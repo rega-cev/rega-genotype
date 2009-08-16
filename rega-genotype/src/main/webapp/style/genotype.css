@@ -53,23 +53,12 @@ div.imgDiv, div.downloadContainer{
 	margin: 0px auto;
 }
 
-table.jobTable, .detailsForm{
-	margin-left: auto;
-	margin-right: auto;
-	border: 1px outset gray;
-	border-spacing: 2px;
-	border-collapse: separate;
-}
+
 .detailsForm .title, .detailsForm .details{
 	border: 1px inset gray;
 	margin: 2px;
 }
 
-table.jobTable td{
-	border: 1px inset gray;
-	padding: 0.5em;
-	text-align: left;
-}
 .detailsForm .title, .detailsForm .details {
 	border: 1px inset gray;
 	padding: 0.5em;
@@ -78,10 +67,30 @@ table.jobTable td{
 	
 table.jobTable {
 	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	border-spacing: 2px;
 }
 
-table.jobTable td {
+table.jobTable td, table.jobTable th {
+	border-top: 1px inset gray;
+	border-bottom: 1px inset gray;
+	padding: 0.5em;
+	text-align: left;
 	line-height: 60px;
+}
+
+table.jobTable col {
+	border-left: 1px outset gray;
+	border-right: 1px outset gray;
+}
+
+table.jobTable col.nrb {
+	border-right: 0px;
+}
+
+table.jobTable col.nlb {
+	border-left: 0px;
 }
 
 table.jobTable .jobTableHeader {
@@ -122,6 +131,10 @@ table.jobTable td img, .detailsForm img {
 
 .details .nov-genotype {
 	font-size: 130%;
+	font-weight: bold;
+}
+
+.details .nov-subclustering {
 	font-weight: bold;
 }
 

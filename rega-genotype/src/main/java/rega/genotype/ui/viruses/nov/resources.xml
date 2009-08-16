@@ -148,7 +148,7 @@ AGCAAAATATAATTGACCCCTGGATTAGAGATAATTTTGTACAAGCC
 			<span class="label">Genogroup assignment:</span> {1}
 		</p>
 		<p>
-			<span class="label">Motivation:</span> {2}
+			<span class="label"></span> {2}
 		</p>
 	</resource>
 
@@ -158,16 +158,16 @@ AGCAAAATATAATTGACCCCTGGATTAGAGATAATTTTGTACAAGCC
 			<span class="label">Genotype assignment:</span> <span class="nov-genotype">{2}</span>
 		</p>
 		<p>
-			<span class="label">Motivation:</span> {3}
+			<span class="label"></span> {3}
 		</p>
 	</resource>
 
 	<resource name="nrvSequenceAssignment.phylo-variant">
 		<p>
-			<span class="label">Sub-clustering:</span> <span class="nrvSequenceAssignment.genotype">{1}</span>
+			<span class="label">Sub-clustering:</span> <span class="nov-subclustering">{1}</span>
 		</p>
 		<p>
-			<span class="label">Motivation:</span> {2}
+			<span class="label"></span> {2}
 		</p>
 	</resource>
 

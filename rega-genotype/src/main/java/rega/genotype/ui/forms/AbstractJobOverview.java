@@ -22,6 +22,7 @@ import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.XlsDataTable;
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
@@ -78,6 +79,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		new WBreak(this);
 		
 		jobTable = new WTable(this);
+		jobTable.setHeaderCount(1, Orientation.Horizontal);
+		jobTable.setHeaderCount(1, Orientation.Vertical);
 		jobTable.setStyleClass("jobTable");
 		
 		downloadContainer = new WContainerWidget(this);
@@ -162,7 +165,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 	public void fillTable() {
 		fillingTable = true;
-		if(jobTable.numRows()==0) {
+		if(jobTable.rowCount()==0) {
 			List<Header> headers = getHeaders();
 
 			int col = 0;
@@ -171,7 +174,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				jobTable.elementAt(0, col).addWidget(new WText(h.name));
 				jobTable.elementAt(0, col).setStyleClass("jobTableHeader");				
 				jobTable.elementAt(0, col).setColumnSpan(h.span);
-				
+
+				for (int j = 0; j < h.span; ++j)
+					jobTable.columnAt(col + j).setStyleClass((j > 0 ? "nlb " : "") + (j < h.span - 1 ? "nrb" : ""));
+
 				col += h.span;
 			}
 		}
@@ -259,7 +265,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private SaxParser tableFiller = new SaxParser(){
 		@Override
 		public void endSequence() {
-			int numRows = jobTable.numRows()-1;
+			int numRows = jobTable.rowCount()-1;
 			if(getSequenceIndex()>=numRows) {
 				List<WWidget> data = getData(tableFiller);
 				for (int i = 0; i < data.size(); i++) {
