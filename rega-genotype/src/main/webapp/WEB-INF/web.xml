@@ -37,5 +37,16 @@
     <url-pattern>/GenotypeHTLV/*</url-pattern>
   </servlet-mapping>
   
+    <servlet>
+    <servlet-name>GenotypePHYLO</servlet-name>
+    <display-name>PHYLO Genotyping</display-name>
+    <description>PHYLO Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.phylo.PhyloMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypePHYLO</servlet-name>
+    <url-pattern>/GenotypePHYLO/*</url-pattern>
+  </servlet-mapping>
 </web-app>
 

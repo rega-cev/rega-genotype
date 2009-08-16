@@ -37,7 +37,7 @@ public class PhyloDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(1, "genome_result.sequence.result['scan'].data");
+		return new DefaultSequenceAssignmentForm(1, "genotype_result.sequence.result['scan'].data");
 	}
 
 	public String getOrganismDirectory() {
@@ -76,7 +76,6 @@ public class PhyloDefinition implements OrganismDefinition {
 		return forms;
 	}
 	public int getUpdateInterval() {
-		// TODO Auto-generated method stub
 		return 5000;
 	}
 

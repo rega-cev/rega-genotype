@@ -47,7 +47,8 @@
    -->
   <property name="jobDir-NoV">/Users/tulio/rega3/jobDir</property>
   <property name="jobDir-HIV">/Users/tulio/rega3/jobDir</property>
-
+  <property name="jobDir-HTLV">/Users/tulio/rega3/jobDir</property>
+  
   <!-- maxAllowedSequences
      The maximum number of sequences that may be submitted in a single batch.
    -->
