@@ -1,7 +1,7 @@
 PRIORITY
 * image sizes (f.e. header image -> too small?)
 *jwt bug
-	* WTextArea setText() with '>' -> &gt;
+	* WTextArea setText() with '>' -> &gt; (Koen)
 * image centering -> sometimes refresh is needed
 * write installation doc
 * maven
