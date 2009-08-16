@@ -17,6 +17,8 @@
 	<resource name="monitorForm.downloadResults">Download results:</resource>
 	<resource name="monitorForm.csvTable">CSV Table</resource>
 	<resource name="monitorForm.xmlFile">XML File</resource>
+	<resource name="monitorForm.downloadJob">Download all job files:</resource>
+	<resource name="monitorForm.jobFile">ZIP</resource>
 	
 	<resource name="main.navigation.start">Start!</resource>
 	<resource name="main.navigation.monitor">Monitor job [${jobId}]</resource>

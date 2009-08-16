@@ -21,6 +21,7 @@ import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.AbstractCsvGenerator;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.GenotypeLib;
 
 public abstract class AbstractJobOverview extends IForm {
 	protected File jobDir;
@@ -135,6 +136,17 @@ public abstract class AbstractJobOverview extends IForm {
 			};
 			csvResource.suggestFileName("results.csv");
 			csvTableDownload.setRef(csvResource.generateUrl());
+			
+			File jobArchive = GenotypeLib.getArchive(jobDir);
+			if(jobArchive != null){
+				new WBreak(downloadContainer);
+				new WText(tr("monitorForm.downloadJob"),downloadContainer);
+				WAnchor jobFileDownload = new WAnchor((String)null, tr("monitorForm.jobFile"), downloadContainer);
+				jobFileDownload.setStyleClass("link");
+				WResource jobResource = new WFileResource("application/zip", jobArchive.getAbsolutePath());
+				jobResource.suggestFileName(jobArchive.getName());
+				jobFileDownload.setRef(jobResource.generateUrl());
+			}
 		}
 		
 		fillingTable = false;

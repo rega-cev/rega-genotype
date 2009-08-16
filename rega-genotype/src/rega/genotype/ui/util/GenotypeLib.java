@@ -9,13 +9,20 @@ import java.awt.image.Kernel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Date;
 import java.util.Random;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -161,6 +168,7 @@ public class GenotypeLib {
 	}
 
 	public static WImage getWImageFromFile(final File f) {
+		System.out.println("*** getWImageFromFile: "+ f.getAbsolutePath());
 		WImage chartImage = new WImage(new WResource() {
 
             @Override
@@ -170,12 +178,20 @@ public class GenotypeLib {
 
             @Override
             protected void streamResourceData(OutputStream stream) {
-                try {
-                	FileInputStream fis = new FileInputStream(f);
-                    IOUtils.copy(fis, stream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+				try {
+					FileInputStream fis = new FileInputStream(f);
+	                try {
+	                    IOUtils.copy(fis, stream);
+	                    stream.flush();
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	                finally{
+	                	IOUtils.closeQuietly(fis);
+	                }
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
             }
             
         }, (WContainerWidget)null);
@@ -184,6 +200,7 @@ public class GenotypeLib {
 	}
 	
 	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) {
+		System.out.println("*** getWImageFromResource: "+ fileName);
 		return new WImage(new WResource() {
             @Override
             public String resourceMimeType() {
@@ -191,11 +208,15 @@ public class GenotypeLib {
             }
             @Override
             protected void streamResourceData(OutputStream stream) {
+            	InputStream is = this.getClass().getClassLoader().getResourceAsStream(od.getOrganismDirectory()+fileName);
                 try {
-                    IOUtils.copy(this.getClass().getClassLoader().getResourceAsStream(od.getOrganismDirectory()+fileName), stream);
+                    IOUtils.copy(is, stream);
+                    stream.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+            	} finally {
+            		IOUtils.closeQuietly(is);
+            	}
             }
         }, parent);
 	}
@@ -207,8 +228,83 @@ public class GenotypeLib {
 	public static WAnchor getAnchor(String text, String fileType, File f) {
 		WAnchor anchor = new WAnchor((String)null, WContainerWidget.lt(text));
 		anchor.setStyleClass("link");
-		anchor.setRef(new WFileResource(fileType, f.getAbsolutePath()).generateUrl());
+		WResource fr = new WFileResource(fileType, f.getAbsolutePath());
+		fr.suggestFileName(f.getName());
+		anchor.setRef(fr.generateUrl());
 		return anchor;
+	}
+	
+	public static File getArchive(File dir){
+		return zip(dir);
+	}
+	
+	public static File tar(File dir){
+		File tar = new File(dir.getAbsolutePath()+".tar.gz");
+		
+		if(!tar.exists()){
+			try{
+				Runtime runtime = Runtime.getRuntime();
+				Process proc;
+				int result;
+				String cmd;
+				
+				cmd = "tar -czf "+ tar.getAbsolutePath() +" "+ dir.getAbsolutePath();
+				proc = runtime.exec(cmd, null, dir.getParentFile());
+				LineNumberReader err = new LineNumberReader(new InputStreamReader(proc.getErrorStream()));
+				String errl;
+				while((errl = err.readLine()) != null){
+					System.err.println(errl);
+				}
+				
+				if((result = proc.waitFor()) != 0)
+					throw new ApplicationException(cmd +" exited with error: "+result);
+				err.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return tar;
+	}
+
+	public static File zip(File dir) {
+
+		byte[] buffer = new byte[18024];
+		File zipFile = new File(dir.getAbsolutePath()+".zip");
+
+		try {
+
+			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+
+			out.setLevel(Deflater.DEFAULT_COMPRESSION);
+
+			for (File f : dir.listFiles()) {
+				FileInputStream in = new FileInputStream(f);
+
+				//new entry, relative path
+				out.putNextEntry(new ZipEntry(f.getAbsolutePath().replace(dir.getAbsolutePath()+File.separatorChar, "")));
+
+				int len;
+				while ((len = in.read(buffer)) > 0) {
+					out.write(buffer, 0, len);
+				}
+				
+				out.closeEntry();
+				in.close();
+			}
+			out.close();
+			return zipFile;
+		}
+		catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static void main(String[] args) {
@@ -216,12 +312,12 @@ public class GenotypeLib {
 
 		initSettings(s);
 
-//		try {
-//			HIVTool hiv = new HIVTool(new File(
-//					"/home/simbre1/tmp/genotype"));
-//			hiv.analyze(
-//					"/home/simbre1/tmp/genotype/seq.fasta",
-//					"/home/simbre1/tmp/genotype/result.xml");
+// try {
+// HIVTool hiv = new HIVTool(new File(
+// "/home/simbre1/tmp/genotype"));
+// hiv.analyze(
+// "/home/simbre1/tmp/genotype/seq.fasta",
+// "/home/simbre1/tmp/genotype/result.xml");
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		} catch (ParameterProblemException e) {
