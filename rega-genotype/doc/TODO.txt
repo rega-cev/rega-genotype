@@ -9,7 +9,6 @@ PRIORITY
    - provide error feed back (not just a red background)
 * unit test example
 * ref seq name is too long
-* layout without tables
 * layout; goto monitor
 
 LATER
