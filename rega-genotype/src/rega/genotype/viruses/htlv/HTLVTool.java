@@ -6,6 +6,7 @@
  */
 package rega.genotype.viruses.htlv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -23,11 +24,11 @@ public class HTLVTool extends GenotypeTool {
     private HTLV1SubtypeTool htlv1subtypetool;
 
     
-    public HTLVTool() throws IOException, ParameterProblemException, FileFormatException {
-        htlv = readAnalyses("htlvblast.xml");
+    public HTLVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        htlv = readAnalyses("htlvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) htlv.getAnalysis("blast");
         
-        htlv1subtypetool = new HTLV1SubtypeTool();
+        htlv1subtypetool = new HTLV1SubtypeTool(workingDir);
         htlv1subtypetool.setParent(this);
 
     }

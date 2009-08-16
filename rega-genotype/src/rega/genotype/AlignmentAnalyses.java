@@ -177,7 +177,7 @@ public class AlignmentAnalyses {
 		}
     }
 
-    public AlignmentAnalyses(File fileName, GenotypeTool tool)
+    public AlignmentAnalyses(File fileName, GenotypeTool tool, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
 
         this.clusters = new ArrayList<Cluster>();
@@ -185,7 +185,7 @@ public class AlignmentAnalyses {
         this.clusterMap = new HashMap<String, Cluster>();
         this.genotypeTool = tool;
 
-        retrieve(fileName);
+        retrieve(fileName, workingDir);
     }
 
     public AbstractAnalysis getAnalysis(String id) {
@@ -195,7 +195,7 @@ public class AlignmentAnalyses {
         return result;
     }
     
-    private void retrieve(File fileName)
+    private void retrieve(File fileName, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
 
         SAXBuilder builder = new SAXBuilder();
@@ -238,7 +238,7 @@ public class AlignmentAnalyses {
             List analysisEs = root.getChildren("analysis");            
 
             for (Iterator i = analysisEs.iterator(); i.hasNext();) {
-                AbstractAnalysis n = readAnalysis((Element) i.next());
+                AbstractAnalysis n = readAnalysis((Element) i.next(), workingDir);
                 analyses.put(n.getId(), n);
             }            
         } catch (JDOMException e) {
@@ -246,16 +246,16 @@ public class AlignmentAnalyses {
         }        
     }
 
-	private AbstractAnalysis readAnalysis(Element element) {
+	private AbstractAnalysis readAnalysis(Element element, File workingDir) {
         String type = element.getAttributeValue("type");
         String id = element.getAttributeValue("id");
         
         if (type.equals("paup")) {
-            return readPaupAnalysis(element, id);
+            return readPaupAnalysis(element, id, workingDir);
         } else if (type.equals("scan")) {
-            return readScanAnalysis(element, id);
+            return readScanAnalysis(element, id, workingDir);
         } else if (type.equals("blast")) {
-            return readBlastAnalaysis(element, id);
+            return readBlastAnalaysis(element, id, workingDir);
         } else {
             System.err.println("Unsupported analysis type: " + type);
             System.exit(1);
@@ -264,7 +264,7 @@ public class AlignmentAnalyses {
         return null;
     }
 
-    private AbstractAnalysis readBlastAnalaysis(Element element, String id) {
+    private AbstractAnalysis readBlastAnalaysis(Element element, String id, File workingDir) {
         Element identifyE = element.getChild("identify");
         String clusters = identifyE.getTextTrim();
         List<Cluster> cs = parseCommaSeparatedClusterIds(clusters);
@@ -279,10 +279,10 @@ public class AlignmentAnalyses {
         if (optionsE != null)
             options = optionsE.getTextTrim();
 
-        return new BlastAnalysis(this, id, cs, cutoff, options);
+        return new BlastAnalysis(this, id, cs, cutoff, options, workingDir);
     }
 
-    private AbstractAnalysis readScanAnalysis(Element element, String id) {
+    private AbstractAnalysis readScanAnalysis(Element element, String id, File workingDir) {
         Element windowE = element.getChild("window");
         int window = Integer.parseInt(windowE.getTextTrim());
 
@@ -299,10 +299,10 @@ public class AlignmentAnalyses {
         if (analysisE.getAttribute("id") != null) {
             analysis = getAnalysis(analysisE.getAttributeValue("id"));
         } else {
-            analysis = readAnalysis(analysisE);
+            analysis = readAnalysis(analysisE, workingDir);
         }
 
-        ScanAnalysis result = new ScanAnalysis(this, id, analysis, window, step, cutoff);
+        ScanAnalysis result = new ScanAnalysis(this, id, analysis, window, step, cutoff, workingDir);
         
         Element optionsE = element.getChild("options");
         if (optionsE != null)
@@ -311,7 +311,7 @@ public class AlignmentAnalyses {
         return result;
     }
 
-    private AbstractAnalysis readPaupAnalysis(Element element, String id) {
+    private AbstractAnalysis readPaupAnalysis(Element element, String id, File workingDir) {
         Element identifyE = element.getChild("identify");
         String clusters = identifyE.getTextTrim();
         List<Cluster> cs = parseCommaSeparatedClusterIds(clusters);
@@ -324,7 +324,7 @@ public class AlignmentAnalyses {
         if (cutoffE != null)
             cutoff = Double.valueOf(cutoffE.getTextTrim());
         
-        PhyloClusterAnalysis analysis = new PhyloClusterAnalysis(this, id, cs, block, cutoff);
+        PhyloClusterAnalysis analysis = new PhyloClusterAnalysis(this, id, cs, block, cutoff, workingDir);
         
         Element optionsE = element.getChild("options");
         if (optionsE != null)

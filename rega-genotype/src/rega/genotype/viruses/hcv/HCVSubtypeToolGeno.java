@@ -6,6 +6,7 @@
  */
 package rega.genotype.viruses.hcv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -25,8 +26,8 @@ public class HCVSubtypeToolGeno extends GenotypeTool {
 
 
 
-    public HCVSubtypeToolGeno() throws IOException, ParameterProblemException, FileFormatException {
-        hcv = readAnalyses("hcvgeno.xml");
+    public HCVSubtypeToolGeno(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        hcv = readAnalyses("hcvgeno.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure-puzzle");
         scanAnalysis = (ScanAnalysis) hcv.getAnalysis("scan");

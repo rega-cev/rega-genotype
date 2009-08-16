@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.lang.reflect.InvocationTargetException;
 
 /*
  * Created on Jul 6, 2004
@@ -18,6 +19,7 @@ import java.io.LineNumberReader;
  */
 public abstract class GenotypeTool {
     private static String xmlBasePath = ".";
+    private static String workingDir = ".";
 
     private GenotypeTool parent;
     private ResultTracer tracer;
@@ -75,6 +77,10 @@ public abstract class GenotypeTool {
         String treePuzzleCmd = (String) parser.getOptionValue(treePuzzleCmdOption);        
         if (treePuzzleCmd != null)
         	PhyloClusterAnalysis.puzzleCommand = treePuzzleCmd;
+        
+        String workingDirTmp = (String) parser.getOptionValue(workingDirOption);        
+        if (workingDirTmp != null)
+        	workingDir = workingDirTmp;
 
         return parser.getRemainingArgs();
 	}
@@ -96,6 +102,7 @@ public abstract class GenotypeTool {
         System.err.println("\t-x,--xml       	specify path to xml files");
         System.err.println("\t-b,--blast     	specify path to blast executables");
         System.err.println("\t-t,--treepuzzle   specify path to treepuzzle executable");
+        System.err.println("\t-w,--workingDir   specify path to the working directory (default .)");
 	}
 
 	private void analyzeSelf(String traceFile) throws FileNotFoundException {
@@ -203,10 +210,11 @@ public abstract class GenotypeTool {
         return args;
     }
 
-    protected AlignmentAnalyses readAnalyses(String file)
+    protected AlignmentAnalyses readAnalyses(String file, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
         return new AlignmentAnalyses(new File(xmlBasePath + File.separator + file),
-                                     this);
+                                     this,
+                                     workingDir);
     }
 
     /**
@@ -234,7 +242,7 @@ public abstract class GenotypeTool {
     }
     
     public static void main(String[] args)
-    	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
     	
     	/*
     	 * Usage: GenotypeTool [-p,-c,-x] className [sequences.fasta] result.xml
@@ -247,7 +255,7 @@ public abstract class GenotypeTool {
     	}
     	
     	Class analyzerClass = Class.forName(args2[0]);
-    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.newInstance();
+    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(workingDir));
 
     	genotypeTool.args = args2;
 

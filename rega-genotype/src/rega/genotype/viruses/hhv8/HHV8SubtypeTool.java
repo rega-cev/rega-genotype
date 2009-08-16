@@ -1,4 +1,5 @@
 package rega.genotype.viruses.hhv8;
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -22,8 +23,8 @@ public class HHV8SubtypeTool extends GenotypeTool {
     private PhyloClusterAnalysis pureAnalysis;
 
 
-    public HHV8SubtypeTool() throws FileFormatException, IOException, ParameterProblemException {
-        hhv8 = readAnalyses("hhv8K1.xml");
+    public HHV8SubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
+        hhv8 = readAnalyses("hhv8K1.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hhv8.getAnalysis("pure-puzzle");
 
     }

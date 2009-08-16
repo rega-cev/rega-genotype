@@ -1,5 +1,6 @@
 package rega.genotype.viruses.hiv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -24,8 +25,8 @@ public class SIVSubtypeTool extends GenotypeTool{
     private PhyloClusterAnalysis pureAnalysis;
     private ScanAnalysis scanAnalysis;
 
-    public SIVSubtypeTool() throws FileFormatException, IOException, ParameterProblemException {
-        siv = readAnalyses("hcv.xml");
+    public SIVSubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
+        siv = readAnalyses("hcv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) siv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis)  siv.getAnalysis("puzzle-pure");
         scanAnalysis = (ScanAnalysis) siv.getAnalysis("scan");

@@ -1,4 +1,5 @@
 package rega.genotype.viruses.hpv;
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -22,8 +23,8 @@ public class HPVSubtypeTool extends GenotypeTool {
     private PhyloClusterAnalysis pureAnalysis;
 
 
-    public HPVSubtypeTool() throws FileFormatException, IOException, ParameterProblemException {
-        hpv = readAnalyses("PVgeneraL1v2.xml");
+    public HPVSubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
+        hpv = readAnalyses("PVgeneraL1v2.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hpv.getAnalysis("pure");
 
     }

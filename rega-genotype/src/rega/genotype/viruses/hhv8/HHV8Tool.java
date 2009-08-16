@@ -6,6 +6,7 @@
  */
 package rega.genotype.viruses.hhv8;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -23,11 +24,11 @@ public class HHV8Tool extends GenotypeTool {
     private HHV8SubtypeTool hhv8subtypetool;
 
     
-    public HHV8Tool() throws IOException, ParameterProblemException, FileFormatException {
-        hhv8 = readAnalyses("hhv8blast.xml");
+    public HHV8Tool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        hhv8 = readAnalyses("hhv8blast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hhv8.getAnalysis("blast");
         
-        hhv8subtypetool = new HHV8SubtypeTool();
+        hhv8subtypetool = new HHV8SubtypeTool(workingDir);
         hhv8subtypetool.setParent(this);
 
     }

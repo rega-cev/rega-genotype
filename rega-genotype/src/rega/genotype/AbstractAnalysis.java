@@ -162,11 +162,11 @@ public abstract class AbstractAnalysis {
      * @return
      * @throws AlignmentException
      */
-    protected SequenceAlignment profileAlign(SequenceAlignment alignment, AbstractSequence sequence) throws AlignmentException {
+    protected SequenceAlignment profileAlign(SequenceAlignment alignment, AbstractSequence sequence, File workingDir) throws AlignmentException {
         SequenceAlignment aligned = alignment;
     
         if (sequence != null && (alignment.findSequence(sequence.getName()) == null))
-            aligned = SequenceAlign.profileAlign(sequence, alignment, owner.isTrimAlignment());
+            aligned = SequenceAlign.profileAlign(sequence, alignment, owner.isTrimAlignment(), workingDir);
         return aligned;
     }
 

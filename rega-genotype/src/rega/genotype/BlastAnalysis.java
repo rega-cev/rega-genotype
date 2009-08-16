@@ -29,6 +29,7 @@ public class BlastAnalysis extends AbstractAnalysis {
     private List<Cluster> clusters;
     private Double cutoff;
     private String options;
+    private File workingDir;
 
     public class Result extends AbstractAnalysis.Result implements Concludable {
         private Cluster cluster;
@@ -121,11 +122,13 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 	public BlastAnalysis(AlignmentAnalyses owner, String id,
                          List<Cluster> clusters, Double cutoff,
-                         String options) {
+                         String options,
+                         File workingDir) {
         super(owner, id);
         this.clusters = clusters;
         this.cutoff = cutoff;
         this.options = options;
+        this.workingDir = workingDir;
     }
 
     private Result compute(SequenceAlignment analysisDb, AbstractSequence sequence)
@@ -154,7 +157,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                 String cmd = blastPath + formatDbCommand + " -o T -p F -i " + db.getAbsolutePath();
                 System.err.println(cmd);
-                formatdb = runtime.exec(cmd);
+                formatdb = runtime.exec(cmd, null, workingDir);
                 int result = formatdb.waitFor();
 
                 if (result != 0) {
@@ -166,7 +169,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 cmd = blastPath + blastCommand + " -p blastn -i " + query.getAbsolutePath() + " "
                     + (options != null ? options : "") + " -m 8 -d " + db.getAbsolutePath();
                 System.err.println(cmd);
-                blast = runtime.exec(cmd);
+                blast = runtime.exec(cmd, null, workingDir);
                 InputStream inputStream = blast.getInputStream();
 
                 LineNumberReader reader

@@ -1,4 +1,5 @@
 package rega.genotype.viruses.phylo;
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -22,8 +23,8 @@ public class PhyloSubtypeTool extends GenotypeTool {
     private PhyloClusterAnalysis pureAnalysis;
 
 
-    public PhyloSubtypeTool() throws FileFormatException, IOException, ParameterProblemException {
-        phylo = readAnalyses("hivphylotypes1.xml");
+    public PhyloSubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
+        phylo = readAnalyses("hivphylotypes1.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) phylo.getAnalysis("pure");
 
     }

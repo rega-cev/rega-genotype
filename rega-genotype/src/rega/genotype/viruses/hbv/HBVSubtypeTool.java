@@ -6,6 +6,7 @@
  */
 package rega.genotype.viruses.hbv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -25,8 +26,8 @@ public class HBVSubtypeTool extends GenotypeTool {
 
 
 
-    public HBVSubtypeTool() throws IOException, ParameterProblemException, FileFormatException {
-        hbv = readAnalyses("hbv.xml");
+    public HBVSubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        hbv = readAnalyses("hbv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hbv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hbv.getAnalysis("pure-puzzle");
         scanAnalysis = (ScanAnalysis) hbv.getAnalysis("scan");

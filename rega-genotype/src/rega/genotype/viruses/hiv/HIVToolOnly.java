@@ -6,6 +6,7 @@
  */
 package rega.genotype.viruses.hiv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -22,8 +23,8 @@ public class HIVToolOnly extends GenotypeTool {
     private BlastAnalysis blastAnalysis;
 
     
-    public HIVToolOnly() throws IOException, ParameterProblemException, FileFormatException {
-        hiv = readAnalyses("hiv.xml");
+    public HIVToolOnly(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        hiv = readAnalyses("hiv.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hiv.getAnalysis("blast");        
     }
 

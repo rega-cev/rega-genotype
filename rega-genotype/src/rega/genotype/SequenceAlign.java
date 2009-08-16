@@ -28,17 +28,18 @@ public class SequenceAlign {
 
     static public SequenceAlignment profileAlign(AbstractSequence sequence,
                                                  SequenceAlignment alignment,
-                                                 boolean trimAlignment)
+                                                 boolean trimAlignment,
+                                                 File workingDir)
             throws AlignmentException {
         SequenceAlignment result = findInCache(sequence, alignment);
         if (result != null)
             return result;
 
         if (trimAlignment) {
-            SequenceAlignment trimmedAlignment = trimAlignment(sequence, alignment);
-            result = clustalProfileAlign(sequence, trimmedAlignment);
+            SequenceAlignment trimmedAlignment = trimAlignment(sequence, alignment, workingDir);
+            result = clustalProfileAlign(sequence, trimmedAlignment, workingDir);
         } else {
-            result = clustalProfileAlign(sequence, alignment);
+            result = clustalProfileAlign(sequence, alignment, workingDir);
         }
 
         addToCache(sequence, alignment, result);
@@ -47,9 +48,9 @@ public class SequenceAlign {
     }
 
     private static SequenceAlignment trimAlignment(AbstractSequence sequence,
-                                                   SequenceAlignment alignment)
+                                                   SequenceAlignment alignment, File workingDir)
             throws AlignmentException {
-        SequenceAlignment example = pairAlign(alignment.getSequences().get(0), sequence);
+        SequenceAlignment example = pairAlign(alignment.getSequences().get(0), sequence, workingDir);
         
         int diff = example.getLength() - alignment.getLength();
 
@@ -66,12 +67,12 @@ public class SequenceAlign {
         return alignment.getSubSequence(start, end);
     }
 
-    static public SequenceAlignment pairAlign(AbstractSequence s1, AbstractSequence s2)
+    static public SequenceAlignment pairAlign(AbstractSequence s1, AbstractSequence s2, File workingDir)
             throws AlignmentException {
-        return clustalPairAlign(s1, s2);
+        return clustalPairAlign(s1, s2, workingDir);
     }
     
-    private static SequenceAlignment clustalPairAlign(AbstractSequence s1, AbstractSequence s2)
+    private static SequenceAlignment clustalPairAlign(AbstractSequence s1, AbstractSequence s2, File workingDir)
             throws AlignmentException {
         try {
             File f = File.createTempFile("pair", ".fasta");
@@ -89,7 +90,7 @@ public class SequenceAlign {
                 + " -outfile=" + f3.getAbsolutePath();
             //System.out.println(cmd);
             Runtime r = Runtime.getRuntime();
-            Process p = r.exec(cmd);
+            Process p = r.exec(cmd, null, workingDir);
             InputStream inputStream = p.getInputStream();
 
             LineNumberReader reader
@@ -146,7 +147,8 @@ public class SequenceAlign {
     }
 
     private static SequenceAlignment clustalProfileAlign(AbstractSequence sequence,
-                                                         SequenceAlignment alignment)
+                                                         SequenceAlignment alignment,
+                                                         File workingDir)
             throws AlignmentException {
 
         try {
@@ -174,7 +176,7 @@ public class SequenceAlign {
                 + " -outfile=" + f3.getAbsolutePath();
             System.err.println(cmd);
             Runtime r = Runtime.getRuntime();
-            Process p = r.exec(cmd);
+            Process p = r.exec(cmd, null, workingDir);
             InputStream inputStream = p.getInputStream();
 
             LineNumberReader reader

@@ -6,6 +6,7 @@
  */
 package rega.genotype;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -209,14 +210,16 @@ public class ScanAnalysis extends AbstractAnalysis {
     private int window;
     private int step;
     private Double cutoff;
+	private File workingDir;
 
     public ScanAnalysis(AlignmentAnalyses owner, String id, AbstractAnalysis analysis,
-                        int window, int step, Double cutoff) {
+                        int window, int step, Double cutoff, File workingDir) {
         super(owner, id);
         this.analysis = analysis;
         this.window = window;
         this.step = step;
         this.cutoff = cutoff;
+        this.workingDir = workingDir;
     }
 
     @Override
@@ -224,7 +227,7 @@ public class ScanAnalysis extends AbstractAnalysis {
             throws AnalysisException {
 
         try {
-            SequenceAlignment aligned = profileAlign(alignment, sequence);
+            SequenceAlignment aligned = profileAlign(alignment, sequence, workingDir);
 
             List<SequenceAlignment> windows
                 = SlidingGene.generateSlidingWindow(aligned, window, step);

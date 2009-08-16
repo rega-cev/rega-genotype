@@ -1,5 +1,6 @@
 package rega.genotype.viruses.hiv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -23,8 +24,8 @@ public class HIV2SubtypeTool extends GenotypeTool {
     private PhyloClusterAnalysis pureAnalysis;
     private ScanAnalysis scanAnalysis;
 
-    public HIV2SubtypeTool() throws FileFormatException, IOException, ParameterProblemException {
-        hiv2 = readAnalyses("HIV/hiv2.xml");
+    public HIV2SubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
+        hiv2 = readAnalyses("HIV/hiv2.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hiv2.getAnalysis("pure");
         scanAnalysis = (ScanAnalysis) hiv2.getAnalysis("scan");
     }

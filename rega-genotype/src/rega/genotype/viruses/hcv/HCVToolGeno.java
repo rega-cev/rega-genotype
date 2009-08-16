@@ -6,6 +6,7 @@
  */
 package rega.genotype.viruses.hcv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -23,11 +24,11 @@ public class HCVToolGeno extends GenotypeTool {
     private HCVSubtypeToolGeno hcvsubtypetool;
 
     
-    public HCVToolGeno() throws IOException, ParameterProblemException, FileFormatException {
-        hcv = readAnalyses("hcvblast.xml");
+    public HCVToolGeno(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        hcv = readAnalyses("hcvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hcv.getAnalysis("blast");
         
-        hcvsubtypetool = new HCVSubtypeToolGeno();
+        hcvsubtypetool = new HCVSubtypeToolGeno(workingDir);
         hcvsubtypetool.setParent(this);
 
     }

@@ -1,4 +1,5 @@
 package rega.genotype.viruses.htlv;
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -22,8 +23,8 @@ public class HTLV1SubtypeTool extends GenotypeTool {
     private PhyloClusterAnalysis pureAnalysis;
 
 
-    public HTLV1SubtypeTool() throws FileFormatException, IOException, ParameterProblemException {
-        htlv1 = readAnalyses("htlv.xml");
+    public HTLV1SubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
+        htlv1 = readAnalyses("htlv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) htlv1.getAnalysis("pure");
 
     }

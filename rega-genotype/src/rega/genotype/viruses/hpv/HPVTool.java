@@ -6,6 +6,7 @@
  */
 package rega.genotype.viruses.hpv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -23,11 +24,11 @@ public class HPVTool extends GenotypeTool {
     private HPVSubtypeTool hpvsubtypetool;
 
     
-    public HPVTool() throws IOException, ParameterProblemException, FileFormatException {
-        hpv = readAnalyses("hpvblast.xml");
+    public HPVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        hpv = readAnalyses("hpvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hpv.getAnalysis("blast");
         
-        hpvsubtypetool = new HPVSubtypeTool();
+        hpvsubtypetool = new HPVSubtypeTool(workingDir);
         hpvsubtypetool.setParent(this);
 
     }

@@ -46,13 +46,16 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
     private Double cutoff;
     private String commandBlock;
     private Map<String, Float> patterns;
+    private File workingDir;
 
     public PhyloClusterAnalysis(AlignmentAnalyses owner,
-                                String id, List<Cluster> clusters, String paupBlock, Double cutoff) {
+                                String id, List<Cluster> clusters, String paupBlock, Double cutoff,
+                                File workingDir) {
         super(owner, id);
         this.clusters = clusters;
         this.commandBlock = paupBlock;
         this.cutoff = cutoff;
+        this.workingDir = workingDir;
     }
 
     public class Result extends AbstractAnalysis.Result implements Scannable, Concludable {
@@ -331,7 +334,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 			String cmd = paupCommand + " -n " + nexFile.getAbsolutePath();
 
             System.err.println(cmd);
-			paup = runtime.exec(cmd);
+			paup = runtime.exec(cmd, null, outputDir);
 
             InputStream stderr = paup.getErrorStream();
             InputStreamReader isr = new InputStreamReader(stderr);
@@ -569,17 +572,16 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 	protected Result compute(SequenceAlignment alignment, AbstractSequence sequence,
                              List<String> queryTaxa, int analysisMethod)
 			throws IOException, ApplicationException {
-		File outputDir = new File(".");
 		File bootstrapFile = null;
 
 		switch (analysisMethod) {
 		case MRBAYES_ANALYSIS:
-			if (!runMrBayes(alignment, outputDir, commandBlock))
+			if (!runMrBayes(alignment, workingDir, commandBlock))
 				throw new ApplicationException("internal error: weirdness running mrbayes");
 			bootstrapFile = new File("analysis.parts");
 			break;
 		case PAUP_ANALYSIS:
-			if (!runPaup(alignment, outputDir, commandBlock))
+			if (!runPaup(alignment, workingDir, commandBlock))
 				throw new ApplicationException("internal error: weirdness running mrbayes");
 			bootstrapFile = getTempFile(PAUP_LOG);
 		}
@@ -651,7 +653,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
              * Run puzzle
              */
             String cmd = puzzleCommand + " " + infile.getAbsolutePath();
-            puzzle = runtime.exec(cmd);
+            puzzle = runtime.exec(cmd, null, workingDir);
 
             InputStream puzzleOut = puzzle.getInputStream();
             OutputStream puzzleIn = puzzle.getOutputStream();
@@ -778,7 +780,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             throws AnalysisException {
         
         try {
-            SequenceAlignment aligned = profileAlign(alignment, sequence);
+            SequenceAlignment aligned = profileAlign(alignment, sequence, workingDir);
 
             List<String> sequences = new ArrayList<String>();
             if (sequence != null)

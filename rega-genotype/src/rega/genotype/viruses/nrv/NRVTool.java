@@ -6,6 +6,7 @@
  */
 package rega.genotype.viruses.nrv;
 
+import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
@@ -34,12 +35,12 @@ public class NRVTool extends GenotypeTool {
 	private AlignmentAnalyses phyloAnalyses[] = new AlignmentAnalyses[4];
     private BlastAnalysis blastAnalysis;
     
-    public NRVTool() throws IOException, ParameterProblemException, FileFormatException {
-        nrv = readAnalyses("NRV/nrvblast.xml");
+    public NRVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        nrv = readAnalyses("NRV/nrvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) nrv.getAnalysis("blast");
 
-        phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("NRV/nrvI-ORF2.xml");
-        phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("NRV/nrvII-ORF2.xml");
+        phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("NRV/nrvI-ORF2.xml", workingDir);
+        phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("NRV/nrvII-ORF2.xml", workingDir);
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {
