@@ -3,7 +3,6 @@ package rega.genotype.ui.recombination;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -11,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.jfree.chart.ChartFactory;
@@ -25,6 +25,8 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
 
+import rega.genotype.ui.data.OrganismDefinition;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Rectangle;
@@ -34,7 +36,7 @@ import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
 
 public class RecombinationPlot {
-	public static JFreeChart getRecombinationPlot(String dataCsv) throws FileNotFoundException, UnsupportedEncodingException {
+	public static JFreeChart getRecombinationPlot(String dataCsv, OrganismDefinition od) throws FileNotFoundException, UnsupportedEncodingException {
 		CsvDataset n = new CsvDataset(new Table(new ByteArrayInputStream(dataCsv.getBytes()), false, '\t'));
 		JFreeChart chart = ChartFactory.createXYLineChart("Bootscan Analyses", 																			
 				"nuleotides position", 
@@ -59,6 +61,18 @@ public class RecombinationPlot {
 		
 		chart.getLegend().setPosition(RectangleEdge.RIGHT);
 		
+		//colors curves
+		Map<String, Color> genomeColors = od.getGenome().COLORS();
+		for(int i=0; i<n.getSeriesCount();i++) {
+			Color c = genomeColors.get(n.getSeriesKey(i));
+			if(c!=null) {
+				plot.getRenderer().setSeriesPaint(i, c);
+			} else {
+				System.err.println("Error: cannot find genome color: " + n.getSeriesKey(i));
+			}
+		}
+		//colors curves
+		
 		//cutoff
 		XYSeriesCollection cutoffCollection = new XYSeriesCollection();
 		XYSeries cutoffSeries = new XYSeries("70% cutoff");
@@ -79,11 +93,11 @@ public class RecombinationPlot {
 		return chart;
 	}
 	
-	public static File getRecombinationPNG(File jobDir, int sequenceIndex, String type, String csvData) throws UnsupportedEncodingException, IOException {
+	public static File getRecombinationPNG(File jobDir, int sequenceIndex, String type, String csvData, OrganismDefinition od) throws UnsupportedEncodingException, IOException {
 		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".png");
 		if(!pngFile.exists()) {
 			FileOutputStream fos = new FileOutputStream(pngFile);
-			ChartUtilities.writeChartAsPNG(fos, getRecombinationPlot(csvData), 720, 450);
+			ChartUtilities.writeChartAsPNG(fos, getRecombinationPlot(csvData, od), 720, 450);
 			fos.flush();
 			fos.close();
 		}
@@ -102,7 +116,7 @@ public class RecombinationPlot {
 		return pdfFile;
 	}
 	
-	public static File getRecombinationPDF(File jobDir, int sequenceIndex, String type, String csvData) throws IOException {
+	public static File getRecombinationPDF(File jobDir, int sequenceIndex, String type, String csvData, OrganismDefinition od) throws IOException {
 		File pdfFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".pdf");
 		
 		if(!pdfFile.exists()) {
@@ -121,7 +135,7 @@ public class RecombinationPlot {
 				PdfTemplate tp = cb.createTemplate(width, height);
 				Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
 				Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height);
-				getRecombinationPlot(csvData).draw(g2, r2D, null);
+				getRecombinationPlot(csvData, od).draw(g2, r2D, null);
 				g2.dispose();
 				cb.addTemplate(tp, 0, 0);
 			} catch (DocumentException de) {
