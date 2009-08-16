@@ -1,11 +1,14 @@
 package rega.genotype.ui.forms;
 
+import java.awt.Color;
+
 import rega.genotype.ui.data.GenotypeResultParser;
-import eu.webtoolkit.jwt.Side;
+import rega.genotype.ui.data.OrganismDefinition;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.WAbstractItemModel;
+import eu.webtoolkit.jwt.WBrush;
+import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTableView;
@@ -19,12 +22,13 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	private WPieChart pieChart;
 	private SummaryTableView table;
 	
+	//TODO use the text in the table
 	private double total = 0;
 	
 	private final String CHECK_THE_BOOTSCAN = "Check the bootscan";
 	private final String NOT_ASSIGNED = "Not assigned";
 	
-	private final static class SummaryTableView extends WTableView {
+	private class SummaryTableView extends WTableView {
 		public SummaryTableView(WAbstractItemModel model,
 				WContainerWidget parent) {
 			super(parent);
@@ -48,10 +52,6 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	}
 	
 	public DefaultJobOverviewSummary() {
-		model = new WStandardItemModel();
-		
-		pieChart = new WPieChart(this);
-		
 		this.setHidden(true);
 	}
 	
@@ -68,7 +68,6 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 		model.setData(1, 1, 0);
 		model.setData(1, 2, 0);
 
-		
 		model.setHeaderData(0, tr("detailsForm.summary.assignment"));
 		model.setHeaderData(1, tr("detailsForm.summary.numberSeqs"));
 		model.setHeaderData(2, tr("detailsForm.summary.percentage"));
@@ -80,18 +79,18 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 			}
 		});
 		
+		pieChart = new WPieChart(this);
 		pieChart.setModel(model);
 		pieChart.setLabelsColumn(0);
 		pieChart.setDataColumn(1);
         pieChart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
-        pieChart.resize(200, 150);
-        pieChart.setMargin(20, Side.Top, Side.Bottom);
-        pieChart.setMargin(WLength.Auto, Side.Left, Side.Right);
+        pieChart.resize(500, 300);
+        pieChart.setPlotAreaPadding(50);
         
 		this.setHidden(false);
 	}
 	
-	public void update(GenotypeResultParser parser) {
+	public void update(GenotypeResultParser parser, OrganismDefinition od) {
 		String assignment = formatAssignment(parser.getEscapedValue("genotype_result.sequence.conclusion.assigned.name"));
 		
 		if (table == null) {
@@ -115,6 +114,15 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 		
 		if (insertPosition != null) {
 			model.insertRow(insertPosition);
+			
+			String majorAssignment = parser.getEscapedValue("genotype_result.sequence.conclusion.assigned.major.assigned.id");
+			WBrush brush = pieChart.getBrush(insertPosition);
+			Color c = od.getGenome().COLORS().get(majorAssignment);
+			if (c != null) {
+				brush.setColor(new WColor(c.getRed(), c.getGreen(), c.getBlue()));
+				pieChart.setBrush(insertPosition, brush);
+			}
+			
 			model.setData(insertPosition, 0, assignment);
 			model.setData(insertPosition, 1, 1);
 			model.setData(insertPosition, 2, 0.0);
@@ -144,7 +152,9 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	public void reset() {
 		if (table != null) {
 			this.removeChild(table);
-			table = null;			
+			this.removeChild(pieChart);
+			table = null;
+			total = 0;
 		}
 	}
 }

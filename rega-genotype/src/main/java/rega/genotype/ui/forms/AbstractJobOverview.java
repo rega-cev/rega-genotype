@@ -284,7 +284,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				
 				JobOverviewSummary summary = getSummary(null);
 				if (summary != null) 
-					summary.update(tableFiller);
+					summary.update(tableFiller, getMain().getOrganismDefinition());
 			}
 		}
 	};
