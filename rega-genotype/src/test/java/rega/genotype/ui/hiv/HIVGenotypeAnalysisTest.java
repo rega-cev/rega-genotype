@@ -25,7 +25,7 @@ public class HIVGenotypeAnalysisTest extends TestCase {
 			jobDir = new File(System.getProperty("java.io.tmpdir") + File.separatorChar +"jobDir" + File.separatorChar + System.currentTimeMillis());
 			System.err.println(jobDir.getAbsolutePath());
 		} while (jobDir.exists());
-		jobDir.mkdir();
+		jobDir.mkdirs();
 		
 		fasta = new File(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta");
 		
