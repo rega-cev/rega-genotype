@@ -1,9 +1,8 @@
+* install maven2
 * install ecplise-maven plugin:
 	*update-site http://m2eclipse.sonatype.org/update/
 		* Maven integration for Eclipse
 		* (Maven Central repository index)
-
-
 * download jargs (http://jargs.sourceforge.net/)
 * install the downloaded file into your local maven repos with the following command (replace $filetopath by the downloaded jar's filename)
 	* mvn install:install-file -Dfile=$pathtofile -DgroupId=jargs -DartifactId=jargs -Dversion=1.0 -Dpackaging=jar -DgeneratePom=true
