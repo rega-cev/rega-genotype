@@ -1,4 +1,4 @@
-package rega.genotype.util;
+package rega.genotype.ui.util;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import rega.genotype.recombination.plot.Table;
+import rega.genotype.ui.recombination.Table;
 
 public abstract class Genome {
 	public abstract Map<String, Color> COLORS();

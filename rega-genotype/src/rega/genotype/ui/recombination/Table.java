@@ -1,4 +1,4 @@
-package rega.genotype.recombination.plot;
+package rega.genotype.ui.recombination;
 
 import java.io.BufferedInputStream;
 import java.io.File;

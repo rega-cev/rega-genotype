@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import rega.genotype.util.Genome;
+import rega.genotype.ui.util.Genome;
 
 public class HivGenome extends Genome {
 	private Map<String, Color> colorMap = new HashMap<String, Color>();

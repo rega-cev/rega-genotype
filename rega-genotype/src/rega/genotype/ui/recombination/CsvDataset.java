@@ -1,4 +1,4 @@
-package rega.genotype.recombination.plot;
+package rega.genotype.ui.recombination;
 
 import org.jfree.data.DomainOrder;
 import org.jfree.data.xy.AbstractXYDataset;

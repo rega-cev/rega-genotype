@@ -1,4 +1,4 @@
-package rega.genotype.util;
+package rega.genotype.ui.util;
 
 import java.io.File;
 import java.io.IOException;
