@@ -40,6 +40,8 @@ public abstract class GenotypeTool {
         CmdLineParser.Option helpOption = parser.addBooleanOption('h', "help");
         CmdLineParser.Option xmlPathOption = parser.addStringOption('x', "xml");
         CmdLineParser.Option blastPathOption = parser.addStringOption('b', "blast");
+        CmdLineParser.Option treePuzzleCmdOption = parser.addStringOption('t', "treepuzzle");
+        CmdLineParser.Option workingDirOption = parser.addStringOption('w', "workingDir");
         
         try {
             parser.parse(args);
@@ -69,6 +71,10 @@ public abstract class GenotypeTool {
         String blastPath = (String) parser.getOptionValue(blastPathOption);        
         if (blastPath != null)
         	BlastAnalysis.blastPath = blastPath;
+        
+        String treePuzzleCmd = (String) parser.getOptionValue(treePuzzleCmdOption);        
+        if (treePuzzleCmd != null)
+        	PhyloClusterAnalysis.puzzleCommand = treePuzzleCmd;
 
         return parser.getRemainingArgs();
 	}
