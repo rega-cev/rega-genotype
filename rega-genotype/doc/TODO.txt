@@ -12,8 +12,10 @@ PRIORITY
 * image centering -> sometimes refresh is needed
 * test on server without X installed, with java 1.5 (image creation)
 * 1000 seqs limitation (only 400 seqs works)
+	* never tested on # seqs only on fasta file size -> fix this!
 * how is dealt with gaps (-) in the input seq
 * write installation doc
+* maven
 * layout 
 	* start form
 	* monitor form
@@ -23,6 +25,7 @@ PRIORITY
 	* example sequences
 	* contact us
 * details pics, generate them during analysis?
+* unit test example
 
 LATER
 * WMessage args, WAnchors
