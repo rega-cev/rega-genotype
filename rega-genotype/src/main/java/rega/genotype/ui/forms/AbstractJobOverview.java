@@ -8,8 +8,6 @@ package rega.genotype.ui.forms;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +24,6 @@ import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
-import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WResource;
@@ -59,7 +56,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WText analysisInProgress;
 	private WTable jobTable;
 	private WTimer updater;
-	private WContainerWidget downloadContainer;
+	private WContainerWidget downloadTableContainer, downloadResultsContainer;
 	private boolean fillingTable = false;
 
 	private String jobId;
@@ -76,16 +73,17 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		analysisInProgress.setStyleClass("analysisProgress");
 		
-		new WBreak(this);
-		
 		jobTable = new WTable(this);
 		jobTable.setHeaderCount(1, Orientation.Horizontal);
 		jobTable.setHeaderCount(1, Orientation.Vertical);
 		jobTable.setStyleClass("jobTable");
 		
-		downloadContainer = new WContainerWidget(this);
-		downloadContainer.setStyleClass("downloadContainer");
-		
+		downloadTableContainer = new WContainerWidget(this);
+		downloadTableContainer.setStyleClass("downloadContainer");
+
+		downloadResultsContainer = new WContainerWidget(this);
+		downloadResultsContainer.setStyleClass("downloadContainer");
+
 		if(updater!=null) {
 			updater.start();
 		}
@@ -141,7 +139,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		if (otherJob)
 			jobTable.clear();
 
-		downloadContainer.clear();
+		downloadTableContainer.clear();
+		downloadResultsContainer.clear();
 
 		analysisInProgress.setHidden(true);
 		
@@ -192,8 +191,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			}
 			analysisInProgress.setHidden(true);
 
-			new WText(tr("monitorForm.downloadResults"), downloadContainer);
-			WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"), downloadContainer);
+			new WText(tr("monitorForm.downloadResults"), downloadTableContainer);
+			WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"), downloadTableContainer);
 			// Wt2:
 			//xmlFileDownload.etTarget(AnchorTarget.TargetNewWindow);
 			xmlFileDownload.setAttributeValue("target", "_new");
@@ -203,19 +202,18 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			xmlResource.suggestFileName("result.xml");
 			xmlFileDownload.setRef(xmlResource.generateUrl());
 			
-			new WText(lt(", "), downloadContainer);
+			new WText(lt(", "), downloadTableContainer);
 			
-			downloadContainer.addWidget(createTableDownload(tr("monitorForm.csvTable"), true));
+			downloadTableContainer.addWidget(createTableDownload(tr("monitorForm.csvTable"), true));
 
-			new WText(lt(", "), downloadContainer);
+			new WText(lt(", "), downloadTableContainer);
 
-			downloadContainer.addWidget(createTableDownload(tr("monitorForm.xlsTable"), false));
+			downloadTableContainer.addWidget(createTableDownload(tr("monitorForm.xlsTable"), false));
 
-			new WBreak(downloadContainer);
-			new WText(tr("monitorForm.downloadJob"),downloadContainer);
+			new WText(tr("monitorForm.downloadJob"), downloadResultsContainer);
 
 			final File jobArchive = GenotypeLib.getZipArchiveFileName(jobDir);
-			WAnchor jobFileDownload = new WAnchor("", tr("monitorForm.jobFile"), downloadContainer);
+			WAnchor jobFileDownload = new WAnchor("", tr("monitorForm.jobFile"), downloadResultsContainer);
 			jobFileDownload.setAttributeValue("target", "_new");
 			jobFileDownload.setStyleClass("link");
 			jobFileDownload.setTarget(AnchorTarget.TargetNewWindow);

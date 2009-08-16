@@ -13,7 +13,6 @@ import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
-import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 

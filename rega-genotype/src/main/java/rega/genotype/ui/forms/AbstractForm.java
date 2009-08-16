@@ -6,7 +6,6 @@
 package rega.genotype.ui.forms;
 
 import rega.genotype.ui.framework.GenotypeWindow;
-import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WText;
 
@@ -23,10 +22,9 @@ public abstract class AbstractForm extends WContainerWidget {
 	
 	public AbstractForm(GenotypeWindow main, String title, String cssClass) {
 		this.main = main;
-		this.title = new WText(main.getResourceManager().getOrganismValue(title, "title"), this);
-		this.title.setStyleClass("header-mainTitle");
+		String titleDiv = "<h1>" + main.getResourceManager().getOrganismValue(title, "title").value() + "</h1>";
+		this.title = new WText(lt(titleDiv), this);
 		this.setStyleClass(cssClass + " form");
-		new WBreak(this);
 	}
 	
 	public GenotypeWindow getMain() {

@@ -12,7 +12,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.jdom.Element;
 
 import rega.genotype.FileFormatException;
@@ -24,7 +23,6 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
-import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WInteractWidget;
 import eu.webtoolkit.jwt.WLineEdit;
@@ -51,8 +49,6 @@ public class StartForm extends AbstractForm {
 	public StartForm(GenotypeWindow main) {
 		super(main, "start-form");
 		
-		new WBreak(this);
-		
 		List<String> noteArgs = new ArrayList<String>();
 		noteArgs.add(Settings.getInstance().getMaxAllowedSeqs()+"");
 		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note", noteArgs), this);
@@ -62,10 +58,11 @@ public class StartForm extends AbstractForm {
 		seqinput.setStyleClass("seqInput");
 		
 		new WText(tr("sequenceInput.inputSequenceInFastaFormat"), seqinput);
-		ta = new WTextArea(seqinput);
+		
+		WContainerWidget textAreaDiv = new WContainerWidget(seqinput);
+		ta = new WTextArea(textAreaDiv);
 		ta.setColumns(83);
 		ta.setRows(15);
-		new WBreak(seqinput);
 
 		run = new WPushButton(seqinput);
 		run.setText(tr("sequenceInput.run"));

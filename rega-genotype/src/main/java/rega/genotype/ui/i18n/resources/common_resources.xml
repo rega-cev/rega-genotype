@@ -6,11 +6,11 @@
   	<resource name="sequenceInput.clear">Clear</resource>
   	<resource name="sequenceInput.inputSequenceInFastaFormat">
   		<p>You may can either:
-  		  <ul>
-  		    <li>A) genotype sequences that you paste in FASTA format in the input field.</li>
-  		    <li>B) upload a FASTA file.</li>
-  		    <li>C) revisit results of a previous run</li>
-  		  </ul>
+  		  <ol style="list-style-type: upper-alpha">
+  		    <li>genotype sequences that you paste in FASTA format in the input field.</li>
+  		    <li>upload a FASTA file.</li>
+  		    <li>revisit results of a previous run</li>
+  		  </ol>
   		</p>
   		<h3>A) Paste nucleotide sequence(s) in FASTA format:</h3>
     </resource>
@@ -29,8 +29,10 @@
 		<p>You may bookmark this page to revisit results of this job ({1}) later.</p>
 	</resource>  	
   	<resource name="monitorForm.analysisInProgress">
-  		Analysis in progress... (Showing partial results). <br/>
-  		This page will be automatically updated every {1} seconds...<br/>
+  		<p>
+  			Analysis in progress... (Showing partial results).<br/>
+  			This page will be automatically updated every {1} seconds...
+  		</p>
   	</resource>
 	<resource name="monitorForm.downloadResults">Download results:</resource>
 	<resource name="monitorForm.csvTable">Table (CSV format)</resource>
@@ -50,6 +52,7 @@
 	<resource name="main.navigation.contactUs">Contact us</resource>
 	
 	<resource name="defaultSequenceAssignment.title">Sequence Assignment</resource>
+	
 
 	<resource name="defaultSequenceAssignment.name-length">
 		<div class="dsa-text">
@@ -57,13 +60,17 @@
 		</div>
 	</resource>
 
+	<resource name="defaultSequenceAssignment.assignment">Assignment: </resource>
+	<resource name="defaultSequenceAssignment.bootstrap">Bootstrap: </resource>
+	<resource name="defaultSequenceAssignment.motivation">Motivation: </resource>
+
 	<resource name="defaultSequenceAssignment.referenceSequence">
 		<p class="refseq">
 			Your sequence starts at position {1} and finishes at position {2} in the {3} genome.
 		</p>
 	</resource>
 	
-	<resource name="details.analysisDetails">Analysis details</resource>
+	<resource name="details.analysisDetails"><h2>Analysis details</h2></resource>
 	
 	<resource name="defaultPhylogeneticAnalyses.title">Phylogenetic analyses</resource>
 	<resource name="defaultPhylogeneticAnalyses.comment">

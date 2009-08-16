@@ -53,18 +53,6 @@ div.imgDiv, div.downloadContainer{
 	margin: 0px auto;
 }
 
-
-.detailsForm .title, .detailsForm .details{
-	border: 1px inset gray;
-	margin: 2px;
-}
-
-.detailsForm .title, .detailsForm .details {
-	border: 1px inset gray;
-	padding: 0.5em;
-	text-align: left;
-}
-	
 table.jobTable {
 	width: 100%;
 	margin-left: auto;
@@ -105,10 +93,22 @@ table.jobTable td img, .detailsForm img {
 	margin-right: auto;
 }
 
-.detailsForm{
+.detailsForm {
+	margin: 3ex auto;
 	width: 800px;
 }
-.detailsForm .title{	
+
+.detailsForm .details {
+	border: 1px inset gray;
+	margin: 2px;
+	padding: 0.5em;
+	text-align: left;
+}
+	
+.detailsForm h2 {
+	border: 1px inset gray;
+	margin: 2px;
+	padding: 0.5em;
 	background-color: darkblue;
 	color: white;
 	font-size: 120%;
@@ -190,13 +190,11 @@ table.jobTable td img, .detailsForm img {
 	display: list-item;
 }
 
-*.header-mainTitle
-{
+h1 {
 	color: rgb(50,0,150);
 	font-weight: bold;
   	font-size: 150%;
-  	display: block;
-  	margin: 1em auto auto 0.5em;
+  	margin: 1em auto 1em 0.5em;
   	text-align: center;
 }
 
@@ -272,7 +270,7 @@ table.files_referenceSequences-csv tr:first-child td{
 	background-color: darkblue;
 }
 
-span.sequence, span.sequenceName{
+div.sequence, div.sequenceName {
 	font-size: 75%;
 	display: block;
 	width: 500px;
@@ -280,8 +278,9 @@ span.sequence, span.sequenceName{
 	margin-right: auto;
 	font-family: 'monospace';
 }
-span.sequence{
-	margin-top: -1em;
+
+div.sequence {
+	margin-bottom: 1em;
 }
 
 span.refseq{

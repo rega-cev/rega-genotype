@@ -43,19 +43,21 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 	@Override
 	public void fillForm(SaxParser p, final OrganismDefinition od, File jobDir) {
 		String id;
-		if(!p.elementExists("genotype_result.sequence.conclusion")) {
+
+		if (!p.elementExists("genotype_result.sequence.conclusion")) {
 			id = "-";
 		} else {
 			id = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.id");
 		}
 			
 		text.clear();
-		text.addWidget(new WText(tr("defaultSequenceAssignment.sequenceName")));
-		text.addWidget(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]")+", ")));
-		text.addWidget(new WText(tr("defaultSequenceAssignment.sequenceLength")));
-		text.addWidget(new WText(lt(p.getEscapedValue("genotype_result.sequence[length]"))));
-		text.addWidget(new WBreak());
+		
+		new WText(tr("defaultSequenceAssignment.name-length")
+				.arg(p.getEscapedValue("genotype_result.sequence[name]"))
+				.arg(p.getEscapedValue("genotype_result.sequence[length]")), text);
+		
 		text.addWidget(new WText(tr("defaultSequenceAssignment.assignment")));
+
 		if(!p.elementExists("genotype_result.sequence.conclusion")) {
 			text.addWidget(new WText(lt(" Sequence error")));
 		} else {

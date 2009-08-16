@@ -64,7 +64,7 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 			}
 		}
 
-		new WText(lt("<h2>Genome region</h2>"), block);
+		new WText(lt("<h3>Genome region</h3>"), block);
 
 		int start = 0;
 		int end = 0;

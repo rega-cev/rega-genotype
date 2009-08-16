@@ -49,7 +49,6 @@ public class DetailsForm extends AbstractForm {
 
 		if (getMain().getOrganismDefinition().haveDetailsNavigationForm()) {
 			WContainerWidget title = new WContainerWidget(mainTable);
-			title.setStyleClass("title");
 			title.addWidget(new WText(tr("details.analysisDetails")));
 			details = new WContainerWidget(mainTable);
 			details.setStyleClass("details");
@@ -80,15 +79,17 @@ public class DetailsForm extends AbstractForm {
 	
 	void addDetailsForm(IDetailsForm df, File jobDir){
 		WContainerWidget cwTitle = new WContainerWidget(mainTable);
-		cwTitle.setStyleClass("title");
+		String detailTitle = df.getTitle().value();
+		WText titleText = new WText(lt("<h2><a name=\"" + detailTitle.replace(" ", "").toLowerCase() + "\"></a>"
+				+ detailTitle + "</h2>"));
+
+		cwTitle.addWidget(titleText);
+
 		WContainerWidget cwDetails = new WContainerWidget(mainTable);
 		cwDetails.setStyleClass("details");
-		
-		String detailTitle = df.getTitle().value();
-		WText titleText = new WText(lt("<a name=\"" + detailTitle.replace(" ", "").toLowerCase() + "\"></a>"+detailTitle));
-		
-		cwTitle.addWidget(titleText);
+
 		cwDetails.addWidget(df);
+
 		df.fillForm(p, getMain().getOrganismDefinition(), jobDir);
 	}
 	
