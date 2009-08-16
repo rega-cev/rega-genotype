@@ -1,0 +1,320 @@
+@CHARSET "UTF-8";
+
+/* general layout */
+
+html {
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+h3 {
+	color: darkblue;
+}
+
+body {
+	background-color: #fbfbfb;
+	font-family: arial,sans-serif;
+	font-size: 80%;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+div.imgDiv, div.downloadContainer{
+	width: 100%;
+	margin: 1em auto 0.5em auto;
+	text-align: center;
+}
+
+.seqInput {
+	margin-top: 2em;
+	margin-left: auto;
+	margin-right: auto;
+	width: 680px;
+}
+
+.seqInput button {
+	margin: 3px;	
+}
+
+.root {
+	padding-left: 
+}
+
+.header {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.form {
+	width: 85%;
+	margin: 0px auto;
+}
+
+table.jobTable {
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	border-spacing: 2px;
+}
+
+table.jobTable td, table.jobTable th {
+	border-top: 1px inset gray;
+	border-bottom: 1px inset gray;
+	padding: 0.5em;
+	text-align: left;
+	line-height: 60px;
+}
+
+table.jobTable col {
+	border-left: 1px outset gray;
+	border-right: 1px outset gray;
+}
+
+table.jobTable col.nrb {
+	border-right: 0px;
+}
+
+table.jobTable col.nlb {
+	border-left: 0px;
+}
+
+table.jobTable .jobTableHeader {
+	line-height: 30px;
+	font-weight: bold;
+	text-align: center;
+}
+
+table.jobTable td img, .detailsForm img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.detailsForm {
+	margin: 3ex auto;
+	width: 800px;
+}
+
+.detailsForm .details {
+	border: 1px inset gray;
+	margin: 2px;
+	padding: 0.5em;
+	text-align: left;
+}
+	
+.detailsForm h2 {
+	border: 1px inset gray;
+	margin: 2px;
+	padding: 0.5em;
+	background-color: darkblue;
+	color: white;
+	font-size: 120%;
+	font-weight: bold;
+	text-align: center;
+}
+
+.detailsForm *.recombinationDetails{
+	text-align: center;
+}
+
+.details .dsa-text {
+	text-align: center;
+	font-weight: bold;
+	line-height: 200%;
+	padding-top: 2em;
+	padding-bottom: 2em;
+	font-size: 110%;
+}
+
+.details .nov-genotype {
+	font-size: 130%;
+	font-weight: bold;
+}
+
+.details .nov-subclustering {
+	font-weight: bold;
+}
+
+.details h2 {
+	margin-top: 4ex;
+	font-size: 110%;
+	color: darkblue;
+}
+
+.details .label {
+	color: darkblue;
+	width: 25ex;
+	display: inline-block;
+	line-height: 120%;
+	text-align: right;
+	padding-right: 2ex;
+}
+
+.details .dsa-text .label {
+	color: darkblue;
+	width: auto;
+	display: inline;
+}
+
+.details .dsa-text span + span + br + span + span {
+	color: darkblue;
+}
+
+.details .dsa-images .legend {
+	float: right;
+}
+
+.details .dsa-motivation {
+	font-style: italic;
+}
+
+.details img.phyloTree {
+	margin: 1em auto;
+	border: 1px solid black;
+}
+
+.details div.phyloLinks {
+	margin: 1em auto;
+}
+
+.decisionTreeHeader{
+	display: block;
+	margin: 1em auto 0.5em auto;
+	text-align: center;
+	font-size: 110%;
+	font-weight: bold;
+	color: darkblue;
+}
+	
+.listContainer{
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+}
+.listContainerItem{
+	margin-left: 3em;
+	padding-left: 0.5em;
+	display: list-item;
+}
+
+h1 {
+	color: rgb(50,0,150);
+	font-weight: bold;
+  	font-size: 150%;
+  	margin: 1em auto 1em 0.5em;
+  	text-align: center;
+}
+
+*.note, *.footer{
+	padding: 0.5em 3em 0.5em 0.5em;
+	background-color: rgb(204, 204, 255);
+	display: block;
+	width: 80%;
+	margin: 0px auto;
+}
+
+*.footer{
+	text-align: center;
+	font-style: italic;
+}
+
+*.navigation{
+	margin: 1em auto;
+	border-color: black;
+	border-style: solid;
+	border-width: 1px 0px 1px 0px;
+	padding: 1em;
+	text-align: center;
+	height: 30px;
+	width: 80%;
+}
+
+.navigation div {
+	margin: 0px auto;
+}
+
+a, .link{
+	text-decoration: underline;
+	color: blue;
+	cursor: pointer;
+}
+
+*.navigation a {
+	display: inline-block;
+	width: 12%;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.edit-invalid {
+	background-color:#f5baaa;
+}
+
+.edit-valid {
+}
+
+*.details-extraComments {
+	font-style:italic;
+}
+
+table.files_referenceSequences-csv{
+	width: 800px;
+	empty-cells: hide;
+	margin-left: auto;
+	margin-right: auto;
+}
+table.files_referenceSequences-csv td{
+	padding: 0.2em;
+	background-color: rgb(240,240,240);
+	border: 2px solid white;
+}
+table.files_referenceSequences-csv tr:first-child td{
+	color: white;
+	background-color: darkblue;
+}
+
+div.sequence, div.sequenceName {
+	font-size: 75%;
+	display: block;
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: 'monospace';
+}
+
+div.sequence {
+	margin-bottom: 1em;
+}
+
+span.refseq{
+	display: block;
+	text-align: center;
+}
+
+.monitor-form{
+	text-align: center;
+}
+
+.analysisProgress{
+	color: red;
+}
+
+.error {
+	color: red;
+	font-style: italic;
+	padding: 1em;
+}
+
+.cite {
+	vertical-align: super;
+	font-size: 80%;
+}
+
+.bibitem {
+	font-size: 80%;
+
+.bibitem span {
+	color: blue;
+}

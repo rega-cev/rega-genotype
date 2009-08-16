@@ -125,4 +125,8 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 		else
 			return v;
 	}
+
+	public boolean haveForm(String form) {
+		return organism.getChild(form) != null;
+	}
 }

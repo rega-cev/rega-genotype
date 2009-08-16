@@ -41,7 +41,7 @@
 	<resource name="monitorForm.downloadJob">Download all job files:</resource>
 	<resource name="monitorForm.jobFile">ZIP</resource>
 	
-	<resource name="main.navigation.start">Start!</resource>
+	<resource name="main.navigation.start">Submit job</resource>
 	<resource name="main.navigation.monitor">Monitor job [{1}]</resource>
 	<resource name="main.navigation.details">Analysis details [{1}]</resource>
 	<resource name="main.navigation.howToCite">How to cite</resource>

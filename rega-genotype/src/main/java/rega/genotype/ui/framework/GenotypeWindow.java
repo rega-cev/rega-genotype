@@ -104,8 +104,10 @@ public class GenotypeWindow extends WContainerWidget
 		content = new WContainerWidget(this);
 		content.setStyleClass("content");
 
-		WContainerWidget navigation = new WContainerWidget(this);
-		navigation.setStyleClass("navigation");
+		WContainerWidget navigationContainer = new WContainerWidget(this);
+		navigationContainer.setStyleClass("navigation");
+
+		WContainerWidget navigation = new WContainerWidget(navigationContainer);
 
 		footer = new WText(resourceManager.getOrganismValue("main-form", "footer"), this);
 		footer.setStyleClass("footer");
@@ -116,7 +118,11 @@ public class GenotypeWindow extends WContainerWidget
 
 		addLink(navigation, tr("main.navigation.howToCite"), CITE_URL, new HowToCiteForm(this));
 		addLink(navigation, tr("main.navigation.tutorial"), TUTORIAL_URL, new TutorialForm(this));
-		addLink(navigation, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, new DecisionTreesForm(this));
+
+		try {
+			addLink(navigation, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, new DecisionTreesForm(this));
+		} catch (Exception e) {
+		}
 		addLink(navigation, tr("main.navigation.subtypingProcess"), METHOD_URL, new SubtypingProcessForm(this));
 		addLink(navigation, tr("main.navigation.exampleSequences"), EXAMPLES_URL, new ExampleSequencesForm(this));
 		addLink(navigation, tr("main.navigation.contactUs"), CONTACT_URL, new ContactUsForm(this));
