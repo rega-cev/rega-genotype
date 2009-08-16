@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.jdom.Element;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
@@ -152,7 +153,25 @@ public class StartForm extends IForm {
 	}
 
 	public void init() {
-		ta.setText("> seqname\nACGTACGGAAACGATACAAGATACAAGATAACA");
+		List seqs = getMain().getResourceManager().getOrganismElement("exampleSequences-form", "exampleSequences-sequences").getChildren();
+		
+		if(seqs.size()>0) {
+			Element seq = (Element)seqs.get(0);
+			StringBuilder text = new StringBuilder(">" + seq.getAttributeValue("name") + "\n");
+			final int nucleotidesPerLine = 80;
+			int counter = 0;
+			String nucleotides = seq.getTextTrim();
+			for(int i = 0; i<nucleotides.length(); i++) {
+				if(!Character.isWhitespace(nucleotides.charAt(i))) {
+					text.append(nucleotides.charAt(i));
+					counter++;
+					if(counter%nucleotidesPerLine==0) {
+						text.append("\n");
+					}
+				}
+			}
+			ta.setText(text.toString());
+		}
 	}
 
 	private void verifyFasta(String fastaContent) {
