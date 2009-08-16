@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rega-genotype-settings>
+  <property name="xmlPath">/home/plibin0/myWorkspace-lisbon/rega-genotype/xml/</property>
+  <property name="paupCmd">/home/plibin0/paup4b10-x86-linux</property>
+  <property name="clustalWCmd">/usr/bin/clustalw</property>
+  <property name="blastPath">/home/plibin0/projects/blast/blast-2.2.11/bin/</property>
+  <property name="treePuzzleCmd">/home/plibin0/projects/treepuzzle/treepuzzle/src/puzzle</property>
+  <property name="jobDir">/home/plibin0/subtypejobdir/</property>
+  <property name="treeGraphCmd">/home/plibin0/projects/treegraph/tgf10rc4/source/tgf</property>
+</rega-genotype-settings>
