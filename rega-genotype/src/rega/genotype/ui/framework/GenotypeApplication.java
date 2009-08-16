@@ -27,44 +27,6 @@ public class GenotypeApplication extends WApplication
 	{
 		return window_;
 	}
-	
-//	public Tree getTree()
-//	{
-//		return getWindow().getTree_();
-//	}
-//	
-//	public Header getHeader()
-//	{
-//		return getWindow().getHeader_();
-//	}
-//	
-//	public FormContainer getFormContainer()
-//	{
-//		return getWindow().getContainer_();
-//	}	
-//	
-//    public Login getLogin() 
-//    {
-//        return login_;
-//    }
-//    
-//    public void login(String uid, String pwd) throws WrongUidException, WrongPasswordException, DisabledUserException
-//    {
-//    	login_ = Login.authenticate(uid, pwd);
-//		DatabaseManager.initInstance(new HibernateQuery(), new HibernateConnector(login_.copyLogin(), false));
-//    }
-//    
-//    public void logout()
-//    {
-//        //close the wt and servlet session
-//        login_.closeSession();
-//        login_=null;
-//    }
-//    
-//    public Transaction createTransaction()
-//    {
-//    	return login_.createTransaction();
-//    }
 
 	public ServletContext getServletContext()
 	{
