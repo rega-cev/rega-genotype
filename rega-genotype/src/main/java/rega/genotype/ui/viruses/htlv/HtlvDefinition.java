@@ -93,4 +93,8 @@ public class HtlvDefinition implements OrganismDefinition {
 
 	}
 
+	public boolean haveDetailsNavigationForm() {
+		return true;
+	}
+
 }

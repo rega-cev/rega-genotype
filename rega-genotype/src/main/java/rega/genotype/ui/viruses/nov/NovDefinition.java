@@ -95,4 +95,8 @@ public class NovDefinition implements OrganismDefinition {
 	public String getOrganismName() {
 		return "NoV";
 	}
+
+	public boolean haveDetailsNavigationForm() {
+		return false;
+	}
 }

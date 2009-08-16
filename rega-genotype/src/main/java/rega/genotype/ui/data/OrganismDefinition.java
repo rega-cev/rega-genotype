@@ -30,4 +30,5 @@ public interface OrganismDefinition {
 	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p);
 	public int getUpdateInterval();
 	public String getOrganismName();
+	public boolean haveDetailsNavigationForm();
 }

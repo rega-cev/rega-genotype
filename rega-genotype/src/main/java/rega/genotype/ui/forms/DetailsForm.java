@@ -39,30 +39,39 @@ public class DetailsForm extends AbstractForm {
 		}
 		
 		mainTable.clear();
-		
+
 		mainDetails = getMain().getOrganismDefinition().getMainDetailsForm();
 		addDetailsForm(mainDetails, jobDir);
-		
-		WContainerWidget title = new WContainerWidget(mainTable);
-		title.setStyleClass("title");
-		title.addWidget(new WText(tr("details.analysisDetails")));
-		WContainerWidget details = new WContainerWidget(mainTable);
-		details.setStyleClass("details");
-		WListContainerWidget ul = new WListContainerWidget(details);
+
+		WListContainerWidget ul = null;
+		WContainerWidget details = null;
 		WContainerWidget li;
-		for(IDetailsForm df : getMain().getOrganismDefinition().getSupportingDetailsforms(p)) {
-			String detailTitle = df.getTitle().value();
-			WText titleText = new WText(lt("<a href=\"#" + detailTitle.replace(" ", "").toLowerCase() + "\">"+detailTitle+"</a>"));
-			titleText.setStyleClass("link");
-			li = ul.addItem(titleText);
-			li.addWidget(new WBreak());
-			li.addWidget(new WText(df.getComment()));
-			li.addWidget(new WBreak());
+
+		if (getMain().getOrganismDefinition().haveDetailsNavigationForm()) {
+			WContainerWidget title = new WContainerWidget(mainTable);
+			title.setStyleClass("title");
+			title.addWidget(new WText(tr("details.analysisDetails")));
+			details = new WContainerWidget(mainTable);
+			details.setStyleClass("details");
+			ul = new WListContainerWidget(details);
+		}
+
+		for (IDetailsForm df : getMain().getOrganismDefinition().getSupportingDetailsforms(p)) {
+			if (ul != null) {
+				String detailTitle = df.getTitle().value();
+				WText titleText = new WText(lt("<a href=\"#" + detailTitle.replace(" ", "")
+						.toLowerCase() + "\">"+detailTitle+"</a>"));
+				titleText.setStyleClass("link");
+				li = ul.addItem(titleText);
+				li.addWidget(new WBreak());
+				li.addWidget(new WText(df.getComment()));
+				li.addWidget(new WBreak());
 			
-			if(df.getExtraComment()!=null) {
-				WText extraComment = new WText(df.getExtraComment());
-				details.addWidget(extraComment);
-				extraComment.setStyleClass("details-extraComments");
+				if (df.getExtraComment()!=null) {
+					WText extraComment = new WText(df.getExtraComment());
+					details.addWidget(extraComment);
+					extraComment.setStyleClass("details-extraComments");
+				}
 			}
 			
 			addDetailsForm(df, jobDir);

@@ -100,4 +100,8 @@ public class HivDefinition implements OrganismDefinition {
 	public String getOrganismName() {
 		return "HIV";
 	}
+
+	public boolean haveDetailsNavigationForm() {
+		return true;
+	}
 }
