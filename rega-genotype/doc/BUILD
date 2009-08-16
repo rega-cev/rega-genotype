@@ -9,8 +9,8 @@ Build instructions for rega-genotype.
 	  (:pserver:anonymous@cvs.webtoolkit.eu:/opt/cvs)
 	* run ant in the jwt root dir
 	* install the jwt jars in the mvn repos
-		* mvn install:install-file -Dfile=jwt.2.1.5b.jar
-		  -DgroupId=jwt -DartifactId=jwt -Dversion=2.1.5b
+		* mvn install:install-file -Dfile=jwt-2.99.1.jar
+		  -DgroupId=jwt -DartifactId=jwt -Dversion=2.99.1
 		  -Dpackaging=jar -DgeneratePom=true
 
 * download jargs (http://jargs.sourceforge.net/)
