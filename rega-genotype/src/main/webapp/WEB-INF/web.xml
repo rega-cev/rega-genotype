@@ -1,0 +1,28 @@
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN
+" "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<web-app>
+  <servlet>
+    <servlet-name>GenotypeHIV</servlet-name>
+    <display-name>HIV Genotyping</display-name>
+    <description>HIV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hiv.HivMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHIV</servlet-name>
+    <url-pattern>/GenotypeHIV/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>GenotypeNRV</servlet-name>
+    <display-name>NRV Genotyping</display-name>
+    <description>NRV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.nrv.NrvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeNRV</servlet-name>
+    <url-pattern>/GenotypeNRV/*</url-pattern>
+  </servlet-mapping>
+</web-app>
+
