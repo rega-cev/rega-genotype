@@ -9,6 +9,7 @@ import java.util.Map;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
@@ -78,7 +79,11 @@ public abstract class SaxParser extends DefaultHandler {
     	XMLReader xmlReader = XMLReaderFactory.createXMLReader();
         xmlReader.setContentHandler(this);
         xmlReader.setErrorHandler(this);
+        try {
         xmlReader.parse(source);
+        } catch (SAXParseException spe) {
+        	
+        }
     }
     
     private void reset() {

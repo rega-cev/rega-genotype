@@ -49,7 +49,7 @@ public class DefaultJobOverview extends AbstractJobOverview {
 			data.add(new WText(lt(p.getValue("genotype_result.sequence.conclusion.assigned.name"))));
 			
 			String support = p.getValue("genotype_result.sequence.conclusion.assigned.support");
-			if(support.equals("")) {
+			if(support==null) {
 				support = "NA";
 			}
 			data.add(new WText(lt(support)));

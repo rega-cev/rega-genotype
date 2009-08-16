@@ -31,20 +31,32 @@ public abstract class Genome {
 		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genome_" + sequenceIndex + "_" + type + "_" + variant + ".png");
 	
 		if(!pngFile.exists()) {
-			Table csvTable = new Table(new ByteArrayInputStream(csvData.getBytes()), false, '\t');
-		    
-		    int w[] = new int[csvTable.numRows()-1];
-		    String assign[] = new String[csvTable.numRows()-1];
-		    
-		    for(int i = 1; i<csvTable.numRows(); i++) {
-		    	w[i-1] = Integer.parseInt(csvTable.valueAt(0, i));
-		    	assign[i-1] = csvTable.valueAt(csvTable.numColumns() -1 -variant, i);
-		    }
-		    
-		    int imgWidth = 584;
+			int w[];
+			String assign[];
+			int scanWindowSize;
+			int scanStepSize;
+			if(csvData!=null) {
+				Table csvTable = new Table(new ByteArrayInputStream(csvData.getBytes()), false, '\t');
+			    
+				w = new int[csvTable.numRows()-1];
+			    assign = new String[csvTable.numRows()-1];
+			    
+			    for(int i = 1; i<csvTable.numRows(); i++) {
+			    	w[i-1] = Integer.parseInt(csvTable.valueAt(0, i));
+			    	assign[i-1] = csvTable.valueAt(csvTable.numColumns() -1 -variant, i);
+			    }
+			    
+			    scanWindowSize = w[0]*2;
+			    scanStepSize = w[1] - w[0];
+			} else {
+				w = new int[0];
+				assign = new String[0];
+				scanWindowSize = 0;
+				scanStepSize = 0;
+			}
+
+			int imgWidth = 584;
 		    int imgHeight = 150;
-		    int scanWindowSize = w[0]*2;
-		    int scanStepSize = w[1] - w[0];
 		    
 		    BufferedImage image = new BufferedImage(imgWidth,imgHeight,BufferedImage.TYPE_INT_ARGB);
 		    Graphics2D g2d = (Graphics2D)image.getGraphics();

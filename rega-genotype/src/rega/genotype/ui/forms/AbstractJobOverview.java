@@ -34,6 +34,10 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 	
 	private WTimer updater;
 	
+	//TODO make sure the updater is not reading at the moment of a new update
+	
+	//TODO run parser only when result.xml file exists (centralize this into sax parser)
+	
 	public AbstractJobOverview(File jobDir, GenotypeResourceManager rm) {
 		this.jobDir = jobDir;
 		
