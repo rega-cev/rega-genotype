@@ -1,7 +1,6 @@
 PRIORITY
 *jwt bug
 	* WTextArea setText() with '>' -> &gt; (Koen)
-* image centering -> sometimes refresh is needed (Stijn)
 * write installation doc
 * maven
 * details pics, generate them during analysis?
