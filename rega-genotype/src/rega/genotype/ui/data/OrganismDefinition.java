@@ -10,7 +10,6 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
 import rega.genotype.ui.util.Genome;
 
 public interface OrganismDefinition {
@@ -20,5 +19,5 @@ public interface OrganismDefinition {
 	public String getOrganismDirectory();
 	public Genome getGenome();
 	public IDetailsForm getMainDetailsForm();
-	public List<IDetailsForm> getSupportingDetailsforms();
+	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p);
 }

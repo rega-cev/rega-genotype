@@ -104,4 +104,9 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 	public WMessage getTitle() {
 		return tr("defaultSequenceAssignment.title");
 	}
+
+	@Override
+	public WMessage getExtraComment() {
+		return null;
+	}
 }

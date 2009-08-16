@@ -20,20 +20,18 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import net.sf.witty.wt.WAnchor;
 import net.sf.witty.wt.WContainerWidget;
+import net.sf.witty.wt.WFileResource;
 import net.sf.witty.wt.WImage;
 import net.sf.witty.wt.WResource;
 
 import org.apache.commons.io.IOUtils;
-import org.jfree.util.WaitingImageObserver;
 
 import rega.genotype.BlastAnalysis;
-import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
-import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
-import rega.genotype.viruses.hiv.HIVTool;
 
 public class GenotypeLib {
 	
@@ -90,10 +88,12 @@ public class GenotypeLib {
 		ImageIO.write(bufferedImage, "png", out);
 	}
 
-	public static void getSignalPNG(File jodDir, File svgFile, File pngFile) {
+	public static File getSignalPNG(File svgFile) {
+		File pngFile = new File(svgFile.getAbsolutePath().replace(".svg", ".png"));
 		if(!pngFile.exists() && svgFile.exists()){
 			ImageConverter.svgToPng(svgFile, pngFile);
 		}
+		return pngFile;
 	}
 	
 	public static File getTreePDF(File jobDir, File treeFile) {
@@ -168,6 +168,17 @@ public class GenotypeLib {
         }, (WContainerWidget)null);
 		
 		return chartImage;
+	}
+	
+	public static File getFile(File jobDir, String fileName) {
+		return new File(jobDir.getAbsolutePath() + File.separatorChar + fileName);
+	}
+	
+	public static WAnchor getAnchor(String text, String fileType, File f) {
+		WAnchor anchor = new WAnchor((String)null, WContainerWidget.lt(text));
+		anchor.setStyleClass("link");
+		anchor.setRef(new WFileResource(fileType, f.getAbsolutePath()).generateUrl());
+		return anchor;
 	}
 
 	public static void main(String[] args) {

@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 
 import javax.swing.JFrame;
 
+import org.apache.commons.io.FileUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
@@ -59,6 +60,18 @@ public class RecombinationPlot {
 			fos.close();
 		}
 		return pngFile;
+	}
+	
+	public static File getRecombinationCSV(File jobDir, int sequenceIndex, String type, String csvData) {
+		File pdfFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
+		if(!pdfFile.exists()) {
+			try {
+				FileUtils.writeStringToFile(pdfFile, csvData);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return pdfFile;
 	}
 	
 	public static File getRecombinationPDF(File jobDir, int sequenceIndex, String type, String csvData) throws IOException {

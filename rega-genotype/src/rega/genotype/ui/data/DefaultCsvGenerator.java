@@ -31,10 +31,10 @@ public class DefaultCsvGenerator extends AbstractCsvGenerator {
     			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.inner"));
     			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.outer"));
     		} else {
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[purepuzzle].best.id"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[purepuzzle].best.support"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[purepuzzle].best.inner"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[purepuzzle].best.outer"));
+    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure-puzzle].best.id"));
+    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure-puzzle].best.support"));
+    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure-puzzle].best.inner"));
+    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure-puzzle].best.outer"));
     		}
     		
     		csvLine.append("," + getCsvValue("genotype_result.sequence.result[scan].support[assigned]"));

@@ -11,4 +11,5 @@ public abstract class IDetailsForm extends WContainerWidget {
 	public abstract void fillForm(SaxParser p, final OrganismDefinition od, File jobDir);
 	public abstract WMessage getTitle();
 	public abstract WMessage getComment();
+	public abstract WMessage getExtraComment();
 }

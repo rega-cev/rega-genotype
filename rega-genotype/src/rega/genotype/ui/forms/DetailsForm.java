@@ -33,7 +33,14 @@ public class DetailsForm extends WContainerWidget {
 		
 		mainDetails = od.getMainDetailsForm();
 		mainDetails.fillForm(p, od, jobDir);
-		mainTable.putElementAt(0, 0, new WText(mainDetails.getTitle()));
-		mainTable.putElementAt(1, 0, mainDetails);
+		int rowIndex = 0;
+		mainTable.putElementAt(rowIndex++, 0, new WText(mainDetails.getTitle()));
+		mainTable.putElementAt(rowIndex++, 0, mainDetails);
+		
+		for(IDetailsForm df : od.getSupportingDetailsforms(p)) {
+			mainTable.putElementAt(rowIndex++, 0, new WText(df.getTitle()));
+			mainTable.putElementAt(rowIndex++, 0, df);
+			df.fillForm(p, od, jobDir);
+		}
 	}
 }

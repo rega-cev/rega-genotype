@@ -18,4 +18,26 @@
 	<resource name="defaultSequenceAssignment.assignment">Assignment: </resource>
 	<resource name="defaultSequenceAssignment.bootstrap">Bootstrap: </resource>
 	<resource name="defaultSequenceAssignment.motivation">Motivation: </resource>
+	
+	<resource name="defaultPhylogeneticAnalyses.title">Phylogenetic analyses</resource>
+	<resource name="defaultPhylogeneticAnalyses.comment">
+		This section contains the alignments, inferred phylogenetic trees, and detailed results of the evolutionary analysis.
+	</resource>
+	
+	<resource name="defaultRecombinationAnalyses.title">Recombination analyses</resource>
+	<resource name="defaultRecombinationAnalyses.comment">
+		This section contains the recombination plots, and data from which they were derived.
+	</resource>
+	<resource name="defaultRecombinationAnalyses.sequenceName">Sequence name:</resource>
+	<resource name="defaultRecombinationAnalyses.bootscanClusterSupport">Bootscan cluster support:</resource>
+	<resource name="defaultRecombinationAnalyses.download">Download</resource>
+	<resource name="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size ${window} and step size ${step}.</resource>
+
+	<resource name="defaultSignalAnalysis.title">Phylogenetic signal analysis</resource>
+	<resource name="defaultSignalAnalysis.comment">This section contains details of the phylogenetic signal analysis.</resource>
+	<resource name="defaultSignalAnalysis.extraComment">Recombination Analyses are only performed for sequences with more than 800 bp.</resource>
+	<resource name="defaultSignalAnalysis.signalValue">Phylogenetic signal:</resource>
+	<resource name="defaultSignalAnalysis.signalComment">
+		Alignments with phylogenetic signal higher than 0.9 are considered suitable for the REGA subtype analysis. View the quartets mapped to the triangle.
+	</resource>
 </common-settings>

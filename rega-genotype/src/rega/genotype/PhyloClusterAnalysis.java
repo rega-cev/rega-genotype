@@ -32,7 +32,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
     private static final String PAUP_LOG       = "paup.log";
     private static final String PAUP_TREE      = "paup.tre";
     private static final String PAUP_ALIGNMENT = "paup.nex";
-    private static final String PUZZLE_LMA     = "infile.eps";
+    private static final String PUZZLE_LMA     = "infile.svg";
     private static final String PUZZLE_REPORT  = "infile.puzzle";
     private static final String PUZZLE_DIST    = "infile.dist";
     static private final int MRBAYES_ANALYSIS  = 0;
@@ -627,7 +627,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
         String paupLogResource = makeResource(paupLog, "log", haveOption("log"));
         String paupAlignmentResource = makeResource(paupAlignment, "nex", haveOption("alignment"));
         String paupTreeResource = makeResource(paupTree, "tre", haveOption("tree"));
-        String puzzleLMAResource = makeResource(lmaFile, "eps",
+        String puzzleLMAResource = makeResource(lmaFile, "svg",
                                                 haveOption("signal") && haveOption("puzzle"));
         
 		Result r = new Result(sequence, bestCluster, bestSupport, outer, inner, signal, results,
