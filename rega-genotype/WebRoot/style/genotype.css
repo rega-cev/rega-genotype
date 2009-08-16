@@ -17,12 +17,28 @@ body {
 	background-color:#fbfbfb;
 	margin-left: auto;
 	margin-right: auto;
+	padding-left: 2em;
+	padding-right: 2em;
+	width: 80%;
+}
+
+div.imgDiv {
+	margin: 1em auto 1em auto;
+	width: 100%;
+	text-align: center;
+}
+
+*.seqInput {
+	margin-top: 2em;
+	margin-left: auto;
+	margin-right: auto;
 	width: 800px;
 }
-/*
+
 table.window{
 	width: 100%;
 }
+/*
 table.window > tbody > tr > td > *{
 	display: block;
 	width: 800px;
@@ -34,15 +50,18 @@ table.window > div{
 	width: 100%;	
 }
 */
+
+table.window tr:first-child td{
+	text-align: center;
+}
+
 table.jobTable {
 	margin-left: auto;
 	margin-right: auto;
 	border: 1px outset gray;
 	border-spacing: 2px;
 	border-collapse: separate;
-}
-table.jobTable *{
-	width: auto;
+	width: 100%;
 }
 table.jobTable th {
 	border: 1px inset gray;
@@ -83,14 +102,16 @@ table.jobTable td {
 	height: 30px;
 }
 
+a, .link{
+	text-decoration: underline;
+	color: blue;
+}
+
 *.navigation *{
 	font-size: 80%;
 	display: block;
 	width: 12%;
 	float: left;
-	text-decoration: underline;
 	text-align: center;
-	color: blue;
-	/*margin: 0em 1em 0em 1em;*/
 }
 

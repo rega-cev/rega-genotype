@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import net.sf.witty.wt.SignalListener;
 import net.sf.witty.wt.WBreak;
+import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WMouseEvent;
 import net.sf.witty.wt.WPushButton;
 import net.sf.witty.wt.WText;
@@ -29,21 +30,22 @@ public class StartForm extends IForm {
 		
 		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note"), this);
 		note.setStyleClass("note");
-		new WBreak(this);
-		new WBreak(this);
 		
-		new WText(tr("sequenceInput.inputSequenceInFastaFormat"), this);
-		new WBreak(this);
+		WContainerWidget seqinput = new WContainerWidget(this);
+		seqinput.setStyleClass("seqInput");
 		
-		ta = new WTextArea(this);
+		new WText(tr("sequenceInput.inputSequenceInFastaFormat"), seqinput);
+		new WBreak(seqinput);
+		
+		ta = new WTextArea(seqinput);
 		ta.setColumns(100);
 		ta.setRows(15);
-		new WBreak(this);
+		new WBreak(seqinput);
 	
-		run = new WPushButton(this);
+		run = new WPushButton(seqinput);
 		run.setText(tr("sequenceInput.run"));
 		
-		clear = new WPushButton(this);
+		clear = new WPushButton(seqinput);
 		clear.setText(tr("sequenceInput.clear"));
 		clear.clicked.addListener(new SignalListener<WMouseEvent>() {
 			public void notify(WMouseEvent a) {

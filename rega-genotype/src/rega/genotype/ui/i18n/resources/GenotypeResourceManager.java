@@ -79,7 +79,7 @@ public class GenotypeResourceManager implements IWMessageResource {
 				textToReturn.append("<"+e.getName());
 				for(Object oa : e.getAttributes()) {
 					Attribute a = (Attribute)oa;
-					textToReturn.append(a.getName() + "=\"" + a.getValue() + "\"");
+					textToReturn.append(" "+ a.getName() + "=\"" + a.getValue() + "\"");
 				}
 				textToReturn.append(">");
 				extractFormattedText(textToReturn, e);

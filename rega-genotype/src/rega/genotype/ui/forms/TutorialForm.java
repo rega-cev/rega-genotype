@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import net.sf.witty.wt.WBreak;
+import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WImage;
 import net.sf.witty.wt.WResource;
 import net.sf.witty.wt.WText;
@@ -12,7 +13,6 @@ import net.sf.witty.wt.WText;
 import org.apache.commons.io.IOUtils;
 import org.jdom.Element;
 
-import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeWindow;
 
 public class TutorialForm extends IForm {
@@ -25,6 +25,8 @@ public class TutorialForm extends IForm {
 			if(e.getName().equals("text")) {
 				new WText(lt(getMain().getResourceManager().extractFormattedText(e)), this);
 			} else if(e.getName().equals("figure")) {
+				WContainerWidget imgDiv = new WContainerWidget(this);
+				imgDiv.setStyleClass("imgDiv");
 				new WImage(new WResource() {
 		            @Override
 		            public String resourceMimeType() {
@@ -38,7 +40,7 @@ public class TutorialForm extends IForm {
 		                    e.printStackTrace();
 		                }
 		            }
-		        }, this);
+		        }, imgDiv);
 			}
 			new WBreak(this);
 		}
