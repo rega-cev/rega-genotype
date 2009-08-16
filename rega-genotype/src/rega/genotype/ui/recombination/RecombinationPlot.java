@@ -9,19 +9,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import javax.swing.JFrame;
 
 import org.apache.commons.io.FileUtils;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 
-import rega.genotype.ui.util.GenotypeLib;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -44,10 +42,15 @@ public class RecombinationPlot {
 				false 
 				);
 		XYPlot plot = chart.getXYPlot();
-		XYItemRenderer renderer = plot.getRenderer();
+		plot.setDomainGridlinesVisible(false);
+		plot.setRangeGridlinesVisible(false);
+		NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
+		yAxis.setTickUnit(new NumberTickUnit(20), true, true);
+		
 
-		NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+		NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
+		xAxis.setTickUnit(new NumberTickUnit(200), true, true);
+		
 		
 		return chart;
 	}
