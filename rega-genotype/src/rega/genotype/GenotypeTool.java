@@ -117,7 +117,7 @@ public abstract class GenotypeTool {
         stopTracer();
 	}
 	
-    protected void analyze(String sequenceFile, String traceFile) throws IOException {
+    public void analyze(String sequenceFile, String traceFile) throws IOException {
         startTracer(traceFile);
 
         LineNumberReader reader
@@ -217,7 +217,11 @@ public abstract class GenotypeTool {
                                      workingDir);
     }
 
-    /**
+    public static void setXmlBasePath(String xmlBasePath) {
+		GenotypeTool.xmlBasePath = xmlBasePath;
+	}
+
+	/**
      * @return Returns the tracer.
      */
     public ResultTracer getTracer() {

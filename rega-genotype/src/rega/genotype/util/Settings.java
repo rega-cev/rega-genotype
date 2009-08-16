@@ -91,13 +91,4 @@ public class Settings {
         
         return new Settings(new File(configFile));
 	}
-	
-	public static void main(String [] args) {
-		Settings s = Settings.getInstance();
-		System.err.println(s.getClustalWCmd());
-		System.err.println(s.getPaupCmd());
-		System.err.println(s.getBlastPath());
-		System.err.println(s.getTreePuzzleCmd());
-		System.err.println(s.getXmlPath());
-	}
 }
