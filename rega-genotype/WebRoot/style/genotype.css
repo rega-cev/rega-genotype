@@ -118,6 +118,15 @@ table.detailsForm *.recombinationDetails{
 	color: darkblue;
 }
 
+.decisionTreeHeader{
+	display: block;
+	margin: 1em auto 0.5em auto;
+	text-align: center;
+	font-size: 110%;
+	font-weight: bold;
+	color: darkblue;
+}
+	
 .listContainer{
 	margin-top: 0.5em;
 	margin-bottom: 1em;

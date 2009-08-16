@@ -15,12 +15,14 @@ public class DecisionTreesForm extends IForm {
 		
 		String ruleNumber;
 		String ruleName;
+		int headerNr=0;
 		
 		Element text = main.getResourceManager().getOrganismElement("decisionTrees-form", "decisionTrees-text");
 		for(Object o : text.getChildren()) {
 			final Element e = (Element)o;
 			if(e.getName().equals("header")) {
-				new WText(lt(getMain().getResourceManager().extractFormattedText(e)), this);
+				WText header = new WText(lt((++headerNr) + ". " + getMain().getResourceManager().extractFormattedText(e) +":"), this);
+				header.setStyleClass("decisionTreeHeader");
 			} else if(e.getName().equals("rule")){
 				ruleNumber = e.getAttributeValue("number");
 				ruleName = e.getAttributeValue("name");
