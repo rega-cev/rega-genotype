@@ -31,6 +31,8 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WebSession;
+import eu.webtoolkit.jwt.utils.StringUtils;
 
 /**
  * The frame of the application.
@@ -91,7 +93,10 @@ public class GenotypeWindow extends WContainerWidget
 		loadI18nResources();
 
 		setStyleClass("root");
-		WApplication.instance().useStyleSheet("/style/genotype.css");
+		WApplication app = WApplication.instance();
+		
+		String contextPath = WebSession.Handler.instance().request().getContextPath();
+		app.useStyleSheet(StringUtils.terminate(contextPath, '/') + "style/genotype.css");
 
 		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
 		header.setStyleClass("header");
