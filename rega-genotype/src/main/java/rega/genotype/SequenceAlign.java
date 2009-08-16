@@ -79,10 +79,15 @@ public class SequenceAlign {
 
     static public SequenceAlignment pairAlign(AbstractSequence s1, AbstractSequence s2, File workingDir)
             throws AlignmentException {
-        return clustalPairAlign(s1, s2, workingDir);
+        return pairAlign(s1, s2, workingDir, 15.0, 6.66);
+    }
+
+    static public SequenceAlignment pairAlign(AbstractSequence s1, AbstractSequence s2, File workingDir, double gapOpenPenalty, double gapExtensionPenalty)
+    		throws AlignmentException {
+    	return clustalPairAlign(s1, s2, workingDir, gapOpenPenalty, gapExtensionPenalty);
     }
     
-    private static SequenceAlignment clustalPairAlign(AbstractSequence s1, AbstractSequence s2, File workingDir)
+    private static SequenceAlignment clustalPairAlign(AbstractSequence s1, AbstractSequence s2, File workingDir, double gapOpenPenalty, double gapExtensionPenalty)
             throws AlignmentException {
         try {
             File f = File.createTempFile("pair", ".fasta");
@@ -97,8 +102,10 @@ public class SequenceAlign {
 
             String cmd = clustalWPath + " -quicktree -infile=" + f.getAbsolutePath()
                 + " -output=fasta"
+                + " -gapopen=" + gapOpenPenalty
+                + " -gapext=" + gapExtensionPenalty
                 + " -outfile=" + f3.getAbsolutePath();
-            //System.out.println(cmd);
+            System.err.println(cmd);
             Runtime r = Runtime.getRuntime();
             Process p = r.exec(cmd, null, workingDir);
             InputStream inputStream = p.getInputStream();
