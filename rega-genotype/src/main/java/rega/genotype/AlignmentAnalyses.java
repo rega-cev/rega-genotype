@@ -225,27 +225,30 @@ public class AlignmentAnalyses {
             Element alignmentE = root.getChild("alignment");
             String alignmentFile = alignmentE.getAttributeValue("file");
 
+            int sequenceType = SequenceAlignment.SEQUENCE_ANY;
+            
+            String data = alignmentE.getAttributeValue("data");
+            if (data != null) {
+            	if (data.equalsIgnoreCase("dna"))
+            		sequenceType = SequenceAlignment.SEQUENCE_DNA;
+            	else
+            		sequenceType = SequenceAlignment.SEQUENCE_AA;
+            }
+
             alignment
                 = new SequenceAlignment
                     (new BufferedInputStream
                             (new FileInputStream(
                                     fileName.getParent()
                                     + File.separator + alignmentFile)),
-                     SequenceAlignment.FILETYPE_FASTA);
+                     SequenceAlignment.FILETYPE_FASTA,
+                     sequenceType);
             
             String trimAlignment = alignmentE.getAttributeValue("trim");
             if (trimAlignment != null && trimAlignment.equals("true"))
                 this.trimAlignment = true;
             else
                 this.trimAlignment = false;
-
-            String data = alignmentE.getAttributeValue("data");
-            if (data != null) {
-            	if (data.equalsIgnoreCase("dna"))
-            		alignment.setSequenceType(SequenceAlignment.SEQUENCE_DNA);
-            	else
-            		alignment.setSequenceType(SequenceAlignment.SEQUENCE_AA);
-            }
 
             Element clustersE = root.getChild("clusters");
             List clusterEs = clustersE.getChildren("cluster");

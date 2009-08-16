@@ -35,21 +35,23 @@ public class SequenceAlignment
     public final static int FILETYPE_NEXUS = 2;
     public final static int FILETYPE_PHYLIP = 3;
 
-	public final static int SEQUENCE_DNA = 0;
-	public final static int SEQUENCE_AA = 1;
+	public final static int SEQUENCE_ANY = 0;
+	public final static int SEQUENCE_DNA = 1;
+	public final static int SEQUENCE_AA = 2;
     
     public final static int MAX_NEXUS_TAXUS_LENGTH = 20;
     public final static int MAX_PHYLIP_TAXUS_LENGTH = 8;
 
     public SequenceAlignment(InputStream inputFile,
-                             int fileType)
+                             int fileType, int sequenceType)
         throws ParameterProblemException, IOException, FileFormatException
     {
+    	this.sequenceType = sequenceType;
         this.sequences = new ArrayList<AbstractSequence>();
 
         switch (fileType) {
             case FILETYPE_FASTA:
-                readFastaFile(inputFile);
+                readFastaFile(inputFile, sequenceType);
                 break;
             case FILETYPE_CLUSTAL:
                 //readClustalFile(inputFile);
@@ -122,7 +124,7 @@ public class SequenceAlignment
         this.sequenceType = sequenceType;
     }
 
-    private void readFastaFile(InputStream inputFile)
+    private void readFastaFile(InputStream inputFile, int sequenceType)
         throws IOException, FileFormatException
     {
         /*
@@ -136,17 +138,16 @@ public class SequenceAlignment
             = new LineNumberReader(new InputStreamReader(inputFile));
 
         for (;;) {
-            Sequence s = readFastaFileSequence(reader);
+            Sequence s = readFastaFileSequence(reader, sequenceType);
 
             if (s != null) {
                 sequences.add(s);
-                //System.err.println(s.getName() + " " + s.getLength());
             } else
                 return;
         }
     }
 
-    public static Sequence readFastaFileSequence(LineNumberReader reader)
+    public static Sequence readFastaFileSequence(LineNumberReader reader, int sequenceType)
         throws IOException, FileFormatException
     {
         /*
@@ -167,7 +168,7 @@ public class SequenceAlignment
         header = header.substring(1);
         while (header.charAt(0) == ' ')
 			header = header.substring(1);
-        // seperate name from description
+        // separate name from description
         int spacePos = header.indexOf(' ');
         String name;
         String description;
@@ -194,14 +195,34 @@ public class SequenceAlignment
                     reader.reset(); 
                     s = null;
                  } else
-                    sequence.append(s);
+                    sequence.append(checkLegal(s, reader.getLineNumber(), sequenceType));
             }
         } while (s != null);
 
         return new Sequence(name, description, sequence.toString());
     }
 
-    /**
+    private static String checkLegal(String s, int line, int sequenceType) throws FileFormatException {
+    	s = s.replaceAll("[ \\t\\n\\r]", "");
+    	
+    	switch (sequenceType) {
+    	case SEQUENCE_ANY:
+    		if (!s.toUpperCase().matches("[A-Z\\-.*]*"))
+    			throw new FileFormatException("Illegal character in input", line);
+    		break;
+    	case SEQUENCE_DNA:
+    		if (!s.toUpperCase().matches("[ACGTRYSWKMBDHVN\\-.]*"))
+    			throw new FileFormatException("Illegal nucleotide character in input", line);
+    		break;
+    	case SEQUENCE_AA:
+    		if (!s.toUpperCase().matches("[ACDEFGHIKLMNPQRSTVWXY\\-.*]*"))
+    			throw new FileFormatException("Illegal amino acid character in input", line);
+    	}
+    		
+    	return s;
+	}
+
+	/**
      * Sanitize the sequence name to not confuse phylogenetic software packages with
      * symbols that they cannot handle or too long sequence names.
      */

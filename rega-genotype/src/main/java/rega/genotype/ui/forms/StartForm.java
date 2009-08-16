@@ -5,8 +5,11 @@
  */
 package rega.genotype.ui.forms;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,7 @@ import org.jdom.Element;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.SequenceAlignment;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
@@ -91,7 +95,7 @@ public class StartForm extends IForm {
 				verifyFasta(ta.text());
 			}
 		});
-		errorSeq = new WText(tr("startForm.errorSequence"), seqinput);		
+		errorSeq = new WText(tr("startForm.errorSequence"), seqinput);
 		
 		new WBreak(this);
 		
@@ -179,23 +183,29 @@ public class StartForm extends IForm {
 	}
 
 	private void verifyFasta(String fastaContent) {
-		int amountOfSeqs = 0;
-		int i = 0;
-		
-		while(true) {
-			i = fastaContent.indexOf('>', i);
-			if(i!=-1) {
-				amountOfSeqs++;
-				i++;
-			} else { 
-				break;
+		int sequenceCount = 0;
+
+		LineNumberReader r = new LineNumberReader(new StringReader(fastaContent));
+
+		try {
+			while (true) {
+				if (SequenceAlignment.readFastaFileSequence(r, SequenceAlignment.SEQUENCE_DNA)
+						== null)
+					break;
+				++sequenceCount;
 			}
-		}
-		
-		if(amountOfSeqs<=Settings.getInstance().getMaxAllowedSeqs()) {
-			setValid(ta, errorSeq);
-			startJob(fastaContent);
-		} else {
+
+			if (sequenceCount <= Settings.getInstance().getMaxAllowedSeqs()) {
+				setValid(ta, errorSeq);
+				startJob(fastaContent);
+			}
+
+		} catch (IOException e) {
+			errorSeq.setText(lt("I/O error reading the sequence."));
+			setInvalid(ta, errorSeq);
+			e.printStackTrace();
+		} catch (FileFormatException e) {
+			errorSeq.setText(lt(e.getMessage()));
 			setInvalid(ta, errorSeq);
 		}
 	}

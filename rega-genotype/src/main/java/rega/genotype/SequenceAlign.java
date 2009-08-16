@@ -131,7 +131,8 @@ public class SequenceAlign {
             */
             SequenceAlignment result
                 = new SequenceAlignment(new BufferedInputStream(new FileInputStream(f3)),
-                                        SequenceAlignment.FILETYPE_FASTA);
+                                        SequenceAlignment.FILETYPE_FASTA,
+                                        SequenceAlignment.SEQUENCE_ANY);
             
             f.delete();
             f3.delete();
@@ -222,7 +223,8 @@ public class SequenceAlign {
             */
             SequenceAlignment result
                 = new SequenceAlignment(new BufferedInputStream(new FileInputStream(f3)),
-                                        SequenceAlignment.FILETYPE_FASTA);
+                                        SequenceAlignment.FILETYPE_FASTA,
+                                        SequenceAlignment.SEQUENCE_ANY);
             
             f.delete();
             f2.delete();

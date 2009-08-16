@@ -142,7 +142,7 @@ public abstract class GenotypeTool {
         
         try {
 			for (;;) {
-			    Sequence s = SequenceAlignment.readFastaFileSequence(reader);
+			    Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
 			    if (s != null) {
                     s.removeGaps();
 
