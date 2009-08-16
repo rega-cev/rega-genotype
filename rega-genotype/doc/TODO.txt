@@ -4,6 +4,12 @@ PRIORITY
 * maven + BUILD
 * details pics, generate them during analysis?
 * unit test example
+* 1st time monitor is shown, downloads are not centralized
+* between "analysis in progress" and table -> break
+* start form -> fix monitor layout
+* ref seq name is too long
+* updateTime (monitorform)
+	* make configurable + fill in
 
 LATER
 * WMessage args, WAnchors
