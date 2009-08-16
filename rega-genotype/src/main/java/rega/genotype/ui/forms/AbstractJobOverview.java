@@ -41,9 +41,8 @@ public abstract class AbstractJobOverview extends IForm {
 	private WTimer updater;
 	
 	private WContainerWidget downloadContainer;
-	
-	private boolean fillingTable = false;
-	
+
+	private boolean fillingTable = false;	
 
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main, "monitor-form");
@@ -74,6 +73,8 @@ public abstract class AbstractJobOverview extends IForm {
 						if (!id.equals("")) {
 							int sequenceIndex = Integer.valueOf(id);
 							getMain().detailsForm(jobDir, sequenceIndex);
+						} else {
+							getMain().setForm(AbstractJobOverview.this);
 						}
 					} catch (NumberFormatException e) {
 						e.printStackTrace();
@@ -89,6 +90,9 @@ public abstract class AbstractJobOverview extends IForm {
 				updater.stop();
 			else
 				updater.start();
+
+		if (!hidden)
+			fillTable();
 
 		super.setHidden(hidden);
 	}
@@ -122,10 +126,10 @@ public abstract class AbstractJobOverview extends IForm {
 						fillTable();
 				}
 			});
-			updater.start();
+
+			// the update timer will be started from within setHidden(false), together with
+			// an initial fill
 		}
-		
-		fillTable();
 	}
 	
 	public void fillTable() {
@@ -138,12 +142,14 @@ public abstract class AbstractJobOverview extends IForm {
 			}
 		}
 		
-		p.parseFile(jobDir);
+		tableFiller.parseFile(jobDir);
 		
 		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
 		if(jobDone.exists()) {
-			if(updater!=null)
+			if (updater!=null) {
 				updater.stop();
+				updater = null;
+			}
 			analysisInProgress.setHidden(true);
 
 			new WText(tr("monitorForm.downloadResults"), downloadContainer);
@@ -206,12 +212,12 @@ public abstract class AbstractJobOverview extends IForm {
 		fillingTable = false;
 	}
 
-	private SaxParser p = new SaxParser(){
+	private SaxParser tableFiller = new SaxParser(){
 		@Override
 		public void endSequence() {
 			int numRows = jobTable.numRows()-1;
 			if(getSequenceIndex()>=numRows) {
-				List<WWidget> data = getData(p);
+				List<WWidget> data = getData(tableFiller);
 				for(int i = 0; i<data.size(); i++) {
 					jobTable.elementAt(getSequenceIndex()+1, i).addWidget(data.get(i));
 				}
