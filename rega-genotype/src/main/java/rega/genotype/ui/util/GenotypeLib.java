@@ -214,7 +214,7 @@ public class GenotypeLib {
 			if (line.equals("\\begindef")) {
 				out.println("\\paper{a2}");
 				out.println("\\width{170}");
-				out.println("\\height{" + (taxa * 8) + "}");
+				out.println("\\height{" + (taxa * 8.3) + "}");
 				out.println("\\margin{10}{10}{10}{10}");
 				out.println("\\style{default}{plain}{13}");
 				out.println("\\style{r}{plain}{13}");
