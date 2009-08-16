@@ -1,0 +1,83 @@
+<genotype-analyses>
+	<alignment file="enterovirus-D-VP1.fasta" trim="false" />
+
+	<clusters>
+		<cluster id="EV-68" name="Enterovirus D, serotype EV-68">
+			<taxus name="EV-68|EF107098" />
+			<taxus name="EV-68|AY426531" />
+		</cluster>
+
+		<cluster id="EV-70" name="Enterovirus D, serotype EV-70">
+			<taxus name="EV-70|NC_001430" />
+			<taxus name="EV-70|D17599" />
+		</cluster>
+
+		<cluster id="EV-94" name="Enterovirus D, serotype EV-94">
+			<taxus name="EV-94|EF107097" />
+			<taxus name="EV-94|DQ916376" />
+		</cluster>
+
+		<!-- singletons in the end -->
+		<cluster id="enterovirus-A" name="Enterovirus A">
+			<taxus name="Outgroup|AB192877" />
+		</cluster>
+	</clusters>
+
+	<analysis id="phylo-serotype" type="paup">
+		<identify>
+		  EV-70, EV-94, EV-68, enterovirus-A
+		</identify>
+		<cutoff>
+			80
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			export format=phylip file=paup.fasta replace=yes;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup Outgroup|AB192877;
+			set criterion=distance outroot=monophyl;
+			dset distance=TamNei rates=gamma shape=0.393955 pinvar=0 NegBrLen=SetAbsVal;
+			constraints
+			CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="scan-self" type="scan">
+		<window>
+			300
+		</window>
+		<step>
+			50
+		</step>
+		<analysis type="paup">
+			<identify>
+				EV-70
+			</identify>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				outgroup EU360814|III.1;
+				set criterion=distance outroot=monophyl;
+				dset distance=TamNei rates=gamma shape=0.413123 NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+
+</genotype-analyses>
+

@@ -18,6 +18,7 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
+import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
@@ -27,7 +28,7 @@ import eu.webtoolkit.jwt.WString;
 /**
  * Enterovirus OrganismDefinition implementation.
  */
-public class EtvDefintion implements OrganismDefinition {
+public class EtvDefinition implements OrganismDefinition {
 	private EtvGenome genome = new EtvGenome(this);
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
@@ -53,7 +54,7 @@ public class EtvDefintion implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new EtvSequenceAssignmentForm();
+		return new DefaultSequenceAssignmentForm(0, "genotype_result.sequence.result['scan'].data");
 	}
 
 	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms) {

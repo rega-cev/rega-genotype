@@ -297,15 +297,31 @@ public class AlignmentAnalyses {
 
         Element cutoffE = element.getChild("cutoff");
         Double cutoff = null;
-        if (cutoffE != null)
+        boolean relativeCutoff = false;
+        Double maxPValue = null;
+        if (cutoffE != null) {
             cutoff = Double.valueOf(cutoffE.getTextTrim());
+
+            String maxP = cutoffE.getAttributeValue("max-p-value");
+            if (maxP != null)
+            	maxPValue = Double.valueOf(maxP);
+
+            String type = cutoffE.getAttributeValue("type");
+            if (type != null)
+            	if (type.equals("relative"))
+            		relativeCutoff = true;
+            	else if (type.equals("absolute"))
+            		; // default
+            	else
+            		throw new RuntimeException("BlastAnalysis: unsupported cutoff type " + type + ", expecting relative|absolute");
+        }
 
         String blastOptions = null;
         Element optionsE = element.getChild("options");
         if (optionsE != null)
             blastOptions = optionsE.getTextTrim();
 
-        BlastAnalysis analysis = new BlastAnalysis(this, id, cs, cutoff, blastOptions, workingDir);
+        BlastAnalysis analysis = new BlastAnalysis(this, id, cs, cutoff, maxPValue, relativeCutoff, blastOptions, workingDir);
 
         List regionsEs = element.getChildren("regions");
         for (Iterator i = regionsEs.iterator(); i.hasNext();) {

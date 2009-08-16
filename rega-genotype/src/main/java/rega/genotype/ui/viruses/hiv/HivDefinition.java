@@ -61,7 +61,7 @@ public class HivDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(2, "genotype_result.sequence.result['scan'].data");
+		return new DefaultSequenceAssignmentForm(2, null);
 	}
 
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p) {

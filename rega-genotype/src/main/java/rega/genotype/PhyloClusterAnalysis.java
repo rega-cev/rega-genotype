@@ -44,6 +44,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
     private static final String PAUP_LOG       = "paup.log";
     private static final String PAUP_TREE      = "paup.tre";
     private static final String PAUP_ALIGNMENT = "paup.nex";
+    private static final String PAUP_BACKBONE  = "${BACKBONE-CLUSTERS}";
     private static final String PUZZLE_LMA     = "infile.svg";
     private static final String PUZZLE_REPORT  = "infile.puzzle";
     private static final String PUZZLE_DIST    = "infile.dist";
@@ -601,7 +602,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
     }
 
 	protected Result compute(SequenceAlignment alignment, AbstractSequence sequence,
-                             List<String> queryTaxa, int analysisMethod)
+                             List<String> queryTaxa, int analysisMethod, String backboneClusters)
 			throws IOException, ApplicationException {
 		File bootstrapFile = null;
 
@@ -612,7 +613,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 			bootstrapFile = new File("analysis.parts");
 			break;
 		case PAUP_ANALYSIS:
-			if (!runPaup(alignment, workingDir, commandBlock))
+			if (!runPaup(alignment, workingDir, commandBlock.replace(PAUP_BACKBONE, backboneClusters)))
 				throw new ApplicationException("internal error: weirdness running mrbayes");
 			bootstrapFile = getTempFile(PAUP_LOG);
 		}
@@ -811,25 +812,46 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             throws AnalysisException {
         
         try {
-            SequenceAlignment aligned = profileAlign(alignment, sequence, workingDir);
-
-            List<String> sequences = new ArrayList<String>();
-            if (sequence != null)
-                sequences.add(sequence.getName());
-
+            /*
+             * Collect clusters, and build automatically the paup backbone constraint
+             */
+            StringBuffer backboneClusters = new StringBuffer("(");
             Set<String> clusterSequences = new LinkedHashSet<String>();
             for (int i = 0; i < clusters.size(); ++i) {
                 List<String> taxa = clusters.get(i).getTaxaIds();
-                clusterSequences.addAll(taxa);
+                if (taxa.size() > 1) {
+                	if (backboneClusters.length() > 1)
+                		backboneClusters.append(',');
+                	int index = clusterSequences.size() + 2;
+                	backboneClusters.append('(').append(index++);
+                	for (int k = 1; k < taxa.size(); ++k)
+                		backboneClusters.append(',').append(index++);
+                	backboneClusters.append(')');
+                }
+
+       			clusterSequences.addAll(taxa);
+            }
+            backboneClusters.append(')');
+
+        	/*
+        	 * Collect list of sequences;
+        	 * modify name of query sequence if it collides with a reference sequence.
+        	 */
+            List<String> sequences = new ArrayList<String>();
+            if (sequence != null) {
+            	if (clusterSequences.contains(sequence.getName()))
+            		sequence.setName(sequence.getName() + "_Query");
+                sequences.add(sequence.getName());
             }
             sequences.addAll(clusterSequences);
-
+        	
+            SequenceAlignment aligned = profileAlign(alignment, sequence, workingDir);
             SequenceAlignment analysisAlignment = aligned.selectSequences(sequences);
             
             List<String> queryTaxa = new ArrayList<String>();
             if (sequence != null)
                 queryTaxa.add(sequence.getName());
-            return compute(analysisAlignment, sequence, queryTaxa, PAUP_ANALYSIS);
+            return compute(analysisAlignment, sequence, queryTaxa, PAUP_ANALYSIS, backboneClusters.toString());
         } catch (AlignmentException e) {
             throw new AnalysisException(getId(), sequence, e);
         } catch (IOException e) {

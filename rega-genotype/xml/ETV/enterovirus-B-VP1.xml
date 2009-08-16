@@ -1,0 +1,354 @@
+<genotype-analyses>
+	<alignment file="enterovirus-B-VP1.fasta" trim="true" />
+
+	<clusters>
+		<cluster id="CV-A9" name="Enterovirus B, serotype CV-A9">
+			<taxus name="CV-A9|AB268121" />
+			<taxus name="CV-A9|D00627" />
+		</cluster>
+
+		<cluster id="CV-B1" name="Enterovirus B, serotype CV-B1">
+			<taxus name="CV-B1|M16560" />
+			<taxus name="CV-B1|AB167989" />
+		</cluster>
+
+		<cluster id="CV-B2" name="Enterovirus B, serotype CV-B2">
+			<taxus name="CV-B2|AF081312" />
+			<taxus name="CV-B2|EF174469" />
+		</cluster>
+
+		<cluster id="CV-B3" name="Enterovirus B, serotype CV-B3">
+			<taxus name="CV-B3|M33854" />
+			<taxus name="CV-B3|U57056" />
+		</cluster>
+
+		<cluster id="CV-B4" name="Enterovirus B, serotype CV-B4">
+			<taxus name="CV-B4|S76772" />
+			<taxus name="CV-B4|X05690D00149" />
+		</cluster>
+
+		<cluster id="CV-B5" name="Enterovirus B, serotype CV-B5">
+			<taxus name="CV-B5|AF114383" />
+			<taxus name="CV-B5|AY875692" />
+		</cluster>
+
+		<cluster id="CV-B6" name="Enterovirus B, serotype CV-B6">
+			<taxus name="CV-B6|AF039205" />
+			<taxus name="CV-B6|AF225469" />
+		</cluster>
+
+		<cluster id="E-1" name="Enterovirus B, serotype E-1">
+			<taxus name="E-1|AF250874" />
+			<taxus name="E-1|AB268145" />
+		</cluster>
+
+		<cluster id="E-2" name="Enterovirus B, serotype E-2">
+			<taxus name="E-2|AF081315" />
+			<taxus name="E-2|AM236961" />
+		</cluster>
+
+		<cluster id="E-3" name="Enterovirus B, serotype E-3">
+			<taxus name="E-3|AY919580" />
+			<taxus name="E-3|AF081316" />
+		</cluster>
+
+		<cluster id="E-4" name="Enterovirus B, serotype E-4">
+			<taxus name="E-4|AM236919" />
+			<taxus name="E-4|AF081318" />
+		</cluster>
+
+		<cluster id="E-5" name="Enterovirus B, serotype E-5">
+			<taxus name="E-5|AY956568" />
+			<taxus name="E-5|AF081320" />
+		</cluster>
+
+		<cluster id="E-6" name="Enterovirus B, serotype E-6">
+			<taxus name="E-6|AF081323" />
+			<taxus name="E-6|AF081322" />
+		</cluster>
+
+		<cluster id="E-9" name="Enterovirus B, serotype E-9">
+			<taxus name="E-9|AF524867" />
+			<taxus name="E-9|X84981" />
+		</cluster>
+
+		<cluster id="E-11" name="Enterovirus B, serotype E-11">
+			<taxus name="E-11|X80059" />
+			<taxus name="E-11|AJ276224" />
+		</cluster>
+
+		<cluster id="E-12" name="Enterovirus B, serotype E-12">
+			<taxus name="E-12|X77709" />
+			<taxus name="E-12|AJ241440" />
+		</cluster>
+
+		<cluster id="E-13" name="Enterovirus B, serotype E-13">
+			<taxus name="E-13|AY680685" />
+			<taxus name="E-13|AJ241427" />
+		</cluster>
+
+		<cluster id="E-14" name="Enterovirus B, serotype E-14">
+			<taxus name="E-14|AY919424" />
+			<taxus name="E-14|AF081328" />
+		</cluster>
+
+		<cluster id="E-16" name="Enterovirus B, serotype E-16">
+			<taxus name="E-16|AB234347" />
+			<taxus name="E-16|X89545" />
+		</cluster>
+
+		<cluster id="E-17" name="Enterovirus B, serotype E-17">
+			<taxus name="E-17|AF081330" />
+			<taxus name="E-17|AY919430" />
+		</cluster>
+
+		<cluster id="E-18" name="Enterovirus B, serotype E-18">
+			<taxus name="E-18|AF081331" />
+			<taxus name="E-18|AM236918" />
+		</cluster>
+
+		<cluster id="E-19" name="Enterovirus B, serotype E-19">
+			<taxus name="E-19|AF081332" />
+			<taxus name="E-19|DQ081220" />
+		</cluster>
+
+		<cluster id="E-20" name="Enterovirus B, serotype E-20">
+			<taxus name="E-20|AJ241443" />
+			<taxus name="E-20|AJ241431" />
+		</cluster>
+
+		<cluster id="E-21" name="Enterovirus B, serotype E-21">
+			<taxus name="E-21|AF081334" />
+			<taxus name="E-21|AM711041" />
+		</cluster>
+
+		<cluster id="E-24" name="Enterovirus B, serotype E-24">
+			<taxus name="E-24|AF081335" />
+			<taxus name="E-24|AB268244" />
+		</cluster>
+
+		<cluster id="E-25" name="Enterovirus B, serotype E-25">
+			<taxus name="E-25|AF081336" />
+			<taxus name="E-25|AM711079" />
+		</cluster>
+
+		<cluster id="E-26" name="Enterovirus B, serotype E-26">
+			<taxus name="E-26|AF081337" />
+			<taxus name="E-26|AY919505" />
+		</cluster>
+
+		<cluster id="E-27" name="Enterovirus B, serotype E-27">
+			<taxus name="E-27|AF081338" />
+			<taxus name="E-27|AM711037" />
+		</cluster>
+
+		<cluster id="E-29" name="Enterovirus B, serotype E-29">
+			<taxus name="E-29|AB268260" />
+			<taxus name="E-29|AF081339" />
+		</cluster>
+
+		<cluster id="E-30" name="Enterovirus B, serotype E-30">
+			<taxus name="E-30|AJ295178" />
+			<taxus name="E-30|AF152869" />
+		</cluster>
+
+		<cluster id="E-31" name="Enterovirus B, serotype E-31">
+			<taxus name="E-31|AF081344" />
+			<taxus name="E-31|AB268266" />
+		</cluster>
+
+		<cluster id="E-33" name="Enterovirus B, serotype E-33">
+			<taxus name="E-33|AY167798" />
+			<taxus name="E-33|AF081346" />
+		</cluster>
+
+		<cluster id="EV-B" name="Enterovirus B, serotype EV-B">
+			<taxus name="EV-B|EF127242" />
+			<taxus name="EV-B|EF127243" />
+		</cluster>
+
+		<cluster id="EV-73" name="Enterovirus B, serotype EV-73">
+			<taxus name="EV-73|AB426613" />
+			<taxus name="EV-73|AB426614" />
+		</cluster>
+
+		<cluster id="EV-74" name="Enterovirus B, serotype EV-74">
+			<taxus name="EV-74|AY556062" />
+			<taxus name="EV-74|EF617336" />
+		</cluster>
+
+		<cluster id="EV-75" name="Enterovirus B, serotype EV-75">
+			<taxus name="EV-75|DQ468137" />
+			<taxus name="EV-75|AY556066" />
+		</cluster>
+
+		<cluster id="EV-79" name="Enterovirus B, serotype EV-79">
+			<taxus name="EV-79|AY843297" />
+			<taxus name="EV-79|AB426610" />
+		</cluster>
+
+		<cluster id="EV-80" name="Enterovirus B, serotype EV-80">
+			<taxus name="EV-80|AY843298" />
+			<taxus name="EV-80|AY843310" />
+		</cluster>
+
+		<cluster id="EV-81" name="Enterovirus B, serotype EV-81">
+			<taxus name="EV-81|AB268272" />
+			<taxus name="EV-81|AY843299" />
+		</cluster>
+
+		<cluster id="EV-82" name="Enterovirus B, serotype EV-82">
+			<taxus name="EV-82|AY843300" />
+			<taxus name="EV-82|AY843311" />
+		</cluster>
+
+		<cluster id="EV-83" name="Enterovirus B, serotype EV-83">
+			<taxus name="EV-83|AY843301" />
+			<taxus name="EV-83|AB268274" />
+		</cluster>
+
+		<cluster id="EV-86" name="Enterovirus B, serotype EV-86">
+			<taxus name="EV-86|AY843312" />
+			<taxus name="EV-86|AY843304" />
+		</cluster>
+
+		<cluster id="EV-97" name="Enterovirus B, serotype EV-97">
+			<taxus name="EV-97|EF364397" />
+			<taxus name="EV-97|AB426611" />
+		</cluster>
+
+		<!-- singletons in the end -->
+		<cluster id="E-15" name="Enterovirus B, serotype E-15">
+			<taxus name="E-15|AF081329" />
+		</cluster>
+
+		<cluster id="EV-7" name="Enterovirus B, serotype EV-7">
+			<taxus name="E-7|AF081324" />
+		</cluster>
+
+		<cluster id="EV-32" name="Enterovirus B, serotype EV-32">
+			<taxus name="E-32|AF081345" />
+		</cluster>
+
+		<cluster id="EV-69" name="Enterovirus B, serotype EV-69">
+			<taxus name="EV-69|AY302560" />
+		</cluster>
+
+		<cluster id="EV-77" name="Enterovirus B, serotype EV-77">
+			<taxus name="EV-77|AY208119" />
+		</cluster>
+
+		<cluster id="EV-78" name="Enterovirus B, serotype EV-78">
+			<taxus name="EV-78|AY208120" />
+		</cluster>
+
+		<cluster id="EV-84" name="Enterovirus B, serotype EV-84">
+			<taxus name="EV-84|DQ902712" />
+		</cluster>
+
+		<cluster id="EV-85" name="Enterovirus B, serotype EV-85">
+			<taxus name="EV-85|AY843303" />
+		</cluster>
+
+		<cluster id="EV-87" name="Enterovirus B, serotype EV-87">
+			<taxus name="EV-87|AY843305" />
+		</cluster>
+
+		<cluster id="EV-88" name="Enterovirus B, serotype EV-88">
+			<taxus name="EV-88|AY843306" />
+		</cluster>
+
+		<cluster id="EV-97" name="Enterovirus B, serotype EV-97">
+			<taxus name="EV-97|EF364397" />
+		</cluster>
+
+		<cluster id="EV-98" name="Enterovirus B, serotype EV-98">
+			<taxus name="EV-98|AB426608" />
+		</cluster>
+
+		<cluster id="EV-100" name="Enterovirus B, serotype EV-100">
+			<taxus name="EV-100|DQ902713" />
+		</cluster>
+
+		<cluster id="EV-101" name="Enterovirus B, serotype EV-101">
+			<taxus name="EV-101|AY843308" />
+		</cluster>
+
+		<cluster id="EV-107" name="Enterovirus B, serotype EV-107">
+			<taxus name="EV-107|AB426609" />
+		</cluster>
+
+		<cluster id="enterovirus-C" name="Enterovirus C">
+		        <taxus name="Outgroup|AF081306" />
+		</cluster>
+	</clusters>
+
+	<analysis id="phylo-serotype" type="paup">
+		<identify>
+		  CV-A9,
+		  CV-B1, CV-B2, CV-B3, CV-B4, CV-B5, CV-B6,
+		  E-1, E-2, E-3, E-4, E-5, E-6, E-9, E-11, E-12, E-13, E-14,
+		  E-16, E-17, E-18, E-19, E-20, E-21, E-24, E-25, E-26, E-27,
+		  E-29, E-30, E-31, E-33,
+		  EV-B,
+		  EV-73, EV-74, EV-75, EV-79, EV-80, EV-81, EV-82, EV-83, EV-86,
+		  EV-97,
+		  E-15,
+		  EV-7, EV-32, EV-69, EV-77, EV-78, EV-84, EV-85, EV-87, EV-88,
+		  EV-97, EV-98, EV-100, EV-101, EV-107,
+		  enterovirus-C
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			export format=phylip file=paup.fasta replace=yes;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup Outgroup|AF081306;
+			set criterion=distance outroot=monophyl;
+			dset distance=TamNei rates=gamma shape=0.393955 pinvar=0 NegBrLen=SetAbsVal;
+			constraints
+			CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="scan-self" type="scan">
+		<window>
+			300
+		</window>
+		<step>
+			50
+		</step>
+		<analysis type="paup">
+			<identify>
+				EV-7
+			</identify>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				outgroup EU360814|III.1;
+				set criterion=distance outroot=monophyl;
+				dset distance=TamNei rates=gamma shape=0.413123 NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+
+</genotype-analyses>
+

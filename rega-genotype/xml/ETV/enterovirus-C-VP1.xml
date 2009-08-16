@@ -1,0 +1,142 @@
+<genotype-analyses>
+	<alignment file="enterovirus-C-VP1.fasta" trim="false" />
+
+	<clusters>
+		<cluster id="CV-A11" name="Enterovirus C, serotype CV-A11">
+			<taxus name="CV-A11|AF081305" />
+			<taxus name="CV-A11|AF081301" />
+		</cluster>
+
+		<cluster id="CV-A13" name="Enterovirus C, serotype CV-A13">
+			<taxus name="CV-A13|AF465513" />
+			<taxus name="CV-A13|AF081303" />
+		</cluster>
+
+		<cluster id="CV-A17" name="Enterovirus C, serotype CV-A17">
+			<taxus name="CV-A17|AB207263" />
+			<taxus name="CV-A17|AF081306" />
+		</cluster>
+
+		<cluster id="CV-A20" name="Enterovirus C, serotype CV-A21">
+			<taxus name="CV-A20|AF081309" />
+			<taxus name="CV-A20|AY919448" />
+		</cluster>
+
+		<cluster id="CV-A21" name="Enterovirus C, serotype CV-A21">
+			<taxus name="CV-A21|D00538" />
+			<taxus name="CV-A21|AY919453" />
+		</cluster>
+
+		<cluster id="CV-A22" name="Enterovirus C, serotype CV-A22">
+			<taxus name="CV-A22|AY919412" />
+			<taxus name="CV-A22|AF081310" />
+		</cluster>
+
+		<cluster id="CV-A24" name="Enterovirus C, serotype CV-A24">
+			<taxus name="CV-A24|AF081347" />
+			<taxus name="CV-A24|AF081311" />
+		</cluster>
+
+		<cluster id="EV-96" name="Enterovirus C, serotype EV-96">
+			<taxus name="EV-96|AY919472" />
+			<taxus name="EV-96|EF364404" />
+		</cluster>
+
+		<cluster id="PV-1" name="Poliovirus, serotype PV-1">
+			<taxus name="PV-1|AY560657" />
+			<taxus name="PV-1|V01148" />
+		</cluster>
+
+		<cluster id="PV-2" name="Poliovirus, serotype PV-2">
+			<taxus name="PV-2|D00625" />
+			<taxus name="PV-2|AY184220" />
+		</cluster>
+
+		<cluster id="PV-3" name="Poliovirus, serotype PV-3">
+			<taxus name="PV-3|K01392" />
+			<taxus name="PV-3|AF541919" />
+		</cluster>
+
+		<!-- singletons in the end -->
+		<cluster id="CV-A1" name="Enterovirus C, serotype CV-A1">
+			<taxus name="CV-A1|AF081293" />
+		</cluster>
+
+		<cluster id="CV-A19" name="Enterovirus C, serotype CV-A19">
+			<taxus name="CV-A19|AF081308" />
+		</cluster>
+
+		<cluster id="EV-99" name="Enterovirus C, serotype EV-99">
+			<taxus name="EV-99|AY919447" />
+		</cluster>
+
+		<cluster id="EV-102" name="Enterovirus C, serotype EV-102">
+			<taxus name="EV-102|AY919409" />
+		</cluster>
+
+		<cluster id="enterovirus-B" name="Enterovirus B">
+		        <taxus name="Outgroup|AB426611" />
+		</cluster>
+	</clusters>
+
+	<analysis id="phylo-serotype" type="paup">
+		<identify>
+		  CV-A11, CV-A13, CV-A17, CV-A20, CV-A21, CV-A22, CV-A24, EV-96,
+		  PV-1, PV-2, PV-3,
+		  CV-A1, CV-A19, EV-99, EV-102,
+		  enterovirus-B
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			export format=phylip file=paup.fasta replace=yes;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup Outgroup|AB426611;
+			set criterion=distance outroot=monophyl;
+			dset distance=TamNei rates=gamma shape=0.393955 pinvar=0 NegBrLen=SetAbsVal;
+			constraints
+			CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="scan-self" type="scan">
+		<window>
+			300
+		</window>
+		<step>
+			50
+		</step>
+		<analysis type="paup">
+			<identify>
+				CV-A1
+			</identify>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				outgroup EU360814|III.1;
+				set criterion=distance outroot=monophyl;
+				dset distance=TamNei rates=gamma shape=0.413123 NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+
+</genotype-analyses>
+

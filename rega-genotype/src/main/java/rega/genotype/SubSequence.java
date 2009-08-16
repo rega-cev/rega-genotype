@@ -53,4 +53,9 @@ public class SubSequence extends AbstractSequence {
 	public AbstractSequence sourceSequence() {
 		return sequence.sourceSequence();
 	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
 }

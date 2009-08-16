@@ -109,4 +109,6 @@ public abstract class AbstractSequence {
 		
 		return result;
 	}
+
+	abstract public void setName(String name);
 }

@@ -98,6 +98,8 @@ public class BlastAnalysis extends AbstractAnalysis {
     
     private List<Cluster> clusters;
     private Double cutoff;
+	private Double maxPValue;
+    private boolean relativeCutoff;
     private String blastOptions;
 	private String formatDbOptions;
 	private Map<String, ReferenceTaxus> referenceTaxa;
@@ -113,7 +115,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 	 */
     public class Result extends AbstractAnalysis.Result implements Concludable {
         private Cluster cluster;
-        private float   score;
+        private float score;
         private int start;
         private int end;
         private ReferenceTaxus refseq;
@@ -216,13 +218,15 @@ public class BlastAnalysis extends AbstractAnalysis {
 	}
 
 	public BlastAnalysis(AlignmentAnalyses owner, String id,
-                         List<Cluster> clusters, Double cutoff,
-                         String blastOptions,
+                         List<Cluster> clusters, Double cutoff, Double maxPValue,
+                         boolean relativeCutoff, String blastOptions,
                          File workingDir) {
         super(owner, id);
         this.workingDir = workingDir;
         this.clusters = clusters;
         this.cutoff = cutoff;
+        this.maxPValue = maxPValue;
+        this.relativeCutoff = relativeCutoff;
         this.blastOptions = blastOptions != null ? blastOptions : "";
         if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
         	this.blastOptions = "-p blastx";
@@ -231,7 +235,6 @@ public class BlastAnalysis extends AbstractAnalysis {
         	this.blastOptions = "-p blastn " + this.blastOptions;
         	this.formatDbOptions = "-p F";
         }
-
         this.referenceTaxa = new HashMap<String, ReferenceTaxus>();
     }
 
@@ -281,13 +284,14 @@ public class BlastAnalysis extends AbstractAnalysis {
                 int queryFactor = (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA)
                 	? 3 : 1;
 
-                String[] best = null;
+                String[] best = null, secondBest = null;
                 int start = Integer.MAX_VALUE;
                 int end = -1;
-                
+
                 boolean reverseCompliment = false;
 
                 ReferenceTaxus refseq = null;
+                Cluster bestCluster = null, secondBestCluster = null;
 
                 for (;;) {
                     String s = reader.readLine();
@@ -299,8 +303,10 @@ public class BlastAnalysis extends AbstractAnalysis {
                     if (values.length != 12)
                     	throw new ApplicationException("blast result format error");
 
-                    if (best == null)
+                    if (best == null) {
                     	best = values;
+                    	bestCluster = findCluster(best[1]);
+                    }
 
                     if (end == -1) {
                         ReferenceTaxus referenceTaxus = referenceTaxa.get(values[1]);
@@ -317,6 +323,14 @@ public class BlastAnalysis extends AbstractAnalysis {
                         	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
                         }
                     }
+
+                    if (relativeCutoff && bestCluster != null && secondBestCluster == null) {
+                    	Cluster c = findCluster(values[1]);
+                    	if (c != bestCluster) {
+                    		secondBestCluster = c;
+                    		secondBest = values;
+                    	}
+                    }
                 }
                 result = blast.waitFor();
 
@@ -328,8 +342,8 @@ public class BlastAnalysis extends AbstractAnalysis {
                     throw new ApplicationException("blast exited with error: " + result);
                 }
 
-                //db.delete();                
-                //query.delete();
+                db.delete();                
+                query.delete();
 
                 if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_DNA) {
                     getTempFile("db.fasta.nhr").delete();
@@ -345,10 +359,20 @@ public class BlastAnalysis extends AbstractAnalysis {
                     getTempFile("db.fasta.psq").delete();
                 }
 
-                if (best == null)
-                    throw new ApplicationException("blast error");
+                if (best != null) {
+                    float score = Float.valueOf(best[11]);
+                	float pValue = Float.valueOf(best[10]);
+                    if (maxPValue != null && pValue > maxPValue)
+                    	score = 0;
 
-                return createResult(sequence, best[1], refseq, Float.valueOf(best[11]), start, end, reverseCompliment);
+                    if (relativeCutoff) {
+                   		if (secondBest != null)
+                   			score = score / Float.valueOf(secondBest[11]);
+                    }
+
+                    return createResult(sequence, bestCluster, refseq, score, start, end, reverseCompliment);
+                } else
+                	return createResult(sequence, null, null, 0, 0, 0, false);
             } else
                 return createResult(sequence, null, null, 0, 0, 0, false);
         } catch (IOException e) {
@@ -367,20 +391,24 @@ public class BlastAnalysis extends AbstractAnalysis {
                 + e.getMessage());
         }
     }
-    
-    private Result createResult(AbstractSequence sequence, String match, ReferenceTaxus refseq,
-                                float score, int start, int end, boolean reverseCompliment) {
-        for (int i = 0; i < clusters.size(); ++i) {
-            if (clusters.get(i).containsTaxus(match))
-                return new Result(sequence, clusters.get(i), score, start, end, refseq, reverseCompliment);
-        }
 
-        return new Result(sequence, null, 0, 0, 0, null, reverseCompliment);
+    private Cluster findCluster(String taxus) {
+        for (int i = 0; i < clusters.size(); ++i)
+            if (clusters.get(i).containsTaxus(taxus))
+            	return clusters.get(i);
+        
+        return null;
+    }
+    
+    private Result createResult(AbstractSequence sequence, Cluster cluster, ReferenceTaxus refseq,
+                                float score, int start, int end, boolean reverseCompliment) {
+    	if (cluster != null)
+    		return new Result(sequence, cluster, score, start, end, refseq, reverseCompliment);
+    	else
+    		return new Result(sequence, null, 0, 0, 0, null, reverseCompliment);
     }
 
-    Result run(SequenceAlignment alignment, AbstractSequence sequence)
-            throws AnalysisException {
-
+    Result run(SequenceAlignment alignment, AbstractSequence sequence) throws AnalysisException {
         try {
             List<String> sequences = new ArrayList<String>();
             Set<String> clusterSequences = new LinkedHashSet<String>();

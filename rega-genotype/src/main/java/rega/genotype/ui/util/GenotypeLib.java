@@ -264,6 +264,8 @@ public class GenotypeLib {
 				response.setContentType("image/"+fileName.substring(fileName.lastIndexOf('.')+1));
 				
             	InputStream is = this.getClass().getResourceAsStream(od.getOrganismDirectory()+fileName);
+            	if (is == null)
+            		return;
                 try {
                     IOUtils.copy(is, response.getOutputStream());
                 } catch (IOException e) {

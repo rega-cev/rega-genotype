@@ -69,7 +69,7 @@ public class SequenceAlign {
         int start = query.firstNonGapPosition();
         int end = query.lastNonGapPosition();
         
-        int MARGIN = 100;
+        int MARGIN = 0;
 
         start = Math.max(0, start - MARGIN - diff);
         end = Math.min(alignment.getLength(), end + MARGIN + diff);

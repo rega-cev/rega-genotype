@@ -11,11 +11,17 @@
       <taxus name="NC_001612" />
       <taxus name="U22521" />
       <taxus name="AY421764" />
-      <taxus name="AY421767" /> <!-- add regions -->
-      <taxus name="AY421769" />
+      <taxus name="AY421767" />
+      <taxus name="AY697458" />
+      <taxus name="AY697459" />
       <taxus name="AY421760" />
-      <taxus name="AF465514" />
-      <taxus name="AY421760" />
+      <taxus name="AY421765" />
+      <taxus name="AY697461" />
+      <taxus name="AB192877" />
+      <taxus name="AY697460" />
+      <taxus name="AY421765" />
+      <taxus name="AY421768" />
+      <taxus name="EF667344" />
     </cluster>
 
     <cluster id="enterovirus-B" name="Enterovirus B">
@@ -25,23 +31,14 @@
       <taxus name="AY186745" />
       <taxus name="FJ357838" />
       <taxus name="AF039205" />
-      <taxus name="D00627" />
-      <taxus name="AF081485" />
-      <taxus name="EU144042" />
-      <taxus name="AF311939" />
-      <taxus name="X67706" />
-      <taxus name="FJ172447" />
-      <taxus name="AJ577590" />
-      <taxus name="X77708" />
+      <taxus name="EF371880" />
+      <taxus name="AF114383" />
+      <taxus name="AY466029" />
       <taxus name="AY302539" />
-      <taxus name="AY302546" />
-      <taxus name="AY302548" />
-      <taxus name="AY302550" />
-      <taxus name="AY302552" />
-      <taxus name="AY302553" />
-      <taxus name="DQ246620" />
-      <taxus name="AY302556" />
-      <taxus name="AF083069" />
+      <taxus name="DQ534205" />
+      <taxus name="AF524866" />
+      <taxus name="FJ007373" />
+      <taxus name="AY896767" />
     </cluster>
 
     <cluster id="enterovirus-C" name="Enterovirus C">
@@ -49,8 +46,6 @@
       <taxus name="M12197" />
       <taxus name="AF499643" />
       <taxus name="AF465511" />
-      <taxus name="K01392" />
-      <taxus name="NC_002058" />
       <taxus name="AF465514" />
     </cluster>
 
@@ -100,20 +95,52 @@
   </clusters>
 
   <analysis id="blast" type="blast">
+    <!-- A -->
     <regions taxus="NC_001612">
       <region name="VP1" begin="2442" end="3360" />
     </regions>
 
+    <regions taxus="AY421767">
+      <region name="VP1" begin="2433" end="3348" />
+    </regions>
+
+    <regions taxus="EF667344">
+      <region name="VP1" begin="2394" end="3349" />
+    </regions>
+
+    <!-- B -->
     <regions taxus="NC_001472">
       <region name="VP1" begin="2406" end="3357" />
     </regions>
 
+    <regions taxus="AF114383">
+      <region name="VP1" begin="2540" end="3340" />
+    </regions>
+
+    <regions taxus="AF039205">
+      <region namee="VP1" begin="2541" end="3338" />
+    </regions>
+
+    <!-- C -->
     <regions taxus="NC_001428">
       <region name="VP1" begin="2442" end="3345" />
     </regions>
 
+    <regions taxus="AF465514">
+      <region name="VP1" begin="2475" end="3381" />
+    </regions>
+
+    <regions taxus="M12197">
+      <region name="VP1" begin="2484" end="3387" />
+    </regions>
+
+    <!-- D -->
     <regions taxus="AY426531">
       <region name="VP1" begin="2358" end="3327" />
+    </regions>
+
+    <regions taxus="NC_001430">
+      <region name="VP1" begin="2359" end="3333" />
     </regions>
 
     <identify>
@@ -132,8 +159,8 @@
       senecavirus
     </identify>
 
-    <cutoff>
-      100
+    <cutoff type="relative" max-p-value="1E-5">
+      1.5
     </cutoff>
 
     <options>
