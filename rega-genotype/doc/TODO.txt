@@ -20,6 +20,7 @@ PRIORITY
 	* details form
 	* subtyping process
 	* example sequences
+* details pics, generate them during analysis?
 
 LATER
 * WMessage args, WAnchors
