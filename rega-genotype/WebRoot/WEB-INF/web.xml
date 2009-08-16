@@ -10,7 +10,7 @@
 
   <servlet-mapping>
     <servlet-name>Genotype</servlet-name>
-    <url-pattern>/Genotype</url-pattern>
+    <url-pattern>/Genotype/*</url-pattern>
   </servlet-mapping>
 </web-app>
 

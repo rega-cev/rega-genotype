@@ -108,25 +108,29 @@ public abstract class AbstractJobOverview extends IForm {
 			WText downloadResult = new WText(tr("monitorForm.downloadResults"), downloadContainer);
 			WAnchor xmlFileDownload = new WAnchor((String)null, tr("monitorForm.xmlFile"), downloadContainer);
 			xmlFileDownload.setStyleClass("link");
-			xmlFileDownload.setRef(new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml").generateUrl());
+			WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+			xmlResource.suggestFileName("result.xml");
+			xmlFileDownload.setRef(xmlResource.generateUrl());
 			
 			new WText(lt(" , "), downloadContainer);
 			
 			WAnchor csvTableDownload = new WAnchor((String)null, tr("monitorForm.csvTable"), downloadContainer);
 			csvTableDownload.setStyleClass("link");
-			csvTableDownload.setRef(new WResource() {
+			WResource csvResource = new WResource() {
 				@Override
 				public String resourceMimeType() {
 					return "application/excell";
 				}
-
+			
 				@Override
 				protected void streamResourceData(OutputStream stream) {
 					AbstractCsvGenerator acsvgen = AbstractJobOverview.this.getMain().getOrganismDefinition().getCsvGenerator(new PrintStream(stream));
 					acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
 				}
 				
-			}.generateUrl());
+			};
+			csvResource.suggestFileName("results.csv");
+			csvTableDownload.setRef(csvResource.generateUrl());
 		}
 		
 		fillingTable = false;
