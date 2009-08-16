@@ -120,19 +120,15 @@ public class StartForm extends AbstractForm {
 		monitorButton = new WPushButton(tr("startForm.monitor"), seqinput);
 		monitorButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				File jobDir = getMain().getJobDir(jobIdTF.getText());
-				if (jobDir.exists()) {
-					setValid(jobIdTF, errorJobId);
-					getMain().monitorForm(jobDir, true);
-				} else {
-					setInvalid(jobIdTF, errorJobId);
-				}
+				getMain().changeInternalPath(JobForm.JOB_URL+"/"+jobIdTF.getText());
 			}
 		});
 		errorJobId = new WText(tr("startForm.errorJobId"), seqinput);
 		errorJobId.setId("jobid-error-message");
 		errorJobId.setStyleClass("error");
 		errorJobId.hide();
+		
+		init();
 	}
 	
 	private void setValid(WInteractWidget w, WText errorMsg){
@@ -166,11 +162,11 @@ public class StartForm extends AbstractForm {
 		});
 		analysis.start();
 		
-		getMain().monitorForm(thisJobDir, true);
+		getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(thisJobDir) + "/");
 	}
 
 	@SuppressWarnings("unchecked")
-	public void init() {
+	private void init() {
 		List seqs = getMain().getResourceManager().getOrganismElement("exampleSequences-form", "exampleSequences-sequences").getChildren();
 		
 		if(seqs.size()>0) {

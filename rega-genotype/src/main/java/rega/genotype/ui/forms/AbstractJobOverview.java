@@ -16,6 +16,7 @@ import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.util.Settings;
 import rega.genotype.ui.util.XlsDataTable;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Orientation;
@@ -64,9 +65,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WTable jobTable;
 	private WTimer updater;
 	private WContainerWidget downloadTableContainer, downloadResultsContainer;
-	private boolean fillingTable = false;
 
-	private WText explainText;	
+	private WText explainText;
 
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main, "monitor-form");
@@ -96,50 +96,17 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			downloadResultsContainer.setObjectName("download-results");
 		} else
 			downloadResultsContainer = null;
-
-		if (updater!=null) {
-			updater.start();
-		}
-		
-		GenotypeMain.getApp().internalPathChanged().addListener(this, new Signal1.Listener<String>() {
-
-			public void trigger(String basePath) {
-				if (basePath.equals(GenotypeWindow.jobPath(jobDir) + '/')) {
-					try {
-						String id = GenotypeMain.getApp().getInternalPathNextPart(basePath);
-						if (!id.equals("")) {
-							int sequenceIndex = Integer.valueOf(id);
-							getMain().detailsForm(jobDir, sequenceIndex);
-						} else {
-							getMain().setForm(AbstractJobOverview.this);
-						}
-					} catch (NumberFormatException e) {
-						e.printStackTrace();
-					}
-				}
-			} });
 	}
 
 	protected boolean downloadResultsLink() {
 		return true;
 	}
 
-	@Override
-	public void setHidden(boolean hidden) {
-		if (updater != null)
-			if (hidden) 
-				updater.stop();
-			else
-				updater.start();
-
-		if (!hidden)
-			fillTable();
-
-		super.setHidden(hidden);
-	}
-
-	public void init(File jobDir, String jobId) {
-		boolean otherJob = !jobDir.equals(this.jobDir);
+	public void init(String jobId) {
+		File jobDir = getJobDir(jobId);
+		
+		if(jobDir.equals(this.jobDir))
+			return;
 		
 		this.jobDir = jobDir;
 
@@ -152,8 +119,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			updater = null;
 		}
 
-		if (otherJob)
-			jobTable.clear();
+		jobTable.clear();
 
 		downloadTableContainer.clear();
 		if (downloadResultsContainer != null)
@@ -169,18 +135,18 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			updater.setInterval(getMain().getOrganismDefinition().getUpdateInterval());
 			updater.timeout().addListener(this, new Signal.Listener() {
 				public void trigger() {
-					if(!fillingTable)
-						fillTable();
+					fillTable();
 				}
 			});
-
-			// the update timer will be started from within setHidden(false), together with
-			// an initial fill
+		}
+		
+		fillTable();		
+		if (updater != null) {
+			updater.start();
 		}
 	}
 	
 	public void fillTable() {
-		fillingTable = true;
 		if(jobTable.getRowCount()==0) {
 			List<Header> headers = getHeaders();
 
@@ -267,8 +233,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				jobFileDownload.setRef(jobResource.generateUrl());
 			}
 		}
-		
-		fillingTable = false;
 	}
 
 	private WAnchor createTableDownload(WString label, final boolean csv) {
@@ -322,7 +286,28 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		WAnchor report = new WAnchor("", "Report");
 		report.setObjectName("report-" + p.getSequenceIndex());
 		report.setStyleClass("link");
-		report.setRefInternalPath(GenotypeWindow.reportPath(jobDir, p.getSequenceIndex()));
+		report.setRefInternalPath(reportPath(jobDir, p.getSequenceIndex()));
 		return report;
 	}
+	
+	public boolean existsJob(String jobId) {
+		return getJobDir(jobId).exists();
+	}
+	
+
+	public File getJobDir(String jobId) {
+		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()+File.separatorChar+jobId);
+	}
+
+	public static String reportPath(File jobDir, int sequenceIndex) {
+		return jobPath(jobDir) + '/' + String.valueOf(sequenceIndex);
+	}
+
+	public static String jobPath(File jobDir) {
+		return JobForm.JOB_URL + '/' + jobId(jobDir);
+	}
+	
+	public static String jobId(File jobDir) {
+		return jobDir.getAbsolutePath().substring(jobDir.getAbsolutePath().lastIndexOf(File.separatorChar)+1);
+	}	
 }

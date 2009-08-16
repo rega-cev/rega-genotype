@@ -40,6 +40,10 @@
 	<resource name="monitorForm.downloadJob">Download all job files:</resource>
 	<resource name="monitorForm.jobFile">ZIP</resource>
 	
+	<resource name="monitorForm.nonExistingJobId">Job id {1} doesn't exist</resource>
+	
+	<resource name="detailsForm.nonExistingSequenceId">Sequence id {1} doesn't exist</resource>
+	
 	<resource name="main.navigation.start">Submit job</resource>
 	<resource name="main.navigation.monitor">Monitor job [{1}]</resource>
 	<resource name="main.navigation.details">Analysis details [{1}]</resource>

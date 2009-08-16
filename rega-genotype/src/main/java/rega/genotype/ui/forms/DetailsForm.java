@@ -12,6 +12,7 @@ import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -31,12 +32,15 @@ public class DetailsForm extends AbstractForm {
 		mainTable.setStyleClass("detailsForm");
 	}
 	
-	public void init(File jobDir, final int selectedSequenceIndex) {
-		p = GenotypeResultParser.parseFile(jobDir, selectedSequenceIndex);
+	WString init(File jobDir, String selectedSequenceIndex) {
+		try {
+			p = GenotypeResultParser.parseFile(jobDir, Integer.parseInt(selectedSequenceIndex));
 		
-		if (p == null) {
-			getMain().monitorForm(jobDir, true);
-			return;
+			if (p == null) {
+				return tr("detailsForm.nonExistingSequenceId").arg(selectedSequenceIndex);
+			}
+		} catch (NumberFormatException nfe) {
+			return tr("detailsForm.nonExistingSequenceId").arg(selectedSequenceIndex);
 		}
 		
 		mainTable.clear();
@@ -76,6 +80,8 @@ public class DetailsForm extends AbstractForm {
 			
 			addDetailsForm(df, jobDir);
 		}
+		
+		return null;
 	}
 	
 	void addDetailsForm(IDetailsForm df, File jobDir){

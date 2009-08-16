@@ -27,13 +27,15 @@ public abstract class AbstractForm extends WContainerWidget {
 	public AbstractForm(GenotypeWindow main, String title, String cssClass) {
 		this.main = main;
 
-		if (!main.getResourceManager().haveForm(title))
-			throw new RuntimeException("No '" + title + "' form.");
+		if (title != null) {
+			if (!main.getResourceManager().haveForm(title))
+				throw new RuntimeException("No '" + title + "' form.");
 
-		String titleDiv = "<h1>" + main.getResourceManager().getOrganismValue(title, "title").getValue() + "</h1>";
-		this.title = new WText(titleDiv, this);
-		this.title.setObjectName("title");
-		this.setStyleClass(cssClass + " form");
+			String titleDiv = "<h1>" + main.getResourceManager().getOrganismValue(title, "title").getValue() + "</h1>";
+			this.title = new WText(titleDiv, this);
+			this.title.setObjectName("title");
+			this.setStyleClass(cssClass + " form");
+		}
 	}
 	
 	public GenotypeWindow getMain() {
