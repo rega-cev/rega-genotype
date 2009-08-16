@@ -92,7 +92,7 @@ public abstract class Genome {
 		        g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
 		    }
 	
-		    Image genomePng = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(getOrganismDefinition().getOrganismDirectory()+"/genome_"+variant+".png"));
+		    Image genomePng = ImageIO.read(this.getClass().getResourceAsStream(getOrganismDefinition().getOrganismDirectory()+"/genome_"+variant+".png"));
 		    g2d.drawImage(genomePng, 0, 0, imgWidth, imgHeight, null);
 		    
 		    ImageIO.write(image, "png", pngFile);

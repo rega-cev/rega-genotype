@@ -53,7 +53,7 @@ public class DocumentationForm extends IForm {
 	
 	private WTable createTable(String csvFile, WContainerWidget parent) {
 		Table csvTable = new Table(
-				getClass().getClassLoader().getResourceAsStream(
+				getClass().getResourceAsStream(
 						getMain().getOrganismDefinition().getOrganismDirectory()+csvFile
 						), false);
 		WTable table = new WTable(parent);

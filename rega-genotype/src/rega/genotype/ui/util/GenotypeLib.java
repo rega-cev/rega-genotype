@@ -208,7 +208,7 @@ public class GenotypeLib {
             }
             @Override
             protected void streamResourceData(OutputStream stream) {
-            	InputStream is = this.getClass().getClassLoader().getResourceAsStream(od.getOrganismDirectory()+fileName);
+            	InputStream is = this.getClass().getResourceAsStream(od.getOrganismDirectory()+fileName);
                 try {
                     IOUtils.copy(is, stream);
                     stream.flush();
