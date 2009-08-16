@@ -58,6 +58,26 @@
 				<target>1.5</target>
     		</configuration>
     	</plugin>
+    	<plugin>
+			<artifactId>maven-assembly-plugin</artifactId>
+			<version>2.2-beta-2</version>
+			<configuration>
+				<descriptors>
+					<descriptor>cli.xml</descriptor>
+				</descriptors>
+				<appendAssemblyId>true</appendAssemblyId>
+				<attach>true</attach>
+			</configuration>
+			<executions>
+				<execution>
+					<id>make-assembly</id>
+					<phase>package</phase>
+					<goals>
+						<goal>single</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
     </plugins>
     
     <resources>

@@ -1,5 +1,5 @@
 * install maven2 (outside eclipse)
-* install ecplise-maven plugin:
+* install eclipse-maven plugin:
 	*update-site http://m2eclipse.sonatype.org/update/
 		* Maven integration for Eclipse
 		* (Maven Central repository index)
