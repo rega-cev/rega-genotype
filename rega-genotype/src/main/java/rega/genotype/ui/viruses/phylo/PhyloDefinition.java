@@ -6,12 +6,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.webtoolkit.jwt.WString;
-
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.ui.data.AbstractCsvGenerator;
-import rega.genotype.ui.data.DefaultCsvGenerator;
+import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
@@ -22,18 +19,14 @@ import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
-import rega.genotype.viruses.htlv.HTLVTool;
 import rega.genotype.viruses.phylo.PhyloSubtypeTool;
-import rega.genotype.viruses.phylo.PhyloTool;
+import eu.webtoolkit.jwt.WString;
 
 public class PhyloDefinition implements OrganismDefinition {
 
 	private PhyloGenome genome = new PhyloGenome(this);
-	
-	public AbstractCsvGenerator getCsvGenerator(Writer w) throws IOException {
-		return new DefaultCsvGenerator(w);
-	}
 
 	public Genome getGenome() {
 			return genome;
@@ -61,14 +54,14 @@ public class PhyloDefinition implements OrganismDefinition {
 		WString m = WString.lt("Phylogenetic analysis with pure subtypes:");
 		
 		if (p.elementExists("genotype_result.sequence.result['pure']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m));
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m, false));
 		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m));
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m, false));
 
 		m = WString.lt("Phylogenetic analysis with pure subtypes and CRFs:");
 
 		if (p.elementExists("genotype_result.sequence.result['crf']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m));
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m, false));
 		
 		if (p.elementExists("genotype_result.sequence.result['scan']"))
 			forms.add(new DefaultRecombinationDetailsForm());
@@ -96,6 +89,17 @@ public class PhyloDefinition implements OrganismDefinition {
 		jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 
 
+	}
+
+	public AbstractDataTableGenerator getDataTableGenerator(DataTable t)
+			throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean haveDetailsNavigationForm() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
