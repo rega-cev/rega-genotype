@@ -5,6 +5,8 @@ PRIORITY
 * details pics, generate them during analysis?
 * unit test example
 * ref seq name is too long
+* layout without tables
+* saxparser bug (id's with .)
 
 LATER
 * WMessage args, WAnchors
