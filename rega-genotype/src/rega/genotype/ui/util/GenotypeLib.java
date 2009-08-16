@@ -70,6 +70,10 @@ public class GenotypeLib {
 
 		ImageIO.write(bufferedImage, "png", out);
 	}
+	
+	public static File getCsvData(File jobDir, int sequenceIndex, String type) {
+		return new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
+	}
 
 	public static void getSignalPNG(int jobid, File svgFile, File pngFile) {
 		if(!pngFile.exists() && svgFile.exists()){

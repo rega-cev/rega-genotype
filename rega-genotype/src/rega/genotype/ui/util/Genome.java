@@ -30,7 +30,7 @@ public abstract class Genome {
 		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genome_" + sequenceIndex + "_" + type + "_" + variant + ".png");
 	
 		if(!pngFile.exists()) {
-			File csvFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
+			File csvFile = GenotypeLib.getCsvData(jobDir, sequenceIndex, type);
 			Table csvTable = Table.readTable(csvFile, '\t');
 		    
 		    int w[] = new int[csvTable.numRows()-1];
