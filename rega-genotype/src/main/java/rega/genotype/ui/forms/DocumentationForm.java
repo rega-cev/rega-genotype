@@ -46,7 +46,7 @@ public class DocumentationForm extends AbstractForm {
 				imgDiv.setStyleClass("imgDiv");
 				GenotypeLib.getWImageFromResource(getMain().getOrganismDefinition(),e.getTextTrim(), imgDiv);
 			} else if(e.getName().equals("sequence")) {
-				String sequence = "<div class=\"sequenceName\">>" + e.getAttributeValue("name") +"</div>";
+				String sequence = "<div class=\"sequenceName\">>" + e.getAttributeValue("name") +"<br/></div>";
 				sequence += "<div class=\"sequence\">";
 				sequence += e.getTextTrim() + "</div>";
 				new WText(lt(sequence), this);
