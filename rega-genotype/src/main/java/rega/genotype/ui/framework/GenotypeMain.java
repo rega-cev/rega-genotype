@@ -5,9 +5,14 @@
  */
 package rega.genotype.ui.framework;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+
+import rega.genotype.GenotypeTool;
+import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.util.Settings;
 import eu.webtoolkit.jwt.Configuration;
 import eu.webtoolkit.jwt.WApplication;
-import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WebController;
 
 /**
@@ -16,17 +21,22 @@ import eu.webtoolkit.jwt.WebController;
  * @author simbre1
  *
  */
+@SuppressWarnings("serial")
 public abstract class GenotypeMain extends WebController
 {
-	public GenotypeMain()
-	{
+	public GenotypeMain() {
 		super(new Configuration());
 	}
 
-	public abstract WApplication createApplication(WEnvironment env);
-	
-	public static GenotypeApplication getApp()
-	{
+	public static GenotypeApplication getApp() {
 		return (GenotypeApplication)WApplication.instance();
 	}
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		GenotypeLib.initSettings(Settings.getInstance());
+		
+		super.init(config);
+	}
+
 }

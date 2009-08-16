@@ -6,7 +6,6 @@
 package rega.genotype.ui.data;
 
 import java.io.IOException;
-import java.io.Writer;
 
 import rega.genotype.ui.util.DataTable;
 

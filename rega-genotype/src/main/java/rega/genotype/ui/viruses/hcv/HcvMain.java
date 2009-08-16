@@ -11,6 +11,7 @@ import eu.webtoolkit.jwt.WEnvironment;
  * @author simbre1
  *
  */
+@SuppressWarnings("serial")
 public class HcvMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {

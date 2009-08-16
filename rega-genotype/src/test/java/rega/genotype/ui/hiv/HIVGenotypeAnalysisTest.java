@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
 import rega.genotype.viruses.hiv.HIVTool;
@@ -79,7 +79,7 @@ public class HIVGenotypeAnalysisTest extends TestCase {
 			fail("FileFormatException occured during analysis runtime");
 		}
 		
-    	SaxParser p = new SaxParser(){
+    	GenotypeResultParser p = new GenotypeResultParser(){
 			@Override
 			public void endSequence() {
 				String assignment = getValue("genotype_result.sequence.conclusion.assigned.major.assigned.name");

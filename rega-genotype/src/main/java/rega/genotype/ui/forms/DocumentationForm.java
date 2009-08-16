@@ -12,48 +12,55 @@ import org.jdom.Element;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Table;
-import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 
 /**
- * Base documentationform widget which parses the resources.xml entries.
+ * A documentation form reads its contents from the resource file.
+ * 
  * DocumentationForm supports: headers, rules, figures, sequences, csv-tables and HTML-formatted text.
  */
 public class DocumentationForm extends AbstractForm {
-	public DocumentationForm(GenotypeWindow main, String title) {
-		super(main, title);
+	public DocumentationForm(GenotypeWindow main, String formName, String formContent) {
+		super(main, formName);
+		
+		fillForm(formName, formContent);
 	}
 
 	protected void fillForm(String formName, String formContent) {
 		String ruleNumber;
 		String ruleName;
 		int headerNr=0;
-		
+
 		Element text = getMain().getResourceManager().getOrganismElement(formName, formContent);
 		for(Object o : text.getChildren()) {
 			final Element e = (Element)o;
 			if(e.getName().equals("header")) {
 				WText header = new WText(lt((++headerNr) + ". " + getMain().getResourceManager().extractFormattedText(e) +":"), this);
+				header.setId("");
 				header.setStyleClass("decisionTreeHeader");
 			} else if(e.getName().equals("rule")){
 				ruleNumber = e.getAttributeValue("number");
 				ruleName = e.getAttributeValue("name");
-				new WText(lt(ruleNumber + ": " + ruleName + "<br></br>" + getMain().getResourceManager().extractFormattedText(e) + "<br></br>"), this);
+				WText w = new WText(lt(ruleNumber + ": " + ruleName + "<br></br>" + getMain().getResourceManager().extractFormattedText(e) + "<br></br>"), this);
+				w.setId("");
 			} else if(e.getName().equals("figure")) {
 				WContainerWidget imgDiv = new WContainerWidget(this);
+				imgDiv.setId("");
 				imgDiv.setStyleClass("imgDiv");
 				GenotypeLib.getWImageFromResource(getMain().getOrganismDefinition(),e.getTextTrim(), imgDiv);
 			} else if(e.getName().equals("sequence")) {
 				String sequence = "<div class=\"sequenceName\">>" + e.getAttributeValue("name") +"<br/></div>";
 				sequence += "<div class=\"sequence\">";
 				sequence += e.getTextTrim() + "</div>";
-				new WText(lt(sequence), this);
+				WText w = new WText(lt(sequence), this);
+				w.setId("");
 			} else if(e.getName().equals("table")) {
 				createTable(e.getTextTrim(), this);
 			} if(e.getName().equals("text")) {
-				new WText(lt(getMain().getResourceManager().extractFormattedText(e)), this);
+				WText w = new WText(lt(getMain().getResourceManager().extractFormattedText(e)), this);
+				w.setId("");
 			}
 		}
 	}
@@ -64,6 +71,7 @@ public class DocumentationForm extends AbstractForm {
 						getMain().getOrganismDefinition().getOrganismDirectory()+csvFile
 						), false);
 		WTable table = new WTable(parent);
+		table.setId("");
 		table.setStyleClass(getCssClass(csvFile));
 
 		for(int i = 0; i<csvTable.numRows(); i++) {

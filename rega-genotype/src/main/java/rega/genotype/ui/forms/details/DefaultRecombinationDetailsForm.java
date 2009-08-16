@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.recombination.RecombinationPlot;
 import rega.genotype.ui.util.GenotypeLib;
@@ -28,7 +28,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		setStyleClass("recombinationDetails");
 	}
 	@Override
-	public void fillForm(SaxParser p, OrganismDefinition od, File jobDir) {
+	public void fillForm(GenotypeResultParser p, OrganismDefinition od, File jobDir) {
 		try {
 			if(p.elementExists("genotype_result.sequence.result['scan']")) {
 				initRecombinationSection(p, jobDir, "genotype_result.sequence.result['scan']", "pure", od);
@@ -42,7 +42,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		}
 	}
 	
-	private void initRecombinationSection(SaxParser p, File jobDir, String path, String type, OrganismDefinition od) throws UnsupportedEncodingException, IOException {
+	private void initRecombinationSection(GenotypeResultParser p, File jobDir, String path, String type, OrganismDefinition od) throws UnsupportedEncodingException, IOException {
 		addWidget(new WText(tr("defaultRecombinationAnalyses.sequenceName")));
 		addWidget(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]"))));
 		addWidget(new WBreak());
@@ -75,5 +75,10 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 	@Override
 	public WString getExtraComment() {
 		return null;
+	}
+
+	@Override
+	public String getId() {
+		return "recombination-detail";
 	}
 }

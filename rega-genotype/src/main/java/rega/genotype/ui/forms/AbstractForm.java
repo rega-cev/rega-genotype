@@ -10,7 +10,10 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WText;
 
 /**
- * AbstractForm class abstracts some functions and attributes used by all forms.
+ * AbstractForm is the abstract base class for one of the main forms in the rega-genotype UI.
+ * 
+ * Every form has a 'title' which is used to retrieve the actual title from the resource file,
+ * and unless a specific CSS class is given, also to set the CSS class.
  */
 public abstract class AbstractForm extends WContainerWidget {
 	private WText title;
@@ -18,6 +21,7 @@ public abstract class AbstractForm extends WContainerWidget {
 
 	public AbstractForm(GenotypeWindow main, String title) {
 		this(main, title, getCssClass(title));
+		setObjectName(title);
 	}
 	
 	public AbstractForm(GenotypeWindow main, String title, String cssClass) {
@@ -28,6 +32,7 @@ public abstract class AbstractForm extends WContainerWidget {
 
 		String titleDiv = "<h1>" + main.getResourceManager().getOrganismValue(title, "title").value() + "</h1>";
 		this.title = new WText(lt(titleDiv), this);
+		this.title.setObjectName("title");
 		this.setStyleClass(cssClass + " form");
 	}
 	

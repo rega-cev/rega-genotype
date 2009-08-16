@@ -7,15 +7,14 @@ package rega.genotype.ui.viruses.nov;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
@@ -60,7 +59,7 @@ public class NovDefinition implements OrganismDefinition {
 		return new NovSequenceAssignmentForm();
 	}
 
-	private void addPhyloDetailForms(SaxParser p, List<IDetailsForm> forms, String region) {
+	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms, String region) {
 		String result = "genotype_result.sequence.result";
 		
 		String phyloResult = result + "['phylo-" + region + "']";
@@ -79,7 +78,7 @@ public class NovDefinition implements OrganismDefinition {
 		}
 	}
 	
-	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p) {
+	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
 
 		addPhyloDetailForms(p, forms, "ORF1");

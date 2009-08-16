@@ -7,8 +7,6 @@ package rega.genotype.ui.viruses.nov;
 
 import java.io.IOException;
 
-import eu.webtoolkit.jwt.WText;
-
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.util.DataTable;
 

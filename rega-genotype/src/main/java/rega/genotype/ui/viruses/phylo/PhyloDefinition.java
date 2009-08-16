@@ -11,7 +11,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.DefaultTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -50,7 +50,7 @@ public class PhyloDefinition implements OrganismDefinition {
 		return "PHYLO";
 	}
 
-	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p) {
+	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
 
 		WString m = WString.lt("Phylogenetic analysis with pure subtypes:");

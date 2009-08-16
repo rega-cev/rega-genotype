@@ -27,7 +27,7 @@ public interface OrganismDefinition {
 	public String getOrganismDirectory();
 	public Genome getGenome();
 	public IDetailsForm getMainDetailsForm();
-	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p);
+	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p);
 	public int getUpdateInterval();
 	public String getOrganismName();
 	public boolean haveDetailsNavigationForm();

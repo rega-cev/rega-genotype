@@ -23,11 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -289,6 +287,7 @@ public class GenotypeLib {
 
 	public static WAnchor getAnchor(String text, String fileType, WResource resource, String suggestedName) {
 		WAnchor anchor = new WAnchor("", WContainerWidget.lt(text));
+		anchor.setId("");
 		anchor.setStyleClass("link");
 		anchor.setTarget(AnchorTarget.TargetNewWindow);
 		if (suggestedName != null)

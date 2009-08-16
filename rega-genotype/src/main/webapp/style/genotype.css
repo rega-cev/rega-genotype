@@ -8,8 +8,12 @@ html {
 	border: 0px;
 }
 
-h3 {
+h2, h3 {
 	color: darkblue;
+}
+
+h2 {
+	font-size: 130%;
 }
 
 body {
@@ -202,11 +206,6 @@ table.jobTable td img, .detailsForm img {
 .listContainer{
 	margin-top: 0.5em;
 	margin-bottom: 1em;
-}
-.listContainerItem{
-	margin-left: 3em;
-	padding-left: 0.5em;
-	display: list-item;
 }
 
 h1 {

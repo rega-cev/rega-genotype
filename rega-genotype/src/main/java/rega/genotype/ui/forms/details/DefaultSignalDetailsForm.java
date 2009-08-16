@@ -8,7 +8,7 @@ package rega.genotype.ui.forms.details;
 import java.io.File;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;
@@ -22,7 +22,7 @@ import eu.webtoolkit.jwt.WText;
 public class DefaultSignalDetailsForm extends IDetailsForm {
 
 	@Override
-	public void fillForm(SaxParser p, OrganismDefinition od, File jobDir) {
+	public void fillForm(GenotypeResultParser p, OrganismDefinition od, File jobDir) {
 		WListContainerWidget ul = new WListContainerWidget(this);
 		WContainerWidget li;
 		li = ul.addItem(new WText(tr("defaultSignalAnalysis.signalValue")));
@@ -45,5 +45,10 @@ public class DefaultSignalDetailsForm extends IDetailsForm {
 	@Override
 	public WString getExtraComment() {
 		return tr("defaultSignalAnalysis.extraComment");
+	}
+	
+	@Override
+	public String getId() {
+		return "phylogenic-signal";
 	}
 }

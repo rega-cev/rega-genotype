@@ -29,7 +29,7 @@ import eu.webtoolkit.jwt.utils.StringUtils;
  * all values in a Map per sequences. Sequences can be accessed by implementing 
  * the endSequence() method.
  */
-public abstract class SaxParser extends DefaultHandler {
+public abstract class GenotypeResultParser extends DefaultHandler {
 
 	private List<String> currentPath = new ArrayList<String>();
 
@@ -42,7 +42,7 @@ public abstract class SaxParser extends DefaultHandler {
 	
 	private boolean stop = false;
 
-	public SaxParser() {
+	public GenotypeResultParser() {
 	}
 	
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -190,7 +190,7 @@ public abstract class SaxParser extends DefaultHandler {
 		System.err.println("End dump:");
 	}
 
-	public static class SkipToSequenceParser extends SaxParser {
+	public static class SkipToSequenceParser extends GenotypeResultParser {
 
 		private boolean found;
 		private int selectedSequenceIndex;
@@ -213,7 +213,7 @@ public abstract class SaxParser extends DefaultHandler {
 		}
 	}
 
-	public static SaxParser parseFile(File jobDir, int selectedSequenceIndex) {
+	public static GenotypeResultParser parseFile(File jobDir, int selectedSequenceIndex) {
 		SkipToSequenceParser p = new SkipToSequenceParser(selectedSequenceIndex);
 		p.parseFile(jobDir);
 

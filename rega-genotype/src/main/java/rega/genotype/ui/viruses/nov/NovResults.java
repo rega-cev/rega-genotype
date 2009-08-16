@@ -5,7 +5,7 @@
  */
 package rega.genotype.ui.viruses.nov;
 
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 
 /**
  * Utility class to parse and interpret the analysis' results.xml file.
@@ -27,7 +27,7 @@ public class NovResults {
 
 	public static final String NA = "<i>NA</i>";
 
-	public static Conclusion getConclusion(SaxParser p, String region) {
+	public static Conclusion getConclusion(GenotypeResultParser p, String region) {
 		Conclusion result = new Conclusion();
 
 		String conclusionP = "genotype_result.sequence.conclusion['" + region + "']";
@@ -63,13 +63,13 @@ public class NovResults {
 		return result;
 	}
 	
-	public static String getBlastConclusion(SaxParser p) {
+	public static String getBlastConclusion(GenotypeResultParser p) {
 		return p.elementExists("genotype_result.sequence.conclusion")
 		? p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name")
 		: NA;
 	}
 
-	public static String getBlastMotivation(SaxParser p) {
+	public static String getBlastMotivation(GenotypeResultParser p) {
 		return p.elementExists("genotype_result.sequence.conclusion")
 		? p.getEscapedValue("genotype_result.sequence.conclusion.motivation")
 		: "";

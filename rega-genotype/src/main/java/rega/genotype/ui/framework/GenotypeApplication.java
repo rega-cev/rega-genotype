@@ -28,15 +28,13 @@ public class GenotypeApplication extends WApplication
 	private ServletContext servletContext_;
 	private GenotypeWindow window_;
 	
-	//TODO
-	//settings at beginning at tomcat startup
-	
 	public GenotypeApplication(WEnvironment env, ServletContext servletContext, OrganismDefinition od)
 	{
 		super(env);
-		
-		GenotypeLib.initSettings(Settings.getInstance());
-		
+
+		useStyleSheet("style/wt.css");               // do not use Wt's inline stylesheet...
+		useStyleSheet("style/wt_ie.css", "IE lt 7"); // do not use Wt's inline stylesheet...
+
 		servletContext_ = servletContext;
 		window_ = new GenotypeWindow(od);
 		window_.init();

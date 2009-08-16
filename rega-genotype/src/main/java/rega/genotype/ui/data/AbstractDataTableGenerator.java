@@ -13,7 +13,7 @@ import rega.genotype.ui.util.DataTable;
  * An abstract class extending SaxParser, which provides utility functions to 
  * write a csv file.
  */
-public abstract class AbstractDataTableGenerator extends SaxParser {
+public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 	public enum ValueFormat {
 		Label,
 		Number

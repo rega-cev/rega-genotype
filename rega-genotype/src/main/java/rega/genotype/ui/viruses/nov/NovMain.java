@@ -17,11 +17,17 @@ import eu.webtoolkit.jwt.WString;
  * @author simbre1
  *
  */
+@SuppressWarnings("serial")
 public class NovMain extends GenotypeMain {
+	public NovMain() {
+		super();
+		
+		configuration().setInlineCss(false);
+	}
+	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new NovDefinition());
-
 		app.setTitle(WString.tr("nrvTool.title"));
 		
 		return app;

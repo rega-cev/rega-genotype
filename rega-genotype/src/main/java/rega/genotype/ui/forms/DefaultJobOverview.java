@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
@@ -18,6 +18,8 @@ import eu.webtoolkit.jwt.WWidget;
 
 /**
  * A default extension of AbstractJobOverview, used by different virus implementations.
+ * 
+ * It provides 6 columns for the table.
  */
 public class DefaultJobOverview extends AbstractJobOverview {
 	private List<Header> headers = new ArrayList<Header>();
@@ -35,7 +37,7 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	}
 	
 	@Override
-	public List<WWidget> getData(final SaxParser p) {
+	public List<WWidget> getData(final GenotypeResultParser p) {
 		data.clear();
 		
 		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]"))));

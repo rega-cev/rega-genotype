@@ -24,6 +24,22 @@
     <servlet-name>GenotypeNoV</servlet-name>
     <url-pattern>/typingtool/*</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>GenotypeNoV-service</servlet-name>
+    <display-name>NoV Genotyping service</display-name>
+    <description>NoV Genotyping service</description>
+    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
+    <init-param>
+    	<param-name>genotypeTool</param-name>
+    	<param-value>rega.genotype.viruses.nov.NoVTool</param-value>
+   	</init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeNoV-service</servlet-name>
+    <url-pattern>/typingservice</url-pattern>
+  </servlet-mapping>
   
   <servlet>
     <servlet-name>GenotypeHTLV</servlet-name>

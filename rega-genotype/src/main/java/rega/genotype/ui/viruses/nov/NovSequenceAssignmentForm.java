@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -28,18 +28,21 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 	}
 
 	@Override
-	public void fillForm(SaxParser p, final OrganismDefinition od, File jobDir) {
+	public void fillForm(GenotypeResultParser p, final OrganismDefinition od, File jobDir) {
 		WContainerWidget block = new WContainerWidget(this);
+		block.setId("");
 
-		new WText(tr("defaultSequenceAssignment.name-length")
+		WText t = new WText(tr("defaultSequenceAssignment.name-length")
 				.arg(p.getEscapedValue("genotype_result.sequence[name]"))
 				.arg(p.getEscapedValue("genotype_result.sequence[length]")), block);
+		t.setId("");
 
 		String blastConclusion = NovResults.getBlastConclusion(p);
 		if (!blastConclusion.equals(NovResults.NA)) {
-			new WText(tr("nrvSequenceAssignment.blast")
+			t = new WText(tr("nrvSequenceAssignment.blast")
 					.arg(blastConclusion)
 					.arg(NovResults.getBlastMotivation(p)), block);
+			t.setId("");
 		}
 
 		for (int i = 1; i <= 2; ++i) {
@@ -49,22 +52,25 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 			WString motivation = WString.lt(c.majorMotivation);
 			motivation.arg(c.majorBootstrap);
 
-			new WText(tr("nrvSequenceAssignment.phylo")
+			t = new WText(tr("nrvSequenceAssignment.phylo")
 					.arg(orf)
 					.arg(c.majorAssignment)
 					.arg(motivation), block);
+			t.setId("");
 
 			if (c.variantDescription != null) {
 				motivation = WString.lt(c.variantMotivation);
 				motivation.arg(c.variantBootstrap);
 
-				new WText(tr("nrvSequenceAssignment.phylo-variant")
+				t = new WText(tr("nrvSequenceAssignment.phylo-variant")
 						.arg(c.variantDescription)
 						.arg(motivation), block);
+				t.setId("");
 			}
 		}
 
-		new WText(lt("<h3>Genome region</h3>"), block);
+		t = new WText(lt("<h3>Genome region</h3>"), block);
+		t.setId("");
 
 		int start = 0;
 		int end = 0;
@@ -78,6 +84,7 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 
 		try {
 			WImage genome = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), "-", start, end, 0, "nrv", null));
+			genome.setId("");
 			block.addWidget(genome);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -90,7 +97,8 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 		refSeq.arg(end);
 		refSeq.arg(p.getEscapedValue("genotype_result.sequence.result['blast'].refseq"));
 
-		new WText(refSeq, block);
+		t = new WText(refSeq, block);
+		t.setId("");
 	}
 
 	@Override
@@ -106,5 +114,10 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 	@Override
 	public WString getExtraComment() {
 		return null;
+	}
+	
+	@Override
+	public String getId() {
+		return "assignment";
 	}
 }

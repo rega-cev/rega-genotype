@@ -5,20 +5,19 @@
   	<resource name="sequenceInput.run">Start!</resource>
   	<resource name="sequenceInput.clear">Clear</resource>
   	<resource name="sequenceInput.inputSequenceInFastaFormat">
-  		<p>You may can either:
+  		<p>You may can either:</p>
   		  <ol style="list-style-type: upper-alpha">
   		    <li>paste one or more sequences in FASTA format in the input field.</li>
   		    <li>upload a FASTA file.</li>
   		    <li>revisit results of a previous run</li>
   		  </ol>
-  		</p>
-  		<h3>A) Paste nucleotide sequence(s) in FASTA format:</h3>
+  		<h2>A) Paste nucleotide sequence(s) in FASTA format:</h2>
     </resource>
   	<resource name="sequenceInput.uploadSequenceInFastaFormat">
-  		<h3>B) Or, upload a FASTA with nucleotide sequences:</h3>
+  		<h2>B) Or, upload a FASTA with nucleotide sequences:</h2>
     </resource>
   	<resource name="startForm.monitorJob">
-  		<h3>C) Or, revisit results from a previous run:</h3>
+  		<h2>C) Or, revisit results from a previous run:</h2>
     </resource>  	
   	<resource name="startForm.labelJobId">Job-id:</resource>
   	<resource name="startForm.monitor">Go!</resource>

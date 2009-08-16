@@ -32,8 +32,8 @@ import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
 
 /**
- * StartForm implementation implements a widget which allows the user to start a new job
- * or jump to a running/finished job.
+ * StartForm implementation implements a widget which allows the user to submit
+ * sequences for a new job or get the results of an existing job using the job Id.
  */
 public class StartForm extends AbstractForm {
 	private WText note;
@@ -48,26 +48,33 @@ public class StartForm extends AbstractForm {
 	
 	public StartForm(GenotypeWindow main) {
 		super(main, "start-form");
-		
+
 		List<String> noteArgs = new ArrayList<String>();
 		noteArgs.add(Settings.getInstance().getMaxAllowedSeqs()+"");
 		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note", noteArgs), this);
+		note.setId("");
 		note.setStyleClass("note");
 		
 		WContainerWidget seqinput = new WContainerWidget(this);
+		seqinput.setId("");
 		seqinput.setStyleClass("seqInput");
-		
-		new WText(tr("sequenceInput.inputSequenceInFastaFormat"), seqinput);
+
+		WText h = new WText(tr("sequenceInput.inputSequenceInFastaFormat"), seqinput);
+		h.setId("");
 		
 		WContainerWidget textAreaDiv = new WContainerWidget(seqinput);
+		textAreaDiv.setObjectName("seq-input-fasta-div");
 		ta = new WTextArea(textAreaDiv);
+		ta.setObjectName("seq-input-fasta");
 		ta.setColumns(83);
 		ta.setRows(15);
 
 		run = new WPushButton(seqinput);
+		run.setObjectName("button-run");
 		run.setText(tr("sequenceInput.run"));
-		
+	
 		clear = new WPushButton(seqinput);
+		clear.setObjectName("button-clear");
 		clear.setText(tr("sequenceInput.clear"));
 		clear.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
@@ -81,9 +88,11 @@ public class StartForm extends AbstractForm {
 			}
 		});
 		
-		new WText(tr("sequenceInput.uploadSequenceInFastaFormat"), seqinput);
+		h = new WText(tr("sequenceInput.uploadSequenceInFastaFormat"), seqinput);
+		h.setId("");
 
 		fileUpload = new FileUpload();
+		fileUpload.setId("sequences-file-upload");
 		seqinput.addWidget(fileUpload);
 		fileUpload.getUploadFile().uploaded().addListener(this, new Signal.Listener() {
             public void trigger() {                
@@ -98,10 +107,16 @@ public class StartForm extends AbstractForm {
             }
         });
 		errorSeq = new WText(tr("startForm.errorSequence"), seqinput);
-		
-		new WText(tr("startForm.monitorJob"), seqinput);
-		new WText(tr("startForm.labelJobId"), seqinput);
+		errorSeq.setId("sequence-error-message");
+		errorSeq.setStyleClass("error");
+		errorSeq.hide();		
+
+		h = new WText(tr("startForm.monitorJob"), seqinput);
+		h.setId("");
+		h = new WText(tr("startForm.labelJobId"), seqinput);
+		h.setId("");
 		jobIdTF = new WLineEdit(seqinput);
+		jobIdTF.setObjectName("job-input-field");
 		monitorButton = new WPushButton(tr("startForm.monitor"), seqinput);
 		monitorButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
@@ -115,11 +130,9 @@ public class StartForm extends AbstractForm {
 			}
 		});
 		errorJobId = new WText(tr("startForm.errorJobId"), seqinput);
-
+		errorJobId.setId("jobid-error-message");
 		errorJobId.setStyleClass("error");
 		errorJobId.hide();
-		errorSeq.setStyleClass("error");
-		errorSeq.hide();		
 	}
 	
 	private void setValid(WInteractWidget w, WText errorMsg){

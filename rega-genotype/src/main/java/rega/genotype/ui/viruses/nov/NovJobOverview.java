@@ -9,12 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
-import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 
@@ -40,7 +39,7 @@ public class NovJobOverview extends AbstractJobOverview {
 	}
 	
 	@Override
-	public List<WWidget> getData(final SaxParser p) {
+	public List<WWidget> getData(final GenotypeResultParser p) {
 		data.clear();
 
 		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]"))));
@@ -81,6 +80,11 @@ public class NovJobOverview extends AbstractJobOverview {
 	@Override
 	public List<Header> getHeaders() {
 		return headers;
+	}
+
+	@Override
+	protected boolean downloadResultsLink() {
+		return false;
 	}
 
 }

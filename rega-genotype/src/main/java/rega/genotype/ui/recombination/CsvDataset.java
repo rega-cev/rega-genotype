@@ -16,6 +16,7 @@ import rega.genotype.utils.Table;
  * @author simbre1
  *
  */
+@SuppressWarnings("serial")
 public class CsvDataset extends AbstractXYDataset {
 	private Table t_;
 

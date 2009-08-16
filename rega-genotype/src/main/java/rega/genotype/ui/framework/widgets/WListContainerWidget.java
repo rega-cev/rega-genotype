@@ -21,19 +21,23 @@ public class WListContainerWidget extends WContainerWidget{
 
 	public WListContainerWidget(WContainerWidget parent){
 		super(parent);
+		setList(true);
 		setStyleClass("listContainer");
 	}	
 	
-	public WContainerWidget addItem(WWidget widget){
+	public WContainerWidget addItem(WWidget widget) {
 		WContainerWidget cw = addItem();
+		widget.setId("");
 		cw.addWidget(widget);
 		return cw;
 	}
-	public WContainerWidget addItem(){
+
+	public WContainerWidget addItem() {
 		return addItem(new WContainerWidget(this));
 	}
+
 	public WContainerWidget addItem(WContainerWidget cw){
-		cw.setStyleClass("listContainerItem");
+		cw.setId("");
 		list.add(cw);
 		return cw;
 	}

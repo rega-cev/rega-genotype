@@ -8,77 +8,79 @@
 		</footer>
 	</main-form>
 	<start-form>
-		<title>
-		Norovirus Genotyping Tool Version 1.0
-		</title>
+		<title>Norovirus Genotyping Tool Version 1.0</title>
 		<note>
-		This tool is designed to use phylogenetic methods in order to identify the norovirus genotype of a nucleotide sequences.
-		<br/>
-		<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
+			<div>
+				This tool is designed to use phylogenetic methods in order to identify the norovirus genotype of a nucleotide sequences.
+			</div>
+			<div>
+				<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
+			</div>
 		</note>
 	</start-form>
 	<monitor-form>
-		<title>
-		Norovirus Genotyping Tool Results
-		</title>
+		<title>Norovirus Genotyping Tool Results</title>
 	</monitor-form>
 	<details-form>
-		<title>
-		Norovirus Genotyping Details
-		</title>
+		<title>Norovirus Genotyping Details</title>
 	</details-form>
 	<howToCite-form>
-		<title>
-		How to Cite the Norovirus Automated Genotyping Tool
-		</title>
+		<title>How to Cite the Norovirus Automated Genotyping Tool</title>
 		<howToCite-text>
 			<text>
 				<p>Please use the following citation:</p>
-				<p>
-				Norovirus genotyping tool, National Institute of Public health and the Environment, The Netherlands,
-				 <a href="http://www.rivm.nl/">www.rivm.nl</a>.
+				<p>Norovirus genotyping tool, National Institute of Public health and the Environment, The Netherlands,
+					<a href="http://www.rivm.nl/">www.rivm.nl</a>.
 				</p>
 			</text>
 		</howToCite-text>
 	</howToCite-form>
+	<introduction-form>
+		<title>The Norovirus Automated Genotyping Tool: introduction.</title>
+		<introduction-text>
+			<text>
+				To be completed.
+			</text>
+		</introduction-text>
+	</introduction-form>
 	<tutorial-form>
-		<title>
-		Norovirus Genotyping Tutorial
-		</title>
+		<title>Norovirus Genotyping Tutorial</title>
 		<tutorial-text>
 			<text>
-			<p>
-			  The sequence report contains a brief overview of the assignment, followed by details
-			  that up to four phylogenetic analyses, depending on the length and positioning,
-			  and on the assigned genotype of the input sequence.
-			</p>
+				<p>
+				  The sequence report contains a brief overview of the assignment, followed by details
+				  that up to four phylogenetic analyses, depending on the length and positioning,
+				  and on the assigned genotype of the input sequence.
+				</p>
 
-			<p>
-			The Sequence assignment contains information on:
-			<ul style="text-align: left;">
-			    <li>the sequence submitted (name and length),</li>
-			    <li>the classification assignment for ORF1 and ORF2</li>
-			    <li>the motivation of the classifications, including the bootstrap value</li>
-			    <li>a graphical representation of the Norovirus genome showing the genomic region of the
+				<p>
+				The Sequence assignment contains information on:
+				<ul style="text-align: left;">
+			    	<li>the sequence submitted (name and length),</li>
+			    	<li>the classification assignment for ORF1 and ORF2</li>
+			    	<li>the motivation of the classifications, including the bootstrap value</li>
+			    	<li>a graphical representation of the Norovirus genome showing the genomic region of the
 			      query sequence with the start and end positions with respect to the NC_001959 genome,</li>
-			</ul>
+				</ul>
 			</p>
 			
 			<p>
-			  ORF1 and ORF2 are always analyzed separately. Only a part (700 nucleotides at the 3' end) of ORF1
-			  (region A and B) can be used for genotyping, while the entire ORF2 (which includes regions C, D, and E)
-			  is supported.<br/>
+				ORF1 and ORF2 are always analyzed separately. Only a part (700 nucleotides at the 3' end) of ORF1
+			  	(region A and B) can be used for genotyping, while the entire ORF2 (which includes regions C, D,
+			  	and E) is supported.
 			  
-			  <div style="margin: 5px auto; width: 400px"><img src="/mpf/norovirus/pics/nov_genome_detail.png" /></div>
+				<div style="margin: 5px auto; width: 400px">
+					<img src="/mpf/norovirus/pics/nov_genome_detail.png" />
+				</div>
 			  
-			  Only when your sequence has sufficient overlap (>100 bps) with each of these areas, a phylogenetic
-			  analysis is performed for that area.
+			  	Only when your sequence has sufficient overlap (>100 bps) with each of these areas, a phylogenetic
+			  	analysis is performed for that area.
 			</p>
 			
 			<p>
-			  For the II.4 genotype an additional variant analysis is performed, while for some other
-			  II genotypes in ORF1, a variant analysis is performed resulting in the suggestion of a likely matching
-			  ORF2 genotype.
+				For the II.4 genotype an additional variant analysis is performed, while for some other
+				II genotypes in ORF1, a variant analysis is performed resulting in the suggestion of a likely matching
+				ORF2 genotype.
 			</p>
 
             <p>			
@@ -95,9 +97,7 @@
 	<decisionTrees-form>
 	</decisionTrees-form>
 	<subtypingProcess-form>
-		<title>
-			Norovirus Genotyping Tool Methods
-		</title>
+		<title>Norovirus Genotyping Tool Methods</title>
 		<subtypingProcess-text>
 			<text>
 				<b>The genotyping process consists of up to three steps:</b>
@@ -110,7 +110,7 @@
 					<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nuccore&amp;id=9886086">U07611</a>,
 					<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nuccore&amp;id=109254934">AF097917</a>,
 					<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nuccore&amp;id=15991707">AF414426</a>,
-					<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nuccore&amp;id=113478394">NC_008311</a>). <br />
+					<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nuccore&amp;id=113478394">NC_008311</a>).
 					
 					<div style="width: 60%; margin: 20px auto">
 					<div style="margin: 5px auto; width: 400px"><img src="/mpf/norovirus/pics/nov_genome_detail.png" /></div>
@@ -183,21 +183,6 @@ AGCAAAATATAATTGACCCCTGGATTAGAGATAATTTTGTACAAGCC
 			</sequence>
 		</exampleSequences-sequences>
 	</exampleSequences-form>
-	<contactUs-form>
-		<title>
-			Contact the developers of the Norovirus Genotyping Tool
-		</title>
-		<contactUs-text>
-			<text>
-				<p>
-					The Norovirus Genotyping tool is mantained by Harry Vennema, RIVM, The Netherlands.
-				</p>
-				<p>
-					Email: <a href="mailto:noronet@rivm.nl">noronet@rivm.nl</a>.
-				</p>
-			</text>
-		</contactUs-text>
-	</contactUs-form>
 
 	<resource name="nrvSequenceAssignment.blast">
 		<h3>Genogroup assignment</h3>
@@ -229,4 +214,8 @@ AGCAAAATATAATTGACCCCTGGATTAGAGATAATTTTGTACAAGCC
 	</resource>
 
 	<resource name="nrvTool.title">NoV Genotyping Tool</resource>
+
+	<resource name="main.navigation.introduction">Introduction</resource>	
+	<resource name="main.navigation.subtypingProcess">(Sub)typing process</resource>
+	<resource name="main.navigation.tutorial">How to use</resource>
 </organism-settings>

@@ -7,7 +7,7 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import eu.webtoolkit.jwt.WBreak;
@@ -22,16 +22,17 @@ public class DetailsForm extends AbstractForm {
 	private WContainerWidget mainTable;
 	private IDetailsForm mainDetails;
 	
-	private SaxParser p;
+	private GenotypeResultParser p;
 	
 	public DetailsForm(GenotypeWindow main) {
 		super(main, "details-form");
 		mainTable = new WContainerWidget(this);
+		mainTable.setObjectName("details-container");
 		mainTable.setStyleClass("detailsForm");
 	}
 	
 	public void init(File jobDir, final int selectedSequenceIndex) {
-		p = SaxParser.parseFile(jobDir, selectedSequenceIndex);
+		p = GenotypeResultParser.parseFile(jobDir, selectedSequenceIndex);
 		
 		if (p == null) {
 			getMain().monitorForm(jobDir, true);
@@ -79,16 +80,20 @@ public class DetailsForm extends AbstractForm {
 	
 	void addDetailsForm(IDetailsForm df, File jobDir){
 		WContainerWidget cwTitle = new WContainerWidget(mainTable);
+		cwTitle.setObjectName(df.getId() + "-title");
 		String detailTitle = df.getTitle().value();
 		WText titleText = new WText(lt("<h2><a name=\"" + detailTitle.replace(" ", "").toLowerCase() + "\"></a>"
 				+ detailTitle + "</h2>"));
+		titleText.setId("");
 
 		cwTitle.addWidget(titleText);
 
 		WContainerWidget cwDetails = new WContainerWidget(mainTable);
+		cwDetails.setObjectName(df.getId() + "-details");
 		cwDetails.setStyleClass("details");
 
 		cwDetails.addWidget(df);
+		df.setId("");
 
 		df.fillForm(p, getMain().getOrganismDefinition(), jobDir);
 	}

@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WBreak;
@@ -41,7 +41,7 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 	}
 
 	@Override
-	public void fillForm(SaxParser p, final OrganismDefinition od, File jobDir) {
+	public void fillForm(GenotypeResultParser p, final OrganismDefinition od, File jobDir) {
 		String id;
 
 		if (!p.elementExists("genotype_result.sequence.conclusion")) {
@@ -122,5 +122,10 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 	@Override
 	public WString getExtraComment() {
 		return null;
+	}
+	
+	@Override
+	public String getId() {
+		return "assignment";
 	}
 }

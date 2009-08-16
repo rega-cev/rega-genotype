@@ -10,16 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.forms.AbstractJobOverview;
-import rega.genotype.ui.forms.ContactUsForm;
-import rega.genotype.ui.forms.DecisionTreesForm;
-import rega.genotype.ui.forms.DetailsForm;
-import rega.genotype.ui.forms.ExampleSequencesForm;
-import rega.genotype.ui.forms.HowToCiteForm;
 import rega.genotype.ui.forms.AbstractForm;
+import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.ui.forms.DetailsForm;
+import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.forms.StartForm;
-import rega.genotype.ui.forms.SubtypingProcessForm;
-import rega.genotype.ui.forms.TutorialForm;
 import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
@@ -31,8 +26,6 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WebSession;
-import eu.webtoolkit.jwt.utils.StringUtils;
 
 /**
  * The frame of the application.
@@ -45,6 +38,7 @@ public class GenotypeWindow extends WContainerWidget
 {
 	private static final String START_URL = "/";
 	private static final String EXAMPLES_URL = "/examples";
+	private static final String INTRODUCTION_URL = "/introduction";
 	private static final String METHOD_URL = "/method";
 	private static final String DECISIONTREES_URL = "/decisiontrees";
 	private static final String TUTORIAL_URL = "/tutorial";
@@ -93,39 +87,81 @@ public class GenotypeWindow extends WContainerWidget
 		loadI18nResources();
 
 		setStyleClass("root");
+		setId("");
 		WApplication app = WApplication.instance();
 		
 		//String contextPath = WebSession.Handler.instance().request().getContextPath();
 		app.useStyleSheet("style/genotype.css");
 
 		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
+		header.setAlternateText(lt("header"));
+		header.setId("");
 		header.setStyleClass("header");
 
 		content = new WContainerWidget(this);
+		content.setId("content");
 		content.setStyleClass("content");
 
 		WContainerWidget navigationContainer = new WContainerWidget(this);
+		navigationContainer.setId("");
 		navigationContainer.setStyleClass("navigation");
 
 		WContainerWidget navigation = new WContainerWidget(navigationContainer);
+		navigation.setId("");
 
 		footer = new WText(resourceManager.getOrganismValue("main-form", "footer"), this);
+		footer.setId("");
 		footer.setStyleClass("footer");
 
+		/*
+		 * Set up the footer: links to all the forms:
+		 */
 		addLink(navigation, tr("main.navigation.start"), START_URL, startForm = new StartForm(this));
 
 		monitor = new StateLink(tr("main.navigation.monitor"), JOB_URL, navigation);
-
-		addLink(navigation, tr("main.navigation.howToCite"), CITE_URL, new HowToCiteForm(this));
-		addLink(navigation, tr("main.navigation.tutorial"), TUTORIAL_URL, new TutorialForm(this));
+		monitor.setId("monitor-link");
 
 		try {
-			addLink(navigation, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, new DecisionTreesForm(this));
+			DocumentationForm form = new DocumentationForm(this, "howToCite-form", "howToCite-text");
+			addLink(navigation, tr("main.navigation.howToCite"), CITE_URL, form);
 		} catch (Exception e) {
 		}
-		addLink(navigation, tr("main.navigation.subtypingProcess"), METHOD_URL, new SubtypingProcessForm(this));
-		addLink(navigation, tr("main.navigation.exampleSequences"), EXAMPLES_URL, new ExampleSequencesForm(this));
-		addLink(navigation, tr("main.navigation.contactUs"), CONTACT_URL, new ContactUsForm(this));
+
+		try {
+			DocumentationForm form = new DocumentationForm(this, "introduction-form", "introduction-text");
+			addLink(navigation, tr("main.navigation.introduction"), INTRODUCTION_URL, form);
+		} catch (Exception e) {
+		}
+
+		try {
+			DocumentationForm form = new DocumentationForm(this, "tutorial-form", "tutorial-text");
+			addLink(navigation, tr("main.navigation.tutorial"), TUTORIAL_URL, form);
+		} catch (Exception e) {
+		}
+
+		try {
+			DocumentationForm form = new DocumentationForm(this, "decisionTrees-form", "decisionTrees-text");
+			addLink(navigation, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, form);
+		} catch (Exception e) {
+		}
+
+		try {
+			DocumentationForm form = new DocumentationForm(this, "subtypingProcess-form", "subtypingProcess-text");
+			addLink(navigation, tr("main.navigation.subtypingProcess"), METHOD_URL, form);
+		} catch (Exception e) {
+		}
+
+		try {
+			DocumentationForm form = new DocumentationForm(this, "exampleSequences-form", "exampleSequences-sequences");
+			addLink(navigation, tr("main.navigation.exampleSequences"), EXAMPLES_URL, form);
+		} catch (Exception e) {
+		}
+
+		try {
+			DocumentationForm form = new DocumentationForm(this, "contactUs-form", "contactUs-text");
+			addLink(navigation, tr("main.navigation.contactUs"), CONTACT_URL, form);
+		} catch (Exception e) {
+		}
 
 		GenotypeMain.getApp().internalPathChanged().addListener(this, new Signal1.Listener<String>() {
 
@@ -160,6 +196,7 @@ public class GenotypeWindow extends WContainerWidget
 
 	private void addLink(WContainerWidget parent, WString text, String url, AbstractForm form) {
 		WAnchor a = new WAnchor("", text, parent);
+		a.setId("");
 		a.setRefInternalPath(url);
 		a.setStyleClass("link");
 		forms.put(url, form);
