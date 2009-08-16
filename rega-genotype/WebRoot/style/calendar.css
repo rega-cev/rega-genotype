@@ -1,0 +1,47 @@
+@CHARSET "UTF-8";
+*.default-style
+{
+	font-weight: normal;
+  	font-size: 20px;
+}
+*.today-style
+{
+	font-weight: bold;
+  	font-size: 20px;
+  	background-color: #d1d9fc;
+    border: 2px solid #ffa500;
+    font-weight: bold;
+
+}
+*.weekends
+{
+	font-style: italic;
+  	font-size: 80px;
+  	color:blue;
+	background-color:cyan;
+}
+*.dayheaders
+{
+	text-align: right;
+	background-color: #d1d9fc;
+    border: 2px solid white;
+    border-style: solid none;
+    padding: 2px;
+}
+*.header-combo
+{
+	position: relative;
+	width:95px;
+   
+}
+*.otherdays-of-month
+{
+	font-weight: normal;
+  	font-size: 15px;
+  	color: blue;
+  	background-color: transparent;
+    width: 1.5em;
+    text-align: right;
+    padding: 2px;
+  	
+}

@@ -34,5 +34,6 @@
 	<classpathentry kind="lib" path="lib/batik-1.7/lib/xml-apis.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/regadb-analyses"/>
 	<classpathentry kind="lib" path="lib/iText-2.1.3.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jwt"/>
+	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

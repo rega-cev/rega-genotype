@@ -1,0 +1,706 @@
+@CHARSET "UTF-8";
+
+/*	fixes for browser bugs */
+
+/* ie does not support position:fixed
+   position this element manually */
+* html #feedback {
+	position:absolute !important;
+	top:expression(document.body.scrollTop + "px"); 
+	right:0px;
+}
+
+/* general dialog fixes */
+html div.MODAL_FLOATING_BACK {
+	/* remove all existing background properties
+	   and cancel the opacity */
+	background:none !important;
+	opacity:1;
+	filter:alpha(opacity=100);
+
+	/* ie6 and 7 should use a filter for png transparency */	
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod='scale', src='pics/transparent_ie.png');
+}
+
+/* ie7 fails to disable faded background elements
+   give it a fully transparent background to force
+   this behavior */
+*:first-child+html .MODAL_FLOATING_BACK {
+	background-image:url('../pics/transparent_ie7.gif') !important;
+	background-repeat:repeat !important;
+	background-position:top left !important;
+	
+}
+
+/* regular background image non ie browsers */
+ html>/**/body div.MODAL_FLOATING_BACK {
+	background-image:url('../pics/transparent.png') !important;
+	background-repeat:repeat !important;
+	background-position:top left !important;
+}
+
+/* ie 6 only fixes */
+* html div.MODAL_FLOATING_BACK {
+	/* ie6 does not know height:100%. We have to derive
+	   it from the body height instead */
+	height:expression(document.documentElement.clientHeight + "px");
+
+	/* ie6 does not understand position fixed
+	   using position absolute and dynamic top
+	   instead */
+	position:absolute;
+	top:expression(document.documentElement.scrollTop + "px");
+}
+
+/* ie6 and 7 don't do hassle-free vertical centering all that well.
+   calculating the position instead*/
+* html .MODAL_FLOATING_FORE {
+	position:absolute;
+	top:expression( ((document.documentElement.clientHeight)/2) + "px");
+}
+*:first-child+html .MODAL_FLOATING_FORE {
+	position:absolute;
+	top:expression( ((document.documentElement.clientHeight)/2) + "px");
+}
+
+div.MODAL_FLOATING_FORE {
+	text-align:center;
+}
+
+div.MODAL_FLOATING_FORE table {
+	margin:0 auto;	
+}
+
+html div.MODAL_FLOATING_FORE iframe {
+	display:none;
+	width:0px;
+	height:0px;
+}
+
+/* iframe hack to fix select z-index bug in ie6 */
+* html div.MODAL_FLOATING_FORE iframe {
+	display:block;
+	position:absolute;
+	margin-top:-1000px;
+	top:0;
+	left:0;
+	z-index:-1;
+	filter:mask();
+	width:3000px !important;
+	height:3000px !important;
+}
+
+
+
+/* general layout */
+
+body {
+	margin:0 auto;
+	padding:0px 1em 1em;
+	text-align:center;
+	width:95%;	
+	background-color:#fbfbfb;
+}
+
+table {
+	width: 100%;	
+}
+
+.MODAL_FLOATING_FORE table {
+	width:auto;	
+}
+
+/* header */
+
+td.header {
+	width:100%;	
+	text-align:left;
+}
+
+*.header-mainTitle
+{
+	Font-weight: bold;
+  	font-size: 40px;
+}
+
+*.header-subTitle 
+{
+  	font-weight: bold;
+  	font-size: 20px;
+}
+
+
+/* tree */
+
+.main-tree {
+	padding:0.5em 1em 0.5em 0em;
+}
+
+.main-tree-content {
+	width:19em;
+}
+
+.main-tree table {
+	width:auto;
+	text-align:left;	
+}
+
+*.treemenu-menuItem
+{
+	cursor: pointer;
+	color: blue;
+}
+
+*.treemenu-disabledMenuItem
+{
+	color: grey;
+}
+
+*.treemenu-selectedMenuItem
+{
+	color: blue;
+	font-weight: bold;
+}
+
+
+/* main forms */
+
+.formcontent {
+	width:100%;	
+}
+
+.control-buttons {
+	margin-left:-1em;
+	margin-right:-1em;
+	margin-bottom:-1em;
+	padding:0.2em;
+	background-color:#ddd;	
+	border:1px solid #bbb;
+	margin-top:1em;
+}
+
+/* data tables */
+
+table.datatable {
+	border-collapse:collapse;
+	background-color:#f4f4f4;
+	border:1px solid #bbb;
+}
+
+table.datatable td {
+	padding:0.1em 0.2em;
+	text-align:left;
+	overflow:hidden;
+}
+
+table.datatable td.tablewrapper, table.date-field td {
+	padding:0px;
+}
+
+table.datatable-grid td{
+	border-left:1px solid #bbb;
+	border-right:1px solid #bbb;
+}
+
+table.datatable td.navigation{
+	border:1px solid #bbb;
+	background-color:#e5e5e5;
+	text-align:right !important;
+}
+
+table.datatable td.column-title, table.datatable td.table-expander {
+	padding:0.2em 0.5em;	
+	background-color:#ddd;
+	border-top:1px solid #bbb;
+	border-left:1px solid #bbb;
+	border-right:1px solid #bbb;
+}
+
+table.datatable td.column-action {
+	background-color:#ddd;
+}
+
+table.datatable td.column-action button {
+	width:7em;
+}
+
+table.datatable td.hidden {
+	display:none;
+	padding:0px;	
+}
+
+table.datatable span.table-header {
+	font-weight: bold;
+}
+
+*.scrollingButtons span {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+*.scrollingButtons button {
+	margin: 1px;
+}
+
+*.table-cell {
+	cursor: pointer;
+	display:block;
+}
+
+*.table-expander-text {
+	text-decoration: underline;
+}
+
+
+
+/* groups and headers */
+
+fieldset {
+	border:1px solid #bbb;
+	margin:1em 0em 0em;
+	padding:0.5em 1em 1em 1em !important;
+	text-align:left !important;
+}
+
+fieldset fieldset {
+	border:0px;
+	margin:1em 0em 0em 1em;
+	padding:0.5em 1em 1em 0em !important;
+}
+
+fieldset legend {
+	font-size:130%;
+	font-weight:bold;
+	margin-left:0em !important;
+}
+
+fieldset fieldset legend {
+	font-size:105%;
+}
+
+fieldset fieldset fieldset legend {
+	font-size:95%;
+}
+
+/* forms */
+
+table.datatable td.form-label-area {
+	width:12em;
+	padding-right:0.5em;
+	text-align:right !important;
+	background-color: #e5e5e5;
+}
+
+.form-label {
+	padding-right:0px !important;
+	margin-right:0px !important;	
+	white-space : nowrap;
+}
+
+.form-label span {
+	font-weight:bold;	
+}
+
+.form-field, .filter-field {
+	width:96%;
+	margin:0px 0%;
+	padding:0px;
+}
+
+.form-field.textfield {
+	width:94%;	
+}
+
+.edit-invalid {
+	background-color:#f5baaa;
+}
+
+.message-error {
+	border:1px solid #ee0000;
+	background-color:#f5baaa;
+}
+
+.message-info {
+	border:1px solid #00bb00;
+	background-color:#baf5ba;
+}
+
+.message-info, .message-error {
+	margin:0.5em;
+	padding:0.5em;
+	text-align:center !important;
+}
+
+.message-info img, .message-error img {
+	padding-right:0.5em;
+}
+
+.message-info div, .message-error div {
+	text-align:center !important;
+	margin-top:0.5em;
+}
+
+
+table.date-field {
+	width:96%;	
+	max-width:8em;
+}
+
+table.date-field .textfield {
+	width:93%;	
+}
+
+table.date-field td {
+	border-width:0px;	
+}
+
+.code-area, .log-area {
+	display:block;
+	overflow:auto;
+	text-align:left;
+	width:40em;
+	max-height:20em;	
+	border:1px solid #bbb;
+	padding:0.2em;
+}
+
+.code-area, .log-area, .ntfield {
+	font-family:monospace;
+}
+
+/* links */
+
+.datatable .general-clickable-text{
+	font-weight:bold;
+}
+
+*.general-clickable-text {
+	color : blue;
+	cursor: pointer;
+}
+
+*.link span {
+	cursor: pointer;
+	display:block;
+}
+
+*.link {
+	color: blue;
+}
+
+/* login form */
+
+.create-account {
+	text-align:right !important;
+	padding:0.2em 0px;
+}
+
+/* drug resistance table */
+
+
+table.datatable-resistance td.resistance-cell {
+	border:1px solid #bbb;
+	width:18%;
+}
+
+table.datatable-resistance td.form-label-area {
+	width:4% !important;	
+}
+
+
+table.datatable-resistance td.resistance-cell span {
+	display:block;
+	text-align:center;
+	padding:0em 0.2em;
+}
+
+table.datatable-resistance td.resistance-NA {
+	color:#fff;
+	background-color:#000;	
+}
+
+table.datatable-resistance td.resistance-R {
+	color:#fff;
+	background-color:red;	
+}
+
+table.datatable-resistance td.resistance-I {
+	color:#000;
+	background-color:yellow;	
+}
+
+table.datatable-resistance td.resistance-S {
+	color:#000;
+	background-color:#00ff00;	
+}
+
+table.datatable-resistance td.resistance-X {
+	color:#fff;
+	background-color:#000;	
+}
+
+table.datatable-resistance td.resistance-remarks {
+	background-color:#e5e5e5;
+	color:#000;
+}
+
+table.datatable-resistance td.resistance-cell span.mutations {
+	font-family:monospace;
+}
+
+/* viral isolate evolution */
+
+table.viral-isolate-table td {
+	border:1px solid #bbb;
+	padding-top:0.2em;
+	padding-bottom:0.2em;
+}
+
+
+/* old css */
+
+
+*.dialog-image
+{
+	margin-left: 5px;
+  	margin-right: 5px;
+  	margin-left: 5px;
+  	margin-right: 5px;
+}
+
+*.viral-isolate-fasta-label {
+	color: blue;
+}
+
+
+
+/* tabbed panes */
+
+.tabbedpane {
+	width: 100%;
+}
+
+.tabbedpane .tabstack {
+	border: 1px solid rgb(102, 102, 102);
+	background-color: rgb(225, 225, 225);
+}
+
+.dialog .tabstack {
+	border-left: 0px solid rgb(102, 102, 102);
+	border-right: 0px solid rgb(102, 102, 102);
+	border-bottom: 0px solid rgb(102, 102, 102);
+}
+
+.tabbedpane .tabmenu td {
+	padding-top:0.5em !important;
+}
+
+.tabbedpane .tab {
+	border-top: 1px solid rgb(140, 140, 140);
+	margin: 0.2em 0px 0px;
+	padding-bottom:0.5em;
+	background-color: rgb(255, 255, 255);
+}
+
+.dialog .tab {
+	background-color: rgb(235, 235, 235);
+}
+
+.tabbedpane .tabmenu span {
+	text-decoration:none !important;
+	color: #000 !important;
+}
+
+.tabbedpane .tabmenu .item, .tabbedpane .tabmenu .itemselected {
+	padding:0px;
+	margin:0px;
+	border:0px;
+	display:inline;
+	height:1.4em;
+	float:left;
+	margin-top:0.5em;
+}
+
+.tabbedpane .tabmenu .item span, .tabbedpane .tabmenu .itemselected span{
+	border-top: 1px solid rgb(102, 102, 102);
+	border-left: 1px solid rgb(102, 102, 102);
+	border-right: 1px solid rgb(102, 102, 102);
+	display:inline;
+	margin-right:0.2em !important;
+	height:1.2em;
+	padding: 0.2em 0.3em;
+	line-height:1.2em;
+	margin-bottom:-1px !important;
+	position:relative;
+	bottom:0px;
+	left:0px;
+}
+
+
+.tabbedpane .tabmenu .item span {
+	background-color:rgb(205,205,205);
+	margin-top:0.25em !important;
+}
+
+.tabbedpane .tabmenu .itemselected span {
+	font-weight:bold;
+	background-color:rgb(225,225,225);
+	border-top: 0.3em solid rgb(102, 102, 102);
+	border-bottom:1px solid rgb(225,225,225);
+}
+
+.tabbedpane .tabmenu {
+	vertical-align: bottom;
+	width:100%;
+}
+
+.tabbedpane .tabmenu td {
+	padding-left:0.2em;
+	padding-top:0.2em;
+}
+
+
+
+/* button panels */
+
+.buttonpanel {
+	padding: 0.15em;	
+}
+
+.buttonpanel .separator {
+	padding:0px 0.2em;
+}
+
+.flatbuttonpanel button {
+	margin-left:-1px;
+	margin-right:0px;
+	background-color: transparent;
+	border:0px solid transparent;
+	padding:2px 3px;
+	overflow:visible;
+}
+
+.flatbuttonpanel button:disabled {
+	opacity:0.3;
+	filter:alpha(opacity=30);
+    color:#000;
+	background-color:transparent;
+}
+
+.flatbuttonpanel button:hover, .flatbuttonpanel button:focus, .flatbuttonpanel button.hover {
+	border:1px solid rgb(180, 180, 180);
+	background-color:rgb(225, 225, 225);
+	padding:1px 2px;
+}
+
+
+
+
+.defaultbuttonpanel button {
+	margin-left:4px;
+	margin-right:4px;
+}
+
+
+
+/* dialog windows */
+
+.dialog, .MODAL_FLOATING_FORE table {
+	border: 1px solid rgb(64, 64, 64);
+	background-color: rgb(235, 235, 235);
+	margin:0.3em;
+}
+
+.dialog .dialogtitle, .MODAL_FLOATING_FORE .dialog-title-container{
+	text-align:center !important;
+	font-weight:bold;
+	background-color: rgb(128, 128, 255);
+	padding:0.15em;
+	border-bottom: 1px solid rgb(102, 102, 102);
+}
+
+.dialog .dialogcontent, .MODAL_FLOATING_FORE .dialog-message{
+	padding:0.3em;
+	display:block;
+}
+
+.dialog .dialogcontent .buttonpanel{
+	text-align:right !important;
+}
+
+.unfocusArea {
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background-color:#fff;	
+	opacity:0.5;
+	z-index:200
+}
+
+.fixed {
+	position:fixed;
+}
+
+.modalDialog {
+	position:relative;
+	top:0px;
+	left:0px;
+	z-index:201;	
+	border:1px solid #555;
+	background-color: rgb(235, 235, 235);
+	z-index:202;
+}
+
+
+
+
+/* status bar */
+
+.statusbar {
+	background-color: rgb(235,235,235);	
+	border-top: 1px solid rgb(180,180,180);
+	padding: 0.1em 0.3em;
+	font-size:95%;
+}
+
+.statusbar .statustext {
+	width:80%;	
+	text-align:left;
+}
+
+.statusbar .warning {
+	display:block;
+}
+
+.statusbar .buttonpanel {
+	padding:0px;
+	float:right;
+}
+
+
+
+
+
+/* progress bar */
+
+.progressbar {
+	height:1.4em;
+	border:1px solid rgb(180,180,180);
+}
+
+.progressbar div {
+	background-color:#6ec81e;
+	height:100%;
+	width:100%;	
+}
+
+.progresstext {
+	position:relative;
+	top:-1.3em;
+	left:0.5em;
+	display:block;
+	height:0px;
+}
+
