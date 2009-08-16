@@ -8,7 +8,7 @@
 	</main-form>
 	<start-form>
 		<title>
-		Norovirus Genotyping Tool Version 0.9
+		Norovirus Genotyping Tool Version 1.0
 		</title>
 		<note>
 		This tool is designed to use phylogenetic methods in order to identify the norovirus genotype of a nucleotide sequences.

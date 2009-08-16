@@ -7,7 +7,7 @@
   	<resource name="sequenceInput.inputSequenceInFastaFormat">
   		<p>You may can either:
   		  <ol style="list-style-type: upper-alpha">
-  		    <li>genotype sequences that you paste in FASTA format in the input field.</li>
+  		    <li>paste one or more sequences in FASTA format in the input field.</li>
   		    <li>upload a FASTA file.</li>
   		    <li>revisit results of a previous run</li>
   		  </ol>
