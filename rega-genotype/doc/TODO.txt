@@ -10,7 +10,6 @@ PRIORITY
 * puzzle image -> too much whitespace
 * image centering -> sometimes refresh is needed
 * test on server without X installed, with java 1.5 (image creation)
-* how is dealt with gaps (-) in the input seq (Koen)
 * write installation doc
 * maven
 * layout 
@@ -31,3 +30,4 @@ LATER
 * download entire jobDir contents as tar.gz (monitor-form)
 * start form 
 	* seq name -> max 20 chars ? (check for this?)
+* how is dealt with gaps (-) in the input seq (Koen)
