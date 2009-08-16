@@ -17,25 +17,25 @@ public class DefaultCsvGenerator extends AbstractCsvGenerator {
 	public void writeLine(PrintStream ps) {
     	StringBuilder csvLine = new StringBuilder();
     	
-    	if(!writtenFullSequence) {
+    	if(!hasWrittenFullSequence()) {
     		ps.append("name,length,assignment,support,begin,end,type,pure,pure_support,pure_inner,pure_outer,scan_best_support,scan_assigned_support,scan_assigned_nosupport,scan_best_profile,scan_assigned_profile,crf,crf_support,crf_inner,crf_outer,crfscan_best_support,crfscan_assigned_support,crfscan_assigned_nosupport,crfscan_best_profile,crfscan_assigned_profile,major_id,minor_id\n");
     	}
     	
     	csvLine.append(getCsvValue("genotype_result.sequence['name']")+",");
     	csvLine.append(getCsvValue("genotype_result.sequence['length']")+",");
 
-    	if(!elements.contains("genotype_result.sequence.conclusion")) {
+    	if(!elementExists("genotype_result.sequence.conclusion")) {
     		csvLine.append("\"Sequence error\",");
     	} else {
     		csvLine.append(getCsvValue("genotype_result.sequence.conclusion.assigned.name")+",");
-    		if(elements.contains("genotype_result.sequence.conclusion.assigned.support")) {
+    		if(elementExists("genotype_result.sequence.conclusion.assigned.support")) {
     			csvLine.append(getCsvValue("genotype_result.sequence.conclusion.assigned.support"));
     		}
     		csvLine.append("," + getCsvValue("genotype_result.sequence.result[blast].start"));
     		csvLine.append("," + getCsvValue("genotype_result.sequence.result[blast].end"));
     		csvLine.append("," + getCsvValue("genotype_result.sequence.result[blast].cluster.name"));
     		
-    		if(elements.contains("genotype_result.sequence.result[pure]")) {
+    		if(elementExists("genotype_result.sequence.result[pure]")) {
     			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.id"));
     			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.support"));
     			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.inner"));
@@ -71,8 +71,7 @@ public class DefaultCsvGenerator extends AbstractCsvGenerator {
     	ps.append(csvLine.toString()+"\n");
     }
 
-
-    public static void main(String [] args) {
+	public static void main(String [] args) {
     	DefaultCsvGenerator csvgen;
 		try {
 			FileOutputStream fos = new FileOutputStream("/home/plibin0/projects/utrecht/genotype/result3.csv");

@@ -18,7 +18,7 @@ public abstract class AbstractCsvGenerator extends SaxParser {
 	
 
     protected String getCsvValue(String name) {
-    	String val = this.valuesMap.get(name);
+    	String val = getValue(name);
     	if(val==null)
     		val="";
     	return "\"" + val + "\"";

@@ -25,11 +25,11 @@ public abstract class SaxParser extends DefaultHandler {
 
 	private StringBuilder values = new StringBuilder();
 	
-	protected Map<String, String> valuesMap = new HashMap<String, String>();
-	protected List<String> elements = new ArrayList<String>();
-	
-	protected boolean writtenFullSequence = false;
-	
+	private Map<String, String> valuesMap = new HashMap<String, String>();
+	private List<String> elements = new ArrayList<String>();
+		
+	private int sequenceIndex = -1;
+
 	public SaxParser() {
 	}
 	
@@ -58,10 +58,10 @@ public abstract class SaxParser extends DefaultHandler {
     	values.delete(0, values.length());
     	
     	if(getCurrentPath().equals("genotype_result.sequence")) {
+    		sequenceIndex++;
     		endSequence();
     		valuesMap.clear();
     		elements.clear();
-    		writtenFullSequence = true;
     	}
 
     	removeFromCurrentPath();
@@ -75,10 +75,16 @@ public abstract class SaxParser extends DefaultHandler {
     }
     
     public void parse(InputSource source)  throws SAXException, IOException {
-        XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+    	reset();
+    	XMLReader xmlReader = XMLReaderFactory.createXMLReader();
         xmlReader.setContentHandler(this);
         xmlReader.setErrorHandler(this);
         xmlReader.parse(source);
+    }
+    
+    private void reset() {
+    	currentPath.delete(0, currentPath.length());
+    	sequenceIndex = -1;
     }
     
     private String getCurrentPath() {
@@ -96,5 +102,21 @@ public abstract class SaxParser extends DefaultHandler {
     	if(lastDot==-1)
     		lastDot = 0;
     	currentPath.delete(lastDot, currentPath.length());
+    }
+    
+	public int getSequenceIndex() {
+		return sequenceIndex;
+	}
+	
+    public boolean hasWrittenFullSequence() {
+		return sequenceIndex!=-1;
+	}
+    
+    public String getValue(String name) {
+    	return valuesMap.get(name);
+    }
+    
+    public boolean elementExists(String name) {
+    	return elements.contains(name);
     }
 }
