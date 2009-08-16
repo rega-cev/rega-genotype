@@ -29,6 +29,7 @@ public class SequenceAlignment
 {
     private List<AbstractSequence> sequences;
     int sequenceType;
+    int alignmentScore = -1;
 
     public final static int FILETYPE_FASTA = 0;
     public final static int FILETYPE_CLUSTAL = 1;
@@ -553,4 +554,12 @@ public class SequenceAlignment
         
         return new SequenceAlignment(selected, sequenceType);
     }
+
+	public int getAlignmentScore() {
+		return alignmentScore;
+	}
+
+	public void setAlignmentScore(int alignmentScore) {
+		this.alignmentScore = alignmentScore;
+	}
 }

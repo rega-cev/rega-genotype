@@ -44,7 +44,7 @@ public class Sequence extends AbstractSequence
 		sequence = new StringBuffer(sequence).deleteCharAt(i).toString();
 	}
 	
-	int firstNonGapPosition() {
+	public int firstNonGapPosition() {
 		for (int i = 0; i < sequence.length(); ++i) {
 			if (sequence.charAt(i) != '-')
 				return i;
@@ -52,7 +52,7 @@ public class Sequence extends AbstractSequence
 		return sequence.length();
 	}
 
-	int lastNonGapPosition() {
+	public int lastNonGapPosition() {
 		for (int i = sequence.length() - 1; i >= 0; --i) {
 			if (sequence.charAt(i) != '-')
 				return i;

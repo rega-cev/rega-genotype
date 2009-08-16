@@ -108,7 +108,7 @@ public class SequenceAlign {
 
             Pattern scorePattern = Pattern.compile("Alignment Score (-?\\d+)");
 
-            //int score = 0;
+            int score = 0;
             for (;;) {
                 String s = reader.readLine();
                 if (s == null)
@@ -117,7 +117,7 @@ public class SequenceAlign {
                 Matcher m = scorePattern.matcher(s);
                 
                 if (m.find()) {
-                    //score = Integer.valueOf(m.group(1)).intValue();
+                    score = Integer.valueOf(m.group(1)).intValue();
                 }
             }
             p.waitFor();
@@ -133,7 +133,8 @@ public class SequenceAlign {
                 = new SequenceAlignment(new BufferedInputStream(new FileInputStream(f3)),
                                         SequenceAlignment.FILETYPE_FASTA,
                                         SequenceAlignment.SEQUENCE_ANY);
-            
+            result.setAlignmentScore(score);
+
             f.delete();
             f3.delete();
             File dnd = new File(f.getAbsolutePath().replace("fasta", "dnd"));
