@@ -16,6 +16,7 @@ import rega.genotype.ui.forms.DetailsForm;
 import rega.genotype.ui.forms.HowToCiteForm;
 import rega.genotype.ui.forms.IForm;
 import rega.genotype.ui.forms.StartForm;
+import rega.genotype.ui.forms.SubtypingProcessForm;
 import rega.genotype.ui.forms.TutorialForm;
 import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
 import rega.genotype.ui.util.GenotypeLib;
@@ -50,6 +51,7 @@ public class GenotypeWindow extends WContainerWidget
 	private WText decisionTrees;
 	private DecisionTreesForm decisionTreesForm;
 	private WText subtypingProcess;
+	private SubtypingProcessForm subtypingProcessForm;
 	private WText exampleSequences;
 	private WText contactUs;
 	
@@ -123,6 +125,13 @@ public class GenotypeWindow extends WContainerWidget
 		});
 		subtypingProcess = new WText(tr("main.navigation.subtypingProcess"), navigation);
 		subtypingProcess.setStyleClass("link");
+		subtypingProcess.clicked.addListener(new SignalListener<WMouseEvent>() {
+			public void notify(WMouseEvent a) {
+				if(subtypingProcessForm==null)
+					subtypingProcessForm = new SubtypingProcessForm(GenotypeWindow.this);
+				setForm(subtypingProcessForm);
+			}
+		});
 		exampleSequences = new WText(tr("main.navigation.exampleSequences"), navigation);
 		exampleSequences.setStyleClass("link");
 		contactUs = new WText(tr("main.navigation.contactUs"), navigation);

@@ -66,16 +66,19 @@ public class GenotypeResourceManager implements IWMessageResource {
 	
 	public String extractFormattedText(Element child) {
 		StringBuilder textToReturn = new StringBuilder();
-		extractFormattedText(textToReturn, child);
+		extractFormattedText(textToReturn, child, false);
 		if(textToReturn.charAt(textToReturn.length()-1)==':')
 			textToReturn.append(' ');
 		return textToReturn.toString();
 	}
 	
-	private void extractFormattedText(StringBuilder textToReturn, Element child) {
+	private void extractFormattedText(StringBuilder textToReturn, Element child, boolean noTrim) {
 		for(Object o : child.getContent()) {
 			if(o instanceof Text) {
-				textToReturn.append(((Text)o).getTextTrim());
+				if(noTrim)
+					textToReturn.append(((Text)o).getText());
+				else
+					textToReturn.append(((Text)o).getTextTrim());
 			} else {
 				Element e = (Element)o;
 				textToReturn.append("<"+e.getName());
@@ -84,7 +87,7 @@ public class GenotypeResourceManager implements IWMessageResource {
 					textToReturn.append(" "+ a.getName() + "=\"" + a.getValue() + "\"");
 				}
 				textToReturn.append(">");
-				extractFormattedText(textToReturn, e);
+				extractFormattedText(textToReturn, e, true);
 				textToReturn.append("</"+e.getName()+">");
 			}
 		}

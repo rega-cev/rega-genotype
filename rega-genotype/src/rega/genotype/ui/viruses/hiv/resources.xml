@@ -58,7 +58,7 @@
 			files/tutorial_1.gif
 			</figure>
 			<text>
-			<b>The sequence report</b> (figure 2) will be composed of three areas named: sequence assignment, analysis details and phylogenetic analyses.
+			<b>The sequence report </b> (figure 2) will be composed of three areas named: sequence assignment, analysis details and phylogenetic analyses.
 			<br/>
 			The Sequence assignment contains information on:
 			<ul style="text-align: left;">
@@ -140,4 +140,40 @@
 			</rule>
 		</decisionTrees-text>
 	</decisionTrees-form>
+	<subtypingProcess-form>
+		<title>
+			HIV-1 Subtying Tool Methods
+		</title>
+		<subtypingProcess-text>
+			<text>
+				<b>The subtyping process consists of four steps:</b>
+				<ul style="text-align: left;">
+				    <li>The initial step involves construction of a phylogenetic tree using HKY distance method in PAUP* software.The alignment contains the sequence under query and group M pure reference sequences for subtypes A-D, F-H, J and K A to K.</li>
+				    <li>The next step, involves construction of a second tree using the sequence under query, HIV-1 pure subtypes, and CRFs sequences.</li>
+				    <li>In the third step, the sequence under query sequence is divided into small segments and is analysed for recombination using bootscanning using a sliding window of 400 bps moving in steps of 50 bps.</li>
+				    <li>Finally, in the fourth step, the alignment is examined to determine whether it contains sufficient phylogenetic signals for subtype determination using Treepuzzle software.</li>
+				</ul>
+			</text>
+			<figure>
+			files/subtypingProcess.gif
+			</figure>
+			<header>
+			Reference Alignment
+			</header>
+			<table>
+			files/referenceSequences.csv
+			</table>
+			<header>
+			Program software used in the tool
+			</header>
+			<text>
+				<ul style="text-align: left;">
+					<li> <a href="http://paup.csit.fsu.edu" TARGET="_blank">PAUP*</a> - Phylogenetic inference (step 1 and 2)</li>
+					<li> <a href="http://www.tree-puzzle.de/" TARGET="_blank">TreePuzzle</a> - Likelihood mapping (step 4)</li>
+					<li> <a href="http://www.csc.fi/molbio/progs/clustalw/doc.html" TARGET="_blank">Clustalw</a> - Alignment (all steps) </li>
+					<li> <a href="http://www.psc.edu/general/software/packages/readseq/manual.html" TARGET="_blank">Readseq</a> - Sequence formating (all steps)</li>
+				</ul>
+			</text>
+		</subtypingProcess-text>
+	</subtypingProcess-form>
 </organism-settings>

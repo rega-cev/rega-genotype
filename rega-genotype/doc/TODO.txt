@@ -17,3 +17,4 @@ PRIORITY
 LATER
 * WMessage args, WAnchors
 * make seq limitation configurable
+* reference alignment table, add support for *_URL colomn name
