@@ -10,7 +10,6 @@ PRIORITY
 * puzzle image -> too much whitespace
 * image centering -> sometimes refresh is needed
 * test on server without X installed, with java 1.5 (image creation)
-* download entire jobDir contents as tar.gz (monitor-form)
 * 1000 seqs limitation (only 400 seqs works)
 * how is dealt with gaps (-) in the input seq
 * write installation doc
@@ -27,3 +26,4 @@ LATER
 * WMessage args, WAnchors
 * make seq limitation configurable
 * reference alignment table, add support for *_URL colomn name
+* download entire jobDir contents as tar.gz (monitor-form)
