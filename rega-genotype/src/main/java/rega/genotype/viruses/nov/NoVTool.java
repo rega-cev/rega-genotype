@@ -151,7 +151,7 @@ public class NoVTool extends GenotypeTool {
 						conclude("Could not assign", "Not supported by " + phyloName, regionName + "-variant");
 				}
 			} else
-					conclude("Could not assign", "Not supported by " + phyloName, regionName);
+				conclude("Could not assign", "Not supported by " + phyloName, regionName);
 
 			return true;
 		} else
