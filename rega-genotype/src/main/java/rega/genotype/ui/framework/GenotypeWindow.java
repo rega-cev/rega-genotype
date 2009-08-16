@@ -95,8 +95,8 @@ public class GenotypeWindow extends WContainerWidget
 		setStyleClass("root");
 		WApplication app = WApplication.instance();
 		
-		String contextPath = WebSession.Handler.instance().request().getContextPath();
-		app.useStyleSheet(StringUtils.terminate(contextPath, '/') + "style/genotype.css");
+		//String contextPath = WebSession.Handler.instance().request().getContextPath();
+		app.useStyleSheet("style/genotype.css");
 
 		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
 		header.setStyleClass("header");
@@ -127,7 +127,7 @@ public class GenotypeWindow extends WContainerWidget
 		addLink(navigation, tr("main.navigation.exampleSequences"), EXAMPLES_URL, new ExampleSequencesForm(this));
 		addLink(navigation, tr("main.navigation.contactUs"), CONTACT_URL, new ContactUsForm(this));
 
-		GenotypeMain.getApp().internalPathChanged.addListener(this, new Signal1.Listener<String>() {
+		GenotypeMain.getApp().internalPathChanged().addListener(this, new Signal1.Listener<String>() {
 
 			public void trigger(String basePath) {
 				if (basePath.equals("/")) {
@@ -187,9 +187,9 @@ public class GenotypeWindow extends WContainerWidget
 		
 		if (setUrl) {
 			WApplication app = WApplication.instance();
-			app.setInternalPath(monitor.ref());
+			app.setInternalPath(monitor.internalPath());
 			if (!app.environment().ajax())
-				app.redirect(app.bookmarkUrl(monitor.ref()));
+				app.redirect(app.bookmarkUrl(monitor.internalPath()));
 		}
 
 		setForm(monitorForm);

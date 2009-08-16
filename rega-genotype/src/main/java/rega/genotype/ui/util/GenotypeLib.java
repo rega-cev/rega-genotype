@@ -53,6 +53,8 @@ import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * General utility class for creating supporting data and images for a genotype job.
@@ -251,62 +253,27 @@ public class GenotypeLib {
 
 	public static WImage getWImageFromFile(final File f) {
 		System.out.println("*** getWImageFromFile: "+ f.getAbsolutePath());
-		WImage chartImage = new WImage(new WResource() {
-			
-			{
-				suggestFileName("x.png");
-			}
-
-            @Override
-            public String resourceMimeType() {
-                return "image/png";
-            }
-
-            @Override
-            protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {
-				try {
-					FileInputStream fis = new FileInputStream(f);
-	                try {
-	                    IOUtils.copy(fis, stream);
-	                    stream.flush();
-	                } catch (IOException e) {
-	                    e.printStackTrace();
-	                }
-	                finally{
-	                	IOUtils.closeQuietly(fis);
-	                }
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
-				return true;
-            }
-            
-        }, new WString(""), (WContainerWidget)null);
-		
+		WImage chartImage = new WImage(new WFileResource("image/png", f.getAbsolutePath()), new WString(""), (WContainerWidget)null);
+		chartImage.resource().suggestFileName("x.png");
 		return chartImage;
 	}
 	
 	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) {
 		System.out.println("*** getWImageFromResource: "+ fileName);
 		return new WImage(new WResource() {
-            @Override
-            public String resourceMimeType() {
-                return "image/"+fileName.substring(fileName.lastIndexOf('.')+1);
-            }
-            @Override
-            protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {
+			@Override
+			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				response.setContentType("image/"+fileName.substring(fileName.lastIndexOf('.')+1));
+				
             	InputStream is = this.getClass().getResourceAsStream(od.getOrganismDirectory()+fileName);
                 try {
-                    IOUtils.copy(is, stream);
-                    stream.flush();
+                    IOUtils.copy(is, response.getOutputStream());
                 } catch (IOException e) {
                     e.printStackTrace();
             	} finally {
             		IOUtils.closeQuietly(is);
             	}
-            	
-            	return true;
-            }
+			}
         }, new WString(""), parent);
 	}
 	

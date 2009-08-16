@@ -25,7 +25,7 @@ public class FileUpload extends WContainerWidget {
 	public FileUpload() {
 		setStyleClass("fileUpload");
         uploadFile = new WFileUpload(this);
-        uploadFile.uploaded.addListener(this, new Signal.Listener()  {
+        uploadFile.uploaded().addListener(this, new Signal.Listener()  {
             public void trigger() {
                 uploadButton.setEnabled(true);
                 uploadButton.setText(tr("sequenceInput.uploadFile"));
@@ -33,7 +33,7 @@ public class FileUpload extends WContainerWidget {
         });
         
         uploadButton = new WPushButton(tr("sequenceInput.uploadFile"), this);
-        uploadButton.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
+        uploadButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
             public void trigger(WMouseEvent a) {
                 uploadButton.setEnabled(false);
                 uploadButton.setText(tr("sequenceInput.uploadingFile"));

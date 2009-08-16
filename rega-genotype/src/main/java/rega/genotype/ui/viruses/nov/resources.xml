@@ -2,7 +2,8 @@
 <organism-settings>
 	<main-form>
 		<footer>
-			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans) and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
+			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
+			and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
 			<p>Contact: <a href="mailto:noronet@rivm.nl">noronet@rivm.nl</a></p>
 		</footer>
 	</main-form>
@@ -34,7 +35,8 @@
 			<text>
 				<p>Please use the following citation:</p>
 				<p>
-				Norovirus genotyping tool, National Institute of Public health and the Environment, The Netherlands, <a href="http://www.rivm.nl/">www.rivm.nl</a>.
+				Norovirus genotyping tool, National Institute of Public health and the Environment, The Netherlands,
+				 <a href="http://www.rivm.nl/">www.rivm.nl</a>.
 				</p>
 			</text>
 		</howToCite-text>
@@ -67,7 +69,7 @@
 			  (region A and B) can be used for genotyping, while the entire ORF2 (which includes regions C, D, and E)
 			  is supported.<br/>
 			  
-			  <img href="genome.png">Genome</img>
+			  <div style="margin: 5px auto; width: 400px"><img src="/mpf/norovirus/pics/nov_genome_detail.png" /></div>
 			  
 			  Only when your sequence has sufficient overlap (>100 bps) with each of these areas, a phylogenetic
 			  analysis is performed for that area.
@@ -111,7 +113,7 @@
 					<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nuccore&amp;id=113478394">NC_008311</a>). <br />
 					
 					<div style="width: 60%; margin: 20px auto">
-					<div style="margin: 5px auto; width: 400px"><img src="pics/nov_genome_detail.png" /></div>
+					<div style="margin: 5px auto; width: 400px"><img src="/mpf/norovirus/pics/nov_genome_detail.png" /></div>
 					<div>Schematic representation of genomic regions of NoV used for genotyping, adapted from:
 					Vinje J, Hamidjaja RA, Sobsey MD. Development and application of a capsid VP1 (region D) based
 					reverse transcription PCR assay for genotyping of genogroup I and II noroviruses.

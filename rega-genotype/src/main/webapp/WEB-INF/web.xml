@@ -22,7 +22,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeNoV</servlet-name>
-    <url-pattern>/GenotypeNoV/*</url-pattern>
+    <url-pattern>/typingtool/*</url-pattern>
   </servlet-mapping>
   
   <servlet>

@@ -17,7 +17,7 @@ import eu.webtoolkit.jwt.WString;
  */
 public class StateLink extends WAnchor {
 
-	private String baseUrl;
+	private String baseUrl, internalPath;
 
 	public StateLink(WString ws, String url, WContainerWidget parent) {
 		super("", ws, parent);
@@ -25,7 +25,7 @@ public class StateLink extends WAnchor {
 		text().arg("");
 		
 		this.setStyleClass("non-link");
-		this.baseUrl = url;
+		this.baseUrl = this.internalPath = url;
 		this.setRefInternalPath(baseUrl);
 	}
 	
@@ -37,13 +37,17 @@ public class StateLink extends WAnchor {
 		text().args().add(value);
 		
 		if (value.equals("")) {
-			setRefInternalPath(baseUrl);
+			setRefInternalPath(this.internalPath = baseUrl);
 			this.setStyleClass("non-link");
 		} else {
-			setRefInternalPath(baseUrl + '/' + value);
+			setRefInternalPath(this.internalPath = baseUrl + '/' + value);
 			this.setStyleClass("link");
 		}
 		
 		refresh();
+	}
+
+	public String internalPath() {
+		return internalPath;
 	}
 }

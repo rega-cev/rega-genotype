@@ -34,6 +34,8 @@ import eu.webtoolkit.jwt.WTableCell;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTimer;
 import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * An abstract class implementing a widget showing the overview of a running or finished job.
@@ -90,7 +92,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			updater.start();
 		}
 		
-		GenotypeMain.getApp().internalPathChanged.addListener(this, new Signal1.Listener<String>() {
+		GenotypeMain.getApp().internalPathChanged().addListener(this, new Signal1.Listener<String>() {
 
 			public void trigger(String basePath) {
 				if (basePath.equals(GenotypeWindow.jobPath(jobDir) + '/')) {
@@ -152,7 +154,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 			updater = new WTimer();
 			updater.setInterval(getMain().getOrganismDefinition().getUpdateInterval());
-			updater.timeout.addListener(this, new Signal.Listener() {
+			updater.timeout().addListener(this, new Signal.Listener() {
 				public void trigger() {
 					if(!fillingTable)
 						fillTable();
@@ -221,10 +223,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			jobFileDownload.setTarget(AnchorTarget.TargetNewWindow);
 			WResource jobResource = new WFileResource("application/zip", jobArchive.getAbsolutePath()) {
 				@Override
-				protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) {
+				public void handleRequest(WebRequest request, WebResponse response) {
 					GenotypeLib.zip(jobDir, jobArchive);
-					super.streamResourceData(stream, arguments);
-					return true;
+					super.handleRequest(request, response);
 				}
 					
 			};
@@ -243,21 +244,16 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		WResource csvResource = new WResource() {
 			@Override
-			public String resourceMimeType() {
-				return "application/excell";
-			}
-
-			@Override
-			protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {
-				DataTable t = csv ? new CsvDataTable(stream, ';', '"') : new XlsDataTable(stream);
+			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				response.setContentType("application/excell");
+				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ';', '"') : new XlsDataTable(response.getOutputStream());
 				AbstractDataTableGenerator acsvgen = AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(t);
 				acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
-				return true;
 			}
 			
 		};
 		csvResource.suggestFileName("results." + (csv ? "csv" : "xls"));
-		csvTableDownload.setRef(csvResource.generateUrl());
+		csvTableDownload.setResource(csvResource);
 
 		return csvTableDownload;
 	}

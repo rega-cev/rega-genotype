@@ -69,13 +69,13 @@ public class StartForm extends AbstractForm {
 		
 		clear = new WPushButton(seqinput);
 		clear.setText(tr("sequenceInput.clear"));
-		clear.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
+		clear.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
 				ta.setText("");
 			}
 		});
 	
-		run.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
+		run.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
 				verifyFasta(ta.text());
 			}
@@ -85,7 +85,7 @@ public class StartForm extends AbstractForm {
 
 		fileUpload = new FileUpload();
 		seqinput.addWidget(fileUpload);
-		fileUpload.getUploadFile().uploaded.addListener(this, new Signal.Listener() {
+		fileUpload.getUploadFile().uploaded().addListener(this, new Signal.Listener() {
             public void trigger() {                
 				try {
 					if (fileUpload.getUploadFile().spoolFileName() != "") {
@@ -103,7 +103,7 @@ public class StartForm extends AbstractForm {
 		new WText(tr("startForm.labelJobId"), seqinput);
 		jobIdTF = new WLineEdit(seqinput);
 		monitorButton = new WPushButton(tr("startForm.monitor"), seqinput);
-		monitorButton.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
+		monitorButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
 				File jobDir = getMain().getJobDir(jobIdTF.text());
 				if (jobDir.exists()) {

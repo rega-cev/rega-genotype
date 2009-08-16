@@ -11,6 +11,8 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 
 import eu.webtoolkit.jwt.WResource;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 public class AlignmentResource extends WResource {
 
@@ -24,24 +26,20 @@ public class AlignmentResource extends WResource {
 	}
 
 	@Override
-	protected String resourceMimeType() {
-		return "application/txt";
-	}
-
-	@Override
-	protected boolean streamResourceData(OutputStream stream,
-			HashMap<String, String> arguments) throws IOException {
+	protected void handleRequest(WebRequest request, WebResponse response)
+			throws IOException {
+		response.setContentType("application/txt");
+		
 
 		try {
 			SequenceAlignment a = new SequenceAlignment(new FileInputStream(nexusFile), SequenceAlignment.FILETYPE_NEXUS, sequenceType);
-			a.writeOutput(stream, fileType);
+			a.writeOutput(response.getOutputStream(), fileType);
 		} catch (ParameterProblemException e) {
 			e.printStackTrace();
 		} catch (FileFormatException e) {
 			e.printStackTrace();
 		}
 
-		return true;
 	}
 
 }
