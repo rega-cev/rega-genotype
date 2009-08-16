@@ -306,7 +306,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					if (data.get(i).objectName().length() > 0)
 						data.get(i).setId("");
 					
-					if (WApplication.instance().environment().agentIE())
+					if (WApplication.instance().environment().agentIsIE())
 						cell.setStyleClass(jobTable.columnAt(i).styleClass());
 				}
 				jobTable.rowAt(jobTable.rowCount() - 1).setId("");
