@@ -237,35 +237,6 @@ public class GenotypeLib {
 	public static File getArchive(File dir){
 		return zip(dir);
 	}
-	
-	public static File tar(File dir){
-		File tar = new File(dir.getAbsolutePath()+".tar.gz");
-		
-		if(!tar.exists()){
-			try{
-				Runtime runtime = Runtime.getRuntime();
-				Process proc;
-				int result;
-				String cmd;
-				
-				cmd = "tar -czf "+ tar.getAbsolutePath() +" "+ dir.getAbsolutePath();
-				proc = runtime.exec(cmd, null, dir.getParentFile());
-				LineNumberReader err = new LineNumberReader(new InputStreamReader(proc.getErrorStream()));
-				String errl;
-				while((errl = err.readLine()) != null){
-					System.err.println(errl);
-				}
-				
-				if((result = proc.waitFor()) != 0)
-					throw new ApplicationException(cmd +" exited with error: "+result);
-				err.close();
-			}
-			catch(Exception e){
-				e.printStackTrace();
-			}
-		}
-		return tar;
-	}
 
 	public static File zip(File dir) {
 
