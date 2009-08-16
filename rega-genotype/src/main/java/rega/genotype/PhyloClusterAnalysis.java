@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype;
 
 import java.io.BufferedReader;
@@ -28,6 +33,13 @@ import java.util.regex.Pattern;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
 
+/**
+ * Implements a clustering analysis using phylogenetic methods:
+ *  - paup or mrbayes for phylogeny estimation and bootstrapping
+ *  - tree puzzle for phylogenetic signal analysis
+ *  
+ * @author koen
+ */
 public class PhyloClusterAnalysis extends AbstractAnalysis {
     private static final String PAUP_LOG       = "paup.log";
     private static final String PAUP_TREE      = "paup.tre";
@@ -61,9 +73,9 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
     public class Result extends AbstractAnalysis.Result implements Scannable, Concludable {
         private Cluster bestCluster;
         private float   support;
-        private float   supportOuter;        // cluster without query sequence
-        private float   supportInner;        // parts of cluster with query sequence        
-        private Double   signal;
+        private float   supportOuter;  // cluster without query sequence
+        private float   supportInner;  // parts of cluster with query sequence        
+        private Double  signal;
 
         private String paupLog;
         private String alignment;

@@ -1,8 +1,7 @@
 /*
- * Created on Feb 6, 2006
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
  */
 package rega.genotype;
 
@@ -13,6 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * A sliding window version of a wrapped analysis.
+ * 
+ * By means of the Scannable interface, this analysis may wrap any other analysis
+ * that provides results that implement this interface.
+ * 
+ * @author koen
+ */
 public class ScanAnalysis extends AbstractAnalysis {
     public class Result extends AbstractAnalysis.Result implements Scannable {
         List<Scannable> windowResults;

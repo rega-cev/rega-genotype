@@ -1,11 +1,13 @@
 /*
- * Created on Feb 7, 2006
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
  */
 package rega.genotype;
 
+/**
+ * Exception thrown by a genotyping analysis
+ */
 public class AnalysisException extends Exception {
     private static final long serialVersionUID = 6415192377329324105L;
 	private String analysId;

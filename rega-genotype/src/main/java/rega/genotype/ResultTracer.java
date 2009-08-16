@@ -1,8 +1,7 @@
 /*
- * Created on Feb 7, 2006
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
  */
 package rega.genotype;
 
@@ -12,6 +11,11 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
+/**
+ * A utility class that serializes genotyping results to the results.xml file.
+ * 
+ * @author koen
+ */
 public class ResultTracer {
     PrintWriter w;
     File        file;
@@ -151,9 +155,6 @@ public class ResultTracer {
         return result;
     }
 
-    /**
-     * @return
-     */
     public String getOutputPath() {
         if (file.getParent() != null)
             return file.getParent();

@@ -1,4 +1,4 @@
-* make sure maven2 is installed
+* requires Java 1.5 or later and maven2
 * command line:
 	* go to the rega-genotype directory
 	* mvn package

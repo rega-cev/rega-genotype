@@ -9,7 +9,7 @@
 		
 	* clustalw
 		* some unix based operating operating systems allow installation via the package manager
-		* can be installed manually from by downloading the appropriate binaries for your OS
+		* can be installed manually by downloading the appropriate binaries or build from source code for your OS
 			* ftp://ftp.ebi.ac.uk/pub/software/clustalw2/
 	
 	* tree-puzzle 5.2 with svg support
@@ -34,20 +34,4 @@
 	* create an XML file like the one in global-conf.xml and save it to a location of your choice
 	* create an environment variable named "REGA_GENOTYPE_CONF_DIR" and store the location of the
 		xml file in this environment variable
-	* fill in the appropriate values
-		* xmlPath -> directory containing the xml files found in this projects xml/ directory
-			* eg.: /soft/rega-genotype/xml/
-		* jobDir-$organismName -> location where the genotypetool can write job-related files for a specific organism
-			* eg.: /soft/rega-genotype/jobs-NRV
-		* paupCmd -> location of your paup executable + name of the paup executable
-			* eg.: /soft/paup/paup4b10-x86-linux
-		* clustalWCmd -> location of your clustalw executable + name of the clustalw executable
-			* eg.: /soft/clustal/clustalw
-		* treePuzzleCmd -> location of your tree-puzzle executable + name of the tree-puzzle executable (the svg enabled version!)
-			* eg.: /soft/tree-puzzle/puzzle
-		* treeGraphCmd -> location of your treegraph executable + name of the treegraph executable
-			* eg.: /soft/treegraph/tgf
-		* blastPath -> location of your blast executables (correct version!)
-			* eg.: /soft/blast/bin
-		* maxAllowedSequences -> the maximum amount of sequences to be submitted at once
-			* eg.: 1000
+	* fill in the appropriate values (see comments in global-conf.xml)

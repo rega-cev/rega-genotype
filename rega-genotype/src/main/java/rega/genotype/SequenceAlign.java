@@ -1,8 +1,7 @@
 /*
- * Created on Feb 6, 2006
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
  */
 package rega.genotype;
 
@@ -20,6 +19,17 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class that computes pairwise or profile sequence alignments based on clustalw.
+ * 
+ * Computed alignments are stored in a cache to avoid recomputing the same alignment
+ * multiple times.
+ * 
+ * To speed up profile alignments, there is an option to first trim the query sequence
+ * based on a pairwise alignment.
+ * 
+ * @author koen
+ */
 public class SequenceAlign {
     public static String clustalWPath = "clustalw";
 
@@ -98,7 +108,7 @@ public class SequenceAlign {
 
             Pattern scorePattern = Pattern.compile("Alignment Score (-?\\d+)");
 
-            int score = 0;
+            //int score = 0;
             for (;;) {
                 String s = reader.readLine();
                 if (s == null)
@@ -107,7 +117,7 @@ public class SequenceAlign {
                 Matcher m = scorePattern.matcher(s);
                 
                 if (m.find()) {
-                    score = Integer.valueOf(m.group(1)).intValue();
+                    //score = Integer.valueOf(m.group(1)).intValue();
                 }
             }
             p.waitFor();
@@ -188,7 +198,7 @@ public class SequenceAlign {
              * This is OK for profile alignments as well: two scores are given but
              * the last one is used.
              */
-            int score = 0;
+            //int score = 0;
             for (;;) {
                 String s = reader.readLine();
                 if (s == null)
@@ -197,7 +207,7 @@ public class SequenceAlign {
                 Matcher m = scorePattern.matcher(s);
                 
                 if (m.find()) {
-                    score = Integer.valueOf(m.group(1)).intValue();
+                    //score = Integer.valueOf(m.group(1)).intValue();
                 }
             }
 

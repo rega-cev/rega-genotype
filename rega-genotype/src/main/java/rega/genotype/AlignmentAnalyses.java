@@ -1,4 +1,10 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +20,20 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+/**
+ * Class that represents information contained in a a single analysis (XML file).
+ * 
+ * A single analysis file describes analyses that may be done based on a single set of
+ * reference sequences (usually an alignment).
+ * 
+ * It provides the following information:
+ *  - the reference sequences, possibly as an alignment, with an indication of the
+ *    sequence type (AA or DNA)
+ *  - the clusters that are described for these reference sequences
+ *  - the analyses that are described for these reference sequences
+ *  
+ * @author koen
+ */
 public class AlignmentAnalyses {    
     private List<Cluster>                 clusters;
     private Map<String, AbstractAnalysis> analyses;
@@ -22,6 +42,9 @@ public class AlignmentAnalyses {
     private boolean                       trimAlignment;
     private GenotypeTool                  genotypeTool;
 
+    /**
+     * A taxus corresponds to a sequence in the alignment
+     */
     public class Taxus {
     	private String id;
     	
@@ -33,12 +56,24 @@ public class AlignmentAnalyses {
 			return id;
 		}
     }
-    
+
+    /**
+     * A cluster groups a number of taxa.
+     * 
+     * Clusters can contain sub clusters. Together with the taxa defined directly for
+     * the cluster, taxa in sub clusters define all taxa for a cluster.
+     * 
+     * A cluster may have an optional description, and a list of tags that may be
+     * referenced from analyses.
+     * 
+     * The cluster id is used internally (referenced from analyses), while the description
+     * is reported to the user.
+     */
     public class Cluster {
         private String        id;
         private String        name;
         private String        description;
-        private List<Taxus>  taxa;
+        private List<Taxus>   taxa;
         private List<Cluster> clusters;
         private Cluster       parent;
         private String        tags;
@@ -78,6 +113,9 @@ public class AlignmentAnalyses {
             parent = cluster;
         }
 
+        /**
+         * @return all taxa in this cluster, including taxa from sub clusters
+         */
         public List<Taxus> getTaxa() {
             List<Taxus> result = new ArrayList<Taxus>(taxa);
 
@@ -88,6 +126,9 @@ public class AlignmentAnalyses {
             return result;
         }
 
+        /**
+         * @return same as getTaxa(), but returns the ids rather than the taxa themselves
+         */
         public List<String> getTaxaIds() {
             List<Taxus> taxa = getTaxa();
             List<String> result = new ArrayList<String>();
@@ -99,6 +140,9 @@ public class AlignmentAnalyses {
             return result;
         }
 
+        /**
+         * @return direct sub clusters
+         */
         public List<Cluster> getClusters() {
             return clusters;
         }
@@ -111,6 +155,10 @@ public class AlignmentAnalyses {
             return id;
         }
 
+        /**
+         * @return the cluster depth: for a top level cluster it is 1, for its sub clusters,
+         * this is 2, etc...
+         */
         public int depth() {
             if (parent == null)
                 return 1;
@@ -118,20 +166,26 @@ public class AlignmentAnalyses {
                 return 1 + parent.depth();
         }
 
-        public boolean containsTaxus(String match) {
+        /**
+         * Returns whether the cluster contains directly or indirectly a particular taxus.
+         */
+        public boolean containsTaxus(String taxusId) {
             for (Taxus t:taxa) {
-            	if (t.getId().equals(match))
+            	if (t.getId().equals(taxusId))
             		return true;
             }
             
             for (int i = 0; i < clusters.size(); ++i) {
-                if (clusters.get(i).containsTaxus(match))
+                if (clusters.get(i).containsTaxus(taxusId))
                     return true;
             }
             
             return false;
         }
 
+        /**
+         * Quick and dirty test to see if a particular tag is set for the cluster.
+         */
 		public boolean haveTag(String tag) {
 			return tags != null && tags.contains(tag);
 		}
@@ -159,7 +213,8 @@ public class AlignmentAnalyses {
     	return analyses.containsKey(id);
     }
     
-    private void retrieve(File fileName, File workingDir)
+    @SuppressWarnings("unchecked")
+	private void retrieve(File fileName, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
 
         SAXBuilder builder = new SAXBuilder();
@@ -228,7 +283,8 @@ public class AlignmentAnalyses {
         return null;
     }
 
-    private AbstractAnalysis readBlastAnalaysis(Element element, String id, File workingDir) {
+    @SuppressWarnings("unchecked")
+	private AbstractAnalysis readBlastAnalaysis(Element element, String id, File workingDir) {
         Element identifyE = element.getChild("identify");
         String clusters = identifyE.getTextTrim();
         List<Cluster> cs = parseCommaSeparatedClusterIds(clusters);
@@ -360,7 +416,8 @@ public class AlignmentAnalyses {
             return c;
     }
 
-    private Cluster readCluster(Element element) {
+    @SuppressWarnings("unchecked")
+	private Cluster readCluster(Element element) {
         String id = element.getAttributeValue("id");
         String name = element.getAttributeValue("name");
         String description = null;

@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rega-genotype-settings>
+  <!-- xmlPath
+     Directory containing the xml files and reference sequence alignments, located in
+     this projects xml/ directory
+     
+     These define the input to the various analyses for each organism.
+   -->
   <property name="xmlPath">/home/plibin0/myWorkspace-lisbon/rega-genotype/xml/</property>
+
+  <!-- paupCmd
+     Location of your paup executable + name of the paup executable.
+     
+     Note, you need to get a license for paup.
+   -->
   <property name="paupCmd">/home/plibin0/paup4b10-x86-linux</property>
+
+  <!-- clustalWCmd
+     Location of your clustalw executable + name of the clustalw executable
+   -->
   <property name="clustalWCmd">/usr/bin/clustalw</property>
+
+  <!-- blastPath
+     Location of your blastall and formatdb executables (from ncbi-tools).     
+   -->
   <property name="blastPath">/home/plibin0/projects/blast/blast-2.2.11/bin/</property>
+
+  <!-- treePuzzleCmd
+     Location of your tree-puzzle executable + name of the tree-puzzle executable (the svg enabled version!)
+   -->
   <property name="treePuzzleCmd">/home/plibin0/projects/treepuzzle/treepuzzle/src/puzzle</property>
-  <property name="jobDir">/home/plibin0/subtypejobdir/</property>
+
+  <!-- treeGraphCmd
+     Location of your treegraph executable + name of the treegraph executable
+   -->
   <property name="treeGraphCmd">/home/plibin0/projects/treegraph/tgf10rc4/source/tgf</property>
+
+  <!-- jobDir-%organism%
+     Location where the genotypetool can write job-related files for a specific organism.
+     
+     %organism% should correspond to an organism (like the folder name in xml/)
+     
+     The tool will never delete any files here. It is your responsibility to implement a
+     policy that will discard old jobs.
+     
+     Each job dir must be different, since jobs cannot be mixed for several organisms.
+   -->
+  <property name="jobDir-NRV">/home/plibin0/subtypejobdir/NRV/</property>
+  <property name="jobDir-HIV">/home/plibin0/subtypejobdir/HIV/</property>
+
+  <!-- maxAllowedSequences
+     The maximum number of sequences that may be submitted in a single batch.
+   -->
+  <property name="maxAllowedSequences">1000</property>
 </rega-genotype-settings>

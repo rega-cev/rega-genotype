@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype;
 import jargs.gnu.CmdLineParser;
 
@@ -12,12 +17,20 @@ import java.lang.reflect.InvocationTargetException;
 
 import rega.genotype.ui.util.GenotypeLib;
 
-/*
- * Created on Jul 6, 2004
- */
-
 /**
- * @author kdforc0
+ * Main class for the genotype tool.
+ * 
+ * It serves two purposes:
+ *  - provides the main() function for using the tool to analyze a number of sequences
+ *    using a specific implementation of the tool for an organism
+ *  - provides an abstract base class for providing a specific implementation of the
+ *    tool for an organism
+ *
+ * Genotyping tools may be used standalone or may be chained together. e.g. one tool may
+ * be providing a distinction between related organisisms, which is chained to other tools
+ * that provide detailed subtyping analyses for each of these organisms.
+ *
+ * @author koen
  */
 public abstract class GenotypeTool {
     private static String xmlBasePath = ".";
@@ -25,19 +38,12 @@ public abstract class GenotypeTool {
 
     private GenotypeTool parent;
     private ResultTracer tracer;
-    private String[] args;
 
     public GenotypeTool() {
     	this.parent = null;
-    	this.args = null;
-    }
-    
-    public GenotypeTool(String[] args) {
-        this.parent = null;
-        parseArgs(args);
     }
 
-    static private String[] parseArgs2(String[] args) { 
+    static private String[] parseArgs(String[] args) { 
         CmdLineParser parser = new CmdLineParser();
         CmdLineParser.Option paupPathOption = parser.addStringOption('p', "paup");
         CmdLineParser.Option clustalPathOption = parser.addStringOption('c', "clustal");
@@ -92,11 +98,7 @@ public abstract class GenotypeTool {
         return parser.getRemainingArgs();
 	}
 
-    private void parseArgs(String[] args) { 
-        this.args = parseArgs2(args);
-	}
-
-	private static void printUsage() {
+    private static void printUsage() {
 		System.err.println("GenotypeTool: error parsing command-line.");
 		System.err.println("usage: GenotypeTool[-p pauppath] [-c clustalpath] [-x xmlpath] analysis [sequences.fasta] result.xml");
 		System.err.println();
@@ -125,6 +127,12 @@ public abstract class GenotypeTool {
         stopTracer();
 	}
 	
+	/**
+	 * This function analyzes an input FASTA file, and writes results to a given
+	 * trace file.
+	 * 
+	 * For each sequence in the input file, it invokes analyze(AbstractSequence)
+	 */
     public void analyze(String sequenceFile, String traceFile) throws IOException {
         startTracer(traceFile);
 
@@ -167,25 +175,24 @@ public abstract class GenotypeTool {
         stopTracer();        
     }
 
-    /**
-     * 
-     */
     protected void stopTracer() {
         getTracer().finish();
     }
 
-    /**
-     * @param traceFile
-     * @throws FileNotFoundException
-     */
     protected void startTracer(String traceFile) throws FileNotFoundException {
         tracer = new ResultTracer(new File(traceFile));
     }
 
+    /**
+     * Conclude the "unassigned" conclusion.
+     */
     protected void conclude(String conclusion, String motivation) {
     	conclude(conclusion, motivation, null);
     }
 
+    /**
+     * Conclude the "unassigned" conclusion.
+     */
     protected void conclude(String conclusion, String motivation, String id) {
         getTracer().printlnOpen("<conclusion type=\"unassigned\""
         		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
@@ -197,10 +204,16 @@ public abstract class GenotypeTool {
         getTracer().printlnClose("</conclusion>");    	
     }
 
+    /**
+     * Conclude a plain conclusion.
+     */
     protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation) {
     	conclude(conclusion, motivation, null);
     }
 
+    /**
+     * Conclude a plain conclusion.
+     */
     protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation, String id) {
         getTracer().printlnOpen("<conclusion type=\"simple\""
         		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
@@ -209,6 +222,9 @@ public abstract class GenotypeTool {
         getTracer().printlnClose("</conclusion>");
     }
 
+    /**
+     * Conclude a combined major/minor conclusion.
+     */
     protected void conclude(AbstractAnalysis.Concludable major, AbstractAnalysis.Concludable minor,
     						String motivation) {
         getTracer().printlnOpen("<conclusion type=\"composed\">");
@@ -217,17 +233,23 @@ public abstract class GenotypeTool {
         getTracer().add("motivation", motivation);
         getTracer().printlnClose("</conclusion>");    	
     }
-    
-    abstract public void analyze(AbstractSequence s) throws AnalysisException;
-    abstract public void analyzeSelf() throws AnalysisException;
-    
-    /**
-     * @return Returns the args.
-     */
-    public String[] getArgs() {
-        return args;
-    }
 
+    /**
+     * Abstract function that analyzes a sequence.
+     * 
+     * You should reimplement this sequence to create a new genotyping tool.
+     */
+    abstract public void analyze(AbstractSequence s) throws AnalysisException;
+
+    /**
+     * Abstract function that provides a self-check analysis.
+     */
+    abstract public void analyzeSelf() throws AnalysisException;
+
+    /**
+     * Read analyses from a given XML file.
+     * Each analysis is configured to use the workingDir to store intermediate results.
+     */
     protected AlignmentAnalyses readAnalyses(String file, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
         return new AlignmentAnalyses(new File(xmlBasePath + File.separator + file),
@@ -250,26 +272,24 @@ public abstract class GenotypeTool {
     }
 
     /**
-     * @return Returns the parent.
+     * @return Returns the parent genotype tool for a nested genotyping tool.
      */
     public GenotypeTool getParent() {
         return parent;
     }
 
-    /**
-     * @param parent The parent to set.
-     */
     public void setParent(GenotypeTool parent) {
         this.parent = parent;
     }
     
-    public static void main(String[] args)
+    @SuppressWarnings("unchecked")
+	public static void main(String[] args)
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
     	
     	/*
     	 * Usage: GenotypeTool [-p,-c,-x] className [sequences.fasta] result.xml
     	 */	
-    	String[] args2 = parseArgs2(args);
+    	String[] args2 = parseArgs(args);
 
     	if (args2.length < 2) {
     		printUsage();
@@ -278,8 +298,6 @@ public abstract class GenotypeTool {
     	
     	Class analyzerClass = Class.forName(args2[0]);
     	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(workingDir));
-
-    	genotypeTool.args = args2;
 
     	if (args2.length == 3) {
     		genotypeTool.analyze(args2[1], args2[2]);

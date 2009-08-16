@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,12 +19,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-/*
- * Created on Apr 7, 2003
- */
-
 /**
- * Represents multiple sequences that are aligned
+ * Represents an alignment of multiple sequences, and provides I/O methods to read and
+ * the alignment from FASTA and to various file formats.
+ * 
+ * @note It can also simply hold a set of unaligned sequences.
  */
 public class SequenceAlignment
 {
@@ -60,8 +64,8 @@ public class SequenceAlignment
         inputFile.close();
     }
 
-	/*
-	 * The most inefficient java code imaginable ... ! Rewrite !
+	/**
+	 * Removes all-gap columns from the alignment.
 	 */
 	public void degap() {
 		for (int i = 0; i < getLength();) {
@@ -87,6 +91,11 @@ public class SequenceAlignment
 		}
 	}
 
+	/**
+	 * Checks whether the alignment is sane: all sequences must have equal length.
+	 * Optionally, it may enforce this by removing sequences that have a length different
+	 * from the first sequence length.
+	 */
     public boolean areAllEqualLength(boolean force) {
         Iterator<AbstractSequence> i = sequences.iterator();
         int length = -1;
@@ -117,7 +126,7 @@ public class SequenceAlignment
         throws IOException, FileFormatException
     {
         /*
-         * The fasta format (for multiple sequences) as described in
+         * The FASTA format (for multiple sequences) as described in
          * http://www.molbiol.ox.ac.uk/help/formatexamples.htm#fasta
          * and
          * http://www.ncbi.nlm.nih.gov/BLAST/fasta.html
@@ -192,6 +201,10 @@ public class SequenceAlignment
         return new Sequence(name, description, sequence.toString());
     }
 
+    /**
+     * Sanitize the sequence name to not confuse phylogenetic software packages with
+     * symbols that they cannot handle or too long sequence names.
+     */
     private static String makeLegalName(String name) {
     	String sane = name.replaceAll("/|\\+|\\(|\\)", "");
 		try {
@@ -212,7 +225,13 @@ public class SequenceAlignment
     public int getLength() {
         return sequences.get(0).getLength();
     }
-    
+
+    /**
+     * Create a sequence alignment that is a window on the current alignment.
+     * 
+     * This uses the SubSequence class to efficiently create a new alignment without
+     * copying the sequences.
+     */
     public SequenceAlignment getSubSequence(int startIndex, int endIndex)
     {
         List<AbstractSequence> subSequences = new ArrayList<AbstractSequence>();
@@ -230,6 +249,9 @@ public class SequenceAlignment
         return new SequenceAlignment(subSequences, sequenceType);
     }
 
+    /**
+     * Write the alignment to a file.
+     */
     void writeOutput(OutputStream outputFile, int fileType)
         throws IOException, ParameterProblemException
     {
@@ -323,9 +345,7 @@ public class SequenceAlignment
         Set<String> nameSet = new HashSet<String>();
         List<String> nameList = new ArrayList<String>();
 
-        for (Iterator i = sequences.iterator(); i.hasNext();) {
-            AbstractSequence seq = (AbstractSequence) i.next();
-
+        for (AbstractSequence seq:sequences) {
             String name = nexusName(seq, nameSet, MAX_NEXUS_TAXUS_LENGTH);
             nameList.add(name);
             nameSet.add(name);
@@ -371,7 +391,7 @@ public class SequenceAlignment
         writer.flush();
     }
 
-    String nexusName(AbstractSequence seq, Set names, int maxlength) {
+    String nexusName(AbstractSequence seq, Set<String> names, int maxlength) {
         String name = seq.getName();
         name = name.substring(0, Math.min(maxlength, name.length()));
         name = name.replace('-', '_');

@@ -1,10 +1,15 @@
-package rega.genotype;
 /*
- * Created on Apr 7, 2003
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
  */
+package rega.genotype;
 
 /**
- * Represents a single sequence
+ * Class that directly implements the AbstractSequence information given
+ * sequence information (e.g. from a FASTA file).
+ * 
+ * @author koen
  */
 public class Sequence extends AbstractSequence
 {

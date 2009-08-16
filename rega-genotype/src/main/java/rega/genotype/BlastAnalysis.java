@@ -1,8 +1,7 @@
 /*
- * Created on Feb 8, 2006
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
  */
 package rega.genotype;
 
@@ -19,11 +18,19 @@ import java.util.Set;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
 
+/**
+ * Implements similarity based analyses using NCBI blast.
+ * 
+ * @author koen
+ */
 public class BlastAnalysis extends AbstractAnalysis {
 	public static String blastPath = "";
     public static String formatDbCommand = "formatdb";
     public static String blastCommand = "blastall";
 
+    /**
+     * Defines a region in a reference sequence.
+     */
     public static class Region {
     	private String name;
     	private int begin, end;
@@ -46,6 +53,13 @@ public class BlastAnalysis extends AbstractAnalysis {
 			return name;
 		}
 
+		/**
+		 * @param queryBegin
+		 * @param queryEnd
+		 * @param minimumOverlap
+		 * @return whether the region overlaps with a region defined by queryBegin
+		 *   and queryEnd, with a minimum overlap.
+		 */
 		public boolean overlaps(int queryBegin, int queryEnd, int minimumOverlap) {
 			int overlapBegin = Math.max(queryBegin, begin);
 			int overlapEnd = Math.min(queryEnd, end);
@@ -63,6 +77,15 @@ public class BlastAnalysis extends AbstractAnalysis {
 	private List<Region> regions;
 	private String referenceTaxus;
 
+	/**
+	 * A result from a blast analysis.
+	 * 
+	 * It contains information on the location of the sequence with respect to a
+	 * reference genome (which may be the best match or a predefined referenceTaxus).
+	 * 
+	 * It also tells you whether the query sequence is reference complimented with
+	 * respect to the reference sequences.
+	 */
     public class Result extends AbstractAnalysis.Result implements Concludable {
         private Cluster cluster;
         private float   score;

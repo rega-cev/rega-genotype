@@ -1,7 +1,14 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype;
 
 /**
- * A file format exception was encountered during reading a file
+ * Exception thrown when an error was encountered reading a file
+ * 
+ * @author koen
  */
 public class FileFormatException extends Exception {
     private static final long serialVersionUID = -3203555163977284783L;
