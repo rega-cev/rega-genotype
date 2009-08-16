@@ -24,7 +24,7 @@ public class HIV2SubtypeTool extends GenotypeTool {
     private ScanAnalysis scanAnalysis;
 
     public HIV2SubtypeTool() throws FileFormatException, IOException, ParameterProblemException {
-        hiv2 = readAnalyses("hiv2.xml");
+        hiv2 = readAnalyses("HIV/hiv2.xml");
         pureAnalysis = (PhyloClusterAnalysis) hiv2.getAnalysis("pure");
         scanAnalysis = (ScanAnalysis) hiv2.getAnalysis("scan");
     }

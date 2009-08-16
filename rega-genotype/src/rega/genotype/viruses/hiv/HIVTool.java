@@ -25,7 +25,7 @@ public class HIVTool extends GenotypeTool {
 
     
     public HIVTool() throws IOException, ParameterProblemException, FileFormatException {
-        hiv = readAnalyses("hiv.xml");
+        hiv = readAnalyses("HIV/hiv.xml");
         blastAnalysis = (BlastAnalysis) hiv.getAnalysis("blast");
         
         hiv1subtypetool = new HIV1SubtypeTool();

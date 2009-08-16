@@ -28,7 +28,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
     private PhyloClusterAnalysis crfScanPhyloAnalysis;
 
     public HIV1SubtypeTool() throws IOException, ParameterProblemException, FileFormatException {
-        hiv1 = readAnalyses("hiv1.xml");
+        hiv1 = readAnalyses("HIV/hiv1.xml");
         pureAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure-puzzle");
         scanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan");
