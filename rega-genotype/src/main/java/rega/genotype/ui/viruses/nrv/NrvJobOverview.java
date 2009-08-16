@@ -45,18 +45,9 @@ public class NrvJobOverview extends AbstractJobOverview {
 			}
 		});
 		data.add(report);
-		
-		if(!p.elementExists("genotype_result.sequence.conclusion['ORF1']")) {
-			data.add(new WText(lt("NA")));
-		} else {
-			data.add(new WText(lt(p.getValue("genotype_result.sequence.conclusion['ORF1'].assigned.name"))));
-		}
 
-		if(!p.elementExists("genotype_result.sequence.conclusion['ORF2']")) {
-			data.add(new WText(lt("NA")));
-		} else {
-			data.add(new WText(lt(p.getValue("genotype_result.sequence.conclusion['ORF2'].assigned.name"))));
-		}
+		data.add(new WText(lt(NrvResults.getConclusion(p, "ORF1"))));
+		data.add(new WText(lt(NrvResults.getConclusion(p, "ORF2"))));
 
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 

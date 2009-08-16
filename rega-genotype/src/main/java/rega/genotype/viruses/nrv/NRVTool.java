@@ -55,6 +55,7 @@ public class NRVTool extends GenotypeTool {
         	if (blastResult.isReverseCompliment())
         		s = s.reverseCompliment();
 
+        	boolean haveConclusion = false;
     		if (blastAnalysis.getRegions() != null) {
         		for (BlastAnalysis.Region region:blastAnalysis.getRegions()) {
         			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 100)) {
@@ -62,13 +63,14 @@ public class NRVTool extends GenotypeTool {
         				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
 
         				AbstractSequence s2 = re > rs ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
-        				if (!phyloAnalysis(s2, c.getId(), region.getName()))
-        					conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff(), region.getName());
-        			}
-        			
-        			
+        				if (phyloAnalysis(s2, c.getId(), region.getName()))
+            				haveConclusion = true;
+        			}        			
         		}
         	}
+    		
+    		if (!haveConclusion)
+    			conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff());
         } else {
             conclude("Unassigned", "Unassigned because of BLAST score &lt; " + blastAnalysis.getCutoff());
         }

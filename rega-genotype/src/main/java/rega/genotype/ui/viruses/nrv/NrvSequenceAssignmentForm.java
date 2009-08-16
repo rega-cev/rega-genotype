@@ -31,14 +31,20 @@ public class NrvSequenceAssignmentForm extends IDetailsForm {
 		block.addWidget(new WBreak());
 
 		block = new WContainerWidget(this);
-		
-		block.addWidget(new WText(lt("ORF1 assignment: " + NrvResults.getConclusion(p, "ORF1") + "<br />")));
-		block.addWidget(new WText(lt("Motivation: " + NrvResults.getMotivation(p, "ORF1"))));
 
-		block = new WContainerWidget(this);
+		String blastConclusion = NrvResults.getBlastConclusion(p);
+		if (!blastConclusion.equals(NrvResults.NA)) {
+			block.addWidget(new WText(lt("Assignment: " + blastConclusion + "<br />")));
+			block.addWidget(new WText(lt("Motivation: " + NrvResults.getBlastMotivation(p))));
+		} else {
+			block.addWidget(new WText(lt("ORF1 assignment: " + NrvResults.getConclusion(p, "ORF1") + "<br />")));
+			block.addWidget(new WText(lt("Motivation: " + NrvResults.getMotivation(p, "ORF1"))));
 
-		block.addWidget(new WText(lt("ORF2 assignment: " + NrvResults.getConclusion(p, "ORF2") + "<br />")));
-		block.addWidget(new WText(lt("Motivation: " + NrvResults.getMotivation(p, "ORF2"))));
+			block = new WContainerWidget(this);
+
+			block.addWidget(new WText(lt("ORF2 assignment: " + NrvResults.getConclusion(p, "ORF2") + "<br />")));
+			block.addWidget(new WText(lt("Motivation: " + NrvResults.getMotivation(p, "ORF2"))));
+		}
 		
 		int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
 		int end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));

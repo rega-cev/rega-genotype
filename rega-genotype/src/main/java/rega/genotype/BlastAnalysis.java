@@ -260,8 +260,12 @@ public class BlastAnalysis extends AbstractAnalysis {
                     if ((end == -1)
                     	 && ((referenceTaxus == null && values == best) || values[1].equals(referenceTaxus))) {
                        	reverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
-                       	int offsetBegin = reverseCompliment ? Integer.parseInt(values[7]) : Integer.parseInt(values[6]);
-                       	int offsetEnd = sequence.getLength() - (reverseCompliment ? Integer.parseInt(values[6]) : Integer.parseInt(values[7]));
+                       	int offsetBegin = Integer.parseInt(values[6]);
+                       	int offsetEnd = sequence.getLength() - Integer.parseInt(values[7]);
+                       	if (reverseCompliment) {
+                       		offsetBegin = sequence.getLength() - offsetBegin;
+                       		offsetEnd = sequence.getLength() - offsetEnd;
+                       	}                       	
                        	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
                        	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
                     }
