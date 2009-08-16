@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nrv;
+package rega.genotype.ui.viruses.nov;
 
 import rega.genotype.ui.data.SaxParser;
 
@@ -13,7 +13,7 @@ import rega.genotype.ui.data.SaxParser;
  * @author simbre1
  *
  */
-public class NrvResults {
+public class NovResults {
 
 	public static final String NA = "<i>NA</i>";
 

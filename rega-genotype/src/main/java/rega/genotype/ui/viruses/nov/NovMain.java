@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nrv;
+package rega.genotype.ui.viruses.nov;
 
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -17,10 +17,10 @@ import eu.webtoolkit.jwt.WString;
  * @author simbre1
  *
  */
-public class NrvMain extends GenotypeMain {
+public class NovMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new NrvDefinition());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new NovDefinition());
 
 		app.setTitle(WString.tr("nrvTool.title"));
 		

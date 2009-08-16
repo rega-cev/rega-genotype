@@ -1,21 +1,21 @@
 <genotype-analyses>
-  <alignment file="nrvblastaa.fasta" data="aa" />
+  <alignment file="novblastaa.fasta" data="aa" />
 
   <clusters>
-    <cluster id="I" name="NRV I">
+    <cluster id="I" name="NoV I">
       <taxus name="NC_001959" />
     </cluster>
-    <cluster id="II" name="NRV II">
+    <cluster id="II" name="NoV II">
       <taxus name="X86557" />
       <taxus name="U07611" />
     </cluster>
-    <cluster id="III" name="NRV III">
+    <cluster id="III" name="NoV III">
       <taxus name="AF097917" />
     </cluster>
-    <cluster id="IV" name="NRV IV">
+    <cluster id="IV" name="NoV IV">
       <taxus name="AF414426" />
     </cluster>
-    <cluster id="V" name="NRV V">
+    <cluster id="V" name="NoV V">
       <taxus name="NC_008311" />
     </cluster>
   </clusters>

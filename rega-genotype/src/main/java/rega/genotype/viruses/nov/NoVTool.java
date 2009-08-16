@@ -4,7 +4,7 @@
  * See the LICENSE file for terms of use.
  */
 
-package rega.genotype.viruses.nrv;
+package rega.genotype.viruses.nov;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +26,7 @@ import rega.genotype.AlignmentAnalyses.Cluster;
  * 
  * @author koen
  */
-public class NRVTool extends GenotypeTool {
+public class NoVTool extends GenotypeTool {
 	enum GroupRegion {
 		GroupI_ORF1,
 		GroupI_ORF2,
@@ -34,18 +34,18 @@ public class NRVTool extends GenotypeTool {
 		GroupII_ORF2
 	}
 
-    private AlignmentAnalyses nrv;
+    private AlignmentAnalyses nov;
 	private AlignmentAnalyses phyloAnalyses[] = new AlignmentAnalyses[4];
     private BlastAnalysis blastAnalysis;
     
-    public NRVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        nrv = readAnalyses("NRV/nrvblastaa.xml", workingDir);
-        blastAnalysis = (BlastAnalysis) nrv.getAnalysis("blast");
+    public NoVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+        nov = readAnalyses("NoV/novblastaa.xml", workingDir);
+        blastAnalysis = (BlastAnalysis) nov.getAnalysis("blast");
 
-        phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()] = readAnalyses("NRV/nrv-ORF1.xml", workingDir);
+        phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()] = readAnalyses("NoV/nov-ORF1.xml", workingDir);
         phyloAnalyses[GroupRegion.GroupII_ORF1.ordinal()] = phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()];
-        phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("NRV/nrvI-ORF2.xml", workingDir);
-        phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("NRV/nrvII-ORF2.xml", workingDir);        
+        phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("NoV/novI-ORF2.xml", workingDir);
+        phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("NoV/novII-ORF2.xml", workingDir);        
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {

@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nrv;
+package rega.genotype.ui.viruses.nov;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -16,8 +16,8 @@ import rega.genotype.ui.data.AbstractCsvGenerator;
  * @author simbre1
  *
  */
-public class NrvCsvGenerator extends AbstractCsvGenerator {
-	public NrvCsvGenerator(Writer ps) throws IOException {
+public class NovCsvGenerator extends AbstractCsvGenerator {
+	public NovCsvGenerator(Writer ps) throws IOException {
 		super(ps);
 		ps.append("name,length,ORF1,ORF2,begin,end,genogroup," +
 				"ORF1_genotype,ORF1_genotype_support,ORF1_inner_support,ORF1_outer_support," +
@@ -34,14 +34,14 @@ public class NrvCsvGenerator extends AbstractCsvGenerator {
     	csvLine.append(addCsvValue("genotype_result.sequence[name]", true));
     	csvLine.append(addCsvValue("genotype_result.sequence[length]"));
 
-    	String orf1Conclusion = NrvResults.getConclusion(this, "ORF1");
-    	if (orf1Conclusion.equals(NrvResults.NA))
+    	String orf1Conclusion = NovResults.getConclusion(this, "ORF1");
+    	if (orf1Conclusion.equals(NovResults.NA))
     		csvLine.append(",");
     	else
     		csvLine.append(",\"" + orf1Conclusion + "\"");
 
-    	String orf2Conclusion = NrvResults.getConclusion(this, "ORF2");
-    	if (orf2Conclusion.equals(NrvResults.NA))
+    	String orf2Conclusion = NovResults.getConclusion(this, "ORF2");
+    	if (orf2Conclusion.equals(NovResults.NA))
     		csvLine.append(",");
     	else
     		csvLine.append(",\"" + orf2Conclusion + "\"");

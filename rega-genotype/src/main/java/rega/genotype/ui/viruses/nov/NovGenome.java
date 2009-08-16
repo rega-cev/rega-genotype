@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nrv;
+package rega.genotype.ui.viruses.nov;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -18,11 +18,11 @@ import rega.genotype.ui.util.Genome;
  * @author simbre1
  *
  */
-public class NrvGenome extends Genome {
+public class NovGenome extends Genome {
 	private Map<String, Color> colorMap = new HashMap<String, Color>();
 	private OrganismDefinition od;
 	
-	public NrvGenome(OrganismDefinition od) {
+	public NovGenome(OrganismDefinition od) {
 		colorMap.put("-", new Color(0x53, 0xb8, 0x08));
 		
 		this.od = od;
@@ -50,16 +50,5 @@ public class NrvGenome extends Genome {
 	
 	public OrganismDefinition getOrganismDefinition() {
 		return od;
-	}
-	
-	public static void main(String [] args) {
-//		HivGenome hiv = new HivGenome();
-//
-//		try {
-//			hiv.getGenomePNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "F1", 2252, 3275, 0, "pure");
-//			hiv.getSmallGenomePNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "F1", 2252, 3275, 0, "pure");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 	}
 }

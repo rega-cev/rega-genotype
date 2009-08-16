@@ -1,282 +1,282 @@
 <genotype-analyses>
-  <alignment file="nrv-ORF1.fasta" trim="false" />
+  <alignment file="nov-ORF1.fasta" trim="false" />
 
   <clusters>
-    <cluster id="I.1" name="NRV I.1">
+    <cluster id="I.1" name="NoV I.1">
       <taxus name="I.1|M87661" />
       <taxus name="I.1|L23828" />
     </cluster>
    
-    <cluster id="I.2" name="NRV I.2">
+    <cluster id="I.2" name="NoV I.2">
       <taxus name="I.2|OB2007183" />
       <taxus name="I.2|OB2001045" />
     </cluster>
 
-    <cluster id="I.3B-8" name="NRV I.3B (capsid I.3)">
-      <cluster id="I.3B" name="NRV I.3B (capsid I.3)">
+    <cluster id="I.3B-8" name="NoV I.3B (capsid I.3)">
+      <cluster id="I.3B" name="NoV I.3B (capsid I.3)">
 	<taxus name="I.3B|I.3|AY038598" />
 	<taxus name="I.3B|I.3|OB2001057" />
       </cluster>
 
-      <cluster id="I.8" name="NRV I.8">
+      <cluster id="I.8" name="NoV I.8">
 	<taxus name="I.8|SW1045-06" />
       </cluster>
     </cluster>
 
-    <cluster id="I.3D" name="NRV I.3D (capsid I.3)">
+    <cluster id="I.3D" name="NoV I.3D (capsid I.3)">
       <taxus name="I.3D|I.3|U04469" />
     </cluster>
     
-    <cluster id="I.4" name="NRV I.4">
+    <cluster id="I.4" name="NoV I.4">
       <taxus name="I.4|AB042808" /> <!-- 10 -->
       <taxus name="I.4|OB2000038" />
     </cluster>
      
-    <cluster id="I.5" name="NRV I.5">
+    <cluster id="I.5" name="NoV I.5">
       <taxus name="I.5|OB2005138" />
     </cluster>
 
-    <cluster id="I.5b" name="NRV I.5b">
+    <cluster id="I.5b" name="NoV I.5b">
       <taxus name="I.5b|AB039774" />
     </cluster>
 
-    <cluster id="I.6" name="NRV I.6">
+    <cluster id="I.6" name="NoV I.6">
       <taxus name="I.6|AF093797" /> <!-- 14 -->
     </cluster>
 
-    <cluster id="I.6b" name="NRV I.6b"> 
+    <cluster id="I.6b" name="NoV I.6b"> 
       <taxus name="I.6b|AB081723" />
       <taxus name="I.6b|OB2003056" />
     </cluster>
 
-    <cluster id="I.7" name="NRV I.7">
+    <cluster id="I.7" name="NoV I.7">
       <taxus name="I.7|OB2003000" />
     </cluster>
 
-    <cluster id="I.13" name="NRV I.13 (capsid I.3)">
+    <cluster id="I.13" name="NoV I.13 (capsid I.3)">
       <taxus name="I.13|I.3|EF529737" />
     </cluster>
 
-    <cluster id="I.14" name="NRV I.14 (capsid I.3)">
+    <cluster id="I.14" name="NoV I.14 (capsid I.3)">
       <taxus name="I.14|I.3|AB187514" />
     </cluster>
 
-    <cluster id="II.1" name="NRV II.1">
+    <cluster id="II.1" name="NoV II.1">
       <taxus name="II.1|OB2000046" />       <!-- 20 -->
       <taxus name="II.1|U07611" />
     </cluster>
 
-    <cluster id="II.2" name="NRV II.2">
+    <cluster id="II.2" name="NoV II.2">
       <taxus name="II.2|X81879" />
       <taxus name="II.2|DQ456824" />
     </cluster>
 
-    <cluster id="II.2|II.SMA" name="NRV II.2 (II.SMA ??)">
+    <cluster id="II.2|II.SMA" name="NoV II.2 (II.SMA ??)">
       <taxus name="II.2|II.SMA|AY134748" />
     </cluster>    
 
-    <cluster id="II.3" name="NRV II.3">
+    <cluster id="II.3" name="NoV II.3">
       <taxus name="II.3|OB2006021" />
       <taxus name="II.3|AB039782" />
     </cluster>
 
-    <cluster id="II.3J" name="NRV II.3J">
+    <cluster id="II.3J" name="NoV II.3J">
       <taxus name="II.3|OB2006021" />
       <taxus name="II.3|AB039782" />
     </cluster>
 
-    <cluster id="II.3R" name="NRV II.3R (capsid II.3)">
+    <cluster id="II.3R" name="NoV II.3R (capsid II.3)">
       <taxus name="II.3R|II.3|AB190457" />
       <taxus name="II.3R|II.3|AF190817" />
     </cluster>
 
-    <cluster id="II.4" name="NRV II.4">
-      <cluster id="II.4|Camb" name="NRV II.4 (Camb)">
+    <cluster id="II.4" name="NoV II.4">
+      <cluster id="II.4|Camb" name="NoV II.4 (Camb)">
 	<taxus name="II.4|Camb|AF145896" />
 	<taxus name="II.4|Camb|AY030098" />
       </cluster>
-      <cluster id="II.4|Brist" name="NRV II.4 (Brist)">
+      <cluster id="II.4|Brist" name="NoV II.4 (Brist)">
 	<taxus name="II.4|Brist|X76716" />
 	<taxus name="II.4|Brist|X86557" />
       </cluster>
-      <cluster id="II.4|1996" name="NRV II.4 (1996)">
+      <cluster id="II.4|1996" name="NoV II.4 (1996)">
 	<taxus name="II.4|1996|DQ078829" />
 	<taxus name="II.4|1996|AY741811" />
       </cluster>
-      <cluster id="II.4|2001" name="NRV II.4 (2001)">
+      <cluster id="II.4|2001" name="NoV II.4 (2001)">
 	<taxus name="II.4|2001|02198022pc" />
 	<taxus name="II.4|2001|AB294779" />
       </cluster>
-      <cluster id="II.4|2002" name="NRV II.4 (2002)">
+      <cluster id="II.4|2002" name="NoV II.4 (2002)">
 	<taxus name="II.4|2002|AY502023" />
 	<taxus name="II.4|2002|AY581254" />
       </cluster>
-      <cluster id="II.4|2002/CN" name="NRV II.4 (2002/CN)">
+      <cluster id="II.4|2002/CN" name="NoV II.4 (2002/CN)">
 	<taxus name="II.4|2002CN|AB240172" />
 	<taxus name="II.4|2002CN|EU310927" />
       </cluster>
-      <cluster id="II.4|2004" name="NRV II.4 (2004)">
+      <cluster id="II.4|2004" name="NoV II.4 (2004)">
 	<taxus name="II.4|2004|AB294788" />
 	<taxus name="II.4|2004|EF126961" />
       </cluster>
-      <cluster id="II.4|2006a" name="NRV II.4 (2006a)">
+      <cluster id="II.4|2006a" name="NoV II.4 (2006a)">
 	<taxus name="II.4|2006a|EF126963" />
 	<taxus name="II.4|2006a|AB294789" />
       </cluster>
-      <cluster id="II.4|2006b" name="NRV II.4 (2006b)">
+      <cluster id="II.4|2006b" name="NoV II.4 (2006b)">
 	<taxus name="II.4|2006b|AB294793" />  <!-- 31 -->
 	<taxus name="II.4|2006b|EF126965" />
       </cluster>
     </cluster>
 
-    <cluster id="II.5" name="NRV II.5">
+    <cluster id="II.5" name="NoV II.5">
       <taxus name="II.5|AF397156" />
       <!-- too short: <taxus name="II.5|AB112318" /> -->
     </cluster>
 
-    <cluster id="II.5FR" name="NRV II.5FR (capsid II.5)">
+    <cluster id="II.5FR" name="NoV II.5FR (capsid II.5)">
       <taxus name="II.5FR|II.5|AY682550" />
     </cluster>
 
-    <cluster id="II.5H" name="NRV II.5H">
-      <cluster id="II.5H|II.5" name="NRV II.5H (capsid II.5)">
+    <cluster id="II.5H" name="NoV II.5H">
+      <cluster id="II.5H|II.5" name="NoV II.5H (capsid II.5)">
 	<taxus name="II.5H|II.5|AB212306" />
 	<!-- too short: <taxus name="II.5H|II.5|AB112314" /> -->
       </cluster>
-      <cluster id="II.5H|II.2" name="NRV II.5H (capsid II.2)">
+      <cluster id="II.5H|II.2" name="NoV II.5H (capsid II.2)">
 	<taxus name="II.5H|II.2|DQ366347" />
 	<!-- too short: <taxus name="II.5H|II.2|AB279554" /> -->
       </cluster>
     </cluster>
 
-    <cluster id="II.6" name="NRV II.6">
+    <cluster id="II.6" name="NoV II.6">
       <taxus name="II.6|AB039778" />
       <taxus name="II.6|AB039779" />
     </cluster>
 
-    <cluster id="II.7" name="NRV II.7">
-      <cluster id="II.7|II.7" name="NRV II.7 (capsid II.7)">
+    <cluster id="II.7" name="NoV II.7">
+      <cluster id="II.7|II.7" name="NoV II.7 (capsid II.7)">
 	<taxus name="II.7|II.7|AB258331" /> 
 	<taxus name="II.7|II.7|AB231342" /> <!-- 40 -->
       </cluster>
-      <cluster id="II.7|II.6" name="NRV II.7 (capsid II.6)">
+      <cluster id="II.7|II.6" name="NoV II.7 (capsid II.6)">
 	<taxus name="II.7|II.6|AB039777" />
 	<taxus name="II.7|II.6|OB2006017" />
       </cluster>
-      <cluster id="II.7|II.9" name="NRV II.7 (capsid II.9)">
+      <cluster id="II.7|II.9" name="NoV II.7 (capsid II.9)">
 	<taxus name="II.7|II.9|DQ379715" />
 	<taxus name="II.7|II.9|AY038599" />
       </cluster>
-      <cluster id="II.7|II.14" name="NRV II.7 (capsid II.14)">
+      <cluster id="II.7|II.14" name="NoV II.7 (capsid II.14)">
 	<taxus name="II.7|II.14|EF670650" />
       </cluster>
-      <cluster id="II.7|II.16" name="NRV II.7 (capsid II.16)">
+      <cluster id="II.7|II.16" name="NoV II.7 (capsid II.16)">
 	<taxus name="II.7|II.16|AB233474" />
       </cluster>
    </cluster>
 
-    <cluster id="II.8" name="NRV II.8">
+    <cluster id="II.8" name="NoV II.8">
       <taxus name="II.8|AB039780" />
     </cluster>
 
-   <cluster id="II.12" name="NRV II.12">
-     <cluster id="II.12|II.2" name="NRV II.12 (capsid II.2)">
+   <cluster id="II.12" name="NoV II.12">
+     <cluster id="II.12|II.2" name="NoV II.12 (capsid II.2)">
        <taxus name="II.12|II.2|AB279568" />
        <taxus name="II.12|II.2|AB354299" />
      </cluster>
-     <cluster id="II.12|II.3" name="NRV II.12 (capsid II.3)">
+     <cluster id="II.12|II.3" name="NoV II.12 (capsid II.3)">
        <taxus name="II.12|II.3|EF670649" />
        <taxus name="II.12|II.3|EU187437" />
      </cluster>
-     <cluster id="II.12|II.4" name="NRV II.12 (capsid II.4)">
+     <cluster id="II.12|II.4" name="NoV II.12 (capsid II.4)">
        <taxus name="II.12|II.4|AB220922" />
        <taxus name="II.12|II.4|DQ095875" />
      </cluster>
-     <cluster id="II.12|II.5" name="NRV II.12 (capsid II.5)">
+     <cluster id="II.12|II.5" name="NoV II.12 (capsid II.5)">
        <taxus name="II.12|II.5|AB231339" />
      </cluster>
-     <cluster id="II.12|II.10" name="NRV II.12 (capsid II.10)">
+     <cluster id="II.12|II.10" name="NoV II.12 (capsid II.10)">
        <taxus name="II.12|II.10|AF504671" />
        <taxus name="II.12|II.10|AY237415" />
      </cluster>
-     <cluster id="II.12|II.12" name="NRV II.12 (capsid II.12)">
+     <cluster id="II.12|II.12" name="NoV II.12 (capsid II.12)">
        <taxus name="II.12|II.12|AB039775" /> <!-- 42 -->
        <taxus name="II.12|II.12|AB044366" />
      </cluster>
-     <cluster id="II.12|II.13" name="NRV II.12 (capsid II.13)">
+     <cluster id="II.12|II.13" name="NoV II.12 (capsid II.13)">
        <taxus name="II.12|II.13|AX441291" />
        <taxus name="II.12|II.13|AY682548" />
      </cluster>
    </cluster>
 
-    <cluster id="II.15" name="NRV II.15">
+    <cluster id="II.15" name="NoV II.15">
       <taxus name="II.15|AB360387" />
     </cluster>
 
-    <cluster id="II.16" name="NRV II.16">
+    <cluster id="II.16" name="NoV II.16">
       <taxus name="II.16|AY772730" />
       <taxus name="II.16|AY682551" />
     </cluster>
 
-    <cluster id="II.17" name="NRV II.17">
+    <cluster id="II.17" name="NoV II.17">
       <taxus name="II.17|EF529741" />
       <taxus name="II.17|EF529742" />
     </cluster>
 
-    <cluster id="II.18" name="NRV II.18">
+    <cluster id="II.18" name="NoV II.18">
       <taxus name="II.18|AY823304" />
       <taxus name="II.18|AY823305" /> <!-- 50 -->
     </cluster>
 
-    <cluster id="II.11/19" name="NRV II.11/19">
+    <cluster id="II.11/19" name="NoV II.11/19">
       <taxus name="II.11|AB074893" />
       <taxus name="II.19|AY823306" />
     </cluster>
 
-    <cluster id="II.20" name="NRV II.20">
+    <cluster id="II.20" name="NoV II.20">
       <taxus name="II.20|EU424333" />
     </cluster>
 
-    <cluster id="II.21" name="NRV II.21">
+    <cluster id="II.21" name="NoV II.21">
       <taxus name="II.21|AB083780" />
       <taxus name="II.21|AB233471" />
     </cluster>
 
-    <cluster id="II.a" name="NRV II.a (capsid II.2)">
+    <cluster id="II.a" name="NoV II.a (capsid II.2)">
       <taxus name="II.a|II.2|97007005" />
       <!-- too short: <taxus name="II.a|II.2|AB279553" /> -->
     </cluster>
 
-    <cluster id="II.b" name="NRV II.b">
-      <cluster id="II.b|II.1" name="NRV II.b (capsid II.1)">
+    <cluster id="II.b" name="NoV II.b">
+      <cluster id="II.b|II.1" name="NoV II.b (capsid II.1)">
        <taxus name="II.b|II.1|AY580335" /> 
        <taxus name="II.b|II.1|AY919139" />
      </cluster>
-      <cluster id="II.b|II.3" name="NRV II.b (capsid II.3)">
+      <cluster id="II.b|II.3" name="NoV II.b (capsid II.3)">
        <taxus name="II.b|II.3|AB365435" /> <!-- 57 -->
        <taxus name="II.b|II.3|AY845056" />
      </cluster>
-      <cluster id="II.b|II.2" name="NRV II.b (capsid II.2)">
+      <cluster id="II.b|II.2" name="NoV II.b (capsid II.2)">
        <taxus name="II.b|II.2|AY682549" />
        <taxus name="II.b|II.2|AB279569" />
      </cluster>
     </cluster>
 
-    <cluster id="II.c" name="NRV II.c">
-      <cluster id="II.c|II.13" name="NRV II.c (capsid II.13)">
+    <cluster id="II.c" name="NoV II.c">
+      <cluster id="II.c|II.13" name="NoV II.c (capsid II.13)">
 	<taxus name="II.c|II.13|DQ379714" />  
       </cluster>
-      <cluster id="II.c|II.1" name="NRV II.c (capsid II.1)">
+      <cluster id="II.c|II.1" name="NoV II.c (capsid II.1)">
 	<taxus name="II.c|II.1|OB2001008" /> <!-- 60 -->
       </cluster>
     </cluster>
 
-    <cluster id="II.Erf007" name="NRV II.Erfurt (capsid II.4)">
+    <cluster id="II.Erf007" name="NoV II.Erfurt (capsid II.4)">
       <taxus name="II.Erf007|II.4|AB434770" />
       <taxus name="II.Erf007|II.4|OB2006151" />
     </cluster>
 
-    <cluster id="II.U" name="NRV II.U (capsid II.2)">
+    <cluster id="II.U" name="NoV II.U (capsid II.2)">
       <taxus name="II.U|II.2|AY682552" />
     </cluster>
 

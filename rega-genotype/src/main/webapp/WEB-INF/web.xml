@@ -14,15 +14,15 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>GenotypeNRV</servlet-name>
-    <display-name>NRV Genotyping</display-name>
-    <description>NRV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.nrv.NrvMain</servlet-class>
+    <servlet-name>GenotypeNoV</servlet-name>
+    <display-name>NoV Genotyping</display-name>
+    <description>NoV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.nov.NovMain</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>GenotypeNRV</servlet-name>
-    <url-pattern>/GenotypeNRV/*</url-pattern>
+    <servlet-name>GenotypeNoV</servlet-name>
+    <url-pattern>/GenotypeNoV/*</url-pattern>
   </servlet-mapping>
   
   <servlet>

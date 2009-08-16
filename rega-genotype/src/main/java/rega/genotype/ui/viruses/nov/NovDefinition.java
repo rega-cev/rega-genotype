@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nrv;
+package rega.genotype.ui.viruses.nov;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
-import rega.genotype.viruses.nrv.NRVTool;
+import rega.genotype.viruses.nov.NoVTool;
 import eu.webtoolkit.jwt.WString;
 
 /**
@@ -30,25 +30,25 @@ import eu.webtoolkit.jwt.WString;
  * @author simbre1
  *
  */
-public class NrvDefinition implements OrganismDefinition {
-	private NrvGenome genome = new NrvGenome(this);
+public class NovDefinition implements OrganismDefinition {
+	private NovGenome genome = new NovGenome(this);
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
-		NRVTool nrvTool = new NRVTool(jobDir);
+		NoVTool nrvTool = new NoVTool(jobDir);
 		nrvTool.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 				jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
 
 	public AbstractJobOverview getJobOverview(GenotypeWindow main) {
-		return new NrvJobOverview(main);
+		return new NovJobOverview(main);
 	}
 	
 	public String getOrganismDirectory() {
-		return "/rega/genotype/ui/viruses/nrv/";
+		return "/rega/genotype/ui/viruses/nov/";
 	}
 
 	public AbstractCsvGenerator getCsvGenerator(Writer ps) throws IOException {
-		return new NrvCsvGenerator(ps);
+		return new NovCsvGenerator(ps);
 	}
 
 	public Genome getGenome() {
@@ -56,7 +56,7 @@ public class NrvDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new NrvSequenceAssignmentForm();
+		return new NovSequenceAssignmentForm();
 	}
 
 	private void addPhyloDetailForms(SaxParser p, List<IDetailsForm> forms, String region) {
@@ -92,6 +92,6 @@ public class NrvDefinition implements OrganismDefinition {
 	}
 
 	public String getOrganismName() {
-		return "NRV";
+		return "NoV";
 	}
 }

@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nrv;
+package rega.genotype.ui.viruses.nov;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,11 +24,11 @@ import eu.webtoolkit.jwt.WWidget;
  * @author simbre1
  *
  */
-public class NrvJobOverview extends AbstractJobOverview {
+public class NovJobOverview extends AbstractJobOverview {
 	private List<WString> headers = new ArrayList<WString>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
-	public NrvJobOverview(GenotypeWindow main) {
+	public NovJobOverview(GenotypeWindow main) {
 		super(main);
 		
 		headers.add(lt("Name"));
@@ -49,8 +49,8 @@ public class NrvJobOverview extends AbstractJobOverview {
 		WAnchor report = createReportLink(p);
 		data.add(report);
 
-		data.add(new WText(lt(NrvResults.getConclusion(p, "ORF1"))));
-		data.add(new WText(lt(NrvResults.getConclusion(p, "ORF2"))));
+		data.add(new WText(lt(NovResults.getConclusion(p, "ORF1"))));
+		data.add(new WText(lt(NovResults.getConclusion(p, "ORF2"))));
 
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 

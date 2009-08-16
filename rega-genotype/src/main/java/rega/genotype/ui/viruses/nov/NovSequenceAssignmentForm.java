@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nrv;
+package rega.genotype.ui.viruses.nov;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +23,8 @@ import eu.webtoolkit.jwt.WText;
  * @author simbre1
  *
  */
-public class NrvSequenceAssignmentForm extends IDetailsForm {
-	public NrvSequenceAssignmentForm() {
+public class NovSequenceAssignmentForm extends IDetailsForm {
+	public NovSequenceAssignmentForm() {
 	}
 
 	@Override
@@ -45,28 +45,28 @@ public class NrvSequenceAssignmentForm extends IDetailsForm {
 
 		block = new WContainerWidget(this);
 
-		String blastConclusion = NrvResults.getBlastConclusion(p);
-		if (!blastConclusion.equals(NrvResults.NA)) {
+		String blastConclusion = NovResults.getBlastConclusion(p);
+		if (!blastConclusion.equals(NovResults.NA)) {
 			new WText(lt("<h2>Genotyping result</h2>"), block);
 			
 			new WText(tr("nrvSequenceAssignment.assignment"), block);
 			new WText(lt(blastConclusion), block);
 			new WText(tr("nrvSequenceAssignment.motivation"), block);
-			new WText(lt(NrvResults.getBlastMotivation(p)), block);
+			new WText(lt(NovResults.getBlastMotivation(p)), block);
 		} else {
 			new WText(lt("<h2>ORF1</h2>"), block);
 
 			new WText(tr("nrvSequenceAssignment.assignment"), block);
-			new WText(lt(NrvResults.getConclusion(p, "ORF1")), block);
+			new WText(lt(NovResults.getConclusion(p, "ORF1")), block);
 			new WText(tr("nrvSequenceAssignment.motivation"), block);
-			new WText(lt(NrvResults.getMotivation(p, "ORF1")), block);
+			new WText(lt(NovResults.getMotivation(p, "ORF1")), block);
 
 			new WText(lt("<h2>ORF2</h2>"), block);
 
 			new WText(tr("nrvSequenceAssignment.assignment"), block);
-			new WText(lt(NrvResults.getConclusion(p, "ORF2")), block);
+			new WText(lt(NovResults.getConclusion(p, "ORF2")), block);
 			new WText(tr("nrvSequenceAssignment.motivation"), block);
-			new WText(lt(NrvResults.getMotivation(p, "ORF2")), block);
+			new WText(lt(NovResults.getMotivation(p, "ORF2")), block);
 		}
 
 		block = new WContainerWidget(this);
