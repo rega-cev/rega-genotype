@@ -24,7 +24,6 @@ import eu.webtoolkit.jwt.WWidget;
  */
 public class DefaultJobOverview extends AbstractJobOverview {
 	private List<Header> headers = new ArrayList<Header>();
-	private List<WWidget> data = new ArrayList<WWidget>();
 	
 	public DefaultJobOverview(GenotypeWindow main) {
 		super(main);
@@ -39,8 +38,8 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	
 	@Override
 	public List<WWidget> getData(final GenotypeResultParser p) {
-		data.clear();
-		
+		List<WWidget> data = new ArrayList<WWidget>();
+
 		data.add(new WText(p.getEscapedValue("genotype_result.sequence[name]")));
 		data.add(new WText(p.getEscapedValue("genotype_result.sequence[length]")));
 		

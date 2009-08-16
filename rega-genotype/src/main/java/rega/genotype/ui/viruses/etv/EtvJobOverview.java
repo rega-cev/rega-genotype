@@ -23,31 +23,45 @@ import eu.webtoolkit.jwt.WWidget;
  */
 public class EtvJobOverview extends AbstractJobOverview {
 	private List<Header> headers = new ArrayList<Header>();
-	private List<WWidget> data = new ArrayList<WWidget>();
-	
+
 	public EtvJobOverview(GenotypeWindow main) {
 		super(main);
 		
 		headers.add(new Header(new WString("Name")));
 		headers.add(new Header(new WString("Length")));
+		headers.add(new Header(new WString("Species")));
+		headers.add(new Header(new WString("Serotype")));
 		headers.add(new Header(new WString("Report")));
-		headers.add(new Header(new WString("Assignment")));
 		headers.add(new Header(new WString("Genome")));
 	}
-	
+
 	@Override
 	public List<WWidget> getData(final GenotypeResultParser p) {
-		data.clear();
+		List<WWidget> data = new ArrayList<WWidget>();
 
 		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[name]"))));
 		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[length]"))));
 
-		WAnchor report = createReportLink(p);
-		data.add(report);
+		boolean havePhyloAnalysis = p.getValue("genotype_result.sequence.result['phylo-serotype'].best.id") != null;
+		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("genotype_result.sequence.conclusion['unassigned'].assigned.id") != null;
 
-		String assignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name");
+		if (haveBlastAssignment) {
+			String blastAssignment = p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.name");
+			data.add(new WText(new WString(notNull(blastAssignment))));
+		} else
+			data.add(new WText("Could not assign"));
 		
-		data.add(new WText(new WString(notNull(assignment))));
+		if (havePhyloAnalysis) {
+			String serotypeAssignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.id");
+			data.add(new WText(new WString(notNull(serotypeAssignment))));
+		} else
+			data.add(new WText());
+
+		if (havePhyloAnalysis) {
+			WAnchor report = createReportLink(p);
+			data.add(report);
+		} else
+			data.add(new WText());
 
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 

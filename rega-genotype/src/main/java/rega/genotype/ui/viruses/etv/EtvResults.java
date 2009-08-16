@@ -24,37 +24,18 @@ public class EtvResults {
 
 	public static final String NA = "<i>NA</i>";
 
-	public static Conclusion getConclusion(GenotypeResultParser p, String region) {
+	public static Conclusion getSerotype(GenotypeResultParser p) {
 		Conclusion result = new Conclusion();
 
-		String conclusionP = "genotype_result.sequence.conclusion['" + region + "']";
+		String conclusionP = "genotype_result.sequence.conclusion";
 
 		if (p.elementExists(conclusionP)) {
 			result.majorAssignment = p.getEscapedValue(conclusionP + ".assigned.name");
 			result.majorBootstrap = p.getEscapedValue(conclusionP + ".assigned.support");
 			result.majorMotivation = p.getEscapedValue(conclusionP + ".motivation");
-
-			String variantConclusionP = "genotype_result.sequence.conclusion['" + region + "-variant']";
-
-			if (p.elementExists(variantConclusionP)) {
-				result.variantAssignment = p.getEscapedValue(variantConclusionP + ".assigned.name");
-
-				boolean showVariantNotAssigned = p.getValue(conclusionP + ".assigned.id").equals("II.4");
-				boolean variantNotAssigned = p.getValue(variantConclusionP + ".assigned.id").equals("Unassigned");
-
-				if (!variantNotAssigned || showVariantNotAssigned)
-					result.variantAssignmentForOverview = result.variantAssignment;
-
-				result.variantBootstrap = p.getEscapedValue(variantConclusionP + ".assigned.support");
-				if (!variantNotAssigned)
-					result.variantDescription = p.getEscapedValue(variantConclusionP + ".assigned.description");
-				else
-					result.variantDescription = "Not assigned";
-				result.variantMotivation = p.getEscapedValue(variantConclusionP + ".motivation");
-			}
 		} else {
 			result.majorAssignment = getBlastConclusion(p);
-			result.majorMotivation = "Sequence does not overlap sufficiently (>100 nucleotides) with " + region;
+			result.majorMotivation = "Sequence does not overlap sufficiently (>100 nucleotides) with VP1";
 		}
 
 		return result;

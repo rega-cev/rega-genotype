@@ -30,19 +30,19 @@ public class EtvGenome extends Genome {
 	}
 
 	public int GENOMEEND() {
-		return 7582;
+		return 7550;
 	}
 
 	public int GENOMESTART() {
-		return 1;
+		return 80;
 	}
 
 	public int IMGGENOMEEND() {
-		return 584;
+		return 605;
 	}
 
 	public int IMGGENOMESTART() {
-		return 0;
+		return 1;
 	}
 	
 	public OrganismDefinition getOrganismDefinition() {

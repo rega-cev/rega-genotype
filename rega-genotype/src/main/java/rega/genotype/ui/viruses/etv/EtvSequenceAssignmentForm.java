@@ -34,36 +34,27 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 				.arg(p.getEscapedValue("genotype_result.sequence[length]")), block);
 		t.setId("");
 
-		String blastConclusion = EtvResults.getBlastConclusion(p);
-		if (!blastConclusion.equals(EtvResults.NA)) {
-			t = new WText(tr("nrvSequenceAssignment.blast")
-					.arg(blastConclusion)
-					.arg(EtvResults.getBlastMotivation(p)), block);
+		boolean havePhyloAnalysis = p.getValue("genotype_result.sequence.result['phylo-serotype'].best.id") != null;
+		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("genotype_result.sequence.conclusion['unassigned'].assigned.id") == null;
+
+		if (haveBlastAssignment) {
+			String blastConclusion = p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.name");
+			String blastScore = p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.score");
+			t = new WText(tr("etvSequenceAssignment.blast").arg(blastConclusion).arg(blastScore), block);
 			t.setId("");
 		}
 
-		for (int i = 1; i <= 2; ++i) {
-			String orf = "ORF" + i;
-			EtvResults.Conclusion c = EtvResults.getConclusion(p, orf);
+		if (havePhyloAnalysis) {
+			EtvResults.Conclusion c = EtvResults.getSerotype(p);
 
 			WString motivation = new WString(c.majorMotivation);
 			motivation.arg(c.majorBootstrap);
 
-			t = new WText(tr("nrvSequenceAssignment.phylo")
-					.arg(orf)
-					.arg(c.majorAssignment)
-					.arg(motivation), block);
-			t.setId("");
-
-			if (c.variantDescription != null) {
-				motivation = new WString(c.variantMotivation);
-				motivation.arg(c.variantBootstrap);
-
-				t = new WText(tr("nrvSequenceAssignment.phylo-variant")
-						.arg(c.variantDescription)
+			t = new WText(tr("etvSequenceAssignment.phylo")
+						.arg("Serotype (VP1)")
+						.arg(c.majorAssignment)
 						.arg(motivation), block);
 				t.setId("");
-			}
 		}
 
 		t = new WText("<h3>Genome region</h3>", block);

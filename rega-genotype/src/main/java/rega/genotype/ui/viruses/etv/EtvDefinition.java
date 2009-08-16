@@ -54,7 +54,7 @@ public class EtvDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(0, "genotype_result.sequence.result['scan'].data");
+		return new EtvSequenceAssignmentForm();
 	}
 
 	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms) {

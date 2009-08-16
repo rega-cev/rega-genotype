@@ -22,7 +22,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeNoV</servlet-name>
-    <url-pattern>/typingtool/*</url-pattern>
+    <url-pattern>/nov/typingtool/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -38,7 +38,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeNoV-service</servlet-name>
-    <url-pattern>/typingservice</url-pattern>
+    <url-pattern>/nov/typingservice</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -50,7 +50,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeEnterovirus</servlet-name>
-    <url-pattern>/etvtypingtool/*</url-pattern>
+    <url-pattern>/etv/typingtool/*</url-pattern>
   </servlet-mapping>
   
   <servlet>

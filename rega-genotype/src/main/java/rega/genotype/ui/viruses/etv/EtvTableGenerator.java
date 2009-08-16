@@ -19,29 +19,17 @@ public class EtvTableGenerator extends AbstractDataTableGenerator {
 
 		table.addLabel("name");
 		table.addLabel("length");
-		table.addLabel("ORF1");
-		table.addLabel("ORF1_variant");
-		table.addLabel("ORF2");
-		table.addLabel("ORF2_variant");
+
+		table.addLabel("conclusion");
+		table.addLabel("species");
+		table.addLabel("species_score");
 		table.addLabel("begin");
 		table.addLabel("end");
-		table.addLabel("genogroup");
-		table.addLabel("ORF1_genotype");
-		table.addLabel("ORF1_genotype_support");
-		table.addLabel("ORF1_inner_support");
-		table.addLabel("ORF1_outer_support");
-		table.addLabel("ORF1_variant");
-		table.addLabel("ORF1_variant_support");
-		table.addLabel("ORF1_variant_inner_support");
-		table.addLabel("ORF1_variant_outer_support");
-		table.addLabel("ORF2_genotype");
-		table.addLabel("ORF2_genotype_support");
-		table.addLabel("ORF2_inner_support");
-		table.addLabel("ORF2_outer_support");
-		table.addLabel("ORF2_variant");
-		table.addLabel("ORF2_variant_support");
-		table.addLabel("ORF2_variant_inner_support");
-		table.addLabel("ORF2_variant_outer_support");
+
+		table.addLabel("serotype");
+		table.addLabel("serotype_support");
+		table.addLabel("serotype_inner_support");
+		table.addLabel("serotype_outer_support");
 		
 		table.newRow();
 	}
@@ -50,34 +38,16 @@ public class EtvTableGenerator extends AbstractDataTableGenerator {
     	addNamedValue("genotype_result.sequence[name]", ValueFormat.Label);
     	addNamedValue("genotype_result.sequence[length]", ValueFormat.Number);
 
-		EtvResults.Conclusion c = EtvResults.getConclusion(this, "ORF1");
+    	addNamedValue("genotype_result.sequence.conclusion.assigned.name", ValueFormat.Label);
 
-		addValue(c.majorAssignment == EtvResults.NA ? "" : c.majorAssignment);
-		addValue(c.variantAssignmentForOverview == null ? "" : c.variantAssignmentForOverview);
-
-		c = EtvResults.getConclusion(this, "ORF2");
-
-		addValue(c.majorAssignment == EtvResults.NA ? "" : c.majorAssignment);
-		addValue(c.variantAssignmentForOverview == null ? "" : c.variantAssignmentForOverview);
-
+    	addNamedValue("genotype_result.sequence.result['blast'].cluster.name", ValueFormat.Label);
+    	addNamedValue("genotype_result.sequence.result['blast'].cluster.score", ValueFormat.Number);
     	addNamedValue("genotype_result.sequence.result['blast'].start", ValueFormat.Number);
     	addNamedValue("genotype_result.sequence.result['blast'].end", ValueFormat.Number);
-    	addNamedValue("genotype_result.sequence.result['blast'].cluster.name", ValueFormat.Label);
-    	
-    	addPhyloResults("phylo-ORF1", false);
 
-    	String id = getValue("genotype_result.sequence.result['phylo-ORF1'].best.id");
+    	String id = getValue("genotype_result.sequence.result['phylo-serotype'].best.id");
     	if (id != null)
-    		addPhyloResults("phylo-ORF1-" + id, true);
-    	else
-    		for (int i = 0; i < 4; ++i)
-    			addValue("");
-
-    	addPhyloResults("phylo-ORF2", false);
-
-    	id = getValue("genotype_result.sequence.result['phylo-ORF2'].best.id");
-    	if (id != null)
-    		addPhyloResults("phylo-ORF2-" + id, true);
+    		addPhyloResults("phylo-serotype", true);
     	else
     		for (int i = 0; i < 4; ++i)
     			addValue("");

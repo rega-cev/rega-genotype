@@ -218,15 +218,15 @@
 		</cluster>
 
 		<!-- singletons in the end -->
+		<cluster id="E-7" name="Enterovirus B, serotype E-7">
+			<taxus name="E-7|AF081324" />
+		</cluster>
+
 		<cluster id="E-15" name="Enterovirus B, serotype E-15">
 			<taxus name="E-15|AF081329" />
 		</cluster>
 
-		<cluster id="EV-7" name="Enterovirus B, serotype EV-7">
-			<taxus name="E-7|AF081324" />
-		</cluster>
-
-		<cluster id="EV-32" name="Enterovirus B, serotype EV-32">
+		<cluster id="E-32" name="Enterovirus B, serotype E-32">
 			<taxus name="E-32|AF081345" />
 		</cluster>
 
@@ -294,7 +294,7 @@
 		  EV-73, EV-74, EV-75, EV-79, EV-80, EV-81, EV-82, EV-83, EV-86,
 		  EV-97,
 		  E-15,
-		  EV-7, EV-32, EV-69, EV-77, EV-78, EV-84, EV-85, EV-87, EV-88,
+		  E-7, E-32, EV-69, EV-77, EV-78, EV-84, EV-85, EV-87, EV-88,
 		  EV-97, EV-98, EV-100, EV-101, EV-107,
 		  enterovirus-C
 		</identify>
@@ -331,7 +331,7 @@
 		</step>
 		<analysis type="paup">
 			<identify>
-				EV-7
+				E-7
 			</identify>
 			<block>
 				begin paup;

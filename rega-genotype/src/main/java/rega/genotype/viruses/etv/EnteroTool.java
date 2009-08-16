@@ -11,10 +11,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sun.xml.internal.stream.XMLBufferListener;
-
-import jxl.demo.XML;
-
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AnalysisException;
@@ -32,7 +28,8 @@ import rega.genotype.AlignmentAnalyses.Cluster;
  * @author koen
  */
 public class EnteroTool extends GenotypeTool {
-    private AlignmentAnalyses picorna;
+    private static final int MINIMUM_REGION_OVERLAP = 100;
+	private AlignmentAnalyses picorna;
     private BlastAnalysis blastAnalysis;
     private Map<String, PhyloClusterAnalysis> serotypeAnalyses = new HashMap<String, PhyloClusterAnalysis>();
 
@@ -70,7 +67,7 @@ public class EnteroTool extends GenotypeTool {
         	PhyloClusterAnalysis pca = serotypeAnalyses.get(c.getId());
         	if (pca != null && blastResult.getReference() != null) {
         		for (BlastAnalysis.Region region:blastResult.getReference().getRegions()) {
-        			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 150)) {
+        			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), MINIMUM_REGION_OVERLAP)) {
         				int rs = Math.max(0, region.getBegin() - blastResult.getStart());
         				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
 

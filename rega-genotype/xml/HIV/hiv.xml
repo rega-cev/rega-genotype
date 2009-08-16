@@ -33,7 +33,7 @@
       50
     </cutoff>
     <options>
-      -q -1 -r 2
+      -q -1
     </options>
   </analysis>
 

@@ -90,7 +90,7 @@ public class GenotypeWindow extends WContainerWidget
 		setId("");
 		WApplication app = WApplication.getInstance();
 		
-		app.useStyleSheet("style/genotype.css");
+		app.useStyleSheet("../style/genotype.css");
 
 		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
 		header.setAlternateText("header");

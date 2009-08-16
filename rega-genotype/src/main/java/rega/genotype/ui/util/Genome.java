@@ -42,7 +42,7 @@ public abstract class Genome {
 	public File getGenomePNG(File jobDir, int sequenceIndex, String thegenotype, int start, int end, int variant, String type, String csvData) throws IOException {
 		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genome_" + sequenceIndex + "_" + type + "_" + variant + ".png");
 	
-		if(!pngFile.exists()) {
+		if (!pngFile.exists()) {
 			int w[];
 			String assign[];
 			int scanWindowSize;
@@ -67,8 +67,10 @@ public abstract class Genome {
 				scanStepSize = 0;
 			}
 
-			int imgWidth = 584;
-		    int imgHeight = 150;
+		    Image genomePng = ImageIO.read(this.getClass().getResourceAsStream(getOrganismDefinition().getOrganismDirectory()+"/genome_"+variant+".png"));
+
+			int imgWidth = genomePng.getWidth(null);
+		    int imgHeight = genomePng.getHeight(null);
 		    
 		    BufferedImage image = new BufferedImage(imgWidth,imgHeight,BufferedImage.TYPE_INT_ARGB);
 		    Graphics2D g2d = (Graphics2D)image.getGraphics();
@@ -103,7 +105,6 @@ public abstract class Genome {
 		        g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
 		    }
 	
-		    Image genomePng = ImageIO.read(this.getClass().getResourceAsStream(getOrganismDefinition().getOrganismDirectory()+"/genome_"+variant+".png"));
 		    g2d.drawImage(genomePng, 0, 0, imgWidth, imgHeight, null);
 		    
 		    ImageIO.write(image, "png", pngFile);
