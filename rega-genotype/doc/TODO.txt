@@ -3,8 +3,6 @@ PRIORITY
 	* details titles is a link now, should be plain title
 * repository for treepuzzle
 * image sizes (f.e. header image -> too small?)
-* start form 
-	* seq name -> max 20 chars ? (check for this?)
 *jwt bug
 	* WTextArea setText() with '>' -> &gt;
 * recombination plot
@@ -31,3 +29,5 @@ LATER
 * make seq limitation configurable
 * reference alignment table, add support for *_URL colomn name
 * download entire jobDir contents as tar.gz (monitor-form)
+* start form 
+	* seq name -> max 20 chars ? (check for this?)
