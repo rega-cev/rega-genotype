@@ -211,6 +211,7 @@ public class CsvGenerator extends DefaultHandler {
     	
     	os.append(csvLine.toString()+"\n");
     	
+    	valuesMap.clear();
     	writtenFullSequence =true;
     }
     
