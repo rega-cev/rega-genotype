@@ -67,7 +67,7 @@ public class DetailsForm extends IForm {
 		
 		for(IDetailsForm df : getMain().getOrganismDefinition().getSupportingDetailsforms(p)) {
 			String detailTitle = df.getTitle().value();
-			WText titleText = new WText(lt("<a name=\"" + detailTitle.replace(" ", "").toLowerCase() + "\">"+detailTitle+"</a>"));
+			WText titleText = new WText(lt("<a name=\"" + detailTitle.replace(" ", "").toLowerCase() + "\"></a>"+detailTitle));
 			mainTable.putElementAt(rowIndex, 0, titleText);
 			mainTable.elementAt(rowIndex++, 0).setStyleClass("title");
 			mainTable.putElementAt(rowIndex, 0, df);

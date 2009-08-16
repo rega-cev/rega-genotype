@@ -1,5 +1,7 @@
 package rega.genotype.ui.forms;
 
+import java.io.File;
+
 import net.sf.witty.wt.WBreak;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WTable;
@@ -36,9 +38,9 @@ public class DocumentationForm extends IForm {
 				imgDiv.setStyleClass("imgDiv");
 				GenotypeLib.getWImageFromResource(getMain().getOrganismDefinition(),e.getTextTrim(), imgDiv);
 			} else if(e.getName().equals("sequence")) {
-				String sequence = ">" + e.getAttributeValue("name");
-				sequence += "</br>";
-				sequence += e.getTextTrim() + "</br>";
+				String sequence = "<span class=\"sequenceName\">>" + e.getAttributeValue("name") +"</span>";
+				sequence += "<br/><span class=\"sequence\">";
+				sequence += e.getTextTrim() + "</span>";
 				new WText(lt(sequence), this);
 			} else if(e.getName().equals("table")) {
 				createTable(e.getTextTrim(), this);
@@ -55,6 +57,7 @@ public class DocumentationForm extends IForm {
 						getMain().getOrganismDefinition().getOrganismDirectory()+csvFile
 						), false);
 		WTable table = new WTable(parent);
+		table.setStyleClass(getCssClass(csvFile));
 
 		for(int i = 0; i<csvTable.numRows(); i++) {
 			for(int j = 0; j<csvTable.numColumns(); j++) {
@@ -62,5 +65,9 @@ public class DocumentationForm extends IForm {
 			}
 		}
 		return table;
+	}
+	
+	private static String getCssClass(String path){
+		return path.replace(File.separatorChar, '_').replace('.', '-');
 	}
 }

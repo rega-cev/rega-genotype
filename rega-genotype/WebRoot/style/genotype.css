@@ -20,6 +20,7 @@ body {
 	padding-left: 2em;
 	padding-right: 2em;
 	width: 80%;
+	font-family: serif;
 }
 
 div.imgDiv, div.downloadContainer{
@@ -140,7 +141,7 @@ table.detailsForm *.recombinationDetails{
 *.header-mainTitle
 {
 	color: rgb(50,0,150);
-	Font-weight: bold;
+	font-weight: bold;
   	font-size: 150%;
   	display: block;
   	margin: 1em auto auto 0.5em;
@@ -192,3 +193,25 @@ a, .link{
 *.details-extraComments {
 	font-style:italic;
 }
+
+table.files_referenceSequences-csv{
+	width: 100%;
+}
+table.files_referenceSequences-csv td{
+	padding: 0.2em;
+}
+table.files_referenceSequences-csv tr:first-child td{
+	color: white;
+	background-color: darkblue;
+	border: 2px solid white;
+}
+
+span.sequence, span.sequenceName{
+	font-size: 80%;
+	display: block;
+	width: 600px;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: 'monospace';
+}
+
