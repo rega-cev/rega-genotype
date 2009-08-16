@@ -9,6 +9,7 @@ import java.util.List;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.ui.data.DefaultTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
@@ -22,6 +23,7 @@ import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.phylo.PhyloSubtypeTool;
+import rega.genotype.viruses.phylo.PhyloTool;
 import eu.webtoolkit.jwt.WString;
 
 public class PhyloDefinition implements OrganismDefinition {
@@ -37,7 +39,7 @@ public class PhyloDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(1, "genotype_result.sequence.result['scan'].data");
+		return new DefaultSequenceAssignmentForm(2, "genotype_result.sequence.result['scan'].data");
 	}
 
 	public String getOrganismDirectory() {
@@ -83,7 +85,7 @@ public class PhyloDefinition implements OrganismDefinition {
 	
 	public void startAnalysis(File jobDir) throws IOException,
 	ParameterProblemException, FileFormatException {
-		PhyloSubtypeTool phylo = new PhyloSubtypeTool(jobDir);
+		PhyloTool phylo = new PhyloTool(jobDir);
 		phylo.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 		jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 
@@ -92,13 +94,11 @@ public class PhyloDefinition implements OrganismDefinition {
 
 	public AbstractDataTableGenerator getDataTableGenerator(DataTable t)
 			throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return new DefaultTableGenerator(t);
 	}
 
 	public boolean haveDetailsNavigationForm() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

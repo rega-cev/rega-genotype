@@ -25,7 +25,7 @@ public class PhyloTool extends GenotypeTool {
 
     
     public PhyloTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        phylo = readAnalyses("hiv.xml", workingDir);
+        phylo = readAnalyses("PHYLO/hiv.xml", workingDir);
         blastAnalysis = (BlastAnalysis) phylo.getAnalysis("blast");
         
         phylosubtypetool = new PhyloSubtypeTool(workingDir);
@@ -39,7 +39,7 @@ public class PhyloTool extends GenotypeTool {
         if (result.haveSupport()) {
             if (result.getCluster().getId().equals("1")) 
                 phylosubtypetool.analyze(s);
-                conclude(result, "L1 ORF region Identified with BLAST score > 200");
+                conclude(result, "HIV-1 BLAST score > 200");
             } else {
 
             conclude("Unassigned", "Unassigned because of BLAST score &lt; 200.");

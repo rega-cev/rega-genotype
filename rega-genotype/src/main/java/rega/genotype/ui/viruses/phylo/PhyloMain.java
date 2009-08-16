@@ -4,7 +4,8 @@ import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
-import rega.genotype.ui.viruses.htlv.HtlvDefinition;
+import rega.genotype.ui.viruses.phylo.PhyloDefinition;
+
 
 public class PhyloMain extends GenotypeMain {
 

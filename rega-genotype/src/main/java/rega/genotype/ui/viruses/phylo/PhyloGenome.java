@@ -13,8 +13,17 @@ public class PhyloGenome extends Genome {
 		private OrganismDefinition od;
 		
 		public PhyloGenome(OrganismDefinition od) {
-			colorMap.put("-", new Color(0, 0xaa, 0xff));
-			
+			colorMap.put("A1", new Color(0xff, 0, 0));
+			colorMap.put("B", new Color(0, 0xaa, 0xff));
+			colorMap.put("C", new Color(0xb0, 0x81, 0x55));
+			colorMap.put("D", new Color(0xfa, 0xac, 0xd5));
+			colorMap.put("F1", new Color(0xd0, 0xff, 0x00));
+			colorMap.put("G", new Color(0x6b, 0xc7, 0x72));
+			colorMap.put("H", new Color(0xff, 0xd4, 0x00));
+			colorMap.put("J", new Color(0x00, 0xfa, 0xff));
+			colorMap.put("K", new Color(0xb9, 0x5f, 0xff));
+			colorMap.put("Group_O", new Color(0, 0, 0));
+			colorMap.put("-", new Color(0xff, 0xff, 0xff));			
 			this.od = od;
 		}
 		
