@@ -38,7 +38,8 @@ public class ResultTracer {
     }
 
     public void addResult(AbstractAnalysis.Result result) {
-        if (result.getSequence().sourceSequence() != currentSequence) {
+        if (result.getSequence() != null
+        	&& result.getSequence().sourceSequence() != currentSequence) {
             finishCurrentSequence();
             startNewSequence(result.getSequence());
         }
