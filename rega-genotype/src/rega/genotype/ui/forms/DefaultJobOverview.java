@@ -8,20 +8,16 @@ import java.util.List;
 import net.sf.witty.wt.WText;
 import net.sf.witty.wt.WWidget;
 import net.sf.witty.wt.i8n.WMessage;
+import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
-import rega.genotype.ui.util.Genome;
 
 public class DefaultJobOverview extends AbstractJobOverview {
 	private List<WMessage> headers = new ArrayList<WMessage>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
-	private Genome genome;
-	
-	public DefaultJobOverview(File jobDir, GenotypeResourceManager rm, Genome genome) {
-		super(jobDir, rm);
-		
-		this.genome = genome;
+	public DefaultJobOverview(File jobDir, GenotypeResourceManager rm, OrganismDefinition od) {
+		super(jobDir, rm, od);
 		
 		headers.add(lt("Name"));
 		headers.add(lt("Length"));
@@ -54,7 +50,7 @@ public class DefaultJobOverview extends AbstractJobOverview {
 			}
 			data.add(new WText(lt(support)));
 			try {
-				data.add(this.getWImageFromFile(genome.getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
+				data.add(this.getWImageFromFile(od.getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
 						id,
 						Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].start")), 
 						Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].end")),

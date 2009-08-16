@@ -1,5 +1,8 @@
 package rega.genotype.ui.data;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,9 +21,6 @@ public abstract class SaxParser extends DefaultHandler {
 	//TODO
 	//header('Content-type: application/ms-excell');
 	
-	//TODO check with incomplete xml files
-	//TODO check with xml file with 1 uncomplete sequence
-
 	private StringBuilder currentPath = new StringBuilder();
 
 	private StringBuilder values = new StringBuilder();
@@ -74,7 +74,7 @@ public abstract class SaxParser extends DefaultHandler {
     	values.append(new String(ch, start, length));
     }
     
-    public void parse(InputSource source)  throws SAXException, IOException {
+    private void parse(InputSource source)  throws SAXException, IOException {
     	reset();
     	XMLReader xmlReader = XMLReaderFactory.createXMLReader();
         xmlReader.setContentHandler(this);
@@ -82,8 +82,25 @@ public abstract class SaxParser extends DefaultHandler {
         try {
         xmlReader.parse(source);
         } catch (SAXParseException spe) {
-        	
+        	if(!spe.getMessage().equals("XML document structures must start and end within the same entity."))
+        		spe.printStackTrace();
         }
+    }
+    
+    public void parseFile(File jobDir) {
+    	File resultFile = new File(jobDir.getAbsolutePath()+File.separatorChar+"result.xml");
+    	
+    	if(resultFile.exists()) {
+	    	try {
+				parse(new InputSource(new FileReader(resultFile)));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+    	}
     }
     
     private void reset() {
@@ -110,10 +127,6 @@ public abstract class SaxParser extends DefaultHandler {
     
 	public int getSequenceIndex() {
 		return sequenceIndex;
-	}
-	
-    public boolean hasWrittenFullSequence() {
-		return sequenceIndex!=-1;
 	}
     
     public String getValue(String name) {

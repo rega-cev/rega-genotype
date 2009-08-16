@@ -1,25 +1,15 @@
 package rega.genotype.ui.data;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 public class DefaultCsvGenerator extends AbstractCsvGenerator {
-	public DefaultCsvGenerator(PrintStream os) {
-		super(os);
+	public DefaultCsvGenerator(PrintStream ps) {
+		super(ps);
+		ps.append("name,length,assignment,support,begin,end,type,pure,pure_support,pure_inner,pure_outer,scan_best_support,scan_assigned_support,scan_assigned_nosupport,scan_best_profile,scan_assigned_profile,crf,crf_support,crf_inner,crf_outer,crfscan_best_support,crfscan_assigned_support,crfscan_assigned_nosupport,crfscan_best_profile,crfscan_assigned_profile,major_id,minor_id\n");
 	}
     
 	public void writeLine(PrintStream ps) {
     	StringBuilder csvLine = new StringBuilder();
-    	
-    	if(!hasWrittenFullSequence()) {
-    		ps.append("name,length,assignment,support,begin,end,type,pure,pure_support,pure_inner,pure_outer,scan_best_support,scan_assigned_support,scan_assigned_nosupport,scan_best_profile,scan_assigned_profile,crf,crf_support,crf_inner,crf_outer,crfscan_best_support,crfscan_assigned_support,crfscan_assigned_nosupport,crfscan_best_profile,crfscan_assigned_profile,major_id,minor_id\n");
-    	}
     	
     	csvLine.append(getCsvValue("genotype_result.sequence['name']")+",");
     	csvLine.append(getCsvValue("genotype_result.sequence['length']")+",");
@@ -69,22 +59,5 @@ public class DefaultCsvGenerator extends AbstractCsvGenerator {
     	}
     	
     	ps.append(csvLine.toString()+"\n");
-    }
-
-	public static void main(String [] args) {
-    	DefaultCsvGenerator csvgen;
-		try {
-			FileOutputStream fos = new FileOutputStream("/home/plibin0/projects/utrecht/genotype/result3.csv");
-			csvgen = new DefaultCsvGenerator(new PrintStream(fos));
-			csvgen.parse(new InputSource(new FileInputStream("/home/plibin0/projects/utrecht/genotype/result.xml")));
-			fos.flush();
-			fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
     }
 }

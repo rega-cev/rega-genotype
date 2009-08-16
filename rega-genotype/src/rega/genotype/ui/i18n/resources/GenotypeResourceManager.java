@@ -11,6 +11,7 @@ import net.sf.witty.wt.i8n.WMessage;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
 
 public class GenotypeResourceManager implements IWMessageResource {
@@ -38,7 +39,7 @@ public class GenotypeResourceManager implements IWMessageResource {
 			for(Object o : root.getChildren()) {
 				Element e = (Element)o;
 				if(e.getName().equals("resource")) {
-					resources.put(e.getAttributeValue("name"), e.getTextTrim());
+					resources.put(e.getAttributeValue("name"), extractFormattedText(e));
 				}
 			}
 			return root;
@@ -51,11 +52,28 @@ public class GenotypeResourceManager implements IWMessageResource {
 	}
     
 	public WMessage getCommonValue(String form, String item) {
-		return WWidget.lt(common.getChild(form).getChild(item).getTextTrim());
+		return WWidget.lt(extractFormattedText(common.getChild(form).getChild(item)));
 	}
 	
 	public WMessage getOrganismValue(String form, String item) {
-		return WWidget.lt(organism.getChild(form).getChild(item).getTextTrim());
+		return WWidget.lt(extractFormattedText(organism.getChild(form).getChild(item)));
+	}
+	
+	private String extractFormattedText(Element child) {
+		StringBuilder textToReturn = new StringBuilder();
+		
+		for(Object o : child.getContent()) {
+			if(o instanceof Text) {
+				textToReturn.append(((Text)o).getTextTrim());
+			} else {
+				Element e = (Element)o;
+				textToReturn.append("<"+e.getName()+">");
+				textToReturn.append(e.getTextTrim());
+				textToReturn.append("</"+e.getName()+">");
+			}
+		}
+		
+		return textToReturn.toString();
 	}
 	
 	public String getValue(WMessage message) {

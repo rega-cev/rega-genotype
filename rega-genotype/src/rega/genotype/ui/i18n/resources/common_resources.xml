@@ -2,6 +2,12 @@
 <common-settings>
   	<resource name="sequenceInput.run">Run</resource>
   	<resource name="sequenceInput.clear">Clear</resource>
-  	<resource name="monitorForm.analysisInProgress">Analysis in progress... (Showing partial results).
-  	This page will be automatically updated every ${monitorForm.analysisInProgress.updateTime} seconds...</resource>
+  	<resource name="sequenceInput.inputSequenceInFastaFormat">Enter your input data in FASTA format. </resource>
+  	<resource name="monitorForm.analysisInProgress">
+  		Analysis in progress... (Showing partial results). <br></br>
+  		This page will be automatically updated every ${monitorForm.analysisInProgress.updateTime} seconds...
+  	</resource>
+	<resource name="monitorForm.downloadResults">Download results:</resource>
+	<resource name="monitorForm.csvTable">CSV Table</resource>
+	<resource name="monitorForm.xmlFile">XML File</resource>
 </common-settings>

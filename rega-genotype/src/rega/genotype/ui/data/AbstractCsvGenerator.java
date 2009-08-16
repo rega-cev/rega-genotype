@@ -4,9 +4,7 @@ import java.io.PrintStream;
 
 public abstract class AbstractCsvGenerator extends SaxParser {
 	private PrintStream os;
-	
-	//TODO make sure this is not called if no xml file exists
-	
+
 	public AbstractCsvGenerator(PrintStream os) {
 		this.os = os;
 	}

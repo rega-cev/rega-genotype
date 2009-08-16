@@ -2,17 +2,21 @@ package rega.genotype.ui.viruses.hiv;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.ui.data.AbstractCsvGenerator;
+import rega.genotype.ui.data.DefaultCsvGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
 import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
+import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.hiv.HIVTool;
 
 public class HivDefinition implements OrganismDefinition {
-	private HivGenome genome = new HivGenome();
+	private HivGenome genome = new HivGenome(this);
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
 		HIVTool hiv = new HIVTool(jobDir);
@@ -21,11 +25,18 @@ public class HivDefinition implements OrganismDefinition {
 	}
 
 	public AbstractJobOverview getJobOverview(File jobDir, GenotypeResourceManager grm) {
-		return new DefaultJobOverview(jobDir, grm, genome);
+		return new DefaultJobOverview(jobDir, grm, this);
 	}
 	
-	//TODO duplicate with genome's organismName()
-	public String getResourcesFile() {
-		return "/rega/genotype/ui/viruses/hiv/resources.xml";
+	public String getOrganismDirectory() {
+		return "/rega/genotype/ui/viruses/hiv/";
+	}
+
+	public AbstractCsvGenerator getCsvGenerator(PrintStream ps) {
+		return new DefaultCsvGenerator(ps);
+	}
+
+	public Genome getGenome() {
+		return genome;
 	}
 }

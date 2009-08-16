@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
+import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.Genome;
 
 public class HivGenome extends Genome {
 	private Map<String, Color> colorMap = new HashMap<String, Color>();
+	private OrganismDefinition od;
 	
-	public HivGenome() {
+	public HivGenome(OrganismDefinition od) {
 		colorMap.put("A1", new Color(0xff, 0, 0));
 		colorMap.put("B", new Color(0, 0xaa, 0xff));
 		colorMap.put("C", new Color(0xb0, 0x81, 0x55));
@@ -21,6 +23,8 @@ public class HivGenome extends Genome {
 		colorMap.put("K", new Color(0xb9, 0x5f, 0xff));
 		colorMap.put("Group_O", new Color(0, 0, 0));
 		colorMap.put("-", new Color(0xff, 0xff, 0xff));
+		
+		this.od = od;
 	}
 	
 	public Map<String, Color> COLORS() {
@@ -29,10 +33,6 @@ public class HivGenome extends Genome {
 
 	public int GENOMEEND() {
 		return 9700;
-	}
-
-	public String organismName() {
-		return "hiv";
 	}
 
 	public int GENOMESTART() {
@@ -45,6 +45,10 @@ public class HivGenome extends Genome {
 
 	public int IMGGENOMESTART() {
 		return -4;
+	}
+	
+	public OrganismDefinition getOrganismDefinition() {
+		return od;
 	}
 	
 	public static void main(String [] args) {

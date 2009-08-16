@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <organism-settings>
+	<main-form>
+		<footer>
+		Developed by: Tulio de Oliveira, Koen Deforche, Sharon Cassol, Andrew Rambaut and Anne-Mieke Vandamme.
+		</footer>
+	</main-form>
+	<start-form>
+		<title>
+		REGA HIV Subtyping Tool Version 2.0
+		</title>
+		<note>
+		This tool is designed to use phylogenetic methods in order to identify the subtype of a specific sequence.
+		The sequence is analysed for recombination using bootscanning methods.
+		<br></br>
+		<b>Note for batch analysis:</b> The REGA subtype tool accepts up to 1000 sequences at a time. 
+		</note>
+	</start-form>
 	<monitor-form>
 		<title>
 		HIV Genotyping Tool Results

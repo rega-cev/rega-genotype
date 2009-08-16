@@ -3,14 +3,16 @@ package rega.genotype.ui.forms;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
-
 import net.sf.witty.wt.SignalListener;
 import net.sf.witty.wt.WBreak;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WMouseEvent;
 import net.sf.witty.wt.WPushButton;
+import net.sf.witty.wt.WText;
 import net.sf.witty.wt.WTextArea;
+
+import org.apache.commons.io.FileUtils;
+
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.OrganismDefinition;
@@ -18,6 +20,8 @@ import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 
 public class StartForm extends WContainerWidget {
+	private WText title;
+	private WText note;
 	private WTextArea ta;
 	private WPushButton run, clear;
 	private GenotypeWindow main;
@@ -29,11 +33,22 @@ public class StartForm extends WContainerWidget {
 	}
 	
 	public void init(final OrganismDefinition od) {
+		title = new WText(main.getResourceManager().getOrganismValue("start-form", "title"), this);
+		new WBreak(this);
+		new WBreak(this);
+		
+		note = new WText(main.getResourceManager().getOrganismValue("start-form", "note"), this);
+		new WBreak(this);
+		new WBreak(this);
+		
+		new WText(tr("sequenceInput.inputSequenceInFastaFormat"), this);
+		new WBreak(this);
+		
 		ta = new WTextArea(this);
 		ta.setColumns(100);
 		ta.setRows(15);
-		
 		new WBreak(this);
+	
 		run = new WPushButton(this);
 		run.setText(tr("sequenceInput.run"));
 		
@@ -68,9 +83,8 @@ public class StartForm extends WContainerWidget {
 					});
 					analysis.start();
 					
-					main.removeWidget(StartForm.this);
 					AbstractJobOverview ajo = od.getJobOverview(thisJobDir, main.getResourceManager());
-					main.addWidget(ajo);
+					main.setForm(ajo);
 					ajo.fillTable();
 			}
 		});

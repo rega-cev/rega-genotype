@@ -33,8 +33,8 @@ public class GenotypeLib {
 	public static void initSettings(Settings s) {
 		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
 		SequenceAlign.clustalWPath = s.getClustalWCmd();
-		GenotypeTool.setXmlBasePath(s.getXmlPath().getAbsolutePath());
-		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath();
+		GenotypeTool.setXmlBasePath(s.getXmlPath().getAbsolutePath() + File.separatorChar);
+		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
 		PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
 		treeGraphCommand = s.getTreeGraphCmd();
 	}
