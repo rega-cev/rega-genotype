@@ -95,7 +95,8 @@ public class GenotypeLib {
 		}
 	}
 	
-	public static void getTreePDF(File jobDir, File treeFile, File pdfFile) {
+	public static File getTreePDF(File jobDir, File treeFile) {
+		File pdfFile = new File(treeFile.getPath().replace(".tre", ".pdf"));
 		if (!pdfFile.exists() && treeFile.exists()) {
 			File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
 			File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
@@ -124,6 +125,7 @@ public class GenotypeLib {
 				e.printStackTrace();
 			}
 		}
+		return pdfFile;
 	}
 	
 	public static File createJobDir(){
