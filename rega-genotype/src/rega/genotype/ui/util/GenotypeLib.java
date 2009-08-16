@@ -28,6 +28,7 @@ import net.sf.witty.wt.WResource;
 
 import org.apache.commons.io.IOUtils;
 
+import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.GenotypeTool;
 import rega.genotype.PhyloClusterAnalysis;
@@ -102,7 +103,14 @@ public class GenotypeLib {
 			
 			try{
 				Runtime runtime = Runtime.getRuntime();
-				runtime.exec(treeGraphCommand +" -t "+ treeFile.getAbsolutePath(), null, jobDir);
+				Process proc;
+				int result;
+				String cmd;
+				
+				cmd = treeGraphCommand +" -t "+ treeFile.getAbsolutePath();
+				proc = runtime.exec(cmd, null, jobDir);
+				if((result = proc.waitFor()) != 0)
+					throw new ApplicationException(cmd +" exited with error: "+result);
 				
 				File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
 				File resizedTgfFile = new File(treeFile.getPath().replace(".tre", ".resized.tgf"));
@@ -123,10 +131,14 @@ public class GenotypeLib {
 				tgfFile.delete();
 				resizedTgfFile.renameTo(tgfFile);
 				
-				runtime.exec(treeGraphCommand +" -v "+ tgfFile.getAbsolutePath(), null, jobDir);
-				File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
+				cmd = treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
+				proc = runtime.exec(cmd, null, jobDir);
+				if((result = proc.waitFor()) != 0)
+					throw new ApplicationException(cmd +" exited with error: "+result);
 				
+				File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
 				ImageConverter.svgToPdf(svgFile, pdfFile);
+				svgFile.delete();
 			}
 			catch(Exception e){
 				e.printStackTrace();
