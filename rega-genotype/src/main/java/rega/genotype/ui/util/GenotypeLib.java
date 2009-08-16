@@ -21,12 +21,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -119,62 +123,112 @@ public class GenotypeLib {
 		}
 		return pngFile;
 	}
-	
+
+	public static File getTreePNG(File jobDir, File treeFile) {
+		File pngFile = new File(treeFile.getPath().replace(".tre", ".png"));
+		if (!pngFile.exists() && treeFile.exists()) {
+			try {
+				File svgFile = getTreeSVG(jobDir, treeFile);
+				
+				ImageConverter.svgToPng(svgFile, pngFile);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return pngFile;
+	}
+
 	public static File getTreePDF(File jobDir, File treeFile) {
 		File pdfFile = new File(treeFile.getPath().replace(".tre", ".pdf"));
 		if (!pdfFile.exists() && treeFile.exists()) {
-			
 			try{
-				Runtime runtime = Runtime.getRuntime();
-				Process proc;
-				int result;
-				String cmd;
-				
-				cmd = treeGraphCommand +" -t "+ treeFile.getAbsolutePath();
-				System.err.println(cmd);
-				proc = runtime.exec(cmd, null, jobDir);
-				if((result = proc.waitFor()) != 0)
-					throw new ApplicationException(cmd +" exited with error: "+result);
-				
-				File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
-				File resizedTgfFile = new File(treeFile.getPath().replace(".tre", ".resized.tgf"));
-				
-				BufferedReader in = new BufferedReader(new FileReader(tgfFile));
-				PrintStream out = new PrintStream(new FileOutputStream(resizedTgfFile));
-				String line;
-				while((line = in.readLine()) != null){
-					line = line.replace("\\width{150}" ,"\\width{180}");
-					line = line.replace("\\height{250}" ,"\\height{370}");
-					line = line.replace("\\margin{0}{0}{0}{0}" ,"\\margin{10}{10}{10}{10}");
-					line = line.replace("\\style{r}{plain}{14.4625}","\\style{r}{plain}{10}");
-					line = line.replaceAll("\\\\len\\{-", "\\\\len\\{");
-					out.println(line);
-					
-					if (line.equals("\\begindef")) {
-						out.println("\\paper{a2}");
-					}
-				}
-				out.close();
-				in.close();
-				
-				tgfFile.delete();
-				resizedTgfFile.renameTo(tgfFile);
-				
-				cmd = treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
-				System.err.println(cmd);
-				proc = runtime.exec(cmd, null, jobDir);
-				if((result = proc.waitFor()) != 0)
-					throw new ApplicationException(cmd +" exited with error: "+result);
-				
-				File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
+				File svgFile = getTreeSVG(jobDir, treeFile);
 				ImageConverter.svgToPdf(svgFile, pdfFile);
-				svgFile.delete();
 			}
 			catch(Exception e){
 				e.printStackTrace();
 			}
 		}
 		return pdfFile;
+	}
+
+	private static File getTreeSVG(File jobDir, File treeFile)
+			throws IOException, InterruptedException, ApplicationException,
+			FileNotFoundException {
+		File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
+		if (svgFile.exists())
+			return svgFile;
+
+		Runtime runtime = Runtime.getRuntime();
+		Process proc;
+		int result;
+		String cmd;
+
+		cmd = treeGraphCommand +" -t "+ treeFile.getAbsolutePath();
+		System.err.println(cmd);
+		proc = runtime.exec(cmd, null, jobDir);
+		
+        InputStream inputStream = proc.getInputStream();
+
+        LineNumberReader reader
+            = new LineNumberReader(new InputStreamReader(inputStream));
+
+        Pattern taxaCountPattern = Pattern.compile("(\\d+) taxa read.");
+
+        int taxa = 0;
+        for (;;) {
+            String s = reader.readLine();
+            if (s == null)
+                break;
+            Matcher m = taxaCountPattern.matcher(s);
+            
+            if (m.find()) {
+                taxa = Integer.valueOf(m.group(1)).intValue();
+            }
+        }
+
+        System.err.println("taxa: " + taxa);
+        
+		if((result = proc.waitFor()) != 0)
+			throw new ApplicationException(cmd +" exited with error: "+result);
+		
+		File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
+		File resizedTgfFile = new File(treeFile.getPath().replace(".tre", ".resized.tgf"));
+
+		BufferedReader in = new BufferedReader(new FileReader(tgfFile));
+		PrintStream out = new PrintStream(new FileOutputStream(resizedTgfFile));
+		String line;
+		while((line = in.readLine()) != null){
+			line = line.replace("\\width{" ,"%\\width{");
+			line = line.replace("\\height{" ,"%\\height{");
+			line = line.replace("\\margin{" ,"%\\margin{");
+			line = line.replace("\\style{r}{plain}","%\\style{r}{plain}");
+			line = line.replace("\\style{default}{plain}","%\\style{default}{plain}");
+			line = line.replaceAll("\\\\len\\{-", "\\\\len\\{");
+			out.println(line);
+			
+			if (line.equals("\\begindef")) {
+				out.println("\\paper{a2}");
+				out.println("\\width{170}");
+				out.println("\\height{" + (taxa * 8) + "}");
+				out.println("\\margin{10}{10}{10}{10}");
+				out.println("\\style{default}{plain}{13}");
+				out.println("\\style{r}{plain}{13}");
+			}
+		}
+		out.close();
+		in.close();
+		
+		tgfFile.delete();
+		resizedTgfFile.renameTo(tgfFile);
+		
+		cmd = treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
+		System.err.println(cmd);
+		proc = runtime.exec(cmd, null, jobDir);
+		if((result = proc.waitFor()) != 0)
+			throw new ApplicationException(cmd +" exited with error: "+result);
+		
+		return svgFile;
 	}
 	
 	public static File createJobDir(OrganismDefinition od){

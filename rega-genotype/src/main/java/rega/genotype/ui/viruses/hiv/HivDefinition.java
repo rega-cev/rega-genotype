@@ -7,7 +7,6 @@ package rega.genotype.ui.viruses.hiv;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,14 +70,14 @@ public class HivDefinition implements OrganismDefinition {
 		WString m = WString.lt("Phylogenetic analysis with pure subtypes:");
 		
 		if (p.elementExists("genotype_result.sequence.result['pure']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m));
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m, false));
 		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m));
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m, false));
 
 		m = WString.lt("Phylogenetic analysis with pure subtypes and CRFs:");
 
 		if (p.elementExists("genotype_result.sequence.result['crf']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m));
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m, false));
 		
 		if (p.elementExists("genotype_result.sequence.result['scan']"))
 			forms.add(new DefaultRecombinationDetailsForm());

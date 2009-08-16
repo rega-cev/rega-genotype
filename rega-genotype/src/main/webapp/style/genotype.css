@@ -159,16 +159,25 @@ table.jobTable td img, .detailsForm img {
 	display: inline;
 }
 
-.details .dsa-text span + span + br + span + span{
+.details .dsa-text span + span + br + span + span {
 	color: darkblue;
 }
 
-.details .dsa-images .legend{
+.details .dsa-images .legend {
 	float: right;
 }
 
-.details .dsa-motivation{
+.details .dsa-motivation {
 	font-style: italic;
+}
+
+.details img.phyloTree {
+	margin: 1em auto;
+	border: 1px solid black;
+}
+
+.details div.phyloLinks {
+	margin: 1em auto;
 }
 
 .decisionTreeHeader{

@@ -14,8 +14,10 @@ import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.AlignmentResource;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
@@ -27,11 +29,13 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 	private String xpath;
 	private WString commentTitle;
 	private WString title;
+	private boolean showTree;
 
-	public DefaultPhylogeneticDetailsForm(String xpath, WString title, WString commentTitle) {
+	public DefaultPhylogeneticDetailsForm(String xpath, WString title, WString commentTitle, boolean showTree) {
 		this.xpath = xpath;
 		this.title = title;
 		this.commentTitle = commentTitle;
+		this.showTree = showTree;
 	}
 
 	public void fillForm(SaxParser p, OrganismDefinition od, File jobDir) {
@@ -58,14 +62,30 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 						SequenceAlignment.SEQUENCE_ANY, SequenceAlignment.FILETYPE_FASTA), "alignment.fasta"));
 		li.addWidget(new WText(lt(")")));
 
-		li = ul.addItem(new WText(lt("Export or View the Phylogenetic Tree: ")));
-		li.addWidget(GenotypeLib.getAnchor("PDF",
+		WAnchor anchorTreePdf = GenotypeLib.getAnchor("PDF",
 				"application/pdf",
-				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))), null));
-		li.addWidget(new WText(lt(", ")));
-		li.addWidget(GenotypeLib.getAnchor("NEXUS Format",
+				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))), null);
+		WAnchor anchorTreeNexus = GenotypeLib.getAnchor("NEXUS Format",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")),null));
+				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")),null);
+
+		if (!showTree) {
+			li = ul.addItem(new WText(lt("Export or View the Phylogenetic Tree: ")));
+			li.addWidget(anchorTreePdf);
+			li.addWidget(new WText(lt(", ")));
+			li.addWidget(anchorTreeNexus);
+		} else {
+			li = ul.addItem(new WText(lt("Phylogenetic Tree (export as ")));
+			li.addWidget(anchorTreePdf);
+			li.addWidget(new WText(lt(", ")));
+			li.addWidget(anchorTreeNexus);
+			li.addWidget(new WText(lt("):")));
+
+			WImage treePng = GenotypeLib.getWImageFromFile
+				(GenotypeLib.getTreePNG(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))));
+			treePng.setStyleClass("phyloTree");
+			li.addWidget(treePng);
+		}
 
 		li = ul.addItem(new WText(lt("View the ")));
 		li.addWidget(GenotypeLib.getAnchor("PAUP* Log file",

@@ -66,7 +66,7 @@ public class NovDefinition implements OrganismDefinition {
 		String phyloResult = result + "['phylo-" + region + "']";
 		if (p.elementExists(phyloResult)) {
 			WString title = WString.lt("Phylogenetic analyses (" + region + ")");
-			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title));
+			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
 
 			String bestGenotype = p.getEscapedValue(phyloResult + ".best.id");
 			
@@ -74,7 +74,7 @@ public class NovDefinition implements OrganismDefinition {
 			if (p.elementExists(variantResult)) {
 				WString variantTitle = WString.lt("Phylogenetic analyses (" + region + ") for variant within "
 						+ bestGenotype);
-				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle));
+				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle, true));
 			}
 		}
 	}
