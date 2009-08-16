@@ -9,6 +9,7 @@ import net.sf.witty.wt.SignalListener;
 import net.sf.witty.wt.WBreak;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WEmptyEvent;
+import net.sf.witty.wt.WLineEdit;
 import net.sf.witty.wt.WMouseEvent;
 import net.sf.witty.wt.WPushButton;
 import net.sf.witty.wt.WText;
@@ -28,6 +29,11 @@ public class StartForm extends IForm {
 	private WTextArea ta;
 	private WPushButton run, clear;
 	private FileUpload fileUpload;
+	
+	private WText monitorLabel;
+	private WText jobIdLabel;
+	private WLineEdit jobIdTF;
+	private WPushButton monitorButton;
 	
 	public StartForm(GenotypeWindow main) {
 		super(main, "start-form");
@@ -96,6 +102,28 @@ public class StartForm extends IForm {
 				} else {
 					ta.setStyleClass("textarea edit-invalid");
 				}
+			}
+		});
+		
+		new WBreak(this);
+		
+		WContainerWidget monitorContainer = new WContainerWidget(this);
+		monitorLabel = new WText(tr("startForm.provideJobId"), monitorContainer);
+		new WBreak(this);
+		jobIdLabel = new WText(tr("startForm.jobId"), monitorContainer);
+		jobIdTF = new WLineEdit(monitorContainer);
+		monitorButton = new WPushButton(tr("startForm.monitor"), monitorContainer);
+		monitorButton.clicked.addListener(new SignalListener<WMouseEvent>() {
+			public void notify(WMouseEvent a) {
+				File jobDir = new File(Settings.getInstance().getJobDir().getAbsolutePath()+File.separatorChar+jobIdTF.text());
+				if(jobDir.exists()) {
+					jobIdTF.setStyleClass("edit-valid");
+					jobIdTF.setText("");
+					getMain().monitorForm(jobDir);
+				} else {
+					jobIdTF.setStyleClass("edit-invalid");
+				}
+					
 			}
 		});
 	}

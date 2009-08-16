@@ -5,6 +5,11 @@
   	<resource name="sequenceInput.run">Run</resource>
   	<resource name="sequenceInput.clear">Clear</resource>
   	<resource name="sequenceInput.inputSequenceInFastaFormat">Enter your input data in FASTA format. </resource>
+  	
+  	<resource name="startForm.provideJobId">Monitor a running or finished job by providing the job-id.</resource>
+  	<resource name="startForm.jobId">Job-id:</resource>
+  	<resource name="startForm.monitor">Monitor</resource>
+  	
   	<resource name="monitorForm.analysisInProgress">
   		Analysis in progress... (Showing partial results). <br></br>
   		This page will be automatically updated every ${monitorForm.analysisInProgress.updateTime} seconds...

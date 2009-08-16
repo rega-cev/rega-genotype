@@ -96,7 +96,8 @@ public abstract class AbstractJobOverview extends IForm {
 		
 		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
 		if(jobDone.exists()) {
-			updater.stop();
+			if(updater!=null)
+				updater.stop();
 			analysisInProgress.setHidden(true);
 
 			//TODO
