@@ -1,7 +1,5 @@
 PRIORITY
-* maven + BUILD
 * details pics, generate them during analysis?
-* zip file: generate on demand
 * start form:
    - do not show an uploaded file (firefox hangs doing spell checking on big file)
      I did this but you may want to give it another look
