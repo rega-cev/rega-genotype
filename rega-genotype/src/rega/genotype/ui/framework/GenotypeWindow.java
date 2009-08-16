@@ -11,6 +11,7 @@ import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.WText;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.ui.forms.ContactUsForm;
 import rega.genotype.ui.forms.DecisionTreesForm;
 import rega.genotype.ui.forms.DetailsForm;
 import rega.genotype.ui.forms.ExampleSequencesForm;
@@ -56,6 +57,7 @@ public class GenotypeWindow extends WContainerWidget
 	private WText exampleSequences;
 	private ExampleSequencesForm exampleSequencesForm;
 	private WText contactUs;
+	private ContactUsForm contactUsForm;
 	
 	public GenotypeWindow(OrganismDefinition od)
 	{
@@ -145,6 +147,13 @@ public class GenotypeWindow extends WContainerWidget
 		});
 		contactUs = new WText(tr("main.navigation.contactUs"), navigation);
 		contactUs.setStyleClass("link");
+		contactUs.clicked.addListener(new SignalListener<WMouseEvent>() {
+			public void notify(WMouseEvent a) {
+				if(contactUsForm==null) 
+					contactUsForm = new ContactUsForm(GenotypeWindow.this);
+				setForm(contactUsForm);
+			}
+		});
 		
 		this.footer = new WText(resourceManager.getOrganismValue("main-form", "footer"), table.elementAt(3, 0));
 		footer.setStyleClass("footer");

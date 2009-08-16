@@ -20,6 +20,7 @@ PRIORITY
 	* details form
 	* subtyping process
 	* example sequences
+	* contact us
 * details pics, generate them during analysis?
 
 LATER

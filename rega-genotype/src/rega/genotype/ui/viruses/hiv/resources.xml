@@ -33,7 +33,7 @@
 		<cite>
 		<b>These tools are not yet published. In the mean time please cite the following paper:</b>
 		<br/>
-		<a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/bti607v1">An Automated Genotyping System for Analysis of HIV-1 and other Microbial Sequences.</a> 
+		<a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/bti607v1" TARGET="_blank">An Automated Genotyping System for Analysis of HIV-1 and other Microbial Sequences.</a> 
 		<br/>
 		T. de Oliveira,K. Deforche, S. Cassol, M. Salminem, D. Paraskevis, C. Seebregts, J. Snoeck, E. J. van Rensburg ,A. M. J. Wensing, D.A. van de Vijver, C. A. Boucher , R. Camacho , and A-M Vandamme.
 		<br/>
@@ -282,4 +282,26 @@
 			</sequence>
 		</exampleSequences-sequences>
 	</exampleSequences-form>
+	<contactUs-form>
+		<title>
+			Contact the developers of the REGA HIV-1 &amp; 2 subtyping tool
+		</title>
+		<contactUs-text>
+			<text>
+				The REGA HIV-1 Subtyping tool is developed and mantained by Tulio de Oliveira, Koen Deforche, Sharon Cassol, Andrew Rambaut and Anne-Mieke Vandamme.
+				<br/>
+				<br/>
+				<b>Suggestions or problems on the program please contact:</b><br/>
+				<a href="http://evolve.zoo.ox.ac.uk/people.html?id=oliveirat" TARGET="_blank">Dr Tulio de Oliveira</a><br/>
+				Marie Curie Fellow<br/>
+				Evolutionary Biology Group<br/>
+				Zoology Department<br/>
+				University of Oxford<br/>
+				OX1 3PS, UK.<br/>
+				<br/>
+				Tel: +44 1865 281 997<br/>
+				Fax: +44 1865 271 249<br/>
+			</text>
+		</contactUs-text>
+	</contactUs-form>
 </organism-settings>
