@@ -2,7 +2,8 @@
 <organism-settings>
 	<main-form>
 		<footer>
-		Developed by: Harry Vennema, Annelies Krooneman and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.
+			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans) and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
+			<p>Contact: <a href="mailto:noronet@rivm.nl">noronet@rivm.nl</a></p>
 		</footer>
 	</main-form>
 	<start-form>

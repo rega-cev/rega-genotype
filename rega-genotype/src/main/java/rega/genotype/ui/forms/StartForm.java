@@ -91,8 +91,10 @@ public class StartForm extends AbstractForm {
 		fileUpload.getUploadFile().uploaded.addListener(this, new Signal.Listener() {
             public void trigger() {                
 				try {
-					String fasta = GenotypeLib.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
-					verifyFasta(fasta);
+					if (fileUpload.getUploadFile().spoolFileName() != "") {
+						String fasta = GenotypeLib.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
+						verifyFasta(fasta);
+					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

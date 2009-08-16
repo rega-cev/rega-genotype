@@ -23,7 +23,7 @@ public class NrvGenome extends Genome {
 	private OrganismDefinition od;
 	
 	public NrvGenome(OrganismDefinition od) {
-		colorMap.put("-", new Color(0xc4, 0xff, 0xb4));
+		colorMap.put("-", new Color(0x53, 0xb8, 0x08));
 		
 		this.od = od;
 	}

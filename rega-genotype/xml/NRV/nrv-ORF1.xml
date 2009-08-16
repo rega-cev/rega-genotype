@@ -249,7 +249,7 @@
 
     <cluster id="II.b" name="NRV II.b">
       <cluster id="II.b|II.1" name="NRV II.b (capsid II.1)">
-       <taxus name="II.b|II.1|AY580335" />
+       <taxus name="II.b|II.1|AY580335" /> 
        <taxus name="II.b|II.1|AY919139" />
      </cluster>
       <cluster id="II.b|II.3" name="NRV II.b (capsid II.3)">
@@ -264,10 +264,10 @@
 
     <cluster id="II.c" name="NRV II.c">
       <cluster id="II.c|II.13" name="NRV II.c (capsid II.13)">
-	<taxus name="II.c|II.13|DQ379714" />
+	<taxus name="II.c|II.13|DQ379714" />  
       </cluster>
       <cluster id="II.c|II.1" name="NRV II.c (capsid II.1)">
-	<taxus name="II.c|II.1|OB2001008" />  <!-- 60 -->
+	<taxus name="II.c|II.1|OB2001008" /> <!-- 60 -->
       </cluster>
     </cluster>
 
@@ -290,10 +290,10 @@
     <identify>
        I.1, I.2, I.3B, I.3B-8, I.3D, I.4, I.5, I.5b, I.6, I.6b, I.7, I.8, I.13, I.14,
        II.1, II.2, II.2|II.SMA, II.3, II.3R,
-       II.4[0;13], II.5, II.5FR, II.5H, II.6,
+       II.4[0;13], II.5, II.5FR, II.5H, II.5H|II.5, II.5H|II.2, II.6,
        II.7[0;4], II.8, II.12[0;9], II.15, II.16,
        II.17, II.18, II.11/19, II.20, II.21,
-       II.a, II.b[0;4], II.c|II.13, II.c|II.1, II.Erf007, II.U, O
+       II.a, II.b[0;4], II.c, II.c|II.13, II.c|II.1, II.Erf007, II.U, O
     </identify>
     <cutoff>
       70
@@ -349,6 +349,7 @@
     </options>
   </analysis>
 
+<!--
   <analysis id="phylo-ORF1-II.5H" type="paup">
     <identify>
        II.5H|II.5, II.5H|II.2, II.1[0]
@@ -375,6 +376,7 @@
       log,alignment,tree,inner,outer
     </options>
   </analysis>
+-->
 
   <analysis id="phylo-ORF1-II.7" type="paup">
     <identify>

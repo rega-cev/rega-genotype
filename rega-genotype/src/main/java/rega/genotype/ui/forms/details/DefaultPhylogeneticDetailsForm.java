@@ -44,6 +44,12 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		WListContainerWidget ul = new WListContainerWidget(this);
 		WContainerWidget li;
 		li = ul.addItem(new WText(lt("Bootstrap support: " + p.getValue(phyloPath + ".best.support"))));
+		
+		li = ul.addItem(new WText(lt("Download the ")));
+		li.addWidget(GenotypeLib.getAnchor("Alignment (NEXUS format)",
+				"application/txt",
+				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment"))));
+
 		li = ul.addItem(new WText(lt("Export or View the Phylogenetic Tree: ")));
 		li.addWidget(GenotypeLib.getAnchor("PDF",
 				"application/pdf",
@@ -59,10 +65,6 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".log"))));
 		li.addWidget(new WText(lt(" (Contains bootstrap values)")));
 		
-		li = ul.addItem(new WText(lt("Download the ")));
-		li.addWidget(GenotypeLib.getAnchor("Alignment (NEXUS format)",
-				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment"))));
 	}
 
 	public WString getComment() {
