@@ -15,6 +15,7 @@ public abstract class IForm extends WContainerWidget {
 	public IForm(GenotypeWindow main, String title) {
 		this.main = main;
 		this.title = new WText(main.getResourceManager().getOrganismValue(title, "title"), this);
+		this.title.setStyleClass("header-mainTitle");
 		new WBreak(this);
 	}
 	

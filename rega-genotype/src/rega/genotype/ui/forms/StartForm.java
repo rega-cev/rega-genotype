@@ -28,6 +28,7 @@ public class StartForm extends IForm {
 		new WBreak(this);
 		
 		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note"), this);
+		note.setStyleClass("note");
 		new WBreak(this);
 		new WBreak(this);
 		

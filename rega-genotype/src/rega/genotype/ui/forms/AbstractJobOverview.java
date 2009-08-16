@@ -42,6 +42,7 @@ public abstract class AbstractJobOverview extends IForm {
 		new WBreak(this);
 		
 		jobTable = new WTable(this);
+		jobTable.setStyleClass("jobTable");
 		
 		downloadContainer = new WContainerWidget(this);
 		

@@ -78,6 +78,7 @@ public class GenotypeWindow extends WContainerWidget
 		WApplication.instance().useStyleSheet("style/genotype.css");
 
 		table = new WTable(this);
+		table.setStyleClass("window");
 		
 		//TODO make utility function to make this kind of image (also used in defaultseqassignmentform+tutorialform)
 		this.header = new WImage(new WResource() {
@@ -96,6 +97,8 @@ public class GenotypeWindow extends WContainerWidget
         }, table.elementAt(0, 0));
 
 		WContainerWidget navigation = new WContainerWidget(table.elementAt(2, 0));
+		navigation.setStyleClass("navigation");
+		
 		start = new WText(tr("main.navigation.start"), navigation);
 		start.clicked.addListener(new SignalListener<WMouseEvent>(){
 			public void notify(WMouseEvent a) {
@@ -136,6 +139,7 @@ public class GenotypeWindow extends WContainerWidget
 		contactUs.setStyleClass("link");
 		
 		this.footer = new WText(resourceManager.getOrganismValue("main-form", "footer"), table.elementAt(3, 0));
+		footer.setStyleClass("footer");
 		
 		startForm();
 	}
