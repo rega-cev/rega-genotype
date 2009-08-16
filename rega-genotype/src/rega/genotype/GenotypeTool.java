@@ -91,9 +91,11 @@ public abstract class GenotypeTool {
 		System.err.println("\tIf no sequences are given, an internal analysis is performed.");
 		System.err.println();
 		System.err.println("options:");
-		System.err.println("\t-p,--paup      specify path to paup");
-        System.err.println("\t-c,--clustal   specify path to clustal");
-        System.err.println("\t-x,--xml       specify path to xml files");
+		System.err.println("\t-p,--paup      	specify path to paup");
+        System.err.println("\t-c,--clustal   	specify path to clustal");
+        System.err.println("\t-x,--xml       	specify path to xml files");
+        System.err.println("\t-b,--blast     	specify path to blast executables");
+        System.err.println("\t-t,--treepuzzle   specify path to treepuzzle executable");
 	}
 
 	private void analyzeSelf(String traceFile) throws FileNotFoundException {
