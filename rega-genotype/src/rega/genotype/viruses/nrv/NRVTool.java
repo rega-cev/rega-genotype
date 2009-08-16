@@ -57,7 +57,7 @@ public class NRVTool extends GenotypeTool {
 
     		if (t.getRegions() != null) {
         		for (Region region:t.getRegions()) {
-        			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 200)) {
+        			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 100)) {
         				int rs = Math.max(1, region.getBegin() - blastResult.getStart());
         				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
         					

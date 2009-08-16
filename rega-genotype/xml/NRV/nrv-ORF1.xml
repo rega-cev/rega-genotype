@@ -21,7 +21,7 @@
       <taxus name="U04469|I.3D" />
     </cluster>
     
-    <cluster id="I.4" name="MRV I.4">
+    <cluster id="I.4" name="NRV I.4">
       <taxus name="AB042808|I.4" />
       <taxus name="OB2000038-252|I.4" />
     </cluster>
@@ -194,11 +194,15 @@
       <taxus name="AF315813|II.SN89JA1989JP" />
     </cluster>
 
+    <cluster id="O" name="Outgroup">
+      <taxus name="AY126474|III.2" />
+    </cluster>
+
   </clusters>
 
   <analysis id="phylo-ORF1" type="paup">
     <identify>
-      I.1,I.2,I.3B,I.3D,I.4,I.5,I.5b,I.6,I.6b,I.7,I.8,I.13,I.14,I.HK2K,II.1,II.2,II.3,II.3R,II.4,II.5,II.5FR,II.5H,II.6,II.7,II.8,II.11,II.12,II.15,II.16,II.17,II.18,II.19,II.20,II.21,II.a,II.b,II.c,II.erfurt,II.U,II.2SMA,II.SN89
+      I.1,I.2,I.3B,I.3D,I.4,I.5,I.5b,I.6,I.6b,I.7,I.8,I.13,I.14,I.HK2K,II.1,II.2,II.3,II.3R,II.4,II.5,II.5FR,II.5H,II.6,II.7,II.8,II.11,II.12,II.15,II.16,II.17,II.18,II.19,II.20,II.21,II.a,II.b,II.c,II.erfurt,II.U,II.2SMA,II.SN89,O
     </identify>
     <cutoff>
       70
@@ -209,6 +213,7 @@
       export format=phylip file=paup.fasta replace=yes;
       exclude gapped;
       export format=nexus file=paup.nex replace=yes;
+      outgroup AY126474|III.2;
       set criterion=distance;
       dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
       constraints CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(9,10),(14,15),(21,22),(23,24),(25,26),(27,28),(29,30,31,32),(35,36),(37,38),(39,40,41),(44,45),(47,48),(49,50),(51,52),(53,54),(56,57),(59,60),(61,62),(63,64));
@@ -232,7 +237,7 @@
     </step>
     <analysis type="paup">
       <identify>
-       I.1,I.2,I.3B,I.3D,I.4,I.5,I.5b,I.6,I.6b,I.7,I.8,I.13,I.14,I.HK2K,II.1,II.2,II.3,II.3R,II.4,II.5,II.5FR,II.5H,II.6,II.7,II.8,II.11,II.12,II.15,II.16,II.17,II.18,II.19,II.20,II.21,II.a,II.b,II.c,II.erfurt,II.U,II.2SMA,II.SN89
+       I.1,I.2,I.3B,I.3D,I.4,I.5,I.5b,I.6,I.6b,I.7,I.8,I.13,I.14,I.HK2K,II.1,II.2,II.3,II.3R,II.4,II.5,II.5FR,II.5H,II.6,II.7,II.8,II.11,II.12,II.15,II.16,II.17,II.18,II.19,II.20,II.21,II.a,II.b,II.c,II.erfurt,II.U,II.2SMA,II.SN89,O
       </identify>
       <block>
         begin paup;

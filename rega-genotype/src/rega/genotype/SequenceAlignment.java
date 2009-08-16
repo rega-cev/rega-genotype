@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -192,7 +193,12 @@ public class SequenceAlignment
     }
 
     private static String makeLegalName(String name) {
-    	String sane = name.replaceAll("/+", "");
+    	String sane = name.replaceAll("/|\\+|\\(|\\)", "");
+		try {
+			sane = new String(sane.getBytes("ASCII"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
     	if (sane.length() > 30)
     		return sane.substring(0, 30);
     	else
