@@ -24,6 +24,7 @@ public class HivDefinition implements OrganismDefinition {
 		return new DefaultJobOverview(jobDir, grm, genome);
 	}
 	
+	//TODO duplicate with genome's organismName()
 	public String getResourcesFile() {
 		return "/rega/genotype/ui/viruses/hiv/resources.xml";
 	}
