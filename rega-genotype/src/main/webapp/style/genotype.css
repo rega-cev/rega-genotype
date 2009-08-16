@@ -42,7 +42,7 @@ div.imgDiv, div.downloadContainer{
 	text-align: center;
 }
 
-table.window{
+.root{
 	width: 100%;
 }
 /*
@@ -58,17 +58,24 @@ table.window > div{
 }
 */
 
-table.window tr:first-child td{
-	text-align: center;
+.header{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-table.jobTable, table.detailsForm{
+table.jobTable, .detailsForm{
 	margin-left: auto;
 	margin-right: auto;
 	border: 1px outset gray;
 	border-spacing: 2px;
 	border-collapse: separate;
 }
+.detailsForm .title, .detailsForm .details{
+	border: 1px inset gray;
+	margin: 2px;
+}
+
 table.jobTable > tbody > tr > td, table.detailsForm > tbody > tr > td {
 	border: 1px inset gray;
 	padding: 0.5em;
@@ -87,42 +94,48 @@ table.jobTable tr:first-child td span{
 	font-weight: bold;
 }
 
-table.jobTable td img, table.detailsForm td img{
+table.jobTable td img, .detailsForm img{
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-table.detailsForm{
+.detailsForm{
+	width: 800px;
 }
-table.detailsForm td.title{	
+.detailsForm .title{	
 	background-color: darkblue;
 	color: white;
 	font-size: 110%;
 	font-weight: bold;
 	text-align: center;
 }
-table.detailsForm td.details{
-}
-table.detailsForm *.recombinationDetails{
+
+.detailsForm *.recombinationDetails{
 	text-align: center;
 }
 
-.details{
-	width: 800px;
+.detailsForm .title, .detailsForm .details{
+	padding: 0.5em;
 }
-.details td{
-	padding-bottom: 1em;
-}
-.details tr:first-child td{
+.details .dsa-text{
+	text-align: center;
 	font-weight: bold;
 	line-height: 200%;
 	padding-top: 2em;
 	padding-bottom: 2em;
 }
 
-.details tr:first-child td span + span + br + span + span{
+.details .dsa-text span + span + br + span + span{
 	color: darkblue;
+}
+
+.details .dsa-images .legend{
+	float: right;
+}
+
+.details .dsa-motivation{
+	font-style: italic;
 }
 
 .decisionTreeHeader{

@@ -16,16 +16,19 @@ import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.util.GenotypeLib;
 
 public class DefaultSequenceAssignmentForm extends IDetailsForm {
-	private WTable mainTable;
 	private WContainerWidget text;
+	private WContainerWidget images;
 	private WContainerWidget motivation;
 	private int genomeVariantCount;
 	private String genomeDataXPath;
 
 	public DefaultSequenceAssignmentForm(int genomeVariantCount, String genomeDataXPath) {
-		mainTable = new WTable(this);
-		text = new WContainerWidget(mainTable.elementAt(0, 0));
-		motivation = new WContainerWidget(mainTable.elementAt(genomeVariantCount + 1, 0));
+		text = new WContainerWidget(this);
+		text.setStyleClass("dsa-text");
+		images = new WContainerWidget(this);
+		images.setStyleClass("dsa-images");
+		motivation = new WContainerWidget(this);
+		motivation.setStyleClass("dsa-motivation");
 		
 		this.genomeVariantCount = genomeVariantCount;
 		this.genomeDataXPath = genomeDataXPath;
@@ -63,14 +66,17 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 		int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
 		int end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
 		String csvData = genomeDataXPath != null ? p.getValue(genomeDataXPath) : null;
+		
+		images.clear();
 		try {
+			WImage legend = GenotypeLib.getWImageFromResource(od, "legend.png", null);
+			legend.setStyleClass("legend");
+			images.addWidget(legend);
+
 			for (int i = 0; i < genomeVariantCount; ++i) {
 				WImage genome = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), id, start, end, i, "pure", csvData));
-				mainTable.putElementAt(i + 1, 0, genome);
+				images.addWidget(genome);
 			}
-				
-			WImage legend = GenotypeLib.getWImageFromResource(od, "legend.png", null);
-			mainTable.elementAt(1, 1).setRowSpan(genomeVariantCount);
 			
 			motivation.clear();
 

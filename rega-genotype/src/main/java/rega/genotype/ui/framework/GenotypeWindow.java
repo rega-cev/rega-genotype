@@ -27,8 +27,9 @@ import rega.genotype.ui.util.StateLink;
 
 public class GenotypeWindow extends WContainerWidget
 {
-	private WTable table;
 	private IForm activeForm;
+		
+	private WContainerWidget content;
 	
 	private WImage header;
 	private WText footer;
@@ -80,13 +81,19 @@ public class GenotypeWindow extends WContainerWidget
 		setStyleClass("root");
 		WApplication.instance().useStyleSheet("style/genotype.css");
 
-		table = new WTable(this);
-		table.setStyleClass("window");
+		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
+		header.setStyleClass("header");
 		
-		this.header = GenotypeLib.getWImageFromResource(od, "header.gif", table.elementAt(0, 0));
-
-		WContainerWidget navigation = new WContainerWidget(table.elementAt(2, 0));
+		content = new WContainerWidget(this);
+		content.setStyleClass("content");
+		
+		WContainerWidget navigation = new WContainerWidget(this);
 		navigation.setStyleClass("navigation");
+		
+		footer = new WText(resourceManager.getOrganismValue("main-form", "footer"), this);
+		footer.setStyleClass("footer");
+
+
 		
 		start = new WText(tr("main.navigation.start"), navigation);
 		start.clicked.addListener(new SignalListener<WMouseEvent>(){
@@ -155,9 +162,6 @@ public class GenotypeWindow extends WContainerWidget
 			}
 		});
 		
-		this.footer = new WText(resourceManager.getOrganismValue("main-form", "footer"), table.elementAt(3, 0));
-		footer.setStyleClass("footer");
-		
 		startForm();
 	}
 	
@@ -166,8 +170,10 @@ public class GenotypeWindow extends WContainerWidget
 			activeForm.hide();
 		activeForm = form;
 		activeForm.show();
-		if (form.parent() == null)
-			table.putElementAt(1, 0, form);
+		if (form.parent() == null){
+			content.clear();
+			content.addWidget(form);
+		}
 	}
 	
 	public void startForm() {
