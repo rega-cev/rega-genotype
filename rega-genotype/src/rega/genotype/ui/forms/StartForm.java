@@ -51,8 +51,7 @@ public class StartForm extends IForm {
             public void notify(WEmptyEvent a) {                
 				try {
 					String fasta = FileUtils.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
-					String s  = ">lala\n actg";
-					ta.setText(s);
+					ta.setText(fasta);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
