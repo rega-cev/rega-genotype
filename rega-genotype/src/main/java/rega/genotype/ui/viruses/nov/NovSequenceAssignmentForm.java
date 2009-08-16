@@ -18,7 +18,7 @@ import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
 /**
- * NRV assignment-details implementation.
+ * NoV assignment-details implementation.
  * 
  * @author simbre1
  *

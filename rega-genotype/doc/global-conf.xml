@@ -45,7 +45,7 @@
      
      Each job dir must be different, since jobs cannot be mixed for several organisms.
    -->
-  <property name="jobDir-NRV">/Users/tulio/rega3/jobDir</property>
+  <property name="jobDir-NoV">/Users/tulio/rega3/jobDir</property>
   <property name="jobDir-HIV">/Users/tulio/rega3/jobDir</property>
 
   <!-- maxAllowedSequences

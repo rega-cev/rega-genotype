@@ -25,7 +25,7 @@ import rega.genotype.viruses.nov.NoVTool;
 import eu.webtoolkit.jwt.WString;
 
 /**
- * NRV OrganismDefinition implementation.
+ * NoV OrganismDefinition implementation.
  * 
  * @author simbre1
  *

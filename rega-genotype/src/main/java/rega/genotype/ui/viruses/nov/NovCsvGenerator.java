@@ -11,7 +11,7 @@ import java.io.Writer;
 import rega.genotype.ui.data.AbstractCsvGenerator;
 
 /**
- * Create a csv file of NRV job results 
+ * Create a csv file of NoV job results 
  * 
  * @author simbre1
  *

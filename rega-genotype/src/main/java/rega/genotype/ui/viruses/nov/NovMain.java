@@ -12,7 +12,7 @@ import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WString;
 
 /**
- * NRV implementation of the genotype application.
+ * NoV implementation of the genotype application.
  * 
  * @author simbre1
  *

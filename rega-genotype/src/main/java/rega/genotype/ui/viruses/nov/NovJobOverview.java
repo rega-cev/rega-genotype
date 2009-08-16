@@ -19,7 +19,7 @@ import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 
 /**
- * NRV job overview implementation.
+ * NoV job overview implementation.
  * 
  * @author simbre1
  *

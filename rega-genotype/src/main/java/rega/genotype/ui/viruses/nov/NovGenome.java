@@ -13,7 +13,7 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.Genome;
 
 /**
- * NRV genome map drawing implementation.
+ * NoV genome map drawing implementation.
  * 
  * @author simbre1
  *

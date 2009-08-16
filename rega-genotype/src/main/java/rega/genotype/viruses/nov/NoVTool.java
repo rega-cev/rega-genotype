@@ -22,7 +22,7 @@ import rega.genotype.SubSequence;
 import rega.genotype.AlignmentAnalyses.Cluster;
 
 /**
- * NRVTool implements the genotyping algorithm for norovirus.
+ * NoVTool implements the genotyping algorithm for norovirus.
  * 
  * @author koen
  */
