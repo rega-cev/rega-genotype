@@ -24,7 +24,7 @@ public class PhyloSubtypeTool extends GenotypeTool {
 
 
     public PhyloSubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
-        phylo = readAnalyses("hivphylotypes1.xml", workingDir);
+        phylo = readAnalyses("PHYLO/hivphylotypes2.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) phylo.getAnalysis("pure");
 
     }
