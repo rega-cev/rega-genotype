@@ -102,7 +102,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return true;
 	}
 
-	public void init(String jobId) {
+	public void init(String jobId, String filter) {
 		File jobDir = getJobDir(jobId);
 		
 		if(jobDir.equals(this.jobDir))
@@ -113,6 +113,12 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		WString msg = tr("monitorForm.explain");
 		msg.arg(jobId);
 		explainText.setText(msg);
+		
+		JobOverviewSummary summary = getSummary(filter);
+		if (summary != null) {
+			summary.reset();
+			this.insertBefore(summary.getWidget(), analysisInProgress);
+		}
 
 		if (updater != null) {
 			updater.stop();
@@ -145,7 +151,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			updater.start();
 		}
 	}
-	
+
 	public void fillTable() {
 		if(jobTable.getRowCount()==0) {
 			List<Header> headers = getHeaders();
@@ -263,6 +269,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			int numRows = jobTable.getRowCount()-1;
 			if(getSequenceIndex()>=numRows) {
 				List<WWidget> data = getData(tableFiller);
+				
 				for (int i = 0; i < data.size(); i++) {
 					WTableCell cell = jobTable.getElementAt(getSequenceIndex()+1, i);
 					cell.setId("");
@@ -274,6 +281,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 						cell.setStyleClass(jobTable.getColumnAt(i).getStyleClass());
 				}
 				jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
+				
+				JobOverviewSummary summary = getSummary(null);
+				if (summary != null) 
+					summary.update(tableFiller);
 			}
 		}
 	};
@@ -281,6 +292,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public abstract List<Header> getHeaders();
 	
 	public abstract List<WWidget> getData(GenotypeResultParser p);
+	
+	public abstract JobOverviewSummary getSummary(String filter);
 
 	protected WAnchor createReportLink(final GenotypeResultParser p) {
 		WAnchor report = new WAnchor("", "Report");

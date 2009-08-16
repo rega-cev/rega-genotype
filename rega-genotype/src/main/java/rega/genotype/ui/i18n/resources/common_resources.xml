@@ -44,6 +44,11 @@
 	
 	<resource name="detailsForm.nonExistingSequenceId">Sequence id {1} doesn't exist</resource>
 	
+	<resource name="detailsForm.summary.assignment">Rega Assignment</resource>
+	<resource name="detailsForm.summary.numberSeqs">Number of sequences</resource>
+	<resource name="detailsForm.summary.percentage">Percentage</resource>
+	<resource name="detailsForm.summary.total">Total</resource>
+	
 	<resource name="main.navigation.start">Submit job</resource>
 	<resource name="main.navigation.monitor">Monitor job [{1}]</resource>
 	<resource name="main.navigation.details">Analysis details [{1}]</resource>

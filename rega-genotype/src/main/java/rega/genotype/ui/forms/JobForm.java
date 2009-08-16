@@ -53,7 +53,8 @@ public class JobForm extends AbstractForm {
 			String sequenceId = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/");
 			
 			if (sequenceId.equals("")) {
-				jobOverview.init(jobId);
+				//TODO pass filter if there is one
+				jobOverview.init(jobId, null);
 				stateLink.setVarValue(jobId);
 				showWidget(jobOverview);
 			} else {

@@ -11,6 +11,7 @@ import java.util.List;
 
 import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
@@ -92,4 +93,8 @@ public class EtvJobOverview extends AbstractJobOverview {
 		return false;
 	}
 
+	@Override
+	public JobOverviewSummary getSummary(String filter) {
+		return null;
+	}
 }
