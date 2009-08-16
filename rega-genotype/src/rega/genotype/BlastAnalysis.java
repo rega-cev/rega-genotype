@@ -133,7 +133,7 @@ public class BlastAnalysis extends AbstractAnalysis {
         	this.formatDbOptions = "";
         } else {
         	this.blastOptions = "-p blastn";
-        	this.formatDbOptions = "-F p";
+        	this.formatDbOptions = "-p F";
         }
     }
 
