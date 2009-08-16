@@ -22,6 +22,7 @@ public class NovResults {
 		String variantDescription;
 		String variantBootstrap;
 		String variantMotivation;
+		String variantAssignmentForOverview;
 	}
 
 	public static final String NA = "<i>NA</i>";
@@ -36,13 +37,20 @@ public class NovResults {
 			result.majorBootstrap = p.getEscapedValue(conclusionP + ".assigned.support");
 			result.majorMotivation = p.getEscapedValue(conclusionP + ".motivation");
 
-			conclusionP = "genotype_result.sequence.conclusion['" + region + "-variant']";
+			String variantConclusionP = "genotype_result.sequence.conclusion['" + region + "-variant']";
 
-			if (p.elementExists(conclusionP)) {
-				result.variantAssignment = p.getEscapedValue(conclusionP + ".assigned.name");
-				result.variantBootstrap = p.getEscapedValue(conclusionP + ".assigned.support");
-				result.variantDescription = p.getEscapedValue(conclusionP + ".assigned.description");
-				result.variantMotivation = p.getEscapedValue(conclusionP + ".motivation");
+			if (p.elementExists(variantConclusionP)) {
+				result.variantAssignment = p.getEscapedValue(variantConclusionP + ".assigned.name");
+
+				boolean showVariantNotAssigned = p.getValue(conclusionP + ".assigned.id").equals("II.4");
+				boolean variantNotAssigned = p.getValue(variantConclusionP + ".assigned.id").equals("Unassigned");
+
+				if (!variantNotAssigned || showVariantNotAssigned)
+					result.variantAssignmentForOverview = result.variantAssignment;
+
+				result.variantBootstrap = p.getEscapedValue(variantConclusionP + ".assigned.support");
+				result.variantDescription = p.getEscapedValue(variantConclusionP + ".assigned.description");
+				result.variantMotivation = p.getEscapedValue(variantConclusionP + ".motivation");
 			}
 		} else {
 			result.majorAssignment = getBlastConclusion(p);

@@ -52,12 +52,12 @@ public class NovJobOverview extends AbstractJobOverview {
 		NovResults.Conclusion c = NovResults.getConclusion(p, "ORF1");
 
 		data.add(new WText(lt(notNull(c.majorAssignment))));
-		data.add(new WText(lt(notNull(c.variantAssignment))));
+		data.add(new WText(lt(notNull(c.variantAssignmentForOverview))));
 
 		c = NovResults.getConclusion(p, "ORF2");
 
 		data.add(new WText(lt(notNull(c.majorAssignment))));
-		data.add(new WText(lt(notNull(c.variantAssignment))));
+		data.add(new WText(lt(notNull(c.variantAssignmentForOverview))));
 
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
