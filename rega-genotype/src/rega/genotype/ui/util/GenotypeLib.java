@@ -8,15 +8,23 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Date;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+
+import net.sf.witty.wt.WContainerWidget;
+import net.sf.witty.wt.WImage;
+import net.sf.witty.wt.WResource;
+
+import org.apache.commons.io.IOUtils;
 
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
@@ -130,6 +138,28 @@ public class GenotypeLib {
 		return d;
 	}
 
+	public static WImage getWImageFromFile(final File f) {
+		WImage chartImage = new WImage(new WResource() {
+
+            @Override
+            public String resourceMimeType() {
+                return "image/png";
+            }
+
+            @Override
+            protected void streamResourceData(OutputStream stream) {
+                try {
+                	FileInputStream fis = new FileInputStream(f);
+                    IOUtils.copy(fis, stream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            
+        }, (WContainerWidget)null);
+		
+		return chartImage;
+	}
 
 	public static void main(String[] args) {
 		Settings s = Settings.getInstance();

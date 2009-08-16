@@ -21,4 +21,9 @@
 		HIV Genotyping Tool Results
 		</title>
 	</monitor-form>
+	<details-form>
+		<title>
+		HIV Genotyping Details
+		</title>
+	</details-form>
 </organism-settings>

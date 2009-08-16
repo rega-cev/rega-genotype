@@ -5,19 +5,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.witty.wt.SignalListener;
+import net.sf.witty.wt.WMouseEvent;
 import net.sf.witty.wt.WText;
 import net.sf.witty.wt.WWidget;
 import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
-import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
+import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.GenotypeLib;
 
 public class DefaultJobOverview extends AbstractJobOverview {
 	private List<WMessage> headers = new ArrayList<WMessage>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
-	public DefaultJobOverview(File jobDir, GenotypeResourceManager rm, OrganismDefinition od) {
-		super(jobDir, rm, od);
+	public DefaultJobOverview(File jobDir, GenotypeWindow main, OrganismDefinition od) {
+		super(jobDir, main, od);
 		
 		headers.add(lt("Name"));
 		headers.add(lt("Length"));
@@ -28,20 +31,28 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	}
 	
 	@Override
-	public List<WWidget> getData(SaxParser p) {
+	public List<WWidget> getData(final SaxParser p) {
 		data.clear();
 		
 		data.add(new WText(lt(p.getValue("genotype_result.sequence['name']"))));
 		data.add(new WText(lt(p.getValue("genotype_result.sequence['length']"))));
+		
+		WText report = new WText(lt("Report"));
+		report.setStyleClass("link");
+		report.clicked.addListener(new SignalListener<WMouseEvent>() {
+			public void notify(WMouseEvent a) {
+				main.detailsForm(jobDir, p.getSequenceIndex());
+			}
+		});
+		data.add(report);
+		
 		String id;
 		if(!p.elementExists("genotype_result.sequence.conclusion")) {
 			id = "-";
-			data.add(new WText(lt("Sequence error")));
 			data.add(new WText(lt("NA")));
 			data.add(new WText(lt("NA")));
 		} else {
 			id = p.getValue("genotype_result.sequence.conclusion.assigned.id");
-			data.add(new WText(lt(id)));
 			data.add(new WText(lt(p.getValue("genotype_result.sequence.conclusion.assigned.name"))));
 			
 			String support = p.getValue("genotype_result.sequence.conclusion.assigned.support");
@@ -50,7 +61,7 @@ public class DefaultJobOverview extends AbstractJobOverview {
 			}
 			data.add(new WText(lt(support)));
 			try {
-				data.add(this.getWImageFromFile(od.getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
+				data.add(GenotypeLib.getWImageFromFile(od.getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
 						id,
 						Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].start")), 
 						Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].end")),

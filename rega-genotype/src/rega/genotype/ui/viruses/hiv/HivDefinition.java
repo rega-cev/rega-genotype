@@ -3,6 +3,7 @@ package rega.genotype.ui.viruses.hiv;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
@@ -11,7 +12,9 @@ import rega.genotype.ui.data.DefaultCsvGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
-import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
+import rega.genotype.ui.forms.IDetailsForm;
+import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
+import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.hiv.HIVTool;
 
@@ -24,8 +27,8 @@ public class HivDefinition implements OrganismDefinition {
 				jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
 
-	public AbstractJobOverview getJobOverview(File jobDir, GenotypeResourceManager grm) {
-		return new DefaultJobOverview(jobDir, grm, this);
+	public AbstractJobOverview getJobOverview(File jobDir, GenotypeWindow main) {
+		return new DefaultJobOverview(jobDir, main, this);
 	}
 	
 	public String getOrganismDirectory() {
@@ -38,5 +41,13 @@ public class HivDefinition implements OrganismDefinition {
 
 	public Genome getGenome() {
 		return genome;
+	}
+
+	public IDetailsForm getMainDetailsForm() {
+		return new DefaultSequenceAssignmentForm();
+	}
+
+	public List<IDetailsForm> getSupportingDetailsforms() {
+		return null;
 	}
 }

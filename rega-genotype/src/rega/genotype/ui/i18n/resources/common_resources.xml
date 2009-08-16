@@ -10,4 +10,12 @@
 	<resource name="monitorForm.downloadResults">Download results:</resource>
 	<resource name="monitorForm.csvTable">CSV Table</resource>
 	<resource name="monitorForm.xmlFile">XML File</resource>
+	
+	
+	<resource name="defaultSequenceAssignment.title">Sequence Assignment</resource>
+	<resource name="defaultSequenceAssignment.sequenceName">Sequence name: </resource>
+	<resource name="defaultSequenceAssignment.sequenceLength">Length: </resource>
+	<resource name="defaultSequenceAssignment.assignment">Assignment: </resource>
+	<resource name="defaultSequenceAssignment.bootstrap">Bootstrap: </resource>
+	<resource name="defaultSequenceAssignment.motivation">Motivation: </resource>
 </common-settings>

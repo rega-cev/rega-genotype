@@ -66,7 +66,6 @@ public class StartForm extends WContainerWidget {
 					Thread analysis = new Thread(new Runnable(){
 						public void run() {
 							try {
-								
 								File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
 								FileUtils.writeStringToFile(seqFile, ta.text());
 								od.startAnalysis(thisJobDir);
@@ -83,9 +82,7 @@ public class StartForm extends WContainerWidget {
 					});
 					analysis.start();
 					
-					AbstractJobOverview ajo = od.getJobOverview(thisJobDir, main.getResourceManager());
-					main.setForm(ajo);
-					ajo.fillTable();
+					main.monitorForm(thisJobDir);
 			}
 		});
 	}

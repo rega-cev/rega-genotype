@@ -1,8 +1,6 @@
 package rega.genotype.ui.forms;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
@@ -13,25 +11,23 @@ import net.sf.witty.wt.WBreak;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WEmptyEvent;
 import net.sf.witty.wt.WFileResource;
-import net.sf.witty.wt.WImage;
 import net.sf.witty.wt.WResource;
 import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.WText;
 import net.sf.witty.wt.WTimer;
 import net.sf.witty.wt.WWidget;
 import net.sf.witty.wt.i8n.WMessage;
-
-import org.apache.commons.io.IOUtils;
-
 import rega.genotype.ui.data.AbstractCsvGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
-import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
+import rega.genotype.ui.framework.GenotypeWindow;
 
 public abstract class AbstractJobOverview extends WContainerWidget {
 	protected File jobDir;
 	
 	protected OrganismDefinition od;
+	
+	protected GenotypeWindow main;
 	
 	private WText title;
 	private WText analysisInProgress;
@@ -40,13 +36,16 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 	private WTimer updater;
 	
 	private boolean fillingTable = false;
+	
 
-	public AbstractJobOverview(File jobDir, GenotypeResourceManager rm, OrganismDefinition od) {
+	public AbstractJobOverview(File jobDir, GenotypeWindow main, OrganismDefinition od) {
+		this.main = main;
+		
 		this.jobDir = jobDir;
 		
 		this.od = od;
 		
-		this.title = new WText(rm.getOrganismValue("monitor-form", "title"), this);
+		this.title = new WText(main.getResourceManager().getOrganismValue("monitor-form", "title"), this);
 		new WBreak(this);
 		
 		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
@@ -98,7 +97,7 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 			xmlFileDownload.setStyleClass("link");
 			xmlFileDownload.setRef(new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml").generateUrl());
 			
-			new WText(lt(" , "), this);
+			new WText(lt(" , "), downloadContainer);
 			
 			WAnchor csvTableDownload = new WAnchor((String)null, tr("monitorForm.csvTable"), downloadContainer);
 			csvTableDownload.setStyleClass("link");
@@ -132,29 +131,6 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 			}
 		}
 	};
-
-	protected WImage getWImageFromFile(final File f) {
-		WImage chartImage = new WImage(new WResource() {
-
-            @Override
-            public String resourceMimeType() {
-                return "image/png";
-            }
-
-            @Override
-            protected void streamResourceData(OutputStream stream) {
-                try {
-                	FileInputStream fis = new FileInputStream(f);
-                    IOUtils.copy(fis, stream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            
-        }, (WContainerWidget)null);
-		
-		return chartImage;
-	}
 	
 	public abstract List<WMessage> getHeaders();
 	

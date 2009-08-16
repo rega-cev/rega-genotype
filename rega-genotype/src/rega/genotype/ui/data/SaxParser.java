@@ -26,49 +26,60 @@ public abstract class SaxParser extends DefaultHandler {
 	private List<String> elements = new ArrayList<String>();
 		
 	private int sequenceIndex = -1;
+	
+	private boolean stop = false;
 
 	public SaxParser() {
 	}
 	
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		String specifier = "";
-		
-		for(int i = 0; i<attributes.getLength(); i++) {
-			if(attributes.getQName(i).equals("id")) {
-				specifier += '[' + attributes.getValue(i) + ']';
-			} else {
-				valuesMap.put(getCurrentPath()+"."+qName+"[\'"+attributes.getQName(i)+"\']", attributes.getValue(i));
+		if(!stop) {
+			String specifier = "";
+			
+			for(int i = 0; i<attributes.getLength(); i++) {
+				if(attributes.getQName(i).equals("id")) {
+					specifier += '[' + attributes.getValue(i) + ']';
+				} else {
+					valuesMap.put(getCurrentPath()+"."+qName+"[\'"+attributes.getQName(i)+"\']", attributes.getValue(i));
+				}
 			}
+	
+			addToCurrentPath(qName + specifier);
 		}
-
-		addToCurrentPath(qName + specifier);
     }
     
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-    	String value = values.toString().trim();
-    	if(!value.equals("")) {
-    		valuesMap.put(getCurrentPath(), value);
-    	} else {
-    		elements.add(getCurrentPath());
+    	if(!stop) {
+	    	String value = values.toString().trim();
+	    	if(!value.equals("")) {
+	    		valuesMap.put(getCurrentPath(), value);
+	    	} else {
+	    		elements.add(getCurrentPath());
+	    	}
+	    	values.delete(0, values.length());
+	    	
+	    	
+	    	if(getCurrentPath().equals("genotype_result.sequence")) {
+	    		sequenceIndex++;
+	    		endSequence();
+	    		if(!stop) {
+	    		valuesMap.clear();
+	    		elements.clear();
+	    		}
+	    	}
+	
+	    	removeFromCurrentPath();
     	}
-    	values.delete(0, values.length());
-    	
-    	if(getCurrentPath().equals("genotype_result.sequence")) {
-    		sequenceIndex++;
-    		endSequence();
-    		valuesMap.clear();
-    		elements.clear();
-    	}
-
-    	removeFromCurrentPath();
     }
     
     public abstract void endSequence();
     
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-    	values.append(new String(ch, start, length));
+    	if(!stop) {
+    		values.append(new String(ch, start, length));
+    	}
     }
     
     private void parse(InputSource source)  throws SAXException, IOException {
@@ -132,5 +143,9 @@ public abstract class SaxParser extends DefaultHandler {
     
     public boolean elementExists(String name) {
     	return elements.contains(name);
+    }
+    
+    public void stopParsing() {
+    	stop = true;
     }
 }
