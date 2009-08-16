@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import net.sf.witty.wt.WAnchor;
 import net.sf.witty.wt.WBreak;
-import net.sf.witty.wt.WFileResource;
 import net.sf.witty.wt.WText;
 import net.sf.witty.wt.i8n.WArgMessage;
 import net.sf.witty.wt.i8n.WMessage;
@@ -18,6 +16,10 @@ import rega.genotype.ui.util.GenotypeLib;
 
 public class DefaultRecombinationDetailsForm extends IDetailsForm {
 
+	public DefaultRecombinationDetailsForm(){
+		super();
+		setStyleClass("recombinationDetails");
+	}
 	@Override
 	public void fillForm(SaxParser p, OrganismDefinition od, File jobDir) {
 		try {

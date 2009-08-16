@@ -45,6 +45,7 @@ public abstract class AbstractJobOverview extends IForm {
 		jobTable.setStyleClass("jobTable");
 		
 		downloadContainer = new WContainerWidget(this);
+		downloadContainer.setStyleClass("downloadContainer");
 		
 		if(updater!=null) {
 			updater.start();

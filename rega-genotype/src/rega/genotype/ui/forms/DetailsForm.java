@@ -16,6 +16,7 @@ public class DetailsForm extends IForm {
 	public DetailsForm(GenotypeWindow main) {
 		super(main, "details-form");
 		mainTable = new WTable(this);
+		mainTable.setStyleClass("detailsForm");
 	}
 	
 	public void init(File jobDir, final int selectedSequenceIndex) {
@@ -34,12 +35,16 @@ public class DetailsForm extends IForm {
 		mainDetails = getMain().getOrganismDefinition().getMainDetailsForm();
 		mainDetails.fillForm(p, getMain().getOrganismDefinition(), jobDir);
 		int rowIndex = 0;
-		mainTable.putElementAt(rowIndex++, 0, new WText(mainDetails.getTitle()));
-		mainTable.putElementAt(rowIndex++, 0, mainDetails);
+		mainTable.putElementAt(rowIndex, 0, new WText(mainDetails.getTitle()));
+		mainTable.elementAt(rowIndex++, 0).setStyleClass("title");
+		mainTable.putElementAt(rowIndex, 0, mainDetails);
+		mainTable.elementAt(rowIndex++, 0).setStyleClass("details");
 		
 		for(IDetailsForm df : getMain().getOrganismDefinition().getSupportingDetailsforms(p)) {
-			mainTable.putElementAt(rowIndex++, 0, new WText(df.getTitle()));
-			mainTable.putElementAt(rowIndex++, 0, df);
+			mainTable.putElementAt(rowIndex, 0, new WText(df.getTitle()));
+			mainTable.elementAt(rowIndex++, 0).setStyleClass("title");
+			mainTable.putElementAt(rowIndex, 0, df);
+			mainTable.elementAt(rowIndex++, 0).setStyleClass("details");
 			df.fillForm(p, getMain().getOrganismDefinition(), jobDir);
 		}
 	}
