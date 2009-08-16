@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Date;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -25,6 +27,7 @@ import rega.genotype.SequenceAlign;
 import rega.genotype.viruses.hiv.HIVTool;
 
 public class GenotypeLib {
+	
 	public static String treeGraphCommand = "/usr/bin/tgf";
 	
 	public static void initSettings(Settings s) {
@@ -113,6 +116,18 @@ public class GenotypeLib {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static File createJobDir(){
+		File jobDir = Settings.getInstance().getJobDir();
+		File d;
+		Random r = new Random(new Date().getTime());
+		do{
+			d = new File(jobDir.getAbsolutePath() + File.separator + "job-" + r.nextInt());
+		}while(d.exists());
+		
+		d.mkdir();
+		return d;
 	}
 
 

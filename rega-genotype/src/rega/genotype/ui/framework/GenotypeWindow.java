@@ -4,8 +4,7 @@ import net.sf.witty.wt.WApplication;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.i8n.WStdMessageResource;
-import rega.genotype.ui.framework.forms.DefaultForm;
-import rega.genotype.ui.framework.forms.IForm;
+import rega.genotype.ui.framework.forms.HIVForm;
 
 public class GenotypeWindow extends WContainerWidget
 {
@@ -14,7 +13,7 @@ public class GenotypeWindow extends WContainerWidget
 	
 	private WTable table;
 	private Navigation navigation;
-	private IForm activeForm;
+	private WContainerWidget activeForm;
 	
 	public GenotypeWindow()
 	{
@@ -37,7 +36,7 @@ public class GenotypeWindow extends WContainerWidget
 		header = new Header(this);
 		table = new WTable(this);
 		navigation = new Navigation(table.elementAt(0, 0));
-		activeForm = new DefaultForm(table.elementAt(0,1));
+		activeForm = new HIVForm(table.elementAt(0,1));
 		footer = new Footer(this);
 	}
 }

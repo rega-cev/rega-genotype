@@ -38,12 +38,18 @@ public class Settings {
 		return treeGraphCmd;
 	}
 	
+	public File getJobDir(){
+		return jobDir;
+	}
+	
 	private File xmlPath;
 	private String paupCmd;
 	private String clustalWCmd;
 	private File blastPath;
 	private String treePuzzleCmd;
 	private String treeGraphCmd;
+	private File jobDir;
+
 	
 	private static Settings instance;
 	
@@ -78,6 +84,8 @@ public class Settings {
             	treePuzzleCmd = e.getValue().trim();
             } else if(name.equals("treeGraphCmd")) {
             	treeGraphCmd = e.getValue().trim();
+            } else if(name.equals("jobDir")) {
+            	jobDir = new File(e.getValue().trim());
             }
         }
     }

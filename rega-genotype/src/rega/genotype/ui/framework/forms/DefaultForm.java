@@ -3,7 +3,7 @@ package rega.genotype.ui.framework.forms;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WText;
 
-public class DefaultForm extends WContainerWidget implements IForm{
+public class DefaultForm extends WContainerWidget{
 	public DefaultForm(WContainerWidget parent){
 		super(parent);
 		init();
