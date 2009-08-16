@@ -39,6 +39,7 @@ public abstract class GenotypeTool {
         CmdLineParser.Option clustalPathOption = parser.addStringOption('c', "clustal");
         CmdLineParser.Option helpOption = parser.addBooleanOption('h', "help");
         CmdLineParser.Option xmlPathOption = parser.addStringOption('x', "xml");
+        CmdLineParser.Option blastPathOption = parser.addStringOption('b', "blast");
         
         try {
             parser.parse(args);
@@ -64,6 +65,10 @@ public abstract class GenotypeTool {
         String xmlPath = (String) parser.getOptionValue(xmlPathOption);        
         if (xmlPath != null)
             xmlBasePath = xmlPath;
+        
+        String blastPath = (String) parser.getOptionValue(blastPathOption);        
+        if (blastPath != null)
+        	BlastAnalysis.blastPath = blastPath;
 
         return parser.getRemainingArgs();
 	}
