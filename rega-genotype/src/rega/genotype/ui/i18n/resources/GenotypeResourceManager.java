@@ -67,6 +67,8 @@ public class GenotypeResourceManager implements IWMessageResource {
 	public String extractFormattedText(Element child) {
 		StringBuilder textToReturn = new StringBuilder();
 		extractFormattedText(textToReturn, child);
+		if(textToReturn.charAt(textToReturn.length()-1)==':')
+			textToReturn.append(' ');
 		return textToReturn.toString();
 	}
 	
