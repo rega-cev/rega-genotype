@@ -38,9 +38,10 @@ public class NrvJobOverview extends AbstractJobOverview {
 		
 		WText report = new WText(lt("Report"));
 		report.setStyleClass("link");
+		final int index = p.getSequenceIndex();
 		report.clicked.addListener(new SignalListener<WMouseEvent>() {
 			public void notify(WMouseEvent a) {
-				getMain().detailsForm(jobDir, p.getSequenceIndex());
+				getMain().detailsForm(jobDir, index);
 			}
 		});
 		data.add(report);

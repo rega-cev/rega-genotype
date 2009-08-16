@@ -43,7 +43,7 @@ public class Settings {
 	}
 	
 	public int getMaxAllowedSeqs() {
-		return 1000;
+		return 10000;
 	}
 	
 	private File xmlPath;

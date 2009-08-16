@@ -62,7 +62,7 @@ public class StartForm extends IForm {
             public void notify(WEmptyEvent a) {                
 				try {
 					String fasta = FileUtils.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
-					ta.setText(fasta);
+					verifyFasta(fasta);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -82,26 +82,7 @@ public class StartForm extends IForm {
 	
 		run.clicked.addListener(new SignalListener<WMouseEvent>() {
 			public void notify(WMouseEvent a) {
-				String fastaContent = ta.text();
-				int amountOfSeqs = 0;
-				int i = 0;
-				
-				while(true) {
-					i = fastaContent.indexOf('>', i);
-					if(i!=-1) {
-						amountOfSeqs++;
-						i++;
-					} else { 
-						break;
-					}
-				}
-				
-				if(amountOfSeqs<=Settings.getInstance().getMaxAllowedSeqs()) {
-					ta.setStyleClass("textarea edit-valid");
-					startJob(fastaContent);
-				} else {
-					ta.setStyleClass("textarea edit-invalid");
-				}
+				verifyFasta(ta.text());
 			}
 		});
 		
@@ -155,5 +136,27 @@ public class StartForm extends IForm {
 
 	public void init() {
 		ta.setText("");
+	}
+
+	private void verifyFasta(String fastaContent) {
+		int amountOfSeqs = 0;
+		int i = 0;
+		
+		while(true) {
+			i = fastaContent.indexOf('>', i);
+			if(i!=-1) {
+				amountOfSeqs++;
+				i++;
+			} else { 
+				break;
+			}
+		}
+		
+		if(amountOfSeqs<=Settings.getInstance().getMaxAllowedSeqs()) {
+			ta.setStyleClass("textarea edit-valid");
+			startJob(fastaContent);
+		} else {
+			ta.setStyleClass("textarea edit-invalid");
+		}
 	}
 }
