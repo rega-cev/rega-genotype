@@ -5,9 +5,9 @@ import java.io.StringBufferInputStream;
 
 import junit.framework.TestCase;
 
-public class Sequences extends TestCase {
+public class SequencesTest extends TestCase {
 
-	public Sequences(String name) {
+	public SequencesTest(String name) {
 		super(name);
 	}
 

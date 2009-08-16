@@ -14,7 +14,7 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
 import rega.genotype.viruses.hiv.HIVTool;
 
-public class HIVGenotypeAnalysis extends TestCase {
+public class HIVGenotypeAnalysisTest extends TestCase {
     private File jobDir;
     
 	private File fasta;
