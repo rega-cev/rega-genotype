@@ -18,9 +18,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 public abstract class SaxParser extends DefaultHandler {
-	//TODO
-	//header('Content-type: application/ms-excell');
-	
 	private StringBuilder currentPath = new StringBuilder();
 
 	private StringBuilder values = new StringBuilder();

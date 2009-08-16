@@ -87,6 +87,10 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 			updater.stop();
 			analysisInProgress.setHidden(true);
 
+			//TODO
+			//header('Content-type: application/ms-excell');
+			//requires WAnchor fix
+			
 			//download section
 			WContainerWidget downloadContainer = new WContainerWidget(this);
 			WText downloadResult = new WText(tr("monitorForm.downloadResults"), downloadContainer);
