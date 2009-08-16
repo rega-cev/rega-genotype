@@ -80,7 +80,7 @@ public class DetailsForm extends AbstractForm {
 	
 	void addDetailsForm(IDetailsForm df, File jobDir){
 		WContainerWidget cwTitle = new WContainerWidget(mainTable);
-		cwTitle.setObjectName(df.getId() + "-title");
+		cwTitle.setObjectName(df.getIdentifier() + "-title");
 		String detailTitle = df.getTitle().getValue();
 		WText titleText = new WText("<h2><a name=\"" + detailTitle.replace(" ", "").toLowerCase() + "\"></a>"
 				+ detailTitle + "</h2>");
@@ -89,7 +89,7 @@ public class DetailsForm extends AbstractForm {
 		cwTitle.addWidget(titleText);
 
 		WContainerWidget cwDetails = new WContainerWidget(mainTable);
-		cwDetails.setObjectName(df.getId() + "-details");
+		cwDetails.setObjectName(df.getIdentifier() + "-details");
 		cwDetails.setStyleClass("details");
 
 		cwDetails.addWidget(df);

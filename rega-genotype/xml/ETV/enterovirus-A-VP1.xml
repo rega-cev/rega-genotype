@@ -1,0 +1,153 @@
+<genotype-analyses>
+	<alignment file="enterovirus-A-VP1.fasta" trim="false" />
+
+	<clusters>
+		<cluster id="CV-A2" name="Enterovirus A, serotype CV-A2">
+			<taxus name="CV-A2|AB119643" />
+			<taxus name="CV-A2|L28146" />
+		</cluster>
+
+		<cluster id="CV-A4" name="Enterovirus A, serotype CV-A4">
+			<taxus name="CV-A4|AF081295" />
+			<taxus name="CV-A4|AB457644" />
+		</cluster>
+
+		<cluster id="CV-A5" name="Enterovirus A, serotype CV-A5">
+			<taxus name="CV-A5|AF081296" />
+			<taxus name="CV-A5|AB114089" />
+		</cluster>
+
+		<cluster id="CV-A6" name="Enterovirus A, serotype CV-A6">
+			<taxus name="CV-A6|AB090799" />
+			<taxus name="CV-A6|AF081297" />
+		</cluster>
+
+		<cluster id="CV-A7" name="Enterovirus A, serotype CV-A7">
+			<taxus name="CV-A7|AY919499" />
+			<taxus name="CV-A7|AF081298" />
+		</cluster>
+
+		<cluster id="CV-A8" name="Enterovirus A, serotype CV-A8">
+			<taxus name="CV-A8|AB167803" />
+			<taxus name="CV-A8|AF081299" />
+		</cluster>
+
+		<cluster id="CV-A10" name="Enterovirus A, serotype CV-A10">
+			<taxus name="CV-A10|AB119639" />
+			<taxus name="CV-A10|AF081300" />
+		</cluster>
+
+		<cluster id="CV-A12" name="Enterovirus A, serotype CV-A12">
+			<taxus name="CV-A12|AB162731" />
+			<taxus name="CV-A12|AF081302" />
+		</cluster>
+
+		<cluster id="CV-A14" name="Enterovirus A, serotype CV-A14">
+			<taxus name="CV-A14|AY919443" />
+			<taxus name="CV-A14|AF081304" />
+		</cluster>
+
+		<cluster id="CV-A16" name="Enterovirus A, serotype CV-A16">
+			<taxus name="CV-A16|AM292442" />
+			<taxus name="CV-A16|U05876" />
+		</cluster>
+
+		<cluster id="EV-71" name="Enterovirus A, serotype EV-71">
+			<taxus name="EV-71|AB482183" />
+			<taxus name="EV-71|U22521" />
+		</cluster>
+
+		<cluster id="EV-76" name="Enterovirus A, serotype EV-76">
+			<taxus name="EV-76|AY697466" />
+			<taxus name="EV-76|AY697462" />
+		</cluster>
+
+		<cluster id="EV-89" name="Enterovirus A, serotype EV-89">
+			<taxus name="EV-89|AY697459" />
+			<taxus name="EV-89|AY697472" />
+		</cluster>
+
+		<cluster id="EV-90" name="Enterovirus A, serotype EV-90">
+			<taxus name="EV-90|AB192877" />
+			<taxus name="EV-90|AY773285" />
+		</cluster>
+
+		<cluster id="EV-91" name="Enterovirus A, serotype EV-91">
+			<taxus name="EV-91|AY697461" />
+			<taxus name="EV-91|AY697476" />
+		</cluster>
+
+		<!-- singletons in the end -->
+		<cluster id="CV-A3" name="Enterovirus A, serotype CV-A3">
+			<taxus name="CV-A3|AF081294" />
+		</cluster>
+
+		<cluster id="EV-92" name="Enterovirus A, serotype EV-92">
+			<taxus name="EV-92|EF667344" />
+		</cluster>
+
+		<cluster id="enterovirus-D" name="Enterovirus D">
+		        <taxus name="Outgroup|NC_001430" />
+		</cluster>
+	</clusters>
+
+	<analysis id="phylo-serotype" type="paup">
+		<identify>
+		  CV-A2, CV-A4, CV-A5, CV-A6, CV-A7, CV-A8, CV-A10, CV-A12,
+		  CV-A14, CV-A16, EV-71, EV-76, EV-89, EV-90, EV-91,
+		  CV-A3, EV-92, enterovirus-D
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			export format=phylip file=paup.fasta replace=yes;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup Outgroup|NC_001430;
+			set criterion=distance outroot=monophyl;
+			dset distance=TamNei rates=gamma shape=0.393955 pinvar=0 NegBrLen=SetAbsVal;
+			constraints
+			CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19),(20,21),(22,23),(24,25),(26,27),(28,29),(30,31));
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="scan-self" type="scan">
+		<window>
+			300
+		</window>
+		<step>
+			50
+		</step>
+		<analysis type="paup">
+			<identify>
+				CV-A2
+			</identify>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				outgroup EU360814|III.1;
+				set criterion=distance outroot=monophyl;
+				dset distance=TamNei rates=gamma shape=0.413123 NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+
+</genotype-analyses>
+

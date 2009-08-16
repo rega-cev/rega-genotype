@@ -20,6 +20,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import rega.genotype.BlastAnalysis.ReferenceTaxus;
+
 /**
  * Class that represents information contained in a a single analysis (XML file).
  * 
@@ -305,9 +307,10 @@ public class AlignmentAnalyses {
 
         BlastAnalysis analysis = new BlastAnalysis(this, id, cs, cutoff, blastOptions, workingDir);
 
-        Element regionsE = element.getChild("regions");
-        if (regionsE != null) {
-        	analysis.setReferenceTaxus(regionsE.getAttributeValue("taxus"));
+        List regionsEs = element.getChildren("regions");
+        for (Iterator i = regionsEs.iterator(); i.hasNext();) {
+        	Element regionsE = (Element) i.next();
+        	ReferenceTaxus t = new ReferenceTaxus(regionsE.getAttributeValue("taxus"));
 
             List regionEs = regionsE.getChildren("region");
             for (Iterator j = regionEs.iterator(); j.hasNext();) {
@@ -315,8 +318,10 @@ public class AlignmentAnalyses {
                 String regionName = regionE.getAttributeValue("name");
                 int begin = Integer.parseInt(regionE.getAttributeValue("begin"));
                 int end = Integer.parseInt(regionE.getAttributeValue("end"));
-               	analysis.addRegion(new BlastAnalysis.Region(regionName, begin, end));
+               	t.addRegion(new BlastAnalysis.Region(regionName, begin, end));
             }
+            
+            analysis.addReferenceTaxus(t);
         }
 
         return analysis;

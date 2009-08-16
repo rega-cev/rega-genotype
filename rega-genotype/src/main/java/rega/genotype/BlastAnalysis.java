@@ -12,8 +12,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
@@ -67,13 +70,37 @@ public class BlastAnalysis extends AbstractAnalysis {
 			return (overlapEnd - overlapBegin) > minimumOverlap;
 		}
     }
+
+    public static class ReferenceTaxus {
+    	private String taxus;
+    	private List<Region> regions;
+
+    	public ReferenceTaxus(String taxus) {
+    		this.taxus = taxus;
+    		this.regions = new ArrayList<Region>();
+    	}
+
+    	void addRegion(Region r) {
+    		if (this.regions == null)
+    			this.regions = new ArrayList<Region>();
+    		
+    		regions.add(r);
+    	}
+    	
+    	public List<Region> getRegions() {
+    		return regions;
+    	}
+
+		public String getTaxus() {
+			return taxus;
+		}
+    }
     
     private List<Cluster> clusters;
     private Double cutoff;
     private String blastOptions;
 	private String formatDbOptions;
-    private List<Region> regions;
-	private String referenceTaxus;
+	private Map<String, ReferenceTaxus> referenceTaxa;
 
 	/**
 	 * A result from a blast analysis.
@@ -89,10 +116,10 @@ public class BlastAnalysis extends AbstractAnalysis {
         private float   score;
         private int start;
         private int end;
-        private String refseq;
+        private ReferenceTaxus refseq;
 		private boolean reverseCompliment;
 
-        public Result(AbstractSequence sequence, Cluster cluster, float score, int start, int end, String refseq, boolean reverseCompliment) {
+        public Result(AbstractSequence sequence, Cluster cluster, float score, int start, int end, ReferenceTaxus refseq, boolean reverseCompliment) {
             super(sequence);
             this.cluster = cluster;
             this.score = score;
@@ -122,7 +149,8 @@ public class BlastAnalysis extends AbstractAnalysis {
             }
             tracer.add("reverse-compliment", String.valueOf(reverseCompliment));
             tracer.printlnClose("</cluster>");
-            tracer.add("refseq", refseq);
+            if (refseq != null)
+            	tracer.add("refseq", refseq.getTaxus());
             writeXMLEnd(tracer);
         }
 
@@ -176,6 +204,10 @@ public class BlastAnalysis extends AbstractAnalysis {
 		public boolean isReverseCompliment() {
 			return reverseCompliment;
 		}
+		
+		public ReferenceTaxus getReference() {
+			return refseq;
+		}
     }
     
     @Override
@@ -196,22 +228,13 @@ public class BlastAnalysis extends AbstractAnalysis {
         	this.blastOptions = "-p blastx";
         	this.formatDbOptions = "";
         } else {
-        	this.blastOptions = "-p blastn";
+        	this.blastOptions = "-p blastn " + this.blastOptions;
         	this.formatDbOptions = "-p F";
         }
+
+        this.referenceTaxa = new HashMap<String, ReferenceTaxus>();
     }
 
-	void addRegion(Region r) {
-		if (this.regions == null)
-			this.regions = new ArrayList<Region>();
-		
-		regions.add(r);
-	}
-	
-	public List<Region> getRegions() {
-		return regions;
-	}
-    
     private Result compute(SequenceAlignment analysisDb, AbstractSequence sequence)
             throws ApplicationException {
         Process formatdb = null;
@@ -245,8 +268,6 @@ public class BlastAnalysis extends AbstractAnalysis {
                     throw new ApplicationException("formatdb exited with error: " + result);
                 }
                 
-                db.delete();
-                
                 cmd = blastPath + blastCommand + " " + blastOptions
                 	+ " -i " + query.getAbsolutePath()
                     + " -m 8 -d " + db.getAbsolutePath();
@@ -266,7 +287,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 
                 boolean reverseCompliment = false;
 
-                String refseq = "";
+                ReferenceTaxus refseq = null;
 
                 for (;;) {
                     String s = reader.readLine();
@@ -281,18 +302,20 @@ public class BlastAnalysis extends AbstractAnalysis {
                     if (best == null)
                     	best = values;
 
-                    if ((end == -1)
-                    	 && ((referenceTaxus == null && values == best) || values[1].equals(referenceTaxus))) {
-                    	refseq = referenceTaxus;
-                       	reverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
-                       	int offsetBegin = Integer.parseInt(values[6]);
-                       	int offsetEnd = sequence.getLength() - Integer.parseInt(values[7]);
-                       	if (reverseCompliment) {
-                       		offsetBegin = sequence.getLength() - offsetBegin;
-                       		offsetEnd = sequence.getLength() - offsetEnd;
-                       	}                       	
-                       	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
-                       	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
+                    if (end == -1) {
+                        ReferenceTaxus referenceTaxus = referenceTaxa.get(values[1]);
+                        if ((referenceTaxa.isEmpty() && values == best) || referenceTaxus != null) {
+                        	refseq = referenceTaxus;
+                        	reverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
+                        	int offsetBegin = Integer.parseInt(values[6]);
+                        	int offsetEnd = sequence.getLength() - Integer.parseInt(values[7]);
+                        	if (reverseCompliment) {
+                        		offsetBegin = sequence.getLength() - offsetBegin;
+                        		offsetEnd = sequence.getLength() - offsetEnd;
+                        	}
+                        	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
+                        	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
+                        }
                     }
                 }
                 result = blast.waitFor();
@@ -305,7 +328,8 @@ public class BlastAnalysis extends AbstractAnalysis {
                     throw new ApplicationException("blast exited with error: " + result);
                 }
 
-                query.delete();
+                //db.delete();                
+                //query.delete();
 
                 if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_DNA) {
                     getTempFile("db.fasta.nhr").delete();
@@ -344,7 +368,7 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
     }
     
-    private Result createResult(AbstractSequence sequence, String match, String refseq,
+    private Result createResult(AbstractSequence sequence, String match, ReferenceTaxus refseq,
                                 float score, int start, int end, boolean reverseCompliment) {
         for (int i = 0; i < clusters.size(); ++i) {
             if (clusters.get(i).containsTaxus(match))
@@ -379,11 +403,16 @@ public class BlastAnalysis extends AbstractAnalysis {
 		return cutoff;
 	}
 
-	public String getReferenceTaxus() {
-		return referenceTaxus;
+	public void addReferenceTaxus(ReferenceTaxus t) {
+		referenceTaxa.put(t.getTaxus(), t);
 	}
 
-	public void setReferenceTaxus(String referenceTaxus) {
-		this.referenceTaxus = referenceTaxus;
+	public Set<String> getRegions() {
+		Set<String> result = new HashSet<String>();
+		for (ReferenceTaxus t : referenceTaxa.values())
+			for (Region r : t.getRegions())
+				result.add(r.getName());
+		
+		return result;
 	}
 }

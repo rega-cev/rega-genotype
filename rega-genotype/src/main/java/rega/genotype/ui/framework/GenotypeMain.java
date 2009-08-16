@@ -8,10 +8,8 @@ package rega.genotype.ui.framework;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-import rega.genotype.GenotypeTool;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
-import eu.webtoolkit.jwt.Configuration;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WtServlet;
 
@@ -25,9 +23,11 @@ import eu.webtoolkit.jwt.WtServlet;
 public abstract class GenotypeMain extends WtServlet
 {
 	public GenotypeMain() {
-		super(new Configuration());
+		super();
+		
+		getConfiguration().setSendXHTMLMimeType(true);
 	}
-
+	
 	public static GenotypeApplication getApp() {
 		return (GenotypeApplication)WApplication.getInstance();
 	}

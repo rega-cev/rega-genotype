@@ -125,7 +125,7 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 	}
 	
 	@Override
-	public String getId() {
+	public String getIdentifier() {
 		return "assignment";
 	}
 }

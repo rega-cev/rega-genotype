@@ -48,7 +48,7 @@ public class DefaultSignalDetailsForm extends IDetailsForm {
 	}
 	
 	@Override
-	public String getId() {
+	public String getIdentifier() {
 		return "phylogenic-signal";
 	}
 }

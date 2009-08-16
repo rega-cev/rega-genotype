@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nov;
+package rega.genotype.ui.viruses.etv;
 
 import java.io.IOException;
 
@@ -11,10 +11,10 @@ import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.util.DataTable;
 
 /**
- * Create a csv file of NoV job results 
+ * Create a csv file of Enterovirus job results 
  */
-public class NovTableGenerator extends AbstractDataTableGenerator {
-	public NovTableGenerator(DataTable table) throws IOException {
+public class EtvTableGenerator extends AbstractDataTableGenerator {
+	public EtvTableGenerator(DataTable table) throws IOException {
 		super(table);
 
 		table.addLabel("name");
@@ -50,14 +50,14 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
     	addNamedValue("genotype_result.sequence[name]", ValueFormat.Label);
     	addNamedValue("genotype_result.sequence[length]", ValueFormat.Number);
 
-		NovResults.Conclusion c = NovResults.getConclusion(this, "ORF1");
+		EtvResults.Conclusion c = EtvResults.getConclusion(this, "ORF1");
 
-		addValue(c.majorAssignment == NovResults.NA ? "" : c.majorAssignment);
+		addValue(c.majorAssignment == EtvResults.NA ? "" : c.majorAssignment);
 		addValue(c.variantAssignmentForOverview == null ? "" : c.variantAssignmentForOverview);
 
-		c = NovResults.getConclusion(this, "ORF2");
+		c = EtvResults.getConclusion(this, "ORF2");
 
-		addValue(c.majorAssignment == NovResults.NA ? "" : c.majorAssignment);
+		addValue(c.majorAssignment == EtvResults.NA ? "" : c.majorAssignment);
 		addValue(c.variantAssignmentForOverview == null ? "" : c.variantAssignmentForOverview);
 
     	addNamedValue("genotype_result.sequence.result['blast'].start", ValueFormat.Number);

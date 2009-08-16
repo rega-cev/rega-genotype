@@ -306,4 +306,8 @@ public abstract class GenotypeTool {
     	} else
     		genotypeTool.analyzeSelf(args2[1]);
     }
+
+	public static String getXmlBasePath() {
+		return xmlBasePath;
+	}
 }

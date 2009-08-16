@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nov;
+package rega.genotype.ui.viruses.etv;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +18,10 @@ import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
 /**
- * NoV assignment-details implementation.
+ * Enterovirus assignment-details implementation.
  */
-public class NovSequenceAssignmentForm extends IDetailsForm {
-	public NovSequenceAssignmentForm() {
+public class EtvSequenceAssignmentForm extends IDetailsForm {
+	public EtvSequenceAssignmentForm() {
 	}
 
 	@Override
@@ -34,17 +34,17 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 				.arg(p.getEscapedValue("genotype_result.sequence[length]")), block);
 		t.setId("");
 
-		String blastConclusion = NovResults.getBlastConclusion(p);
-		if (!blastConclusion.equals(NovResults.NA)) {
+		String blastConclusion = EtvResults.getBlastConclusion(p);
+		if (!blastConclusion.equals(EtvResults.NA)) {
 			t = new WText(tr("nrvSequenceAssignment.blast")
 					.arg(blastConclusion)
-					.arg(NovResults.getBlastMotivation(p)), block);
+					.arg(EtvResults.getBlastMotivation(p)), block);
 			t.setId("");
 		}
 
 		for (int i = 1; i <= 2; ++i) {
 			String orf = "ORF" + i;
-			NovResults.Conclusion c = NovResults.getConclusion(p, orf);
+			EtvResults.Conclusion c = EtvResults.getConclusion(p, orf);
 
 			WString motivation = new WString(c.majorMotivation);
 			motivation.arg(c.majorBootstrap);

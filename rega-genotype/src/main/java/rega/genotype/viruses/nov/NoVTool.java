@@ -69,8 +69,8 @@ public class NoVTool extends GenotypeTool {
         	 * See if any of the phylogenetic analyses are available given
         	 * the sequence region, and if they can give some conclusion
         	 */
-    		if (blastAnalysis.getRegions() != null) {
-        		for (BlastAnalysis.Region region:blastAnalysis.getRegions()) {
+    		if (blastResult.getReference() != null) {
+        		for (BlastAnalysis.Region region:blastResult.getReference().getRegions()) {
         			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 100)) {
         				int rs = Math.max(0, region.getBegin() - blastResult.getStart());
         				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));

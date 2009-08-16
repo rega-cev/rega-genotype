@@ -40,6 +40,18 @@
     <servlet-name>GenotypeNoV-service</servlet-name>
     <url-pattern>/typingservice</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>GenotypeEnterovirus</servlet-name>
+    <display-name>Enterovirus Genotyping</display-name>
+    <description>Enterovirus Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.etv.EtvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeEnterovirus</servlet-name>
+    <url-pattern>/etvtypingtool/*</url-pattern>
+  </servlet-mapping>
   
   <servlet>
     <servlet-name>GenotypeHTLV</servlet-name>

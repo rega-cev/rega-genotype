@@ -78,7 +78,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 	}
 
 	@Override
-	public String getId() {
+	public String getIdentifier() {
 		return "recombination-detail";
 	}
 }

@@ -1,0 +1,145 @@
+<genotype-analyses>
+  <alignment file="humanpicornagenusblast.fasta" data="dna"/>
+
+  <clusters>
+    <cluster id="cardiovirus" name="Cardiovirus">
+      <taxus name="NC_009448" />
+      <taxus name="NC_010810" />
+    </cluster>
+
+    <cluster id="enterovirus-A" name="Enterovirus A">
+      <taxus name="NC_001612" />
+      <taxus name="U22521" />
+      <taxus name="AY421764" />
+      <taxus name="AY421767" /> <!-- add regions -->
+      <taxus name="AY421769" />
+      <taxus name="AY421760" />
+      <taxus name="AF465514" />
+      <taxus name="AY421760" />
+    </cluster>
+
+    <cluster id="enterovirus-B" name="Enterovirus B">
+      <taxus name="NC_001472" />
+      <taxus name="NC_009887" />
+      <taxus name="D00627" />
+      <taxus name="AY186745" />
+      <taxus name="FJ357838" />
+      <taxus name="AF039205" />
+      <taxus name="D00627" />
+      <taxus name="AF081485" />
+      <taxus name="EU144042" />
+      <taxus name="AF311939" />
+      <taxus name="X67706" />
+      <taxus name="FJ172447" />
+      <taxus name="AJ577590" />
+      <taxus name="X77708" />
+      <taxus name="AY302539" />
+      <taxus name="AY302546" />
+      <taxus name="AY302548" />
+      <taxus name="AY302550" />
+      <taxus name="AY302552" />
+      <taxus name="AY302553" />
+      <taxus name="DQ246620" />
+      <taxus name="AY302556" />
+      <taxus name="AF083069" />
+    </cluster>
+
+    <cluster id="enterovirus-C" name="Enterovirus C">
+      <taxus name="NC_001428" />
+      <taxus name="M12197" />
+      <taxus name="AF499643" />
+      <taxus name="AF465511" />
+      <taxus name="K01392" />
+      <taxus name="NC_002058" />
+      <taxus name="AF465514" />
+    </cluster>
+
+    <cluster id="enterovirus-D" name="Enterovirus D">
+      <taxus name="AY426531" />
+      <taxus name="NC_001430" />
+    </cluster>
+
+    <cluster id="hepatovirus" name="Hepatovirus">
+      <taxus name="AB279734" />
+      <taxus name="NC_001489" />
+    </cluster>
+
+    <cluster id="kobuvirus" name="Kobuvirus">
+      <taxus name="AY747174" />
+      <taxus name="NC_001918" />
+    </cluster>
+
+    <cluster id="parechovirus" name="Parechovirus">
+      <taxus name="S45208" />
+      <taxus name="NC_001897" />
+    </cluster>
+
+    <cluster id="rhinovirus-A" name="Rhinovirus A">
+      <taxus name="D00239" />
+      <taxus name="NC_001617" />
+    </cluster>
+
+    <cluster id="rhinovirus-B" name="Rhinovirus B">
+      <taxus name="EF173425" />
+      <taxus name="NC_001490" />
+    </cluster>
+
+    <cluster id="rhinovirus-C" name="Rhinovirus C">
+      <taxus name="EF582387" />
+      <taxus name="NC_009996" />
+    </cluster>
+
+    <cluster id="cosavirus" name="Cosavirus">
+      <taxus name="FJ438907" />
+      <taxus name="FJ438902" />
+    </cluster>
+
+    <cluster id="senecavirus" name="Senecavirus">
+      <taxus name="NC_011349" />
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <regions taxus="NC_001612">
+      <region name="VP1" begin="2442" end="3360" />
+    </regions>
+
+    <regions taxus="NC_001472">
+      <region name="VP1" begin="2406" end="3357" />
+    </regions>
+
+    <regions taxus="NC_001428">
+      <region name="VP1" begin="2442" end="3345" />
+    </regions>
+
+    <regions taxus="AY426531">
+      <region name="VP1" begin="2358" end="3327" />
+    </regions>
+
+    <identify>
+      cardiovirus,
+      enterovirus-A,
+      enterovirus-B,
+      enterovirus-C,
+      enterovirus-D,
+      hepatovirus,
+      kobuvirus,
+      parechovirus,
+      rhinovirus-A,
+      rhinovirus-B,
+      rhinovirus-C,
+      cosavirus,
+      senecavirus
+    </identify>
+
+    <cutoff>
+      100
+    </cutoff>
+
+    <options>
+      -q -1 -r 1
+    </options>
+  </analysis>
+
+</genotype-analyses>
+

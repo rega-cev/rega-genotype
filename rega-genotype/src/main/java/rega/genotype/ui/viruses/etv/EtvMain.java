@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nov;
+package rega.genotype.ui.viruses.etv;
 
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -12,11 +12,11 @@ import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WString;
 
 /**
- * NoV implementation of the genotype application.
+ * Enterovirus implementation of the genotype application.
  */
 @SuppressWarnings("serial")
-public class NovMain extends GenotypeMain {
-	public NovMain() {
+public class EtvMain extends GenotypeMain {
+	public EtvMain() {
 		super();
 		
 		getConfiguration().setInlineCss(false);
@@ -24,8 +24,8 @@ public class NovMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new NovDefinition());
-		app.setTitle(WString.tr("nrvTool.title"));
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new EtvDefintion());
+		app.setTitle(WString.tr("etvTool.title"));
 		
 		return app;
 	}

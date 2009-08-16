@@ -43,5 +43,5 @@ public abstract class IDetailsForm extends WContainerWidget {
 	/**
 	 * Return an ID that can be used as widget objectName()
 	 */
-	public abstract String getId();
+	public abstract String getIdentifier();
 }

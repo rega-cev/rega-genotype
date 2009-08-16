@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nov;
+package rega.genotype.ui.viruses.etv;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,20 +19,19 @@ import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 
 /**
- * NoV job overview implementation.
+ * Enterovirus job overview implementation.
  */
-public class NovJobOverview extends AbstractJobOverview {
+public class EtvJobOverview extends AbstractJobOverview {
 	private List<Header> headers = new ArrayList<Header>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
-	public NovJobOverview(GenotypeWindow main) {
+	public EtvJobOverview(GenotypeWindow main) {
 		super(main);
 		
 		headers.add(new Header(new WString("Name")));
 		headers.add(new Header(new WString("Length")));
 		headers.add(new Header(new WString("Report")));
-		headers.add(new Header(new WString("ORF 1"), 2));
-		headers.add(new Header(new WString("ORF 2"), 2));
+		headers.add(new Header(new WString("Assignment")));
 		headers.add(new Header(new WString("Genome")));
 	}
 	
@@ -46,15 +45,9 @@ public class NovJobOverview extends AbstractJobOverview {
 		WAnchor report = createReportLink(p);
 		data.add(report);
 
-		NovResults.Conclusion c = NovResults.getConclusion(p, "ORF1");
-
-		data.add(new WText(new WString(notNull(c.majorAssignment))));
-		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
-
-		c = NovResults.getConclusion(p, "ORF2");
-
-		data.add(new WText(new WString(notNull(c.majorAssignment))));
-		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
+		String assignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name");
+		
+		data.add(new WText(new WString(notNull(assignment))));
 
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 

@@ -119,7 +119,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 	}
 
 	@Override
-	public String getId() {
+	public String getIdentifier() {
 		return "phylogeny-detail";
 	}
 }

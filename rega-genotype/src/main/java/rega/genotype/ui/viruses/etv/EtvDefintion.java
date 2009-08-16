@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nov;
+package rega.genotype.ui.viruses.etv;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,31 +21,31 @@ import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
-import rega.genotype.viruses.nov.NoVTool;
+import rega.genotype.viruses.etv.EnteroTool;
 import eu.webtoolkit.jwt.WString;
 
 /**
- * NoV OrganismDefinition implementation.
+ * Enterovirus OrganismDefinition implementation.
  */
-public class NovDefinition implements OrganismDefinition {
-	private NovGenome genome = new NovGenome(this);
+public class EtvDefintion implements OrganismDefinition {
+	private EtvGenome genome = new EtvGenome(this);
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
-		NoVTool nrvTool = new NoVTool(jobDir);
-		nrvTool.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
+		EnteroTool etvTool = new EnteroTool(jobDir);
+		etvTool.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 				jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
 
 	public AbstractJobOverview getJobOverview(GenotypeWindow main) {
-		return new NovJobOverview(main);
+		return new EtvJobOverview(main);
 	}
 	
 	public String getOrganismDirectory() {
-		return "/rega/genotype/ui/viruses/nov/";
+		return "/rega/genotype/ui/viruses/etv/";
 	}
 
 	public AbstractDataTableGenerator getDataTableGenerator(DataTable table) throws IOException {
-		return new NovTableGenerator(table);
+		return new EtvTableGenerator(table);
 	}
 
 	public Genome getGenome() {
@@ -53,34 +53,22 @@ public class NovDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new NovSequenceAssignmentForm();
+		return new EtvSequenceAssignmentForm();
 	}
 
-	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms, String region) {
+	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms) {
 		String result = "genotype_result.sequence.result";
 		
-		String phyloResult = result + "['phylo-" + region + "']";
+		String phyloResult = result + "['phylo-serotype']";
 		if (p.elementExists(phyloResult)) {
-			WString title = new WString("Phylogenetic analyses (" + region + ")");
+			WString title = new WString("Phylogenetic analyses");
 			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
-
-			String bestGenotype = p.getEscapedValue(phyloResult + ".best.id");
-			
-			String variantResult = result + "['phylo-" + region + "-" + bestGenotype + "']";
-			if (p.elementExists(variantResult)) {
-				WString variantTitle = new WString("Phylogenetic analyses (" + region + ") for variant within "
-						+ bestGenotype);
-				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle, true));
-			}
 		}
 	}
 	
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
-
-		addPhyloDetailForms(p, forms, "ORF1");
-		addPhyloDetailForms(p, forms, "ORF2");
-		
+		addPhyloDetailForms(p, forms);
 		return forms;
 	}
 	
@@ -89,7 +77,7 @@ public class NovDefinition implements OrganismDefinition {
 	}
 
 	public String getOrganismName() {
-		return "NoV";
+		return "Entero";
 	}
 
 	public boolean haveDetailsNavigationForm() {

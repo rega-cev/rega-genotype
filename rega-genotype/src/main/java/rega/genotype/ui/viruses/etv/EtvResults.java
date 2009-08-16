@@ -3,14 +3,14 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.nov;
+package rega.genotype.ui.viruses.etv;
 
 import rega.genotype.ui.data.GenotypeResultParser;
 
 /**
  * Utility class to parse and interpret the analysis' results.xml file.
  */
-public class NovResults {
+public class EtvResults {
 	public static class Conclusion {
 		String majorAssignment;
 		String majorMotivation;
