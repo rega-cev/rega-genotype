@@ -108,6 +108,7 @@ public class StartForm extends IForm {
 		new WBreak(this);
 		
 		WContainerWidget monitorContainer = new WContainerWidget(this);
+		monitorContainer.setStyleClass("monitor");
 		monitorLabel = new WText(tr("startForm.provideJobId"), monitorContainer);
 		new WBreak(this);
 		jobIdLabel = new WText(tr("startForm.jobId"), monitorContainer);

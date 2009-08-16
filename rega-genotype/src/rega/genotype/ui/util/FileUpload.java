@@ -12,6 +12,7 @@ public class FileUpload extends WContainerWidget {
 	private WPushButton uploadButton;
 
 	public FileUpload() {
+		setStyleClass("fileUpload");
         uploadFile = new WFileUpload(this);
         uploadFile.uploaded.addListener(new SignalListener<WEmptyEvent>()  {
             public void notify(WEmptyEvent a) {
