@@ -10,6 +10,7 @@ PRIORITY
 * unit test example
 * ref seq name is too long
 * layout without tables
+* layout; goto monitor
 
 LATER
 * WMessage args, WAnchors
