@@ -71,6 +71,19 @@ public class GenotypeLib {
 		ImageIO.write(bufferedImage, "png", out);
 	}
 
+	public static void getSignalPNG(int jobid, File svgFile, File pngFile) {
+		if(!pngFile.exists() && svgFile.exists()){
+			ImageConverter.svgToPng(svgFile, pngFile);
+		}
+	}
+	
+	public static void getTreePDF(int jobid, File svgFile, File pdfFile) {
+		if (!pdfFile.exists() && svgFile.exists()) {
+			ImageConverter.svgToPdf(svgFile, pdfFile);
+		}
+	}
+
+
 	public static void main(String[] args) {
 		Settings s = Settings.getInstance();
 
@@ -78,10 +91,10 @@ public class GenotypeLib {
 
 		try {
 			HIVTool hiv = new HIVTool(new File(
-					"/home/plibin0/projects/utrecht/genotype"));
+					"/home/simbre1/tmp/genotype"));
 			hiv.analyze(
-					"/home/plibin0/projects/utrecht/genotype/test-small.fasta",
-					"/home/plibin0/projects/utrecht/genotype/result.xml");
+					"/home/simbre1/tmp/genotype/seq.fasta",
+					"/home/simbre1/tmp/genotype/result.xml");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParameterProblemException e) {
