@@ -33,6 +33,7 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.GenotypeTool;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
+import rega.genotype.ui.data.OrganismDefinition;
 
 public class GenotypeLib {
 	
@@ -180,6 +181,23 @@ public class GenotypeLib {
         }, (WContainerWidget)null);
 		
 		return chartImage;
+	}
+	
+	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) {
+		return new WImage(new WResource() {
+            @Override
+            public String resourceMimeType() {
+                return "image/"+fileName.substring(fileName.lastIndexOf('.')+1);
+            }
+            @Override
+            protected void streamResourceData(OutputStream stream) {
+                try {
+                    IOUtils.copy(this.getClass().getClassLoader().getResourceAsStream(od.getOrganismDirectory()+fileName), stream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, parent);
 	}
 	
 	public static File getFile(File jobDir, String fileName) {

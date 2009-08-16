@@ -1,28 +1,24 @@
 package rega.genotype.ui.framework;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import net.sf.witty.wt.SignalListener;
 import net.sf.witty.wt.WApplication;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WImage;
 import net.sf.witty.wt.WMouseEvent;
-import net.sf.witty.wt.WResource;
 import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.WText;
-
-import org.apache.commons.io.IOUtils;
-
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.ui.forms.DecisionTreesForm;
 import rega.genotype.ui.forms.DetailsForm;
 import rega.genotype.ui.forms.HowToCiteForm;
 import rega.genotype.ui.forms.IForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.forms.TutorialForm;
 import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
 import rega.genotype.ui.util.StateLink;
 
@@ -52,6 +48,7 @@ public class GenotypeWindow extends WContainerWidget
 	private WText tutorial;
 	private TutorialForm tutorialForm;
 	private WText decisionTrees;
+	private DecisionTreesForm decisionTreesForm;
 	private WText subtypingProcess;
 	private WText exampleSequences;
 	private WText contactUs;
@@ -80,21 +77,7 @@ public class GenotypeWindow extends WContainerWidget
 		table = new WTable(this);
 		table.setStyleClass("window");
 		
-		//TODO make utility function to make this kind of image (also used in defaultseqassignmentform+tutorialform)
-		this.header = new WImage(new WResource() {
-            @Override
-            public String resourceMimeType() {
-                return "image/gif";
-            }
-            @Override
-            protected void streamResourceData(OutputStream stream) {
-                try {
-                    IOUtils.copy(this.getClass().getClassLoader().getResourceAsStream(od.getOrganismDirectory()+"header.gif"), stream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, table.elementAt(0, 0));
+		this.header = GenotypeLib.getWImageFromResource(od, "header.gif", table.elementAt(0, 0));
 
 		WContainerWidget navigation = new WContainerWidget(table.elementAt(2, 0));
 		navigation.setStyleClass("navigation");
@@ -131,6 +114,13 @@ public class GenotypeWindow extends WContainerWidget
 		});
 		decisionTrees = new WText(tr("main.navigation.decisionTrees"), navigation);
 		decisionTrees.setStyleClass("link");
+		decisionTrees.clicked.addListener(new SignalListener<WMouseEvent>(){
+			public void notify(WMouseEvent a) {
+				if(decisionTreesForm==null)
+					decisionTreesForm = new DecisionTreesForm(GenotypeWindow.this);
+				setForm(decisionTreesForm);
+			}
+		});
 		subtypingProcess = new WText(tr("main.navigation.subtypingProcess"), navigation);
 		subtypingProcess.setStyleClass("link");
 		exampleSequences = new WText(tr("main.navigation.exampleSequences"), navigation);

@@ -63,20 +63,7 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 		try {
 			WImage genome0 = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), id, start, end, 1, "pure", csvData));
 			WImage genome1 = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), id, start, end, 0, "pure", csvData));
-			WImage legend = new WImage(new WResource() {
-	            @Override
-	            public String resourceMimeType() {
-	                return "image/png";
-	            }
-	            @Override
-	            protected void streamResourceData(OutputStream stream) {
-	                try {
-	                    IOUtils.copy(this.getClass().getClassLoader().getResourceAsStream(od.getOrganismDirectory()+"legend.png"), stream);
-	                } catch (IOException e) {
-	                    e.printStackTrace();
-	                }
-	            }
-	        }, (WContainerWidget)null);
+			WImage legend = GenotypeLib.getWImageFromResource(od, "legend.png", null);
 			mainTable.putElementAt(1, 0, genome0);
 			mainTable.putElementAt(2, 0, genome1);
 			mainTable.putElementAt(1, 1, legend);

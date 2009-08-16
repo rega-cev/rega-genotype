@@ -84,4 +84,65 @@
 			</figure>
 		</tutorial-text>
 	</tutorial-form>
+	<decisionTrees-form>
+		<title>
+			REGA HIV-1 Subtying Classification Rules
+		</title>
+		<decisionTrees-text>
+			<header>
+			Decision Tree for sequences longer than 800 bp
+			</header>
+			<figure>
+			files/decisionTrees_1.gif
+			</figure>			
+			<figure>
+			files/decisionTrees_2.gif
+			</figure>
+			<rule number="Rule 1A" name="PURE">
+			Subtype assigned based on sequence &gt; 800 bps, clustering with a pure subtype with bootstrap &gt; 70% without recombination in the bootscan, and do not clustering with a CRF with bootstrap &gt;70 %.
+			</rule>
+			<rule number="Rule 1B" name="PURE">
+			Subtype assigned based on sequence &gt; 800 bps, clustering with a pure subtype with bootstrap &gt; 70% without recombination in the bootscan,  clustering with a CRF with bootstrap &gt;70 % however  not clustering inside the CRF cluster.
+			</rule>
+			<rule number="Rule 1C" name="PURE (CRF)">
+			Subtype assigned based on sequence &gt; 800 bps, clustering with a pure subtype with bootstrap &gt; 70% without recombination in the bootscan,  clustering with a CRF with bootstrap &gt;70 % and clustering inside the pure subtype cluster.
+			</rule>
+			<rule number="Rule 2" name="check the bootscan">
+			Subtype unassigned based on sequence &gt; 800bp, clustering with a pure subtype with bootstrap &gt;70 %, with detection of recombination in the pure subtype bootscan, and failure to classify as a CRFs (bootstrap support).
+			</rule>
+			<rule number="Rule 3" name="check the bootscan">
+			Subtype unassigned based on sequence &gt; 800bp, clustering with a pure subtype and CRF with bootstrap &gt;70 %, with detection of recombination in the pure subtype bootscan, and failure to classify as a CRFs (bootscan support).
+			</rule>
+			<rule number="Rule 4" name="CRF">
+			Subtype assigned based on sequence &gt; 800bp, clustering with a CRF with bootstrap &gt; 70%,with detection of recombination in the pure subtype bootscan, and further confirmed as a CRF by bootscan analysis.
+			</rule>
+			<rule number="Rule 5" name="check the report">
+			Subtype unassigned based on sequence &gt; 800bp, do not clustering with a pure subtype with bootstrap &gt;70 %, with no detection of recombination in the pure subtype bootscan.
+			</rule>
+			<rule number="Rule 6" name="check the bootscan">
+			Subtype unassigned based on sequence &gt; 800bp, do not clustering with a pure subtype or CRF with bootstrap &gt;70 %, with detection of recombination.
+			</rule>
+			<rule number="Rule 7" name="check the bootscan">
+			Subtype unassigned based on sequence &gt; 800bp, clustering with a CRF with bootstrap &gt; 70%,with detection of recombination in the pure subtype bootscan, and failure to classify as a CRFs (bootscan support).
+			</rule>
+			<rule number="Rule 8" name="CRF">
+			Subtype assigned based on sequence &gt; 800bp, clustering with a CRF with bootstrap &gt; 70%,with detection of recombination in the pure subtype bootscan, and further confirmed by CRF by bootscan analysis.
+			</rule>
+			<header>
+			Decision Tree for sequences shorter than 800 bp
+			</header>
+			<figure>
+			files/decisionTrees_3.gif
+			</figure>
+			<rule number="Rule 9" name="check the report">
+			Subtype unassigned based on sequence &lt; 800bp, do not clustering with a pure subtype with bootstrap &gt;70 %.
+			</rule>
+			<rule number="Rule 10" name="check the report">
+			Subtype unassigned based on sequence &lt; 800bp, clustering with a pure subtype with bootstrap &gt; 70%, however  not clustering inside the pure subtype cluster.
+			</rule>
+			<rule number="Rule 11" name="Pure">
+			Subtype assigned based on sequence &lt; 800bp, clustering with a pure subtype with bootstrap &gt; 70%, and clustering inside the pure subtype cluster 
+			</rule>
+		</decisionTrees-text>
+	</decisionTrees-form>
 </organism-settings>
