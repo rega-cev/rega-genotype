@@ -90,7 +90,7 @@ public class GenotypeWindow extends WContainerWidget
 	}
 	
 	public void detailsForm(File jobDir, int selectedSequenceIndex) {
-		DetailsForm df = new DetailsForm();
+		DetailsForm df = new DetailsForm(this);
 		df.init(jobDir, selectedSequenceIndex, od);
 		setForm(df);
 	}

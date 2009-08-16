@@ -41,7 +41,7 @@ public class DefaultJobOverview extends AbstractJobOverview {
 		report.setStyleClass("link");
 		report.clicked.addListener(new SignalListener<WMouseEvent>() {
 			public void notify(WMouseEvent a) {
-				main.detailsForm(jobDir, p.getSequenceIndex());
+				getMain().detailsForm(jobDir, p.getSequenceIndex());
 			}
 		});
 		data.add(report);

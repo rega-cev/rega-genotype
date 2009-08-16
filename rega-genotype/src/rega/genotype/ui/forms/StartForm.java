@@ -19,25 +19,23 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 
-public class StartForm extends WContainerWidget {
+public class StartForm extends IForm {
 	private WText title;
 	private WText note;
 	private WTextArea ta;
 	private WPushButton run, clear;
-	private GenotypeWindow main;
 	
 	public StartForm(OrganismDefinition vd, WContainerWidget parent, GenotypeWindow main) {
-		super(parent);
-		this.main = main;
+		super(main, "start-form");
 		init(vd);
 	}
 	
 	public void init(final OrganismDefinition od) {
-		title = new WText(main.getResourceManager().getOrganismValue("start-form", "title"), this);
+		title = new WText(getMain().getResourceManager().getOrganismValue("start-form", "title"), this);
 		new WBreak(this);
 		new WBreak(this);
 		
-		note = new WText(main.getResourceManager().getOrganismValue("start-form", "note"), this);
+		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note"), this);
 		new WBreak(this);
 		new WBreak(this);
 		
@@ -82,7 +80,7 @@ public class StartForm extends WContainerWidget {
 					});
 					analysis.start();
 					
-					main.monitorForm(thisJobDir);
+					getMain().monitorForm(thisJobDir);
 			}
 		});
 	}

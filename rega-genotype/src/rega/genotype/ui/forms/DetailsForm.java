@@ -7,16 +7,16 @@ import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.WText;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.framework.GenotypeWindow;
 
-public class DetailsForm extends WContainerWidget {
-	private WText title;
+public class DetailsForm extends IForm {
 	private WTable mainTable;
 	private IDetailsForm mainDetails;
 	
 	private SaxParser p;
 	
-	public DetailsForm() {
-		title = new WText(lt("TITLE"), this);
+	public DetailsForm(GenotypeWindow main) {
+		super(main, "details-form");
 		mainTable = new WTable(this);
 	}
 	

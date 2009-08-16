@@ -22,14 +22,11 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 
-public abstract class AbstractJobOverview extends WContainerWidget {
+public abstract class AbstractJobOverview extends IForm {
 	protected File jobDir;
 	
 	protected OrganismDefinition od;
-	
-	protected GenotypeWindow main;
-	
-	private WText title;
+
 	private WText analysisInProgress;
 	private WTable jobTable;
 	
@@ -39,13 +36,12 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 	
 
 	public AbstractJobOverview(File jobDir, GenotypeWindow main, OrganismDefinition od) {
-		this.main = main;
+		super(main, "monitor-form");
 		
 		this.jobDir = jobDir;
 		
 		this.od = od;
-		
-		this.title = new WText(main.getResourceManager().getOrganismValue("monitor-form", "title"), this);
+
 		new WBreak(this);
 		
 		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
