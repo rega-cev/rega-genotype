@@ -123,7 +123,7 @@ public class GenotypeLib {
 		File d;
 		Random r = new Random(new Date().getTime());
 		do{
-			d = new File(jobDir.getAbsolutePath() + File.separator + "job-" + r.nextInt());
+			d = new File(jobDir.getAbsolutePath() + File.separator + "job-" + r.nextInt(Integer.MAX_VALUE));
 		}while(d.exists());
 		
 		d.mkdir();
