@@ -16,6 +16,7 @@ import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.WText;
 import net.sf.witty.wt.WTimer;
 import net.sf.witty.wt.WWidget;
+import net.sf.witty.wt.i8n.WArgMessage;
 import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.AbstractCsvGenerator;
 import rega.genotype.ui.data.SaxParser;
@@ -36,8 +37,10 @@ public abstract class AbstractJobOverview extends IForm {
 
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main, "monitor-form");
-
-		analysisInProgress = new WText(tr("monitorForm.analysisInProgress"), this);
+	
+		WArgMessage aipm = new WArgMessage("monitorForm.analysisInProgress");
+		aipm.addArgument("${monitorForm.analysisInProgress.updateTime}", getMain().getOrganismDefinition().getUpdateInterval()/1000);
+		analysisInProgress = new WText(aipm, this);
 		analysisInProgress.setStyleClass("analysisProgress");
 		
 		new WBreak(this);
@@ -68,9 +71,9 @@ public abstract class AbstractJobOverview extends IForm {
 		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
 		if(!jobDone.exists()) {
 			analysisInProgress.setHidden(false);
-			
+
 			updater = new WTimer();
-			updater.setInterval(5*1000);
+			updater.setInterval(getMain().getOrganismDefinition().getUpdateInterval());
 			updater.timeout.addListener(new SignalListener<WEmptyEvent>() {
 				public void notify(WEmptyEvent a) {
 					if(!fillingTable)

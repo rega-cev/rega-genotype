@@ -11,8 +11,8 @@
   	<resource name="startForm.monitor">Monitor</resource>
   	
   	<resource name="monitorForm.analysisInProgress">
-  		Analysis in progress... (Showing partial results). <br></br>
-  		This page will be automatically updated every ${monitorForm.analysisInProgress.updateTime} seconds...
+  		Analysis in progress... (Showing partial results). <br/>
+  		This page will be automatically updated every ${monitorForm.analysisInProgress.updateTime} seconds...<br/>
   	</resource>
 	<resource name="monitorForm.downloadResults">Download results:</resource>
 	<resource name="monitorForm.csvTable">CSV Table</resource>

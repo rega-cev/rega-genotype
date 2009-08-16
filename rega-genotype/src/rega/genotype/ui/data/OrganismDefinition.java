@@ -20,4 +20,5 @@ public interface OrganismDefinition {
 	public Genome getGenome();
 	public IDetailsForm getMainDetailsForm();
 	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p);
+	public int getUpdateInterval();
 }

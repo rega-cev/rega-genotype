@@ -74,4 +74,8 @@ public class HivDefinition implements OrganismDefinition {
 		
 		return forms;
 	}
+	
+	public int getUpdateInterval(){
+		return 5000;
+	}
 }

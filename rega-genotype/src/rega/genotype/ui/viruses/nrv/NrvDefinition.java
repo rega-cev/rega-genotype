@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.witty.wt.i8n.WMessage;
-
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.AbstractCsvGenerator;
@@ -15,12 +14,9 @@ import rega.genotype.ui.data.DefaultCsvGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
-import rega.genotype.ui.forms.DefaultJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
-import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
-import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.nrv.NRVTool;
@@ -79,5 +75,9 @@ public class NrvDefinition implements OrganismDefinition {
 		addPhyloDetailForms(p, forms, "ORF2");
 		
 		return forms;
+	}
+	
+	public int getUpdateInterval(){
+		return 5000;
 	}
 }
