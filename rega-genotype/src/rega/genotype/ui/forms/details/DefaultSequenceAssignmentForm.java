@@ -2,16 +2,13 @@ package rega.genotype.ui.forms.details;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-
-import org.apache.commons.io.IOUtils;
 
 import net.sf.witty.wt.WBreak;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WImage;
-import net.sf.witty.wt.WResource;
 import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.WText;
+import net.sf.witty.wt.i8n.WArgMessage;
 import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
@@ -70,6 +67,16 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 			mainTable.elementAt(1, 1).setRowSpan(2);
 			
 			motivation.clear();
+
+			motivation.addWidget(new WBreak());
+			WArgMessage refSeq = new WArgMessage("defaultSequenceAssignment.referenceSequence");
+			refSeq.addArgument("${start}", start);
+			refSeq.addArgument("${end}", end);
+			refSeq.addArgument("${refSeq}", p.getValue("genotype_result.sequence.result[blast].refseq"));
+			WText refSeqWidget = new WText(refSeq);
+			refSeqWidget.setStyleClass("refseq");
+			motivation.addWidget(refSeqWidget);
+
 			motivation.addWidget(new WBreak());
 			motivation.addWidget(new WText(tr("defaultSequenceAssignment.motivation")));
 			if(!p.elementExists("genotype_result.sequence.conclusion")) {

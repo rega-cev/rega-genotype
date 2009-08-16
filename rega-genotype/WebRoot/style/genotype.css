@@ -194,16 +194,28 @@ a, .link{
 	font-style:italic;
 }
 
+/*
+.subtypingProcess-form{
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+*/
+
 table.files_referenceSequences-csv{
-	width: 100%;
+	width: 800px;
+	empty-cells: hide;
+	margin-left: auto;
+	margin-right: auto;
 }
 table.files_referenceSequences-csv td{
 	padding: 0.2em;
+	background-color: rgb(240,240,240);
+	border: 2px solid white;
 }
 table.files_referenceSequences-csv tr:first-child td{
 	color: white;
 	background-color: darkblue;
-	border: 2px solid white;
 }
 
 span.sequence, span.sequenceName{
@@ -216,6 +228,11 @@ span.sequence, span.sequenceName{
 }
 span.sequence{
 	margin-top: -1em;
+}
+
+span.refseq{
+	display: block;
+	text-align: center;
 }
 
 .monitor-form{

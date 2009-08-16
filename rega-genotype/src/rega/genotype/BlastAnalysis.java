@@ -35,13 +35,15 @@ public class BlastAnalysis extends AbstractAnalysis {
         private float   score;
         private int start;
         private int end;
+        private String refseq;
 
-        public Result(AbstractSequence sequence, Cluster cluster, float score, int start, int end) {
+        public Result(AbstractSequence sequence, Cluster cluster, float score, int start, int end, String refseq) {
             super(sequence);
             this.cluster = cluster;
             this.score = score;
             this.start = start;
             this.end = end;
+            this.refseq = refseq;
         }
 
         public boolean haveSupport() {
@@ -63,6 +65,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 tracer.add("description", cluster.getDescription());
             }
             tracer.printlnClose("</cluster>");
+            tracer.add("refseq", refseq);
             writeXMLEnd(tracer);
         }
 
@@ -248,10 +251,10 @@ public class BlastAnalysis extends AbstractAnalysis {
                                 float score, int start, int end) {
         for (int i = 0; i < clusters.size(); ++i) {
             if (clusters.get(i).containsTaxus(match))
-                return new Result(sequence, clusters.get(i), score, start, end);
+                return new Result(sequence, clusters.get(i), score, start, end, match);
         }
 
-        return new Result(sequence, null, 0, 0, 0);
+        return new Result(sequence, null, 0, 0, 0, null);
     }
 
     Result run(SequenceAlignment alignment, AbstractSequence sequence)
