@@ -78,7 +78,7 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 			WArgMessage refSeq = new WArgMessage("defaultSequenceAssignment.referenceSequence");
 			refSeq.addArgument("${start}", start);
 			refSeq.addArgument("${end}", end);
-			refSeq.addArgument("${refSeq}", p.getValue("genotype_result.sequence.result[blast].refseq"));
+			refSeq.addArgument("${refSeq}", p.getValue("genotype_result.sequence.result['blast'].refseq"));
 			WText refSeqWidget = new WText(refSeq);
 			refSeqWidget.setStyleClass("refseq");
 			motivation.addWidget(refSeqWidget);

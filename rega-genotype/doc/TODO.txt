@@ -5,14 +5,6 @@ PRIORITY
 * image centering -> sometimes refresh is needed (Stijn)
 * write installation doc
 * maven
-* layout (Stijn)
-	* start form
-	* monitor form
-	* decision trees
-	* details form
-	* subtyping process
-	* example sequences
-	* contact us
 * details pics, generate them during analysis?
 * unit test example
 
