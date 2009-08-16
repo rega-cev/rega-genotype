@@ -12,5 +12,17 @@
     <servlet-name>GenotypeHIV</servlet-name>
     <url-pattern>/GenotypeHIV/*</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>GenotypeNRV</servlet-name>
+    <display-name>NRV Genotyping</display-name>
+    <description>NRV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.nrv.NrvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeNRV</servlet-name>
+    <url-pattern>/GenotypeNRV/*</url-pattern>
+  </servlet-mapping>
 </web-app>
 

@@ -6,6 +6,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.witty.wt.i8n.WMessage;
+
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.AbstractCsvGenerator;
@@ -49,23 +51,25 @@ public class HivDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm();
+		return new DefaultSequenceAssignmentForm(2, "genotype_result.sequence.result['scan'].data");
 	}
 
 	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
 		
-		if(p.elementExists("genotype_result.sequence.result[pure]") || p.elementExists("genotype_result.sequence.result[pure-puzzle]")) {
-			DefaultPhylogeneticDetailsForm pdf = new DefaultPhylogeneticDetailsForm();
-			forms.add(pdf);
-		}
-		if(p.elementExists("genotype_result.sequence.result[scan]") || p.elementExists("genotype_result.sequence.result[crfscan]")) {
-			DefaultRecombinationDetailsForm rdf = new DefaultRecombinationDetailsForm();
-			forms.add(rdf);
-		}
-		if(p.elementExists("genotype_result.sequence.result[pure-puzzle]")) {
-			DefaultSignalDetailsForm sdf = new DefaultSignalDetailsForm();
-			forms.add(sdf);
+		if (p.elementExists("genotype_result.sequence.result['pure']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", WMessage.lt("Phylogenetic analysis with pure subtypes:")));
+		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", WMessage.lt("Phylogenetic analysis with pure subtypes:")));
+
+		if (p.elementExists("genotype_result.sequence.result['scan']"))
+			forms.add(new DefaultRecombinationDetailsForm());
+		
+		if (p.elementExists("genotype_result.sequence.result['crfscan']"))
+			forms.add(new DefaultRecombinationDetailsForm());
+
+		if(p.elementExists("genotype_result.sequence.result['pure-puzzle']")) {
+			forms.add(new DefaultSignalDetailsForm());
 		}
 		
 		return forms;

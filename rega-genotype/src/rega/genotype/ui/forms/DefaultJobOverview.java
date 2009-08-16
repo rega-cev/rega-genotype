@@ -32,8 +32,8 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final SaxParser p) {
 		data.clear();
 		
-		data.add(new WText(lt(p.getValue("genotype_result.sequence['name']"))));
-		data.add(new WText(lt(p.getValue("genotype_result.sequence['length']"))));
+		data.add(new WText(lt(p.getValue("genotype_result.sequence[name]"))));
+		data.add(new WText(lt(p.getValue("genotype_result.sequence[length]"))));
 		
 		WText report = new WText(lt("Report"));
 		report.setStyleClass("link");
@@ -61,11 +61,11 @@ public class DefaultJobOverview extends AbstractJobOverview {
 			try {
 				data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
 						id,
-						Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].start")), 
-						Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].end")),
+						Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start")), 
+						Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end")),
 						0, 
 						"pure", 
-						p.getValue("genotype_result.sequence.result[scan].data"))));
+						p.getValue("genotype_result.sequence.result['scan'].data"))));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

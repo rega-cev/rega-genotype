@@ -19,10 +19,16 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 	private WTable mainTable;
 	private WContainerWidget text;
 	private WContainerWidget motivation;
-	public DefaultSequenceAssignmentForm() {
+	private int genomeVariantCount;
+	private String genomeDataXPath;
+
+	public DefaultSequenceAssignmentForm(int genomeVariantCount, String genomeDataXPath) {
 		mainTable = new WTable(this);
 		text = new WContainerWidget(mainTable.elementAt(0, 0));
-		motivation = new WContainerWidget(mainTable.elementAt(3, 0));
+		motivation = new WContainerWidget(mainTable.elementAt(genomeVariantCount + 1, 0));
+		
+		this.genomeVariantCount = genomeVariantCount;
+		this.genomeDataXPath = genomeDataXPath;
 	}
 
 	@Override
@@ -36,9 +42,9 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 			
 		text.clear();
 		text.addWidget(new WText(tr("defaultSequenceAssignment.sequenceName")));
-		text.addWidget(new WText(lt(p.getValue("genotype_result.sequence['name']")+", ")));
+		text.addWidget(new WText(lt(p.getValue("genotype_result.sequence[name]")+", ")));
 		text.addWidget(new WText(tr("defaultSequenceAssignment.sequenceLength")));
-		text.addWidget(new WText(lt(p.getValue("genotype_result.sequence['length']"))));
+		text.addWidget(new WText(lt(p.getValue("genotype_result.sequence[length]"))));
 		text.addWidget(new WBreak());
 		text.addWidget(new WText(tr("defaultSequenceAssignment.assignment")));
 		if(!p.elementExists("genotype_result.sequence.conclusion")) {
@@ -54,17 +60,17 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 			text.addWidget(new WText(lt(" " +p.getValue("genotype_result.sequence.conclusion.assigned.support")+"%")));
 		}
 		
-		int start = Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].start"));
-		int end = Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].end"));
-		String csvData = p.getValue("genotype_result.sequence.result[scan].data");
+		int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
+		int end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
+		String csvData = genomeDataXPath != null ? p.getValue(genomeDataXPath) : null;
 		try {
-			WImage genome0 = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), id, start, end, 1, "pure", csvData));
-			WImage genome1 = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), id, start, end, 0, "pure", csvData));
+			for (int i = 0; i < genomeVariantCount; ++i) {
+				WImage genome = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), id, start, end, i, "pure", csvData));
+				mainTable.putElementAt(i + 1, 0, genome);
+			}
+				
 			WImage legend = GenotypeLib.getWImageFromResource(od, "legend.png", null);
-			mainTable.putElementAt(1, 0, genome0);
-			mainTable.putElementAt(2, 0, genome1);
-			mainTable.putElementAt(1, 1, legend);
-			mainTable.elementAt(1, 1).setRowSpan(2);
+			mainTable.elementAt(1, 1).setRowSpan(genomeVariantCount);
 			
 			motivation.clear();
 

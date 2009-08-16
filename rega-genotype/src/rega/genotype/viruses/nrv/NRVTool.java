@@ -54,8 +54,6 @@ public class NRVTool extends GenotypeTool {
         	Cluster c = blastResult.getConcludedCluster();
         	Taxus t = c.getTaxa().get(0);
 
-    		boolean phyloAssignment = false;
-
     		if (t.getRegions() != null) {
         		for (Region region:t.getRegions()) {
         			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 100)) {
@@ -63,14 +61,13 @@ public class NRVTool extends GenotypeTool {
         				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
 
         				AbstractSequence s2 = re > rs ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
-        				if (phyloAnalysis(s2, c.getId(), region.getName()))
-        					phyloAssignment = true;
+        				if (!phyloAnalysis(s2, c.getId(), region.getName()))
+        					conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff(), region.getName());
         			}
+        			
+        			
         		}
         	}
-    		
-    		if (!phyloAssignment)
-    			conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff());
         } else {
             conclude("Unassigned", "Unassigned because of BLAST score &lt; " + blastAnalysis.getCutoff());
         }
@@ -101,12 +98,12 @@ public class NRVTool extends GenotypeTool {
 
 			if (r.haveSupport()) {
 				if (!variantPhyloAnalysis(s, phylo, regionName, r.getConcludedCluster()))
-					conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70");
+					conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70", regionName);
 			} else {
 				if (r.getSupportInner() >= 95)
-					conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100");
+					conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100", regionName);
 				else
-					conclude("Could not assign", "Not supported by " + phyloName);
+					conclude("Could not assign", "Not supported by " + phyloName, regionName);
 			}
 
 			return true;
@@ -127,11 +124,11 @@ public class NRVTool extends GenotypeTool {
 		String phyloName = "phylogenetic analysis (" + regionName + ")";
 
 		if (r.haveSupport()) {
-			conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70");
+			conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70", regionName);
 			return true;
 		} else {
 			if (r.getSupportInner() >= 95) {
-				conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100");
+				conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100", regionName);
 				return true;
 			} else
 				return false;

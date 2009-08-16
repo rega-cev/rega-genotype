@@ -77,6 +77,6 @@ public class DetailsForm extends IForm {
 	}
 	
 	public String getSequenceName() {
-		return p.getValue("genotype_result.sequence['name']");
+		return p.getValue("genotype_result.sequence[name]");
 	}
 }

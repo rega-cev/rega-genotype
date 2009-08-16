@@ -183,7 +183,12 @@ public abstract class GenotypeTool {
     }
 
     protected void conclude(String conclusion, String motivation) {
-        getTracer().printlnOpen("<conclusion type=\"unassigned\">");
+    	conclude(conclusion, motivation, null);
+    }
+
+    protected void conclude(String conclusion, String motivation, String id) {
+        getTracer().printlnOpen("<conclusion type=\"unassigned\""
+        		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
         getTracer().printlnOpen("<assigned>");
         getTracer().add("id", "Unassigned");
         getTracer().add("name", (String) conclusion);
@@ -193,7 +198,12 @@ public abstract class GenotypeTool {
     }
 
     protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation) {
-        getTracer().printlnOpen("<conclusion type=\"simple\">");
+    	conclude(conclusion, motivation, null);
+    }
+
+    protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation, String id) {
+        getTracer().printlnOpen("<conclusion type=\"simple\""
+        		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
         conclusion.writeConclusion(getTracer());
         getTracer().add("motivation", motivation);
         getTracer().printlnClose("</conclusion>");

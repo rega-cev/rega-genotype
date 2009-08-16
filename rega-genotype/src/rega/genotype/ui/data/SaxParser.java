@@ -38,9 +38,9 @@ public abstract class SaxParser extends DefaultHandler {
 			
 			for(int i = 0; i<attributes.getLength(); i++) {
 				if(attributes.getQName(i).equals("id")) {
-					specifier += '[' + attributes.getValue(i) + ']';
+					specifier += "[\'" + attributes.getValue(i) + "\']";
 				} else {
-					valuesMap.put(getCurrentPath()+"."+qName+"[\'"+attributes.getQName(i)+"\']", attributes.getValue(i));
+					valuesMap.put(getCurrentPath()+"."+qName+'['+attributes.getQName(i)+']', attributes.getValue(i));
 				}
 			}
 	

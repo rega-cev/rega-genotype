@@ -23,10 +23,10 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 	@Override
 	public void fillForm(SaxParser p, OrganismDefinition od, File jobDir) {
 		try {
-			if(p.elementExists("genotype_result.sequence.result[scan]")) {
-				initRecombinationSection(p, jobDir, "genotype_result.sequence.result[scan]", "pure", od);
-			} else if(p.elementExists("genotype_result.sequence.result[crfscan]")) {
-				initRecombinationSection(p, jobDir, "genotype_result.sequence.result[crfscan]", "crf", od);
+			if(p.elementExists("genotype_result.sequence.result['scan']")) {
+				initRecombinationSection(p, jobDir, "genotype_result.sequence.result['scan']", "pure", od);
+			} else if(p.elementExists("genotype_result.sequence.result['crfscan']")) {
+				initRecombinationSection(p, jobDir, "genotype_result.sequence.result['crfscan']", "crf", od);
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -37,12 +37,12 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 	
 	private void initRecombinationSection(SaxParser p, File jobDir, String path, String type, OrganismDefinition od) throws UnsupportedEncodingException, IOException {
 		addWidget(new WText(tr("defaultRecombinationAnalyses.sequenceName")));
-		addWidget(new WText(lt(p.getValue("genotype_result.sequence['name']"))));
+		addWidget(new WText(lt(p.getValue("genotype_result.sequence[name]"))));
 		addWidget(new WBreak());
 		addWidget(GenotypeLib.getWImageFromFile(RecombinationPlot.getRecombinationPNG(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"), od)));
 		addWidget(new WBreak());
 		addWidget(new WText(tr("defaultRecombinationAnalyses.bootscanClusterSupport")));
-		addWidget(new WText(lt(p.getValue(path+".support[best]"))));
+		addWidget(new WText(lt(p.getValue(path+".support['best']"))));
 		addWidget(new WBreak());
 		addWidget(new WText(lt(tr("defaultRecombinationAnalyses.download").value() +" ")));
 		addWidget(GenotypeLib.getAnchor("CSV", "application/excel", RecombinationPlot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"))));

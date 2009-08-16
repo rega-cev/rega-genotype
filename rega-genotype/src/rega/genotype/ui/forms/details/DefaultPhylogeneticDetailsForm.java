@@ -14,18 +14,17 @@ import rega.genotype.ui.util.GenotypeLib;
 
 public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 	
+	private String xpath;
+	private WMessage title;
+
+	public DefaultPhylogeneticDetailsForm(String xpath, WMessage title) {
+		this.xpath = xpath;
+		this.title = title;
+	}
+
 	public void fillForm(SaxParser p, OrganismDefinition od, File jobDir) {
-		String phyloPath;
-		if(p.elementExists("genotype_result.sequence.result[pure]")) {
-			phyloPath = "genotype_result.sequence.result[pure]";
-		} else {
-			phyloPath = "genotype_result.sequence.result[pure-puzzle]";
-		}
-		initPhyloSection(p, lt("Phylogenetic analysis with pure subtypes:"), jobDir, phyloPath);
-		
-		if(p.elementExists("genotype_result.sequence.result[crf]")) {
-			initPhyloSection(p, lt("Phylogenetic analysis with pure subtypes and CRFs:"), jobDir, "genotype_result.sequence.result[crf]");
-		}
+		String phyloPath = xpath;
+		initPhyloSection(p, title, jobDir, phyloPath);
 	}
 	
 	private void initPhyloSection(SaxParser p, WMessage header, File jobDir, String phyloPath) {
