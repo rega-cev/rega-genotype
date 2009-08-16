@@ -34,11 +34,16 @@ public class Settings {
 		return treePuzzleCmd;
 	}
 	
+	public String getTreeGraphCmd() {
+		return treeGraphCmd;
+	}
+	
 	private File xmlPath;
 	private String paupCmd;
 	private String clustalWCmd;
 	private File blastPath;
 	private String treePuzzleCmd;
+	private String treeGraphCmd;
 	
 	private static Settings instance;
 	
@@ -71,6 +76,8 @@ public class Settings {
             	blastPath = new File(e.getValue().trim());
             } else if(name.equals("treePuzzleCmd")) {
             	treePuzzleCmd = e.getValue().trim();
+            } else if(name.equals("treeGraphCmd")) {
+            	treeGraphCmd = e.getValue().trim();
             }
         }
     }

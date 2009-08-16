@@ -1,7 +1,5 @@
 package rega.genotype.ui.util;
 
-import jargs.gnu.CmdLineParser;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -35,6 +33,7 @@ public class GenotypeLib {
 		GenotypeTool.setXmlBasePath(s.getXmlPath().getAbsolutePath());
 		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath();
 		PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
+		treeGraphCommand = s.getTreeGraphCmd();
 	}
 
 	public static void startAnalysis(File jobDir, Class analysis,
@@ -83,20 +82,20 @@ public class GenotypeLib {
 		return new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
 	}
 
-	public static void getSignalPNG(int jobid, File svgFile, File pngFile) {
+	public static void getSignalPNG(File jodDir, File svgFile, File pngFile) {
 		if(!pngFile.exists() && svgFile.exists()){
 			ImageConverter.svgToPng(svgFile, pngFile);
 		}
 	}
 	
-	public static void getTreePDF(int jobid, File treeFile, File pdfFile) {
+	public static void getTreePDF(File jobDir, File treeFile, File pdfFile) {
 		if (!pdfFile.exists() && treeFile.exists()) {
 			File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
 			File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
 			
 			try{
 				Runtime runtime = Runtime.getRuntime();
-				runtime.exec(treeGraphCommand +" -t "+ treeFile.getAbsolutePath(), null, treeFile.getParentFile());
+				runtime.exec(treeGraphCommand +" -t "+ treeFile.getAbsolutePath(), null, jobDir);
 				
 				BufferedReader in = new BufferedReader(new FileReader(treeFile));
 				PrintStream out = new PrintStream(new FileOutputStream(tgfFile));
@@ -111,7 +110,7 @@ public class GenotypeLib {
 				out.close();
 				in.close();
 				
-				runtime.exec(treeGraphCommand +" -v "+ tgfFile.getAbsolutePath(), null, tgfFile.getParentFile());	
+				runtime.exec(treeGraphCommand +" -v "+ tgfFile.getAbsolutePath(), null, jobDir);	
 				ImageConverter.svgToPdf(svgFile, pdfFile);
 			}
 			catch(Exception e){
