@@ -17,10 +17,34 @@ public abstract class AbstractCsvGenerator extends SaxParser {
 	public abstract void writeLine(PrintStream ps);
 	
 
-    protected String getCsvValue(String name) {
-    	String val = getValue(name);
-    	if(val==null)
-    		val="";
-    	return "\"" + val + "\"";
+    protected String addCsvValue(String name) {
+    	return addCsvValue(name, false);
     }
+
+    protected String addCsvValue(String name, boolean isFirst) {
+    	String val = getValue(name);
+    	if (val==null)
+    		val="";
+    	val = "\"" + val + "\"";
+    	
+    	if (isFirst)
+    		return val;
+    	else
+    		return "," + val;
+    }
+
+	protected void addPhyloResults(StringBuilder csvLine, String analysisId) {
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.id"));
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.support"));
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.inner"));
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.outer"));
+	}
+
+	protected void addPhyloScanResults(StringBuilder csvLine, String analysisId) {
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].support['assigned']"));
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].support['best']"));
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].nosupport['best']"));
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].profile['assigned']"));
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].profile['best']"));
+	}
 }

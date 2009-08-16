@@ -2,18 +2,18 @@
   <alignment file="nrvI-ORF2.fasta" trim="false" />
 
   <clusters>
-    <cluster id="1" name="NRV I.1">
+    <cluster id="I.1" name="NRV I.1">
       <taxus name="I.1|M87661" />
       <taxus name="I.1|AY502016" />
       <taxus name="I.1|EF547392" />
     </cluster>
    
-    <cluster id="2" name="NRV I.2">
+    <cluster id="I.2" name="NRV I.2">
       <taxus name="I.2|AF435807" />
       <taxus name="I.2|L07418" />
     </cluster>
 
-    <cluster id="3" name="NRV I.3">
+    <cluster id="I.3" name="NRV I.3">
       <taxus name="I.3|AF414405" />
       <taxus name="I.3|AF439267" />      
       <taxus name="I.3|AB187514" />
@@ -21,30 +21,30 @@
       <taxus name="I.3|EF547396" />
     </cluster>
 
-    <cluster id="4" name="NRV I.4">
+    <cluster id="I.4" name="NRV I.4">
       <taxus name="I.4|AJ313030" />
       <taxus name="I.4|AB042808" />
     </cluster>
     
-    <cluster id="5" name="NRV I.5">
+    <cluster id="I.5" name="NRV I.5">
       <taxus name="I.5|AJ277614" />
       <taxus name="I.5|AF414406" />
       <taxus name="I.5|AB039774" />
     </cluster>
      
-    <cluster id="6" name="NRV I.6">
+    <cluster id="I.6" name="NRV I.6">
       <taxus name="I.6|AJ277615" />
       <taxus name="I.6|AY502008" />
       <taxus name="I.6|AF093797" />
     </cluster>
 
-    <cluster id="7" name="NRV I.7">
+    <cluster id="I.7" name="NRV I.7">
       <taxus name="I.7|AY675555" />
       <taxus name="I.7|AJ844469" />
       <taxus name="I.7|AJ277609" />
     </cluster>
 
-    <cluster id="8" name="NRV I.8">
+    <cluster id="I.8" name="NRV I.8">
       <taxus name="I.8|AF538679" />
     </cluster>
 
@@ -55,7 +55,7 @@
 
   <analysis id="phylo-ORF2" type="paup">
     <identify>
-      1,2,3,4,5,6,7,8,O
+      I.1,I.2,I.3,I.4,I.5,I.6,I.7,I.8,O
     </identify>
     <cutoff>
       70
@@ -91,7 +91,7 @@
     </step>
     <analysis type="paup">
       <identify>
-       1,2,3,4,5,6,7,8,O
+       I.1,I.2,I.3,I.4,I.5,I.6,I.7,I.8,O
       </identify>
       <block>
         begin paup;

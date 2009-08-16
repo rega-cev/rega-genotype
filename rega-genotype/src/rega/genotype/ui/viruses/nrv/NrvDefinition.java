@@ -39,7 +39,7 @@ public class NrvDefinition implements OrganismDefinition {
 	}
 
 	public AbstractCsvGenerator getCsvGenerator(PrintStream ps) {
-		return new DefaultCsvGenerator(ps);
+		return new NrvCsvGenerator(ps);
 	}
 
 	public Genome getGenome() {

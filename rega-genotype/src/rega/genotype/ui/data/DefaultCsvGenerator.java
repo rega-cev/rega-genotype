@@ -11,52 +11,33 @@ public class DefaultCsvGenerator extends AbstractCsvGenerator {
 	public void writeLine(PrintStream ps) {
     	StringBuilder csvLine = new StringBuilder();
     	
-    	csvLine.append(getCsvValue("genotype_result.sequence['name']")+",");
-    	csvLine.append(getCsvValue("genotype_result.sequence['length']")+",");
+    	csvLine.append(addCsvValue("genotype_result.sequence[name]", true));
+    	csvLine.append(addCsvValue("genotype_result.sequence[length]"));
 
-    	if(!elementExists("genotype_result.sequence.conclusion")) {
-    		csvLine.append("\"Sequence error\",");
-    	} else {
-    		csvLine.append(getCsvValue("genotype_result.sequence.conclusion.assigned.name")+",");
-    		if(elementExists("genotype_result.sequence.conclusion.assigned.support")) {
-    			csvLine.append(getCsvValue("genotype_result.sequence.conclusion.assigned.support"));
-    		}
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[blast].start"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[blast].end"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[blast].cluster.name"));
+    	if (!elementExists("genotype_result.sequence.conclusion"))
+    		csvLine.append(",\"Sequence error\"");
+    	else
+    		csvLine.append(addCsvValue("genotype_result.sequence.conclusion.assigned.name"));
+    	
+    	csvLine.append(addCsvValue("genotype_result.sequence.conclusion.assigned.support"));
+
+    	csvLine.append(addCsvValue("genotype_result.sequence.result['blast'].start"));
+    	csvLine.append(addCsvValue("genotype_result.sequence.result['blast'].end"));
+    	csvLine.append(addCsvValue("genotype_result.sequence.result['blast'].cluster.name"));
     		
-    		if(elementExists("genotype_result.sequence.result[pure]")) {
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.id"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.support"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.inner"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure].best.outer"));
-    		} else {
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure-puzzle].best.id"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure-puzzle].best.support"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure-puzzle].best.inner"));
-    			csvLine.append("," + getCsvValue("genotype_result.sequence.result[pure-puzzle].best.outer"));
-    		}
-    		
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[scan].support[assigned]"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[scan].support[best]"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[scan].nosupport[best]"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[scan].profile[assigned]"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[scan].profile[best]"));
-    		
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crf].best.id"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crf].best.support"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crf].best.inner"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crf].best.outer"));
-    		
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crfscan].support[assigned]"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crfscan].support[best]"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crfscan].nosupport[best]"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crfscan].profile[assigned]"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.result[crfscan].profile[best]"));
-    		
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.conclusion.assigned.major.assigned.id"));
-    		csvLine.append("," + getCsvValue("genotype_result.sequence.conclusion.assigned.minor.assigned.id"));
-    	}
+    	if (elementExists("genotype_result.sequence.result['pure']"))
+    		addPhyloResults(csvLine, "pure");
+    	else
+    		addPhyloResults(csvLine, "pure-puzzle");
+
+		addPhyloScanResults(csvLine, "scan");
+
+		addPhyloResults(csvLine, "crf");
+
+		addPhyloScanResults(csvLine, "crfscan");
+		
+		csvLine.append(addCsvValue("genotype_result.sequence.conclusion.assigned.major.assigned.id"));
+		csvLine.append(addCsvValue("genotype_result.sequence.conclusion.assigned.minor.assigned.id"));
     	
     	ps.append(csvLine.toString()+"\n");
     }

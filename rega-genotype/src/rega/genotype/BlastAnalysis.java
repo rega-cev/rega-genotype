@@ -24,11 +24,44 @@ public class BlastAnalysis extends AbstractAnalysis {
     public static String formatDbCommand = "formatdb";
     public static String blastCommand = "blastall";
 
+    public static class Region {
+    	private String name;
+    	private int begin, end;
+    	
+    	public Region(String name, int begin, int end) {
+    		this.name = name;
+    		this.begin = begin;
+    		this.end = end;
+    	}
+
+		public int getBegin() {
+			return begin;
+		}
+
+		public int getEnd() {
+			return end;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public boolean overlaps(int queryBegin, int queryEnd, int minimumOverlap) {
+			int overlapBegin = Math.max(queryBegin, begin);
+			int overlapEnd = Math.min(queryEnd, end);
+			
+			return (overlapEnd - overlapBegin) > minimumOverlap;
+		}
+    }
+    
     private List<Cluster> clusters;
     private Double cutoff;
     private String blastOptions;
 	private String formatDbOptions;
     private File workingDir;
+   
+	private List<Region> regions;
+	private String referenceTaxus;
 
     public class Result extends AbstractAnalysis.Result implements Concludable {
         private Cluster cluster;
@@ -140,6 +173,17 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
     }
 
+	void addRegion(Region r) {
+		if (this.regions == null)
+			this.regions = new ArrayList<Region>();
+		
+		regions.add(r);
+	}
+	
+	public List<Region> getRegions() {
+		return regions;
+	}
+    
     private Result compute(SequenceAlignment analysisDb, AbstractSequence sequence)
             throws ApplicationException {
         Process formatdb = null;
@@ -196,13 +240,16 @@ public class BlastAnalysis extends AbstractAnalysis {
                     if (s == null)
                         break;
                     System.err.println(s);
-                    if (best == null) {
-                        best = s.split("\t");
-                        if (best.length != 12)
-                        	throw new ApplicationException("blast result format error");
 
-                        String[] values = s.split("\t");
+                    String[] values = s.split("\t");
+                    if (values.length != 12)
+                    	throw new ApplicationException("blast result format error");
 
+                    if (best == null)
+                    	best = values;
+
+                    if ((end == -1)
+                    	 && ((referenceTaxus == null && values == best) || values[1].equals(referenceTaxus))) {
                        	start = Integer.parseInt(values[8])*queryFactor - Integer.parseInt(values[6]);
                        	end = Integer.parseInt(values[9])*queryFactor + sequence.getLength() - Integer.parseInt(values[7]);
                     }
@@ -280,5 +327,13 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 	public Double getCutoff() {
 		return cutoff;
+	}
+
+	public String getReferenceTaxus() {
+		return referenceTaxus;
+	}
+
+	public void setReferenceTaxus(String referenceTaxus) {
+		this.referenceTaxus = referenceTaxus;
 	}
 }

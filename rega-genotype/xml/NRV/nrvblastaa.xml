@@ -3,20 +3,11 @@
 
   <clusters>
     <cluster id="I" name="I">
-      <taxus name="NC_001959">
-        <region name="ORF1" begin="4566" end="5283" />
-        <region name="ORF2" begin="5325" end="6963" />
-      </taxus>
+      <taxus name="NC_001959" />
     </cluster>
     <cluster id="II" name="II">
-      <taxus name="X86557">
-        <region name="ORF1" begin="4293" end="5010" />
-        <region name="ORF2" begin="5046" end="6696" />
-      </taxus>
-      <taxus name="U07611">
-        <region name="ORF1" begin="4293" end="5010" />
-        <region name="ORF2" begin="5046" end="6696" />
-      </taxus>
+      <taxus name="X86557" />
+      <taxus name="U07611" />
     </cluster>
     <cluster id="III" name="III">
       <taxus name="AF097917" />
@@ -30,6 +21,10 @@
   </clusters>
 
   <analysis id="blast" type="blast">
+    <regions taxus="NC_001959">
+      <region name="ORF1" begin="4566" end="5283" />
+      <region name="ORF2" begin="5325" end="6963" />
+    </regions>
     <identify>
       I,II,III,IV,V
     </identify>

@@ -148,4 +148,18 @@ public abstract class SaxParser extends DefaultHandler {
     public void stopParsing() {
     	stop = true;
     }
+
+	public void dumpDebug() {
+		System.err.println("Start dump:");
+		
+		System.err.println("Value map:");
+		for (Map.Entry<String, String> e:valuesMap.entrySet())
+			System.err.println(e.getKey() + ": " + e.getValue());
+
+		System.err.println("Elements:");
+		for (String e:elements)
+			System.err.println(e);
+
+		System.err.println("End dump:");
+	}
 }

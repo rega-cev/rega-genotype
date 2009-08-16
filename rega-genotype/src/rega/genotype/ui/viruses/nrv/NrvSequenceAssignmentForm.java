@@ -21,6 +21,8 @@ public class NrvSequenceAssignmentForm extends IDetailsForm {
 
 	@Override
 	public void fillForm(SaxParser p, final OrganismDefinition od, File jobDir) {
+		p.dumpDebug();
+		
 		WContainerWidget block = new WContainerWidget(this);
 		block.setStyleClass("assignment");
 		
@@ -39,7 +41,7 @@ public class NrvSequenceAssignmentForm extends IDetailsForm {
 
 		block.addWidget(new WText(lt("ORF2 assignment: " + NrvResults.getConclusion(p, "ORF2") + "<br />")));
 		block.addWidget(new WText(lt("Motivation: " + NrvResults.getMotivation(p, "ORF2"))));
-
+		
 		int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
 		int end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
 

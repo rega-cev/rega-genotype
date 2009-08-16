@@ -20,9 +20,7 @@ import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.SubSequence;
 import rega.genotype.AlignmentAnalyses.Cluster;
-import rega.genotype.AlignmentAnalyses.Region;
 import rega.genotype.AlignmentAnalyses.Taxus;
-import rega.genotype.PhyloClusterAnalysis.Result;
 
 public class NRVTool extends GenotypeTool {
 	enum GroupRegion {
@@ -52,10 +50,9 @@ public class NRVTool extends GenotypeTool {
         
         if (blastResult.haveSupport()) {
         	Cluster c = blastResult.getConcludedCluster();
-        	Taxus t = c.getTaxa().get(0);
 
-    		if (t.getRegions() != null) {
-        		for (Region region:t.getRegions()) {
+    		if (blastAnalysis.getRegions() != null) {
+        		for (BlastAnalysis.Region region:blastAnalysis.getRegions()) {
         			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 100)) {
         				int rs = Math.max(0, region.getBegin() - blastResult.getStart());
         				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));

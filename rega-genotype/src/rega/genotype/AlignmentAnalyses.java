@@ -22,58 +22,15 @@ public class AlignmentAnalyses {
     private boolean                       trimAlignment;
     private GenotypeTool                  genotypeTool;
 
-    public class Region {
-    	private String name;
-    	private int begin, end;
-    	
-    	public Region(String name, int begin, int end) {
-    		this.name = name;
-    		this.begin = begin;
-    		this.end = end;
-    	}
-
-		public int getBegin() {
-			return begin;
-		}
-
-		public int getEnd() {
-			return end;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public boolean overlaps(int queryBegin, int queryEnd, int minimumOverlap) {
-			int overlapBegin = Math.max(queryBegin, begin);
-			int overlapEnd = Math.min(queryEnd, end);
-			
-			return (overlapEnd - overlapBegin) > minimumOverlap;
-		}
-    }
-
     public class Taxus {
     	private String id;
-    	private List<Region> regions;
     	
     	public Taxus(String id) {
     		this.id = id;
-    		this.regions = null;
     	}
 
 		public String getId() {
 			return id;
-		}
-
-		void addRegion(Region r) {
-			if (this.regions == null)
-				this.regions = new ArrayList<Region>();
-			
-			regions.add(r);
-		}
-		
-		public List<Region> getRegions() {
-			return regions;
 		}
     }
     
@@ -286,7 +243,23 @@ public class AlignmentAnalyses {
         if (optionsE != null)
             blastOptions = optionsE.getTextTrim();
 
-        return new BlastAnalysis(this, id, cs, cutoff, blastOptions, workingDir);
+        BlastAnalysis analysis = new BlastAnalysis(this, id, cs, cutoff, blastOptions, workingDir);
+
+        Element regionsE = element.getChild("regions");
+        if (regionsE != null) {
+        	analysis.setReferenceTaxus(regionsE.getAttributeValue("taxus"));
+
+            List regionEs = regionsE.getChildren("region");
+            for (Iterator j = regionEs.iterator(); j.hasNext();) {
+                Element regionE = (Element) j.next(); 
+                String regionName = regionE.getAttributeValue("name");
+                int begin = Integer.parseInt(regionE.getAttributeValue("begin"));
+                int end = Integer.parseInt(regionE.getAttributeValue("end"));
+               	analysis.addRegion(new BlastAnalysis.Region(regionName, begin, end));
+            }
+        }
+
+        return analysis;
     }
 
     private AbstractAnalysis readScanAnalysis(Element element, String id, File workingDir) {
@@ -409,15 +382,6 @@ public class AlignmentAnalyses {
             Element taxusE = (Element) i.next(); 
             Taxus taxus = new Taxus(taxusE.getAttributeValue("name"));
             result.addTaxus(taxus);
-            
-            List regionEs = taxusE.getChildren("region");        
-            for (Iterator j = regionEs.iterator(); j.hasNext();) {
-                Element regionE = (Element) j.next(); 
-                String regionName = regionE.getAttributeValue("name");
-                int begin = Integer.parseInt(regionE.getAttributeValue("begin"));
-                int end = Integer.parseInt(regionE.getAttributeValue("end"));
-               	taxus.addRegion(new Region(regionName, begin, end));
-            }
         }
 
         List clusterEs = element.getChildren("cluster");        
