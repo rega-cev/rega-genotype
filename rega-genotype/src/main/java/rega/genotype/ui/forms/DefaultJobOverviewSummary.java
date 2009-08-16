@@ -27,7 +27,8 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	private final static class SummaryTableView extends WTableView {
 		public SummaryTableView(WAbstractItemModel model,
 				WContainerWidget parent) {
-			super(model, parent);
+			super(parent);
+			setModel(model);
 			initTotalRow();
 		}
 

@@ -30,7 +30,7 @@ public class EtvJobOverview extends AbstractJobOverview {
 		
 		headers.add(new Header(new WString("Name")));
 		headers.add(new Header(new WString("Length")));
-		headers.add(new Header(new WString("Species")));
+		headers.add(new Header(new WString("Genus/Species")));
 		headers.add(new Header(new WString("Serotype")));
 		headers.add(new Header(new WString("Report")));
 		headers.add(new Header(new WString("Genome")));
@@ -44,7 +44,7 @@ public class EtvJobOverview extends AbstractJobOverview {
 		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[length]"))));
 
 		boolean havePhyloAnalysis = p.getValue("genotype_result.sequence.result['phylo-serotype'].best.id") != null;
-		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("genotype_result.sequence.conclusion['unassigned'].assigned.id") != null;
+		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("genotype_result.sequence.conclusion['unassigned'].assigned.id") == null;
 
 		if (haveBlastAssignment) {
 			String blastAssignment = p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.name");

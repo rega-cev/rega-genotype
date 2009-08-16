@@ -17,7 +17,7 @@
 			<taxus name="CV-A17|AF081306" />
 		</cluster>
 
-		<cluster id="CV-A20" name="Enterovirus C, serotype CV-A21">
+		<cluster id="CV-A20" name="Enterovirus C, serotype CV-A20">
 			<taxus name="CV-A20|AF081309" />
 			<taxus name="CV-A20|AY919448" />
 		</cluster>

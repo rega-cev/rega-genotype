@@ -787,7 +787,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             System.err.println("Inner support for " + numSubClusters + " possible subclusters will take for ages." +
                     " Sure you want this ?");
         }
-        
+
 		float result = 0;
 		for (int i = 1; i < numSubClusters - 1; ++i) { // excluding the empty and full cluster
 			List<Integer> idxesList = new ArrayList<Integer>();
@@ -804,13 +804,12 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 
 			result += retrieveResultValues(alignment, taxa);
 		}		
-        
+
         return result;
 	}
-    
+
     public Result run(SequenceAlignment alignment, AbstractSequence sequence)
             throws AnalysisException {
-        
         try {
             /*
              * Collect clusters, and build automatically the paup backbone constraint
@@ -835,19 +834,28 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 
         	/*
         	 * Collect list of sequences;
-        	 * modify name of query sequence if it collides with a reference sequence.
+        	 * modify name of query sequence if it collides with a reference sequence or is a number.
         	 */
             List<String> sequences = new ArrayList<String>();
             if (sequence != null) {
             	if (clusterSequences.contains(sequence.getName()))
             		sequence.setName(sequence.getName() + "_Query");
+            	else
+            		try {
+            			Integer.parseInt(sequence.getName());
+            			sequence.setName("q" + sequence.getName());
+                	} catch (NumberFormatException e) {
+                		// Okay
+                	}
+
                 sequences.add(sequence.getName());
             }
+
             sequences.addAll(clusterSequences);
-        	
+
             SequenceAlignment aligned = profileAlign(alignment, sequence, workingDir);
             SequenceAlignment analysisAlignment = aligned.selectSequences(sequences);
-            
+
             List<String> queryTaxa = new ArrayList<String>();
             if (sequence != null)
                 queryTaxa.add(sequence.getName());

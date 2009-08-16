@@ -41,7 +41,7 @@ public class JobForm extends AbstractForm {
 	}
 	
 	public void handleInternalPath() {
-		if (GenotypeMain.getApp().isInternalPathMatches(JOB_URL + "/")) {
+		if (GenotypeMain.getApp().internalPathMatches(JOB_URL + "/")) {
 			String jobId = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/");
 			
 			if (!jobOverview.existsJob(jobId)) {

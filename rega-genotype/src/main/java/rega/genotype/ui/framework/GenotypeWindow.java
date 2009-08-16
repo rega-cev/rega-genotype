@@ -154,7 +154,7 @@ public class GenotypeWindow extends WContainerWidget
 	}
 	
 	private void handleInternalPath() {
-		if (GenotypeMain.getApp().isInternalPathMatches("/")) {
+		if (GenotypeMain.getApp().internalPathMatches("/")) {
 			String newPath = "/" + GenotypeMain.getApp().getInternalPathNextPart("/");
 
 			AbstractForm f = forms.get(newPath);

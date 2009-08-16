@@ -17,8 +17,8 @@
    sodipodi:docname="genome.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/koen/project/java/rega-genotype/src/main/java/rega/genotype/ui/viruses/etv/genome_0.png"
-   inkscape:export-xdpi="62.311893"
-   inkscape:export-ydpi="62.311893">
+   inkscape:export-xdpi="62.569462"
+   inkscape:export-ydpi="62.569462">
   <metadata
      id="metadata2445">
     <rdf:RDF>
@@ -63,8 +63,8 @@
      inkscape:zoom="0.8625"
      inkscape:cx="512.69829"
      inkscape:cy="-80.320985"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="446"
+     inkscape:window-y="244"
      inkscape:current-layer="svg2440"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -269,12 +269,12 @@
      id="path3509" />
   <path
      style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 218.72603,-142.59792 L 227.18192,-101.42973"
+     d="M 224.52313,-142.59792 L 227.18192,-101.42973"
      id="path3511"
      sodipodi:nodetypes="cc" />
   <path
      style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 331.11256,-100.75405 L 338.70895,-141.95038"
+     d="M 331.11256,-100.75405 L 332.91185,-143.1098"
      id="path3513"
      sodipodi:nodetypes="cc" />
   <text
@@ -288,12 +288,12 @@
        id="tspan3517"
        x="278.77594"
        y="-159.48508"
-       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans">Region used for</tspan><tspan
+       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans">Region used</tspan><tspan
        sodipodi:role="line"
        x="278.77594"
        y="-139.68507"
        style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:110.00000238%;writing-mode:lr-tb;text-anchor:middle;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
-       id="tspan3521">serotyping</tspan></text>
+       id="tspan3521">for typing</tspan></text>
   <rect
      style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.89185749999999997;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
      id="rect2423"
