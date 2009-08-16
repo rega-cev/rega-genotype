@@ -15,6 +15,7 @@ PRIORITY
 	* contact us
 * details pics, generate them during analysis?
 * unit test example
+* HTLV/HHV8 submitted seq starts at pos ... of the ${name} ref seq (add name ref seq to xml file)
 
 LATER
 * WMessage args, WAnchors
