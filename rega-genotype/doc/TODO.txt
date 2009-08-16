@@ -8,7 +8,8 @@ PRIORITY
 	* monitor job (by providing an id)
 *jwt bug
 	* WTextArea setText() with '>' -> &gt;
-* recombination plot (cfr mail pong)
+* recombination plot
+	* curve colors
 * puzzle image -> too much whitespace
 * image centering -> sometimes refresh is needed
 * test on server without X installed, with java 1.5 (image creation)

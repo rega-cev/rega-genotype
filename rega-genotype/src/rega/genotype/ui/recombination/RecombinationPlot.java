@@ -1,6 +1,9 @@
 package rega.genotype.ui.recombination;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -8,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
 
 import org.apache.commons.io.FileUtils;
 import org.jfree.chart.ChartFactory;
@@ -18,8 +20,10 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
-
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.RectangleEdge;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -41,17 +45,37 @@ public class RecombinationPlot {
 				true, 
 				false 
 				);
+		
 		XYPlot plot = chart.getXYPlot();
 		plot.setDomainGridlinesVisible(false);
 		plot.setRangeGridlinesVisible(false);
+		
 		NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
 		yAxis.setTickUnit(new NumberTickUnit(20), true, true);
 		
-
 		NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
 		xAxis.setTickUnit(new NumberTickUnit(200), true, true);
+		xAxis.setRange(n.getXValue(0, 0), n.getXValue(0, n.getItemCount(0)-1));
 		
+		chart.getLegend().setPosition(RectangleEdge.RIGHT);
 		
+		//cutoff
+		XYSeriesCollection cutoffCollection = new XYSeriesCollection();
+		XYSeries cutoffSeries = new XYSeries("70% cutoff");
+		cutoffSeries.add(n.getXValue(0, 0), 70.0);
+		cutoffSeries.add(n.getXValue(0, n.getItemCount(0)-1), 70.0);
+		cutoffCollection.addSeries(cutoffSeries);
+		plot.setDataset(1, cutoffCollection);
+		plot.setRenderer(1, new XYLineAndShapeRenderer(true, false));
+		plot.getRenderer(1).setBaseStroke(new BasicStroke(2.0f,
+	                       BasicStroke.CAP_ROUND,
+	                       BasicStroke.JOIN_ROUND,
+	                       1.0f,
+	                       new float[] {10.0f, 6.0f},
+	                       0.0f));
+		plot.getRenderer(1).setSeriesPaint(0, Color.RED);
+		//cutoff
+
 		return chart;
 	}
 	
