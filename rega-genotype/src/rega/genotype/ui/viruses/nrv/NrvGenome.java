@@ -12,7 +12,7 @@ public class NrvGenome extends Genome {
 	private OrganismDefinition od;
 	
 	public NrvGenome(OrganismDefinition od) {
-		colorMap.put("-", new Color(0xff, 0xff, 0xff));
+		colorMap.put("-", new Color(0xc4, 0xff, 0xb4));
 		
 		this.od = od;
 	}
@@ -22,7 +22,7 @@ public class NrvGenome extends Genome {
 	}
 
 	public int GENOMEEND() {
-		return 7654;
+		return 7582;
 	}
 
 	public int GENOMESTART() {
@@ -30,11 +30,11 @@ public class NrvGenome extends Genome {
 	}
 
 	public int IMGGENOMEEND() {
-		return 579;
+		return 584;
 	}
 
 	public int IMGGENOMESTART() {
-		return -4;
+		return 0;
 	}
 	
 	public OrganismDefinition getOrganismDefinition() {

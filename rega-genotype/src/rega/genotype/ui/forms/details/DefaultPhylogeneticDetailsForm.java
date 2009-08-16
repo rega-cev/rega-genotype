@@ -15,16 +15,18 @@ import rega.genotype.ui.util.GenotypeLib;
 public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 	
 	private String xpath;
+	private WMessage commentTitle;
 	private WMessage title;
 
-	public DefaultPhylogeneticDetailsForm(String xpath, WMessage title) {
+	public DefaultPhylogeneticDetailsForm(String xpath, WMessage title, WMessage commentTitle) {
 		this.xpath = xpath;
 		this.title = title;
+		this.commentTitle = commentTitle;
 	}
 
 	public void fillForm(SaxParser p, OrganismDefinition od, File jobDir) {
 		String phyloPath = xpath;
-		initPhyloSection(p, title, jobDir, phyloPath);
+		initPhyloSection(p, commentTitle, jobDir, phyloPath);
 	}
 	
 	private void initPhyloSection(SaxParser p, WMessage header, File jobDir, String phyloPath) {
@@ -59,7 +61,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 	}
 
 	public WMessage getTitle() {
-		return tr("defaultPhylogeneticAnalyses.title");
+		return title != null ? title : tr("defaultPhylogeneticAnalyses.title");
 	}
 
 	@Override

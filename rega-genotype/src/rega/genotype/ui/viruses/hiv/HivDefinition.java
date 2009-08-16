@@ -56,12 +56,19 @@ public class HivDefinition implements OrganismDefinition {
 
 	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
+
+		WMessage m = WMessage.lt("Phylogenetic analysis with pure subtypes:");
 		
 		if (p.elementExists("genotype_result.sequence.result['pure']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", WMessage.lt("Phylogenetic analysis with pure subtypes:")));
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m));
 		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", WMessage.lt("Phylogenetic analysis with pure subtypes:")));
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m));
 
+		m = WMessage.lt("Phylogenetic analysis with pure subtypes and CRFs:");
+
+		if (p.elementExists("genotype_result.sequence.result['crf']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m));
+		
 		if (p.elementExists("genotype_result.sequence.result['scan']"))
 			forms.add(new DefaultRecombinationDetailsForm());
 		

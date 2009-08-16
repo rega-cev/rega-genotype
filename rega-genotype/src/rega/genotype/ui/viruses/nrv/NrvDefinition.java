@@ -47,7 +47,7 @@ public class NrvDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(1, null);
+		return new NrvSequenceAssignmentForm();
 	}
 
 	private void addPhyloDetailForms(SaxParser p, List<IDetailsForm> forms, String region) {
@@ -55,15 +55,15 @@ public class NrvDefinition implements OrganismDefinition {
 		
 		String phyloResult = result + "['phylo-" + region + "']";
 		if (p.elementExists(phyloResult)) {
-			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult,
-					WMessage.lt("Phylogenetic analyses for " + region + " genotype: ")));
+			WMessage title = WMessage.lt("Phylogenetic analyses for " + region + " genotype");
+			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title));
 
 			String bestGenotype = p.getValue(phyloResult + ".best.id");
 			
 			String variantResult = result + "['phylo-" + region + "-" + bestGenotype + "']";
 			if (p.elementExists(variantResult)) {
-				forms.add(new DefaultPhylogeneticDetailsForm(variantResult,
-					WMessage.lt("Phylogenetic analyses for variant:")));
+				WMessage variantTitle = WMessage.lt("Phylogenetic analyses for variant");
+				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle));
 			}
 		}
 	}
