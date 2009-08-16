@@ -2,40 +2,15 @@
 " "http://java.sun.com/dtd/web-app_2_3.dtd" >
 <web-app>
   <servlet>
-    <servlet-name>GenotypeHIV</servlet-name>
-    <display-name>HIV Genotyping</display-name>
-    <description>HIV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.hiv.HivMain</servlet-class>
+    <servlet-name>MPF</servlet-name>
+    <display-name>RIVM Molecular Platform</display-name>
+    <description>RIVM Molecular Platform</description>
+    <servlet-class>nl.rivm.mpf.ui.main.MpfMain</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>GenotypeHIV</servlet-name>
-    <url-pattern>/GenotypeHIV/*</url-pattern>
+    <servlet-name>MPF</servlet-name>
+    <url-pattern>/MPF/*</url-pattern>
   </servlet-mapping>
-
-  <servlet>
-    <servlet-name>GenotypeNoV</servlet-name>
-    <display-name>NoV Genotyping</display-name>
-    <description>NoV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.nov.NovMain</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeNoV</servlet-name>
-    <url-pattern>/GenotypeNoV/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>GenotypeHTLV</servlet-name>
-    <display-name>HTLV Genotyping</display-name>
-    <description>HTLV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.htlv.HtlvMain</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHTLV</servlet-name>
-    <url-pattern>/GenotypeHTLV/*</url-pattern>
-  </servlet-mapping>
-  
 </web-app>
 

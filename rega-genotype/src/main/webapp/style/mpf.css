@@ -1,0 +1,16 @@
+*.navigation-item
+{
+	cursor: pointer;
+	color: blue;
+}
+
+*.navigation-disabledItem
+{
+	color: grey;
+}
+
+*.navigation-selectedItem
+{
+	color: blue;
+	font-weight: bold;
+}
