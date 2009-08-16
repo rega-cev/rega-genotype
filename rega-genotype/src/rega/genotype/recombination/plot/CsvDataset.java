@@ -1,7 +1,5 @@
 package rega.genotype.recombination.plot;
 
-import net.sf.regadb.csv.Table;
-
 import org.jfree.data.DomainOrder;
 import org.jfree.data.xy.AbstractXYDataset;
 

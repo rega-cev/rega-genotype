@@ -6,8 +6,6 @@ import java.io.FileReader;
 
 import javax.swing.JFrame;
 
-import net.sf.regadb.csv.Table;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
