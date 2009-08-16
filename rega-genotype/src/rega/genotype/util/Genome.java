@@ -26,11 +26,11 @@ public abstract class Genome {
 		         *((double)IMGGENOMEEND() - IMGGENOMESTART()));
 	}
 	
-	public void getGenomePNG(File jobDir, int sequenceIndex, String thegenotype, int start, int end, int variant, String type) throws IOException {
-		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genome_" + sequenceIndex + type + variant + ".png");
+	public File getGenomePNG(File jobDir, int sequenceIndex, String thegenotype, int start, int end, int variant, String type) throws IOException {
+		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genome_" + sequenceIndex + "_" + type + "_" + variant + ".png");
 	
 		if(!pngFile.exists()) {
-			File csvFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + type + ".csv");
+			File csvFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
 			Table csvTable = Table.readTable(csvFile, '\t');
 		    
 		    int w[] = new int[csvTable.numRows()-1];
@@ -84,5 +84,18 @@ public abstract class Genome {
 		    
 		    ImageIO.write(image, "png", pngFile);
 		}
+		
+		return pngFile;
+	}
+	
+	public File getSmallGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, int variant, String type) throws IOException {
+		  File smallPngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genomesmall_" + sequenceIndex + "_" + type + "_" + variant + ".png");
+
+		  if (!smallPngFile.exists()) {
+		    File pngFile = getGenomePNG(jobDir, sequenceIndex, genotype, start, end, variant, type);
+		    GenotypeLib.scalePNG(pngFile, smallPngFile, 40.0);
+		  }
+
+		  return smallPngFile;
 	}
 }

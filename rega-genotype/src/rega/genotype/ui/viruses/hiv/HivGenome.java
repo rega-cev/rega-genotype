@@ -54,6 +54,7 @@ public class HivGenome extends Genome {
 
 		try {
 			hiv.getGenomePNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "F1", 2252, 3275, 0, "pure");
+			hiv.getSmallGenomePNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "F1", 2252, 3275, 0, "pure");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
