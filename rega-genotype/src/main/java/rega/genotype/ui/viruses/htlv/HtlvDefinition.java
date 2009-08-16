@@ -55,14 +55,14 @@ public class HtlvDefinition implements OrganismDefinition {
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
 
-		WString m = WString.lt("Phylogenetic analysis with pure subtypes:");
+		WString m = new WString("Phylogenetic analysis with pure subtypes:");
 		
 		if (p.elementExists("genotype_result.sequence.result['pure']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m, false));
 		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m, false));
 
-		m = WString.lt("Phylogenetic analysis with pure subtypes and CRFs:");
+		m = new WString("Phylogenetic analysis with pure subtypes and CRFs:");
 
 		if (p.elementExists("genotype_result.sequence.result['crf']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m, false));

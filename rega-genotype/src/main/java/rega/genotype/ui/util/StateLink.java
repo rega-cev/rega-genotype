@@ -22,7 +22,7 @@ public class StateLink extends WAnchor {
 	public StateLink(WString ws, String url, WContainerWidget parent) {
 		super("", ws, parent);
 
-		text().arg("");
+		getText().arg("");
 		
 		this.setStyleClass("non-link");
 		this.baseUrl = this.internalPath = url;
@@ -33,8 +33,8 @@ public class StateLink extends WAnchor {
 		/*
 		 * Update link text
 		 */
-		text().args().clear();
-		text().args().add(value);
+		getText().args().clear();
+		getText().args().add(value);
 		
 		if (value.equals("")) {
 			setRefInternalPath(this.internalPath = baseUrl);

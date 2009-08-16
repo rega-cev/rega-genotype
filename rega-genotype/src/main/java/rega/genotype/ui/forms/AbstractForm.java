@@ -31,7 +31,7 @@ public abstract class AbstractForm extends WContainerWidget {
 			throw new RuntimeException("No '" + title + "' form.");
 
 		String titleDiv = "<h1>" + main.getResourceManager().getOrganismValue(title, "title").value() + "</h1>";
-		this.title = new WText(lt(titleDiv), this);
+		this.title = new WText(titleDiv, this);
 		this.title.setObjectName("title");
 		this.setStyleClass(cssClass + " form");
 	}

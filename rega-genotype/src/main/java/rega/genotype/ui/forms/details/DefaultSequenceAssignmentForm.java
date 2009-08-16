@@ -59,16 +59,16 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 		text.addWidget(new WText(tr("defaultSequenceAssignment.assignment")));
 
 		if(!p.elementExists("genotype_result.sequence.conclusion")) {
-			text.addWidget(new WText(lt(" Sequence error")));
+			text.addWidget(new WText(" Sequence error"));
 		} else {
-			text.addWidget(new WText(lt(" " +p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name"))));
+			text.addWidget(new WText(" " +p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name")));
 		}
-		text.addWidget(new WText(lt(", ")));
+		text.addWidget(new WText(", "));
 		text.addWidget(new WText(tr("defaultSequenceAssignment.bootstrap")));
 		if(!p.elementExists("genotype_result.sequence.conclusion.assigned.support")) {
-			text.addWidget(new WText(lt(" NA")));
+			text.addWidget(new WText(" NA"));
 		} else {
-			text.addWidget(new WText(lt(" " +p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support")+"%")));
+			text.addWidget(new WText(" " +p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support")+"%"));
 		}
 		
 		int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
@@ -100,9 +100,9 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 			motivation.addWidget(new WBreak());
 			motivation.addWidget(new WText(tr("defaultSequenceAssignment.motivation")));
 			if(!p.elementExists("genotype_result.sequence.conclusion")) {
-				motivation.addWidget(new WText(lt(p.getEscapedValue("genotype_result.sequence.error"))));
+				motivation.addWidget(new WText(p.getEscapedValue("genotype_result.sequence.error")));
 			} else {
-				motivation.addWidget(new WText(lt(p.getEscapedValue("genotype_result.sequence.conclusion.motivation"))));
+				motivation.addWidget(new WText(p.getEscapedValue("genotype_result.sequence.conclusion.motivation")));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

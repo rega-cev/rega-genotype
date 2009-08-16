@@ -84,7 +84,7 @@ public class StartForm extends AbstractForm {
 	
 		run.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				verifyFasta(ta.text());
+				verifyFasta(ta.getText());
 			}
 		});
 		
@@ -97,8 +97,8 @@ public class StartForm extends AbstractForm {
 		fileUpload.getUploadFile().uploaded().addListener(this, new Signal.Listener() {
             public void trigger() {                
 				try {
-					if (fileUpload.getUploadFile().spoolFileName() != "") {
-						String fasta = GenotypeLib.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
+					if (!fileUpload.getUploadFile().getSpoolFileName().equals("")) {
+						String fasta = GenotypeLib.readFileToString(new File(fileUpload.getUploadFile().getSpoolFileName()));
 						verifyFasta(fasta);
 					}
 				} catch (IOException e) {
@@ -120,7 +120,7 @@ public class StartForm extends AbstractForm {
 		monitorButton = new WPushButton(tr("startForm.monitor"), seqinput);
 		monitorButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				File jobDir = getMain().getJobDir(jobIdTF.text());
+				File jobDir = getMain().getJobDir(jobIdTF.getText());
 				if (jobDir.exists()) {
 					setValid(jobIdTF, errorJobId);
 					getMain().monitorForm(jobDir, true);
@@ -211,11 +211,11 @@ public class StartForm extends AbstractForm {
 			}
 
 		} catch (IOException e) {
-			errorSeq.setText(lt("I/O error reading the sequence."));
+			errorSeq.setText("I/O error reading the sequence.");
 			setInvalid(ta, errorSeq);
 			e.printStackTrace();
 		} catch (FileFormatException e) {
-			errorSeq.setText(lt(e.getMessage()));
+			errorSeq.setText(e.getMessage());
 			setInvalid(ta, errorSeq);
 		}
 	}

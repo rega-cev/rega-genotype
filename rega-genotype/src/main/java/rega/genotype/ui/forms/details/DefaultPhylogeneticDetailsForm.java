@@ -51,19 +51,19 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		WListContainerWidget ul = new WListContainerWidget(this);
 		ul.setId("");
 		WContainerWidget li;
-		li = ul.addItem(new WText(lt("Bootstrap support: " + p.getValue(phyloPath + ".best.support"))));
+		li = ul.addItem(new WText("Bootstrap support: " + p.getValue(phyloPath + ".best.support")));
 		
-		li = ul.addItem(new WText(lt("Download the alignment (")));
+		li = ul.addItem(new WText("Download the alignment ("));
 		li.addWidget(GenotypeLib.getAnchor("NEXUS format",
 				"application/txt",
 				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")), null));
-		li.addWidget(w = new WText(lt(", ")));
+		li.addWidget(w = new WText(", "));
 		w.setId("");
 		li.addWidget(GenotypeLib.getAnchor("FASTA format",
 				"application/txt",
 				new AlignmentResource(GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")),
 						SequenceAlignment.SEQUENCE_ANY, SequenceAlignment.FILETYPE_FASTA), "alignment.fasta"));
-		li.addWidget(w= new WText(lt(")")));
+		li.addWidget(w= new WText(")"));
 		w.setId("");
 
 		WAnchor anchorTreePdf = GenotypeLib.getAnchor("PDF",
@@ -76,18 +76,18 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		anchorTreeNexus.setId("");
 
 		if (!showTree) {
-			li = ul.addItem(new WText(lt("Export or View the Phylogenetic Tree: ")));
+			li = ul.addItem(new WText("Export or View the Phylogenetic Tree: "));
 			li.addWidget(anchorTreePdf);
-			li.addWidget(w = new WText(lt(", ")));
+			li.addWidget(w = new WText(", "));
 			w.setId("");
 			li.addWidget(anchorTreeNexus);
 		} else {
-			li = ul.addItem(new WText(lt("Phylogenetic Tree (export as ")));
+			li = ul.addItem(new WText("Phylogenetic Tree (export as "));
 			li.addWidget(anchorTreePdf);
-			li.addWidget(w = new WText(lt(", ")));
+			li.addWidget(w = new WText(", "));
 			w.setId("");
 			li.addWidget(anchorTreeNexus);
-			li.addWidget(w = new WText(lt("):")));
+			li.addWidget(w = new WText("):"));
 			w.setId("");
 
 			WImage treePng = GenotypeLib.getWImageFromFile
@@ -97,11 +97,11 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 			li.addWidget(treePng);
 		}
 
-		li = ul.addItem(new WText(lt("View the ")));
+		li = ul.addItem(new WText("View the "));
 		li.addWidget(GenotypeLib.getAnchor("PAUP* Log file",
 				"application/txt",
 				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".log")), "paup-log.doc"));
-		li.addWidget(w = new WText(lt(" (Contains bootstrap values)")));
+		li.addWidget(w = new WText(" (Contains bootstrap values)"));
 		w.setId("");
 	}
 

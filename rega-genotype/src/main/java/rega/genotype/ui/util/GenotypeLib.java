@@ -252,7 +252,7 @@ public class GenotypeLib {
 	public static WImage getWImageFromFile(final File f) {
 		System.out.println("*** getWImageFromFile: "+ f.getAbsolutePath());
 		WImage chartImage = new WImage(new WFileResource("image/png", f.getAbsolutePath()), new WString(""), (WContainerWidget)null);
-		chartImage.resource().suggestFileName("x.png");
+		chartImage.getResource().suggestFileName("x.png");
 		return chartImage;
 	}
 	
@@ -286,7 +286,7 @@ public class GenotypeLib {
 	}
 
 	public static WAnchor getAnchor(String text, String fileType, WResource resource, String suggestedName) {
-		WAnchor anchor = new WAnchor("", WContainerWidget.lt(text));
+		WAnchor anchor = new WAnchor("", text);
 		anchor.setId("");
 		anchor.setStyleClass("link");
 		anchor.setTarget(AnchorTarget.TargetNewWindow);

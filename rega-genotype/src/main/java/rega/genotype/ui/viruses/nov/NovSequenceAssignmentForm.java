@@ -49,7 +49,7 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 			String orf = "ORF" + i;
 			NovResults.Conclusion c = NovResults.getConclusion(p, orf);
 
-			WString motivation = WString.lt(c.majorMotivation);
+			WString motivation = new WString(c.majorMotivation);
 			motivation.arg(c.majorBootstrap);
 
 			t = new WText(tr("nrvSequenceAssignment.phylo")
@@ -59,7 +59,7 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 			t.setId("");
 
 			if (c.variantDescription != null) {
-				motivation = WString.lt(c.variantMotivation);
+				motivation = new WString(c.variantMotivation);
 				motivation.arg(c.variantBootstrap);
 
 				t = new WText(tr("nrvSequenceAssignment.phylo-variant")
@@ -69,7 +69,7 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 			}
 		}
 
-		t = new WText(lt("<h3>Genome region</h3>"), block);
+		t = new WText("<h3>Genome region</h3>", block);
 		t.setId("");
 
 		int start = 0;

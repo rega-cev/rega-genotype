@@ -484,6 +484,12 @@ public class SequenceAlignment
             } while (names.contains(name));
         }
 
+        try {
+        	Integer.parseInt(name);
+        	name = "_" + name;
+        } catch (NumberFormatException e) {        	
+        }
+        
         return name;
     }
 

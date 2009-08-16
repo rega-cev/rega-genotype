@@ -85,4 +85,8 @@ public class Sequence extends AbstractSequence
 	public void setSourceSequence(AbstractSequence sourceSequence) {
 		this.sourceSequence = sourceSequence;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

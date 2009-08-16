@@ -64,14 +64,14 @@ public class NovDefinition implements OrganismDefinition {
 		
 		String phyloResult = result + "['phylo-" + region + "']";
 		if (p.elementExists(phyloResult)) {
-			WString title = WString.lt("Phylogenetic analyses (" + region + ")");
+			WString title = new WString("Phylogenetic analyses (" + region + ")");
 			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
 
 			String bestGenotype = p.getEscapedValue(phyloResult + ".best.id");
 			
 			String variantResult = result + "['phylo-" + region + "-" + bestGenotype + "']";
 			if (p.elementExists(variantResult)) {
-				WString variantTitle = WString.lt("Phylogenetic analyses (" + region + ") for variant within "
+				WString variantTitle = new WString("Phylogenetic analyses (" + region + ") for variant within "
 						+ bestGenotype);
 				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle, true));
 			}

@@ -94,7 +94,7 @@ public class GenotypeWindow extends WContainerWidget
 		app.useStyleSheet("style/genotype.css");
 
 		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
-		header.setAlternateText(lt("header"));
+		header.setAlternateText("header");
 		header.setId("");
 		header.setStyleClass("header");
 
@@ -212,7 +212,7 @@ public class GenotypeWindow extends WContainerWidget
 			activeForm.hide();
 		activeForm = form;
 
-		if (form.parent() == null)
+		if (form.getParent() == null)
 			content.addWidget(form);
 	}
 	

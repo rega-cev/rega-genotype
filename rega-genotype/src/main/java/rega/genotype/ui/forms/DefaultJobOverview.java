@@ -13,6 +13,7 @@ import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 
@@ -28,20 +29,20 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	public DefaultJobOverview(GenotypeWindow main) {
 		super(main);
 		
-		headers.add(new Header(lt("Name")));
-		headers.add(new Header(lt("Length")));
-		headers.add(new Header(lt("Report")));
-		headers.add(new Header(lt("Assignment")));
-		headers.add(new Header(lt("Support")));
-		headers.add(new Header(lt("Genome")));
+		headers.add(new Header(new WString("Name")));
+		headers.add(new Header(new WString("Length")));
+		headers.add(new Header(new WString("Report")));
+		headers.add(new Header(new WString("Assignment")));
+		headers.add(new Header(new WString("Support")));
+		headers.add(new Header(new WString("Genome")));
 	}
 	
 	@Override
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		data.clear();
 		
-		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]"))));
-		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[length]"))));
+		data.add(new WText(p.getEscapedValue("genotype_result.sequence[name]")));
+		data.add(new WText(p.getEscapedValue("genotype_result.sequence[length]")));
 		
 		WAnchor report = createReportLink(p);
 		data.add(report);
@@ -49,17 +50,17 @@ public class DefaultJobOverview extends AbstractJobOverview {
 		String id;
 		if (!p.elementExists("genotype_result.sequence.conclusion")) {
 			id = "-";
-			data.add(new WText(lt("NA")));
-			data.add(new WText(lt("NA")));
+			data.add(new WText("NA"));
+			data.add(new WText("NA"));
 		} else {
 			id = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.id");
-			data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name"))));
+			data.add(new WText(p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name")));
 			
 			String support = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support");
 			if(support==null) {
 				support = "NA";
 			}
-			data.add(new WText(lt(support)));
+			data.add(new WText(support));
 			try {
 				data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
 						id,

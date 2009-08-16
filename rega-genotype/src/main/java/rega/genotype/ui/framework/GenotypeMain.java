@@ -13,7 +13,7 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
 import eu.webtoolkit.jwt.Configuration;
 import eu.webtoolkit.jwt.WApplication;
-import eu.webtoolkit.jwt.WebController;
+import eu.webtoolkit.jwt.WtServlet;
 
 /**
  * The entry point of the application.
@@ -22,7 +22,7 @@ import eu.webtoolkit.jwt.WebController;
  *
  */
 @SuppressWarnings("serial")
-public abstract class GenotypeMain extends WebController
+public abstract class GenotypeMain extends WtServlet
 {
 	public GenotypeMain() {
 		super(new Configuration());

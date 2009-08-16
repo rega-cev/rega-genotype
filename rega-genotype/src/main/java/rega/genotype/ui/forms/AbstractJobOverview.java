@@ -233,12 +233,12 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			xmlResource.suggestFileName("result.xml");
 			xmlFileDownload.setRef(xmlResource.generateUrl());
 			
-			l = new WText(lt(", "), div);
+			l = new WText(", ", div);
 			l.setId("");
 			
 			div.addWidget(createTableDownload(tr("monitorForm.csvTable"), true));
 
-			l = new WText(lt(", "), div);
+			l = new WText(", ", div);
 			l.setId("");
 
 			div.addWidget(createTableDownload(tr("monitorForm.xlsTable"), false));
@@ -303,11 +303,11 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					WTableCell cell = jobTable.elementAt(getSequenceIndex()+1, i);
 					cell.setId("");
 					cell.addWidget(data.get(i));
-					if (data.get(i).objectName().length() > 0)
+					if (data.get(i).getObjectName().length() > 0)
 						data.get(i).setId("");
 					
 					if (WApplication.instance().environment().agentIsIE())
-						cell.setStyleClass(jobTable.columnAt(i).styleClass());
+						cell.setStyleClass(jobTable.columnAt(i).getStyleClass());
 				}
 				jobTable.rowAt(jobTable.rowCount() - 1).setId("");
 			}
@@ -319,7 +319,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public abstract List<WWidget> getData(GenotypeResultParser p);
 
 	protected WAnchor createReportLink(final GenotypeResultParser p) {
-		WAnchor report = new WAnchor("", lt("Report"));
+		WAnchor report = new WAnchor("", "Report");
 		report.setObjectName("report-" + p.getSequenceIndex());
 		report.setStyleClass("link");
 		report.setRefInternalPath(GenotypeWindow.reportPath(jobDir, p.getSequenceIndex()));

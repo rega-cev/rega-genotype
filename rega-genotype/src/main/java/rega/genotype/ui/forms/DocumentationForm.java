@@ -37,13 +37,13 @@ public class DocumentationForm extends AbstractForm {
 		for(Object o : text.getChildren()) {
 			final Element e = (Element)o;
 			if(e.getName().equals("header")) {
-				WText header = new WText(lt((++headerNr) + ". " + getMain().getResourceManager().extractFormattedText(e) +":"), this);
+				WText header = new WText((++headerNr) + ". " + getMain().getResourceManager().extractFormattedText(e) +":", this);
 				header.setId("");
 				header.setStyleClass("decisionTreeHeader");
 			} else if(e.getName().equals("rule")){
 				ruleNumber = e.getAttributeValue("number");
 				ruleName = e.getAttributeValue("name");
-				WText w = new WText(lt(ruleNumber + ": " + ruleName + "<br></br>" + getMain().getResourceManager().extractFormattedText(e) + "<br></br>"), this);
+				WText w = new WText(ruleNumber + ": " + ruleName + "<br></br>" + getMain().getResourceManager().extractFormattedText(e) + "<br></br>", this);
 				w.setId("");
 			} else if(e.getName().equals("figure")) {
 				WContainerWidget imgDiv = new WContainerWidget(this);
@@ -54,12 +54,12 @@ public class DocumentationForm extends AbstractForm {
 				String sequence = "<div class=\"sequenceName\">>" + e.getAttributeValue("name") +"<br/></div>";
 				sequence += "<div class=\"sequence\">";
 				sequence += e.getTextTrim() + "</div>";
-				WText w = new WText(lt(sequence), this);
+				WText w = new WText(sequence, this);
 				w.setId("");
 			} else if(e.getName().equals("table")) {
 				createTable(e.getTextTrim(), this);
 			} if(e.getName().equals("text")) {
-				WText w = new WText(lt(getMain().getResourceManager().extractFormattedText(e)), this);
+				WText w = new WText(getMain().getResourceManager().extractFormattedText(e), this);
 				w.setId("");
 			}
 		}
@@ -76,7 +76,7 @@ public class DocumentationForm extends AbstractForm {
 
 		for(int i = 0; i<csvTable.numRows(); i++) {
 			for(int j = 0; j<csvTable.numColumns(); j++) {
-				table.elementAt(i, j).addWidget(new WText(lt(csvTable.valueAt(j, i))));
+				table.elementAt(i, j).addWidget(new WText(csvTable.valueAt(j, i)));
 			}
 		}
 		return table;

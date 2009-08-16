@@ -14,6 +14,7 @@ import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 
@@ -30,33 +31,33 @@ public class NovJobOverview extends AbstractJobOverview {
 	public NovJobOverview(GenotypeWindow main) {
 		super(main);
 		
-		headers.add(new Header(lt("Name")));
-		headers.add(new Header(lt("Length")));
-		headers.add(new Header(lt("Report")));
-		headers.add(new Header(lt("ORF 1"), 2));
-		headers.add(new Header(lt("ORF 2"), 2));
-		headers.add(new Header(lt("Genome")));
+		headers.add(new Header(new WString("Name")));
+		headers.add(new Header(new WString("Length")));
+		headers.add(new Header(new WString("Report")));
+		headers.add(new Header(new WString("ORF 1"), 2));
+		headers.add(new Header(new WString("ORF 2"), 2));
+		headers.add(new Header(new WString("Genome")));
 	}
 	
 	@Override
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		data.clear();
 
-		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]"))));
-		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[length]"))));
+		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[name]"))));
+		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[length]"))));
 
 		WAnchor report = createReportLink(p);
 		data.add(report);
 
 		NovResults.Conclusion c = NovResults.getConclusion(p, "ORF1");
 
-		data.add(new WText(lt(notNull(c.majorAssignment))));
-		data.add(new WText(lt(notNull(c.variantAssignmentForOverview))));
+		data.add(new WText(new WString(notNull(c.majorAssignment))));
+		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
 
 		c = NovResults.getConclusion(p, "ORF2");
 
-		data.add(new WText(lt(notNull(c.majorAssignment))));
-		data.add(new WText(lt(notNull(c.variantAssignmentForOverview))));
+		data.add(new WText(new WString(notNull(c.majorAssignment))));
+		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
 
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 

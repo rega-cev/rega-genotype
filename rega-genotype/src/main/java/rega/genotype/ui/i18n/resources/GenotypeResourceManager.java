@@ -64,11 +64,11 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 	}
     
 	public WString getCommonValue(String form, String item) {
-		return WWidget.lt(extractFormattedText(common.getChild(form).getChild(item)));
+		return new WString(extractFormattedText(common.getChild(form).getChild(item)));
 	}
 	
 	public WString getOrganismValue(String form, String item) {
-		return WWidget.lt(extractFormattedText(organism.getChild(form).getChild(item)));
+		return new WString(extractFormattedText(organism.getChild(form).getChild(item)));
 	}
 	
 	public WString getOrganismValue(String form, String item, List<String> args) {
@@ -78,7 +78,7 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 			value = value.replace("{"+(i+1)+"}", args.get(i));
 		}
 		
-		return WWidget.lt(value);
+		return new WString(value);
 	}
 	
 	public Element getOrganismElement(String form, String item) {
