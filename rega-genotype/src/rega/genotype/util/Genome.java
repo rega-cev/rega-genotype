@@ -1,7 +1,16 @@
 package rega.genotype.util;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+
+import rega.genotype.recombination.plot.Table;
 
 public abstract class Genome {
 	public abstract Map<String, Color> COLORS();
@@ -15,5 +24,62 @@ public abstract class Genome {
 		return (int)(IMGGENOMESTART() + ((double)pos - GENOMESTART())
 		         /((double)GENOMEEND() - GENOMESTART())
 		         *((double)IMGGENOMEEND() - IMGGENOMESTART()));
+	}
+	
+	public void getGenomePNG(File jobDir, int sequenceIndex, String thegenotype, int start, int end, int variant, String type) throws IOException {
+		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genome_" + sequenceIndex + type + variant + ".png");
+	
+		if(!pngFile.exists()) {
+			File csvFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + type + ".csv");
+			Table csvTable = Table.readTable(csvFile, '\t');
+		    
+		    int w[] = new int[csvTable.numRows()];
+		    String assign[] = new String[csvTable.numRows()];
+		    
+		    for(int i = 1; i<csvTable.numRows(); i++) {
+		    	w[i] = Integer.parseInt(csvTable.valueAt(0, i));
+		    	assign[i] = csvTable.valueAt(csvTable.numColumns() -1 -variant, i);
+		    }
+		    
+		    int imgWidth = 584;
+		    int imgHeight = 150;
+		    int scanWindowSize = w[0]*2;
+		    int scanStepSize = w[1] - w[0];
+		    
+		    BufferedImage image = new BufferedImage(imgWidth,imgHeight,BufferedImage.TYPE_INT_ARGB);
+		    Graphics2D g2d = (Graphics2D)image.getGraphics();
+		    
+		    Map<String, Color> colorMap = COLORS();
+		    
+		    Color bgcolor = colorMap.get("-");
+		    if (w.length == 0) {
+		      bgcolor = colorMap.get(thegenotype);
+		    }
+		    
+		    //g2d.setColor(bgcolor);
+		    g2d.setColor(Color.red);
+		    g2d.fillRect(imgX(start), 0, imgX(end)-imgX(start), imgHeight);
+		    
+		    int x1, x2;
+		    for (int c=0; c < w.length; c++) {
+		        if (c == 0)
+		        	x1 = start + w[c] - scanWindowSize/2;
+		        else
+		        	x1 = start + w[c] - scanStepSize/2;
+
+		        if (c == w.length-1)
+		        	x2 = start + w[c] + scanWindowSize/2;
+		        else
+		        	x2 = start + w[c] + scanStepSize/2;
+
+		        g2d.setColor(colorMap.get(assign[c]));
+		        g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
+		    }
+	
+		    Image genomePng = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(GENOMEIMAGE()+variant+".png"));
+		    g2d.drawImage(genomePng, 0, 0, imgWidth, imgHeight, null);
+		    
+		    ImageIO.write(image, "png", pngFile);
+		}
 	}
 }
