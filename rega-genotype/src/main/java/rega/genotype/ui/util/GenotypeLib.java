@@ -187,11 +187,13 @@ public class GenotypeLib {
             }
         }
 
-        System.err.println("taxa: " + taxa);
-        
-		if((result = proc.waitFor()) != 0)
+		if ((result = proc.waitFor()) != 0)
 			throw new ApplicationException(cmd +" exited with error: "+result);
-		
+
+		proc.getErrorStream().close();
+		proc.getInputStream().close();
+		proc.getOutputStream().close();
+
 		File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
 		File resizedTgfFile = new File(treeFile.getPath().replace(".tre", ".resized.tgf"));
 
@@ -227,7 +229,11 @@ public class GenotypeLib {
 		proc = runtime.exec(cmd, null, jobDir);
 		if((result = proc.waitFor()) != 0)
 			throw new ApplicationException(cmd +" exited with error: "+result);
-		
+
+		proc.getErrorStream().close();
+		proc.getInputStream().close();
+		proc.getOutputStream().close();
+
 		return svgFile;
 	}
 	

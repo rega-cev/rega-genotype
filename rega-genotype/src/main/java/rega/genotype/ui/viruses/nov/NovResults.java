@@ -49,7 +49,10 @@ public class NovResults {
 					result.variantAssignmentForOverview = result.variantAssignment;
 
 				result.variantBootstrap = p.getEscapedValue(variantConclusionP + ".assigned.support");
-				result.variantDescription = p.getEscapedValue(variantConclusionP + ".assigned.description");
+				if (!variantNotAssigned)
+					result.variantDescription = p.getEscapedValue(variantConclusionP + ".assigned.description");
+				else
+					result.variantDescription = "Not assigned";
 				result.variantMotivation = p.getEscapedValue(variantConclusionP + ".motivation");
 			}
 		} else {

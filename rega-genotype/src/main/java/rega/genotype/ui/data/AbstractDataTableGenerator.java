@@ -65,8 +65,9 @@ public abstract class AbstractDataTableGenerator extends SaxParser {
     		addValue(value);
     }
 
-	protected void addPhyloResults(String analysisId) {
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best.name", ValueFormat.Label);
+	protected void addPhyloResults(String analysisId, boolean useIdNotName) {
+		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best."
+					+ (useIdNotName ? "id" : "name"), ValueFormat.Label);
 		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best.support", ValueFormat.Number);
 		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best.inner", ValueFormat.Number);
 		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best.outer", ValueFormat.Number);

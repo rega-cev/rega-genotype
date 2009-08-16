@@ -25,7 +25,9 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
 		table.addLabel("name");
 		table.addLabel("length");
 		table.addLabel("ORF1");
+		table.addLabel("ORF1_variant");
 		table.addLabel("ORF2");
+		table.addLabel("ORF2_variant");
 		table.addLabel("begin");
 		table.addLabel("end");
 		table.addLabel("genogroup");
@@ -55,32 +57,32 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
 
 		NovResults.Conclusion c = NovResults.getConclusion(this, "ORF1");
 
-		addValue(c.majorAssignment);
-		addValue(c.variantAssignment == null ? "" : c.variantAssignment);
+		addValue(c.majorAssignment == NovResults.NA ? "" : c.majorAssignment);
+		addValue(c.variantAssignmentForOverview == null ? "" : c.variantAssignmentForOverview);
 
 		c = NovResults.getConclusion(this, "ORF2");
 
-		addValue(c.majorAssignment);
-		addValue(c.variantAssignment == null ? "" : c.variantAssignment);
+		addValue(c.majorAssignment == NovResults.NA ? "" : c.majorAssignment);
+		addValue(c.variantAssignmentForOverview == null ? "" : c.variantAssignmentForOverview);
 
     	addNamedValue("genotype_result.sequence.result['blast'].start", ValueFormat.Number);
     	addNamedValue("genotype_result.sequence.result['blast'].end", ValueFormat.Number);
     	addNamedValue("genotype_result.sequence.result['blast'].cluster.name", ValueFormat.Label);
     	
-    	addPhyloResults("phylo-ORF1");
+    	addPhyloResults("phylo-ORF1", false);
 
     	String id = getValue("genotype_result.sequence.result['phylo-ORF1'].best.id");
     	if (id != null)
-    		addPhyloResults("phylo-ORF1-" + id);
+    		addPhyloResults("phylo-ORF1-" + id, true);
     	else
     		for (int i = 0; i < 4; ++i)
     			addValue("");
 
-    	addPhyloResults("phylo-ORF2");
+    	addPhyloResults("phylo-ORF2", false);
 
     	id = getValue("genotype_result.sequence.result['phylo-ORF2'].best.id");
     	if (id != null)
-    		addPhyloResults("phylo-ORF2-" + id);
+    		addPhyloResults("phylo-ORF2-" + id, true);
     	else
     		for (int i = 0; i < 4; ++i)
     			addValue("");

@@ -63,13 +63,13 @@ public class DefaultTableGenerator extends AbstractDataTableGenerator {
     	addNamedValue("genotype_result.sequence.result['blast'].cluster.name", ValueFormat.Label);
     		
     	if (elementExists("genotype_result.sequence.result['pure']"))
-    		addPhyloResults("pure");
+    		addPhyloResults("pure", false);
     	else
-    		addPhyloResults("pure-puzzle");
+    		addPhyloResults("pure-puzzle", false);
 
 		addPhyloScanResults("scan");
 
-		addPhyloResults("crf");
+		addPhyloResults("crf", false);
 
 		addPhyloScanResults("crfscan");
 		
