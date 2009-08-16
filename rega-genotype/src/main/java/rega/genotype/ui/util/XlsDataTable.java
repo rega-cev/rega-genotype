@@ -56,9 +56,9 @@ public class XlsDataTable implements DataTable {
 		try {
 			sheet.addCell(xlsCell.getCell());
 		} catch (RowsExceededException e) {
-			throw new IOException(e);
+			throw new IOException(e.getMessage());
 		} catch (WriteException e) {
-			throw new IOException(e);
+			throw new IOException(e.getMessage());
 		}
 	}
 

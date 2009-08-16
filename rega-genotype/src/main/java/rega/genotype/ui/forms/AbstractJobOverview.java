@@ -303,7 +303,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					WTableCell cell = jobTable.elementAt(getSequenceIndex()+1, i);
 					cell.setId("");
 					cell.addWidget(data.get(i));
-					if (data.get(i).objectName().isEmpty())
+					if (data.get(i).objectName().length() == 0)
 						data.get(i).setId("");
 					
 					if (WApplication.instance().environment().agentIE())
