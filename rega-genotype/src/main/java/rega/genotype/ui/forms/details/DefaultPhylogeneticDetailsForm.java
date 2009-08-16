@@ -7,10 +7,12 @@ package rega.genotype.ui.forms.details;
 
 import java.io.File;
 
+import rega.genotype.SequenceAlignment;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
+import rega.genotype.ui.util.AlignmentResource;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -45,10 +47,16 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		WContainerWidget li;
 		li = ul.addItem(new WText(lt("Bootstrap support: " + p.getValue(phyloPath + ".best.support"))));
 		
-		li = ul.addItem(new WText(lt("Download the ")));
-		li.addWidget(GenotypeLib.getAnchor("Alignment (NEXUS format)",
+		li = ul.addItem(new WText(lt("Download the alignment (")));
+		li.addWidget(GenotypeLib.getAnchor("NEXUS format",
 				"application/txt",
 				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")), null));
+		li.addWidget(new WText(lt(", ")));
+		li.addWidget(GenotypeLib.getAnchor("FASTA format",
+				"application/txt",
+				new AlignmentResource(GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")),
+						SequenceAlignment.SEQUENCE_ANY, SequenceAlignment.FILETYPE_FASTA), "alignment.fasta"));
+		li.addWidget(new WText(lt(")")));
 
 		li = ul.addItem(new WText(lt("Export or View the Phylogenetic Tree: ")));
 		li.addWidget(GenotypeLib.getAnchor("PDF",
@@ -58,7 +66,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		li.addWidget(GenotypeLib.getAnchor("NEXUS Format",
 				"application/txt",
 				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")),null));
-		
+
 		li = ul.addItem(new WText(lt("View the ")));
 		li.addWidget(GenotypeLib.getAnchor("PAUP* Log file",
 				"application/txt",

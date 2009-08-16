@@ -57,8 +57,8 @@ public class SequenceAlignment
                 //readClustalFile(inputFile);
                 throw new ParameterProblemException("Reading clustal not yet supported");
             case FILETYPE_NEXUS:
-                //readClustalFile(inputFile);
-                throw new ParameterProblemException("Reading nexus not yet supported");
+                readNexusFile(inputFile, sequenceType);
+                break;
             default:
                 throw new ParameterProblemException("Illegal value for fileType");
         }
@@ -240,6 +240,56 @@ public class SequenceAlignment
     		return sane;
 	}
 
+	private void readNexusFile(InputStream inputFile, int sequenceType) throws IOException, FileFormatException {
+        /*
+         * The NEXUS format (for multiple sequences) as used by PAUP export
+         * function (i.e. the non-interleaved format).
+         */
+
+        LineNumberReader reader
+            = new LineNumberReader(new InputStreamReader(inputFile));
+
+        String signature = reader.readLine();
+        
+        if (signature == null || !signature.trim().equals("#NEXUS"))
+        	throw new FileFormatException("NEXUS file should start with '#NEXUS'", reader.getLineNumber());
+
+        for (;;) {
+        	String line = reader.readLine();
+        	if (line == null)
+        		throw new FileFormatException("NEXUS file did not contain sequence data", reader.getLineNumber());
+        	if (line.toUpperCase().indexOf("MATRIX") != -1)
+        		break;
+        }
+        
+        for (;;) {
+            Sequence s = readNexusFileSequence(reader, sequenceType);
+
+            if (s != null) {
+                sequences.add(s);
+            } else
+                return;
+        }
+	}
+    
+	private Sequence readNexusFileSequence(LineNumberReader reader, int sequenceType) throws IOException, FileFormatException {
+		/*
+		 * Format: name white-space sequence data.
+		 */
+		String line = reader.readLine();
+		if (line == null)
+			throw new FileFormatException("Unexpected EOF while reading sequence data", reader.getLineNumber());
+
+		if (line.trim().equals(";"))
+			return null;
+		
+		String a[] = line.split("\\s+");
+		if (a.length != 2)
+			throw new FileFormatException("Unexpected sequence line format", reader.getLineNumber());
+		
+		return new Sequence(a[0], "", checkLegal(a[1], reader.getLineNumber(), sequenceType));
+	}
+
 	public List<AbstractSequence> getSequences() {
         return sequences;
     }
@@ -274,7 +324,7 @@ public class SequenceAlignment
     /**
      * Write the alignment to a file.
      */
-    void writeOutput(OutputStream outputFile, int fileType)
+    public void writeOutput(OutputStream outputFile, int fileType)
         throws IOException, ParameterProblemException
     {
         switch (fileType) {
