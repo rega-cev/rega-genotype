@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.viruses.nrv;
 
 import java.io.IOException;
@@ -8,9 +13,7 @@ import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
-import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
-import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;

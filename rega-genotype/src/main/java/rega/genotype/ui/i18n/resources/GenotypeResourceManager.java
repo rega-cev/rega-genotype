@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.i18n.resources;
 
 import java.io.IOException;

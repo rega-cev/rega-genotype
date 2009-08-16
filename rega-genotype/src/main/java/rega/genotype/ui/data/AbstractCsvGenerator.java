@@ -1,8 +1,11 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.data;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 public abstract class AbstractCsvGenerator extends SaxParser {

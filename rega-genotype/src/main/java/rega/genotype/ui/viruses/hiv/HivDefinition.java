@@ -1,8 +1,12 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.viruses.hiv;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;

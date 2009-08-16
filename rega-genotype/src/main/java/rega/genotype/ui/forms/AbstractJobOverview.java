@@ -1,7 +1,11 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.forms;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -76,17 +80,27 @@ public abstract class AbstractJobOverview extends IForm {
 					}
 				}
 			} });
-
 	}
-	
+
+	@Override
+	public void setHidden(boolean hidden) {
+		if (updater != null)
+			if (hidden) 
+				updater.stop();
+			else
+				updater.start();
+
+		super.setHidden(hidden);
+	}
+
 	public void init(File jobDir) {
 		boolean otherJob = !jobDir.equals(this.jobDir);
 		
 		this.jobDir = jobDir;
 
-		// FIXME should be done when hiding the widget?
 		if (updater != null) {
 			updater.stop();
+			updater = null;
 		}
 
 		if (otherJob)
@@ -106,7 +120,6 @@ public abstract class AbstractJobOverview extends IForm {
 				public void trigger() {
 					if(!fillingTable)
 						fillTable();
-					System.err.println("lala---------------------");
 				}
 			});
 			updater.start();
@@ -133,7 +146,7 @@ public abstract class AbstractJobOverview extends IForm {
 				updater.stop();
 			analysisInProgress.setHidden(true);
 
-			WText downloadResult = new WText(tr("monitorForm.downloadResults"), downloadContainer);
+			new WText(tr("monitorForm.downloadResults"), downloadContainer);
 			WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"), downloadContainer);
 			// Wt2:
 			//xmlFileDownload.etTarget(AnchorTarget.TargetNewWindow);
@@ -155,7 +168,6 @@ public abstract class AbstractJobOverview extends IForm {
 				public String resourceMimeType() {
 					return "application/excell";
 				}
-				// TODO Auto-generated catch block
 
 				@Override
 				protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {

@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.util;
 
 import java.awt.Color;
@@ -55,6 +60,7 @@ public class GenotypeLib {
 		treeGraphCommand = s.getTreeGraphCmd();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void startAnalysis(File jobDir, Class analysis,
 			Settings settings) {
 

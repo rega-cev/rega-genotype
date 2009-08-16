@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.forms;
 
 import java.io.File;
@@ -31,8 +36,6 @@ public class StartForm extends IForm {
 	private WPushButton run, clear;
 	private FileUpload fileUpload;
 	
-	private WText monitorLabel;
-	private WText jobIdLabel;
 	private WLineEdit jobIdTF;
 	private WPushButton monitorButton;
 
@@ -94,9 +97,9 @@ public class StartForm extends IForm {
 		
 		WContainerWidget monitorContainer = new WContainerWidget(this);
 		monitorContainer.setStyleClass("monitor");
-		monitorLabel = new WText(tr("startForm.provideJobId"), monitorContainer);
+		new WText(tr("startForm.provideJobId"), monitorContainer);
 		new WBreak(monitorContainer);
-		jobIdLabel = new WText(tr("startForm.jobId"), monitorContainer);
+		new WText(tr("startForm.jobId"), monitorContainer);
 		jobIdTF = new WLineEdit(monitorContainer);
 		monitorButton = new WPushButton(tr("startForm.monitor"), monitorContainer);
 		monitorButton.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
@@ -152,6 +155,7 @@ public class StartForm extends IForm {
 		getMain().monitorForm(thisJobDir, true);
 	}
 
+	@SuppressWarnings("unchecked")
 	public void init() {
 		List seqs = getMain().getResourceManager().getOrganismElement("exampleSequences-form", "exampleSequences-sequences").getChildren();
 		

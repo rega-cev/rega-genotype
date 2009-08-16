@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.util;
 
 import java.io.File;
@@ -60,10 +65,8 @@ public class Settings {
 	
 	private Map<String, File> jobDirs = new HashMap<String, File>();
 
-	
-	private static Settings instance;
-	
-    private void parseConfFile(File confFile) {
+    @SuppressWarnings("unchecked")
+	private void parseConfFile(File confFile) {
         SAXBuilder builder = new SAXBuilder();
         Document doc = null;
         try {

@@ -1,17 +1,19 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.framework;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.text.NavigationFilter;
-
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.ContactUsForm;
 import rega.genotype.ui.forms.DecisionTreesForm;
 import rega.genotype.ui.forms.DetailsForm;
-import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.forms.ExampleSequencesForm;
 import rega.genotype.ui.forms.HowToCiteForm;
 import rega.genotype.ui.forms.IForm;
@@ -27,7 +29,6 @@ import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
-import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 

@@ -1,12 +1,13 @@
+/*
+ * Copyright (C) 2008 Rega Institute for Medical Research, KULeuven
+ * 
+ * See the LICENSE file for terms of use.
+ */
 package rega.genotype.ui.util;
 
-import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
-import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WString;
-import eu.webtoolkit.jwt.WText;
 
 public class StateLink extends WAnchor {
 
