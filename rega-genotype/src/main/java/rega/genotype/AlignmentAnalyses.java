@@ -283,11 +283,8 @@ public class AlignmentAnalyses {
         } else if (type.equals("blast")) {
             return readBlastAnalaysis(element, id, workingDir);
         } else {
-            System.err.println("Unsupported analysis type: " + type);
-            System.exit(1);
+            throw new RuntimeException("Unsupported analysis type: " + type);
         }
-        
-        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -384,8 +381,7 @@ public class AlignmentAnalyses {
             String id = ids[i].trim();
             Cluster c = getCluster(id);
             if (c == null) {
-                System.err.println("Undefined cluster: " + id);
-                System.exit(1);
+                throw new RuntimeException("Undefined cluster: " + id);
             }
             result.add(c);
         }

@@ -666,7 +666,7 @@ public class Table {
 					Integer ind = (Integer) values.get(valueAt(i, j));
 					if (ind == null) {
 						System.err.println("Internal error: " + i + ", " + j + ": " + valueAt(i, j));
-						System.exit(1);
+						return;
 					}
 					printIdt.print(ind);
 				} else

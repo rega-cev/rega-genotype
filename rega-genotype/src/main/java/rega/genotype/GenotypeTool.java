@@ -59,12 +59,12 @@ public abstract class GenotypeTool {
         } catch (CmdLineParser.OptionException e) {
             System.err.println(e.getMessage());
             printUsage();
-            System.exit(2);
+            return null;
         }
         
         if (parser.getOptionValue(helpOption) == Boolean.TRUE) {
             printUsage();
-            System.exit(0);
+            return null;
         }
         
         String paupPath = (String) parser.getOptionValue(paupPathOption);        
@@ -290,10 +290,12 @@ public abstract class GenotypeTool {
     	 * Usage: GenotypeTool [-p,-c,-x] className [sequences.fasta] result.xml
     	 */	
     	String[] args2 = parseArgs(args);
+    	if(args==null)
+    		return;
 
     	if (args2.length < 2) {
     		printUsage();
-    		System.exit(2);
+    		return;
     	}
     	
     	Class analyzerClass = Class.forName(args2[0]);
