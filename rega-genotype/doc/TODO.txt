@@ -1,5 +1,4 @@
 PRIORITY
-* repository for treepuzzle
 * image sizes (f.e. header image -> too small?)
 *jwt bug
 	* WTextArea setText() with '>' -> &gt;
