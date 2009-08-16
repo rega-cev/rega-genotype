@@ -35,11 +35,11 @@ public class NRVTool extends GenotypeTool {
     private BlastAnalysis blastAnalysis;
     
     public NRVTool() throws IOException, ParameterProblemException, FileFormatException {
-        nrv = readAnalyses("nrv/nrvblast.xml");
+        nrv = readAnalyses("NRV/nrvblast.xml");
         blastAnalysis = (BlastAnalysis) nrv.getAnalysis("blast");
 
-        phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("nrv/nrvI-ORF2.xml");
-        phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("nrv/nrvII-ORF2.xml");
+        phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("NRV/nrvI-ORF2.xml");
+        phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("NRV/nrvII-ORF2.xml");
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {
