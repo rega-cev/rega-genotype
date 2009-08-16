@@ -171,10 +171,10 @@ public class StartForm extends IForm {
 		}
 		
 		if(amountOfSeqs<=Settings.getInstance().getMaxAllowedSeqs()) {
-			setInvalid(ta, errorSeq);
+			setValid(ta, errorSeq);
 			startJob(fastaContent);
 		} else {
-			setValid(ta, errorSeq);
+			setInvalid(ta, errorSeq);
 		}
 	}
 }
