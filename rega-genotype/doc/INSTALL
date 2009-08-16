@@ -1,3 +1,8 @@
+INSTALL
+-------
+
+Installation instructions for rega-genotype
+
 * Java
 	* follow the build procedure for this java project (BUILD)
 	* install the resulting war file in your servlet container
@@ -5,33 +10,41 @@
 * External tools
 	* Paup* 4 beta10 
 		* can be purchased from http://paup.csit.fsu.edu/
-		* make sure to install this version, since older versions can give problems!
+		* make sure to install this version, since older versions
+		  can give problems!
 		
 	* clustalw
-		* some unix based operating operating systems allow installation via the package manager
-		* can be installed manually by downloading the appropriate binaries or build from source code for your OS
+		* some unix based operating operating systems allow
+		  installation via the package manager
+		* can be installed manually by downloading the appropriate
+		  binaries or build from source code for your OS
 			* ftp://ftp.ebi.ac.uk/pub/software/clustalw2/
 	
-	* tree-puzzle 5.2 with svg support
-		* we added svg support to tree-puzzle 5.2, these changes are necessary for the rega-genotype software
+	* tree-puzzle 5.2 with svg support (only for HIV)
+		* we added svg support to tree-puzzle 5.2, these changes are
+		  necessary for the rega-genotype software
 		* you can download the binaries from
-			* //TODO mybiodata website?
 			
 	* treegraph
-		* if you use unix based OS you should download and build the source code
+		* if you use unix based OS you should download and build the
+		  source code
 			* http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/
 		* if you use a Microsoft Windows you can download a binary
 			* http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/
 	
 	* blast 2.2.11
-		* make sure to install this version, since other versions can give problems!
+		* make sure to install this version, since other versions can
+		  give problems!
 		* the binaries can be downloaded from
 			* ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/
 			* select the appropriate binary for your OS
-		* these binaries can be installed by extracting the archive to a desired location
+		* these binaries can be installed by extracting the archive to
+		  a desired location
 	
 * Configuration
-	* create an XML file like the one in global-conf.xml and save it to a location of your choice
-	* create an environment variable named "REGA_GENOTYPE_CONF_DIR" and store the location of the
+	* create an XML file like the one in global-conf.xml and save it to a
+	  location of your choice
+	* create an environment variable named "REGA_GENOTYPE_CONF_DIR" and
+	  store the location of the
 		xml file in this environment variable
 	* fill in the appropriate values (see comments in global-conf.xml)

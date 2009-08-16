@@ -136,12 +136,12 @@ public class NoVTool extends GenotypeTool {
 				if (!variantPhyloAnalysis(s, phylo, regionName, r.getConcludedCluster()))
 					conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70", regionName);
 			} else {
-				if (r.getSupportInner() >= 95)
+				if (false && r.getSupportInner() >= 95)
 					/*
 					 * Note that in this case we do not attempt to identify a variant, as the sequence
 					 * fell outside of the cluster anyway.
 					 */
-					conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100", regionName);
+					conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 95", regionName);
 				else
 					conclude("Could not assign", "Not supported by " + phyloName, regionName);
 			}
@@ -188,7 +188,7 @@ public class NoVTool extends GenotypeTool {
 			conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70", regionName);
 			return true;
 		} else {
-			if (r.getSupportInner() >= 95) {
+			if (false && r.getSupportInner() >= 95) {
 				conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100", regionName);
 				return true;
 			} else
