@@ -1,12 +1,5 @@
 PRIORITY
 * details pics, generate them during analysis?
-* start form:
-   - do not show an uploaded file (firefox hangs doing spell checking on big file)
-     I did this but you may want to give it another look
-   - show small sample to start with
-     > seqname
-     ACGTACGGAAACGATACAAGATACAAGATAACA
-   - provide error feed back (not just a red background)
 * ref seq name is too long
 * layout; goto monitor
 

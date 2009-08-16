@@ -9,6 +9,8 @@
   	<resource name="startForm.provideJobId">Monitor a running or finished job by providing the job-id.</resource>
   	<resource name="startForm.jobId">Job-id:</resource>
   	<resource name="startForm.monitor">Monitor</resource>
+  	<resource name="startForm.errorJobId">Invalid job id.</resource>
+  	<resource name="startForm.errorSequence">Too many sequences.</resource>
   	
   	<resource name="monitorForm.analysisInProgress">
   		Analysis in progress... (Showing partial results). <br/>

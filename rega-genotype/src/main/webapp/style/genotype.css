@@ -264,3 +264,9 @@ span.refseq{
 .analysisProgress{
 	color: red;
 }
+
+.error{
+	color: red;
+	font-style: italic;
+	padding: 1em;
+}

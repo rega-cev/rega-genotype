@@ -9,11 +9,13 @@ import net.sf.witty.wt.SignalListener;
 import net.sf.witty.wt.WBreak;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WEmptyEvent;
+import net.sf.witty.wt.WInteractWidget;
 import net.sf.witty.wt.WLineEdit;
 import net.sf.witty.wt.WMouseEvent;
 import net.sf.witty.wt.WPushButton;
 import net.sf.witty.wt.WText;
 import net.sf.witty.wt.WTextArea;
+import net.sf.witty.wt.i8n.WMessage;
 
 import org.apache.commons.io.FileUtils;
 
@@ -34,6 +36,8 @@ public class StartForm extends IForm {
 	private WText jobIdLabel;
 	private WLineEdit jobIdTF;
 	private WPushButton monitorButton;
+
+	private WText errorJobId, errorSeq;
 	
 	public StartForm(GenotypeWindow main) {
 		super(main, "start-form");
@@ -85,13 +89,14 @@ public class StartForm extends IForm {
 				verifyFasta(ta.text());
 			}
 		});
+		errorSeq = new WText(tr("startForm.errorSequence"), seqinput);		
 		
 		new WBreak(this);
 		
 		WContainerWidget monitorContainer = new WContainerWidget(this);
 		monitorContainer.setStyleClass("monitor");
 		monitorLabel = new WText(tr("startForm.provideJobId"), monitorContainer);
-		new WBreak(this);
+		new WBreak(monitorContainer);
 		jobIdLabel = new WText(tr("startForm.jobId"), monitorContainer);
 		jobIdTF = new WLineEdit(monitorContainer);
 		monitorButton = new WPushButton(tr("startForm.monitor"), monitorContainer);
@@ -99,15 +104,28 @@ public class StartForm extends IForm {
 			public void notify(WMouseEvent a) {
 				File jobDir = new File(Settings.getInstance().getJobDir().getAbsolutePath()+File.separatorChar+jobIdTF.text());
 				if(jobDir.exists()) {
-					jobIdTF.setStyleClass("edit-valid");
-					jobIdTF.setText("");
+					setValid(jobIdTF, errorJobId);
 					getMain().monitorForm(jobDir);
 				} else {
-					jobIdTF.setStyleClass("edit-invalid");
+					setInvalid(jobIdTF, errorJobId);
 				}
-					
 			}
 		});
+		errorJobId = new WText(tr("startForm.errorJobId"), monitorContainer);
+
+		errorJobId.setStyleClass("error");
+		errorJobId.hide();
+		errorSeq.setStyleClass("error");
+		errorSeq.hide();		
+	}
+	
+	private void setValid(WInteractWidget w, WText errorMsg){
+		w.setStyleClass("edit-valid");
+		errorMsg.hide();
+	}
+	private void setInvalid(WInteractWidget w, WText errorMsg){
+		w.setStyleClass("edit-invalid");
+		errorMsg.show();
 	}
 	
 	private void startJob(final String fastaContent) {
@@ -135,7 +153,7 @@ public class StartForm extends IForm {
 	}
 
 	public void init() {
-		ta.setText("");
+		ta.setText("> seqname\nACGTACGGAAACGATACAAGATACAAGATAACA");
 	}
 
 	private void verifyFasta(String fastaContent) {
@@ -153,10 +171,10 @@ public class StartForm extends IForm {
 		}
 		
 		if(amountOfSeqs<=Settings.getInstance().getMaxAllowedSeqs()) {
-			ta.setStyleClass("textarea edit-valid");
+			setInvalid(ta, errorSeq);
 			startJob(fastaContent);
 		} else {
-			ta.setStyleClass("textarea edit-invalid");
+			setValid(ta, errorSeq);
 		}
 	}
 }
