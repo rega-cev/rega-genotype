@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<common-settings>
+  	<resource name="sequenceInput.run">Run</resource>
+  	<resource name="sequenceInput.clear">Clear</resource>
+  	<resource name="monitorForm.analysisInProgress">Analysis in progress... (Showing partial results).
+  	This page will be automatically updated every ${monitorForm.analysisInProgress.updateTime} seconds...</resource>
+</common-settings>

@@ -19,7 +19,7 @@ public abstract class Genome {
 	public abstract int IMGGENOMEEND();
 	public abstract int GENOMESTART();
 	public abstract int GENOMEEND();
-	public abstract String GENOMEIMAGE();
+	public abstract String organismName();
 	
 	public int imgX(int pos) {
 		return (int)(IMGGENOMESTART() + ((double)pos - GENOMESTART())
@@ -79,7 +79,7 @@ public abstract class Genome {
 		        g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
 		    }
 	
-		    Image genomePng = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(GENOMEIMAGE()+variant+".png"));
+		    Image genomePng = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream("/rega/genotype/ui/viruses/"+organismName()+"/genome_"+variant+".png"));
 		    g2d.drawImage(genomePng, 0, 0, imgWidth, imgHeight, null);
 		    
 		    ImageIO.write(image, "png", pngFile);

@@ -1,6 +1,5 @@
 package rega.genotype.ui.framework;
 
-import net.sf.regadb.util.settings.RegaDBSettings;
 import net.sf.witty.wt.Configuration;
 import net.sf.witty.wt.WApplication;
 import net.sf.witty.wt.WEnvironment;
@@ -17,10 +16,8 @@ public class GenotypeMain extends WebController
 	public WApplication createApplication(WEnvironment env)
 	{
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext());
-        
-        RegaDBSettings.getInstance().initProxySettings();
-        
-        return app;
+
+		return app;
 	}
 	
 	public static GenotypeApplication getApp()

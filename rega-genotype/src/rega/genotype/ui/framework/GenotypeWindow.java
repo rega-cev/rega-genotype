@@ -3,8 +3,9 @@ package rega.genotype.ui.framework;
 import net.sf.witty.wt.WApplication;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WTable;
-import net.sf.witty.wt.i8n.WStdMessageResource;
-import rega.genotype.ui.framework.forms.HIVForm;
+import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.forms.StartForm;
+import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
 
 public class GenotypeWindow extends WContainerWidget
 {
@@ -12,17 +13,26 @@ public class GenotypeWindow extends WContainerWidget
 	private Footer footer;
 	
 	private WTable table;
-	private Navigation navigation;
 	private WContainerWidget activeForm;
 	
-	public GenotypeWindow()
+	private OrganismDefinition od;
+	
+	private GenotypeResourceManager resourceManager;
+	
+	public GenotypeResourceManager getResourceManager() {
+		return resourceManager;
+	}
+
+	public GenotypeWindow(OrganismDefinition od)
 	{
 		super();
+		this.od = od;
 	}
 	
 	private void loadI18nResources()
 	{
-		WApplication.instance().messageResourceBundle().useResource(new WStdMessageResource("rega.genotype.ui.i18n.resources.genotype"));
+		resourceManager = new GenotypeResourceManager("/rega/genotype/ui/i18n/resources/common_resources.xml", od.getResourcesFile());
+		WApplication.instance().messageResourceBundle().useResource(resourceManager);
 	}
 
 	public void init() {
@@ -35,8 +45,7 @@ public class GenotypeWindow extends WContainerWidget
 
 		header = new Header(this);
 		table = new WTable(this);
-		navigation = new Navigation(table.elementAt(0, 0));
-		activeForm = new HIVForm(table.elementAt(0,1));
+		activeForm = new StartForm(od, table.elementAt(0,1), this);
 		footer = new Footer(this);
 	}
 }

@@ -19,8 +19,7 @@ public abstract class SaxParser extends DefaultHandler {
 	
 	//TODO check with incomplete xml files
 	//TODO check with xml file with 1 uncomplete sequence
-	
-	//TODO make sure this is not called if no xml file exists
+
 	private StringBuilder currentPath = new StringBuilder();
 
 	private StringBuilder values = new StringBuilder();

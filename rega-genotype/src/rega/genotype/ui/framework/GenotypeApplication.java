@@ -7,18 +7,26 @@ import javax.servlet.ServletContext;
 
 import net.sf.witty.wt.WApplication;
 import net.sf.witty.wt.WEnvironment;
+import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.util.Settings;
+import rega.genotype.ui.viruses.hiv.HivDefinition;
 
 public class GenotypeApplication extends WApplication
 {
 	private ServletContext servletContext_;
 	private GenotypeWindow window_;
 	
+	//TODO
+	//settings at beginning at tomcat startup
+	
 	public GenotypeApplication(WEnvironment env, ServletContext servletContext)
 	{
 		super(env);
 		
+		GenotypeLib.initSettings(Settings.getInstance());
+		
 		servletContext_ = servletContext;
-		window_ = new GenotypeWindow();
+		window_ = new GenotypeWindow(new HivDefinition());
 		window_.init();
 		root().addWidget(window_);
 	}

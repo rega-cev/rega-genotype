@@ -1,8 +1,6 @@
 package rega.genotype.ui.viruses.hiv;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,8 +31,8 @@ public class HivGenome extends Genome {
 		return 9700;
 	}
 
-	public String GENOMEIMAGE() {
-		return "rega/genotype/ui/viruses/hiv/genomehiv_";
+	public String organismName() {
+		return "hiv";
 	}
 
 	public int GENOMESTART() {
