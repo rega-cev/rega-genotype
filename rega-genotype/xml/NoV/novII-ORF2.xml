@@ -3,17 +3,13 @@
 
 	<clusters>
 		<cluster id="II.1" name="NoV II.1">
+			<taxus name="II.1|AJ277606" />
 			<taxus name="II.1|U07611" />
-			<taxus name="II.1|OB2001007" />
 		</cluster>
 
 		<cluster id="II.2" name="NoV II.2">
-			<taxus name="II.2|AB279553" />
-			<!--
-				<taxus name="AB279568|II.2" /> <taxus name="AB279570|II.2" /> <taxus
-				name="AY134748|II.2" /> <taxus name="X81879|II.2" />
-			-->
-			<taxus name="II.2|DQ366347" />
+			<taxus name="II.2|AY134748" />
+			<taxus name="II.2|X81879" />
 		</cluster>
 
 		<cluster id="II.3" name="NoV II.3">
@@ -37,7 +33,7 @@
 			<cluster id="II.4|1996" name="1996">
 				<description>Variant 1996</description>
 				<taxus name="II.4|1996|AJ004864" />
-				<taxus name="II.4|1996|DQ078829" />
+				<taxus name="II.4|1996|AF080558" />
 			</cluster>
 			<cluster id="II.4|2001" name="2001">
 				<description>Variant 2001</description>
@@ -47,7 +43,7 @@
 			<cluster id="II.4|2002" name="2002">
 				<description>Variant 2002</description>
 				<taxus name="II.4|2002|AY485642" />
-				<taxus name="II.4|2002|EP2002022" />
+				<taxus name="II.4|2002|AY502023" />
 			</cluster>
 			<cluster id="II.4|2002/CN" name="2002/CN">
 				<description>Variant 2002/CN</description>
@@ -56,23 +52,23 @@
 			</cluster>
 			<cluster id="II.4|2003" name="2003">
 				<description>Variant 2003</description>
-				<taxus name="II.4|2003|AB220922" />
+				<taxus name="II.4|2003|AB220921" />
 				<taxus name="II.4|2003|DQ369797" />
 			</cluster>
 			<cluster id="II.4|2004" name="2004">
 				<description>Variant 2004</description>
 				<taxus name="II.4|2004|AY883096" />
-				<taxus name="II.4|2004|EF202568" />
+				<taxus name="II.4|2004|DQ078794" />
 			</cluster>
 			<cluster id="II.4|2006a" name="2006a">
 				<description>Variant 2006a</description>
 				<taxus name="II.4|2006a|EF126963" />
-				<taxus name="II.4|2006a|EF187497" />
+				<taxus name="II.4|2006a|EF126964" />
 			</cluster>
 			<cluster id="II.4|2006b" name="2006b">
 				<description>Variant 2006b</description>
-				<taxus name="II.4|2006b|EF126966" />
-				<taxus name="II.4|2006b|OB2007300" />
+				<taxus name="II.4|2006b|EF126965" />
+				<taxus name="II.4|2006b|EF684915" />
 			</cluster>
 			<cluster id="II.4|2007" name="2007">
 				<description>Variant 2007</description>
@@ -87,17 +83,17 @@
 		</cluster>
 
 		<cluster id="II.5" name="NoV II.5">
-			<taxus name="II.5|AF414423" />
+			<taxus name="II.5|AF397156" />
 			<taxus name="II.5|AJ277607" />
 		</cluster>
 
 		<cluster id="II.6" name="NoV II.6">
-			<taxus name="II.6|AB039777" />
-			<taxus name="II.6|AB039779" />
+			<taxus name="II.6|AB039778" />
+			<taxus name="II.6|AJ277620" />
 		</cluster>
 
 		<cluster id="II.7" name="NoV II.7">
-			<taxus name="II.7|EF547402" />
+			<taxus name="II.7|AF414409" />
 			<taxus name="II.7|AJ277608" />
 		</cluster>
 
@@ -107,17 +103,17 @@
 		</cluster>
 
 		<cluster id="II.9" name="NoV II.9">
-			<taxus name="II.9|DQ379715" />
 			<taxus name="II.9|AY038599" />
+			<taxus name="II.9|DQ379715" />
 		</cluster>
 
 		<cluster id="II.10" name="NoV II.10">
-			<taxus name="II.10|AF504671" />
+			<taxus name="II.10|AY237415" />
 			<taxus name="II.10|AF427118" />
 		</cluster>
 
 		<cluster id="II.11" name="NoV II.11">
-			<taxus name="II.11|AB074892" />
+			<taxus name="II.11|AB126320" />
 			<taxus name="II.11|AB074893" />
 		</cluster>
 
@@ -156,13 +152,26 @@
 			<taxus name="II.18|AY823305" />
 		</cluster>
 
-		<cluster id="II.20" name="NoV II.20">
-			<taxus name="II.20|EU424333" />
-			<taxus name="II.20|EU373815" />
+		<cluster id="II.19" name="NoV II.19">
+			<taxus name="II.19|AY823306" />
+			<taxus name="II.19|AY823307" />
 		</cluster>
 
-		<cluster id="II.21" name="NoV II.21">
-			<taxus name="II.21|AB083780" />
+        <cluster id="II.NA1" name="NoV II.NA1">
+			<taxus name="II.NA1|EU424333" />
+			<taxus name="II.NA1|EU373815" />
+		</cluster>
+
+		<cluster id="II.NA2" name="NoV II.NA2">
+			<taxus name="II.NA2|AB083780" />
+		</cluster>
+
+		<cluster id="II.NA3" name="NoV II.NA3">
+			<taxus name="II.NA3|AY675554" />
+		</cluster>
+
+		<cluster id="II.NA4" name="NoV II.NA4">
+			<taxus name="II.NA4|AJ844470" />
 		</cluster>
 
 		<cluster id="O" name="NoV III.1">
@@ -174,7 +183,7 @@
 		<identify>
 			II.1, II.2, II.3, II.4[6;22], II.5, II.6, II.7, II.8, II.9,
 			II.10, II.11, II.12, II.13, II.14, II.15, II.16, II.17,
-			II.18, II.20, II.21, O
+			II.18, II.19, II.NA1, II.NA2, II.NA3, II.NA4, O
     </identify>
 		<cutoff>
 			70
@@ -189,7 +198,7 @@
 			set criterion=distance outroot=monophyl;
 			dset distance=TamNei rates=gamma shape=0.413123 NegBrLen=SetAbsVal;
 			constraints
-			CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19),(20,21),(22,23),(24,25),(26,27),(28,29),(30,31),(32,33),(34,35),(36,37),(38,39));
+			CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19),(20,21),(22,23),(24,25),(26,27),(28,29),(30,31),(32,33),(34,35),(36,37),(38,39),(40,41));
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
@@ -205,7 +214,7 @@
 		<identify>
 			II.4|Camb, II.4|Brist, II.4|1996, II.4|2001, II.4|2002, II.4|2002/CN,
 			II.4|2003, II.4|2004, II.4|2006a, II.4|2006b, II.4|2007, II.4|2008,
-			II.20[0]
+			II.NA1[0]
     </identify>
 		<cutoff>
 			70
@@ -216,7 +225,7 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup II.20|EU424333;
+			outgroup II.NA1|EU424333;
 			set criterion=distance;
 			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
 			constraints CONSTRE(BACKBONE)

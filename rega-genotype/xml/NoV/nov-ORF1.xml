@@ -9,66 +9,63 @@
 
 		<cluster id="I.2" name="NoV I.2">
 			<taxus name="I.2|OB2007183" />
-			<taxus name="I.2|OB2001045" />
+			<taxus name="I.2|L07418" />
 		</cluster>
 
-		<cluster id="I.3B-8" name="NoV I.3B">
-			<tags>no-subclusters</tags> <!-- The sub-clustering under I.3B is a workaround for clustering problems -->
-			<description>This genotype is mostly found in combination with ORF2 genotype I.3</description>
-			<cluster id="I.3B" name="NoV I.3B">
-				<description>This genotype is mostly found in combination with ORF2 genotype I.3</description>
-				<taxus name="I.3B|I.3|AY038598" />
-				<taxus name="I.3B|I.3|OB2001057" />
-			</cluster>
-
-			<cluster id="I.8" name="NoV I.8">
-				<taxus name="I.8|SW1045-06" />
-			</cluster>
-		</cluster>
-
-		<cluster id="I.3D" name="NoV I.3D">
-			<description>This genotype is mostly found in combination with ORF2 genotype I.3</description>
-			<taxus name="I.3D|I.3|U04469" />
+		<cluster id="I.3" name="NoV I.3">
+			<taxus name="I.3|AY038598" />
+			<taxus name="I.3|OB2001057" />
 		</cluster>
 
 		<cluster id="I.4" name="NoV I.4">
-			<taxus name="I.4|AB042808" /> <!-- 10 -->
+			<taxus name="I.4|AB042808" /> 
 			<taxus name="I.4|OB2000038" />
 		</cluster>
 
 		<cluster id="I.5" name="NoV I.5">
 			<taxus name="I.5|OB2005138" />
-		</cluster>
-
-		<cluster id="I.5b" name="NoV I.5b">
-			<taxus name="I.5b|AB039774" />
+			<taxus name="I.5|AF414406" />
 		</cluster>
 
 		<cluster id="I.6" name="NoV I.6">
-			<taxus name="I.6|AF093797" /> <!-- 14 -->
-		</cluster>
-
-		<cluster id="I.6b" name="NoV I.6b">
-			<taxus name="I.6b|AB081723" />
-			<taxus name="I.6b|OB2003056" />
+			<taxus name="I.6|AF093797" /> 
 		</cluster>
 
 		<cluster id="I.7" name="NoV I.7">
-			<taxus name="I.7|OB2003000" />
+			<taxus name="I.7|OB20030541" />
 		</cluster>
 
-		<cluster id="I.13" name="NoV I.13">
-			<description>This genotype is mostly found in combination with ORF2 genotype I.3</description>
-			<taxus name="I.13|I.3|EF529737" />
+		<cluster id="I.8" name="NoV I.8">
+			<taxus name="I.8|SW1045-06" />
 		</cluster>
 
-		<cluster id="I.14" name="NoV I.14">
-			<description>This genotype is mostly found in combination with ORF2 genotype I.3</description>
-			<taxus name="I.14|I.3|AB187514" />
+		<cluster id="I.a" name="NoV I.a">
+			<taxus name="I.a|U04469" />
+		</cluster>
+
+		<cluster id="I.b" name="NoV I.b">
+			<taxus name="I.b|AB081723" />
+			<taxus name="I.b|OB2003056" />
+		</cluster>
+
+		<cluster id="I.c" name="NoV I.c">
+			<taxus name="I.c|AB039774" />
+		</cluster>
+
+		<cluster id="I.d" name="NoV I.d">
+			<taxus name="I.d|EF190919" />
+		</cluster>
+
+		<cluster id="I.e" name="NoV I.e">
+			<taxus name="I.e|EF529737" />
+		</cluster>
+
+		<cluster id="I.f" name="NoV I.f">
+			<taxus name="I.f|AB187514" />
 		</cluster>
 
 		<cluster id="II.1" name="NoV II.1">
-			<taxus name="II.1|OB2000046" /><!-- 20 -->
+			<taxus name="II.1|OB2001003" />
 			<taxus name="II.1|U07611" />
 		</cluster>
 
@@ -77,31 +74,16 @@
 			<taxus name="II.2|DQ456824" />
 		</cluster>
 
-		<cluster id="II.2|II.SMA" name="NoV II.2/II.SMA">
-			<taxus name="II.2|II.SMA|AY134748" />
-		</cluster>
-
 		<cluster id="II.3" name="NoV II.3">
-			<taxus name="II.3|OB2006021" />
-			<taxus name="II.3|AB039782" />
-		</cluster>
-
-		<cluster id="II.3J" name="NoV II.3J">
-			<taxus name="II.3|OB2006021" />
-			<taxus name="II.3|AB039782" />
-		</cluster>
-
-		<cluster id="II.3R" name="NoV II.3R">
-			<description>This genotype is mostly found in combination with ORF2 genotype II.3</description>
-			<taxus name="II.3R|II.3|AB190457" />
-			<taxus name="II.3R|II.3|AF190817" />
+			<taxus name="II.3|U02030" />
+			<taxus name="II.3|U22498" />
 		</cluster>
 
 		<cluster id="II.4" name="NoV II.4">
 			<cluster id="II.4|Camb" name="Camberwell">
 				<description>Variant Camberwell</description>
 				<taxus name="II.4|Camb|AF145896" />
-				<taxus name="II.4|Camb|AY030098" />
+				<taxus name="II.4|Camb|AY032605" />
 			</cluster>
 			<cluster id="II.4|Brist" name="Bristol">
 				<description>Variant Bristol</description>
@@ -111,7 +93,7 @@
 			<cluster id="II.4|1996" name="1996">
 				<description>Variant 1996</description>
 				<taxus name="II.4|1996|DQ078829" />
-				<taxus name="II.4|1996|AY741811" />
+				<taxus name="II.4|1996|AY038600" />
 			</cluster>
 			<cluster id="II.4|2001" name="2001">
 				<description>Variant 2001</description>
@@ -121,27 +103,27 @@
 			<cluster id="II.4|2002" name="2002">
 				<description>Variant 2002</description>
 				<taxus name="II.4|2002|AY502023" />
-				<taxus name="II.4|2002|AY581254" />
+				<taxus name="II.4|2002|AY485642" />
 			</cluster>
 			<cluster id="II.4|2002/CN" name="2002/CN">
 				<description>Variant 2002/CN</description>
-				<taxus name="II.4|2002CN|AB240172" />
+				<taxus name="II.4|2002CN|DQ364459" />
 				<taxus name="II.4|2002CN|EU310927" />
 			</cluster>
 			<cluster id="II.4|2004" name="2004">
 				<description>Variant 2004</description>
-				<taxus name="II.4|2004|AB294788" />
+				<taxus name="II.4|2004|AB294785" />
 				<taxus name="II.4|2004|EF126961" />
 			</cluster>
 			<cluster id="II.4|2006a" name="2006a">
 				<description>Variant 2006a</description>
 				<taxus name="II.4|2006a|EF126963" />
-				<taxus name="II.4|2006a|AB294789" />
+				<taxus name="II.4|2006a|EF126964" />
 			</cluster>
 			<cluster id="II.4|2006b" name="2006b">
 				<description>Variant 2006b</description>
-				<taxus name="II.4|2006b|AB294793" />  <!-- 31 -->
-				<taxus name="II.4|2006b|EF126965" />
+				<taxus name="II.4|2006b|EF126965" />  
+				<taxus name="II.4|2006b|EF126966" />
 			</cluster>
 		</cluster>
 
@@ -150,93 +132,34 @@
 			<!-- too short: <taxus name="II.5|AB112318" /> -->
 		</cluster>
 
-		<cluster id="II.5FR" name="NoV II.5FR"> <!-- (capsid II.5) -->
-			<taxus name="II.5FR|II.5|AY682550" />
-		</cluster>
-
-		<cluster id="II.5H" name="NoV II.5H">
-			<cluster id="II.5H|II.5" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.5</description>
-				<taxus name="II.5H|II.5|AB212306" />
-				<!-- too short: <taxus name="II.5H|II.5|AB112314" /> -->
-			</cluster>
-			<cluster id="II.5H|II.2" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.2</description>
-				<taxus name="II.5H|II.2|DQ366347" />
-				<!-- too short: <taxus name="II.5H|II.2|AB279554" /> -->
-			</cluster>
-		</cluster>
-
 		<cluster id="II.6" name="NoV II.6">
 			<taxus name="II.6|AB039778" />
 			<taxus name="II.6|AB039779" />
 		</cluster>
 
 		<cluster id="II.7" name="NoV II.7">
-			<cluster id="II.7|II.7" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.7</description>
-				<taxus name="II.7|II.7|AB258331" />
-				<taxus name="II.7|II.7|AB231342" /> <!-- 40 -->
-			</cluster>
-			<cluster id="II.7|II.6" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.6</description>
-				<taxus name="II.7|II.6|AB039777" />
-				<taxus name="II.7|II.6|OB2006017" />
-			</cluster>
-			<cluster id="II.7|II.9" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.9</description>
-				<taxus name="II.7|II.9|DQ379715" />
-				<taxus name="II.7|II.9|AY038599" />
-			</cluster>
-			<cluster id="II.7|II.14" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.14</description>
-				<taxus name="II.7|II.14|EF670650" />
-			</cluster>
-			<cluster id="II.7|II.16" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.16</description>
-				<taxus name="II.7|II.16|AB233474" />
-			</cluster>
+			<taxus name="II.7|AB039777" />
+			<taxus name="II.7|AB233474" /> 
+			<taxus name="II.7|AY038599" /> 
+			<taxus name="II.7|AB258331" />
+			<taxus name="II.7|EF670650" /> 
 		</cluster>
 
 		<cluster id="II.8" name="NoV II.8">
 			<taxus name="II.8|AB039780" />
 		</cluster>
 
+		<cluster id="II.11" name="NoV II.11">
+			<taxus name="II.11|AB074893" />
+		</cluster>
+
 		<cluster id="II.12" name="NoV II.12">
-			<cluster id="II.12|II.2" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.2</description>
-				<taxus name="II.12|II.2|AB279568" />
-				<taxus name="II.12|II.2|AB354299" />
-			</cluster>
-			<cluster id="II.12|II.3" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.3</description>
-				<taxus name="II.12|II.3|EF670649" />
-				<taxus name="II.12|II.3|EU187437" />
-			</cluster>
-			<cluster id="II.12|II.4" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.4</description>
-				<taxus name="II.12|II.4|AB220922" />
-				<taxus name="II.12|II.4|DQ095875" />
-			</cluster>
-			<cluster id="II.12|II.5" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.5</description>
-				<taxus name="II.12|II.5|AB231339" />
-			</cluster>
-			<cluster id="II.12|II.10" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.10</description>
-				<taxus name="II.12|II.10|AF504671" />
-				<taxus name="II.12|II.10|AY237415" />
-			</cluster>
-			<cluster id="II.12|II.12" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.12</description>
-				<taxus name="II.12|II.12|AB039775" /> <!-- 42 -->
-				<taxus name="II.12|II.12|AB044366" />
-			</cluster>
-			<cluster id="II.12|II.13" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.13</description>
-				<taxus name="II.12|II.13|AX441291" />
-				<taxus name="II.12|II.13|AY682548" />
-			</cluster>
+			<taxus name="II.12|AB220921" />
+			<taxus name="II.12|AB039775" />
+			<taxus name="II.12|AB354299" />
+			<taxus name="II.12|AF504671" />
+			<taxus name="II.12|AX441291" />
+			<taxus name="II.12|EU187437" />
 		</cluster>
 
 		<cluster id="II.15" name="NoV II.15">
@@ -255,69 +178,74 @@
 
 		<cluster id="II.18" name="NoV II.18">
 			<taxus name="II.18|AY823304" />
-			<taxus name="II.18|AY823305" /> <!-- 50 -->
+			<taxus name="II.18|AY823305" /> 
 		</cluster>
 
-		<cluster id="II.11/19" name="NoV II.11/19">
-			<taxus name="II.11|AB074893" />
+		<cluster id="II.19" name="NoV II.19">
+			<taxus name="II.19|AB126320" />
 			<taxus name="II.19|AY823306" />
 		</cluster>
 
-		<cluster id="II.20" name="NoV II.20">
-			<taxus name="II.20|EU424333" />
-		</cluster>
-
-		<cluster id="II.21" name="NoV II.21">
-			<taxus name="II.21|AB083780" />
-			<taxus name="II.21|AB233471" />
-		</cluster>
-
-		<cluster id="II.a" name="NoV II.a">
-			<description>This genotype is mostly found in combination with ORF2 genotype II.2</description>
-			<taxus name="II.a|II.2|97007005" />
-			<!-- too short: <taxus name="II.a|II.2|AB279553" /> -->
+		<cluster id="II.a" name="NoV II.a"> 
+			<taxus name="II.a|AB190457" /> 
+			<taxus name="II.a|AF190817" />
 		</cluster>
 
 		<cluster id="II.b" name="NoV II.b">
-			<cluster id="II.b|II.1" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.1</description>
-				<taxus name="II.b|II.1|AY580335" />
-				<taxus name="II.b|II.1|AY919139" />
-			</cluster>
-			<cluster id="II.b|II.3" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.3</description>
-				<taxus name="II.b|II.3|AB365435" /> <!-- 57 -->
-				<taxus name="II.b|II.3|AY845056" />
-			</cluster>
-			<cluster id="II.b|II.2" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.2</description>
-				<taxus name="II.b|II.2|AY682549" />
-				<taxus name="II.b|II.2|AB279569" />
-			</cluster>
+			<taxus name="II.b|AY682549" />
+			<taxus name="II.b|AY845056" />
+			<taxus name="II.b|AY919139" />
 		</cluster>
 
 		<cluster id="II.c" name="NoV II.c">
-			<cluster id="II.c|II.13" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.13</description>
-				<taxus name="II.c|II.13|DQ379714" />
-			</cluster>
-			<cluster id="II.c|II.1" name="">
-				<description>This sub-cluster is mostly found in combination with ORF2 genotype II.1</description>
-				<taxus name="II.c|II.1|OB2001008" /> <!-- 60 -->
-			</cluster>
+			<taxus name="II.c|AY134748" />
 		</cluster>
 
-		<cluster id="II.Erf007" name="NoV II.Erfurt">
-			<description>This genotype is mostly found in combination with ORF2 genotype II.4</description>
-			<taxus name="II.Erf007|II.4|AB434770" />
-			<taxus name="II.Erf007|II.4|OB2006151" />
+		<cluster id="II.d1" name="NoV II.d1">
+			<taxus name="II.d1|AB212306" />
+			<!-- too short: <taxus name="II.d1|AB279554" /> -->
 		</cluster>
 
-		<cluster id="II.U" name="NoV II.U">
-			<description>This genotype is mostly found in combination with ORF2 genotype II.2</description>
-			<taxus name="II.U|II.2|AY682552" />
+		<cluster id="II.d2" name="NoV II.d2">
+			<taxus name="II.d2|AB112321" /> <!--too short-->
 		</cluster>
 
+		<cluster id="II.e" name="NoV II.e"> 
+			<taxus name="II.e|AB434770" /> 
+			<taxus name="II.e|OB2006151" />
+		</cluster>
+		
+		<cluster id="II.f" name="NoV II.f">
+			<taxus name="II.f|AY682550" />
+		</cluster>
+
+		<cluster id="II.g" name="NoV II.g">
+			<taxus name="II.g|DQ379714" />
+			<taxus name="II.g|OB2001008" />
+		</cluster>
+
+		<cluster id="II.h" name="NoV II.h">
+			<taxus name="II.h|AB089882" />
+			<!-- too short: <taxus name="II.h|AB279553" /> -->
+		</cluster>
+
+		<cluster id="II.j" name="NoV II.j">
+			<taxus name="II.j|AY682552" />
+		</cluster>
+
+		<cluster id="II.k" name="NoV II.k">
+			<taxus name="II.k|AF315813" />
+		</cluster>
+
+		<cluster id="II.NA1" name="NoV II.NA1">
+			<taxus name="II.NA1|EU424333" />
+		</cluster>
+
+		<cluster id="II.NA2" name="NoV II.NA2">
+			<taxus name="II.NA2|AB083780" />
+			<taxus name="II.NA2|AB233471" />
+		</cluster>
+		
 		<cluster id="O" name="Outgroup">
 			<taxus name="III.2|AY126474" />
 		</cluster>
@@ -326,13 +254,11 @@
 
 	<analysis id="phylo-ORF1" type="paup">
 		<identify>
-			I.1, I.2, I.3B, I.3B-8, I.3D, I.4, I.5, I.5b, I.6, I.6b, I.7, I.8, I.13,
-			I.14,
-			II.1, II.2, II.2|II.SMA, II.3, II.3R,
-			II.4[0;13], II.5, II.5FR, II.5H, II.5H|II.5, II.5H|II.2, II.6,
-			II.7[0;4], II.8, II.12[0;9], II.15, II.16,
-			II.17, II.18, II.11/19, II.20, II.21,
-			II.a, II.b[0;4], II.c, II.c|II.13, II.c|II.1, II.Erf007, II.U, O
+			I.1, I.2, I.3, I.4, I.5, I.6, I.7, I.8, I.a, I.b, I.c, I.d, I.e, I.f,
+			II.1, II.2, II.3, II.4[0;13], II.5, II.6, II.7, II.8, 
+			II.11, II.12, II.15, II.16, II.17, II.18, II.19,
+			II.a, II.b, II.c, II.d1, II.d2, II.e, II.f, II.g, II.h, II.j, II.k,
+			II.NA1, II.NA2, O
 		</identify>
 		<cutoff>
 			70
@@ -347,7 +273,7 @@
 			set criterion=distance;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
 			constraints
-			CONSTRE(BACKBONE)=((2,3),(4,5),(6,7,8),(10,11),(15,16),(20,21),(22,23),(25,26),(27,28),(29,30),(31,32),(35,36),(37,38),(39,40),(42,43),(45,46),(47,48),(49,50),(51,52),(54,55),(57,58),(59,60),(61,62));
+			CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(16,17),(22,23),(24,25),(26,27),(28,29),(31,32),(33,34,35,36,37),(40,41,42,43,44,45),(47,48),(49,50),(51,52),(53,54),(55,56),(57,58,59),(63,64),(66,67)(72,73));
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
@@ -373,111 +299,11 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup II.1|OB2000046;
+			outgroup II.1|OB2001003;
 			set criterion=distance;
 			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
 			constraints CONSTRE(BACKBONE)
 			=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19));
-			NJ constraints=CONSTRE enforce=yes;
-			savetree format=nexus brlens=yes file=paup.tre replace=yes;
-			bootstrap nreps=100 search=nj;
-			end;
-			quit;
-    </block>
-		<options>
-			log,alignment,tree,inner,outer
-    </options>
-	</analysis>
-
-	<!--
-		<analysis id="phylo-ORF1-II.5H" type="paup"> <identify> II.5H|II.5,
-		II.5H|II.2, II.1[0] </identify> <cutoff> 70 </cutoff> <block> begin
-		paup; log file=paup.log replace=yes; export format=phylip
-		file=paup.fasta replace=yes; exclude gapped; export format=nexus
-		file=paup.nex replace=yes; outgroup II.1|OB2000046; set
-		criterion=distance; dset distance=HKY85 pinvar=0.44
-		NegBrLen=SetAbsVal; NJ; savetree format=nexus brlens=yes file=paup.tre
-		replace=yes; bootstrap nreps=100 search=nj; end; quit; </block>
-		<options> log,alignment,tree,inner,outer </options> </analysis>
-	-->
-
-	<analysis id="phylo-ORF1-II.7" type="paup">
-		<identify>
-			II.7|II.7, II.7|II.6, II.7|II.9, II.7|II.14, II.7|II.16, II.6[0]
-    </identify>
-		<cutoff>
-			70
-    </cutoff>
-		<block>
-			begin paup;
-			log file=paup.log replace=yes;
-			export format=phylip file=paup.fasta replace=yes;
-			exclude gapped;
-			export format=nexus file=paup.nex replace=yes;
-			outgroup II.6|AB039778;
-			set criterion=distance;
-			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
-			constraints CONSTRE(BACKBONE)
-			=((2,3),(4,5),(6,7));
-			NJ constraints=CONSTRE enforce=yes;
-			savetree format=nexus brlens=yes file=paup.tre replace=yes;
-			bootstrap nreps=100 search=nj;
-			end;
-			quit;
-    </block>
-		<options>
-			log,alignment,tree,inner,outer
-    </options>
-	</analysis>
-
-	<analysis id="phylo-ORF1-II.12" type="paup">
-		<identify>
-			II.12|II.2, II.12|II.3, II.12|II.4, II.12|II.5, II.12|II.10, II.12|II.12,
-			II.12|II.13, II.8[0]
-    </identify>
-		<cutoff>
-			70
-    </cutoff>
-		<block>
-			begin paup;
-			log file=paup.log replace=yes;
-			export format=phylip file=paup.fasta replace=yes;
-			exclude gapped;
-			export format=nexus file=paup.nex replace=yes;
-			outgroup II.8|AB039780;
-			set criterion=distance;
-			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
-			constraints CONSTRE(BACKBONE)
-			=((2,3),(4,5),(6,7),(9,10),(11,12),(13,14));
-			NJ constraints=CONSTRE enforce=yes;
-			savetree format=nexus brlens=yes file=paup.tre replace=yes;
-			bootstrap nreps=100 search=nj;
-			end;
-			quit;
-    </block>
-		<options>
-			log,alignment,tree,inner,outer
-    </options>
-	</analysis>
-
-	<analysis id="phylo-ORF1-II.b" type="paup">
-		<identify>
-			II.b|II.1, II.b|II.3, II.b|II.2, II.a[0]
-    </identify>
-		<cutoff>
-			70
-    </cutoff>
-		<block>
-			begin paup;
-			log file=paup.log replace=yes;
-			export format=phylip file=paup.fasta replace=yes;
-			exclude gapped;
-			export format=nexus file=paup.nex replace=yes;
-			outgroup II.a|II.2|97007005;
-			set criterion=distance;
-			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
-			constraints CONSTRE(BACKBONE)
-			=((2,3),(4,5),(6,7));
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;

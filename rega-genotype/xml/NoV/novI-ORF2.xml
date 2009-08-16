@@ -4,44 +4,38 @@
   <clusters>
     <cluster id="I.1" name="NoV I.1">
       <taxus name="I.1|M87661" />
-      <taxus name="I.1|AY502016" />
-      <taxus name="I.1|EF547392" />
+      <taxus name="I.1|L23828" />
     </cluster>
 
     <cluster id="I.2" name="NoV I.2">
-      <taxus name="I.2|AF435807" />
       <taxus name="I.2|L07418" />
+      <taxus name="I.2|AJ277610" />
     </cluster>
 
     <cluster id="I.3" name="NoV I.3">
-      <taxus name="I.3|AF414405" />
-      <taxus name="I.3|AF439267" />      
-      <taxus name="I.3|AB187514" />
       <taxus name="I.3|U04469" />
-      <!-- <taxus name="I.3|EF547396" /> -->
+      <taxus name="I.3|AY038598" />      
+      <taxus name="I.3|AJ277612" />
     </cluster>
 
     <cluster id="I.4" name="NoV I.4">
-      <taxus name="I.4|AJ313030" />
       <taxus name="I.4|AB042808" />
+      <taxus name="I.4|AJ313030" />
     </cluster>
 
     <cluster id="I.5" name="NoV I.5">
-      <taxus name="I.5|AJ277614" />
-      <taxus name="I.5|AF414406" />
       <taxus name="I.5|AB039774" />
+      <taxus name="I.5|AJ277614" />
     </cluster>
 
     <cluster id="I.6" name="NoV I.6">
-      <taxus name="I.6|AJ277615" />
-      <taxus name="I.6|AY502008" />
       <taxus name="I.6|AF093797" />
+      <taxus name="I.6|AJ277615" />
     </cluster>
 
     <cluster id="I.7" name="NoV I.7">
-      <taxus name="I.7|AY675555" />
-      <taxus name="I.7|AJ844469" />
       <taxus name="I.7|AJ277609" />
+      <taxus name="I.7|AY675555" />
     </cluster>
 
     <cluster id="I.8" name="NoV I.8">
@@ -69,7 +63,7 @@
       outgroup III.1|EU360814;
       set criterion=distance outroot=monophyl;
       dset distance=TamNei rates=gamma shape=0.324463 NegBrLen=SetAbsVal;
-      constraints CONSTRE(BACKBONE)=((2,3,4),(5,6),(7,8,9,10),(11,12),(13,14,15),(16,17,18),(19,20,21));
+      constraints CONSTRE(BACKBONE)=((2,3),(4,5),(6,7,8),(9,10),(11,12),(13,14),(15,16));
       NJ constraints=CONSTRE enforce=yes;
       savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
