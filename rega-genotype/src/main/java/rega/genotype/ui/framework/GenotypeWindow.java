@@ -80,7 +80,7 @@ public class GenotypeWindow extends WContainerWidget
 	private void loadI18nResources()
 	{
 		resourceManager = new GenotypeResourceManager("/rega/genotype/ui/i18n/resources/common_resources.xml", od.getOrganismDirectory()+"resources.xml");
-		WApplication.instance().setLocalizedStrings(resourceManager);
+		WApplication.getInstance().setLocalizedStrings(resourceManager);
 	}
 
 	public void init() {
@@ -88,9 +88,8 @@ public class GenotypeWindow extends WContainerWidget
 
 		setStyleClass("root");
 		setId("");
-		WApplication app = WApplication.instance();
+		WApplication app = WApplication.getInstance();
 		
-		//String contextPath = WebSession.Handler.instance().request().getContextPath();
 		app.useStyleSheet("style/genotype.css");
 
 		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
@@ -167,14 +166,14 @@ public class GenotypeWindow extends WContainerWidget
 
 			public void trigger(String basePath) {
 				if (basePath.equals("/")) {
-					String newPath = "/" + GenotypeMain.getApp().internalPathNextPart(basePath);
+					String newPath = "/" + GenotypeMain.getApp().getInternalPathNextPart(basePath);
 
 					AbstractForm f = forms.get(newPath);
 
 					if (f != null)
 						setForm(f);
 				} else if (basePath.equals("/job/")) {
-					String jobId = GenotypeMain.getApp().internalPathNextPart(basePath);
+					String jobId = GenotypeMain.getApp().getInternalPathNextPart(basePath);
 					if (existsJob(jobId)) {
 						File jobDir = getJobDir(jobId);
 						if (monitorForm == null)
@@ -223,10 +222,10 @@ public class GenotypeWindow extends WContainerWidget
 		monitor.setVarValue(jobId(jobDir));
 		
 		if (setUrl) {
-			WApplication app = WApplication.instance();
+			WApplication app = WApplication.getInstance();
 			app.setInternalPath(monitor.internalPath());
-			if (!app.environment().ajax())
-				app.redirect(app.bookmarkUrl(monitor.internalPath()));
+			if (!app.getEnvironment().hasAjax())
+				app.redirect(app.getBookmarkUrl(monitor.internalPath()));
 		}
 
 		setForm(monitorForm);

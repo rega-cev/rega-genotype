@@ -106,7 +106,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			public void trigger(String basePath) {
 				if (basePath.equals(GenotypeWindow.jobPath(jobDir) + '/')) {
 					try {
-						String id = GenotypeMain.getApp().internalPathNextPart(basePath);
+						String id = GenotypeMain.getApp().getInternalPathNextPart(basePath);
 						if (!id.equals("")) {
 							int sequenceIndex = Integer.valueOf(id);
 							getMain().detailsForm(jobDir, sequenceIndex);
@@ -181,7 +181,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 	public void fillTable() {
 		fillingTable = true;
-		if(jobTable.rowCount()==0) {
+		if(jobTable.getRowCount()==0) {
 			List<Header> headers = getHeaders();
 
 			int col = 0;
@@ -189,20 +189,20 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				Header h = headers.get(i);
 				WText hh = new WText(h.name);
 				hh.setId("");
-				jobTable.elementAt(0, col).addWidget(hh);
-				jobTable.elementAt(0, col).setId("");
-				jobTable.elementAt(0, col).setStyleClass("jobTableHeader");				
-				jobTable.elementAt(0, col).setColumnSpan(h.span);
+				jobTable.getElementAt(0, col).addWidget(hh);
+				jobTable.getElementAt(0, col).setId("");
+				jobTable.getElementAt(0, col).setStyleClass("jobTableHeader");				
+				jobTable.getElementAt(0, col).setColumnSpan(h.span);
 
 				for (int j = 0; j < h.span; ++j) {
-					jobTable.columnAt(col + j).setStyleClass((j > 0 ? "nlb " : "") + (j < h.span - 1 ? "nrb" : ""));
-					jobTable.columnAt(col + j).setId("");
+					jobTable.getColumnAt(col + j).setStyleClass((j > 0 ? "nlb " : "") + (j < h.span - 1 ? "nrb" : ""));
+					jobTable.getColumnAt(col + j).setId("");
 				}
 
 				col += h.span;
 			}
 			
-			jobTable.rowAt(0).setId("");
+			jobTable.getRowAt(0).setId("");
 		}
 		
 		tableFiller.parseFile(jobDir);
@@ -296,20 +296,20 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private GenotypeResultParser tableFiller = new GenotypeResultParser(){
 		@Override
 		public void endSequence() {
-			int numRows = jobTable.rowCount()-1;
+			int numRows = jobTable.getRowCount()-1;
 			if(getSequenceIndex()>=numRows) {
 				List<WWidget> data = getData(tableFiller);
 				for (int i = 0; i < data.size(); i++) {
-					WTableCell cell = jobTable.elementAt(getSequenceIndex()+1, i);
+					WTableCell cell = jobTable.getElementAt(getSequenceIndex()+1, i);
 					cell.setId("");
 					cell.addWidget(data.get(i));
 					if (data.get(i).getObjectName().length() > 0)
 						data.get(i).setId("");
 					
-					if (WApplication.instance().environment().agentIsIE())
-						cell.setStyleClass(jobTable.columnAt(i).getStyleClass());
+					if (WApplication.getInstance().getEnvironment().agentIsIE())
+						cell.setStyleClass(jobTable.getColumnAt(i).getStyleClass());
 				}
-				jobTable.rowAt(jobTable.rowCount() - 1).setId("");
+				jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
 			}
 		}
 	};

@@ -38,7 +38,7 @@ public class GenotypeApplication extends WApplication
 		servletContext_ = servletContext;
 		window_ = new GenotypeWindow(od);
 		window_.init();
-		root().addWidget(window_);
+		getRoot().addWidget(window_);
 	}
 
 	public GenotypeWindow getWindow()

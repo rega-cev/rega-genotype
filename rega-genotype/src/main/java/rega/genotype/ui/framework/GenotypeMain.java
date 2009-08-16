@@ -29,7 +29,7 @@ public abstract class GenotypeMain extends WtServlet
 	}
 
 	public static GenotypeApplication getApp() {
-		return (GenotypeApplication)WApplication.instance();
+		return (GenotypeApplication)WApplication.getInstance();
 	}
 
 	@Override

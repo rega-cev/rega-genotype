@@ -58,7 +58,7 @@ public class DetailsForm extends AbstractForm {
 
 		for (IDetailsForm df : getMain().getOrganismDefinition().getSupportingDetailsforms(p)) {
 			if (ul != null) {
-				String detailTitle = df.getTitle().value();
+				String detailTitle = df.getTitle().getValue();
 				WText titleText = new WText("<a href=\"#" + detailTitle.replace(" ", "")
 						.toLowerCase() + "\">"+detailTitle+"</a>");
 				titleText.setStyleClass("link");
@@ -81,7 +81,7 @@ public class DetailsForm extends AbstractForm {
 	void addDetailsForm(IDetailsForm df, File jobDir){
 		WContainerWidget cwTitle = new WContainerWidget(mainTable);
 		cwTitle.setObjectName(df.getId() + "-title");
-		String detailTitle = df.getTitle().value();
+		String detailTitle = df.getTitle().getValue();
 		WText titleText = new WText("<h2><a name=\"" + detailTitle.replace(" ", "").toLowerCase() + "\"></a>"
 				+ detailTitle + "</h2>");
 		titleText.setId("");

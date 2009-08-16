@@ -22,7 +22,7 @@ public class NovMain extends GenotypeMain {
 	public NovMain() {
 		super();
 		
-		configuration().setInlineCss(false);
+		getConfiguration().setInlineCss(false);
 	}
 	
 	@Override
