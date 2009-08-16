@@ -1,0 +1,19 @@
+PRIORITY
+* overview analyses details (+ extra comments)
+* repository for treepuzzle
+* image sizes (f.e. header image -> too small?)
+* start form -> seq name -> max 20 chars ?
+* start form -> browse for file
+* start form -> monitor job (by providing an id)
+* recombination plot (cfr mail pong)
+* puzzle image -> too much whitespace
+* image centering -> sometimes refresh is needed
+* test on server without X installed, with java 1.5 (image creation)
+* download entire jobDir contents as tar.gz (monitor-form)
+* 1000 seqs limitation (only 400 seqs works)
+* how is dealt with gaps (-) in the input seq
+* write installation doc
+
+LATER
+* WMessage args, WAnchors
+* make seq limitation configurable
