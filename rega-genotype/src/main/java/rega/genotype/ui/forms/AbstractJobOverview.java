@@ -58,19 +58,24 @@ public abstract class AbstractJobOverview extends IForm {
 	}
 	
 	public void init(File jobDir) {
-		this.jobDir = jobDir;
+		boolean otherJob = !jobDir.equals(this.jobDir);
 		
-		jobTable.clear();
-		downloadContainer.clear();
+		this.jobDir = jobDir;
 
-		if(updater!=null) {
+		// FIXME should be done when hiding the widget?
+		if (updater != null) {
 			updater.stop();
 		}
-		
+
+		if (otherJob)
+			jobTable.clear();
+
+		downloadContainer.clear();
+
 		analysisInProgress.setHidden(true);
 		
 		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
-		if(!jobDone.exists()) {
+		if (!jobDone.exists()) {
 			analysisInProgress.setHidden(false);
 
 			updater = new WTimer();
@@ -105,11 +110,6 @@ public abstract class AbstractJobOverview extends IForm {
 				updater.stop();
 			analysisInProgress.setHidden(true);
 
-			//TODO
-			//header('Content-type: application/ms-excell');
-			//requires WAnchor fix
-			
-			//download section
 			WText downloadResult = new WText(tr("monitorForm.downloadResults"), downloadContainer);
 			WAnchor xmlFileDownload = new WAnchor((String)null, tr("monitorForm.xmlFile"), downloadContainer);
 			xmlFileDownload.setStyleClass("link");
@@ -137,16 +137,22 @@ public abstract class AbstractJobOverview extends IForm {
 			csvResource.suggestFileName("results.csv");
 			csvTableDownload.setRef(csvResource.generateUrl());
 			
-			File jobArchive = GenotypeLib.getArchive(jobDir);
-			if(jobArchive != null){
-				new WBreak(downloadContainer);
-				new WText(tr("monitorForm.downloadJob"),downloadContainer);
-				WAnchor jobFileDownload = new WAnchor((String)null, tr("monitorForm.jobFile"), downloadContainer);
-				jobFileDownload.setStyleClass("link");
-				WResource jobResource = new WFileResource("application/zip", jobArchive.getAbsolutePath());
-				jobResource.suggestFileName(jobArchive.getName());
-				jobFileDownload.setRef(jobResource.generateUrl());
-			}
+			new WBreak(downloadContainer);
+			new WText(tr("monitorForm.downloadJob"),downloadContainer);
+
+			final File jobArchive = GenotypeLib.getZipArchiveFileName(jobDir);
+			WAnchor jobFileDownload = new WAnchor((String)null, tr("monitorForm.jobFile"), downloadContainer);
+			jobFileDownload.setStyleClass("link");
+			WResource jobResource = new WFileResource("application/zip", jobArchive.getAbsolutePath()) {
+				@Override
+				protected void streamResourceData(OutputStream stream) {
+					GenotypeLib.zip(jobDir, jobArchive);
+					super.streamResourceData(stream);
+				}
+					
+			};
+			jobResource.suggestFileName(jobArchive.getName());
+			jobFileDownload.setRef(jobResource.generateUrl());
 		}
 		
 		fillingTable = false;

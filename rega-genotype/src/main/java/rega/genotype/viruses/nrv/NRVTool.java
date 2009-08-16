@@ -18,6 +18,7 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
+import rega.genotype.Sequence;
 import rega.genotype.SubSequence;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AlignmentAnalyses.Taxus;
@@ -50,6 +51,9 @@ public class NRVTool extends GenotypeTool {
         
         if (blastResult.haveSupport()) {
         	Cluster c = blastResult.getConcludedCluster();
+
+        	if (blastResult.isReverseCompliment())
+        		s = s.reverseCompliment();
 
     		if (blastAnalysis.getRegions() != null) {
         		for (BlastAnalysis.Region region:blastAnalysis.getRegions()) {

@@ -69,14 +69,16 @@ public class BlastAnalysis extends AbstractAnalysis {
         private int start;
         private int end;
         private String refseq;
+		private boolean reverseCompliment;
 
-        public Result(AbstractSequence sequence, Cluster cluster, float score, int start, int end, String refseq) {
+        public Result(AbstractSequence sequence, Cluster cluster, float score, int start, int end, String refseq, boolean reverseCompliment) {
             super(sequence);
             this.cluster = cluster;
             this.score = score;
             this.start = start;
             this.end = end;
             this.refseq = refseq;
+            this.reverseCompliment = reverseCompliment;
         }
 
         public boolean haveSupport() {
@@ -97,6 +99,7 @@ public class BlastAnalysis extends AbstractAnalysis {
             if (cluster != null && cluster.getDescription() != null) {
                 tracer.add("description", cluster.getDescription());
             }
+            tracer.add("reverse-compliment", String.valueOf(reverseCompliment));
             tracer.printlnClose("</cluster>");
             tracer.add("refseq", refseq);
             writeXMLEnd(tracer);
@@ -147,6 +150,10 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 		public float getConcludedSupport() {
 			return 0;
+		}
+
+		public boolean isReverseCompliment() {
+			return reverseCompliment;
 		}
     }
     
@@ -235,6 +242,8 @@ public class BlastAnalysis extends AbstractAnalysis {
                 String[] best = null;
                 int start = Integer.MAX_VALUE;
                 int end = -1;
+                
+                boolean reverseCompliment = false;
                 for (;;) {
                     String s = reader.readLine();
                     if (s == null)
@@ -250,8 +259,11 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                     if ((end == -1)
                     	 && ((referenceTaxus == null && values == best) || values[1].equals(referenceTaxus))) {
-                       	start = Integer.parseInt(values[8])*queryFactor - Integer.parseInt(values[6]);
-                       	end = Integer.parseInt(values[9])*queryFactor + sequence.getLength() - Integer.parseInt(values[7]);
+                       	reverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
+                       	int offsetBegin = reverseCompliment ? Integer.parseInt(values[7]) : Integer.parseInt(values[6]);
+                       	int offsetEnd = sequence.getLength() - (reverseCompliment ? Integer.parseInt(values[6]) : Integer.parseInt(values[7]));
+                       	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
+                       	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
                     }
                 }
                 result = blast.waitFor();
@@ -273,10 +285,12 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                 if (best == null)
                     throw new ApplicationException("blast error");
+
                 
-                return createResult(sequence, best[1], Float.valueOf(best[11]), start, end);
+                
+                return createResult(sequence, best[1], Float.valueOf(best[11]), start, end, reverseCompliment);
             } else
-                return createResult(sequence, null, 0, 0, 0);
+                return createResult(sequence, null, 0, 0, 0, false);
         } catch (IOException e) {
             if (formatdb != null)
                 formatdb.destroy();
@@ -295,13 +309,13 @@ public class BlastAnalysis extends AbstractAnalysis {
     }
     
     private Result createResult(AbstractSequence sequence, String match,
-                                float score, int start, int end) {
+                                float score, int start, int end, boolean reverseCompliment) {
         for (int i = 0; i < clusters.size(); ++i) {
             if (clusters.get(i).containsTaxus(match))
-                return new Result(sequence, clusters.get(i), score, start, end, match);
+                return new Result(sequence, clusters.get(i), score, start, end, match, reverseCompliment);
         }
 
-        return new Result(sequence, null, 0, 0, 0, null);
+        return new Result(sequence, null, 0, 0, 0, null, reverseCompliment);
     }
 
     Result run(SequenceAlignment alignment, AbstractSequence sequence)

@@ -241,14 +241,12 @@ public class GenotypeLib {
 		return anchor;
 	}
 	
-	public static File getArchive(File dir){
-		return zip(dir);
+	public static File getZipArchiveFileName(File dir){
+		return new File(dir.getAbsolutePath()+".zip");
 	}
 
-	public static File zip(File dir) {
-
-		byte[] buffer = new byte[18024];
-		File zipFile = new File(dir.getAbsolutePath()+".zip");
+	public static void zip(File dir, File zipFile) {
+		byte[] buffer = new byte[1024*1024];
 
 		try {
 
@@ -271,7 +269,6 @@ public class GenotypeLib {
 				in.close();
 			}
 			out.close();
-			return zipFile;
 		}
 		catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -282,7 +279,6 @@ public class GenotypeLib {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
 	}
 
 	public static void main(String[] args) {

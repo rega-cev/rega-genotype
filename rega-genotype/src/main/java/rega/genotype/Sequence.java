@@ -11,6 +11,7 @@ public class Sequence extends AbstractSequence
     private String name;
     private String description;
     private String sequence;
+	private AbstractSequence sourceSequence = this;
 
     public Sequence(String name, String description, String sequence) {
         this.name = name;
@@ -73,6 +74,10 @@ public class Sequence extends AbstractSequence
 
 	@Override
 	public AbstractSequence sourceSequence() {
-		return this;
+		return sourceSequence;
+	}
+
+	public void setSourceSequence(AbstractSequence sourceSequence) {
+		this.sourceSequence = sourceSequence;
 	}
 }

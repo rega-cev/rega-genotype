@@ -163,9 +163,11 @@ public class GenotypeWindow extends WContainerWidget
 	
 	private void setForm(IForm form) {
 		if(activeForm!=null)
-			activeForm.setParent(null);
+			activeForm.hide();
 		activeForm = form;
-		table.putElementAt(1,0, form);
+		activeForm.show();
+		if (form.parent() == null)
+			table.putElementAt(1, 0, form);
 	}
 	
 	public void startForm() {

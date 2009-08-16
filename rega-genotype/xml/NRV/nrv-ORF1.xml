@@ -365,9 +365,7 @@
       outgroup II.1|OB2000046;
       set criterion=distance;
       dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
-      constraints CONSTRE(BACKBONE)
-        =((2,3),(4,5));
-      NJ constraints=CONSTRE enforce=yes;
+      NJ;
       savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
       end;

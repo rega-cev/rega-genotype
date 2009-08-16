@@ -39,4 +39,51 @@ public abstract class AbstractSequence {
         SequenceAlignment sa = new SequenceAlignment(thisseq, SequenceAlignment.SEQUENCE_DNA);
         sa.writeFastaOutput(f);
     }
+
+	public AbstractSequence reverseCompliment() {
+		String sequence = getSequence().toUpperCase();
+		StringBuffer s = new StringBuffer();
+		for (int i = 0; i < sequence.length(); ++i) {
+			char ch = sequence.charAt(sequence.length() - i - 1);
+			switch (ch) {
+			case 'A':
+				ch = 'T'; break;
+			case 'C':
+				ch = 'G'; break;
+			case 'G':
+				ch = 'C'; break;
+			case 'T':
+				ch = 'A'; break;
+			case 'M':
+				ch = 'K'; break;
+			case 'R':
+				ch = 'Y'; break;
+			case 'W':
+				ch = 'W'; break;
+			case 'S':
+				ch = 'S'; break;
+			case 'Y':
+				ch = 'R'; break;
+			case 'K':
+				ch = 'M'; break;
+			case 'B':
+				ch = 'V'; break;
+			case 'D':
+				ch = 'H'; break;
+			case 'H':
+				ch = 'D'; break;
+			case 'V':
+				ch = 'B'; break;
+			case 'N':
+				ch = 'N'; break;
+			default:
+			}
+			s.append(ch);
+		}
+		
+		Sequence result = new Sequence(getName(), getDescription(), s.toString());
+		result.setSourceSequence(this);
+		
+		return result;
+	}
 }
