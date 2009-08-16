@@ -9,7 +9,7 @@ PRIORITY
 * start form -> fix monitor layout
 * ref seq name is too long
 * updateTime (monitorform)
-	* make configurable + fill in
+	* make configurable (in OrganismDefinition) + fill in
 
 LATER
 * WMessage args, WAnchors
