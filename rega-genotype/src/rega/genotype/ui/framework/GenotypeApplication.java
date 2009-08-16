@@ -7,9 +7,9 @@ import javax.servlet.ServletContext;
 
 import net.sf.witty.wt.WApplication;
 import net.sf.witty.wt.WEnvironment;
+import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
-import rega.genotype.ui.viruses.hiv.HivDefinition;
 
 public class GenotypeApplication extends WApplication
 {
@@ -19,14 +19,14 @@ public class GenotypeApplication extends WApplication
 	//TODO
 	//settings at beginning at tomcat startup
 	
-	public GenotypeApplication(WEnvironment env, ServletContext servletContext)
+	public GenotypeApplication(WEnvironment env, ServletContext servletContext, OrganismDefinition od)
 	{
 		super(env);
 		
 		GenotypeLib.initSettings(Settings.getInstance());
 		
 		servletContext_ = servletContext;
-		window_ = new GenotypeWindow(new HivDefinition());
+		window_ = new GenotypeWindow(od);
 		window_.init();
 		root().addWidget(window_);
 	}

@@ -2,15 +2,15 @@
 " "http://java.sun.com/dtd/web-app_2_3.dtd" >
 <web-app>
   <servlet>
-    <servlet-name>Genotype</servlet-name>
-    <display-name>This is the display name of my J2EE component</display-name>
-    <description>This is the description of my J2EE component</description>
-    <servlet-class>rega.genotype.ui.framework.GenotypeMain</servlet-class>
+    <servlet-name>GenotypeHIV</servlet-name>
+    <display-name>HIV Genotyping</display-name>
+    <description>HIV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hiv.HivMain</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>Genotype</servlet-name>
-    <url-pattern>/Genotype/*</url-pattern>
+    <servlet-name>GenotypeHIV</servlet-name>
+    <url-pattern>/GenotypeHIV/*</url-pattern>
   </servlet-mapping>
 </web-app>
 
