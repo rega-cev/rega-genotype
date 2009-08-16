@@ -15,12 +15,10 @@ public class CsvDataset extends AbstractXYDataset {
 		return DomainOrder.ASCENDING;
 	}
 
-	@Override
 	public int getItemCount(int arg0) {
 		return t_.numRows() - 1;
 	}
 
-	@Override
 	public Number getX(int arg0, int arg1) {
 		return Double.parseDouble(t_.valueAt(0, arg1 + 1));
 	}
@@ -30,7 +28,6 @@ public class CsvDataset extends AbstractXYDataset {
 		return Double.parseDouble(t_.valueAt(0, arg1 + 1));
 	}
 
-	@Override
 	public Number getY(int arg0, int arg1) {
 		return Double.parseDouble(t_.valueAt(arg0 + 1, arg1 + 1));
 	}
