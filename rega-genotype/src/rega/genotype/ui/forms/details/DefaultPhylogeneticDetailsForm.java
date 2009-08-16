@@ -2,9 +2,7 @@ package rega.genotype.ui.forms.details;
 
 import java.io.File;
 
-import net.sf.witty.wt.WAnchor;
 import net.sf.witty.wt.WBreak;
-import net.sf.witty.wt.WFileResource;
 import net.sf.witty.wt.WText;
 import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.OrganismDefinition;
@@ -32,9 +30,9 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		addWidget(new WText(header));
 		addWidget(new WBreak());
 		addWidget(new WText(lt("<li>Export or View the Phylogenetic Tree: ")));
-//		addWidget(getAnchor("PDF",
-//				"application/pdf",
-//				GenotypeLib.getTreePDF(jobDir, getFile(jobDir, p.getValue(phyloPath+".tree")))));
+		addWidget(GenotypeLib.getAnchor("PDF",
+				"application/pdf",
+				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")))));
 		addWidget(new WText(lt(", ")));
 		addWidget(GenotypeLib.getAnchor("NEXUS Format",
 				"application/txt",
