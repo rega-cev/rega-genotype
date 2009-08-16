@@ -85,4 +85,8 @@ public class HivDefinition implements OrganismDefinition {
 	public int getUpdateInterval(){
 		return 5000;
 	}
+
+	public String getOrganismName() {
+		return "HIV";
+	}
 }

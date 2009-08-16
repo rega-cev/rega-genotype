@@ -100,7 +100,7 @@ public class StartForm extends IForm {
 		monitorButton = new WPushButton(tr("startForm.monitor"), monitorContainer);
 		monitorButton.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				File jobDir = new File(Settings.getInstance().getJobDir().getAbsolutePath()+File.separatorChar+jobIdTF.text());
+				File jobDir = new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()+File.separatorChar+jobIdTF.text());
 				if(jobDir.exists()) {
 					setValid(jobIdTF, errorJobId);
 					getMain().monitorForm(jobDir, true);
@@ -127,7 +127,7 @@ public class StartForm extends IForm {
 	}
 	
 	private void startJob(final String fastaContent) {
-		final File thisJobDir = GenotypeLib.createJobDir();
+		final File thisJobDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition());
 
 		Thread analysis = new Thread(new Runnable(){
 			public void run() {

@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.Writer;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
@@ -163,12 +162,12 @@ public class GenotypeLib {
 		return pdfFile;
 	}
 	
-	public static File createJobDir(){
-		File jobDir = Settings.getInstance().getJobDir();
+	public static File createJobDir(OrganismDefinition od){
+		File jobDir = Settings.getInstance().getJobDir(od);
 		File d;
 		Random r = new Random(new Date().getTime());
 		do{
-			d = new File(jobDir.getAbsolutePath() + File.separator + "job-" + r.nextInt(Integer.MAX_VALUE));
+			d = new File(jobDir.getAbsolutePath() + File.separator + r.nextInt(Integer.MAX_VALUE));
 		}while(d.exists());
 		
 		d.mkdir();

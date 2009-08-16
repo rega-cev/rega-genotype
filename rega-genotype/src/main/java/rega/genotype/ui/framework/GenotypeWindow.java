@@ -120,7 +120,7 @@ public class GenotypeWindow extends WContainerWidget
 						setForm(f);
 				} else if (basePath.equals("/job/")) {
 					String jobId = GenotypeMain.getApp().internalPathNextPart(basePath);
-					monitorForm(new File(Settings.getInstance().getJobDir().getAbsolutePath()+File.separatorChar+jobId), false);
+					monitorForm(new File(Settings.getInstance().getJobDir(od).getAbsolutePath()+File.separatorChar+jobId), false);
 				}
 			} });
 

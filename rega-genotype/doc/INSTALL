@@ -37,8 +37,8 @@
 	* fill in the appropriate values
 		* xmlPath -> directory containing the xml files found in this projects xml/ directory
 			* eg.: /soft/rega-genotype/xml/
-		* jobDir -> location where the genotypetool can write job-related files
-			* eg.: /soft/rega-genotype/jobs/
+		* jobDir-$organismName -> location where the genotypetool can write job-related files for a specific organism
+			* eg.: /soft/rega-genotype/jobs-NRV
 		* paupCmd -> location of your paup executable + name of the paup executable
 			* eg.: /soft/paup/paup4b10-x86-linux
 		* clustalWCmd -> location of your clustalw executable + name of the clustalw executable

@@ -2,12 +2,16 @@ package rega.genotype.ui.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+
+import rega.genotype.ui.data.OrganismDefinition;
 
 public class Settings {
 	private Settings(File f) {
@@ -38,8 +42,8 @@ public class Settings {
 		return treeGraphCmd;
 	}
 	
-	public File getJobDir(){
-		return jobDir;
+	public File getJobDir(OrganismDefinition od){
+		return jobDirs.get(od.getOrganismName());
 	}
 	
 	public int getMaxAllowedSeqs() {
@@ -52,7 +56,8 @@ public class Settings {
 	private File blastPath;
 	private String treePuzzleCmd;
 	private String treeGraphCmd;
-	private File jobDir;
+	
+	private Map<String, File> jobDirs = new HashMap<String, File>();
 
 	
 	private static Settings instance;
@@ -88,8 +93,9 @@ public class Settings {
             	treePuzzleCmd = e.getValue().trim();
             } else if(name.equals("treeGraphCmd")) {
             	treeGraphCmd = e.getValue().trim();
-            } else if(name.equals("jobDir")) {
-            	jobDir = new File(e.getValue().trim());
+            } else if(name.startsWith("jobDir-")) {
+            	String organism = name.split("-")[1];
+            	jobDirs.put(organism, new File(e.getValue().trim()));
             }
         }
     }

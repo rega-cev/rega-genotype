@@ -22,4 +22,5 @@ public interface OrganismDefinition {
 	public IDetailsForm getMainDetailsForm();
 	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p);
 	public int getUpdateInterval();
+	public String getOrganismName();
 }
