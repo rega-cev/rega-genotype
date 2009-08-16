@@ -17,6 +17,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
 
@@ -33,14 +34,14 @@ import com.lowagie.text.pdf.PdfWriter;
 public class RecombinationPlot {
 	public static JFreeChart getRecombinationPlot(String dataCsv) throws FileNotFoundException, UnsupportedEncodingException {
 		CsvDataset n = new CsvDataset(new Table(new ByteArrayInputStream(dataCsv.getBytes()), false, '\t'));
-		JFreeChart chart = ChartFactory.createTimeSeriesChart(
-				"Bootscan Analyses", // chart title
-				"nuleotides position", // x axis label
-				"bootstrap values", // y axis label
-				n, // data
-				true, // include legend
-				true, // tooltips
-				false // urls
+		JFreeChart chart = ChartFactory.createXYLineChart("Bootscan Analyses", 																			
+				"nuleotides position", 
+				"bootstrap values", 
+				n, 
+				PlotOrientation.VERTICAL, 
+				true, 
+				true, 
+				false 
 				);
 		XYPlot plot = chart.getXYPlot();
 		XYItemRenderer renderer = plot.getRenderer();
