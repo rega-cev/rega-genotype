@@ -1,12 +1,32 @@
 PRIORITY
 * details pics, generate them during analysis?
 * ref seq name is too long
-* layout; goto monitor
+* fix NRV CSV generation "sequence error"
+* start form: explain clearly that there are two options to submit a sequence:
+  1) Either paste your sequence or sequences below in FASTA format:
+     ...
+     [Run] [Clear]
+  2) Or, upload a FASTA file containing your sequences:
+     ...
+     [Upload]
+
+  3) If you have submitted a job before, you can use a bookmark to go back, or
+     if you have saved the job ID, enter it here:
+     ...
+     [Go]
+* report form: explain that you can bookmark the page at any time, to come back
+  to the results later. Indicate how long they are kept (configuration option).
 
 LATER
 * WMessage args, WAnchors
+  ??
 * reference alignment table, add support for *_URL colomn name
 * download entire jobDir contents as tar.gz (monitor-form)
+  [now is a zip file, that is okay?]
 * start form 
 	* seq name -> max 20 chars ? (check for this?)
+   -> they are truncated, I would not really worry about it. Also stupid characters
+      are stripped from them.
 * how is dealt with gaps (-) in the input seq (Koen)
+   -> they are removed, as they should.
+  

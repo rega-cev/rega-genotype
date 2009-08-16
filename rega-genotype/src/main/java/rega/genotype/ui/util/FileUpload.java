@@ -24,6 +24,7 @@ public class FileUpload extends WContainerWidget {
         uploadButton = new WPushButton(tr("sequenceInput.uploadFile"), this);
         uploadButton.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
             public void trigger(WMouseEvent a) {
+                uploadButton.setEnabled(false);
                 uploadButton.setText(tr("sequenceInput.uploadingFile"));
             	uploadFile.upload();
             }

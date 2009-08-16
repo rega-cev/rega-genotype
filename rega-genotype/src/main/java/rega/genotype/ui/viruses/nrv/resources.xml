@@ -116,4 +116,8 @@
 			</text>
 		</contactUs-text>
 	</contactUs-form>
+
+	<resource name="nrvSequenceAssignment.assignment"><span class="label">Assignment:</span></resource>
+	<resource name="nrvSequenceAssignment.motivation"><br /><span class="label">Motivation:</span></resource>
+	
 </organism-settings>

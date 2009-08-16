@@ -20,31 +20,50 @@ public class NrvSequenceAssignmentForm extends IDetailsForm {
 
 	@Override
 	public void fillForm(SaxParser p, final OrganismDefinition od, File jobDir) {
-		WContainerWidget block = new WContainerWidget(this);
+		WContainerWidget block;
+		
+		block = new WContainerWidget(this);
 		block.setStyleClass("dsa-text");
 
-		block.addWidget(new WText(tr("defaultSequenceAssignment.sequenceName")));
-		block.addWidget(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]")+", ")));
-		block.addWidget(new WText(tr("defaultSequenceAssignment.sequenceLength")));
-		block.addWidget(new WText(lt(p.getEscapedValue("genotype_result.sequence[length]"))));
-		block.addWidget(new WBreak());
+		new WText(tr("defaultSequenceAssignment.sequenceName"), block)
+			.setStyleClass("label");
+		new WText(lt(p.getEscapedValue("genotype_result.sequence[name]")+", "), block)
+			.setStyleClass("value");
+		new WText(tr("defaultSequenceAssignment.sequenceLength"), block)
+			.setStyleClass("label");
+		new WText(lt(p.getEscapedValue("genotype_result.sequence[length]") + " bps"), block)
+			.setStyleClass("value");
 
 		block = new WContainerWidget(this);
 
 		String blastConclusion = NrvResults.getBlastConclusion(p);
 		if (!blastConclusion.equals(NrvResults.NA)) {
-			block.addWidget(new WText(lt("Assignment: " + blastConclusion + "<br />")));
-			block.addWidget(new WText(lt("Motivation: " + NrvResults.getBlastMotivation(p))));
+			new WText(lt("<h2>Genotyping result</h2>"), block);
+			
+			new WText(tr("nrvSequenceAssignment.assignment"), block);
+			new WText(lt(blastConclusion), block);
+			new WText(tr("nrvSequenceAssignment.motivation"), block);
+			new WText(lt(NrvResults.getBlastMotivation(p)), block);
 		} else {
-			block.addWidget(new WText(lt("ORF1 assignment: " + NrvResults.getConclusion(p, "ORF1") + "<br />")));
-			block.addWidget(new WText(lt("Motivation: " + NrvResults.getMotivation(p, "ORF1"))));
+			new WText(lt("<h2>ORF1</h2>"), block);
 
-			block = new WContainerWidget(this);
+			new WText(tr("nrvSequenceAssignment.assignment"), block);
+			new WText(lt(NrvResults.getConclusion(p, "ORF1")), block);
+			new WText(tr("nrvSequenceAssignment.motivation"), block);
+			new WText(lt(NrvResults.getMotivation(p, "ORF1")), block);
 
-			block.addWidget(new WText(lt("ORF2 assignment: " + NrvResults.getConclusion(p, "ORF2") + "<br />")));
-			block.addWidget(new WText(lt("Motivation: " + NrvResults.getMotivation(p, "ORF2"))));
+			new WText(lt("<h2>ORF2</h2>"), block);
+
+			new WText(tr("nrvSequenceAssignment.assignment"), block);
+			new WText(lt(NrvResults.getConclusion(p, "ORF2")), block);
+			new WText(tr("nrvSequenceAssignment.motivation"), block);
+			new WText(lt(NrvResults.getMotivation(p, "ORF2")), block);
 		}
-		
+
+		block = new WContainerWidget(this);
+
+		new WText(lt("<h2>Genome region</h2>"), block);
+
 		int start = 0;
 		int end = 0;
 		try {

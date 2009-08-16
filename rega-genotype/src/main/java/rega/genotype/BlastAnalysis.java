@@ -244,6 +244,9 @@ public class BlastAnalysis extends AbstractAnalysis {
                 int end = -1;
                 
                 boolean reverseCompliment = false;
+
+                String refseq = "";
+
                 for (;;) {
                     String s = reader.readLine();
                     if (s == null)
@@ -259,6 +262,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                     if ((end == -1)
                     	 && ((referenceTaxus == null && values == best) || values[1].equals(referenceTaxus))) {
+                    	refseq = referenceTaxus;
                        	reverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
                        	int offsetBegin = Integer.parseInt(values[6]);
                        	int offsetEnd = sequence.getLength() - Integer.parseInt(values[7]);
@@ -281,20 +285,27 @@ public class BlastAnalysis extends AbstractAnalysis {
                 }
 
                 query.delete();
-                getTempFile("db.fasta.nhr").delete();
-                getTempFile("db.fasta.nin").delete();
-                getTempFile("db.fasta.nsd").delete();
-                getTempFile("db.fasta.nsi").delete();
-                getTempFile("db.fasta.nsq").delete();
+
+                if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_DNA) {
+                    getTempFile("db.fasta.nhr").delete();
+                    getTempFile("db.fasta.nin").delete();
+                    getTempFile("db.fasta.nsd").delete();
+                    getTempFile("db.fasta.nsi").delete();
+                    getTempFile("db.fasta.nsq").delete();
+                } else {
+                    getTempFile("db.fasta.phr").delete();
+                    getTempFile("db.fasta.pin").delete();
+                    getTempFile("db.fasta.psd").delete();
+                    getTempFile("db.fasta.psi").delete();
+                    getTempFile("db.fasta.psq").delete();
+                }
 
                 if (best == null)
                     throw new ApplicationException("blast error");
 
-                
-                
-                return createResult(sequence, best[1], Float.valueOf(best[11]), start, end, reverseCompliment);
+                return createResult(sequence, best[1], refseq, Float.valueOf(best[11]), start, end, reverseCompliment);
             } else
-                return createResult(sequence, null, 0, 0, 0, false);
+                return createResult(sequence, null, null, 0, 0, 0, false);
         } catch (IOException e) {
             if (formatdb != null)
                 formatdb.destroy();
@@ -312,11 +323,11 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
     }
     
-    private Result createResult(AbstractSequence sequence, String match,
+    private Result createResult(AbstractSequence sequence, String match, String refseq,
                                 float score, int start, int end, boolean reverseCompliment) {
         for (int i = 0; i < clusters.size(); ++i) {
             if (clusters.get(i).containsTaxus(match))
-                return new Result(sequence, clusters.get(i), score, start, end, match, reverseCompliment);
+                return new Result(sequence, clusters.get(i), score, start, end, refseq, reverseCompliment);
         }
 
         return new Result(sequence, null, 0, 0, 0, null, reverseCompliment);

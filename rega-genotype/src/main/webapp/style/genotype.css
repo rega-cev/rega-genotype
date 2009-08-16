@@ -99,7 +99,7 @@ table.jobTable td img, .detailsForm img{
 .detailsForm .title{	
 	background-color: darkblue;
 	color: white;
-	font-size: 110%;
+	font-size: 120%;
 	font-weight: bold;
 	text-align: center;
 }
@@ -108,12 +108,31 @@ table.jobTable td img, .detailsForm img{
 	text-align: center;
 }
 
-.details .dsa-text{
+.details .dsa-text {
 	text-align: center;
 	font-weight: bold;
 	line-height: 200%;
 	padding-top: 2em;
 	padding-bottom: 2em;
+	font-size: 110%;
+}
+
+.details h2 {
+	font-size: 110%;
+	color: darkblue;
+}
+
+.details .label {
+	color: darkblue;
+	width: 12ex;
+	display: inline-block;
+	line-height: 120%;
+}
+
+.details .dsa-text .label {
+	color: darkblue;
+	width: auto;
+	display: inline;
 }
 
 .details .dsa-text span + span + br + span + span{

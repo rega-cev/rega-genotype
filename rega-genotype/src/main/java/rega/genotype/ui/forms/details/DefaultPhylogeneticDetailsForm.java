@@ -35,6 +35,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 
 		WListContainerWidget ul = new WListContainerWidget(this);
 		WContainerWidget li;
+		li = ul.addItem(new WText(lt("Bootstrap support: " + p.getValue(phyloPath + ".best.support"))));
 		li = ul.addItem(new WText(lt("Export or View the Phylogenetic Tree: ")));
 		li.addWidget(GenotypeLib.getAnchor("PDF",
 				"application/pdf",

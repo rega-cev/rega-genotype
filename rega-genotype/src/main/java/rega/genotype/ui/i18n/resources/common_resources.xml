@@ -38,7 +38,7 @@
 	<resource name="defaultSequenceAssignment.assignment">Assignment: </resource>
 	<resource name="defaultSequenceAssignment.bootstrap">Bootstrap: </resource>
 	<resource name="defaultSequenceAssignment.motivation">Motivation: </resource>
-	<resource name="defaultSequenceAssignment.referenceSequence">Your sequence starts at position {1} and finishes at position ${2} in the ${3} genome.</resource>
+	<resource name="defaultSequenceAssignment.referenceSequence">Your sequence starts at position {1} and finishes at position {2} in the {3} genome.</resource>
 	
 	
 	<resource name="details.analysisDetails">Analysis details</resource>
