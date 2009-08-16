@@ -24,5 +24,18 @@
     <servlet-name>GenotypeNRV</servlet-name>
     <url-pattern>/GenotypeNRV/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>GenotypeHTLV</servlet-name>
+    <display-name>HTLV Genotyping</display-name>
+    <description>HTLV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.htlv.HtlvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHTLV</servlet-name>
+    <url-pattern>/GenotypeHTLV/*</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
 

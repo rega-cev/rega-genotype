@@ -24,7 +24,7 @@ public class HTLV1SubtypeTool extends GenotypeTool {
 
 
     public HTLV1SubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
-        htlv1 = readAnalyses("htlv.xml", workingDir);
+        htlv1 = readAnalyses("HTLV/htlv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) htlv1.getAnalysis("pure");
 
     }

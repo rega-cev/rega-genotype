@@ -25,7 +25,7 @@ public class HTLVTool extends GenotypeTool {
 
     
     public HTLVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        htlv = readAnalyses("htlvblast.xml", workingDir);
+        htlv = readAnalyses("HTLV/htlvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) htlv.getAnalysis("blast");
         
         htlv1subtypetool = new HTLV1SubtypeTool(workingDir);

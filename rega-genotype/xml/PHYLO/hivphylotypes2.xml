@@ -389,14 +389,14 @@
   </analysis>
   <analysis id="scan-pure-self" type="scan">
     <window>
-      500
+      1000
     </window>
     <step>
-      50
+      500
     </step>
     <analysis type="paup">
       <identify>
-       A1[0],A2[0],B[0],C[0],D[0],F1[0],F2[0],G[0],H[0],J[0],K[0],Group_O
+       A2,B,F1,F2,G,H,J,K,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O       
       </identify>
       <block>
         begin paup;

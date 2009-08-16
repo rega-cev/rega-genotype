@@ -6,34 +6,34 @@
      
      These define the input to the various analyses for each organism.
    -->
-  <property name="xmlPath">/home/plibin0/myWorkspace-lisbon/rega-genotype/xml/</property>
+  <property name="xmlPath">/Users/tulio/rega3/rega-genotype/xml/</property>
 
   <!-- paupCmd
      Location of your paup executable + name of the paup executable.
      
      Note, you need to get a license for paup.
    -->
-  <property name="paupCmd">/home/plibin0/paup4b10-x86-linux</property>
+  <property name="paupCmd">/bin/wrappaup.sh /bin/paup</property>
 
   <!-- clustalWCmd
      Location of your clustalw executable + name of the clustalw executable
    -->
-  <property name="clustalWCmd">/usr/bin/clustalw</property>
+  <property name="clustalWCmd">/bin/clustalw</property>
 
   <!-- blastPath
      Location of your blastall and formatdb executables (from ncbi-tools).     
    -->
-  <property name="blastPath">/home/plibin0/projects/blast/blast-2.2.11/bin/</property>
+  <property name="blastPath">/usr/local/biotools/macgde/GDE2.2/bin/blast/</property>
 
   <!-- treePuzzleCmd
      Location of your tree-puzzle executable + name of the tree-puzzle executable (the svg enabled version!)
    -->
-  <property name="treePuzzleCmd">/home/plibin0/projects/treepuzzle/treepuzzle/src/puzzle</property>
+  <property name="treePuzzleCmd">/Users/tulio/biotools/tree-puzzle-5.2/src/puzzle-macosx-Xcode</property>
 
   <!-- treeGraphCmd
      Location of your treegraph executable + name of the treegraph executable
    -->
-  <property name="treeGraphCmd">/home/plibin0/projects/treegraph/tgf10rc4/source/tgf</property>
+  <property name="treeGraphCmd">/Users/tulio/biotools/tgf10rc4/source/tgf</property>
 
   <!-- jobDir-%organism%
      Location where the genotypetool can write job-related files for a specific organism.
@@ -45,8 +45,8 @@
      
      Each job dir must be different, since jobs cannot be mixed for several organisms.
    -->
-  <property name="jobDir-NRV">/home/plibin0/subtypejobdir/NRV/</property>
-  <property name="jobDir-HIV">/home/plibin0/subtypejobdir/HIV/</property>
+  <property name="jobDir-NRV">/Users/tulio/rega3/jobDir</property>
+  <property name="jobDir-HIV">/Users/tulio/rega3/jobDir</property>
 
   <!-- maxAllowedSequences
      The maximum number of sequences that may be submitted in a single batch.

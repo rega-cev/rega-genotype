@@ -294,10 +294,10 @@
 
   <analysis id="scan-pure-self" type="scan">
     <window>
-      500
+      1000
     </window>
     <step>
-      50
+      500
     </step>
     <analysis type="paup">
       <identify>
