@@ -16,6 +16,7 @@ PRIORITY
 * how is dealt with gaps (-) in the input seq
 * write installation doc
 * maven
+* generify documentation forms
 * layout 
 	* start form
 	* monitor form
