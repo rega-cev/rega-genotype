@@ -11,6 +11,15 @@
 	<resource name="monitorForm.csvTable">CSV Table</resource>
 	<resource name="monitorForm.xmlFile">XML File</resource>
 	
+	<resource name="main.navigation.start">Start!</resource>
+	<resource name="main.navigation.monitor">Monitor job [${jobId}]</resource>
+	<resource name="main.navigation.details">Analysis details [${sequenceId}]</resource>
+	<resource name="main.navigation.howToCite">How to cite</resource>
+	<resource name="main.navigation.tutorial">Tutorial</resource>
+	<resource name="main.navigation.decisionTrees">Decision trees</resource>
+	<resource name="main.navigation.subtypingProcess">Subtyping process</resource>
+	<resource name="main.navigation.exampleSequences">Example sequences</resource>
+	<resource name="main.navigation.contactUs">Contact us</resource>
 	
 	<resource name="defaultSequenceAssignment.title">Sequence Assignment</resource>
 	<resource name="defaultSequenceAssignment.sequenceName">Sequence name: </resource>

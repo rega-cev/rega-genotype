@@ -25,12 +25,9 @@ public class StartForm extends IForm {
 	private WTextArea ta;
 	private WPushButton run, clear;
 	
-	public StartForm(OrganismDefinition vd, WContainerWidget parent, GenotypeWindow main) {
+	public StartForm(final OrganismDefinition od, WContainerWidget parent, GenotypeWindow main) {
 		super(main, "start-form");
-		init(vd);
-	}
-	
-	public void init(final OrganismDefinition od) {
+		
 		title = new WText(getMain().getResourceManager().getOrganismValue("start-form", "title"), this);
 		new WBreak(this);
 		new WBreak(this);
@@ -83,5 +80,9 @@ public class StartForm extends IForm {
 					getMain().monitorForm(thisJobDir);
 			}
 		});
+	}
+
+	public void init(File jobDir, OrganismDefinition od, final int selectedSequenceIndex) {
+		ta.setText("");
 	}
 }

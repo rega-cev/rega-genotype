@@ -14,7 +14,7 @@ import rega.genotype.ui.util.Genome;
 
 public interface OrganismDefinition {
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException;
-	public AbstractJobOverview getJobOverview(File jobDir, GenotypeWindow main);
+	public AbstractJobOverview getJobOverview(GenotypeWindow main);
 	public AbstractCsvGenerator getCsvGenerator(PrintStream ps);
 	public String getOrganismDirectory();
 	public Genome getGenome();

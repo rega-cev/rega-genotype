@@ -1,6 +1,5 @@
 package rega.genotype.ui.forms;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,6 @@ import net.sf.witty.wt.WMouseEvent;
 import net.sf.witty.wt.WText;
 import net.sf.witty.wt.WWidget;
 import net.sf.witty.wt.i8n.WMessage;
-import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
@@ -19,8 +17,8 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	private List<WMessage> headers = new ArrayList<WMessage>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
-	public DefaultJobOverview(File jobDir, GenotypeWindow main, OrganismDefinition od) {
-		super(jobDir, main, od);
+	public DefaultJobOverview(GenotypeWindow main) {
+		super(main);
 		
 		headers.add(lt("Name"));
 		headers.add(lt("Length"));

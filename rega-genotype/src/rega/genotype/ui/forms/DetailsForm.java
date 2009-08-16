@@ -2,7 +2,6 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 
-import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.WText;
 import rega.genotype.ui.data.OrganismDefinition;
@@ -20,7 +19,7 @@ public class DetailsForm extends IForm {
 		mainTable = new WTable(this);
 	}
 	
-	public void init(File jobDir, final int selectedSequenceIndex, OrganismDefinition od) {
+	public void init(File jobDir, OrganismDefinition od, final int selectedSequenceIndex) {
 		p = new SaxParser(){
 			@Override
 			public void endSequence() {
@@ -30,6 +29,8 @@ public class DetailsForm extends IForm {
 			}
 		};
 		p.parseFile(jobDir);
+		
+		mainTable.clear();
 		
 		mainDetails = od.getMainDetailsForm();
 		mainDetails.fillForm(p, od, jobDir);
@@ -42,5 +43,9 @@ public class DetailsForm extends IForm {
 			mainTable.putElementAt(rowIndex++, 0, df);
 			df.fillForm(p, od, jobDir);
 		}
+	}
+	
+	public String getSequenceName() {
+		return p.getValue("genotype_result.sequence['name']");
 	}
 }

@@ -32,21 +32,44 @@ public abstract class AbstractJobOverview extends IForm {
 	
 	private WTimer updater;
 	
+	private WContainerWidget downloadContainer;
+	
 	private boolean fillingTable = false;
 	
 
-	public AbstractJobOverview(File jobDir, GenotypeWindow main, OrganismDefinition od) {
+	public AbstractJobOverview(GenotypeWindow main) {
 		super(main, "monitor-form");
-		
-		this.jobDir = jobDir;
-		
-		this.od = od;
 
+		analysisInProgress = new WText(tr("monitorForm.analysisInProgress"), this);
+		
 		new WBreak(this);
+		
+		jobTable = new WTable(this);
+		
+		downloadContainer = new WContainerWidget(this);
+		
+		if(updater!=null) {
+			updater.start();
+		}
+	}
+	
+	public void init(File jobDir, OrganismDefinition od, final int selectedSequenceIndex) {
+		this.jobDir = jobDir;
+		this.od = od;
+		
+		jobTable.clear();
+		downloadContainer.clear();
+
+		if(updater!=null) {
+			updater.stop();
+		}
+		
+		analysisInProgress.setHidden(true);
 		
 		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
 		if(!jobDone.exists()) {
-			analysisInProgress = new WText(tr("monitorForm.analysisInProgress"), this);
+			analysisInProgress.setHidden(false);
+			
 			updater = new WTimer();
 			updater.setInterval(5*1000);
 			updater.timeout.addListener(new SignalListener<WEmptyEvent>() {
@@ -59,11 +82,7 @@ public abstract class AbstractJobOverview extends IForm {
 			updater.start();
 		}
 		
-		jobTable = new WTable(this);
-		
-		if(updater!=null) {
-			updater.start();
-		}
+		fillTable();
 	}
 	
 	public void fillTable() {
@@ -87,7 +106,6 @@ public abstract class AbstractJobOverview extends IForm {
 			//requires WAnchor fix
 			
 			//download section
-			WContainerWidget downloadContainer = new WContainerWidget(this);
 			WText downloadResult = new WText(tr("monitorForm.downloadResults"), downloadContainer);
 			WAnchor xmlFileDownload = new WAnchor((String)null, tr("monitorForm.xmlFile"), downloadContainer);
 			xmlFileDownload.setStyleClass("link");

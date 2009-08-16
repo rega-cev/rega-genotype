@@ -32,8 +32,8 @@ public class HivDefinition implements OrganismDefinition {
 				jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
 
-	public AbstractJobOverview getJobOverview(File jobDir, GenotypeWindow main) {
-		return new DefaultJobOverview(jobDir, main, this);
+	public AbstractJobOverview getJobOverview(GenotypeWindow main) {
+		return new DefaultJobOverview(main);
 	}
 	
 	public String getOrganismDirectory() {

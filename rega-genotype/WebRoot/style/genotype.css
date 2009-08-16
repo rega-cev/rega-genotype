@@ -388,6 +388,10 @@ table.date-field td {
 	color: blue;
 }
 
+*.non-link {
+	color: grey;
+}
+
 /* login form */
 
 .create-account {
