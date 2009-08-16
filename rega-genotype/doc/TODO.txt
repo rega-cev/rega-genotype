@@ -16,6 +16,9 @@ PRIORITY
 * report form: explain that you can bookmark the page at any time, to come back
   to the results later. Indicate how long they are kept (configuration option).
 * check the jobDir whether it exists, if not give an appropriate error message
+* google find the subtypetool (meta content)
+* HIV/HTLV report bootstrap is not showing
+* wrong assignment HTLV
 
 LATER
 * WMessage args, WAnchors
