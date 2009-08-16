@@ -30,6 +30,8 @@
 	<resource name="defaultSequenceAssignment.bootstrap">Bootstrap: </resource>
 	<resource name="defaultSequenceAssignment.motivation">Motivation: </resource>
 	
+	<resource name="details.analysisDetails">Analysis details</resource>
+	
 	<resource name="defaultPhylogeneticAnalyses.title">Phylogenetic analyses</resource>
 	<resource name="defaultPhylogeneticAnalyses.comment">
 		This section contains the alignments, inferred phylogenetic trees, and detailed results of the evolutionary analysis.
@@ -51,4 +53,7 @@
 	<resource name="defaultSignalAnalysis.signalComment">
 		Alignments with phylogenetic signal higher than 0.9 are considered suitable for the REGA subtype analysis. View the quartets mapped to the triangle.
 	</resource>
+	<resource name="defaultSignalAnalysis.extraComment">
+		Recombination Analyses are only performed for sequences with more than 800 bp.
+	</resource>	
 </common-settings>

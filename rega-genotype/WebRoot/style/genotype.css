@@ -188,3 +188,7 @@ a, .link{
 
 .edit-valid {
 }
+
+*.details-extraComments {
+	font-style:italic;
+}

@@ -31,6 +31,6 @@ public class DefaultSignalDetailsForm extends IDetailsForm {
 
 	@Override
 	public WMessage getExtraComment() {
-		return null;
+		return tr("defaultSignalAnalysis.extraComment");
 	}
 }

@@ -1,5 +1,6 @@
 PRIORITY
-* overview analyses details (+ extra comments)
+* overview analyses details
+	* details titles is a link now, should be plain title
 * repository for treepuzzle
 * image sizes (f.e. header image -> too small?)
 * start form 
