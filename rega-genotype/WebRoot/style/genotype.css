@@ -24,8 +24,7 @@ body {
 }
 
 div.imgDiv, div.downloadContainer{
-	width: 640px;
-	position: relative;
+	width: 100%;
 	margin: 1em auto 0.5em auto;
 	text-align: center;
 }
@@ -67,6 +66,7 @@ table.jobTable, table.detailsForm{
 table.jobTable > tbody > tr > td, table.detailsForm > tbody > tr > td {
 	border: 1px inset gray;
 	padding: 0.5em;
+	text-align: left;
 }
 
 table.jobTable{
@@ -207,11 +207,23 @@ table.files_referenceSequences-csv tr:first-child td{
 }
 
 span.sequence, span.sequenceName{
-	font-size: 80%;
+	font-size: 75%;
 	display: block;
-	width: 600px;
+	width: 500px;
 	margin-left: auto;
 	margin-right: auto;
 	font-family: 'monospace';
 }
+span.sequence{
+	margin-top: -1em;
+}
 
+.monitor-form{
+	text-align: center;
+}
+
+.analysisProgress{
+	color: red;
+	display: block;
+	margin-bottom: 1em;
+}

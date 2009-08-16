@@ -38,6 +38,7 @@ public abstract class AbstractJobOverview extends IForm {
 		super(main, "monitor-form");
 
 		analysisInProgress = new WText(tr("monitorForm.analysisInProgress"), this);
+		analysisInProgress.setStyleClass("analysisProgress");
 		
 		new WBreak(this);
 		

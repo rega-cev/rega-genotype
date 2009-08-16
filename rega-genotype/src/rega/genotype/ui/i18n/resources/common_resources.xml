@@ -48,7 +48,7 @@
 	</resource>
 	<resource name="defaultRecombinationAnalyses.sequenceName">Sequence name:</resource>
 	<resource name="defaultRecombinationAnalyses.bootscanClusterSupport">Bootscan cluster support:</resource>
-	<resource name="defaultRecombinationAnalyses.download">Download</resource>
+	<resource name="defaultRecombinationAnalyses.download">Download: </resource>
 	<resource name="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size ${window} and step size ${step}.</resource>
 
 	<resource name="defaultSignalAnalysis.title">Phylogenetic signal analysis</resource>

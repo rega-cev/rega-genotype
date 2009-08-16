@@ -43,10 +43,11 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		addWidget(new WBreak());
 		addWidget(new WText(tr("defaultRecombinationAnalyses.bootscanClusterSupport")));
 		addWidget(new WText(lt(p.getValue(path+".support[best]"))));
-		addWidget(new WText(tr("defaultRecombinationAnalyses.download")));
+		addWidget(new WBreak());
+		addWidget(new WText(lt(tr("defaultRecombinationAnalyses.download").value() +" ")));
 		addWidget(GenotypeLib.getAnchor("CSV", "application/excel", RecombinationPlot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"))));
-		addWidget(new WText(tr("defaultRecombinationAnalyses.download")));
-		addWidget(GenotypeLib.getAnchor("PDF", "application/pdf", RecombinationPlot.getRecombinationPDF(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"), od)));
+		addWidget(new WText(lt(", ")));
+		addWidget(GenotypeLib.getAnchor(" PDF ", "application/pdf", RecombinationPlot.getRecombinationPDF(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"), od)));
 		addWidget(new WBreak());
 		WArgMessage m = new WArgMessage("defaultRecombinationAnalyses.bootscanAnalysis");
 		m.addArgument("${window}", p.getValue(path+".window"));
