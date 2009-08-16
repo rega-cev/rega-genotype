@@ -1,5 +1,5 @@
 <genotype-analyses>
-  <alignment file="nrv-ORF1.fasta" trim="false" />
+  <alignment file="nrv-ORF1-713.fasta" trim="false" />
 
   <clusters>
     <cluster id="I.1" name="NRV I.1">
@@ -47,6 +47,8 @@
       <taxus name="OB2003000-541|I.7" />
     </cluster>
 
+	<!-- should nest inside I.3B?
+	     check using paup on ORF1 -->
     <cluster id="I.8" name="NRV I.8">
       <taxus name="SW1045-06|I.8" />
     </cluster>
@@ -76,7 +78,7 @@
     <cluster id="II.3" name="NRV II.3">
       <taxus name="OB2006021-121|II.3" />
       <taxus name="AB039782|II.3" />
-      <!-- <taxus name="DQ379713|II.3" /> -->
+      <!-- <taxus name="DQ379713|II.3" />  ok: old sequence -->
     </cluster>
 
     <cluster id="II.3R" name="NRV II.3R">
@@ -120,8 +122,9 @@
     </cluster>
 
     <cluster id="II.11" name="NRV II.11">
-      <taxus name="AB074892|II.11" />
-      <!-- <taxus name="AB074893|II.11" /> -->
+      <taxus name="AY823306|II.19" />
+      <taxus name="AB074893|II.11" />
+      <!-- <taxus name="AB074892|II.11" /> -->
     </cluster>
 
     <cluster id="II.12" name="NRV II.12">
@@ -148,10 +151,11 @@
       <taxus name="AY823305|II.18" />
     </cluster>
 
+    <!--
     <cluster id="II.19" name="NRV II.19">
-      <taxus name="AY823306|II.19" />
       <taxus name="AY823307|II.19" />
     </cluster>
+     -->
 
     <cluster id="II.20" name="NRV II.20">
       <taxus name="EU424333|II.20" />
@@ -160,7 +164,7 @@
     <cluster id="II.21" name="NRV II.21">
       <taxus name="AB083780|II.21" />
       <taxus name="AB231337|II.21" />
-      <!-- <taxus name="AB231337|II.21" /> -->
+      <!-- <taxus name="AB233471|II.21" /> -->
     </cluster>
 
     <cluster id="II.a" name="NRV II.a">

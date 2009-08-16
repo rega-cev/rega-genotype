@@ -106,7 +106,7 @@ public abstract class AbstractAnalysis {
         }
     };
 
-    private AlignmentAnalyses owner;
+    protected AlignmentAnalyses owner;
     private String            id;
 	private String            options;
 

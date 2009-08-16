@@ -1,0 +1,42 @@
+<genotype-analyses>
+  <alignment file="nrvblastaa.fasta" data="aa" />
+
+  <clusters>
+    <cluster id="I" name="I">
+      <taxus name="NC_001959">
+        <region name="ORF1" begin="4566" end="5283" />
+        <region name="ORF2" begin="5325" end="6963" />
+      </taxus>
+    </cluster>
+    <cluster id="II" name="II">
+      <taxus name="X86557">
+        <region name="ORF1" begin="4293" end="5010" />
+        <region name="ORF2" begin="5046" end="6696" />
+      </taxus>
+      <taxus name="U07611">
+        <region name="ORF1" begin="4293" end="5010" />
+        <region name="ORF2" begin="5046" end="6696" />
+      </taxus>
+    </cluster>
+    <cluster id="III" name="III">
+      <taxus name="AF097917" />
+    </cluster>
+    <cluster id="IV" name="IV">
+      <taxus name="AF414426" />
+    </cluster>
+    <cluster id="V" name="V">
+      <taxus name="NC_008311" />
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>
+      I,II,III,IV,V
+    </identify>
+    <cutoff>
+      100
+    </cutoff>
+  </analysis>
+
+</genotype-analyses>
+

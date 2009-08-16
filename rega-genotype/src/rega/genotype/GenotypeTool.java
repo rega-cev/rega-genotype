@@ -138,22 +138,22 @@ public abstract class GenotypeTool {
 			    if (s != null) {
                     s.removeGaps();
 
-			        try {
-			            System.err.println("Starting analysis of: " + s.getName());
-			            long start = System.currentTimeMillis();
+		            System.err.println("Starting analysis of: " + s.getName());
 
+		            long start = System.currentTimeMillis();
+			        try {
                         analyze(s);
-                        tracer.flush();
- 
-			            long elapsedTimeMillis = System.currentTimeMillis()-start;
-			            float elapsedTimeSec = elapsedTimeMillis/1000F;
-			            
-			            System.err.println("Completed analysis of: " + s.getName() + " (took " + elapsedTimeSec + "s)");
 			        } catch (AnalysisException e) {
 			            System.err.println(e.getMessage());
 			            e.printStackTrace();
 			            tracer.printError(e);
 			        }
+                    tracer.flush();
+                    
+		            long elapsedTimeMillis = System.currentTimeMillis()-start;
+		            float elapsedTimeSec = elapsedTimeMillis/1000F;
+		            
+		            System.err.println("Completed analysis of: " + s.getName() + " (took " + elapsedTimeSec + "s)");
 			        SequenceAlign.forgetAll();
 			    } else
 			        break;

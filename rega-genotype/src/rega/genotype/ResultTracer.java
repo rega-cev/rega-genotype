@@ -162,7 +162,7 @@ public class ResultTracer {
     }
 
 	public void printError(AnalysisException e) {
-        if (e.getSequence() != currentSequence) {
+        if (e.getSequence().sourceSequence() != currentSequence) {
             finishCurrentSequence();
             startNewSequence(e.getSequence());
         }

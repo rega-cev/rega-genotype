@@ -7,7 +7,6 @@
 package rega.genotype;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,12 +21,13 @@ import rega.genotype.AlignmentAnalyses.Cluster;
 
 public class BlastAnalysis extends AbstractAnalysis {
 	public static String blastPath = "";
-    static public String formatDbCommand = "formatdb";
-    static public String blastCommand = "blastall";
+    public static String formatDbCommand = "formatdb";
+    public static String blastCommand = "blastall";
 
     private List<Cluster> clusters;
     private Double cutoff;
-    private String options;
+    private String blastOptions;
+	private String formatDbOptions;
     private File workingDir;
 
     public class Result extends AbstractAnalysis.Result implements Concludable {
@@ -121,13 +121,20 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 	public BlastAnalysis(AlignmentAnalyses owner, String id,
                          List<Cluster> clusters, Double cutoff,
-                         String options,
+                         String blastOptions,
                          File workingDir) {
         super(owner, id);
+        this.workingDir = workingDir;
         this.clusters = clusters;
         this.cutoff = cutoff;
-        this.options = options;
-        this.workingDir = workingDir;
+        this.blastOptions = blastOptions != null ? blastOptions : "";
+        if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
+        	this.blastOptions = "-p blastx";
+        	this.formatDbOptions = "";
+        } else {
+        	this.blastOptions = "-p blastn";
+        	this.formatDbOptions = "-F p";
+        }
     }
 
     private Result compute(SequenceAlignment analysisDb, AbstractSequence sequence)
@@ -154,7 +161,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                         
                 Runtime runtime = Runtime.getRuntime();
 
-                String cmd = blastPath + formatDbCommand + " -o T -p F -i " + db.getAbsolutePath();
+                String cmd = blastPath + formatDbCommand + " " + formatDbOptions + " -o T -i " + db.getAbsolutePath();
                 System.err.println(cmd);
                 formatdb = runtime.exec(cmd, null, workingDir);
                 int result = formatdb.waitFor();
@@ -165,8 +172,9 @@ public class BlastAnalysis extends AbstractAnalysis {
                 
                 db.delete();
                 
-                cmd = blastPath + blastCommand + " -p blastn -i " + query.getAbsolutePath() + " "
-                    + (options != null ? options : "") + " -m 8 -d " + db.getAbsolutePath();
+                cmd = blastPath + blastCommand + " " + blastOptions
+                	+ " -i " + query.getAbsolutePath()
+                    + " -m 8 -d " + db.getAbsolutePath();
                 System.err.println(cmd);
                 blast = runtime.exec(cmd, null, workingDir);
                 InputStream inputStream = blast.getInputStream();
@@ -196,6 +204,11 @@ public class BlastAnalysis extends AbstractAnalysis {
                 }
                 result = blast.waitFor();
 
+                if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
+                	start *= 3;
+                	end *= 3;
+                }
+                
                 blast.getErrorStream().close();
                 blast.getInputStream().close();
                 blast.getOutputStream().close();

@@ -277,12 +277,12 @@ public class AlignmentAnalyses {
         if (cutoffE != null)
             cutoff = Double.valueOf(cutoffE.getTextTrim());
 
+        String blastOptions = null;
         Element optionsE = element.getChild("options");
-        String options = null;
         if (optionsE != null)
-            options = optionsE.getTextTrim();
+            blastOptions = optionsE.getTextTrim();
 
-        return new BlastAnalysis(this, id, cs, cutoff, options, workingDir);
+        return new BlastAnalysis(this, id, cs, cutoff, blastOptions, workingDir);
     }
 
     private AbstractAnalysis readScanAnalysis(Element element, String id, File workingDir) {
