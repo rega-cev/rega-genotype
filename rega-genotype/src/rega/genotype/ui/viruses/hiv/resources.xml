@@ -30,15 +30,17 @@
 		<title>
 		How to Cite the REGA HIV-1 Automated Subtyping Tool
 		</title>
-		<cite>
-		<b>These tools are not yet published. In the mean time please cite the following paper:</b>
-		<br/>
-		<a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/bti607v1" TARGET="_blank">An Automated Genotyping System for Analysis of HIV-1 and other Microbial Sequences.</a> 
-		<br/>
-		T. de Oliveira,K. Deforche, S. Cassol, M. Salminem, D. Paraskevis, C. Seebregts, J. Snoeck, E. J. van Rensburg ,A. M. J. Wensing, D.A. van de Vijver, C. A. Boucher , R. Camacho , and A-M Vandamme.
-		<br/>
-		Bioinformatics 2005; 21 (19), 3797-3800.
-		</cite>
+		<howToCite-text>
+			<text>
+				<b>These tools are not yet published. In the mean time please cite the following paper:</b>
+				<br/>
+				<a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/bti607v1" TARGET="_blank">An Automated Genotyping System for Analysis of HIV-1 and other Microbial Sequences.</a> 
+				<br/>
+				T. de Oliveira,K. Deforche, S. Cassol, M. Salminem, D. Paraskevis, C. Seebregts, J. Snoeck, E. J. van Rensburg ,A. M. J. Wensing, D.A. van de Vijver, C. A. Boucher , R. Camacho , and A-M Vandamme.
+				<br/>
+				Bioinformatics 2005; 21 (19), 3797-3800.
+			</text>
+		</howToCite-text>
 	</howToCite-form>
 	<tutorial-form>
 		<title>

@@ -13,10 +13,9 @@ PRIORITY
 * puzzle image -> too much whitespace
 * image centering -> sometimes refresh is needed
 * test on server without X installed, with java 1.5 (image creation)
-* how is dealt with gaps (-) in the input seq
+* how is dealt with gaps (-) in the input seq (Koen)
 * write installation doc
 * maven
-* generify documentation forms
 * layout 
 	* start form
 	* monitor form
