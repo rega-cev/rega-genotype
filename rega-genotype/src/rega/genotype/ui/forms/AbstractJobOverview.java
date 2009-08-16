@@ -34,7 +34,7 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 	
 	private WTimer updater;
 	
-	//TODO make sure the updater is not reading at the moment of a new update
+	private boolean fillingTable = false;
 	
 	//TODO run parser only when result.xml file exists (centralize this into sax parser)
 	
@@ -50,7 +50,8 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 			updater.setInterval(5*1000);
 			updater.timeout.addListener(new SignalListener<WEmptyEvent>() {
 				public void notify(WEmptyEvent a) {
-					fillTable();
+					if(!fillingTable)
+						fillTable();
 					System.err.println("lala---------------------");
 				}
 			});
@@ -65,6 +66,7 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 	}
 	
 	public void fillTable() {
+		fillingTable = true;
 		if(jobTable.numRows()==0) {
 			List<WMessage> headers = getHeaders();
 			for(int i = 0; i<headers.size(); i++) {
@@ -84,6 +86,13 @@ public abstract class AbstractJobOverview extends WContainerWidget {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
+		if(jobDone.exists()) {
+			updater.stop();
+		}
+		
+		fillingTable = false;
 	}
 
 	private SaxParser p = new SaxParser(){
