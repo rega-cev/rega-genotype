@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
 
+import rega.genotype.ui.util.GenotypeLib;
+
 /*
  * Created on Jul 6, 2004
  */
@@ -44,6 +46,7 @@ public abstract class GenotypeTool {
         CmdLineParser.Option blastPathOption = parser.addStringOption('b', "blast");
         CmdLineParser.Option treePuzzleCmdOption = parser.addStringOption('t', "treepuzzle");
         CmdLineParser.Option workingDirOption = parser.addStringOption('w', "workingDir");
+        CmdLineParser.Option treeGraphCmdOption = parser.addStringOption('g', "treegraph");
         
         try {
             parser.parse(args);
@@ -81,6 +84,10 @@ public abstract class GenotypeTool {
         String workingDirTmp = (String) parser.getOptionValue(workingDirOption);        
         if (workingDirTmp != null)
         	workingDir = workingDirTmp;
+        
+        String treeGraphCmd = (String) parser.getOptionValue(treeGraphCmdOption);        
+        if (treeGraphCmd != null)
+        	GenotypeLib.treeGraphCommand = treeGraphCmd;
 
         return parser.getRemainingArgs();
 	}
@@ -102,6 +109,7 @@ public abstract class GenotypeTool {
         System.err.println("\t-x,--xml       	specify path to xml files");
         System.err.println("\t-b,--blast     	specify path to blast executables");
         System.err.println("\t-t,--treepuzzle   specify path to treepuzzle executable");
+        System.err.println("\t-g,--treegraph    specify path to treegraph executable");
         System.err.println("\t-w,--workingDir   specify path to the working directory (default .)");
 	}
 

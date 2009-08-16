@@ -1,13 +1,19 @@
 package rega.genotype.ui.util;
 
+import jargs.gnu.CmdLineParser;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -21,6 +27,8 @@ import rega.genotype.SequenceAlign;
 import rega.genotype.viruses.hiv.HIVTool;
 
 public class GenotypeLib {
+	public static String treeGraphCommand = "/usr/bin/tgf";
+	
 	public static void initSettings(Settings s) {
 		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
 		SequenceAlign.clustalWPath = s.getClustalWCmd();
@@ -81,9 +89,34 @@ public class GenotypeLib {
 		}
 	}
 	
-	public static void getTreePDF(int jobid, File svgFile, File pdfFile) {
-		if (!pdfFile.exists() && svgFile.exists()) {
-			ImageConverter.svgToPdf(svgFile, pdfFile);
+	public static void getTreePDF(int jobid, File treeFile, File pdfFile) {
+		if (!pdfFile.exists() && treeFile.exists()) {
+			File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
+			File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
+			
+			try{
+				Runtime runtime = Runtime.getRuntime();
+				runtime.exec(treeGraphCommand +" -t "+ treeFile.getAbsolutePath(), null, treeFile.getParentFile());
+				
+				BufferedReader in = new BufferedReader(new FileReader(treeFile));
+				PrintStream out = new PrintStream(new FileOutputStream(tgfFile));
+				String line;
+				while((line = in.readLine()) != null){
+					line = line.replace("\\width{150}" ,"\\width{180}");
+					line = line.replace("\\height{250}" ,"\\height{270}");
+					line = line.replace("\\margin{0}{0}{0}{0}" ,"\\margin{10}{10}{10}{10}");
+					line = line.replace("\\style{r}{plain}{14.4625}","\\style{r}{plain}{10}");
+					out.println(line);
+				}
+				out.close();
+				in.close();
+				
+				runtime.exec(treeGraphCommand +" -v "+ tgfFile.getAbsolutePath(), null, tgfFile.getParentFile());	
+				ImageConverter.svgToPdf(svgFile, pdfFile);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 	}
 

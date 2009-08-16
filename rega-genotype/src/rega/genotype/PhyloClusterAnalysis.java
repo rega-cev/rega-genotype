@@ -652,7 +652,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             /*
              * Run puzzle
              */
-            String cmd = puzzleCommand + " " + infile.getAbsolutePath();
+            String cmd = puzzleCommand + " " + infile.getAbsolutePath() +" -svg";
             puzzle = runtime.exec(cmd, null, workingDir);
 
             InputStream puzzleOut = puzzle.getInputStream();
