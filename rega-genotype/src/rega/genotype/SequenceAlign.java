@@ -167,7 +167,7 @@ public class SequenceAlign {
             //fout2.flush();
             //fout2.getFD().sync();
             fout2.close();
-            
+
             System.err.println("Written file: " + f.getPath());
             System.err.println("Written file: " + f2.getPath());
             

@@ -3,53 +3,53 @@
 
   <clusters>
     <cluster id="1" name="NRV I.1">
-      <taxus name="M87661|I.1" />
-      <taxus name="AY502016|I.1" />
-      <taxus name="EF547392|I.1" />
+      <taxus name="I.1|M87661" />
+      <taxus name="I.1|AY502016" />
+      <taxus name="I.1|EF547392" />
     </cluster>
    
     <cluster id="2" name="NRV I.2">
-      <taxus name="AF435807|I.2" />
-      <taxus name="L07418|I.2" />
+      <taxus name="I.2|AF435807" />
+      <taxus name="I.2|L07418" />
     </cluster>
 
     <cluster id="3" name="NRV I.3">
-      <taxus name="AF414405|I.3" />
-      <taxus name="AF439267|I.3" />      
-      <taxus name="AB187514|I.3" />
-      <taxus name="U04469|I.3" />
-      <taxus name="EF547396|I.3" />
+      <taxus name="I.3|AF414405" />
+      <taxus name="I.3|AF439267" />      
+      <taxus name="I.3|AB187514" />
+      <taxus name="I.3|U04469" />
+      <taxus name="I.3|EF547396" />
     </cluster>
 
     <cluster id="4" name="NRV I.4">
-      <taxus name="AJ313030|I.4" />
-      <taxus name="AB042808|I.4" />
+      <taxus name="I.4|AJ313030" />
+      <taxus name="I.4|AB042808" />
     </cluster>
     
     <cluster id="5" name="NRV I.5">
-      <taxus name="AJ277614|I.5" />
-      <taxus name="AF414406|I.5" />
-      <taxus name="AB039774|I.5" />
+      <taxus name="I.5|AJ277614" />
+      <taxus name="I.5|AF414406" />
+      <taxus name="I.5|AB039774" />
     </cluster>
      
     <cluster id="6" name="NRV I.6">
-      <taxus name="AJ277615|I.6" />
-      <taxus name="AY502008|I.6" />
-      <taxus name="AF093797|I.6" />
+      <taxus name="I.6|AJ277615" />
+      <taxus name="I.6|AY502008" />
+      <taxus name="I.6|AF093797" />
     </cluster>
 
     <cluster id="7" name="NRV I.7">
-      <taxus name="AY675555|I.7" />
-      <taxus name="AJ844469|I.7" />
-      <taxus name="AJ277609|I.7" />
+      <taxus name="I.7|AY675555" />
+      <taxus name="I.7|AJ844469" />
+      <taxus name="I.7|AJ277609" />
     </cluster>
 
     <cluster id="8" name="NRV I.8">
-      <taxus name="AF538679|I.8" />
+      <taxus name="I.8|AF538679" />
     </cluster>
 
     <cluster id="O" name="NRV III.1">
-      <taxus name="EU360814|III.1" />
+      <taxus name="III.1|EU360814" />
     </cluster>
   </clusters>
 
@@ -66,7 +66,7 @@
       export format=phylip file=paup.fasta replace=yes;
       exclude gapped;
       export format=nexus file=paup.nex replace=yes;
-      outgroup EU360814|III.1;
+      outgroup III.1|EU360814;
       set criterion=distance outroot=monophyl;
       dset distance=TamNei rates=gamma shape=0.324463 NegBrLen=SetAbsVal;
       constraints CONSTRE(BACKBONE)=((2,3,4),(5,6),(7,8,9,10,11),(12,13),(14,15,16),(17,18,19),(20,21,22));

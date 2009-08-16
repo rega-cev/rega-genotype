@@ -198,6 +198,10 @@ public class AlignmentAnalyses {
         return result;
     }
     
+    public boolean haveAnalysis(String id) {
+    	return analyses.containsKey(id);
+    }
+    
     private void retrieve(File fileName, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
 
@@ -341,7 +345,7 @@ public class AlignmentAnalyses {
         
         String[] ids = s.split(",");
         for (int i = 0; i < ids.length; ++i) {
-            String id = ids[i];
+            String id = ids[i].trim();
             Cluster c = getCluster(id);
             if (c == null) {
                 System.err.println("Undefined cluster: " + id);
@@ -359,8 +363,9 @@ public class AlignmentAnalyses {
         if (id.contains("[")) {
             name = id.substring(0, id.indexOf('['));
             taxalist = id.substring(id.indexOf('[') + 1, id.length() - 1);
+            
         }
-         
+        
         Cluster c = clusterMap.get(name);
         if (c != null && taxalist != null) {
             Cluster result = new Cluster(c.getId(), c.getName(), c.getDescription(), c.tags);

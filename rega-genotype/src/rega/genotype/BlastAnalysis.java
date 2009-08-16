@@ -182,6 +182,9 @@ public class BlastAnalysis extends AbstractAnalysis {
                 LineNumberReader reader
                     = new LineNumberReader(new InputStreamReader(inputStream));
 
+                int queryFactor = (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA)
+                	? 3 : 1;
+
                 String[] best = null;
                 int start = Integer.MAX_VALUE;
                 int end = -1;
@@ -194,21 +197,15 @@ public class BlastAnalysis extends AbstractAnalysis {
                         best = s.split("\t");
                         if (best.length != 12)
                         	throw new ApplicationException("blast result format error");
-                    }
-                    String[] values = s.split("\t");
-                    
-                    if (values[1].equals(best[1]) && Float.parseFloat(values[11]) > cutoff) {
-                    	start = Math.min(start, Integer.parseInt(values[8]) - Integer.parseInt(values[6]));
-                    	end = Math.max(end, Integer.parseInt(values[9]) + sequence.getLength() - Integer.parseInt(values[7]));
+
+                        String[] values = s.split("\t");
+
+                       	start = Integer.parseInt(values[8])*queryFactor - Integer.parseInt(values[6]);
+                       	end = Integer.parseInt(values[9])*queryFactor + sequence.getLength() - Integer.parseInt(values[7]);
                     }
                 }
                 result = blast.waitFor();
 
-                if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
-                	start *= 3;
-                	end *= 3;
-                }
-                
                 blast.getErrorStream().close();
                 blast.getInputStream().close();
                 blast.getOutputStream().close();

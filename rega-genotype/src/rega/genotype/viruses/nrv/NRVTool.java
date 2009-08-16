@@ -22,6 +22,7 @@ import rega.genotype.SubSequence;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AlignmentAnalyses.Region;
 import rega.genotype.AlignmentAnalyses.Taxus;
+import rega.genotype.PhyloClusterAnalysis.Result;
 
 public class NRVTool extends GenotypeTool {
 	enum GroupRegion {
@@ -60,8 +61,8 @@ public class NRVTool extends GenotypeTool {
         			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 100)) {
         				int rs = Math.max(0, region.getBegin() - blastResult.getStart());
         				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
-        					
-        				AbstractSequence s2 = new SubSequence(s.getName(), s.getDescription(), s, rs, re);
+
+        				AbstractSequence s2 = re > rs ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
         				if (phyloAnalysis(s2, c.getId(), region.getName()))
         					phyloAssignment = true;
         			}
@@ -97,11 +98,12 @@ public class NRVTool extends GenotypeTool {
 			PhyloClusterAnalysis.Result r = a.run(s);
 
 			String phyloName = "phylogenetic analysis (" + regionName + ")";
-			
-			if (r.haveSupport())
-				conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70");
-			else {
-				if (r.getSupportInner() >= 100)
+
+			if (r.haveSupport()) {
+				if (!variantPhyloAnalysis(s, phylo, regionName, r.getConcludedCluster()))
+					conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70");
+			} else {
+				if (r.getSupportInner() >= 95)
 					conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100");
 				else
 					conclude("Could not assign", "Not supported by " + phyloName);
@@ -110,6 +112,30 @@ public class NRVTool extends GenotypeTool {
 			return true;
 		} else
 			return false;
+	}
+
+	private boolean variantPhyloAnalysis(AbstractSequence s, AlignmentAnalyses phylo, String regionName, Cluster cluster) throws AnalysisException {
+		String analysisName = "phylo-" + regionName + "-" + cluster.getId();
+
+		if (!phylo.haveAnalysis(analysisName))
+			return false;
+
+		PhyloClusterAnalysis a = (PhyloClusterAnalysis) phylo.getAnalysis(analysisName);
+
+		PhyloClusterAnalysis.Result r = a.run(s);
+		
+		String phyloName = "phylogenetic analysis (" + regionName + ")";
+
+		if (r.haveSupport()) {
+			conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70");
+			return true;
+		} else {
+			if (r.getSupportInner() >= 95) {
+				conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100");
+				return true;
+			} else
+				return false;
+		}
 	}
 
 	public void analyzeSelf() throws AnalysisException {

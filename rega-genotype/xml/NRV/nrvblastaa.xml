@@ -34,7 +34,7 @@
       I,II,III,IV,V
     </identify>
     <cutoff>
-      100
+      60
     </cutoff>
   </analysis>
 
