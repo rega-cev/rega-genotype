@@ -17,7 +17,11 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 
-public class DocumentationForm extends IForm {
+/**
+ * Base documentationform widget which parses the resources.xml entries.
+ * DocumentationForm supports: headers, rules, figures, sequences, csv-tables and HTML-formatted text.
+ */
+public class DocumentationForm extends AbstractForm {
 	public DocumentationForm(GenotypeWindow main, String title) {
 		super(main, title);
 	}

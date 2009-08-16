@@ -7,6 +7,9 @@ package rega.genotype.ui.forms;
 
 import rega.genotype.ui.framework.GenotypeWindow;
 
+/**
+ * The contact us documentation form widget.
+ */
 public class ContactUsForm extends DocumentationForm {
 	public ContactUsForm(GenotypeWindow main) {
 		super(main, "contactUs-form");

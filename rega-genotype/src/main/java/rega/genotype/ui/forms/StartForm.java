@@ -34,7 +34,11 @@ import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
 
-public class StartForm extends IForm {
+/**
+ * StartForm implementation implements a widget which allows the user to start a new job
+ * or jump to a running/finished job.
+ */
+public class StartForm extends AbstractForm {
 	private WText note;
 	private WTextArea ta;
 	private WPushButton run, clear;

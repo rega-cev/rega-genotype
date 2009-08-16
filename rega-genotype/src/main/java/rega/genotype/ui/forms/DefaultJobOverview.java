@@ -17,6 +17,9 @@ import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 
+/**
+ * A default extension of AbstractJobOverview, used by different virus implementations.
+ */
 public class DefaultJobOverview extends AbstractJobOverview {
 	private List<WString> headers = new ArrayList<WString>();
 	private List<WWidget> data = new ArrayList<WWidget>();

@@ -17,6 +17,9 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
+/**
+ * A default extension of IDetailsForm for visualizing phylogenetic details, used by different virus implementations.
+ */
 public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 	
 	private String xpath;

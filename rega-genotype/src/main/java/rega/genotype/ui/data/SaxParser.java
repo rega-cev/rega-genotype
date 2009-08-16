@@ -24,6 +24,11 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import eu.webtoolkit.jwt.utils.StringUtils;
 
+/**
+ * A sax parser which parses the rega-genotype analysis result file and stores 
+ * all values in a Map per sequences. Sequences can be accessed by implementing 
+ * the endSequence() method.
+ */
 public abstract class SaxParser extends DefaultHandler {
 
 	private List<String> currentPath = new ArrayList<String>();

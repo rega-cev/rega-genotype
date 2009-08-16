@@ -18,6 +18,9 @@ import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
+/**
+ * A default extension of IDetailsForm for visualizing the genotypic assignment, used by different virus implementations.
+ */
 public class DefaultSequenceAssignmentForm extends IDetailsForm {
 	private WContainerWidget text;
 	private WContainerWidget images;

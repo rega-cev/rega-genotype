@@ -17,6 +17,9 @@ import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 
+/**
+ * An interface describing all attributes and functions specific to an organism.
+ */
 public interface OrganismDefinition {
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException;
 	public AbstractJobOverview getJobOverview(GenotypeWindow main);

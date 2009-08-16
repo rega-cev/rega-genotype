@@ -7,6 +7,9 @@ package rega.genotype.ui.forms;
 
 import rega.genotype.ui.framework.GenotypeWindow;
 
+/**
+ * The subtyping process documentation form widget.
+ */
 public class SubtypingProcessForm extends DocumentationForm {
 
 	public SubtypingProcessForm(GenotypeWindow main) {

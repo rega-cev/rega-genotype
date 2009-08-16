@@ -16,7 +16,7 @@ import rega.genotype.ui.forms.DecisionTreesForm;
 import rega.genotype.ui.forms.DetailsForm;
 import rega.genotype.ui.forms.ExampleSequencesForm;
 import rega.genotype.ui.forms.HowToCiteForm;
-import rega.genotype.ui.forms.IForm;
+import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.forms.SubtypingProcessForm;
 import rega.genotype.ui.forms.TutorialForm;
@@ -50,9 +50,9 @@ public class GenotypeWindow extends WContainerWidget
 	private static final String JOB_URL = "/job";
 	private static final String CONTACT_URL = "/contact";
 
-	private Map<String, IForm> forms = new HashMap<String, IForm>();
+	private Map<String, AbstractForm> forms = new HashMap<String, AbstractForm>();
 	
-	private IForm activeForm;
+	private AbstractForm activeForm;
 		
 	private WContainerWidget content;
 	
@@ -122,7 +122,7 @@ public class GenotypeWindow extends WContainerWidget
 				if (basePath.equals("/")) {
 					String newPath = "/" + GenotypeMain.getApp().internalPathNextPart(basePath);
 
-					IForm f = forms.get(newPath);
+					AbstractForm f = forms.get(newPath);
 
 					if (f != null)
 						setForm(f);
@@ -147,14 +147,14 @@ public class GenotypeWindow extends WContainerWidget
 		return getJobDir(jobId).exists();
 	}
 
-	private void addLink(WContainerWidget parent, WString text, String url, IForm form) {
+	private void addLink(WContainerWidget parent, WString text, String url, AbstractForm form) {
 		WAnchor a = new WAnchor("", text, parent);
 		a.setRefInternalPath(url);
 		a.setStyleClass("link");
 		forms.put(url, form);
 	}
 
-	public void setForm(IForm form) {
+	public void setForm(AbstractForm form) {
 		if (form == activeForm)
 			return;
 

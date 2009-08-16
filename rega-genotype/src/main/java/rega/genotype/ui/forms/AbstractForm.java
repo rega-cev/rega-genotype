@@ -10,15 +10,18 @@ import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WText;
 
-public abstract class IForm extends WContainerWidget {
+/**
+ * AbstractForm class abstracts some functions and attributes used by all forms.
+ */
+public abstract class AbstractForm extends WContainerWidget {
 	private WText title;
 	private GenotypeWindow main;
 
-	public IForm(GenotypeWindow main, String title) {
+	public AbstractForm(GenotypeWindow main, String title) {
 		this(main, title, getCssClass(title));
 	}
 	
-	public IForm(GenotypeWindow main, String title, String cssClass) {
+	public AbstractForm(GenotypeWindow main, String title, String cssClass) {
 		this.main = main;
 		this.title = new WText(main.getResourceManager().getOrganismValue(title, "title"), this);
 		this.title.setStyleClass("header-mainTitle");

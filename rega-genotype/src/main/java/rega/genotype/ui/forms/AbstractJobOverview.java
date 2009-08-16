@@ -32,7 +32,11 @@ import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTimer;
 import eu.webtoolkit.jwt.WWidget;
 
-public abstract class AbstractJobOverview extends IForm {
+/**
+ * An abstract class implementing a widget showing the overview of a running or finished job.
+ * Can be used by implementing the getHeader and getData methods.
+ */
+public abstract class AbstractJobOverview extends AbstractForm {
 	protected File jobDir;
 
 	private WText analysisInProgress;

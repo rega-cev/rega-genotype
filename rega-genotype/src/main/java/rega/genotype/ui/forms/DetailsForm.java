@@ -14,7 +14,11 @@ import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WText;
 
-public class DetailsForm extends IForm {
+/**
+ * The DetailsForm widget groups together the different detail modules defined in the 
+ * OrganismDefinition implementation.
+ */
+public class DetailsForm extends AbstractForm {
 	private WContainerWidget mainTable;
 	private IDetailsForm mainDetails;
 	

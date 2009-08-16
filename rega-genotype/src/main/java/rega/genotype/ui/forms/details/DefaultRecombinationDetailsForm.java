@@ -18,6 +18,9 @@ import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
+/**
+ * A default extension of IDetailsForm for visualizing recombination details, used by different virus implementations.
+ */
 public class DefaultRecombinationDetailsForm extends IDetailsForm {
 
 	public DefaultRecombinationDetailsForm(){

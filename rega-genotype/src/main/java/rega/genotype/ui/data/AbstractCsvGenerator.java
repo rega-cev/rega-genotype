@@ -8,6 +8,10 @@ package rega.genotype.ui.data;
 import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * An abstract class extending SaxParser, which provides utility functions to 
+ * write a csv file.
+ */
 public abstract class AbstractCsvGenerator extends SaxParser {
 	private Writer w;
 

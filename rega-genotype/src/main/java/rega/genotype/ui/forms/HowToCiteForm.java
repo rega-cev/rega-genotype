@@ -7,6 +7,9 @@ package rega.genotype.ui.forms;
 
 import rega.genotype.ui.framework.GenotypeWindow;
 
+/**
+ * The how to cite documentation form widget.
+ */
 public class HowToCiteForm extends DocumentationForm {
 	public HowToCiteForm(GenotypeWindow main) {
 		super(main, "howToCite-form");

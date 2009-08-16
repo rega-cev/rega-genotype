@@ -8,6 +8,9 @@ package rega.genotype.ui.data;
 import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * A default extension of AbstractCsvGenerator, used by different virus implementations.
+ */
 public class DefaultCsvGenerator extends AbstractCsvGenerator {
 	public DefaultCsvGenerator(Writer ps) throws IOException {
 		super(ps);

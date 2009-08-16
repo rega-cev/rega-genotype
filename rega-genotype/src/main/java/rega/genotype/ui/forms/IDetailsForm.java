@@ -12,6 +12,9 @@ import rega.genotype.ui.data.SaxParser;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
 
+/**
+ * An interface describing all attributes and functions for a details module in the DetailsForm
+ */
 public abstract class IDetailsForm extends WContainerWidget {
 	public abstract void fillForm(SaxParser p, final OrganismDefinition od, File jobDir);
 	public abstract WString getTitle();
