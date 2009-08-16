@@ -1,6 +1,7 @@
 package rega.genotype.recombination.plot;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,6 +32,10 @@ public class Table {
     
     public static Table readTable(String filename, char delimiter) throws FileNotFoundException, UnsupportedEncodingException{
         return readTable(filename, Charset.defaultCharset().name(), delimiter);
+    }
+    
+    public static Table readTable(File file, char delimiter) throws FileNotFoundException, UnsupportedEncodingException{
+        return readTable(file.getAbsolutePath(), delimiter);
     }
     
     public static Table readTable(String filename, String charsetName) throws FileNotFoundException, UnsupportedEncodingException{
