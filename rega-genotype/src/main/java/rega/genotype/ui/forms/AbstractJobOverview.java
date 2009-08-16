@@ -40,19 +40,28 @@ import eu.webtoolkit.jwt.WWidget;
  * Can be used by implementing the getHeader and getData methods.
  */
 public abstract class AbstractJobOverview extends AbstractForm {
-	protected File jobDir;
+	public class Header {
+		public WString name;
+		public int span;
 
+		public Header(WString aName) {
+			this(aName, 1);
+		}
+
+		public Header(WString aName, int aSpan) {
+			name = aName;
+			span = aSpan;
+		}
+	}
+	
+	protected File jobDir;
 	private WText analysisInProgress;
 	private WTable jobTable;
-	
 	private WTimer updater;
-	
 	private WContainerWidget downloadContainer;
-
 	private boolean fillingTable = false;
 
 	private String jobId;
-
 	private WText explainText;	
 
 	public AbstractJobOverview(GenotypeWindow main) {
@@ -154,10 +163,16 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public void fillTable() {
 		fillingTable = true;
 		if(jobTable.numRows()==0) {
-			List<WString> headers = getHeaders();
+			List<Header> headers = getHeaders();
+
+			int col = 0;
 			for(int i = 0; i<headers.size(); i++) {
-				jobTable.elementAt(0, i).addWidget(new WText(headers.get(i)));
-				jobTable.elementAt(0, i).setStyleClass("jobTableHeader");
+				Header h = headers.get(i);
+				jobTable.elementAt(0, col).addWidget(new WText(h.name));
+				jobTable.elementAt(0, col).setStyleClass("jobTableHeader");				
+				jobTable.elementAt(0, col).setColumnSpan(h.span);
+				
+				col += h.span;
 			}
 		}
 		
@@ -247,14 +262,14 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			int numRows = jobTable.numRows()-1;
 			if(getSequenceIndex()>=numRows) {
 				List<WWidget> data = getData(tableFiller);
-				for(int i = 0; i<data.size(); i++) {
+				for (int i = 0; i < data.size(); i++) {
 					jobTable.elementAt(getSequenceIndex()+1, i).addWidget(data.get(i));
 				}
 			}
 		}
 	};
 	
-	public abstract List<WString> getHeaders();
+	public abstract List<Header> getHeaders();
 	
 	public abstract List<WWidget> getData(SaxParser p);
 

@@ -257,12 +257,16 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
         }
 
         public void writeConclusion(ResultTracer tracer) {
-            tracer.printlnOpen("<assigned>");
             Cluster c = getSpecificCluster();
 
             if (c == null)
             	c = getBestCluster();
+            
+            writeConclusion(tracer, c);
+        }
 
+        public void writeConclusion(ResultTracer tracer, Cluster c) {
+            tracer.printlnOpen("<assigned>");
             tracer.add("id", c.getId());
             tracer.add("name", c.getName());
             tracer.add("support", getSupport(c));
@@ -274,6 +278,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             
             if (haveOption("outer"))
                 tracer.add("outer", getSupportOuter());
+
             tracer.printlnClose("</assigned>");
         }
 
@@ -283,6 +288,22 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 
 		public float getConcludedSupport() {
 			return (float) getSupport(getConcludedCluster());
+		}
+
+		public Concludable concludeForCluster(final Cluster cluster) {
+			return new Concludable() {
+				public Cluster getConcludedCluster() {
+					return cluster;
+				}
+
+				public float getConcludedSupport() {
+					return (float) getSupport(cluster);
+				}
+
+				public void writeConclusion(ResultTracer tracer) {
+					Result.this.writeConclusion(tracer, cluster);
+				}	
+			};
 		}
 
     }

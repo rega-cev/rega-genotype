@@ -142,7 +142,34 @@ AGCAAAATATAATTGACCCCTGGATTAGAGATAATTTTGTACAAGCC
 		</contactUs-text>
 	</contactUs-form>
 
-	<resource name="nrvSequenceAssignment.assignment"><span class="label">Assignment:</span></resource>
-	<resource name="nrvSequenceAssignment.motivation"><br /><span class="label">Motivation:</span></resource>
+	<resource name="nrvSequenceAssignment.blast">
+		<h2>Genogroup assignment</h2>
+		<p>
+			<span class="label">Genogroup assignment:</span> {1}
+		</p>
+		<p>
+			<span class="label">Motivation:</span> {2}
+		</p>
+	</resource>
+
+	<resource name="nrvSequenceAssignment.phylo">
+		<h2>{1}</h2>
+		<p>
+			<span class="label">Genotype assignment:</span> <span class="nov-genotype">{2}</span>
+		</p>
+		<p>
+			<span class="label">Motivation:</span> {3}
+		</p>
+	</resource>
+
+	<resource name="nrvSequenceAssignment.phylo-variant">
+		<p>
+			<span class="label">Sub-clustering:</span> <span class="nrvSequenceAssignment.genotype">{1}</span>
+		</p>
+		<p>
+			<span class="label">Motivation:</span> {2}
+		</p>
+	</resource>
+
 	<resource name="nrvTool.title">NoV Genotyping Tool</resource>
 </organism-settings>

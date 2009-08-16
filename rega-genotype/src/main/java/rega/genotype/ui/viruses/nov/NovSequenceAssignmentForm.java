@@ -29,47 +29,40 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 
 	@Override
 	public void fillForm(SaxParser p, final OrganismDefinition od, File jobDir) {
-		WContainerWidget block;
-		
-		block = new WContainerWidget(this);
-		block.setStyleClass("dsa-text");
+		WContainerWidget block = new WContainerWidget(this);
 
-		new WText(tr("defaultSequenceAssignment.sequenceName"), block)
-			.setStyleClass("label");
-		new WText(lt(p.getEscapedValue("genotype_result.sequence[name]")+", "), block)
-			.setStyleClass("value");
-		new WText(tr("defaultSequenceAssignment.sequenceLength"), block)
-			.setStyleClass("label");
-		new WText(lt(p.getEscapedValue("genotype_result.sequence[length]") + " bps"), block)
-			.setStyleClass("value");
-
-		block = new WContainerWidget(this);
+		new WText(tr("defaultSequenceAssignment.name-length")
+				.arg(p.getEscapedValue("genotype_result.sequence[name]"))
+				.arg(p.getEscapedValue("genotype_result.sequence[length]")), block);
 
 		String blastConclusion = NovResults.getBlastConclusion(p);
 		if (!blastConclusion.equals(NovResults.NA)) {
-			new WText(lt("<h2>Genotyping result</h2>"), block);
-			
-			new WText(tr("nrvSequenceAssignment.assignment"), block);
-			new WText(lt(blastConclusion), block);
-			new WText(tr("nrvSequenceAssignment.motivation"), block);
-			new WText(lt(NovResults.getBlastMotivation(p)), block);
-		} else {
-			new WText(lt("<h2>ORF1</h2>"), block);
-
-			new WText(tr("nrvSequenceAssignment.assignment"), block);
-			new WText(lt(NovResults.getConclusion(p, "ORF1")), block);
-			new WText(tr("nrvSequenceAssignment.motivation"), block);
-			new WText(lt(NovResults.getMotivation(p, "ORF1")), block);
-
-			new WText(lt("<h2>ORF2</h2>"), block);
-
-			new WText(tr("nrvSequenceAssignment.assignment"), block);
-			new WText(lt(NovResults.getConclusion(p, "ORF2")), block);
-			new WText(tr("nrvSequenceAssignment.motivation"), block);
-			new WText(lt(NovResults.getMotivation(p, "ORF2")), block);
+			new WText(tr("nrvSequenceAssignment.blast")
+					.arg(blastConclusion)
+					.arg(NovResults.getBlastMotivation(p)), block);
 		}
 
-		block = new WContainerWidget(this);
+		for (int i = 1; i <= 2; ++i) {
+			String orf = "ORF" + i;
+			NovResults.Conclusion c = NovResults.getConclusion(p, orf);
+
+			WString motivation = WString.lt(c.majorMotivation);
+			motivation.arg(c.majorBootstrap);
+
+			new WText(tr("nrvSequenceAssignment.phylo")
+					.arg(orf)
+					.arg(c.majorAssignment)
+					.arg(motivation), block);
+
+			if (c.variantDescription != null) {
+				motivation = WString.lt(c.variantMotivation);
+				motivation.arg(c.variantBootstrap);
+
+				new WText(tr("nrvSequenceAssignment.phylo-variant")
+						.arg(c.variantDescription)
+						.arg(motivation), block);
+			}
+		}
 
 		new WText(lt("<h2>Genome region</h2>"), block);
 
@@ -92,15 +85,12 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 			e.printStackTrace();
 		}
 
-		block = new WContainerWidget(this);
-
 		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
 		refSeq.arg(start);
 		refSeq.arg(end);
 		refSeq.arg(p.getEscapedValue("genotype_result.sequence.result['blast'].refseq"));
-		WText refSeqWidget = new WText(refSeq);
-		refSeqWidget.setStyleClass("refseq");
-		block.addWidget(refSeqWidget);
+
+		new WText(refSeq, block);
 	}
 
 	@Override

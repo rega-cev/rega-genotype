@@ -76,20 +76,21 @@ table.jobTable td{
 	text-align: left;
 }
 	
-table.jobTable{
+table.jobTable {
 	width: 100%;
 }
 
-table.jobTable td{
+table.jobTable td {
 	line-height: 60px;
 }
-table.jobTable .jobTableHeader{
+
+table.jobTable .jobTableHeader {
 	line-height: 30px;
 	font-weight: bold;
 	text-align: center;
 }
 
-table.jobTable td img, .detailsForm img{
+table.jobTable td img, .detailsForm img {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
@@ -119,16 +120,24 @@ table.jobTable td img, .detailsForm img{
 	font-size: 110%;
 }
 
+.details .nov-genotype {
+	font-size: 130%;
+	font-weight: bold;
+}
+
 .details h2 {
+	margin-top: 4ex;
 	font-size: 110%;
 	color: darkblue;
 }
 
 .details .label {
 	color: darkblue;
-	width: 12ex;
+	width: 25ex;
 	display: inline-block;
 	line-height: 120%;
+	text-align: right;
+	padding-right: 2ex;
 }
 
 .details .dsa-text .label {

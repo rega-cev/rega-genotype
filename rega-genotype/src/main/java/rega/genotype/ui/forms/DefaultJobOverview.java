@@ -21,18 +21,18 @@ import eu.webtoolkit.jwt.WWidget;
  * A default extension of AbstractJobOverview, used by different virus implementations.
  */
 public class DefaultJobOverview extends AbstractJobOverview {
-	private List<WString> headers = new ArrayList<WString>();
+	private List<Header> headers = new ArrayList<Header>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
 	public DefaultJobOverview(GenotypeWindow main) {
 		super(main);
 		
-		headers.add(lt("Name"));
-		headers.add(lt("Length"));
-		headers.add(lt("Report"));
-		headers.add(lt("Assignment"));
-		headers.add(lt("Support"));
-		headers.add(lt("Genome"));
+		headers.add(new Header(lt("Name")));
+		headers.add(new Header(lt("Length")));
+		headers.add(new Header(lt("Report")));
+		headers.add(new Header(lt("Assignment")));
+		headers.add(new Header(lt("Support")));
+		headers.add(new Header(lt("Genome")));
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	}
 
 	@Override
-	public List<WString> getHeaders() {
+	public List<Header> getHeaders() {
 		return headers;
 	}
 

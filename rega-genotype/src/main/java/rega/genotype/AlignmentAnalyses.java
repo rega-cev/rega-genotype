@@ -186,8 +186,12 @@ public class AlignmentAnalyses {
         /**
          * Quick and dirty test to see if a particular tag is set for the cluster.
          */
-		public boolean haveTag(String tag) {
+		public boolean hasTag(String tag) {
 			return tags != null && tags.contains(tag);
+		}
+
+		public Cluster getParent() {
+			return parent;
 		}
     }
 

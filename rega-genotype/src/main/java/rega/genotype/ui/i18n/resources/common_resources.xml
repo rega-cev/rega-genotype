@@ -50,13 +50,18 @@
 	<resource name="main.navigation.contactUs">Contact us</resource>
 	
 	<resource name="defaultSequenceAssignment.title">Sequence Assignment</resource>
-	<resource name="defaultSequenceAssignment.sequenceName">Sequence name: </resource>
-	<resource name="defaultSequenceAssignment.sequenceLength">Length: </resource>
-	<resource name="defaultSequenceAssignment.assignment">Assignment: </resource>
-	<resource name="defaultSequenceAssignment.bootstrap">Bootstrap: </resource>
-	<resource name="defaultSequenceAssignment.motivation">Motivation: </resource>
-	<resource name="defaultSequenceAssignment.referenceSequence">Your sequence starts at position {1} and finishes at position {2} in the {3} genome.</resource>
-	
+
+	<resource name="defaultSequenceAssignment.name-length">
+		<div class="dsa-text">
+			<span class="label">Name:</span> {1}, <span class="label">Length:</span> {2}
+		</div>
+	</resource>
+
+	<resource name="defaultSequenceAssignment.referenceSequence">
+		<p class="refseq">
+			Your sequence starts at position {1} and finishes at position {2} in the {3} genome.
+		</p>
+	</resource>
 	
 	<resource name="details.analysisDetails">Analysis details</resource>
 	
@@ -72,7 +77,7 @@
 	<resource name="defaultRecombinationAnalyses.sequenceName">Sequence name:</resource>
 	<resource name="defaultRecombinationAnalyses.bootscanClusterSupport">Bootscan cluster support:</resource>
 	<resource name="defaultRecombinationAnalyses.download">Download: </resource>
-	<resource name="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size {1} and step size ${2}.</resource>
+	<resource name="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size {1} and step size {2}.</resource>
 
 	<resource name="defaultSignalAnalysis.title">Phylogenetic signal analysis</resource>
 	<resource name="defaultSignalAnalysis.comment">This section contains details of the phylogenetic signal analysis.</resource>

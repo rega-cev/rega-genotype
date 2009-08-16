@@ -7,6 +7,8 @@ package rega.genotype.ui.viruses.nov;
 
 import java.io.IOException;
 
+import eu.webtoolkit.jwt.WText;
+
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.util.DataTable;
 
@@ -51,17 +53,15 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
     	addNamedValue("genotype_result.sequence[name]", ValueFormat.Label);
     	addNamedValue("genotype_result.sequence[length]", ValueFormat.Number);
 
-    	String orf1Conclusion = NovResults.getConclusion(this, "ORF1");
-    	if (orf1Conclusion.equals(NovResults.NA))
-    		addValue("");
-    	else
-    		addValue(orf1Conclusion);
+		NovResults.Conclusion c = NovResults.getConclusion(this, "ORF1");
 
-    	String orf2Conclusion = NovResults.getConclusion(this, "ORF2");
-    	if (orf2Conclusion.equals(NovResults.NA))
-    		addValue("");
-    	else
-    		addValue(orf2Conclusion);
+		addValue(c.majorAssignment);
+		addValue(c.variantAssignment == null ? "" : c.variantAssignment);
+
+		c = NovResults.getConclusion(this, "ORF2");
+
+		addValue(c.majorAssignment);
+		addValue(c.variantAssignment == null ? "" : c.variantAssignment);
 
     	addNamedValue("genotype_result.sequence.result['blast'].start", ValueFormat.Number);
     	addNamedValue("genotype_result.sequence.result['blast'].end", ValueFormat.Number);

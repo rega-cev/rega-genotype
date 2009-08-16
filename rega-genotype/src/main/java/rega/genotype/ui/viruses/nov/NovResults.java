@@ -14,9 +14,44 @@ import rega.genotype.ui.data.SaxParser;
  *
  */
 public class NovResults {
+	public static class Conclusion {
+		String majorAssignment;
+		String majorMotivation;
+		String majorBootstrap;
+		String variantAssignment;
+		String variantDescription;
+		String variantBootstrap;
+		String variantMotivation;
+	}
 
 	public static final String NA = "<i>NA</i>";
 
+	public static Conclusion getConclusion(SaxParser p, String region) {
+		Conclusion result = new Conclusion();
+
+		String conclusionP = "genotype_result.sequence.conclusion['" + region + "']";
+
+		if (p.elementExists(conclusionP)) {
+			result.majorAssignment = p.getEscapedValue(conclusionP + ".assigned.name");
+			result.majorBootstrap = p.getEscapedValue(conclusionP + ".assigned.support");
+			result.majorMotivation = p.getEscapedValue(conclusionP + ".motivation");
+
+			conclusionP = "genotype_result.sequence.conclusion['" + region + "-variant']";
+
+			if (p.elementExists(conclusionP)) {
+				result.variantAssignment = p.getEscapedValue(conclusionP + ".assigned.name");
+				result.variantBootstrap = p.getEscapedValue(conclusionP + ".assigned.support");
+				result.variantDescription = p.getEscapedValue(conclusionP + ".assigned.description");
+				result.variantMotivation = p.getEscapedValue(conclusionP + ".motivation");
+			}
+		} else {
+			result.majorAssignment = getBlastConclusion(p);
+			result.majorMotivation = "Sequence does not overlap sufficiently (>100 nucleotides) with " + region;
+		}
+
+		return result;
+	}
+	
 	public static String getBlastConclusion(SaxParser p) {
 		return p.elementExists("genotype_result.sequence.conclusion")
 		? p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name")
@@ -28,19 +63,4 @@ public class NovResults {
 		? p.getEscapedValue("genotype_result.sequence.conclusion.motivation")
 		: "";
 	}
-
-	public static String getConclusion(SaxParser p, String region) {
-		return p.elementExists("genotype_result.sequence.conclusion['" + region + "']")
-			? p.getEscapedValue("genotype_result.sequence.conclusion['" + region
-						 + "'].assigned.name")
-			: getBlastConclusion(p);
-	}
-
-	public static String getMotivation(SaxParser p, String region) {
-		return p.elementExists("genotype_result.sequence.conclusion['" + region + "']")
-		? p.getEscapedValue("genotype_result.sequence.conclusion['" + region
-				 + "'].motivation")
-		: "Sequence does not overlap sufficiently (>100 nucleotides) with " + region;
-	}
-
 }

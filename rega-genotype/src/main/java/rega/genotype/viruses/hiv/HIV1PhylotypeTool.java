@@ -45,7 +45,7 @@ public class HIV1PhylotypeTool extends GenotypeTool {
             PhyloClusterAnalysis.Result crfResult = crfAnalysis.run(s);
             ScanAnalysis.Result scanCRFResult = null;
 
-            if (crfResult.haveSupport() && crfResult.getBestCluster().haveTag("CRF")) {
+            if (crfResult.haveSupport() && crfResult.getBestCluster().hasTag("CRF")) {
                 crfScanPhyloAnalysis.getClusters().add(crfResult.getBestCluster());
 
                 scanCRFResult = crfScanAnalysis.run(s);
@@ -84,7 +84,7 @@ public class HIV1PhylotypeTool extends GenotypeTool {
                             "with detection of recombination in the bootscan, " +
                             "and failure to classify as a CRF or sub-subtype (bootstrap support).");
                 } else {
-                    if (crfResult.getBestCluster().haveTag("CRF")) {
+                    if (crfResult.getBestCluster().hasTag("CRF")) {
                         if (!scanCRFResult.haveSupport()) {
                             if (pureResult.haveSupport()) {
                                 //Rule 3

@@ -130,21 +130,28 @@ public class NoVTool extends GenotypeTool {
 			String phyloName = "phylogenetic analysis (" + regionName + ")";
 
 			if (r.haveSupport()) {
-				/*
-				 * Unless a variant could be identified, report the genotype
-				 */
-				if (!variantPhyloAnalysis(s, phylo, regionName, r.getConcludedCluster()))
-					conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70", regionName);
-			} else {
-				if (false && r.getSupportInner() >= 95)
-					/*
-					 * Note that in this case we do not attempt to identify a variant, as the sequence
-					 * fell outside of the cluster anyway.
-					 */
-					conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 95", regionName);
+				Cluster major = null, variant = null;
+
+				major = r.getConcludedCluster().getParent();
+				if (major == null || major.hasTag("no-subclusters"))
+					major = r.getConcludedCluster();
 				else
+					variant = r.getConcludedCluster();
+
+				conclude(r.concludeForCluster(major), "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", regionName);
+
+				boolean haveSubClusters = major.getClusters().size() > 0 && !major.hasTag("no-subclusters");
+				
+				if (haveSubClusters && variant != null)
+					conclude(r.concludeForCluster(variant), "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", regionName + "-variant");
+				else {
+					boolean haveVariantAnalysis = variantPhyloAnalysis(s, phylo, regionName, r.getConcludedCluster());
+				
+					if (!haveVariantAnalysis && haveSubClusters)
+						conclude("Could not assign", "Not supported by " + phyloName, regionName + "-variant");
+				}
+			} else
 					conclude("Could not assign", "Not supported by " + phyloName, regionName);
-			}
 
 			return true;
 		} else
@@ -169,7 +176,7 @@ public class NoVTool extends GenotypeTool {
 
 		PhyloClusterAnalysis.Result r = a.run(s);
 		
-		String phyloName = "phylogenetic analysis (" + regionName + ")";
+		String phyloName = "phylogenetic sub clustering analysis (" + regionName + ")";
 
 		/*
 		 * If we are clustering with the outgroup, then clearly we could not identify a variant.
@@ -181,19 +188,13 @@ public class NoVTool extends GenotypeTool {
 		 */
 		if (r == null
 			|| r.getConcludedCluster() == null
-			|| !r.getConcludedCluster().getName().startsWith(cluster.getName()))
-			return false;
+			|| !r.getConcludedCluster().getId().startsWith(cluster.getId())
+			|| !r.haveSupport())
+			conclude("Could not assign", "Not supported by " + phyloName, regionName + "-variant");
+		else
+			conclude(r, "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", regionName + "-variant");
 
-		if (r.haveSupport()) {
-			conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70", regionName);
-			return true;
-		} else {
-			if (false && r.getSupportInner() >= 95) {
-				conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100", regionName);
-				return true;
-			} else
-				return false;
-		}
+		return true;
 	}
 
 	public void analyzeSelf() throws AnalysisException {

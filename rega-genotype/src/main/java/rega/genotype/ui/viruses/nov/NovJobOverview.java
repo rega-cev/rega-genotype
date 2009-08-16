@@ -25,32 +25,39 @@ import eu.webtoolkit.jwt.WWidget;
  *
  */
 public class NovJobOverview extends AbstractJobOverview {
-	private List<WString> headers = new ArrayList<WString>();
+	private List<Header> headers = new ArrayList<Header>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
 	public NovJobOverview(GenotypeWindow main) {
 		super(main);
 		
-		headers.add(lt("Name"));
-		headers.add(lt("Length"));
-		headers.add(lt("Report"));
-		headers.add(lt("ORF 1"));
-		headers.add(lt("ORF 2"));
-		headers.add(lt("Genome"));
+		headers.add(new Header(lt("Name")));
+		headers.add(new Header(lt("Length")));
+		headers.add(new Header(lt("Report")));
+		headers.add(new Header(lt("ORF 1"), 2));
+		headers.add(new Header(lt("ORF 2"), 2));
+		headers.add(new Header(lt("Genome")));
 	}
 	
 	@Override
 	public List<WWidget> getData(final SaxParser p) {
 		data.clear();
-		
+
 		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]"))));
 		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[length]"))));
-		
+
 		WAnchor report = createReportLink(p);
 		data.add(report);
 
-		data.add(new WText(lt(NovResults.getConclusion(p, "ORF1"))));
-		data.add(new WText(lt(NovResults.getConclusion(p, "ORF2"))));
+		NovResults.Conclusion c = NovResults.getConclusion(p, "ORF1");
+
+		data.add(new WText(lt(notNull(c.majorAssignment))));
+		data.add(new WText(lt(notNull(c.variantAssignment))));
+
+		c = NovResults.getConclusion(p, "ORF2");
+
+		data.add(new WText(lt(notNull(c.majorAssignment))));
+		data.add(new WText(lt(notNull(c.variantAssignment))));
 
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
@@ -67,8 +74,12 @@ public class NovJobOverview extends AbstractJobOverview {
 		return data;
 	}
 
+	private static String notNull(String s) {
+		return s == null ? "" : s;
+	}
+
 	@Override
-	public List<WString> getHeaders() {
+	public List<Header> getHeaders() {
 		return headers;
 	}
 
