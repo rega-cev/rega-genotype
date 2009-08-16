@@ -18,7 +18,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 public abstract class SaxParser extends DefaultHandler {
-	private StringBuilder currentPath = new StringBuilder();
+	private List<String> currentPath = new ArrayList<String>();
 
 	private StringBuilder values = new StringBuilder();
 	
@@ -112,25 +112,28 @@ public abstract class SaxParser extends DefaultHandler {
     }
     
     private void reset() {
-    	currentPath.delete(0, currentPath.length());
+    	currentPath.clear();
     	sequenceIndex = -1;
     }
     
     private String getCurrentPath() {
-    	return currentPath.toString();
+    	StringBuilder tmp = new StringBuilder();
+    	
+    	for(int i = 0; i<currentPath.size(); i++) {
+    		tmp.append(currentPath.get(i));
+    		if(i!=currentPath.size()-1)
+    			tmp.append('.');
+    	}
+    	
+    	return tmp.toString();
     }
     
     private void addToCurrentPath(String p) {
-    	if(currentPath.length()>0)
-    		currentPath.append('.');
-    	currentPath.append(p);
+    	currentPath.add(p);
     }
     
     private void removeFromCurrentPath() {
-    	int lastDot = currentPath.lastIndexOf(".");
-    	if(lastDot==-1)
-    		lastDot = 0;
-    	currentPath.delete(lastDot, currentPath.length());
+    	currentPath.remove(currentPath.size()-1);
     }
     
 	public int getSequenceIndex() {
