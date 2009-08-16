@@ -105,18 +105,18 @@ public class GenotypeLib {
 				Runtime runtime = Runtime.getRuntime();
 				runtime.exec(treeGraphCommand +" -t "+ treeFile.getAbsolutePath(), null, jobDir);
 				
-				BufferedReader in = new BufferedReader(new FileReader(treeFile));
-				PrintStream out = new PrintStream(new FileOutputStream(tgfFile));
-				String line;
-				while((line = in.readLine()) != null){
-					line = line.replace("\\width{150}" ,"\\width{180}");
-					line = line.replace("\\height{250}" ,"\\height{270}");
-					line = line.replace("\\margin{0}{0}{0}{0}" ,"\\margin{10}{10}{10}{10}");
-					line = line.replace("\\style{r}{plain}{14.4625}","\\style{r}{plain}{10}");
-					out.println(line);
-				}
-				out.close();
-				in.close();
+//				BufferedReader in = new BufferedReader(new FileReader(treeFile));
+//				PrintStream out = new PrintStream(new FileOutputStream(tgfFile));
+//				String line;
+//				while((line = in.readLine()) != null){
+//					line = line.replace("\\width{150}" ,"\\width{180}");
+//					line = line.replace("\\height{250}" ,"\\height{270}");
+//					line = line.replace("\\margin{0}{0}{0}{0}" ,"\\margin{10}{10}{10}{10}");
+//					line = line.replace("\\style{r}{plain}{14.4625}","\\style{r}{plain}{10}");
+//					out.println(line);
+//				}
+//				out.close();
+//				in.close();
 				
 				runtime.exec(treeGraphCommand +" -v "+ tgfFile.getAbsolutePath(), null, jobDir);	
 				ImageConverter.svgToPdf(svgFile, pdfFile);
@@ -174,6 +174,8 @@ public class GenotypeLib {
 			hiv.analyze(
 					"/home/simbre1/tmp/genotype/seq.fasta",
 					"/home/simbre1/tmp/genotype/result.xml");
+			
+			getTreePDF(new File("/home/simbre1/tmp/genotype/"), new File("/home/simbre1/tmp/genotype/r4084335.tre"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParameterProblemException e) {
