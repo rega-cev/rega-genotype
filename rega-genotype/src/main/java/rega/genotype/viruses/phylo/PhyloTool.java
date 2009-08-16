@@ -39,8 +39,7 @@ public class PhyloTool extends GenotypeTool {
         if (result.haveSupport()) {
             if (result.getCluster().getId().equals("1")) 
                 phylosubtypetool.analyze(s);
-                conclude(result, "HIV-1 BLAST score > 200");
-            } else {
+           } else {
 
             conclude("Unassigned", "Unassigned because of BLAST score &lt; 200.");
         }
