@@ -4,8 +4,9 @@ PRIORITY
 * image sizes (f.e. header image -> too small?)
 * start form 
 	* seq name -> max 20 chars ?
-	* browse for file
 	* monitor job (by providing an id)
+*jwt bug
+	* WTextArea setText() with '>' -> &gt;
 * recombination plot (cfr mail pong)
 * puzzle image -> too much whitespace
 * image centering -> sometimes refresh is needed
@@ -14,6 +15,7 @@ PRIORITY
 * how is dealt with gaps (-) in the input seq
 * write installation doc
 * layout 
+	* start form
 	* monitor form
 	* decision trees
 	* details form

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <common-settings>
+	<resource name="sequenceInput.uploadFile">Upload file</resource>
+	<resource name="sequenceInput.uploadingFile">Uploading file</resource>
   	<resource name="sequenceInput.run">Run</resource>
   	<resource name="sequenceInput.clear">Clear</resource>
   	<resource name="sequenceInput.inputSequenceInFastaFormat">Enter your input data in FASTA format. </resource>

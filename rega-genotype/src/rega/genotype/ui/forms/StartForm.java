@@ -6,6 +6,7 @@ import java.io.IOException;
 import net.sf.witty.wt.SignalListener;
 import net.sf.witty.wt.WBreak;
 import net.sf.witty.wt.WContainerWidget;
+import net.sf.witty.wt.WEmptyEvent;
 import net.sf.witty.wt.WMouseEvent;
 import net.sf.witty.wt.WPushButton;
 import net.sf.witty.wt.WText;
@@ -16,12 +17,14 @@ import org.apache.commons.io.FileUtils;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 
 public class StartForm extends IForm {
 	private WText note;
 	private WTextArea ta;
 	private WPushButton run, clear;
+	private FileUpload fileUpload;
 	
 	public StartForm(GenotypeWindow main) {
 		super(main, "start-form");
@@ -42,6 +45,20 @@ public class StartForm extends IForm {
 		ta.setRows(15);
 		new WBreak(seqinput);
 	
+		fileUpload = new FileUpload();
+		seqinput.addWidget(fileUpload);
+		fileUpload.getUploadFile().uploaded.addListener(new SignalListener<WEmptyEvent>() {
+            public void notify(WEmptyEvent a) {                
+				try {
+					String fasta = FileUtils.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
+					String s  = ">lala\n actg";
+					ta.setText(s);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+        });
+		
 		run = new WPushButton(seqinput);
 		run.setText(tr("sequenceInput.run"));
 		
