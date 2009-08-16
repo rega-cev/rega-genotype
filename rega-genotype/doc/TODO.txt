@@ -1,5 +1,4 @@
 PRIORITY
-* image sizes (f.e. header image -> too small?) (Stijn)
 *jwt bug
 	* WTextArea setText() with '>' -> &gt; (Koen)
 * image centering -> sometimes refresh is needed (Stijn)
