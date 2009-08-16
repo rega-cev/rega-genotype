@@ -76,22 +76,28 @@ table.jobTable, .detailsForm{
 	margin: 2px;
 }
 
-table.jobTable > tbody > tr > td, table.detailsForm > tbody > tr > td {
+table.jobTable td{
 	border: 1px inset gray;
 	padding: 0.5em;
 	text-align: left;
 }
-
+.detailsForm .title, .detailsForm .details {
+	border: 1px inset gray;
+	padding: 0.5em;
+	text-align: left;
+}
+	
 table.jobTable{
 	width: 100%;
 }
 
-table.jobTable td span{
+table.jobTable td{
 	line-height: 60px;
 }
-table.jobTable tr:first-child td span{
+table.jobTable .jobTableHeader{
 	line-height: 30px;
 	font-weight: bold;
+	text-align: center;
 }
 
 table.jobTable td img, .detailsForm img{
@@ -115,9 +121,6 @@ table.jobTable td img, .detailsForm img{
 	text-align: center;
 }
 
-.detailsForm .title, .detailsForm .details{
-	padding: 0.5em;
-}
 .details .dsa-text{
 	text-align: center;
 	font-weight: bold;

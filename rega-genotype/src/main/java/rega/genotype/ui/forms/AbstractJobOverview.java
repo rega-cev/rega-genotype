@@ -99,6 +99,7 @@ public abstract class AbstractJobOverview extends IForm {
 			List<WMessage> headers = getHeaders();
 			for(int i = 0; i<headers.size(); i++) {
 				jobTable.putElementAt(0, i, new WText(headers.get(i)));
+				jobTable.elementAt(0, i).setStyleClass("jobTableHeader");
 			}
 		}
 		

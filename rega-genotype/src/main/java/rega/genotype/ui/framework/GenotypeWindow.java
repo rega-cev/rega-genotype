@@ -171,7 +171,6 @@ public class GenotypeWindow extends WContainerWidget
 		activeForm = form;
 		activeForm.show();
 		if (form.parent() == null){
-			content.clear();
 			content.addWidget(form);
 		}
 	}
