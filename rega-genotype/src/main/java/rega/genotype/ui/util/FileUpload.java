@@ -12,6 +12,12 @@ import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
 
+/**
+ * A file upload widget.
+ * 
+ * @author simbre1
+ *
+ */
 public class FileUpload extends WContainerWidget {
 	private WFileUpload uploadFile;
 	private WPushButton uploadButton;

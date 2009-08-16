@@ -19,6 +19,12 @@ import javax.imageio.ImageIO;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.recombination.Table;
 
+/**
+ * Abstract class, provides basis for drawing genome map images.
+ * 
+ * @author simbre1
+ *
+ */
 public abstract class Genome {
 	public abstract Map<String, Color> COLORS();
 	public abstract int IMGGENOMESTART();

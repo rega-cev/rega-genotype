@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WWidget;
 
+/**
+ * Emulates an html unsorted list with WContainerWidgets
+ * 
+ * @author simbre1
+ *
+ */
 public class WListContainerWidget extends WContainerWidget{
 	ArrayList<WContainerWidget> list = new ArrayList<WContainerWidget>(); 
 

@@ -11,6 +11,12 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * Transforms flat rules file into an xml format.
+ * 
+ * @author simbre1
+ *
+ */
 public class RuleParser {
 	public static void main(String [] args) throws IOException {
 		String s = FileUtils.readFileToString(new File("/home/plibin0/projects/subtypetool/rules.txt"));

@@ -16,6 +16,12 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.fop.svg.PDFTranscoder;
 
+/**
+ * Utility class for converting/transcoding SVG vector images.
+ * 
+ * @author simbre1
+ *
+ */
 public class ImageConverter {
 
 	public static void svgToPng(File svgFile, File pngFile) {

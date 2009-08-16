@@ -24,6 +24,12 @@ import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.nrv.NRVTool;
 import eu.webtoolkit.jwt.WString;
 
+/**
+ * NRV OrganismDefinition implementation.
+ * 
+ * @author simbre1
+ *
+ */
 public class NrvDefinition implements OrganismDefinition {
 	private NrvGenome genome = new NrvGenome(this);
 

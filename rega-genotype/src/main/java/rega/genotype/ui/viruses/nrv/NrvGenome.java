@@ -12,6 +12,12 @@ import java.util.Map;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.Genome;
 
+/**
+ * NRV genome map drawing implementation.
+ * 
+ * @author simbre1
+ *
+ */
 public class NrvGenome extends Genome {
 	private Map<String, Color> colorMap = new HashMap<String, Color>();
 	private OrganismDefinition od;

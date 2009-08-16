@@ -18,6 +18,12 @@ import org.jdom.input.SAXBuilder;
 
 import rega.genotype.ui.data.OrganismDefinition;
 
+/**
+ * Singleton class which contains the application settings, parses them from the xml configuration file.
+ * 
+ * @author simbre1
+ *
+ */
 public class Settings {
 	private Settings(File f) {
 		parseConfFile(f);

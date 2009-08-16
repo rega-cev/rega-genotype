@@ -10,6 +10,12 @@ import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WebController;
 
+/**
+ * The entry point of the application.
+ * 
+ * @author simbre1
+ *
+ */
 public abstract class GenotypeMain extends WebController
 {
 	public GenotypeMain()

@@ -30,6 +30,13 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * A mutable table-like data structure with support for input from and output to various file formats,
+ * merging and appending tables, sorting, ...
+ * 
+ * @author simbre1
+ *
+ */
 public class Table {
     public static Table readTable(String filename)  throws FileNotFoundException, UnsupportedEncodingException {
         return readTable(filename, Charset.defaultCharset().name(), ',');
@@ -51,12 +58,24 @@ public class Table {
         return new Table(new InputStreamReader(new BufferedInputStream(new FileInputStream(filename)),charsetName), false,delimiter);
     }
     
+    /**
+     * Indices can be created to sort the table on certain columns. 
+     * 
+     * @author simbre1
+     *
+     */
     public class Index {
         private int columns[];
         private boolean reverse[];
         
         private Integer index_i[];
 
+        /**
+         * IndexComparator compares on numeric value if possible, otherwise it falls back to string sorting. 
+         * 
+         * @author simbre1
+         *
+         */
         private class IndexComparator implements Comparator<Integer> {
             int column;
             boolean reverse;

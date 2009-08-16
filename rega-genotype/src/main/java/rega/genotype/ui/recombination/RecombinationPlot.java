@@ -40,6 +40,12 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
 
+/**
+ * Constructs recombination plots using the jfreechart api.
+ * 
+ * @author simbre1
+ *
+ */
 public class RecombinationPlot {
 	public static JFreeChart getRecombinationPlot(String dataCsv, OrganismDefinition od) throws FileNotFoundException, UnsupportedEncodingException {
 		CsvDataset n = new CsvDataset(new Table(new ByteArrayInputStream(dataCsv.getBytes()), false, '\t'));

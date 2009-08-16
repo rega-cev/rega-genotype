@@ -29,6 +29,12 @@ import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.hiv.HIVTool;
 import eu.webtoolkit.jwt.WString;
 
+/**
+ * HIV OrganismDefinition implementation.
+ * 
+ * @author simbre1
+ *
+ */
 public class HivDefinition implements OrganismDefinition {
 	private HivGenome genome = new HivGenome(this);
 

@@ -17,6 +17,12 @@ import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
+/**
+ * NRV assignment-details implementation.
+ * 
+ * @author simbre1
+ *
+ */
 public class NrvSequenceAssignmentForm extends IDetailsForm {
 	public NrvSequenceAssignmentForm() {
 	}

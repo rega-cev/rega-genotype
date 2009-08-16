@@ -10,6 +10,12 @@ import java.io.Writer;
 
 import rega.genotype.ui.data.AbstractCsvGenerator;
 
+/**
+ * Create a csv file of NRV job results 
+ * 
+ * @author simbre1
+ *
+ */
 public class NrvCsvGenerator extends AbstractCsvGenerator {
 	public NrvCsvGenerator(Writer ps) throws IOException {
 		super(ps);

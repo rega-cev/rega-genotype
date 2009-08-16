@@ -32,6 +32,13 @@ import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
+/**
+ * The frame of the application.
+ * Defines the general user interface of the application.
+ * 
+ * @author simbre1
+ *
+ */
 public class GenotypeWindow extends WContainerWidget
 {
 	private static final String START_URL = "/";

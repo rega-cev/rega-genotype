@@ -8,6 +8,12 @@ package rega.genotype.ui.recombination;
 import org.jfree.data.DomainOrder;
 import org.jfree.data.xy.AbstractXYDataset;
 
+/**
+ * Implementation of an XYDataset which extracts its data from a CSV file.
+ * 
+ * @author simbre1
+ *
+ */
 public class CsvDataset extends AbstractXYDataset {
 	private Table t_;
 

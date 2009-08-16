@@ -7,6 +7,12 @@ package rega.genotype.ui.viruses.nrv;
 
 import rega.genotype.ui.data.SaxParser;
 
+/**
+ * Utility class to parse and interpret the analysis' results.xml file.
+ * 
+ * @author simbre1
+ *
+ */
 public class NrvResults {
 
 	public static final String NA = "<i>NA</i>";

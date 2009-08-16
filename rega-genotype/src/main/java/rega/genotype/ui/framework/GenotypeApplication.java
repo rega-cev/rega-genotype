@@ -16,6 +16,13 @@ import rega.genotype.ui.util.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 
+/**
+ * The application.
+ * OrganismDefinition determines which kind of virus the application will be used for.
+ * 
+ * @author simbre1
+ *
+ */
 public class GenotypeApplication extends WApplication
 {
 	private ServletContext servletContext_;

@@ -47,6 +47,12 @@ import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
 
+/**
+ * General utility class for creating supporting data and images for a genotype job.
+ * 
+ * @author simbre1
+ *
+ */
 public class GenotypeLib {
 	
 	public static String treeGraphCommand = "/usr/bin/tgf";

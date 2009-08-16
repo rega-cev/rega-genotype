@@ -18,6 +18,12 @@ import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 
+/**
+ * NRV job overview implementation.
+ * 
+ * @author simbre1
+ *
+ */
 public class NrvJobOverview extends AbstractJobOverview {
 	private List<WString> headers = new ArrayList<WString>();
 	private List<WWidget> data = new ArrayList<WWidget>();

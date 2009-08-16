@@ -9,6 +9,12 @@ import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
 
+/**
+ * An toggle-able anchor widget with a single parameter.
+ * 
+ * @author simbre1
+ *
+ */
 public class StateLink extends WAnchor {
 
 	private String baseUrl;
