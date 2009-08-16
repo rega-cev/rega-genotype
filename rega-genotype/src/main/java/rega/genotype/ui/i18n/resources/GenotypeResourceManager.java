@@ -70,7 +70,7 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 		String value = extractFormattedText(organism.getChild(form).getChild(item));
 		
 		for(int i = 0; i<args.size(); i++) {
-			value = value.replace("${"+(i+1)+"}", args.get(i));
+			value = value.replace("{"+(i+1)+"}", args.get(i));
 		}
 		
 		return WWidget.lt(value);

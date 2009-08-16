@@ -47,5 +47,7 @@
 			* eg.: /soft/tree-puzzle/puzzle
 		* treeGraphCmd -> location of your treegraph executable + name of the treegraph executable
 			* eg.: /soft/treegraph/tgf
-		* blastPath -> location of your blast executables (correc version!)
+		* blastPath -> location of your blast executables (correct version!)
 			* eg.: /soft/blast/bin
+		* maxAllowedSequences -> the maximum amount of sequences to be submitted at once
+			* eg.: 1000

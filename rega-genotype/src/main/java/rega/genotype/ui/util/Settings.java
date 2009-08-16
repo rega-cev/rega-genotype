@@ -47,7 +47,7 @@ public class Settings {
 	}
 	
 	public int getMaxAllowedSeqs() {
-		return 10000;
+		return maxAllowedSeqs;
 	}
 	
 	private File xmlPath;
@@ -56,6 +56,7 @@ public class Settings {
 	private File blastPath;
 	private String treePuzzleCmd;
 	private String treeGraphCmd;
+	private int maxAllowedSeqs;
 	
 	private Map<String, File> jobDirs = new HashMap<String, File>();
 
@@ -96,6 +97,8 @@ public class Settings {
             } else if(name.startsWith("jobDir-")) {
             	String organism = name.split("-")[1];
             	jobDirs.put(organism, new File(e.getValue().trim()));
+            } else if(name.equals("maxAllowedSequences")) {
+            	maxAllowedSeqs = Integer.parseInt(e.getValue().trim());
             }
         }
     }
