@@ -19,6 +19,7 @@ PRIORITY
 	* decision trees
 	* details form
 	* subtyping process
+	* example sequences
 
 LATER
 * WMessage args, WAnchors

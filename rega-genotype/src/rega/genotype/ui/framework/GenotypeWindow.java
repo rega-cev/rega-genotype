@@ -13,6 +13,7 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DecisionTreesForm;
 import rega.genotype.ui.forms.DetailsForm;
+import rega.genotype.ui.forms.ExampleSequencesForm;
 import rega.genotype.ui.forms.HowToCiteForm;
 import rega.genotype.ui.forms.IForm;
 import rega.genotype.ui.forms.StartForm;
@@ -53,6 +54,7 @@ public class GenotypeWindow extends WContainerWidget
 	private WText subtypingProcess;
 	private SubtypingProcessForm subtypingProcessForm;
 	private WText exampleSequences;
+	private ExampleSequencesForm exampleSequencesForm;
 	private WText contactUs;
 	
 	public GenotypeWindow(OrganismDefinition od)
@@ -134,6 +136,13 @@ public class GenotypeWindow extends WContainerWidget
 		});
 		exampleSequences = new WText(tr("main.navigation.exampleSequences"), navigation);
 		exampleSequences.setStyleClass("link");
+		exampleSequences.clicked.addListener(new SignalListener<WMouseEvent>() {
+			public void notify(WMouseEvent a) {
+				if(exampleSequencesForm==null)
+					exampleSequencesForm = new ExampleSequencesForm(GenotypeWindow.this);
+				setForm(exampleSequencesForm);
+			}
+		});
 		contactUs = new WText(tr("main.navigation.contactUs"), navigation);
 		contactUs.setStyleClass("link");
 		
