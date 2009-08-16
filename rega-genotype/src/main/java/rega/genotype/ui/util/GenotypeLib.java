@@ -12,15 +12,18 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Writer;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
@@ -321,5 +324,35 @@ public class GenotypeLib {
 //		}
 		
 		getTreePDF(new File("/home/simbre1/tmp/genotype/"), new File("/home/simbre1/tmp/genotype/r7184492.tre"));
+	}
+	
+	public static String readFileToString(File f) throws IOException {
+	    StringBuilder contents = new StringBuilder();
+	    
+	    BufferedReader input = null;
+		try {
+			input = new BufferedReader(new FileReader(f));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	    
+		String line = null;
+
+	        while (( line = input.readLine()) != null){
+	          contents.append(line);
+	          contents.append(System.getProperty("line.separator"));
+	        }
+
+	    return contents.toString();
+	}
+
+	public static void writeStringToFile(File f, String s) throws IOException {
+	      Writer output = new BufferedWriter(new FileWriter(f));
+	      try {
+	        output.write( s );
+	      }
+	      finally {
+	        output.close();
+	      }
 	}
 }

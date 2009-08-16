@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -31,6 +30,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
 
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.util.GenotypeLib;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -119,7 +119,7 @@ public class RecombinationPlot {
 		File pdfFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
 		if(!pdfFile.exists()) {
 			try {
-				FileUtils.writeStringToFile(pdfFile, csvData);
+				GenotypeLib.writeStringToFile(pdfFile, csvData);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

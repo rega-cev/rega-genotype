@@ -46,7 +46,7 @@ public class HIVGenotypeAnalysis extends TestCase {
 			"AGGAACTGAGACAACATTTGTGGAAGTGGGGATTCTACACACCAGACAAAAAATATCAGAAAGAACCCCC" + 
 			"ATTCCTTTGGATG";
 		try {
-			FileUtils.writeStringToFile(fasta, fastaContent);
+			GenotypeLib.writeStringToFile(fasta, fastaContent);
 		} catch (IOException e) {
 			fail("Could not write fasta String to fasta file");
 		}

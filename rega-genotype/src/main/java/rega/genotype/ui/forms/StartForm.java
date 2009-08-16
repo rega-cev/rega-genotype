@@ -91,7 +91,7 @@ public class StartForm extends AbstractForm {
 		fileUpload.getUploadFile().uploaded.addListener(this, new Signal.Listener() {
             public void trigger() {                
 				try {
-					String fasta = FileUtils.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
+					String fasta = GenotypeLib.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
 					verifyFasta(fasta);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -139,10 +139,10 @@ public class StartForm extends AbstractForm {
 			public void run() {
 				try {
 					File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
-					FileUtils.writeStringToFile(seqFile, fastaContent);
+					GenotypeLib.writeStringToFile(seqFile, fastaContent);
 					getMain().getOrganismDefinition().startAnalysis(thisJobDir);
 					File done = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"DONE");
-					FileUtils.writeStringToFile(done, System.currentTimeMillis()+"");
+					GenotypeLib.writeStringToFile(done, System.currentTimeMillis()+"");
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (ParameterProblemException e) {
