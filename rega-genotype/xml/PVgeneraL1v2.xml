@@ -1,0 +1,363 @@
+<genotype-analyses>
+  <alignment file="PVgeneraL1v2.fasta" trim="true" />
+
+  <clusters>
+  
+    <cluster id="alpha" name=" genus alphapapillomavirus">
+    <cluster id="alpha1" name="alphapapillomavirus species 1: low risk mucosal HPV">
+    	<taxus name="a1_HPV32" />
+    	<taxus name="a1_HPV42" />
+    </cluster>
+    
+   <cluster id="alpha2" name="alphapapillomavirus species 2">
+ 	<taxus name="a2_HPV10" />
+    <taxus name="a2_HPV3" />
+	<taxus name="a2_HPV28" />
+	<taxus name="a2_HPV29" />
+	<taxus name="a2_HPV77" />
+	<taxus name="a2_HPV94" />
+    </cluster>
+    
+   <cluster id="alpha3" name="alphapapillomavirus species 3: low risk mucosal HPV">
+ 	<taxus name="a3_HPV61" />
+    <taxus name="a3_HPV72" />
+	<taxus name="a3_HPV81" />
+	<taxus name="a3_HPV83" />
+	<taxus name="a3_HPV84" />
+	<taxus name="a3_HPV62" />
+	<taxus name="a3_HPV86" />
+	<taxus name="a3_HPV87" />
+	<taxus name="a3_HPV89" />
+	<taxus name="a3_HPV102" />
+    </cluster>
+    
+   <cluster id="alpha4" name="alphapapillomavirus species 4">
+ 	<taxus name="a4_HPV2" />
+    <taxus name="a4_HPV27" />
+	<taxus name="a4_HPV57" />
+    </cluster>
+    
+   <cluster id="alpha5" name="alphapapillomavirus species 5: high risk mucosal HPV">
+ 	<taxus name="a5_HPV26" />
+    <taxus name="a5_HPV51" />
+	<taxus name="a5_HPV69" />
+	<taxus name="a5_HPV82" />
+    </cluster>
+    
+   <cluster id="alpha6" name="alphapapillomavirus species 6: high risk mucosal HPV">
+ 	<taxus name="a6_HPV53" />
+    <taxus name="a6_HPV30" />
+	<taxus name="a6_HPV56" />
+	<taxus name="a6_HPV66" />
+    </cluster>
+    
+   <cluster id="alpha7" name="alphapapillomavirus species 7: high risk mucosal HPV">
+ 	<taxus name="a7_HPV18" />
+    <taxus name="a7_HPV39" />
+	<taxus name="a7_HPV45" />
+	<taxus name="a7_HPV59" />
+	<taxus name="a7_HPV68" />
+	<taxus name="a7_HPV70" />
+	<taxus name="a7_HPV85" />
+    </cluster>
+    
+   <cluster id="alpha8" name="alphapapillomavirus species 8: low risk mucosal and cutaneous HPV">
+ 	<taxus name="a8_HPV7" />
+    <taxus name="a8_HPV40" />
+	<taxus name="a8_HPV43" />
+	<taxus name="a8_HPV91" />
+    </cluster>
+    
+   <cluster id="alpha9" name="alphapapillomavirus species 9: high risk mucosal HPV">
+ 	<taxus name="a9_HPV16" />
+    <taxus name="a9_HPV31" />
+	<taxus name="a9_HPV33" />
+	<taxus name="a9_HPV35" />
+	<taxus name="a9_HPV52" />
+	<taxus name="a9_HPV58" />
+	<taxus name="a9_HPV67" />
+    </cluster>
+    
+   <cluster id="alpha10" name="alphapapillomavirus species 10: low risk mucosal HPV">
+ 	<taxus name="a10_HPV6" />
+    <taxus name="a10_HPV11" />
+	<taxus name="a10_HPV13" />
+	<taxus name="a10_HPV44" />
+	<taxus name="a10_HPV74" />
+	<taxus name="a10_PCPV" />
+	<taxus name="a10_CCPV" />
+    </cluster>
+    
+   <cluster id="alpha11" name="alphapapillomavirus species 11: high risk mucosal HPV">
+ 	<taxus name="a11_HPV34" />
+    	<taxus name="a11_HPV73" />
+    </cluster>
+    
+   <cluster id="alpha12" name="alphapapillomavirus species 12">
+ 	<taxus name="a12_RhPV1" />
+    </cluster>
+    
+   <cluster id="alpha13" name="alphapapillomavirus species 13: low risk mucosal HPV">
+ 	<taxus name="a13_HPV54" />
+    </cluster>
+    
+   <cluster id="alpha14" name="alphapapillomavirus species 14: low risk mucosal HPV">
+ 	<taxus name="a14_HPV90" />
+    </cluster>
+    
+   <cluster id="alpha15" name="alphapapillomavirus species 15: low riks mucosal HPV">
+ 	<taxus name="a15_HPV71" />
+    </cluster>
+	</cluster>
+
+    <cluster id="beta" name=" genus betapapillomavirus">
+    <cluster id="beta1" name="betapapillomavirus species 1">
+    	<taxus name="b1_HPV5" />
+    	<taxus name="b1_HPV8" />
+    	<taxus name="b1_HPV12" />
+    	<taxus name="b1_HPV14" />
+    	<taxus name="b1_HPV19" />
+    	<taxus name="b1_HPV20" />
+    	<taxus name="b1_HPV21" />
+    	<taxus name="b1_HPV24" />
+    	<taxus name="b1_HPV25" />
+    	<taxus name="b1_HPV36" />
+    	<taxus name="b1_HPV47" />
+    	<taxus name="b1_HPV93" />
+    </cluster>
+    
+   <cluster id="beta2" name="betapapillomavirus species 2">
+ 	<taxus name="b2_HPV9" />
+    	<taxus name="b2_HPV15" />
+	<taxus name="b2_HPV17" />
+	<taxus name="b2_HPV22" />
+	<taxus name="b2_HPV23" />
+	<taxus name="b2_HPV37" />
+	<taxus name="b2_HPV38" />
+	<taxus name="b2_HPV80" />
+    </cluster>
+    
+   <cluster id="beta3" name="betapapillomavirus species 3">
+ 	<taxus name="b3_HPV49" />
+    	<taxus name="b3_HPV75" />
+	<taxus name="b3_HPV76" />
+    </cluster>
+    
+   <cluster id="beta4" name="betapapillomavirus species 4">
+ 	<taxus name="b4_HPV92" />
+    </cluster>
+    
+   <cluster id="beta5" name="betapapillomavirus species 5">
+ 	<taxus name="b5_HPV96" />
+    </cluster>
+	</cluster>
+
+    <cluster id="gamma" name=" genus gammapapillomavirus">
+    <cluster id="gamma1" name="gammapapillomavirus species 1">
+    	<taxus name="g1_HPV4" />
+    	<taxus name="g1_HPV65" />
+    	<taxus name="g1_HPV95" />
+    </cluster>
+    
+   <cluster id="gamma2" name="gammapapillomavirus species 2">
+ 	<taxus name="g2_HPV48" />
+    </cluster>
+    
+   <cluster id="gamma3" name="gammapapillomavirus species 3">
+ 	<taxus name="g3_HPV50" />
+    </cluster>
+    
+   <cluster id="gamma4" name="gammapapillomavirus species 4">
+ 	<taxus name="g4_HPV60" />
+    </cluster>
+	</cluster>
+
+    <cluster id="delta" name=" genus deltapapillomavirus">
+    <cluster id="delta1" name="deltapapillomavirus species 1">
+    	<taxus name="d1_EEPV" />
+    	<taxus name="d1_RPV" />
+    </cluster>
+    
+   <cluster id="delta2" name="deltapapillomavirus species 2">
+ 	<taxus name="d2_DPV" />
+    </cluster>
+    
+   <cluster id="delta3" name="deltapapillomavirus species 3">
+ 	<taxus name="d3_OvPV1" />
+ 	<taxus name="d3_OvPV2" />
+    </cluster>
+    
+   <cluster id="delta4" name="deltapapillomavirus species 4">
+ 	<taxus name="d4_BPV1" />
+ 	<taxus name="d4_BPV2" />
+    </cluster>
+	</cluster>
+
+    <cluster id="epsilon" name=" genus epsilonpapillomavirus">
+    <cluster id="epsilon1" name="epsilonpapillomavirus species 1">
+    	<taxus name="e1_BPV5" />
+    </cluster>
+	</cluster>
+
+    <cluster id="zeta" name=" genus zetapapillomavirus">
+    <cluster id="zeta1" name="zetapapillomavirus species 1">
+    	<taxus name="z1_EcPV1" />
+    </cluster>
+	</cluster>
+
+    <cluster id="eta" name=" genus etapapillomavirus">
+    <cluster id="eta1" name="etapapillomavirus species 1">
+    	<taxus name="h1_FcPV" />
+    </cluster>
+	</cluster>
+
+    <cluster id="theta" name=" genus thetapapillomavirus">
+    <cluster id="theta1" name="thetapapillomavirus species 1">
+    	<taxus name="q1_PePV" />
+    </cluster>
+	</cluster>
+
+    <cluster id="iota" name=" genus iotapapillomavirus">
+    <cluster id="iota1" name="iotapapillomavirus species 1">
+    	<taxus name="i1_MnPV" />
+    </cluster>
+	</cluster>
+
+    <cluster id="kappa" name=" genus kappapapillomavirus">
+    <cluster id="kappa1" name="kappapapillomavirus species 1">
+    	<taxus name="k1_CRPV" />
+    </cluster>
+
+    <cluster id="kappa2" name="kappapapillomavirus species 2">
+    	<taxus name="k2_ROPV" />
+    </cluster>
+	</cluster>
+
+    <cluster id="lambda" name=" genus lambdapapillomavirus">
+    <cluster id="lambda1" name="lambdapapillomavirus species 1">
+    	<taxus name="l1_COPV" />
+    </cluster>
+
+    <cluster id="lambda2" name="lambdapapillomavirus species 2">
+    	<taxus name="l2_FdPV1" />
+    </cluster>
+
+    <cluster id="lambda3" name="lambdapapillomavirus species 3">
+    	<taxus name="l3_PlPV1" />
+    </cluster>
+	</cluster>
+
+    <cluster id="mu" name=" genus mupapillomavirus">
+    <cluster id="mu1" name="mupapillomavirus species 1">
+    	<taxus name="m1_HPV1" />
+    </cluster>
+
+    <cluster id="mu2" name="mupapillomavirus species 2">
+    	<taxus name="m2_HPV63" />
+    </cluster>
+	</cluster>
+
+    <cluster id="nu" name=" genus nupapillomavirus">
+    <cluster id="nu1" name="nupapillomavirus species 1">
+    	<taxus name="n1_HPV41" />
+    </cluster>
+	</cluster>
+
+    <cluster id="xi" name=" genus xipapillomavirus">
+    <cluster id="xi1" name="xipapillomavirus species 1">
+    	<taxus name="x1_BPV3" />
+    	<taxus name="x1_BPV4" />
+    	<taxus name="x1_BPV6" />
+    </cluster>
+	</cluster>
+
+    <cluster id="omikron" name=" genus omikronpapillomavirus">
+    <cluster id="omikron1" name="omikronpapillomavirus species 1">
+    	<taxus name="o1_PsPV1" />
+    </cluster>
+	</cluster>
+
+    <cluster id="pi" name=" genus pipapillomavirus">
+    <cluster id="pi1" name="pipapillomavirus species 1">
+    	<taxus name="p1_HaOPV" />
+    </cluster>
+	</cluster>
+
+    <cluster id="rho" name=" genus rhopapillomavirus">
+    <cluster id="rho1" name="rhopapillomavirus species 1">
+    	<taxus name="r1_TmPV1" />
+    </cluster>
+	</cluster>
+
+    <cluster id="sigma" name=" genus sigmapapillomavirus">
+    <cluster id="sigma1" name="sigmapapillomavirus species 1">
+    	<taxus name="s1_EdPV1" />
+    </cluster>
+	</cluster>
+	
+   <cluster id="unclassified1" name="unclassified genus 1">
+    <taxus name="u1_CPV2" />  
+    </cluster>
+
+   <cluster id="unclassified2" name="unclassified genus 2">
+    <taxus name="u2_RaPV1" />  
+    </cluster>
+   
+  </clusters>
+
+  <analysis id="pure" type="paup">
+    <identify>
+		alpha1,alpha2,alpha3,alpha4,alpha5,alpha6,alpha7,alpha8,alpha9,alpha10,alpha11,alpha12,alpha13,alpha14,alpha15,alpha,beta1,beta2,beta3,beta4,beta5,beta,gamma1,gamma2,gamma3,gamma4,gamma,delta1,delta2,delta3,delta4,delta,epsilon1,epsilon,zeta1,zeta,eta1,eta,theta1,theta,iota1,iota,kappa1,kappa2,kappa,lambda1,lambda2,lambda3,lambda,mu1,mu2,mu,nu1,nu,xi1,xi,omikron1,omikron,pi1,pi,rho1,rho,sigma1,sigma,unclassified1,unclassified2
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      set rootmethod=midpoint;
+      set criterion=distance outroot=monophyl;
+      dset distance=TamNei rates=gamma shape=0.4756 NegBrLen=SetAbsVal;
+      NJ;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree
+    </options>
+  </analysis>
+
+ 
+  <analysis id="scan-pure-self" type="scan">
+    <window>
+      300	
+    </window>
+    <step>
+      5
+    </step>
+    <analysis type="paup">
+      <identify>
+		alpha1,alpha2,alpha3,alpha4,alpha5,alpha6,alpha7,alpha8,alpha9,alpha10,alpha11,alpha12,alpha13,alpha14,alpha15,alpha,beta1,beta2,beta3,beta4,beta5,beta,gamma1,gamma2,gamma3,gamma4,gamma,delta1,delta2,delta3,delta4,delta,epsilon1,epsilon,zeta1,zeta,eta1,eta,theta1,theta,iota1,iota,kappa1,kappa2,kappa,lambda1,lambda2,lambda3,lambda,mu1,mu2,mu,nu1,nu,xi1,xi,omikron1,omikron,pi1,pi,rho1,rho,sigma1,sigma,unclassified1,unclassified2
+      </identify>
+      <block>
+        begin paup;
+        log file=paup.log replace=yes;
+        exclude gapped;
+        export format=nexus file=paup.nex replace=yes;
+        set criterion=distance outroot=monophyl;
+        dset distance=HKY NegBrLen=SetAbsVal;
+        NJ;
+        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        bootstrap nreps=100 search=nj;
+        end;
+        quit;
+      </block>
+    </analysis>
+  </analysis>
+    
+</genotype-analyses>
+

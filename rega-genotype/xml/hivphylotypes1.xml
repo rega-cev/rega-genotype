@@ -1,0 +1,418 @@
+<genotype-analyses>
+  <alignment file="phylotypes1.fasta" trim="true" />
+
+  <clusters>
+    <cluster id="A" name="Subtype A">
+      <description>blabla</description>
+      <cluster id="A1" name="Subtype A (A1)">
+      	 <description>blabla</description>
+         <taxus name="A1UG85U455" />
+    	 <taxus name="A1UG9292UG037" />
+      </cluster>
+      <cluster id="A2" name="Subtype A (A2)">
+	     <taxus name="A2CD9797CDKTB48" />
+		 <taxus name="A2CY9494CY01741" />
+    	 <tags>CRF</tags>
+      </cluster>
+    </cluster>
+   
+    <cluster id="B" name="Subtype B">
+      <taxus name="BUS83RF" />
+      <taxus name="BUS90WEAU160" />
+    </cluster>
+
+    <cluster id="C" name="Subtype C">
+	  <taxus name="CBR9292BR025" />
+      <taxus name="CBW9696BW0502" />
+    </cluster>
+
+ 	<cluster id="D" name="Subtype D">
+   	  <taxus name="D.UG.99.99UGA07412" />
+      <taxus name="D.UG.99.99UGE08364" />
+    </cluster>
+    
+    <cluster id="F" name="Subtype F">
+ 	  <cluster id="F1" name="Subtype F (F1)">
+	 	<taxus name="F1BE93VI850" />
+    	<taxus name="F1FR96MP411" />
+ 	  </cluster>
+ 	  <cluster id="F2" name="Subtype F (F2)">
+     	<taxus name="F2CM195MP255" />
+    	<taxus name="F2CM95MP257" />
+    	 <tags>CRF</tags>
+	  </cluster>		
+    </cluster>
+     
+    <cluster id="G" name="Subtype G">
+	  <taxus name="GFI93HH8793121" />
+      <taxus name="GNG9292NG083" />
+    </cluster>
+
+    <cluster id="H" name="Subtype H">
+	  <taxus name="HBE93VI997" />
+      <taxus name="HCF9090CF056" />
+    </cluster>
+
+    <cluster id="J" name="Subtype J">
+      <taxus name="JSE93SE7887" />
+      <taxus name="JSE94SE7022" />
+    </cluster>
+
+    <cluster id="K" name="Subtype K">
+	  <taxus name="KCD97EQTB11C" />
+      <taxus name="KCM96MP535" />
+    </cluster>
+
+    <cluster id="01_AE" name="CRF 01_AE">
+      <taxus name="01_AECF19090CF11697" />
+	  <taxus name="01_AETH90CM240" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="02_AG" name="CRF 02_AG">
+	  <taxus name="02_AGCM9797CMP807" />
+      <taxus name="02_AGFR91DJ264" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="03_AB" name="CRF 03_AB">
+	  <taxus name="03_ABRU97KAL153" />
+      <taxus name="03_ABRU98RU98001" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="04_CPX" name="CRF 04_CPX">
+	  <taxus name="04_CPXG1R9197PVCH" />
+      <taxus name="04_CPXGR9797PVMY" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="05_DF" name="CRF 05_DF">
+	  <taxus name="05_DFBEVI1310" />
+      <taxus name="05_DFBE93VI961" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="06_CPX" name="CRF 06_CPX">
+   	  <taxus name="06_CPXAU96BFP90" />
+   	  <taxus name="06_CPXML9595ML84" />
+      <tags>CRF</tags>
+    </cluster>
+    
+    <cluster id="07_BC" name="CRF 07_BC">
+   	  <taxus name="07_BCC1N9797CN001" />
+      <taxus name="07_BCCN9898CN009" />
+      <tags>CRF</tags>
+      <description>http://evolve.zoo.ox.ac.uk/HIV/phylotypes.html?phylotype=24</description>
+    </cluster>
+    
+    <cluster id="08_BC" name="CRF 08_BC">
+	  <taxus name="08_BCCN19797CNGX7F" />
+      <taxus name="08_BCCN9898CN006" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="10_CD" name="CRF 10_CD">
+	  <taxus name="10_CDTZ19696TZBF071" />
+      <taxus name="10_CDTZ9696TZBF110" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="11_CPX" name="CRF 11_CPX">
+	  <taxus name="11_CPXF1R99MP1298" />
+      <taxus name="11_CPXGRGR17" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="12_BF" name="CRF 12_BF">
+	  <taxus name="12_BFAR97A32989" />
+   	  <taxus name="12_BFU1Y99URTR23" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="13_CPX" name="CRF 13_CPX">
+	  <taxus name="13_CPXC1M961849" />
+      <taxus name="13_CPXCM964164" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="14_BG" name="CRF 14_BG">
+	  <taxus name="14_BGE1S00X477" />
+      <taxus name="14_BGES99X397" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="09_cpx" name="CRF 09_cpx">
+         <taxus name="09_cpx.GH.96.96GH2911" />
+         <taxus name="09_cpx.US.99.99DE4057" />
+      <tags>CRF</tags>
+    </cluster>
+    
+    <cluster id="18_cpx" name="CRF 18_cpx">    
+         <taxus name="18_cpx.CM.97.CM53379" />
+         <taxus name="18_cpx.CU.99.CU76" />
+      <tags>CRF</tags>
+    </cluster>
+    
+        <cluster id="19_cpx" name="CRF 19_cpx">
+         <taxus name="19_cpx.CU.99.CU29" />
+         <taxus name="19_cpx.CU.99.CU7" />
+       <tags>CRF</tags>
+    </cluster>
+         
+    <cluster id="A1SN" name="A1 Senegal">
+         <taxus name="A.SN.01.DDI579" />
+         <taxus name="A.SN.01.DDJ369" />
+         <taxus name="A.SN.96.DDJ360" />
+      <tags>CRF</tags>
+    </cluster>    
+    
+    <cluster id="A1KE" name="A1 Kenya">
+         <taxus name="A1.KE.00.KNH1199" />
+         <taxus name="A1.KE.97.ML752" />
+         <taxus name="A1.TZ.01.A341" />
+      <tags>CRF</tags>
+    </cluster>
+
+    <cluster id="01UZ" name="A1 UZ">
+         <taxus name="A1.UZ.02.02UZ0659" />
+         <taxus name="A1.UZ.02.02UZ0663" />
+
+      <tags>CRF</tags>
+    </cluster>
+    
+        <cluster id="AHJU" name="AHJU CM">
+         <taxus name="AHJU.CM.01.01CM_1278NG" />
+         <taxus name="AHJU.CM.01.01CM_1296NG" />
+      <tags>CRF</tags>
+    </cluster>
+    
+        <cluster id="CBR" name="C Brazil">
+         <taxus name="C.AR.01.ARG4006" />
+         <taxus name="C.BR.x.04BR013" />
+      <tags>CRF</tags>
+    </cluster>
+    
+        <cluster id="CIN" name="C India">
+         <taxus name="C.IN.93.93IN904" />
+         <taxus name="C.IN.98.98IN022" />
+      <tags>CRF</tags>
+    </cluster>
+    
+    <cluster id="DCM" name="D Cameroon">    
+         <taxus name="D.CM.01.01CM_0009BBY" />
+         <taxus name="D.CM.01.01CM_4412HAL" />
+          <tags>CRF</tags>
+    </cluster>
+    
+        <cluster id="DUG" name="D Uganda">
+         <taxus name="D.UG.99.99UGA07412" />
+         <taxus name="D.UG.99.99UGB21875" />
+         <taxus name="D.UG.99.99UGE08364" />
+        <tags>CRF</tags>
+    </cluster>
+    
+    <cluster id="DZA" name="D South Africa">    
+         <taxus name="D.ZA.85.R214" />
+         <taxus name="D.ZA.85.R286" />
+      <tags>CRF</tags>
+    </cluster>
+    
+        <cluster id="GES" name="G Spain">
+         <taxus name="G.ES.00.X558" />
+         <taxus name="G.ES.99.X138" />
+      <tags>CRF</tags>
+    </cluster>
+    
+    <cluster id="GNG" name="G Nigeria">
+         <taxus name="G.NG.x.01NGPL0669" />
+         <taxus name="G.NG.x.01NGPL0760" />
+      <tags>CRF</tags>
+    </cluster>
+        <cluster id="GKU" name="GKU Senegal">
+         <taxus name="GKU.SE.x.SE8646" />
+         <taxus name="GKU.SE.x.SE9010" />
+      <tags>CRF</tags>
+    </cluster>
+
+
+
+    <cluster id="Group_O" name="Group O">
+	  <taxus name="OCM91MVP5180" />
+    </cluster>
+  </clusters>
+
+  <analysis id="pure" type="paup">
+    <identify>
+      A1,A2,B,F,F1,F2,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup OCM91MVP5180;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=SetAbsVal;
+ 	  NJ;
+ 	  savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree,inner,outer
+    </options>
+  </analysis>
+
+  <analysis id="pure-puzzle" type="paup">
+    <identify>
+      A1,B,C,D,F1,G,H,J,K,Group_O
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup OCM91MVP5180;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=SetAbsVal;
+      constraints CONSTRE(BACKBONE)=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
+      NJ constraints=CONSTRE enforce=yes;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree,signal,puzzle-likelihood-mapping
+    </options>
+  </analysis>
+
+  <analysis id="crf" type="paup">
+    <identify>
+      A1,A2,B,F,F1,F2,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup OCM91MVP5180;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=SetAbsVal;
+	  NJ;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree
+    </options>
+  </analysis>
+
+  <analysis id="scan" type="scan">
+    <window>
+      500
+    </window>
+    <step>
+      100
+    </step>
+    <cutoff>
+      0.9
+    </cutoff>
+    <analysis type="paup">
+      <identify>
+ 	A1,B,C,D,F1,G,H,J,K,Group_O
+      </identify>
+      <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=SetAbsVal;
+      constraints CONSTRE(BACKBONE)=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
+      NJ constraints=CONSTRE enforce=yes;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+      </block>
+      <cutoff>70</cutoff>
+    </analysis>
+      <options>data-all</options>
+  </analysis>
+ <analysis id="crfscan" type="scan">
+    <window>
+      400
+    </window>
+    <step>
+      50
+    </step>
+    <cutoff>
+      0.9
+    </cutoff>
+    <analysis type="paup">
+      <identify>
+       A1,B,C,D,F1,G,H,J,K
+      </identify>
+      <block>
+      begin paup;
+      log file=paup.log replace=yes;
+	  exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      set criterion=distance outroot=monophyl;       
+	  dset distance=HKY NegBrLen=SetAbsVal;
+      constraints CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19),(20,21));
+      NJ constraints=CONSTRE enforce=yes;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+      </block>
+      <cutoff>
+      70
+    </cutoff>
+    </analysis>
+    <options>data-all</options>
+  </analysis>
+  <analysis id="scan-pure-self" type="scan">
+    <window>
+      500
+    </window>
+    <step>
+      50
+    </step>
+    <analysis type="paup">
+      <identify>
+       A1[0],A2[0],B[0],C[0],D[0],F1[0],F2[0],G[0],H[0],J[0],K[0],Group_O
+      </identify>
+      <block>
+        begin paup;
+        log file=paup.log replace=yes;
+        exclude gapped;
+        export format=nexus file=paup.nex replace=yes;
+        outgroup OCM91MVP5180;
+        set criterion=distance outroot=monophyl;
+        dset distance=HKY NegBrLen=Prohibit;
+        NJ;
+        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        bootstrap nreps=100 search=nj;
+        end;
+        quit;
+      </block>
+    </analysis>
+  </analysis>
+    
+</genotype-analyses>
+

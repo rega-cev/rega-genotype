@@ -1,0 +1,159 @@
+<genotype-analyses>
+  <alignment file="SIVtrim.fasta" trim="true" />
+
+  <clusters>
+  
+    <cluster id="SMM" name="SMM">
+    	<taxus name="SMMSL92SL92B" />
+    	<taxus name="SMMUSH9" />
+    	<taxus name="SMMUSPGM53" />
+    	<taxus name="STMUSSTM" />
+    </cluster>
+    
+    
+    <cluster id="AGM" name="AGM">    	
+	    <taxus name="VERDEAGM3" />
+    	<taxus name="VERKE9063" />
+    	<taxus name="VERKEAGM155" />
+    	<taxus name="VERKETYO1" />
+	</cluster>
+ 
+ 	<cluster id="SKY" name="SKY">
+    	<taxus name="SYKKEKE51" />
+    	<taxus name="SYKKESYK173" />
+    </cluster>
+    
+    <cluster id="COL" name="COL">
+    	<taxus name="COLCMCGU1" />
+    </cluster>
+    
+    <cluster id="LHoest" name="LHoest">	
+    	<taxus name="LSTCD88447" />
+    	<taxus name="LSTCD88485" />
+    	<taxus name="LSTCD88524" />
+    	<taxus name="LSTKElho7" />
+    	<taxus name="SUNGA98L14" />
+    	<taxus name="MND1GAMNDGB1" />
+    </cluster>
+    
+    <cluster id="CPZ" name="CPZ">	    
+    	<taxus name="CPZCM98CAM5" />
+    	<taxus name="CPZGACPZGAB" />
+    	<taxus name="CPZGA88GAB2" />
+    	<taxus name="CPZUS85CPZUS" />
+	</cluster>
+   
+  </clusters>
+
+  <analysis id="pure" type="paup">
+    <identify>
+SMM,AGM,SKY,COL,LHoest,CPZ
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup COLCMCGU1;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=Prohibit;
+      NJ;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree
+    </options>
+  </analysis>
+
+  <analysis id="pure-puzzle" type="paup">
+    <identify>
+SMM,AGM,SKY,COL,LHoest,CPZ
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup COLCMCGU1;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=Prohibit;
+      NJ;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree,signal,puzzle-likelihood-mapping
+    </options>
+  </analysis>
+
+  <analysis id="scan" type="scan">
+    <window>
+      400
+    </window>
+    <step>
+      50
+    </step>
+    <cutoff>
+      0.9
+    </cutoff>
+    <analysis type="paup">
+      <identify>
+SMM[0],AGM[0],SKY[0],COL[0],LHoest[0],CPZ[0]
+	</identify>
+      <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=Prohibit;
+      NJ;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+      </block>
+    </analysis>
+  </analysis>
+
+  <analysis id="scan-pure-self" type="scan">
+    <window>
+	1500
+    </window>
+    <step>
+      50
+    </step>
+    <analysis type="paup">
+      <identify>
+		SMM,AGM,SKY,COL,LHoest,CPZ
+      </identify>
+      <block>
+        begin paup;
+        log file=paup.log replace=yes;
+        exclude gapped;
+        export format=nexus file=paup.nex replace=yes;
+        outgroup COLCMCGU1;
+        set criterion=distance outroot=monophyl;
+        dset distance=HKY NegBrLen=Prohibit;
+        NJ;
+        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        bootstrap nreps=100 search=nj;
+        end;
+        quit;
+      </block>
+    </analysis>
+  </analysis>
+    
+</genotype-analyses>
+

@@ -1,0 +1,249 @@
+<genotype-analyses>
+  <alignment file="HCVLos2005.fasta" trim="true" />
+
+  <clusters>
+  
+	<cluster id="Geno_1" name="Genotype 1">
+ 	  	<cluster id="1a" name="Genotype 1 subtype a">
+      	<taxus name="1a.COLONEL" />
+    		<taxus name="1a.HCV_1" />
+    		<taxus name="1a.HCV_H" />
+   		</cluster>
+
+ 	  	<cluster id="1b" name="Genotype 1 subtype b"> 
+   			<taxus name="1b.HCV_A" />
+    		<taxus name="1b.HCV_JS" />
+    		<taxus name="1b.HCV_J" />
+    		<taxus name="1b.MD1_1" />
+		</cluster>
+
+ 	  	<cluster id="1c" name="Genotype 1 subtype c"> 
+    		<taxus name="1c.AY051292" />
+    		<taxus name="1c.HC_G9" />
+		</cluster>
+		
+	</cluster>
+
+	<cluster id="Geno_2" name="Genotype 2">
+ 	  	<cluster id="2a" name="Genotype 2 subtype a">
+    		<taxus name="2a.G2AK3" />
+    		<taxus name="2a.HC_J6CH" />
+    		<taxus name="2a.NDM228" />
+    		<taxus name="2a.Td_6" />
+    	</cluster>
+    	
+ 	  	<cluster id="2b" name="Genotype 2 subtype b">
+    		<taxus name="2b.HC_J8" />
+    		<taxus name="2b.JPUT971017" />
+    		<taxus name="2b.MD2B_1" />
+    	</cluster>
+    	
+ 	  	<cluster id="2c" name="Genotype 2 subtype c">
+ 		    <taxus name="2c.BEBE1" />
+		</cluster>
+	
+ 	  	<cluster id="2k" name="Genotype 2 subtype k">
+		    <taxus name="2k.VAT96" />
+		</cluster>
+     </cluster>
+     
+	<cluster id="Geno_3" name="Genotype 3">
+ 	  	<cluster id="3a" name="Genotype 3 subtype a">
+		    <taxus name="3a.CB" />
+    		<taxus name="3a.HCVCENS1" />
+    		<taxus name="3a.K3A" />
+    		<taxus name="3a.NZL1" />
+    	</cluster>
+    	
+     	<cluster id="3b" name="Genotype 3 subtype b">
+		    <taxus name="3b.HCV_Tr" />
+    		<taxus name="3b.JP1996056672" />
+   		</cluster>
+   		
+ 	  	<cluster id="3k" name="Genotype 3 subtype k">
+  		   <taxus name="3k.JK049" />
+  		</cluster>
+   </cluster>
+
+	<cluster id="4a" name="Genotype 4 subtype a">
+    	<taxus name="4a.ED43" />
+  	</cluster>
+  	
+  	<cluster id="5a" name="Genotype 5 subtype a">
+	    <taxus name="5a.EUH1480" />
+    	<taxus name="5a.SA13" />
+	</cluster>
+	
+	<cluster id="Geno_6" name="Genotype 6">
+ 	  	<cluster id="6a" name="Genotype 6 subtype a">
+		    <taxus name="6a.EUHK2" />
+    	</cluster>	
+
+ 	  	<cluster id="6b" name="Genotype 6 subtype b">
+    		<taxus name="6b.TH580" />
+    	</cluster>
+    	
+ 	  	<cluster id="6d" name="Genotype 6 subtype d">
+		    <taxus name="6d.VN235" />
+		</cluster>
+
+ 	  	<cluster id="6g" name="Genotype 6 subtype g">
+		    <taxus name="6g.JK046" />
+		</cluster>
+
+ 	  	<cluster id="6h" name="Genotype 6 subtype h">
+		    <taxus name="6h.VN004" />
+		</cluster>
+		
+ 	  	<cluster id="6k" name="Genotype 6 subtype k">
+		    <taxus name="6k.VN405" />
+    	</cluster>
+    </cluster>
+    
+  </clusters>
+
+  <analysis id="pure" type="paup">
+    <identify>
+Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup 4a.ED43;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=Prohibit;
+      NJ;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree
+    </options>
+  </analysis>
+
+  <analysis id="pure-puzzle" type="paup">
+    <identify>
+Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup 4a.ED43;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=Prohibit;
+      NJ;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree,signal,puzzle-likelihood-mapping,inner,outer
+    </options>
+  </analysis>
+
+  <analysis id="scan" type="scan">
+    <window>
+      500
+    </window>
+    <step>
+      100
+    </step>
+    <cutoff>
+      0.9
+    </cutoff>
+    <analysis type="paup">
+      <identify>
+1a,1b,1c,2a,2b,2c,2k,3a,3b,3k,4a,5a,Geno_6
+	</identify>
+      <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=Prohibit;
+      constraints CONSTRE(BACKBONE)=(((2,3,4),(5,6,7,8),(9,10)),((11,12,13,14),(15,16,17),18,19),((20,21,22,23),(24,25),26),27,(28,29),(30,31,32,33,34,35));
+      NJ constraints=CONSTRE enforce=yes;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+      </block>
+      <cutoff>70</cutoff>
+    </analysis>
+      <options>data-all</options>
+  </analysis>
+
+  <analysis id="crfscan" type="scan">
+    <window>
+      400
+    </window>
+    <step>
+      50
+    </step>
+    <cutoff>
+      0.9
+    </cutoff>
+    <analysis type="paup">
+      <identify>
+1a[0],1b[0],1c[0],2a[0],2b[0],2c[0],2k[0],3a[0],3b[0],3k[0],4a[0],5a[0],6a[0],6b[0],6d[0],6g[0],6h[0],6k 
+	</identify>
+      <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=Prohibit;
+      NJ;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+      </block>
+    </analysis>
+  </analysis>
+
+  <analysis id="scan-pure-self" type="scan">
+    <window>
+     1500
+    </window>
+    <step>
+      50
+    </step>
+    <analysis type="paup">
+      <identify>
+Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
+      </identify>
+      <block>
+        begin paup;
+        log file=paup.log replace=yes;
+		exclude gapped;
+        export format=nexus file=paup.nex replace=yes;
+        outgroup 4a.ED43;
+        set criterion=distance outroot=monophyl;
+        dset distance=HKY NegBrLen=Prohibit;
+        NJ;
+        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        bootstrap nreps=100 search=nj;
+        end;
+        quit;
+      </block>
+    </analysis>
+  </analysis>
+    
+</genotype-analyses>
+

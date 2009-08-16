@@ -1,0 +1,391 @@
+<genotype-analyses>
+
+  <alignment file="ntVP1.fasta" trim="true" />
+
+
+
+  <clusters>
+
+  
+
+    <cluster id="VP1_1" name="Rotavirus_VP1_genogroup1">
+
+       	<taxus name="Hu_B4106" />
+
+    	<taxus name="La_3096" />
+
+    	<taxus name="Bo_UKtc" />
+
+    	<taxus name="Bo_RF" />
+
+    	<taxus name="Hu_NCDV" />
+
+    	<taxus name="Si_SA11" />
+
+    	<taxus name="Si_SA11both" />
+
+    	<taxus name="Hu_TBChen" />
+
+    	<taxus name="Hu_S2" />
+
+    	<taxus name="Hu_DS1" />
+
+    	<taxus name="Hu_DRC88" />
+
+    	<taxus name="Hu_DRC86" />
+
+    	<taxus name="Hu_RV176" />
+
+    	<taxus name="Hu_RV161" />
+
+    	<taxus name="Hu_N2602" />
+
+    	<taxus name="Hu_L26" />
+
+    </cluster>
+
+    <cluster id="VP1_2" name="Rotavirus_VP1_genogroup2">
+
+       	<taxus name="Hu_Dhaka2502" />
+
+    	<taxus name="Hu_Dhaka1603" />
+
+    	<taxus name="Hu_B3458" />
+
+    	<taxus name="Hu_B3644" />
+
+    	<taxus name="Hu_Matlab1303" />
+
+    	<taxus name="Hu_Dhaka1203" />
+
+    	<taxus name="Hu_Hosokawa" />
+
+    	<taxus name="Hu_Wa" />
+
+    	<taxus name="Hu_KU" />
+
+    	<taxus name="Hu_YO" />
+
+    	<taxus name="Po_YM" />
+
+    	<taxus name="Po_Gottfried" />
+
+    </cluster>
+
+    <cluster id="VP1_3" name="Rotavirus_VP1_genogroup3">
+
+       	<taxus name="Hu_T152" />
+
+    	<taxus name="Hu_Au-1" />
+
+    </cluster>
+
+    <cluster id="VP1_4" name="Rotavirus_VP1_genogroup4">
+
+       	<taxus name="Av_PO13" />
+
+    </cluster>
+
+  </clusters>
+
+  <analysis id="pure" type="paup">
+
+    <identify>
+
+		VP1_1,VP1_2,VP1_3,VP1_4
+
+    </identify>
+
+    <cutoff>
+
+      70
+
+    </cutoff>
+
+    <block>
+
+      begin paup;
+
+      log file=paup.log replace=yes;
+
+      exclude gapped;
+
+      export format=nexus file=paup.nex replace=yes;
+
+      outgroup RCM.GA.GAB1;
+
+      set criterion=distance outroot=monophyl;
+
+      dset distance=HKY NegBrLen=Prohibit;
+
+      NJ;
+
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+
+      bootstrap nreps=100 search=nj;
+
+      end;
+
+      quit;
+
+    </block>
+
+    <options>
+
+      log,alignment,tree
+
+    </options>
+
+  </analysis>
+
+  <analysis id="crf" type="paup">
+
+    <identify>
+
+		VP1_1,VP1_2,VP1_3,VP1_4
+
+    </identify>
+
+    <cutoff>
+
+      70
+
+    </cutoff>
+
+    <block>
+
+      begin paup;
+
+      log file=paup.log replace=yes;
+
+      exclude gapped;
+
+      export format=nexus file=paup.nex replace=yes;
+
+      outgroup RCM.GA.GAB1;
+
+      set criterion=distance outroot=monophyl;
+
+      dset distance=HKY NegBrLen=Prohibit;
+
+      NJ;
+
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+
+      bootstrap nreps=100 search=nj;
+
+      end;
+
+      quit;
+
+    </block>
+
+    <options>
+
+      log,alignment,tree
+
+    </options>
+
+  </analysis>
+
+  <analysis id="pure-puzzle" type="paup">
+
+    <identify>
+
+		VP1_1,VP1_2,VP1_3,VP1_4
+
+    </identify>
+
+    <cutoff>
+
+      70
+
+    </cutoff>
+
+    <block>
+
+      begin paup;
+
+      log file=paup.log replace=yes;
+
+      exclude gapped;
+
+      export format=nexus file=paup.nex replace=yes;
+
+      outgroup RCM.GA.GAB1;
+
+      set criterion=distance outroot=monophyl;
+
+      dset distance=HKY NegBrLen=Prohibit;
+
+      NJ;
+
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+
+      bootstrap nreps=100 search=nj;
+
+      end;
+
+      quit;
+
+    </block>
+
+    <options>
+
+      log,alignment,tree,signal,puzzle-likelihood-mapping
+
+    </options>
+
+  </analysis>
+
+
+
+  <analysis id="scan" type="scan">
+
+    <window>
+
+      500
+
+    </window>
+
+    <step>
+
+      50
+
+    </step>
+
+    <cutoff>
+
+      0.9
+
+    </cutoff>
+
+    <analysis type="paup">
+
+      <identify>
+
+		VP1_1,VP1_2,VP1_3,VP1_4
+
+	</identify>
+
+      <block>
+
+      begin paup;
+
+      log file=paup.log replace=yes;
+
+      exclude gapped;
+
+      export format=nexus file=paup.nex replace=yes;
+
+      set criterion=distance outroot=monophyl;
+
+      dset distance=HKY NegBrLen=Prohibit;
+
+      NJ;
+
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+
+      bootstrap nreps=100 search=nj;
+
+      end;
+
+      quit;
+
+      </block>
+
+    </analysis>
+
+  </analysis>
+
+  <analysis id="crfscan" type="scan">
+
+    <window>
+
+      500
+
+    </window>
+
+    <step>
+
+      50
+
+    </step>
+
+    <cutoff>
+
+      0.9
+
+    </cutoff>
+
+    <analysis type="paup">
+
+      <identify>
+
+		VP1_1,VP1_2,VP1_3,VP1_4
+
+	</identify>
+
+      <block>
+
+      begin paup;
+
+      log file=paup.log replace=yes;
+
+      exclude gapped;
+
+      export format=nexus file=paup.nex replace=yes;
+
+      set criterion=distance outroot=monophyl;
+
+      dset distance=HKY NegBrLen=Prohibit;
+
+      NJ;
+
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+
+      bootstrap nreps=100 search=nj;
+
+      end;
+
+      quit;
+
+      </block>
+
+    </analysis>
+
+  </analysis>
+  <analysis id="scan-pure-self" type="scan">
+
+    <window>
+      500
+    </window>
+    <step>
+      50
+    </step>
+    <analysis type="paup">
+      <identify>
+		VP1_1,VP1_2,VP1_3,VP1_4
+      </identify>
+      <block>
+        begin paup;
+        log file=paup.log replace=yes;
+		exclude gapped;
+        export format=nexus file=paup.nex replace=yes;
+        set criterion=distance outroot=monophyl;
+        dset distance=HKY NegBrLen=Prohibit;
+        NJ;
+        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        bootstrap nreps=100 search=nj;
+        end;
+        quit;
+      </block>
+          <options>
+      signal,puzzle-likelihood-mapping
+    </options>
+    </analysis>
+  </analysis>
+</genotype-analyses>
+
+
+

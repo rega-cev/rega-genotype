@@ -1,0 +1,147 @@
+<genotype-analyses>
+  <alignment file="htlv.fasta" trim="true" />
+
+  <clusters>
+  
+      	<cluster id="subtype_c" name="subtype_c"> 
+      	<description>HTLV-1 subtype C found in Japan</description>
+      		<taxus name="Mel5" />
+      	</cluster>
+      
+       	<cluster id="STLV1_(Macaca_tonkeana)" name="STLV1_(Macaca_tonkeana)"> 
+       	<description>STLV simian virus</description>
+    		<taxus name="TE4" />
+       	</cluster>
+       
+      	<cluster id="subtype_e" name="subtype_e">   
+        <description>HTLV-1 subtype e found in Africa</description>
+    		<taxus name="Efe1" />
+       	</cluster>    
+       	
+      	<cluster id="subtype_f" name="subtype_f">        	       	
+   			<taxus name="Lib2" />
+       	</cluster> 
+
+      	<cluster id="subtype_b" name="subtype_b">        	       	
+    		<taxus name="MOMJ" />
+    		<taxus name="ITIS" />
+    		<taxus name="MWMG" />    
+    		<taxus name="GB233" />
+    		<taxus name="PH236" />
+    		<taxus name="T49" />
+    		<taxus name="H24" />
+    		<taxus name="GAB7" />
+       	</cluster>    		
+
+      	<cluster id="subtype_d" name="subtype_d">           		
+    		<taxus name="H23" />
+    		<taxus name="pyg19" />
+       	</cluster>    	    		
+
+	<cluster id="subtype_a" name="subtype_a">
+      	<cluster id="subtype_a(subgroup_C)" name="subtype_a(subgroup_C)(West African)">           		    		
+    		<taxus name="HS35" />
+    		<taxus name="GH78" />
+       	</cluster>    
+       	
+      	<cluster id="subtype_a(subgroup_D)" name="subtype_a(subgroup_D)(North African)">           		    		    		
+    		<taxus name="OD" />
+    		<taxus name="BO" />
+    		<taxus name="Pr52" />
+       	</cluster>  
+       	
+      	<cluster id="subtype_a(subgroup_E)" name="subtype_a(subgroup_E)(Black Peruvian)">           		    		    				
+    		<taxus name="Bl1" />
+    		<taxus name="RKI4" />
+       	</cluster> 
+       	
+    <cluster id="subtype_a(subgroup_B)" name="subtype_a(subgroup_B)(Japanese)">       	
+		<taxus name="ATM" />
+    		<taxus name="MT4" />
+    		<taxus name="ATK1" />
+    		<taxus name="ATLYS" />
+    		<taxus name="Ni1" />
+    		<taxus name="H5" />
+    		<taxus name="BCI2" />
+       	</cluster>     		
+
+    <cluster id="subtype_a(subgroup_A)" name="subtype_a(subgroup_A)(Transcontinental)"> 
+    <description>HTLV-1 subtype a subgroup A Cosmopolitan</description>
+        	
+ 		<taxus name="AMA" />
+    		<taxus name="TBH4" />
+    		<taxus name="AINU" />
+    		<taxus name="73RM" />
+    		<taxus name="CMC" />
+    		<taxus name="KUW1" />
+    		<taxus name="Cam" />
+    		<taxus name="TBH2" />
+    		<taxus name="CR1" />
+    		<taxus name="Boi" />
+    		<taxus name="Bl2" />
+    		<taxus name="HTLV04" />
+    		<taxus name="Qu1" />
+    		<taxus name="FNN100" />
+    </cluster>
+    </cluster>
+</clusters>
+
+  <analysis id="pure" type="paup">
+    <identify>
+		subtype_c,STLV1_(Macaca_tonkeana),subtype_e,subtype_f,subtype_b,subtype_d,subtype_a(subgroup_C),subtype_a(subgroup_D),subtype_a(subgroup_E),subtype_a(subgroup_B),subtype_a(subgroup_A)
+    </identify>
+    <cutoff>
+      75
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup TE4;
+      set rootmethod=midpoint;
+      set criterion=distance outroot=monophyl;
+      dset distance=TamNei rates=gamma shape=0.4756 NegBrLen=SetAbsVal;
+	  constraints CONSTRE(BACKBONE)=((2,(3,(4,(5,(6,7,8,9,10,11,12,13))))),(14,15),(16,17),(18,19,20),(21,22),(23,24,25,26,27,28,29),(30,31,32,33,34,35,36,37,38,39,40,41,42,43)); 
+      NJ constraints=CONSTRE enforce=yes;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree
+    </options>
+  </analysis>
+
+ 
+  <analysis id="scan-pure-self" type="scan">
+    <window>
+      300	
+    </window>
+    <step>
+      5
+    </step>
+    <analysis type="paup">
+      <identify>
+ 		subtype_c,STLV1_(Macaca_tonkeana),subtype_e,subtype_f,subtype_b,subtype_d,subtype_a(subgroup_C),subtype_a(subgroup_D),subtype_a(subgroup_E),subtype_a(subgroup_B),subtype_a(subgroup_A)
+      </identify>
+      <block>
+        begin paup;
+        log file=paup.log replace=yes;
+        exclude gapped;
+        export format=nexus file=paup.nex replace=yes;
+        outgroup TE4;
+        set criterion=distance outroot=monophyl;
+        dset distance=HKY NegBrLen=SetAbsVal;
+        NJ;
+        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        bootstrap nreps=100 search=nj;
+        end;
+        quit;
+      </block>
+    </analysis>
+  </analysis>
+    
+</genotype-analyses>
+

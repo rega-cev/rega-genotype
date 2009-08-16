@@ -1,0 +1,24 @@
+<genotype-analyses>
+  <alignment file="hbvblast.fasta" />
+
+  <clusters>
+    <cluster id="1" name="HBV">
+      <description>blablabla</description>
+      <taxus name="NC_003977" />
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>
+      1
+    </identify>
+    <cutoff>
+      50
+    </cutoff>
+    <options>
+      -q -1 -r 2
+    </options>
+  </analysis>
+
+</genotype-analyses>
+

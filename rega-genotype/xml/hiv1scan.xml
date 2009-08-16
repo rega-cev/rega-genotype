@@ -1,0 +1,93 @@
+<genotype-analyses>
+  <alignment file="hiv1scan.fasta" trim="true" />
+
+  <clusters>
+    <cluster id="A" name="Subtype A">
+	    <taxus name="A" />
+    </cluster>
+    <cluster id="B" name="Subtype B">
+		<taxus name="B" />
+    </cluster>
+    <cluster id="C" name="Subtype C">
+	    <taxus name="C" />
+    </cluster>
+    <cluster id="D" name="Subtype D">
+	    <taxus name="D" />
+    </cluster>
+    <cluster id="F" name="Subtype F">
+	    <taxus name="F" />
+    </cluster>
+    <cluster id="G" name="Subtype G">
+	    <taxus name="G" />
+    </cluster>
+    <cluster id="H" name="Subtype H">
+	    <taxus name="H" />
+    </cluster>
+    <cluster id="J" name="Subtype J">
+	    <taxus name="J" />
+    </cluster>
+        <cluster id="K" name="Subtype K">
+	    <taxus name="K" />
+    </cluster>
+  </clusters>
+
+  <analysis id="scan" type="scan">
+    <window>
+      500
+    </window>
+    <step>
+      50
+    </step>
+    <cutoff>
+      0.9
+    </cutoff>
+    <analysis type="paup">
+      <identify>
+ 		A,B,C,D,F,G,H,J,K
+      </identify>
+      <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=Prohibit;
+      NJ;
+      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+      </block>
+    </analysis>
+  </analysis>
+
+  <analysis id="scan-pure-self" type="scan">
+    <window>
+      400
+    </window>
+    <step>
+      50
+    </step>
+    <analysis type="paup">
+      <identify>
+       A,B,C,D,F,G,H,J,K
+      </identify>
+      <block>
+        begin paup;
+        log file=paup.log replace=yes;
+        exclude gapped;
+        export format=nexus file=paup.nex replace=yes;
+        outgroup OCM91MVP5180;
+        set criterion=distance outroot=monophyl;
+        dset distance=HKY NegBrLen=Prohibit;
+        NJ;
+        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        bootstrap nreps=100 search=nj;
+        end;
+        quit;
+      </block>
+    </analysis>
+  </analysis>
+    
+</genotype-analyses>
+

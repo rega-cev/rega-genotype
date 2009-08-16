@@ -1,0 +1,24 @@
+<genotype-analyses>
+  <alignment file="HCVLos2005.fasta" />
+
+  <clusters>
+    <cluster id="1" name="HCV">
+      <description>blablabla</description>
+      <taxus name="1a.COLONEL" />
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>
+      1
+    </identify>
+    <cutoff>
+      50
+    </cutoff>
+    <options>
+      -q -1 -r 2
+    </options>
+  </analysis>
+
+</genotype-analyses>
+
