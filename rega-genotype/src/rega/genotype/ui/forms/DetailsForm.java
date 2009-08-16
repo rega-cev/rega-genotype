@@ -4,7 +4,6 @@ import java.io.File;
 
 import net.sf.witty.wt.WTable;
 import net.sf.witty.wt.WText;
-import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 
@@ -19,7 +18,7 @@ public class DetailsForm extends IForm {
 		mainTable = new WTable(this);
 	}
 	
-	public void init(File jobDir, OrganismDefinition od, final int selectedSequenceIndex) {
+	public void init(File jobDir, final int selectedSequenceIndex) {
 		p = new SaxParser(){
 			@Override
 			public void endSequence() {
@@ -32,16 +31,16 @@ public class DetailsForm extends IForm {
 		
 		mainTable.clear();
 		
-		mainDetails = od.getMainDetailsForm();
-		mainDetails.fillForm(p, od, jobDir);
+		mainDetails = getMain().getOrganismDefinition().getMainDetailsForm();
+		mainDetails.fillForm(p, getMain().getOrganismDefinition(), jobDir);
 		int rowIndex = 0;
 		mainTable.putElementAt(rowIndex++, 0, new WText(mainDetails.getTitle()));
 		mainTable.putElementAt(rowIndex++, 0, mainDetails);
 		
-		for(IDetailsForm df : od.getSupportingDetailsforms(p)) {
+		for(IDetailsForm df : getMain().getOrganismDefinition().getSupportingDetailsforms(p)) {
 			mainTable.putElementAt(rowIndex++, 0, new WText(df.getTitle()));
 			mainTable.putElementAt(rowIndex++, 0, df);
-			df.fillForm(p, od, jobDir);
+			df.fillForm(p, getMain().getOrganismDefinition(), jobDir);
 		}
 	}
 	

@@ -2,6 +2,7 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 
+import net.sf.witty.wt.WBreak;
 import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WText;
 import rega.genotype.ui.data.OrganismDefinition;
@@ -14,11 +15,10 @@ public abstract class IForm extends WContainerWidget {
 	public IForm(GenotypeWindow main, String title) {
 		this.main = main;
 		this.title = new WText(main.getResourceManager().getOrganismValue(title, "title"), this);
+		new WBreak(this);
 	}
 	
 	public GenotypeWindow getMain() {
 		return main;
 	}
-	
-	public abstract void init(File jobDir, OrganismDefinition od, final int selectedSequenceIndex);
 }

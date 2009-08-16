@@ -8,6 +8,7 @@ import net.sf.witty.wt.WWidget;
 import net.sf.witty.wt.i8n.IWMessageResource;
 import net.sf.witty.wt.i8n.WMessage;
 
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -59,21 +60,32 @@ public class GenotypeResourceManager implements IWMessageResource {
 		return WWidget.lt(extractFormattedText(organism.getChild(form).getChild(item)));
 	}
 	
-	private String extractFormattedText(Element child) {
+	public Element getOrganismElement(String form, String item) {
+		return organism.getChild(form).getChild(item);
+	}
+	
+	public String extractFormattedText(Element child) {
 		StringBuilder textToReturn = new StringBuilder();
-		
+		extractFormattedText(textToReturn, child);
+		return textToReturn.toString();
+	}
+	
+	private void extractFormattedText(StringBuilder textToReturn, Element child) {
 		for(Object o : child.getContent()) {
 			if(o instanceof Text) {
 				textToReturn.append(((Text)o).getTextTrim());
 			} else {
 				Element e = (Element)o;
-				textToReturn.append("<"+e.getName()+">");
-				textToReturn.append(e.getTextTrim());
+				textToReturn.append("<"+e.getName());
+				for(Object oa : e.getAttributes()) {
+					Attribute a = (Attribute)oa;
+					textToReturn.append(a.getName() + "=\"" + a.getValue() + "\"");
+				}
+				textToReturn.append(">");
+				extractFormattedText(textToReturn, e);
 				textToReturn.append("</"+e.getName()+">");
 			}
 		}
-		
-		return textToReturn.toString();
 	}
 	
 	public String getValue(WMessage message) {

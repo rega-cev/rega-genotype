@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import net.sf.witty.wt.SignalListener;
 import net.sf.witty.wt.WBreak;
-import net.sf.witty.wt.WContainerWidget;
 import net.sf.witty.wt.WMouseEvent;
 import net.sf.witty.wt.WPushButton;
 import net.sf.witty.wt.WText;
@@ -15,21 +14,17 @@ import org.apache.commons.io.FileUtils;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 
 public class StartForm extends IForm {
-	private WText title;
 	private WText note;
 	private WTextArea ta;
 	private WPushButton run, clear;
 	
-	public StartForm(final OrganismDefinition od, WContainerWidget parent, GenotypeWindow main) {
+	public StartForm(GenotypeWindow main) {
 		super(main, "start-form");
 		
-		title = new WText(getMain().getResourceManager().getOrganismValue("start-form", "title"), this);
-		new WBreak(this);
 		new WBreak(this);
 		
 		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note"), this);
@@ -63,7 +58,7 @@ public class StartForm extends IForm {
 							try {
 								File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
 								FileUtils.writeStringToFile(seqFile, ta.text());
-								od.startAnalysis(thisJobDir);
+								getMain().getOrganismDefinition().startAnalysis(thisJobDir);
 								File done = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"DONE");
 								FileUtils.writeStringToFile(done, System.currentTimeMillis()+"");
 							} catch (IOException e) {
@@ -82,7 +77,7 @@ public class StartForm extends IForm {
 		});
 	}
 
-	public void init(File jobDir, OrganismDefinition od, final int selectedSequenceIndex) {
+	public void init() {
 		ta.setText("");
 	}
 }

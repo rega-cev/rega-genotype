@@ -18,14 +18,11 @@ import net.sf.witty.wt.WTimer;
 import net.sf.witty.wt.WWidget;
 import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.AbstractCsvGenerator;
-import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 
 public abstract class AbstractJobOverview extends IForm {
 	protected File jobDir;
-	
-	protected OrganismDefinition od;
 
 	private WText analysisInProgress;
 	private WTable jobTable;
@@ -53,9 +50,8 @@ public abstract class AbstractJobOverview extends IForm {
 		}
 	}
 	
-	public void init(File jobDir, OrganismDefinition od, final int selectedSequenceIndex) {
+	public void init(File jobDir) {
 		this.jobDir = jobDir;
-		this.od = od;
 		
 		jobTable.clear();
 		downloadContainer.clear();
@@ -123,7 +119,7 @@ public abstract class AbstractJobOverview extends IForm {
 
 				@Override
 				protected void streamResourceData(OutputStream stream) {
-					AbstractCsvGenerator acsvgen = od.getCsvGenerator(new PrintStream(stream));
+					AbstractCsvGenerator acsvgen = AbstractJobOverview.this.getMain().getOrganismDefinition().getCsvGenerator(new PrintStream(stream));
 					acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
 				}
 				

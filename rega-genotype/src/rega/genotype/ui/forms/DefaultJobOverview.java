@@ -59,7 +59,7 @@ public class DefaultJobOverview extends AbstractJobOverview {
 			}
 			data.add(new WText(lt(support)));
 			try {
-				data.add(GenotypeLib.getWImageFromFile(od.getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
+				data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
 						id,
 						Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].start")), 
 						Integer.parseInt(p.getValue("genotype_result.sequence.result[blast].end")),
