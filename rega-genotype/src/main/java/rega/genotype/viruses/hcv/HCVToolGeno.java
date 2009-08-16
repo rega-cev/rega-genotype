@@ -25,7 +25,7 @@ public class HCVToolGeno extends GenotypeTool {
 
     
     public HCVToolGeno(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hcv = readAnalyses("hcvblast.xml", workingDir);
+        hcv = readAnalyses("HCV/hcvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hcv.getAnalysis("blast");
         
         hcvsubtypetool = new HCVSubtypeToolGeno(workingDir);

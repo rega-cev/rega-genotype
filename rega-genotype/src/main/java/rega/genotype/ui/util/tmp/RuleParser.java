@@ -19,7 +19,7 @@ import rega.genotype.ui.util.GenotypeLib;
  */
 public class RuleParser {
 	public static void main(String [] args) throws IOException {
-		String s = GenotypeLib.readFileToString(new File("/home/plibin0/projects/subtypetool/rules.txt"));
+		String s = GenotypeLib.readFileToString(new File("/home/plibin0/projects/rega-genotype/rulesa_hcv.txt"));
 		StringTokenizer t = new StringTokenizer(s, "\n");
 		int i = 0;
 		while(t.hasMoreTokens()) {

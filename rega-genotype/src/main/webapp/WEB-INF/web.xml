@@ -48,5 +48,17 @@
     <servlet-name>GenotypePHYLO</servlet-name>
     <url-pattern>/GenotypePHYLO/*</url-pattern>
   </servlet-mapping>
+  
+	<servlet>
+    <servlet-name>GenotypeHCV</servlet-name>
+    <display-name>HCV Genotyping</display-name>
+    <description>HCV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hcv.HcvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHCV</servlet-name>
+    <url-pattern>/GenotypeHCV/*</url-pattern>
+  </servlet-mapping>
 </web-app>
 

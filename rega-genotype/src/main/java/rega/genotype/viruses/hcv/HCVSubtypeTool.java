@@ -27,7 +27,7 @@ public class HCVSubtypeTool extends GenotypeTool {
 
 
     public HCVSubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hcv = readAnalyses("hcv.xml", workingDir);
+        hcv = readAnalyses("HCV/hcv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure-puzzle");
         scanAnalysis = (ScanAnalysis) hcv.getAnalysis("scan");
