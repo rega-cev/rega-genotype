@@ -11,8 +11,6 @@ PRIORITY
 * puzzle image -> too much whitespace
 * image centering -> sometimes refresh is needed
 * test on server without X installed, with java 1.5 (image creation)
-* 1000 seqs limitation (only 400 seqs works)
-	* never tested on # seqs only on fasta file size -> fix this!
 * how is dealt with gaps (-) in the input seq
 * write installation doc
 * maven

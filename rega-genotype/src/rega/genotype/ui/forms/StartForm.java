@@ -2,6 +2,8 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.witty.wt.SignalListener;
 import net.sf.witty.wt.WBreak;
@@ -19,6 +21,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.util.Settings;
 
 public class StartForm extends IForm {
 	private WText note;
@@ -31,7 +34,9 @@ public class StartForm extends IForm {
 		
 		new WBreak(this);
 		
-		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note"), this);
+		Map<String, String> noteArgs = new HashMap<String, String>();
+		noteArgs.put("${maxAllowedSeqs}", Settings.getInstance().getMaxAllowedSeqs()+"");
+		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note", noteArgs), this);
 		note.setStyleClass("note");
 		
 		WContainerWidget seqinput = new WContainerWidget(this);
@@ -71,29 +76,52 @@ public class StartForm extends IForm {
 	
 		run.clicked.addListener(new SignalListener<WMouseEvent>() {
 			public void notify(WMouseEvent a) {
-					final File thisJobDir = GenotypeLib.createJobDir();
-					Thread analysis = new Thread(new Runnable(){
-						public void run() {
-							try {
-								File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
-								FileUtils.writeStringToFile(seqFile, ta.text());
-								getMain().getOrganismDefinition().startAnalysis(thisJobDir);
-								File done = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"DONE");
-								FileUtils.writeStringToFile(done, System.currentTimeMillis()+"");
-							} catch (IOException e) {
-								e.printStackTrace();
-							} catch (ParameterProblemException e) {
-								e.printStackTrace();
-							} catch (FileFormatException e) {
-								e.printStackTrace();
-							}
-						}
-					});
-					analysis.start();
-					
-					getMain().monitorForm(thisJobDir);
+				String fastaContent = ta.text();
+				int amountOfSeqs = 0;
+				int i = 0;
+				
+				while(true) {
+					i = fastaContent.indexOf('>', i);
+					if(i!=-1) {
+						amountOfSeqs++;
+						i++;
+					} else { 
+						break;
+					}
+				}
+				
+				if(amountOfSeqs<=Settings.getInstance().getMaxAllowedSeqs()) {
+					ta.setStyleClass("textarea edit-valid");
+					startJob(fastaContent);
+				} else {
+					ta.setStyleClass("textarea edit-invalid");
+				}
 			}
 		});
+	}
+	
+	private void startJob(final String fastaContent) {
+		final File thisJobDir = GenotypeLib.createJobDir();
+		Thread analysis = new Thread(new Runnable(){
+			public void run() {
+				try {
+					File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
+					FileUtils.writeStringToFile(seqFile, fastaContent);
+					getMain().getOrganismDefinition().startAnalysis(thisJobDir);
+					File done = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"DONE");
+					FileUtils.writeStringToFile(done, System.currentTimeMillis()+"");
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (ParameterProblemException e) {
+					e.printStackTrace();
+				} catch (FileFormatException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		analysis.start();
+		
+		getMain().monitorForm(thisJobDir);
 	}
 
 	public void init() {

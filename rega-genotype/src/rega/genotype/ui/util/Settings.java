@@ -42,6 +42,10 @@ public class Settings {
 		return jobDir;
 	}
 	
+	public int getMaxAllowedSeqs() {
+		return 1000;
+	}
+	
 	private File xmlPath;
 	private String paupCmd;
 	private String clustalWCmd;

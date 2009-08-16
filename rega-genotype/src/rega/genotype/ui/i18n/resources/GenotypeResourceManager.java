@@ -2,8 +2,10 @@ package rega.genotype.ui.i18n.resources;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import net.sf.witty.utils.pair.Pair;
 import net.sf.witty.wt.WWidget;
 import net.sf.witty.wt.i8n.IWMessageResource;
 import net.sf.witty.wt.i8n.WMessage;
@@ -58,6 +60,16 @@ public class GenotypeResourceManager implements IWMessageResource {
 	
 	public WMessage getOrganismValue(String form, String item) {
 		return WWidget.lt(extractFormattedText(organism.getChild(form).getChild(item)));
+	}
+	
+	public WMessage getOrganismValue(String form, String item, Map<String, String> args) {
+		String value = extractFormattedText(organism.getChild(form).getChild(item));
+		
+		for(Map.Entry<String, String> e : args.entrySet()) {
+			value = value.replace(e.getKey(), e.getValue());
+		}
+		
+		return WWidget.lt(value);
 	}
 	
 	public Element getOrganismElement(String form, String item) {
