@@ -1,8 +1,7 @@
 PRIORITY
 *jwt bug
 	* WTextArea setText() with '>' -> &gt; (Koen)
-* write installation doc
-* maven
+* maven + BUILD
 * details pics, generate them during analysis?
 * unit test example
 

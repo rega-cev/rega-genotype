@@ -1,0 +1,51 @@
+* Java
+	* follow the build procedure for this java project (BUILD)
+	* install the resulting war file in your servlet container
+
+* External tools
+	* Paup* 4 beta10 
+		* can be purchased from http://paup.csit.fsu.edu/
+		* make sure to install this version, since older versions can give problems!
+		
+	* clustalw
+		* some unix based operating operating systems allow installation via the package manager
+		* can be installed manually from by downloading the appropriate binaries for your OS
+			* ftp://ftp.ebi.ac.uk/pub/software/clustalw2/
+	
+	* tree-puzzle 5.2 with svg support
+		* we added svg support to tree-puzzle 5.2, these changes are necessary for the rega-genotype software
+		* you can download the binaries from
+			* //TODO mybiodata website?
+			
+	* treegraph
+		* if you use unix based OS you should download and build the source code
+			* http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/
+		* if you use a Microsoft Windows you can download a binary
+			* http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/
+	
+	* blast 2.2.11
+		* make sure to install this version, since other versions can give problems!
+		* the binaries can be downloaded from
+			* ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/
+			* select the appropriate binary for your OS
+		* these binaries can be installed by extracting the archive to a desired location
+	
+* Configuration
+	* create an XML file like the one in global-conf.xml and save it to a location of your choice
+	* create an environment variable named "REGA_GENOTYPE_CONF_DIR" and store the location of the
+		xml file in this environment variable
+	* fill in the appropriate values
+		* xmlPath -> directory containing the xml files found in this projects xml/ directory
+			* eg.: /soft/rega-genotype/xml/
+		* jobDir -> location where the genotypetool can write job-related files
+			* eg.: /soft/rega-genotype/jobs/
+		* paupCmd -> location of your paup executable + name of the paup executable
+			* eg.: /soft/paup/paup4b10-x86-linux
+		* clustalWCmd -> location of your clustalw executable + name of the clustalw executable
+			* eg.: /soft/clustal/clustalw
+		* treePuzzleCmd -> location of your tree-puzzle executable + name of the tree-puzzle executable (the svg enabled version!)
+			* eg.: /soft/tree-puzzle/puzzle
+		* treeGraphCmd -> location of your treegraph executable + name of the treegraph executable
+			* eg.: /soft/treegraph/tgf
+		* blastPath -> location of your blast executables (correc version!)
+			* eg.: /soft/blast/bin
