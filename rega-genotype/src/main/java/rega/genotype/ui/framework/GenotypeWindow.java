@@ -155,16 +155,17 @@ public class GenotypeWindow extends WContainerWidget
 	}
 
 	public void setForm(AbstractForm form) {
+		form.show();
+
 		if (form == activeForm)
 			return;
 
 		if(activeForm!=null)
 			activeForm.hide();
 		activeForm = form;
-		activeForm.show();
-		if (form.parent() == null){
+
+		if (form.parent() == null)
 			content.addWidget(form);
-		}
 	}
 	
 	public void monitorForm(File jobDir, boolean setUrl) {

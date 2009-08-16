@@ -34,13 +34,17 @@ public class NrvCsvGenerator extends AbstractCsvGenerator {
     	csvLine.append(addCsvValue("genotype_result.sequence[name]", true));
     	csvLine.append(addCsvValue("genotype_result.sequence[length]"));
 
-    	if (!elementExists("genotype_result.sequence.conclusion['ORF1']")
-    		&& !elementExists("genotype_result.sequence.conclusion['ORF2']"))
-    		csvLine.append(",\"Sequence error\",\"Sequence error\"");
-    	else {
-    		csvLine.append(addCsvValue("genotype_result.sequence.conclusion['ORF1'].assigned.name"));
-    		csvLine.append(addCsvValue("genotype_result.sequence.conclusion['ORF2'].assigned.name"));
-    	}
+    	String orf1Conclusion = NrvResults.getConclusion(this, "ORF1");
+    	if (orf1Conclusion.equals(NrvResults.NA))
+    		csvLine.append(",");
+    	else
+    		csvLine.append(",\"" + orf1Conclusion + "\"");
+
+    	String orf2Conclusion = NrvResults.getConclusion(this, "ORF2");
+    	if (orf2Conclusion.equals(NrvResults.NA))
+    		csvLine.append(",");
+    	else
+    		csvLine.append(",\"" + orf2Conclusion + "\"");
 
     	csvLine.append(addCsvValue("genotype_result.sequence.result['blast'].start"));
     	csvLine.append(addCsvValue("genotype_result.sequence.result['blast'].end"));

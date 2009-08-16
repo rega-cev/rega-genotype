@@ -211,11 +211,12 @@ public class SequenceAlignment
     			throw new FileFormatException("Illegal character in input", line);
     		break;
     	case SEQUENCE_DNA:
-    		if (!s.toUpperCase().matches("[ACGTRYSWKMBDHVN\\-.]*"))
+    		// bionumerics gives an occasional I?
+    		if (!s.toUpperCase().matches("[ACGITRYSWKMBDHVN\\-.*]*"))
     			throw new FileFormatException("Illegal nucleotide character in input", line);
     		break;
     	case SEQUENCE_AA:
-    		if (!s.toUpperCase().matches("[ACDEFGHIKLMNPQRSTVWXY\\-.*]*"))
+    		if (!s.toUpperCase().matches("[ACDEFGHIKLMNPQRSTUVWXY\\-.*]*"))
     			throw new FileFormatException("Illegal amino acid character in input", line);
     	}
     		

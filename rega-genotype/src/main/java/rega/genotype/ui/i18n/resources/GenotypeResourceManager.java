@@ -87,19 +87,17 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 	
 	public String extractFormattedText(Element child) {
 		StringBuilder textToReturn = new StringBuilder();
-		extractFormattedText(textToReturn, child, false);
-		if(textToReturn.charAt(textToReturn.length()-1)==':')
-			textToReturn.append(' ');
-		return textToReturn.toString();
+		extractFormattedText(textToReturn, child);
+		String result = textToReturn.toString().trim();
+		if (result.charAt(result.length()-1)==':')
+			result += ' ';
+		return result;
 	}
 	
-	private void extractFormattedText(StringBuilder textToReturn, Element child, boolean noTrim) {
+	private void extractFormattedText(StringBuilder textToReturn, Element child) {
 		for(Object o : child.getContent()) {
 			if(o instanceof Text) {
-				if(noTrim)
-					textToReturn.append(StringUtils.escapeText(((Text)o).getText(), false));
-				else
-					textToReturn.append(StringUtils.escapeText(((Text)o).getTextTrim(), false));
+				textToReturn.append(StringUtils.escapeText(((Text)o).getText(), false));
 			} else {
 				Element e = (Element)o;
 				textToReturn.append("<"+e.getName());
@@ -108,7 +106,7 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 					textToReturn.append(" "+ a.getName() + "=\"" + a.getValue() + "\"");
 				}
 				textToReturn.append(">");
-				extractFormattedText(textToReturn, e, true);
+				extractFormattedText(textToReturn, e);
 				textToReturn.append("</"+e.getName()+">");
 			}
 		}

@@ -1,7 +1,6 @@
 PRIORITY
 * details pics, generate them during analysis?
 * ref seq name is too long
-* fix NRV CSV generation "sequence error"
 * start form: explain clearly that there are two options to submit a sequence:
   1) Either paste your sequence or sequences below in FASTA format:
      ...

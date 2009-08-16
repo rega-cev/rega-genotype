@@ -9,6 +9,7 @@ import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
+import eu.webtoolkit.jwt.WString;
 
 /**
  * NRV implementation of the genotype application.
@@ -21,6 +22,8 @@ public class NrvMain extends GenotypeMain {
 	public WApplication createApplication(WEnvironment env) {
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new NrvDefinition());
 
+		app.setTitle(WString.tr("nrvTool.title"));
+		
 		return app;
 	}
 }

@@ -2,7 +2,7 @@
 <organism-settings>
 	<main-form>
 		<footer>
-		Developed by: Harry Vennema, Annelies Krooneman and MyBioData bvba.
+		Developed by: Harry Vennema, Annelies Krooneman and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.
 		</footer>
 	</main-form>
 	<start-form>
@@ -143,5 +143,5 @@ AGCAAAATATAATTGACCCCTGGATTAGAGATAATTTTGTACAAGCC
 
 	<resource name="nrvSequenceAssignment.assignment"><span class="label">Assignment:</span></resource>
 	<resource name="nrvSequenceAssignment.motivation"><br /><span class="label">Motivation:</span></resource>
-	
+	<resource name="nrvTool.title">NRV Genotyping Tool</resource>
 </organism-settings>
