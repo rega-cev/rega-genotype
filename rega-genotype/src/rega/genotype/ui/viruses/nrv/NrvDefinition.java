@@ -55,14 +55,15 @@ public class NrvDefinition implements OrganismDefinition {
 		
 		String phyloResult = result + "['phylo-" + region + "']";
 		if (p.elementExists(phyloResult)) {
-			WMessage title = WMessage.lt("Phylogenetic analyses for " + region + " genotype");
+			WMessage title = WMessage.lt("Phylogenetic analyses (" + region + ")");
 			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title));
 
 			String bestGenotype = p.getValue(phyloResult + ".best.id");
 			
 			String variantResult = result + "['phylo-" + region + "-" + bestGenotype + "']";
 			if (p.elementExists(variantResult)) {
-				WMessage variantTitle = WMessage.lt("Phylogenetic analyses for variant");
+				WMessage variantTitle = WMessage.lt("Phylogenetic analyses (" + region + ") for variant within "
+						+ bestGenotype);
 				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle));
 			}
 		}

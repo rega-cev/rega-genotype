@@ -193,7 +193,7 @@
     <identify>
        II.4|Camb, II.4|Brist, II.4|1996, II.4|2001, II.4|2002, II.4|2002/CN, 
        II.4|2003, II.4|2004, II.4|2006a, II.4|2006b, II.4|2007, II.4|2008,
-       II.1[0]
+       II.20[0]
     </identify>
     <cutoff>
       70
@@ -204,7 +204,7 @@
       export format=phylip file=paup.fasta replace=yes;
       exclude gapped;
       export format=nexus file=paup.nex replace=yes;
-      outgroup II.1|U07611;
+      outgroup II.20|EU424333;
       set criterion=distance;
       dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
       constraints CONSTRE(BACKBONE)

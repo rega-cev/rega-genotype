@@ -116,6 +116,7 @@ public class GenotypeLib {
 				String cmd;
 				
 				cmd = treeGraphCommand +" -t "+ treeFile.getAbsolutePath();
+				System.err.println(cmd);
 				proc = runtime.exec(cmd, null, jobDir);
 				if((result = proc.waitFor()) != 0)
 					throw new ApplicationException(cmd +" exited with error: "+result);
@@ -128,10 +129,15 @@ public class GenotypeLib {
 				String line;
 				while((line = in.readLine()) != null){
 					line = line.replace("\\width{150}" ,"\\width{180}");
-					line = line.replace("\\height{250}" ,"\\height{270}");
+					line = line.replace("\\height{250}" ,"\\height{370}");
 					line = line.replace("\\margin{0}{0}{0}{0}" ,"\\margin{10}{10}{10}{10}");
 					line = line.replace("\\style{r}{plain}{14.4625}","\\style{r}{plain}{10}");
+					line = line.replaceAll("\\\\len\\{-", "\\\\len\\{");
 					out.println(line);
+					
+					if (line.equals("\\begindef")) {
+						out.println("\\paper{a2}");
+					}
 				}
 				out.close();
 				in.close();
@@ -140,6 +146,7 @@ public class GenotypeLib {
 				resizedTgfFile.renameTo(tgfFile);
 				
 				cmd = treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
+				System.err.println(cmd);
 				proc = runtime.exec(cmd, null, jobDir);
 				if((result = proc.waitFor()) != 0)
 					throw new ApplicationException(cmd +" exited with error: "+result);

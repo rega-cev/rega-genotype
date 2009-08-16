@@ -48,7 +48,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		li.addWidget(GenotypeLib.getAnchor("PAUP* Log file",
 				"application/txt",
 				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".log"))));
-		li.addWidget(new WText(lt(" (Contains bootstrap values for all HIV subtypes)")));
+		li.addWidget(new WText(lt(" (Contains bootstrap values)")));
 		
 		li = ul.addItem(new WText(lt("Download the ")));
 		li.addWidget(GenotypeLib.getAnchor("Alignment (NEXUS format)",

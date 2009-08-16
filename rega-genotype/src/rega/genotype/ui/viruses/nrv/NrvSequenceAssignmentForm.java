@@ -21,11 +21,9 @@ public class NrvSequenceAssignmentForm extends IDetailsForm {
 
 	@Override
 	public void fillForm(SaxParser p, final OrganismDefinition od, File jobDir) {
-		p.dumpDebug();
-		
 		WContainerWidget block = new WContainerWidget(this);
 		block.setStyleClass("assignment");
-		
+
 		block.addWidget(new WText(tr("defaultSequenceAssignment.sequenceName")));
 		block.addWidget(new WText(lt(p.getValue("genotype_result.sequence[name]")+", ")));
 		block.addWidget(new WText(tr("defaultSequenceAssignment.sequenceLength")));
@@ -33,7 +31,7 @@ public class NrvSequenceAssignmentForm extends IDetailsForm {
 		block.addWidget(new WBreak());
 
 		block = new WContainerWidget(this);
-
+		
 		block.addWidget(new WText(lt("ORF1 assignment: " + NrvResults.getConclusion(p, "ORF1") + "<br />")));
 		block.addWidget(new WText(lt("Motivation: " + NrvResults.getMotivation(p, "ORF1"))));
 
