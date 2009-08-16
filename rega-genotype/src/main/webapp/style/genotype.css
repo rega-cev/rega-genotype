@@ -73,11 +73,21 @@ table.jobTable col {
 	border-right: 1px outset gray;
 }
 
-table.jobTable col.nrb {
+table.jobTable td, table.jobTable th {
+	border-left: 1px outset gray;
+	border-right: 1px outset gray;
+}
+
+table.jobTable tr > td {
+	border-left-width: inherit;
+	border-right-width: inherit;	
+}
+
+table.jobTable .nrb {
 	border-right: 0px;
 }
 
-table.jobTable col.nlb {
+table.jobTable .nlb {
 	border-left: 0px;
 }
 

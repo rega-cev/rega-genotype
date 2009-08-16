@@ -217,9 +217,7 @@ public class ScanAnalysis extends AbstractAnalysis {
     private int window;
     private int step;
     private Double cutoff;
-	private File workingDir;
-
-    public ScanAnalysis(AlignmentAnalyses owner, String id, AbstractAnalysis analysis,
+	public ScanAnalysis(AlignmentAnalyses owner, String id, AbstractAnalysis analysis,
                         int window, int step, Double cutoff, File workingDir) {
         super(owner, id);
         this.analysis = analysis;

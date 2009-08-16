@@ -24,11 +24,13 @@ import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
+import eu.webtoolkit.jwt.WTableCell;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTimer;
 import eu.webtoolkit.jwt.WWidget;
@@ -267,7 +269,11 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			if(getSequenceIndex()>=numRows) {
 				List<WWidget> data = getData(tableFiller);
 				for (int i = 0; i < data.size(); i++) {
-					jobTable.elementAt(getSequenceIndex()+1, i).addWidget(data.get(i));
+					WTableCell cell = jobTable.elementAt(getSequenceIndex()+1, i);
+					cell.addWidget(data.get(i));
+					
+					if (WApplication.instance().environment().agentIE())
+						cell.setStyleClass(jobTable.columnAt(i).styleClass());
 				}
 			}
 		}

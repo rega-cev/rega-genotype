@@ -58,8 +58,6 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
     private Double cutoff;
     private String commandBlock;
     private Map<String, Float> patterns;
-    private File workingDir;
-
     public PhyloClusterAnalysis(AlignmentAnalyses owner,
                                 String id, List<Cluster> clusters, String paupBlock, Double cutoff,
                                 File workingDir) {

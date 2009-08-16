@@ -72,9 +72,7 @@ public class BlastAnalysis extends AbstractAnalysis {
     private Double cutoff;
     private String blastOptions;
 	private String formatDbOptions;
-    private File workingDir;
-   
-	private List<Region> regions;
+    private List<Region> regions;
 	private String referenceTaxus;
 
 	/**

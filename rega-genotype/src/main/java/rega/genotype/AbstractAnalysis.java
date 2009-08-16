@@ -153,6 +153,7 @@ public abstract class AbstractAnalysis {
     protected AlignmentAnalyses owner;
     private String            id;
 	private String            options;
+	protected File workingDir;
 
     public AbstractAnalysis(AlignmentAnalyses owner, String id) {
         this.owner = owner;
@@ -181,12 +182,16 @@ public abstract class AbstractAnalysis {
     public Result run(AbstractSequence sequence) throws AnalysisException {
         
         Result r = run(owner.getAlignment(), sequence);
-        getTracer().addResult(r);
+        if (getTracer() != null)
+        	getTracer().addResult(r);
         return r;
     }
 
     private ResultTracer getTracer() {
-        return owner.getGenotypeTool().getTracer();
+    	if (owner.getGenotypeTool() != null)
+    		return owner.getGenotypeTool().getTracer();
+    	else
+    		return null;
     }
     
     String getId() { return id; }
@@ -210,7 +215,11 @@ public abstract class AbstractAnalysis {
     }
     
     protected File getTempFile(String fileName) {
-        return new File(getTracer().getOutputPath() + File.separator + fileName);
+        ResultTracer tracer = getTracer();
+        if (tracer != null)
+        	return new File(tracer.getOutputPath() + File.separator + fileName);
+        else
+        	return new File(workingDir + File.separator + fileName);
     }
 
     /**

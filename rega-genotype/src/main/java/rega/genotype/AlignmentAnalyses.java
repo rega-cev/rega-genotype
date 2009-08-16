@@ -78,7 +78,7 @@ public class AlignmentAnalyses {
         private Cluster       parent;
         private String        tags;
 
-        Cluster(String id, String name, String description, String tags) {
+        public Cluster(String id, String name, String description, String tags) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -367,7 +367,7 @@ public class AlignmentAnalyses {
         if (cutoffE != null)
             cutoff = Double.valueOf(cutoffE.getTextTrim());
         
-        PhyloClusterAnalysis analysis = new PhyloClusterAnalysis(this, id, cs, block, cutoff, workingDir);
+        AbstractAnalysis analysis = new PhyloClusterAnalysis(this, id, cs, block, cutoff, workingDir);
         
         Element optionsE = element.getChild("options");
         if (optionsE != null)
