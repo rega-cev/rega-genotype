@@ -25,6 +25,7 @@ import net.sf.witty.wt.WImage;
 import net.sf.witty.wt.WResource;
 
 import org.apache.commons.io.IOUtils;
+import org.jfree.util.WaitingImageObserver;
 
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
@@ -98,27 +99,33 @@ public class GenotypeLib {
 	public static File getTreePDF(File jobDir, File treeFile) {
 		File pdfFile = new File(treeFile.getPath().replace(".tre", ".pdf"));
 		if (!pdfFile.exists() && treeFile.exists()) {
-			File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
-			File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
 			
 			try{
 				Runtime runtime = Runtime.getRuntime();
 				runtime.exec(treeGraphCommand +" -t "+ treeFile.getAbsolutePath(), null, jobDir);
 				
-//				BufferedReader in = new BufferedReader(new FileReader(treeFile));
-//				PrintStream out = new PrintStream(new FileOutputStream(tgfFile));
-//				String line;
-//				while((line = in.readLine()) != null){
-//					line = line.replace("\\width{150}" ,"\\width{180}");
-//					line = line.replace("\\height{250}" ,"\\height{270}");
-//					line = line.replace("\\margin{0}{0}{0}{0}" ,"\\margin{10}{10}{10}{10}");
-//					line = line.replace("\\style{r}{plain}{14.4625}","\\style{r}{plain}{10}");
-//					out.println(line);
-//				}
-//				out.close();
-//				in.close();
+				File tgfFile = new File(treeFile.getPath().replace(".tre", ".tgf"));
+				File resizedTgfFile = new File(treeFile.getPath().replace(".tre", ".resized.tgf"));
 				
-				runtime.exec(treeGraphCommand +" -v "+ tgfFile.getAbsolutePath(), null, jobDir);	
+				BufferedReader in = new BufferedReader(new FileReader(tgfFile));
+				PrintStream out = new PrintStream(new FileOutputStream(resizedTgfFile));
+				String line;
+				while((line = in.readLine()) != null){
+					line = line.replace("\\width{150}" ,"\\width{180}");
+					line = line.replace("\\height{250}" ,"\\height{270}");
+					line = line.replace("\\margin{0}{0}{0}{0}" ,"\\margin{10}{10}{10}{10}");
+					line = line.replace("\\style{r}{plain}{14.4625}","\\style{r}{plain}{10}");
+					out.println(line);
+				}
+				out.close();
+				in.close();
+				
+				tgfFile.delete();
+				resizedTgfFile.renameTo(tgfFile);
+				
+				runtime.exec(treeGraphCommand +" -v "+ tgfFile.getAbsolutePath(), null, jobDir);
+				File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
+				
 				ImageConverter.svgToPdf(svgFile, pdfFile);
 			}
 			catch(Exception e){
@@ -168,20 +175,20 @@ public class GenotypeLib {
 
 		initSettings(s);
 
-		try {
-			HIVTool hiv = new HIVTool(new File(
-					"/home/simbre1/tmp/genotype"));
-			hiv.analyze(
-					"/home/simbre1/tmp/genotype/seq.fasta",
-					"/home/simbre1/tmp/genotype/result.xml");
-			
-			getTreePDF(new File("/home/simbre1/tmp/genotype/"), new File("/home/simbre1/tmp/genotype/r4084335.tre"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParameterProblemException e) {
-			e.printStackTrace();
-		} catch (FileFormatException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			HIVTool hiv = new HIVTool(new File(
+//					"/home/simbre1/tmp/genotype"));
+//			hiv.analyze(
+//					"/home/simbre1/tmp/genotype/seq.fasta",
+//					"/home/simbre1/tmp/genotype/result.xml");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (ParameterProblemException e) {
+//			e.printStackTrace();
+//		} catch (FileFormatException e) {
+//			e.printStackTrace();
+//		}
+		
+		getTreePDF(new File("/home/simbre1/tmp/genotype/"), new File("/home/simbre1/tmp/genotype/r7184492.tre"));
 	}
 }
