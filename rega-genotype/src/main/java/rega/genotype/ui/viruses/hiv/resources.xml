@@ -13,7 +13,7 @@
 		This tool is designed to use phylogenetic methods in order to identify the subtype of a specific sequence.
 		The sequence is analysed for recombination using bootscanning methods.
 		<br/>
-		<b>Note for batch analysis:</b> The REGA subtype tool accepts up to ${maxAllowedSeqs} sequences at a time. 
+		<b>Note for batch analysis:</b> The REGA subtype tool accepts up to {1} sequences at a time. 
 		</note>
 	</start-form>
 	<monitor-form>

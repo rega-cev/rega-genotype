@@ -5,11 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.witty.utils.pair.Pair;
-import net.sf.witty.wt.WWidget;
-import net.sf.witty.wt.i8n.IWMessageResource;
-import net.sf.witty.wt.i8n.WMessage;
-
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -17,7 +12,12 @@ import org.jdom.JDOMException;
 import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
 
-public class GenotypeResourceManager implements IWMessageResource {
+import eu.webtoolkit.jwt.WLocalizedStrings;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.utils.StringUtils;
+
+public class GenotypeResourceManager extends WLocalizedStrings {
 	private Map<String, String> resources = new HashMap<String, String>();
 	
 	private String commonXml;
@@ -36,13 +36,17 @@ public class GenotypeResourceManager implements IWMessageResource {
 	private Element processDoc(String xmlName) {
 		SAXBuilder builder = new SAXBuilder();
 		Document doc = null;
+		String name;
+		String value;
 		try {
 			doc = builder.build(this.getClass().getResourceAsStream(xmlName));
 			Element root = doc.getRootElement();
 			for(Object o : root.getChildren()) {
 				Element e = (Element)o;
 				if(e.getName().equals("resource")) {
-					resources.put(e.getAttributeValue("name"), extractFormattedText(e));
+					name = e.getAttributeValue("name");
+					value = extractFormattedText(e);
+					resources.put(name, value);
 				}
 			}
 			return root;
@@ -54,19 +58,19 @@ public class GenotypeResourceManager implements IWMessageResource {
 		return null;
 	}
     
-	public WMessage getCommonValue(String form, String item) {
+	public WString getCommonValue(String form, String item) {
 		return WWidget.lt(extractFormattedText(common.getChild(form).getChild(item)));
 	}
 	
-	public WMessage getOrganismValue(String form, String item) {
+	public WString getOrganismValue(String form, String item) {
 		return WWidget.lt(extractFormattedText(organism.getChild(form).getChild(item)));
 	}
 	
-	public WMessage getOrganismValue(String form, String item, Map<String, String> args) {
+	public WString getOrganismValue(String form, String item, List<String> args) {
 		String value = extractFormattedText(organism.getChild(form).getChild(item));
 		
-		for(Map.Entry<String, String> e : args.entrySet()) {
-			value = value.replace(e.getKey(), e.getValue());
+		for(int i = 0; i<args.size(); i++) {
+			value = value.replace("${"+(i+1)+"}", args.get(i));
 		}
 		
 		return WWidget.lt(value);
@@ -88,9 +92,9 @@ public class GenotypeResourceManager implements IWMessageResource {
 		for(Object o : child.getContent()) {
 			if(o instanceof Text) {
 				if(noTrim)
-					textToReturn.append(((Text)o).getText());
+					textToReturn.append(StringUtils.escapeText(((Text)o).getText(), false));
 				else
-					textToReturn.append(((Text)o).getTextTrim());
+					textToReturn.append(StringUtils.escapeText(((Text)o).getTextTrim(), false));
 			} else {
 				Element e = (Element)o;
 				textToReturn.append("<"+e.getName());
@@ -104,13 +108,14 @@ public class GenotypeResourceManager implements IWMessageResource {
 			}
 		}
 	}
-	
-	public String getValue(WMessage message) {
-		return resources.get(message.key());
-	}
 
 	public void refresh() {
 		common = processDoc(commonXml);
 		organism = processDoc(organismXml);
+	}
+
+	@Override
+	public String resolveKey(String key) {
+		return resources.get(key);
 	}
 }

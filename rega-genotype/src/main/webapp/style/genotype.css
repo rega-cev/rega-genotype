@@ -1,26 +1,20 @@
 @CHARSET "UTF-8";
 
-/*	fixes for browser bugs */
-
-/* ie does not support position:fixed
-   position this element manually */
-* html #feedback {
-	position:absolute !important;
-	top:expression(document.body.scrollTop + "px"); 
-	right:0px;
-}
-
 /* general layout */
 
+html {
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
 
 body {
-	background-color:#fbfbfb;
-	margin-left: auto;
-	margin-right: auto;
-	padding-left: 2em;
-	padding-right: 2em;
-	width: 80%;
-	font-family: serif;
+	background-color: #fbfbfb;
+	font-family: arial,sans-serif;
+	font-size: 80%;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
 }
 
 div.imgDiv, div.downloadContainer{
@@ -33,35 +27,28 @@ div.imgDiv, div.downloadContainer{
 	margin-top: 2em;
 	margin-left: auto;
 	margin-right: auto;
-	width: 730px;
+	width: 680px;
 }
-.fileUpload{
+.fileUpload {
 	text-align: center;
 }
-.monitor{
+.monitor {
 	text-align: center;
 }
 
-.root{
-	width: 100%;
+.root {
+	padding-left: 
 }
-/*
-table.window > tbody > tr > td > *{
-	display: block;
-	width: 800px;
-	margin-left: auto;
-	margin-right: auto;	
-	border: 1px solid red;
-}
-table.window > div{
-	width: 100%;	
-}
-*/
 
-.header{
+.header {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.form {
+	width: 85%;
+	margin: 0px auto;
 }
 
 table.jobTable, .detailsForm{
@@ -174,6 +161,8 @@ table.jobTable td img, .detailsForm img{
 	padding: 0.5em 3em 0.5em 0.5em;
 	background-color: rgb(204, 204, 255);
 	display: block;
+	width: 80%;
+	margin: 0px auto;
 }
 
 *.footer{
@@ -182,13 +171,14 @@ table.jobTable td img, .detailsForm img{
 }
 
 *.navigation{
-	margin: 1em 0em 1em 0em;
+	margin: 1em auto;
 	border-color: black;
 	border-style: solid;
 	border-width: 1px 0px 1px 0px;
 	padding: 1em;
 	text-align: center;
 	height: 30px;
+	width: 80%;
 }
 
 a, .link{
@@ -197,8 +187,7 @@ a, .link{
 	cursor: pointer;
 }
 
-*.navigation *{
-	font-size: 80%;
+*.navigation a {
 	display: block;
 	width: 12%;
 	float: left;

@@ -2,24 +2,22 @@ package rega.genotype.ui.viruses.nrv;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.AbstractCsvGenerator;
-import rega.genotype.ui.data.DefaultCsvGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
-import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.nrv.NRVTool;
+import eu.webtoolkit.jwt.WString;
 
 public class NrvDefinition implements OrganismDefinition {
 	private NrvGenome genome = new NrvGenome(this);
@@ -38,7 +36,7 @@ public class NrvDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/nrv/";
 	}
 
-	public AbstractCsvGenerator getCsvGenerator(PrintStream ps) {
+	public AbstractCsvGenerator getCsvGenerator(Writer ps) throws IOException {
 		return new NrvCsvGenerator(ps);
 	}
 
@@ -55,14 +53,14 @@ public class NrvDefinition implements OrganismDefinition {
 		
 		String phyloResult = result + "['phylo-" + region + "']";
 		if (p.elementExists(phyloResult)) {
-			WMessage title = WMessage.lt("Phylogenetic analyses (" + region + ")");
+			WString title = WString.lt("Phylogenetic analyses (" + region + ")");
 			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title));
 
-			String bestGenotype = p.getValue(phyloResult + ".best.id");
+			String bestGenotype = p.getEscapedValue(phyloResult + ".best.id");
 			
 			String variantResult = result + "['phylo-" + region + "-" + bestGenotype + "']";
 			if (p.elementExists(variantResult)) {
-				WMessage variantTitle = WMessage.lt("Phylogenetic analyses (" + region + ") for variant within "
+				WString variantTitle = WString.lt("Phylogenetic analyses (" + region + ") for variant within "
 						+ bestGenotype);
 				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle));
 			}

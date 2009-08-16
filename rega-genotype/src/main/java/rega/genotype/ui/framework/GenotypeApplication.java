@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import net.sf.witty.wt.WApplication;
-import net.sf.witty.wt.WEnvironment;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WEnvironment;
 
 public class GenotypeApplication extends WApplication
 {

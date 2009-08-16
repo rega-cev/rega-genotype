@@ -1,9 +1,9 @@
 package rega.genotype.ui.forms;
 
-import net.sf.witty.wt.WBreak;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WText;
 import rega.genotype.ui.framework.GenotypeWindow;
+import eu.webtoolkit.jwt.WBreak;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WText;
 
 public abstract class IForm extends WContainerWidget {
 	private WText title;
@@ -17,7 +17,7 @@ public abstract class IForm extends WContainerWidget {
 		this.main = main;
 		this.title = new WText(main.getResourceManager().getOrganismValue(title, "title"), this);
 		this.title.setStyleClass("header-mainTitle");
-		this.setStyleClass(cssClass);
+		this.setStyleClass(cssClass + " form");
 		new WBreak(this);
 	}
 	

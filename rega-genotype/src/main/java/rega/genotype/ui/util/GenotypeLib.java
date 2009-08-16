@@ -14,11 +14,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.Writer;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
@@ -26,12 +26,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-
-import net.sf.witty.wt.WAnchor;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WFileResource;
-import net.sf.witty.wt.WImage;
-import net.sf.witty.wt.WResource;
 
 import org.apache.commons.io.IOUtils;
 
@@ -41,6 +35,13 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.ui.data.OrganismDefinition;
+import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WImage;
+import eu.webtoolkit.jwt.WResource;
+import eu.webtoolkit.jwt.WString;
 
 public class GenotypeLib {
 	
@@ -177,6 +178,10 @@ public class GenotypeLib {
 	public static WImage getWImageFromFile(final File f) {
 		System.out.println("*** getWImageFromFile: "+ f.getAbsolutePath());
 		WImage chartImage = new WImage(new WResource() {
+			
+			{
+				suggestFileName("x.png");
+			}
 
             @Override
             public String resourceMimeType() {
@@ -184,7 +189,7 @@ public class GenotypeLib {
             }
 
             @Override
-            protected void streamResourceData(OutputStream stream) {
+            protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {
 				try {
 					FileInputStream fis = new FileInputStream(f);
 	                try {
@@ -199,9 +204,10 @@ public class GenotypeLib {
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
+				return true;
             }
             
-        }, (WContainerWidget)null);
+        }, new WString(""), (WContainerWidget)null);
 		
 		return chartImage;
 	}
@@ -214,7 +220,7 @@ public class GenotypeLib {
                 return "image/"+fileName.substring(fileName.lastIndexOf('.')+1);
             }
             @Override
-            protected void streamResourceData(OutputStream stream) {
+            protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {
             	InputStream is = this.getClass().getResourceAsStream(od.getOrganismDirectory()+fileName);
                 try {
                     IOUtils.copy(is, stream);
@@ -224,8 +230,10 @@ public class GenotypeLib {
             	} finally {
             		IOUtils.closeQuietly(is);
             	}
+            	
+            	return true;
             }
-        }, parent);
+        }, new WString(""), parent);
 	}
 	
 	public static File getFile(File jobDir, String fileName) {
@@ -233,9 +241,9 @@ public class GenotypeLib {
 	}
 	
 	public static WAnchor getAnchor(String text, String fileType, File f) {
-		WAnchor anchor = new WAnchor((String)null, WContainerWidget.lt(text));
+		WAnchor anchor = new WAnchor("", WContainerWidget.lt(text));
 		anchor.setStyleClass("link");
-		anchor.setAttributeValue("target", "_new");
+		anchor.setTarget(AnchorTarget.TargetNewWindow);
 		WResource fr = new WFileResource(fileType, f.getAbsolutePath());
 		fr.suggestFileName(f.getName());
 		anchor.setRef(fr.generateUrl());

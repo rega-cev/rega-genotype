@@ -4,18 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.witty.wt.SignalListener;
-import net.sf.witty.wt.WMouseEvent;
-import net.sf.witty.wt.WText;
-import net.sf.witty.wt.WWidget;
-import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WWidget;
 
 public class NrvJobOverview extends AbstractJobOverview {
-	private List<WMessage> headers = new ArrayList<WMessage>();
+	private List<WString> headers = new ArrayList<WString>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
 	public NrvJobOverview(GenotypeWindow main) {
@@ -33,17 +34,10 @@ public class NrvJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final SaxParser p) {
 		data.clear();
 		
-		data.add(new WText(lt(p.getValue("genotype_result.sequence[name]"))));
-		data.add(new WText(lt(p.getValue("genotype_result.sequence[length]"))));
+		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[name]"))));
+		data.add(new WText(lt(p.getEscapedValue("genotype_result.sequence[length]"))));
 		
-		WText report = new WText(lt("Report"));
-		report.setStyleClass("link");
-		final int index = p.getSequenceIndex();
-		report.clicked.addListener(new SignalListener<WMouseEvent>() {
-			public void notify(WMouseEvent a) {
-				getMain().detailsForm(jobDir, index);
-			}
-		});
+		WAnchor report = createReportLink(p);
 		data.add(report);
 
 		data.add(new WText(lt(NrvResults.getConclusion(p, "ORF1"))));
@@ -57,13 +51,15 @@ public class NrvJobOverview extends AbstractJobOverview {
 					0, "", null)));
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
 		}
 		
 		return data;
 	}
 
 	@Override
-	public List<WMessage> getHeaders() {
+	public List<WString> getHeaders() {
 		return headers;
 	}
 

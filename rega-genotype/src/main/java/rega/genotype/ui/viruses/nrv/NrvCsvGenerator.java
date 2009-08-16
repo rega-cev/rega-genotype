@@ -1,11 +1,13 @@
 package rega.genotype.ui.viruses.nrv;
 
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Writer;
 
 import rega.genotype.ui.data.AbstractCsvGenerator;
 
 public class NrvCsvGenerator extends AbstractCsvGenerator {
-	public NrvCsvGenerator(PrintStream ps) {
+	public NrvCsvGenerator(Writer ps) throws IOException {
 		super(ps);
 		ps.append("name,length,orf1,orf2,begin,end,genogroup," +
 				"ORF1_genotype,ORF1_genotype_support,ORF1_inner_support,ORF1_outer_support," +
@@ -16,7 +18,7 @@ public class NrvCsvGenerator extends AbstractCsvGenerator {
 		ps.append("\n");
 	}
     
-	public void writeLine(PrintStream ps) {
+	public void writeLine(Writer ps) throws IOException {
     	StringBuilder csvLine = new StringBuilder();
     	
     	csvLine.append(addCsvValue("genotype_result.sequence[name]", true));

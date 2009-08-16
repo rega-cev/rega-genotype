@@ -1,9 +1,9 @@
 package rega.genotype.ui.framework;
 
-import net.sf.witty.wt.Configuration;
-import net.sf.witty.wt.WApplication;
-import net.sf.witty.wt.WEnvironment;
-import net.sf.witty.wt.WebController;
+import eu.webtoolkit.jwt.Configuration;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WEnvironment;
+import eu.webtoolkit.jwt.WebController;
 
 public abstract class GenotypeMain extends WebController
 {

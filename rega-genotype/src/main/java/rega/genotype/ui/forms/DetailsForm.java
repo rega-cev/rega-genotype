@@ -2,12 +2,12 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 
-import net.sf.witty.wt.WBreak;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WText;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
+import eu.webtoolkit.jwt.WBreak;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WText;
 
 public class DetailsForm extends IForm {
 	private WContainerWidget mainTable;
@@ -78,6 +78,6 @@ public class DetailsForm extends IForm {
 	}
 	
 	public String getSequenceName() {
-		return p.getValue("genotype_result.sequence[name]");
+		return p.getEscapedValue("genotype_result.sequence[name]");
 	}
 }

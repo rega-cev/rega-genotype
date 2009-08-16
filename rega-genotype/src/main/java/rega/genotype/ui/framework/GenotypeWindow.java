@@ -1,19 +1,17 @@
 package rega.genotype.ui.framework;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
-import net.sf.witty.wt.SignalListener;
-import net.sf.witty.wt.WApplication;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WImage;
-import net.sf.witty.wt.WMouseEvent;
-import net.sf.witty.wt.WTable;
-import net.sf.witty.wt.WText;
+import javax.swing.text.NavigationFilter;
+
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.ContactUsForm;
 import rega.genotype.ui.forms.DecisionTreesForm;
 import rega.genotype.ui.forms.DetailsForm;
+import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.forms.ExampleSequencesForm;
 import rega.genotype.ui.forms.HowToCiteForm;
 import rega.genotype.ui.forms.IForm;
@@ -24,9 +22,28 @@ import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
 import rega.genotype.ui.util.StateLink;
+import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WImage;
+import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WText;
 
 public class GenotypeWindow extends WContainerWidget
 {
+	private static final String START_URL = "/";
+	private static final String EXAMPLES_URL = "/examples";
+	private static final String METHOD_URL = "/method";
+	private static final String DECISIONTREES_URL = "/decisiontrees";
+	private static final String TUTORIAL_URL = "/tutorial";
+	private static final String CITE_URL = "/cite";
+	private static final String JOB_URL = "/job";
+	private static final String CONTACT_URL = "/contact";
+
+	private Map<String, IForm> forms = new HashMap<String, IForm>();
+	
 	private IForm activeForm;
 		
 	private WContainerWidget content;
@@ -42,24 +59,11 @@ public class GenotypeWindow extends WContainerWidget
 
 	private GenotypeResourceManager resourceManager;
 	
-	private WText start;
 	private StartForm startForm;
 	private StateLink monitor;
 	private AbstractJobOverview monitorForm;
 	private DetailsForm detailsForm;
-	private WText howToCite;
-	private HowToCiteForm howToCiteForm;
-	private WText tutorial;
-	private TutorialForm tutorialForm;
-	private WText decisionTrees;
-	private DecisionTreesForm decisionTreesForm;
-	private WText subtypingProcess;
-	private SubtypingProcessForm subtypingProcessForm;
-	private WText exampleSequences;
-	private ExampleSequencesForm exampleSequencesForm;
-	private WText contactUs;
-	private ContactUsForm contactUsForm;
-	
+
 	public GenotypeWindow(OrganismDefinition od)
 	{
 		super();
@@ -72,99 +76,65 @@ public class GenotypeWindow extends WContainerWidget
 	private void loadI18nResources()
 	{
 		resourceManager = new GenotypeResourceManager("/rega/genotype/ui/i18n/resources/common_resources.xml", od.getOrganismDirectory()+"resources.xml");
-		WApplication.instance().messageResourceBundle().useResource(resourceManager);
+		WApplication.instance().setLocalizedStrings(resourceManager);
 	}
 
 	public void init() {
 		loadI18nResources();
 
 		setStyleClass("root");
-		WApplication.instance().useStyleSheet("style/genotype.css");
+		WApplication.instance().useStyleSheet("/style/genotype.css");
 
 		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
 		header.setStyleClass("header");
-		
+
 		content = new WContainerWidget(this);
 		content.setStyleClass("content");
-		
+
 		WContainerWidget navigation = new WContainerWidget(this);
 		navigation.setStyleClass("navigation");
-		
+
 		footer = new WText(resourceManager.getOrganismValue("main-form", "footer"), this);
 		footer.setStyleClass("footer");
 
+		addLink(navigation, tr("main.navigation.start"), START_URL, startForm = new StartForm(this));
 
-		
-		start = new WText(tr("main.navigation.start"), navigation);
-		start.clicked.addListener(new SignalListener<WMouseEvent>(){
-			public void notify(WMouseEvent a) {
-				startForm();
-			}
-		});
-		start.setStyleClass("link");
-		monitor = new StateLink("main.navigation.monitor", navigation, "${jobId}"){
-			public void clickAction(String value) {
-				monitorForm(new File(Settings.getInstance().getJobDir().getAbsolutePath()+File.separatorChar+value));
-			}
-		};
-		howToCite = new WText(tr("main.navigation.howToCite"), navigation);
-		howToCite.setStyleClass("link");
-		howToCite.clicked.addListener(new SignalListener<WMouseEvent>(){
-			public void notify(WMouseEvent a) {
-				if(howToCiteForm==null)
-					howToCiteForm = new HowToCiteForm(GenotypeWindow.this);
-				setForm(howToCiteForm);
-			}
-		});
-		tutorial = new WText(tr("main.navigation.tutorial"), navigation);
-		tutorial.setStyleClass("link");
-		tutorial.clicked.addListener(new SignalListener<WMouseEvent>(){
-			public void notify(WMouseEvent a) {
-				if(tutorialForm==null)
-					tutorialForm = new TutorialForm(GenotypeWindow.this);
-				setForm(tutorialForm);
-			}
-		});
-		decisionTrees = new WText(tr("main.navigation.decisionTrees"), navigation);
-		decisionTrees.setStyleClass("link");
-		decisionTrees.clicked.addListener(new SignalListener<WMouseEvent>(){
-			public void notify(WMouseEvent a) {
-				if(decisionTreesForm==null)
-					decisionTreesForm = new DecisionTreesForm(GenotypeWindow.this);
-				setForm(decisionTreesForm);
-			}
-		});
-		subtypingProcess = new WText(tr("main.navigation.subtypingProcess"), navigation);
-		subtypingProcess.setStyleClass("link");
-		subtypingProcess.clicked.addListener(new SignalListener<WMouseEvent>() {
-			public void notify(WMouseEvent a) {
-				if(subtypingProcessForm==null)
-					subtypingProcessForm = new SubtypingProcessForm(GenotypeWindow.this);
-				setForm(subtypingProcessForm);
-			}
-		});
-		exampleSequences = new WText(tr("main.navigation.exampleSequences"), navigation);
-		exampleSequences.setStyleClass("link");
-		exampleSequences.clicked.addListener(new SignalListener<WMouseEvent>() {
-			public void notify(WMouseEvent a) {
-				if(exampleSequencesForm==null)
-					exampleSequencesForm = new ExampleSequencesForm(GenotypeWindow.this);
-				setForm(exampleSequencesForm);
-			}
-		});
-		contactUs = new WText(tr("main.navigation.contactUs"), navigation);
-		contactUs.setStyleClass("link");
-		contactUs.clicked.addListener(new SignalListener<WMouseEvent>() {
-			public void notify(WMouseEvent a) {
-				if(contactUsForm==null) 
-					contactUsForm = new ContactUsForm(GenotypeWindow.this);
-				setForm(contactUsForm);
-			}
-		});
-		
-		startForm();
+		monitor = new StateLink(tr("main.navigation.monitor"), JOB_URL, navigation);
+
+		addLink(navigation, tr("main.navigation.howToCite"), CITE_URL, new HowToCiteForm(this));
+		addLink(navigation, tr("main.navigation.tutorial"), TUTORIAL_URL, new TutorialForm(this));
+		addLink(navigation, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, new DecisionTreesForm(this));
+		addLink(navigation, tr("main.navigation.subtypingProcess"), METHOD_URL, new SubtypingProcessForm(this));
+		addLink(navigation, tr("main.navigation.exampleSequences"), EXAMPLES_URL, new ExampleSequencesForm(this));
+		addLink(navigation, tr("main.navigation.contactUs"), CONTACT_URL, new ContactUsForm(this));
+
+		GenotypeMain.getApp().internalPathChanged.addListener(this, new Signal1.Listener<String>() {
+
+			public void trigger(String basePath) {
+				if (basePath.equals("/")) {
+					String newPath = "/" + GenotypeMain.getApp().internalPathNextPart(basePath);
+
+					IForm f = forms.get(newPath);
+
+					if (f != null)
+						setForm(f);
+				} else if (basePath.equals("/job/")) {
+					String jobId = GenotypeMain.getApp().internalPathNextPart(basePath);
+					monitorForm(new File(Settings.getInstance().getJobDir().getAbsolutePath()+File.separatorChar+jobId), false);
+				}
+			} });
+
+		startForm.init();
+		setForm(startForm);
 	}
-	
+
+	private void addLink(WContainerWidget parent, WString text, String url, IForm form) {
+		WAnchor a = new WAnchor("", text, parent);
+		a.setRefInternalPath(url);
+		a.setStyleClass("link");
+		forms.put(url, form);
+	}
+
 	private void setForm(IForm form) {
 		if(activeForm!=null)
 			activeForm.hide();
@@ -175,25 +145,41 @@ public class GenotypeWindow extends WContainerWidget
 		}
 	}
 	
-	public void startForm() {
-		if(startForm==null)
-			startForm = new StartForm(this);
-		startForm.init();
-		setForm(startForm);
-	}
-	
-	public void monitorForm(File jobDir) {
-		if(monitorForm==null)
+	public void monitorForm(File jobDir, boolean setUrl) {
+		if (monitorForm==null)
 			monitorForm = od.getJobOverview(this);
 		monitorForm.init(jobDir);
-		monitor.setVarValue(jobDir.getAbsolutePath().substring(jobDir.getAbsolutePath().lastIndexOf(File.separatorChar)+1));
+		monitor.setVarValue(jobId(jobDir));
+		
+		if (setUrl) {
+			WApplication app = WApplication.instance();
+			app.setInternalPath(monitor.ref());
+			if (!app.environment().ajax())
+				app.redirect(app.bookmarkUrl(monitor.ref()));
+		}
+
 		setForm(monitorForm);
 	}
-	
+
 	public void detailsForm(File jobDir, int selectedSequenceIndex) {
-		if(detailsForm==null)
+		if (detailsForm==null)
 			detailsForm = new DetailsForm(this);
+
+		monitor.setVarValue(jobId(jobDir));
 		detailsForm.init(jobDir, selectedSequenceIndex);
+
 		setForm(detailsForm);
 	}
+
+	public static String reportPath(File jobDir, int sequenceIndex) {
+		return jobPath(jobDir) + '/' + String.valueOf(sequenceIndex);
+	}
+
+	public static String jobPath(File jobDir) {
+		return JOB_URL + '/' + jobId(jobDir);
+	}
+	
+	public static String jobId(File jobDir) {
+		return jobDir.getAbsolutePath().substring(jobDir.getAbsolutePath().lastIndexOf(File.separatorChar)+1);
+	}	
 }

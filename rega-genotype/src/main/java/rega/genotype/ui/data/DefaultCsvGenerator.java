@@ -1,14 +1,16 @@
 package rega.genotype.ui.data;
 
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Writer;
 
 public class DefaultCsvGenerator extends AbstractCsvGenerator {
-	public DefaultCsvGenerator(PrintStream ps) {
+	public DefaultCsvGenerator(Writer ps) throws IOException {
 		super(ps);
 		ps.append("name,length,assignment,support,begin,end,type,pure,pure_support,pure_inner,pure_outer,scan_best_support,scan_assigned_support,scan_assigned_nosupport,scan_best_profile,scan_assigned_profile,crf,crf_support,crf_inner,crf_outer,crfscan_best_support,crfscan_assigned_support,crfscan_assigned_nosupport,crfscan_best_profile,crfscan_assigned_profile,major_id,minor_id\n");
 	}
     
-	public void writeLine(PrintStream ps) {
+	public void writeLine(Writer ps) throws IOException {
     	StringBuilder csvLine = new StringBuilder();
     	
     	csvLine.append(addCsvValue("genotype_result.sequence[name]", true));

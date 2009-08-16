@@ -1,27 +1,32 @@
 package rega.genotype.ui.forms;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
 
-import net.sf.witty.wt.SignalListener;
-import net.sf.witty.wt.WAnchor;
-import net.sf.witty.wt.WBreak;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WEmptyEvent;
-import net.sf.witty.wt.WFileResource;
-import net.sf.witty.wt.WResource;
-import net.sf.witty.wt.WTable;
-import net.sf.witty.wt.WText;
-import net.sf.witty.wt.WTimer;
-import net.sf.witty.wt.WWidget;
-import net.sf.witty.wt.i8n.WArgMessage;
-import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.AbstractCsvGenerator;
 import rega.genotype.ui.data.SaxParser;
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WBreak;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WResource;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WTable;
+import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WTimer;
+import eu.webtoolkit.jwt.WWidget;
 
 public abstract class AbstractJobOverview extends IForm {
 	protected File jobDir;
@@ -39,8 +44,8 @@ public abstract class AbstractJobOverview extends IForm {
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main, "monitor-form");
 	
-		WArgMessage aipm = new WArgMessage("monitorForm.analysisInProgress");
-		aipm.addArgument("${monitorForm.analysisInProgress.updateTime}", getMain().getOrganismDefinition().getUpdateInterval()/1000);
+		WString aipm = tr("monitorForm.analysisInProgress");
+		aipm.arg(getMain().getOrganismDefinition().getUpdateInterval()/1000);
 		analysisInProgress = new WText(aipm, this);
 		analysisInProgress.setStyleClass("analysisProgress");
 		
@@ -55,6 +60,23 @@ public abstract class AbstractJobOverview extends IForm {
 		if(updater!=null) {
 			updater.start();
 		}
+		
+		GenotypeMain.getApp().internalPathChanged.addListener(this, new Signal1.Listener<String>() {
+
+			public void trigger(String basePath) {
+				if (basePath.equals(GenotypeWindow.jobPath(jobDir) + '/')) {
+					try {
+						String id = GenotypeMain.getApp().internalPathNextPart(basePath);
+						if (!id.equals("")) {
+							int sequenceIndex = Integer.valueOf(id);
+							getMain().detailsForm(jobDir, sequenceIndex);
+						}
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					}
+				}
+			} });
+
 	}
 	
 	public void init(File jobDir) {
@@ -80,8 +102,8 @@ public abstract class AbstractJobOverview extends IForm {
 
 			updater = new WTimer();
 			updater.setInterval(getMain().getOrganismDefinition().getUpdateInterval());
-			updater.timeout.addListener(new SignalListener<WEmptyEvent>() {
-				public void notify(WEmptyEvent a) {
+			updater.timeout.addListener(this, new Signal.Listener() {
+				public void trigger() {
 					if(!fillingTable)
 						fillTable();
 					System.err.println("lala---------------------");
@@ -96,9 +118,9 @@ public abstract class AbstractJobOverview extends IForm {
 	public void fillTable() {
 		fillingTable = true;
 		if(jobTable.numRows()==0) {
-			List<WMessage> headers = getHeaders();
+			List<WString> headers = getHeaders();
 			for(int i = 0; i<headers.size(); i++) {
-				jobTable.putElementAt(0, i, new WText(headers.get(i)));
+				jobTable.elementAt(0, i).addWidget(new WText(headers.get(i)));
 				jobTable.elementAt(0, i).setStyleClass("jobTableHeader");
 			}
 		}
@@ -112,30 +134,36 @@ public abstract class AbstractJobOverview extends IForm {
 			analysisInProgress.setHidden(true);
 
 			WText downloadResult = new WText(tr("monitorForm.downloadResults"), downloadContainer);
-			WAnchor xmlFileDownload = new WAnchor((String)null, tr("monitorForm.xmlFile"), downloadContainer);
+			WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"), downloadContainer);
 			// Wt2:
 			//xmlFileDownload.etTarget(AnchorTarget.TargetNewWindow);
 			xmlFileDownload.setAttributeValue("target", "_new");
 			xmlFileDownload.setStyleClass("link");
+			xmlFileDownload.setTarget(AnchorTarget.TargetNewWindow);
 			WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 			xmlResource.suggestFileName("result.xml");
 			xmlFileDownload.setRef(xmlResource.generateUrl());
 			
 			new WText(lt(" , "), downloadContainer);
 			
-			WAnchor csvTableDownload = new WAnchor((String)null, tr("monitorForm.csvTable"), downloadContainer);
+			WAnchor csvTableDownload = new WAnchor("", tr("monitorForm.csvTable"), downloadContainer);
 			csvTableDownload.setAttributeValue("target", "_new");
 			csvTableDownload.setStyleClass("link");
+			csvTableDownload.setTarget(AnchorTarget.TargetNewWindow);
 			WResource csvResource = new WResource() {
 				@Override
 				public String resourceMimeType() {
 					return "application/excell";
 				}
-			
+				// TODO Auto-generated catch block
+
 				@Override
-				protected void streamResourceData(OutputStream stream) {
-					AbstractCsvGenerator acsvgen = AbstractJobOverview.this.getMain().getOrganismDefinition().getCsvGenerator(new PrintStream(stream));
+				protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {
+					Writer w = new OutputStreamWriter(stream, "UTF-8");
+					AbstractCsvGenerator acsvgen = AbstractJobOverview.this.getMain().getOrganismDefinition().getCsvGenerator(w);
 					acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
+					w.flush();
+					return true;
 				}
 				
 			};
@@ -146,14 +174,16 @@ public abstract class AbstractJobOverview extends IForm {
 			new WText(tr("monitorForm.downloadJob"),downloadContainer);
 
 			final File jobArchive = GenotypeLib.getZipArchiveFileName(jobDir);
-			WAnchor jobFileDownload = new WAnchor((String)null, tr("monitorForm.jobFile"), downloadContainer);
+			WAnchor jobFileDownload = new WAnchor("", tr("monitorForm.jobFile"), downloadContainer);
 			jobFileDownload.setAttributeValue("target", "_new");
 			jobFileDownload.setStyleClass("link");
+			jobFileDownload.setTarget(AnchorTarget.TargetNewWindow);
 			WResource jobResource = new WFileResource("application/zip", jobArchive.getAbsolutePath()) {
 				@Override
-				protected void streamResourceData(OutputStream stream) {
+				protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) {
 					GenotypeLib.zip(jobDir, jobArchive);
-					super.streamResourceData(stream);
+					super.streamResourceData(stream, arguments);
+					return true;
 				}
 					
 			};
@@ -171,13 +201,20 @@ public abstract class AbstractJobOverview extends IForm {
 			if(getSequenceIndex()>=numRows) {
 				List<WWidget> data = getData(p);
 				for(int i = 0; i<data.size(); i++) {
-					jobTable.putElementAt(getSequenceIndex()+1, i, data.get(i));
+					jobTable.elementAt(getSequenceIndex()+1, i).addWidget(data.get(i));
 				}
 			}
 		}
 	};
 	
-	public abstract List<WMessage> getHeaders();
+	public abstract List<WString> getHeaders();
 	
 	public abstract List<WWidget> getData(SaxParser p);
+
+	protected WAnchor createReportLink(final SaxParser p) {
+		WAnchor report = new WAnchor("", lt("Report"));
+		report.setStyleClass("link");
+		report.setRefInternalPath(GenotypeWindow.reportPath(jobDir, p.getSequenceIndex()));
+		return report;
+	}
 }

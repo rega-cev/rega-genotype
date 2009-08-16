@@ -1,44 +1,42 @@
 package rega.genotype.ui.util;
 
-import net.sf.witty.wt.SignalListener;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WMouseEvent;
-import net.sf.witty.wt.WText;
-import net.sf.witty.wt.i8n.WArgMessage;
+import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WText;
 
-public abstract class StateLink extends WText {
-	String varName;
-	
-	public StateLink(String text, WContainerWidget parent, String varName) {
-		super(new WArgMessage(text), parent);
-		this.varName = varName;
-		
-		((WArgMessage)text()).addArgument(varName, "");
+public class StateLink extends WAnchor {
+
+	private String baseUrl;
+
+	public StateLink(WString ws, String url, WContainerWidget parent) {
+		super("", ws, parent);
+
+		text().arg("");
 		
 		this.setStyleClass("non-link");
-		
-		this.clicked.addListener(new SignalListener<WMouseEvent>(){
-			public void notify(WMouseEvent a) {
-				String value = ((WArgMessage)text()).getArgument(StateLink.this.varName);
-				if(!value.equals("")) {
-					clickAction(value);
-				}
-			}
-		});
+		this.baseUrl = url;
+		this.setRefInternalPath(baseUrl);
 	}
 	
 	public void setVarValue(String value) {
-		WArgMessage m = ((WArgMessage)text());
-		m.changeArgument(varName, value);
+		/*
+		 * Update link text
+		 */
+		text().args().clear();
+		text().args().add(value);
 		
-		if(value.equals("")) {
+		if (value.equals("")) {
+			setRefInternalPath(baseUrl);
 			this.setStyleClass("non-link");
 		} else {
+			setRefInternalPath(baseUrl + '/' + value);
 			this.setStyleClass("link");
 		}
 		
 		refresh();
 	}
-	
-	public abstract void clickAction(String value);
 }

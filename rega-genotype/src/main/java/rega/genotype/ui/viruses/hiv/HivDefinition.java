@@ -2,11 +2,10 @@ package rega.genotype.ui.viruses.hiv;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.witty.wt.i8n.WMessage;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
@@ -24,6 +23,7 @@ import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.hiv.HIVTool;
+import eu.webtoolkit.jwt.WString;
 
 public class HivDefinition implements OrganismDefinition {
 	private HivGenome genome = new HivGenome(this);
@@ -42,8 +42,8 @@ public class HivDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/hiv/";
 	}
 
-	public AbstractCsvGenerator getCsvGenerator(PrintStream ps) {
-		return new DefaultCsvGenerator(ps);
+	public AbstractCsvGenerator getCsvGenerator(Writer w) throws IOException {
+		return new DefaultCsvGenerator(w);
 	}
 
 	public Genome getGenome() {
@@ -57,14 +57,14 @@ public class HivDefinition implements OrganismDefinition {
 	public List<IDetailsForm> getSupportingDetailsforms(SaxParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
 
-		WMessage m = WMessage.lt("Phylogenetic analysis with pure subtypes:");
+		WString m = WString.lt("Phylogenetic analysis with pure subtypes:");
 		
 		if (p.elementExists("genotype_result.sequence.result['pure']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m));
 		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m));
 
-		m = WMessage.lt("Phylogenetic analysis with pure subtypes and CRFs:");
+		m = WString.lt("Phylogenetic analysis with pure subtypes and CRFs:");
 
 		if (p.elementExists("genotype_result.sequence.result['crf']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m));

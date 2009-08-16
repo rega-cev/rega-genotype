@@ -17,6 +17,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import eu.webtoolkit.jwt.utils.StringUtils;
+
 public abstract class SaxParser extends DefaultHandler {
 	private List<String> currentPath = new ArrayList<String>();
 
@@ -88,14 +90,14 @@ public abstract class SaxParser extends DefaultHandler {
         xmlReader.setContentHandler(this);
         xmlReader.setErrorHandler(this);
         try {
-        xmlReader.parse(source);
+        	xmlReader.parse(source);
         } catch (SAXParseException spe) {
         	if(!spe.getMessage().equals("XML document structures must start and end within the same entity."))
         		spe.printStackTrace();
         }
     }
-    
-    public void parseFile(File jobDir) {
+
+	public void parseFile(File jobDir) {
     	File resultFile = new File(jobDir.getAbsolutePath()+File.separatorChar+"result.xml");
     	
     	if(resultFile.exists()) {
@@ -142,6 +144,14 @@ public abstract class SaxParser extends DefaultHandler {
     
     public String getValue(String name) {
     	return valuesMap.get(name);
+    }
+    
+    public String getEscapedValue(String name) {
+    	String value = getValue(name);
+    	if(value==null)
+    		return null;
+    	else
+    		return StringUtils.escapeText(value, true);
     }
     
     public boolean elementExists(String name) {

@@ -1,11 +1,11 @@
 package rega.genotype.ui.util;
 
-import net.sf.witty.wt.SignalListener;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WEmptyEvent;
-import net.sf.witty.wt.WFileUpload;
-import net.sf.witty.wt.WMouseEvent;
-import net.sf.witty.wt.WPushButton;
+import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WFileUpload;
+import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WPushButton;
 
 public class FileUpload extends WContainerWidget {
 	private WFileUpload uploadFile;
@@ -14,16 +14,16 @@ public class FileUpload extends WContainerWidget {
 	public FileUpload() {
 		setStyleClass("fileUpload");
         uploadFile = new WFileUpload(this);
-        uploadFile.uploaded.addListener(new SignalListener<WEmptyEvent>()  {
-            public void notify(WEmptyEvent a) {
+        uploadFile.uploaded.addListener(this, new Signal.Listener()  {
+            public void trigger() {
                 uploadButton.setEnabled(true);
                 uploadButton.setText(tr("sequenceInput.uploadFile"));
             }
         });
         
         uploadButton = new WPushButton(tr("sequenceInput.uploadFile"), this);
-        uploadButton.clicked.addListener(new SignalListener<WMouseEvent>() {
-            public void notify(WMouseEvent a) {
+        uploadButton.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
+            public void trigger(WMouseEvent a) {
                 uploadButton.setText(tr("sequenceInput.uploadingFile"));
             	uploadFile.upload();
             }

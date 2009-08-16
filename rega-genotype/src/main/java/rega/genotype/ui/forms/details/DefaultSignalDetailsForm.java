@@ -2,14 +2,14 @@ package rega.genotype.ui.forms.details;
 
 import java.io.File;
 
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WText;
-import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WText;
 
 public class DefaultSignalDetailsForm extends IDetailsForm {
 
@@ -18,24 +18,24 @@ public class DefaultSignalDetailsForm extends IDetailsForm {
 		WListContainerWidget ul = new WListContainerWidget(this);
 		WContainerWidget li;
 		li = ul.addItem(new WText(tr("defaultSignalAnalysis.signalValue")));
-		li.addWidget(new WText(lt(p.getValue("genotype_result.sequence.result['pure-puzzle'].signal"))));
+		li.addWidget(new WText(lt(p.getEscapedValue("genotype_result.sequence.result['pure-puzzle'].signal"))));
 		li = ul.addItem(new WText(tr("defaultSignalAnalysis.signalComment")));
 		
 		addWidget(GenotypeLib.getWImageFromFile(GenotypeLib.getSignalPNG(GenotypeLib.getFile(jobDir, p.getValue("genotype_result.sequence.result['pure-puzzle'].puzzle")))));
 	}
 	
 	@Override
-	public WMessage getComment() {
+	public WString getComment() {
 		return tr("defaultSignalAnalysis.comment");
 	}
 
 	@Override
-	public WMessage getTitle() {
+	public WString getTitle() {
 		return tr("defaultSignalAnalysis.title");
 	}
 
 	@Override
-	public WMessage getExtraComment() {
+	public WString getExtraComment() {
 		return tr("defaultSignalAnalysis.extraComment");
 	}
 }

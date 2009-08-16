@@ -2,16 +2,15 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 
-import net.sf.witty.wt.WBreak;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WTable;
-import net.sf.witty.wt.WText;
-
 import org.jdom.Element;
 
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.recombination.Table;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.WBreak;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WTable;
+import eu.webtoolkit.jwt.WText;
 
 public class DocumentationForm extends IForm {
 	public DocumentationForm(GenotypeWindow main, String title) {
@@ -61,7 +60,7 @@ public class DocumentationForm extends IForm {
 
 		for(int i = 0; i<csvTable.numRows(); i++) {
 			for(int j = 0; j<csvTable.numColumns(); j++) {
-				table.putElementAt(i, j, new WText(lt(csvTable.valueAt(j, i))));
+				table.elementAt(i, j).addWidget(new WText(lt(csvTable.valueAt(j, i))));
 			}
 		}
 		return table;

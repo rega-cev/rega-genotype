@@ -2,23 +2,23 @@ package rega.genotype.ui.forms.details;
 
 import java.io.File;
 
-import net.sf.witty.wt.WBreak;
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WText;
-import net.sf.witty.wt.i8n.WMessage;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.WBreak;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WText;
 
 public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 	
 	private String xpath;
-	private WMessage commentTitle;
-	private WMessage title;
+	private WString commentTitle;
+	private WString title;
 
-	public DefaultPhylogeneticDetailsForm(String xpath, WMessage title, WMessage commentTitle) {
+	public DefaultPhylogeneticDetailsForm(String xpath, WString title, WString commentTitle) {
 		this.xpath = xpath;
 		this.title = title;
 		this.commentTitle = commentTitle;
@@ -29,7 +29,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		initPhyloSection(p, commentTitle, jobDir, phyloPath);
 	}
 	
-	private void initPhyloSection(SaxParser p, WMessage header, File jobDir, String phyloPath) {
+	private void initPhyloSection(SaxParser p, WString header, File jobDir, String phyloPath) {
 		addWidget(new WText(header));
 		addWidget(new WBreak());
 
@@ -56,16 +56,16 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment"))));
 	}
 
-	public WMessage getComment() {
+	public WString getComment() {
 		return tr("defaultPhylogeneticAnalyses.comment");
 	}
 
-	public WMessage getTitle() {
+	public WString getTitle() {
 		return title != null ? title : tr("defaultPhylogeneticAnalyses.title");
 	}
 
 	@Override
-	public WMessage getExtraComment() {
+	public WString getExtraComment() {
 		return null;
 	}
 }

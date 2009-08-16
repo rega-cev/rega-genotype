@@ -12,7 +12,7 @@
 		<note>
 		This tool is designed to use phylogenetic methods in order to identify the norovirus genotype of a nucleotide sequences.
 		<br/>
-		<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time. 
+		<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
 		</note>
 	</start-form>
 	<monitor-form>

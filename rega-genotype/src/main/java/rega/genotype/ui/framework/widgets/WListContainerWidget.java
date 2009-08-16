@@ -2,8 +2,8 @@ package rega.genotype.ui.framework.widgets;
 
 import java.util.ArrayList;
 
-import net.sf.witty.wt.WContainerWidget;
-import net.sf.witty.wt.WWidget;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WWidget;
 
 public class WListContainerWidget extends WContainerWidget{
 	ArrayList<WContainerWidget> list = new ArrayList<WContainerWidget>(); 
