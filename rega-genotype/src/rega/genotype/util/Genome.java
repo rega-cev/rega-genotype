@@ -33,12 +33,12 @@ public abstract class Genome {
 			File csvFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + type + ".csv");
 			Table csvTable = Table.readTable(csvFile, '\t');
 		    
-		    int w[] = new int[csvTable.numRows()];
-		    String assign[] = new String[csvTable.numRows()];
+		    int w[] = new int[csvTable.numRows()-1];
+		    String assign[] = new String[csvTable.numRows()-1];
 		    
 		    for(int i = 1; i<csvTable.numRows(); i++) {
-		    	w[i] = Integer.parseInt(csvTable.valueAt(0, i));
-		    	assign[i] = csvTable.valueAt(csvTable.numColumns() -1 -variant, i);
+		    	w[i-1] = Integer.parseInt(csvTable.valueAt(0, i));
+		    	assign[i-1] = csvTable.valueAt(csvTable.numColumns() -1 -variant, i);
 		    }
 		    
 		    int imgWidth = 584;
@@ -49,6 +49,10 @@ public abstract class Genome {
 		    BufferedImage image = new BufferedImage(imgWidth,imgHeight,BufferedImage.TYPE_INT_ARGB);
 		    Graphics2D g2d = (Graphics2D)image.getGraphics();
 		    
+		    //gray background
+		    g2d.setColor(new Color(230, 230, 230));
+		    g2d.fillRect(0, 0, imgWidth, imgHeight);
+		    
 		    Map<String, Color> colorMap = COLORS();
 		    
 		    Color bgcolor = colorMap.get("-");
@@ -56,8 +60,7 @@ public abstract class Genome {
 		      bgcolor = colorMap.get(thegenotype);
 		    }
 		    
-		    //g2d.setColor(bgcolor);
-		    g2d.setColor(Color.red);
+		    g2d.setColor(bgcolor);
 		    g2d.fillRect(imgX(start), 0, imgX(end)-imgX(start), imgHeight);
 		    
 		    int x1, x2;
