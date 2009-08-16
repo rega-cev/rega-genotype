@@ -113,6 +113,9 @@ public abstract class AbstractJobOverview extends IForm {
 
 			WText downloadResult = new WText(tr("monitorForm.downloadResults"), downloadContainer);
 			WAnchor xmlFileDownload = new WAnchor((String)null, tr("monitorForm.xmlFile"), downloadContainer);
+			// Wt2:
+			//xmlFileDownload.etTarget(AnchorTarget.TargetNewWindow);
+			xmlFileDownload.setAttributeValue("target", "_new");
 			xmlFileDownload.setStyleClass("link");
 			WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 			xmlResource.suggestFileName("result.xml");
@@ -121,6 +124,7 @@ public abstract class AbstractJobOverview extends IForm {
 			new WText(lt(" , "), downloadContainer);
 			
 			WAnchor csvTableDownload = new WAnchor((String)null, tr("monitorForm.csvTable"), downloadContainer);
+			csvTableDownload.setAttributeValue("target", "_new");
 			csvTableDownload.setStyleClass("link");
 			WResource csvResource = new WResource() {
 				@Override
@@ -143,6 +147,7 @@ public abstract class AbstractJobOverview extends IForm {
 
 			final File jobArchive = GenotypeLib.getZipArchiveFileName(jobDir);
 			WAnchor jobFileDownload = new WAnchor((String)null, tr("monitorForm.jobFile"), downloadContainer);
+			jobFileDownload.setAttributeValue("target", "_new");
 			jobFileDownload.setStyleClass("link");
 			WResource jobResource = new WFileResource("application/zip", jobArchive.getAbsolutePath()) {
 				@Override

@@ -61,7 +61,7 @@ public class SequenceAlignment
     }
 
 	/*
-	 * The most unefficient java code imaginable ... ! Rewrite !
+	 * The most inefficient java code imaginable ... ! Rewrite !
 	 */
 	public void degap() {
 		for (int i = 0; i < getLength();) {

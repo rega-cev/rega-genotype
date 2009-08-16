@@ -235,6 +235,7 @@ public class GenotypeLib {
 	public static WAnchor getAnchor(String text, String fileType, File f) {
 		WAnchor anchor = new WAnchor((String)null, WContainerWidget.lt(text));
 		anchor.setStyleClass("link");
+		anchor.setAttributeValue("target", "_new");
 		WResource fr = new WFileResource(fileType, f.getAbsolutePath());
 		fr.suggestFileName(f.getName());
 		anchor.setRef(fr.generateUrl());
