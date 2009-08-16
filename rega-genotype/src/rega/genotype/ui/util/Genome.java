@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -26,12 +27,11 @@ public abstract class Genome {
 		         *((double)IMGGENOMEEND() - IMGGENOMESTART()));
 	}
 	
-	public File getGenomePNG(File jobDir, int sequenceIndex, String thegenotype, int start, int end, int variant, String type) throws IOException {
+	public File getGenomePNG(File jobDir, int sequenceIndex, String thegenotype, int start, int end, int variant, String type, String csvData) throws IOException {
 		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genome_" + sequenceIndex + "_" + type + "_" + variant + ".png");
 	
 		if(!pngFile.exists()) {
-			File csvFile = GenotypeLib.getCsvData(jobDir, sequenceIndex, type);
-			Table csvTable = Table.readTable(csvFile, '\t');
+			Table csvTable = new Table(new ByteArrayInputStream(csvData.getBytes()), false, '\t');
 		    
 		    int w[] = new int[csvTable.numRows()-1];
 		    String assign[] = new String[csvTable.numRows()-1];
@@ -88,11 +88,11 @@ public abstract class Genome {
 		return pngFile;
 	}
 	
-	public File getSmallGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, int variant, String type) throws IOException {
+	public File getSmallGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, int variant, String type, String csvData) throws IOException {
 		  File smallPngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genomesmall_" + sequenceIndex + "_" + type + "_" + variant + ".png");
 
 		  if (!smallPngFile.exists()) {
-		    File pngFile = getGenomePNG(jobDir, sequenceIndex, genotype, start, end, variant, type);
+		    File pngFile = getGenomePNG(jobDir, sequenceIndex, genotype, start, end, variant, type, csvData);
 		    GenotypeLib.scalePNG(pngFile, smallPngFile, 40.0);
 		  }
 

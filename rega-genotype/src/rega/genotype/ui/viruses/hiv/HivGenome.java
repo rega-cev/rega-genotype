@@ -50,13 +50,13 @@ public class HivGenome extends Genome {
 	}
 	
 	public static void main(String [] args) {
-		HivGenome hiv = new HivGenome();
-
-		try {
-			hiv.getGenomePNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "F1", 2252, 3275, 0, "pure");
-			hiv.getSmallGenomePNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "F1", 2252, 3275, 0, "pure");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		HivGenome hiv = new HivGenome();
+//
+//		try {
+//			hiv.getGenomePNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "F1", 2252, 3275, 0, "pure");
+//			hiv.getSmallGenomePNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "F1", 2252, 3275, 0, "pure");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
