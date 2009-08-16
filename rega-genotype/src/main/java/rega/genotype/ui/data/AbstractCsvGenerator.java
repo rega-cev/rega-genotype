@@ -41,7 +41,7 @@ public abstract class AbstractCsvGenerator extends SaxParser {
     }
 
 	protected void addPhyloResults(StringBuilder csvLine, String analysisId) {
-		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.id"));
+		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.name"));
 		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.support"));
 		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.inner"));
 		csvLine.append(addCsvValue("genotype_result.sequence.result['" + analysisId + "'].best.outer"));

@@ -120,12 +120,19 @@ public class GenotypeWindow extends WContainerWidget
 						setForm(f);
 				} else if (basePath.equals("/job/")) {
 					String jobId = GenotypeMain.getApp().internalPathNextPart(basePath);
-					monitorForm(new File(Settings.getInstance().getJobDir(od).getAbsolutePath()+File.separatorChar+jobId), false);
+					if (existsJob(jobId))
+						monitorForm(new File(Settings.getInstance().getJobDir(od).getAbsolutePath()+File.separatorChar+jobId), false);
+					else
+						setForm(startForm);
 				}
 			} });
 
 		startForm.init();
 		setForm(startForm);
+	}
+
+	protected boolean existsJob(String jobId) {
+		return getJobDir(jobId).exists();
 	}
 
 	private void addLink(WContainerWidget parent, WString text, String url, IForm form) {
@@ -169,6 +176,11 @@ public class GenotypeWindow extends WContainerWidget
 		detailsForm.init(jobDir, selectedSequenceIndex);
 
 		setForm(detailsForm);
+	}
+
+
+	public File getJobDir(String jobId) {
+		return new File(Settings.getInstance().getJobDir(getOrganismDefinition()).getAbsolutePath()+File.separatorChar+jobId);
 	}
 
 	public static String reportPath(File jobDir, int sequenceIndex) {

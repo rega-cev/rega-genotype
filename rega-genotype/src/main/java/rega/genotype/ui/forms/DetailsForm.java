@@ -22,15 +22,12 @@ public class DetailsForm extends IForm {
 	}
 	
 	public void init(File jobDir, final int selectedSequenceIndex) {
-		p = new SaxParser(){
-			@Override
-			public void endSequence() {
-				if(selectedSequenceIndex==getSequenceIndex()) {
-					stopParsing();
-				}
-			}
-		};
-		p.parseFile(jobDir);
+		p = SaxParser.parseFile(jobDir, selectedSequenceIndex);
+		
+		if (p == null) {
+			getMain().monitorForm(jobDir, true);
+			return;
+		}
 		
 		mainTable.clear();
 		

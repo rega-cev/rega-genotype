@@ -138,7 +138,7 @@
       <taxus name="II.5FR|II.5|AY682550" />
     </cluster>
 
-    <cluster id="II.5H" name="NRV II.5H (capsid II.5)">
+    <cluster id="II.5H" name="NRV II.5H">
       <cluster id="II.5H|II.5" name="NRV II.5H (capsid II.5)">
 	<taxus name="II.5H|II.5|AB212306" />
 	<!-- too short: <taxus name="II.5H|II.5|AB112314" /> -->

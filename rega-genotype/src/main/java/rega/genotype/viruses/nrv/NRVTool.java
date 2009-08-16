@@ -124,6 +124,15 @@ public class NRVTool extends GenotypeTool {
 		
 		String phyloName = "phylogenetic analysis (" + regionName + ")";
 
+		// The following test is based on a variant cluster to start with the same
+		// name as the genotype for which it is a variant!
+		// This is to differentiate with the outgroup. It would be better to mark the
+		// outgroup with some attribute ?
+		if (r == null
+			|| r.getConcludedCluster() == null
+			|| !r.getConcludedCluster().getName().startsWith(cluster.getName()))
+			return false;
+
 		if (r.haveSupport()) {
 			conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70", regionName);
 			return true;

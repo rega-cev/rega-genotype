@@ -20,6 +20,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import eu.webtoolkit.jwt.utils.StringUtils;
 
 public abstract class SaxParser extends DefaultHandler {
+
 	private List<String> currentPath = new ArrayList<String>();
 
 	private StringBuilder values = new StringBuilder();
@@ -174,5 +175,38 @@ public abstract class SaxParser extends DefaultHandler {
 			System.err.println(e);
 
 		System.err.println("End dump:");
+	}
+
+	public static class SkipToSequenceParser extends SaxParser {
+
+		private boolean found;
+		private int selectedSequenceIndex;
+
+		public SkipToSequenceParser(int selectedSequenceIndex) {
+			this.selectedSequenceIndex = selectedSequenceIndex;
+			this.found = false;
+		}
+
+		@Override
+		public void endSequence() {
+			if (getSequenceIndex() == selectedSequenceIndex) {
+				found = true;
+				stopParsing();
+			}
+		}
+
+		public boolean indexOutOfBounds() {
+			return !found;
+		}
+	}
+
+	public static SaxParser parseFile(File jobDir, int selectedSequenceIndex) {
+		SkipToSequenceParser p = new SkipToSequenceParser(selectedSequenceIndex);
+		p.parseFile(jobDir);
+
+		if (!p.indexOutOfBounds())
+			return p;
+		else
+			return null;
 	}
 }

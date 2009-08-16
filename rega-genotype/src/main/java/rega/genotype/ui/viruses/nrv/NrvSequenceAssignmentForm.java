@@ -79,6 +79,8 @@ public class NrvSequenceAssignmentForm extends IDetailsForm {
 			block.addWidget(genome);
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		block = new WContainerWidget(this);

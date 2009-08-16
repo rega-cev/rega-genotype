@@ -9,9 +9,9 @@ import rega.genotype.ui.data.AbstractCsvGenerator;
 public class NrvCsvGenerator extends AbstractCsvGenerator {
 	public NrvCsvGenerator(Writer ps) throws IOException {
 		super(ps);
-		ps.append("name,length,orf1,orf2,begin,end,genogroup," +
+		ps.append("name,length,ORF1,ORF2,begin,end,genogroup," +
 				"ORF1_genotype,ORF1_genotype_support,ORF1_inner_support,ORF1_outer_support," +
-				"ORF1_variant,ORF1_variant_support,ORF1_variant_inner_support,ORF1_variant_outer_support" +
+				"ORF1_variant,ORF1_variant_support,ORF1_variant_inner_support,ORF1_variant_outer_support," +
 				"ORF2_genotype,ORF2_genotype_support,ORF2_inner_support,ORF2_outer_support," +
 				"ORF2_variant,ORF2_variant_support,ORF2_variant_inner_support,ORF2_variant_outer_support");
 		
@@ -39,18 +39,18 @@ public class NrvCsvGenerator extends AbstractCsvGenerator {
     	addPhyloResults(csvLine, "phylo-ORF1");
 
     	String id = getValue("genotype_result.sequence.result['phylo-ORF1'].best.id");
-    	if (id == null)
-    		id = "";
-
-    	addPhyloResults(csvLine, "phylo-ORF1-" + id);
+    	if (id != null)
+    		addPhyloResults(csvLine, "phylo-ORF1-" + id);
+    	else
+    		csvLine.append(",,,,");
 
     	addPhyloResults(csvLine, "phylo-ORF2");
 
     	id = getValue("genotype_result.sequence.result['phylo-ORF2'].best.id");
-    	if (id == null)
-    		id = "";
-
-    	addPhyloResults(csvLine, "phylo-ORF2-" + id);
+    	if (id != null)
+    		addPhyloResults(csvLine, "phylo-ORF2-" + id);
+    	else
+    		csvLine.append(",,,,");
     	
     	ps.append(csvLine.toString()+"\n");
 	}

@@ -101,8 +101,8 @@ public class StartForm extends IForm {
 		monitorButton = new WPushButton(tr("startForm.monitor"), monitorContainer);
 		monitorButton.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				File jobDir = new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()+File.separatorChar+jobIdTF.text());
-				if(jobDir.exists()) {
+				File jobDir = getMain().getJobDir(jobIdTF.text());
+				if (jobDir.exists()) {
 					setValid(jobIdTF, errorJobId);
 					getMain().monitorForm(jobDir, true);
 				} else {
