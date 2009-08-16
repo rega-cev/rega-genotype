@@ -13,8 +13,8 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.ui.data.AbstractCsvGenerator;
-import rega.genotype.ui.data.DefaultCsvGenerator;
+import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.ui.data.DefaultTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
@@ -25,6 +25,7 @@ import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.hiv.HIVTool;
 import eu.webtoolkit.jwt.WString;
@@ -52,8 +53,8 @@ public class HivDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/hiv/";
 	}
 
-	public AbstractCsvGenerator getCsvGenerator(Writer w) throws IOException {
-		return new DefaultCsvGenerator(w);
+	public AbstractDataTableGenerator getDataTableGenerator(DataTable t) throws IOException {
+		return new DefaultTableGenerator(t);
 	}
 
 	public Genome getGenome() {

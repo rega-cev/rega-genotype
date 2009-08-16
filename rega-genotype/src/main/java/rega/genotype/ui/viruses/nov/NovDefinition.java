@@ -13,13 +13,14 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.ui.data.AbstractCsvGenerator;
+import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.viruses.nov.NoVTool;
 import eu.webtoolkit.jwt.WString;
@@ -47,8 +48,8 @@ public class NovDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/nov/";
 	}
 
-	public AbstractCsvGenerator getCsvGenerator(Writer ps) throws IOException {
-		return new NovCsvGenerator(ps);
+	public AbstractDataTableGenerator getDataTableGenerator(DataTable table) throws IOException {
+		return new NovTableGenerator(table);
 	}
 
 	public Genome getGenome() {

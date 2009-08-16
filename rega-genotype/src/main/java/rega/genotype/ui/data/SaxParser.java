@@ -87,7 +87,9 @@ public abstract class SaxParser extends DefaultHandler {
     }
     
     public abstract void endSequence();
-    
+
+	public void endFile() { }
+
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
     	if(!stop) {
@@ -102,6 +104,7 @@ public abstract class SaxParser extends DefaultHandler {
         xmlReader.setErrorHandler(this);
         try {
         	xmlReader.parse(source);
+        	endFile();
         } catch (SAXParseException spe) {
         	if(!spe.getMessage().equals("XML document structures must start and end within the same entity."))
         		spe.printStackTrace();

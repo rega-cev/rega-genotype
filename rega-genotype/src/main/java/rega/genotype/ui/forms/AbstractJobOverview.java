@@ -13,11 +13,14 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 
-import rega.genotype.ui.data.AbstractCsvGenerator;
+import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.SaxParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.CsvDataTable;
+import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.util.XlsDataTable;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
@@ -179,31 +182,14 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			xmlResource.suggestFileName("result.xml");
 			xmlFileDownload.setRef(xmlResource.generateUrl());
 			
-			new WText(lt(" , "), downloadContainer);
+			new WText(lt(", "), downloadContainer);
 			
-			WAnchor csvTableDownload = new WAnchor("", tr("monitorForm.csvTable"), downloadContainer);
-			csvTableDownload.setAttributeValue("target", "_new");
-			csvTableDownload.setStyleClass("link");
-			csvTableDownload.setTarget(AnchorTarget.TargetNewWindow);
-			WResource csvResource = new WResource() {
-				@Override
-				public String resourceMimeType() {
-					return "application/excell";
-				}
+			downloadContainer.addWidget(createTableDownload(tr("monitorForm.csvTable"), true));
 
-				@Override
-				protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {
-					Writer w = new OutputStreamWriter(stream, "UTF-8");
-					AbstractCsvGenerator acsvgen = AbstractJobOverview.this.getMain().getOrganismDefinition().getCsvGenerator(w);
-					acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
-					w.flush();
-					return true;
-				}
-				
-			};
-			csvResource.suggestFileName("results.csv");
-			csvTableDownload.setRef(csvResource.generateUrl());
-			
+			new WText(lt(", "), downloadContainer);
+
+			downloadContainer.addWidget(createTableDownload(tr("monitorForm.xlsTable"), false));
+
 			new WBreak(downloadContainer);
 			new WText(tr("monitorForm.downloadJob"),downloadContainer);
 
@@ -226,6 +212,33 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		}
 		
 		fillingTable = false;
+	}
+
+	private WAnchor createTableDownload(WString label, final boolean csv) {
+		WAnchor csvTableDownload = new WAnchor("", label);
+		csvTableDownload.setAttributeValue("target", "_new");
+		csvTableDownload.setStyleClass("link");
+		csvTableDownload.setTarget(AnchorTarget.TargetNewWindow);
+
+		WResource csvResource = new WResource() {
+			@Override
+			public String resourceMimeType() {
+				return "application/excell";
+			}
+
+			@Override
+			protected boolean streamResourceData(OutputStream stream, HashMap<String, String> arguments) throws IOException {
+				DataTable t = csv ? new CsvDataTable(stream, ';', '"') : new XlsDataTable(stream);
+				AbstractDataTableGenerator acsvgen = AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(t);
+				acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
+				return true;
+			}
+			
+		};
+		csvResource.suggestFileName("results." + (csv ? "csv" : "xls"));
+		csvTableDownload.setRef(csvResource.generateUrl());
+
+		return csvTableDownload;
 	}
 
 	private SaxParser tableFiller = new SaxParser(){
