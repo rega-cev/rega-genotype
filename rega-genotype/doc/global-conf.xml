@@ -6,34 +6,34 @@
      
      These define the input to the various analyses for each organism.
    -->
-  <property name="xmlPath">/Users/tulio/rega3/rega-genotype/xml/</property>
+  <property name="xmlPath">/Users/tulio/biotools/rega3/rega2009/rega-genotype/xml/</property>
 
   <!-- paupCmd
      Location of your paup executable + name of the paup executable.
      
      Note, you need to get a license for paup.
    -->
-  <property name="paupCmd">/bin/wrappaup.sh /bin/paup</property>
+  <property name="paupCmd">/Applications/biotools/paup4b10-ppc-macosx/wrappaup.sh /Applications/biotools/paup4b10-ppc-macosx/paup4b10-ppc-macosx</property>
 
   <!-- clustalWCmd
      Location of your clustalw executable + name of the clustalw executable
    -->
-  <property name="clustalWCmd">/bin/clustalw</property>
+  <property name="clustalWCmd">/Applications/biotools/clustalw2</property>
 
   <!-- blastPath
      Location of your blastall and formatdb executables (from ncbi-tools).     
    -->
-  <property name="blastPath">/usr/local/biotools/macgde/GDE2.2/bin/blast/</property>
+  <property name="blastPath">/Applications/biotools/blast/blast-2.2.20/bin/</property>
 
   <!-- treePuzzleCmd
      Location of your tree-puzzle executable + name of the tree-puzzle executable (the svg enabled version!)
    -->
-  <property name="treePuzzleCmd">/Users/tulio/biotools/tree-puzzle-5.2/src/puzzle-macosx-Xcode</property>
+  <property name="treePuzzleCmd">/Applications/biotools/treepuzzle/src/puzzle</property>
 
   <!-- treeGraphCmd
      Location of your treegraph executable + name of the treegraph executable
    -->
-  <property name="treeGraphCmd">/Users/tulio/biotools/tgf10rc4/source/tgf</property>
+  <property name="treeGraphCmd">/Applications/biotools/tgf10r4/source/tgf</property>
 
   <!-- jobDir-%organism%
      Location where the genotypetool can write job-related files for a specific organism.
@@ -45,9 +45,10 @@
      
      Each job dir must be different, since jobs cannot be mixed for several organisms.
    -->
-  <property name="jobDir-NoV">/Users/tulio/rega3/jobDir</property>
-  <property name="jobDir-HIV">/Users/tulio/rega3/jobDir</property>
-  <property name="jobDir-HTLV">/Users/tulio/rega3/jobDir</property>
+  <property name="jobDir-NoV">/Users/tulio/biotools/rega3/rega2009/jobDir</property>
+  <property name="jobDir-HIV">/Users/tulio/biotools/rega3/rega2009/jobDirHIV</property>
+  <property name="jobDir-HTLV">/Users/tulio/biotools/rega3/rega2009/jobDirHTLV</property>
+  <property name="jobDir-PHYLO">/Users/tulio/biotools/rega3/rega2009/jobDirPHYLO</property>
   
   <!-- maxAllowedSequences
      The maximum number of sequences that may be submitted in a single batch.

@@ -291,10 +291,9 @@
       export format=nexus file=paup.nex replace=yes;
       outgroup OCM91MVP5180;
       set criterion=distance outroot=monophyl;
-     dset distance=HKY NegBrLen=SetAbsVal;        
-     constraints CONSTRE(BACKBONE)=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
-     NJ constraints=CONSTRE enforce=yes;
-      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      dset distance=HKY NegBrLen=SetAbsVal;
+      NJ;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
       end;
       quit;
@@ -306,7 +305,7 @@
 
   <analysis id="pure-puzzle" type="paup">
     <identify>
-      A1,B,C,D,F1,G,H,J,K,A2,F1,F2,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
+      39,31,4,26,34,9,23,17,45,Group_O
     </identify>
     <cutoff>
       70
@@ -320,19 +319,19 @@
       dset distance=HKY NegBrLen=SetAbsVal;
       constraints CONSTRE(BACKBONE)=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
       NJ constraints=CONSTRE enforce=yes;
-      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
       end;
       quit;
     </block>
     <options>
-      log,alignment,tree,signal,puzzle-likelihood-mapping
+      log,alignment,tree,signal,puzzle-likelihood-mapping,inner,outer
     </options>
   </analysis>
 
   <analysis id="crf" type="paup">
     <identify>
-  A2,B,F,F1,F2,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
+      46,31,33,34,35,42,43,32,22,37,14,24,7,25,16,36,19,12,20,13,44,40,A1KE,41,21,8,6,29,27,28,10,11,18,23,17,45,Group_O
     </identify>
     <cutoff>
       70
@@ -345,8 +344,9 @@
       outgroup OCM91MVP5180;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
-	  NJ; 
-      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      constraints CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19),(20,21),(22,23),(24,25),(26,27),(28,29),(30,31),(32,33),(34,35),(36,37),(38,39),(40,41),(42,43,44),(45,46,47),(48,49),(50,51),(52,53),(54,55),(56,57),(58,59,60),(61,62),(63,64),(65,66),(67,68),(69,70),(71,72),(73,74),75);
+      NJ constraints=CONSTRE enforce=yes;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
       end;
       quit;
@@ -368,7 +368,7 @@
     </cutoff>
     <analysis type="paup">
       <identify>
- 	A1,B,C,D,F1,G,H,J,K,Group_O
+ 	39,31,4,26,34,9,23,17,45,Group_O
       </identify>
       <block>
       begin paup;
@@ -379,7 +379,7 @@
       dset distance=HKY NegBrLen=SetAbsVal;
       constraints CONSTRE(BACKBONE)=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
       NJ constraints=CONSTRE enforce=yes;
-      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
       end;
       quit;
@@ -400,7 +400,7 @@
     </cutoff>
     <analysis type="paup">
       <identify>
-       A1,B,C,D,F1,G,H,J,K
+       39,31,4,26,34,9,23,17,45
       </identify>
       <block>
       begin paup;
@@ -411,7 +411,7 @@
 	  dset distance=HKY NegBrLen=SetAbsVal;
       constraints CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19),(20,21));
       NJ constraints=CONSTRE enforce=yes;
-      savetree format=phylip brlens=yes file=paup.tre replace=yes;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
       end;
       quit;
@@ -424,14 +424,14 @@
   </analysis>
   <analysis id="scan-pure-self" type="scan">
     <window>
-      1000
+      500
     </window>
     <step>
-      500
+      50
     </step>
     <analysis type="paup">
       <identify>
-       A2,B,F1,F2,G,H,J,K,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O       
+       39[0],46[0],31[0],4[0],26[0],34[0],35[0],9[0],23[0],17[0],45[0],Group_O
       </identify>
       <block>
         begin paup;

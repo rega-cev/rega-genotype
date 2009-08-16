@@ -2,12 +2,12 @@
 <organism-settings>
 	<main-form>
 		<footer>
-		Developed by: Tulio de Oliveira, Koen Deforche, Sharon Cassol, Andrew Rambaut and Anne-Mieke Vandamme.
+		Rega HIV subtyping tool V.3 is maintained by: Tulio de Oliveira, Pieter Libin, Koen Deforche, Sharon Cassol and Anne-Mieke Vandamme.
 		</footer>
 	</main-form>
 	<start-form>
 		<title>
-		REGA HIV Subtyping Tool Version 2.0
+		REGA HIV Subtyping Tool Version 3.0
 		</title>
 		<note>
 		This tool is designed to use phylogenetic methods in order to identify the subtype of a specific sequence.
@@ -32,13 +32,26 @@
 		</title>
 		<howToCite-text>
 			<text>
-				<b>These tools are not yet published. In the mean time please cite the following paper:</b>
+				<b>These REGA HIV-1 subtyping tool version 3 is not yet published.</b> 
+				<br/>In the moment please cite the usage of REGA HIV-1 subtyping tool as originally published:
 				<br/>
 				<a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/bti607v1" TARGET="_blank">An Automated Genotyping System for Analysis of HIV-1 and other Microbial Sequences.</a> 
 				<br/>
-				T. de Oliveira,K. Deforche, S. Cassol, M. Salminem, D. Paraskevis, C. Seebregts, J. Snoeck, E. J. van Rensburg ,A. M. J. Wensing, D.A. van de Vijver, C. A. Boucher , R. Camacho , and A-M Vandamme.
+				de Oliveira T,Deforche K, Cassol S, Salminem M, Paraskevis D, Seebregts C, Snoeck J, van Rensburg EJ,Wensing AMJ, van de Vijver DA, Boucher CA, Camacho R and Vandamme A-M.
 				<br/>
-				Bioinformatics 2005; 21 (19), 3797-3800.
+				Bioinformatics 2005; 21 (19), 3797-3800.<br/><br/>
+				To cite the others subtyping and genotyping tools (e.g. HCV, HBV, HPV, HTLV-1 and HHV8) please use the reference:
+				<br/>
+<a href="http://www.bioafrica.net/manuscripts/AlcantaraVirusGenotyping.pdf" TARGET="_blank">A Standardized Framework for Accurate, High-throughput Genotyping of Recombinant and Non-recombinant Viral Sequences .</a><br/>
+Alcantara LCJ, Cassol S, Libin P, Deforche K, Pybus OG, Van Ranst M, Galvao-Castro B, Vandamme A-M and  de Oliveira T.
+<br/>
+Nucleic Acids Research 2009; doi: 10.1093/nar/gkp455, pages 1-9.<br/>
+<br/>
+<p> You can also see papers that <a href="http://scholar.google.com/scholar?q=An+Automated+Genotyping+System+for+Analysis+of+HIV-1+and+other+Microbial+Sequences" TARGET="_blank">cite Rega HIV-1 subtyping tool in google scholar.</a> </p>
+
+			
+		
+				
 			</text>
 		</howToCite-text>
 	</howToCite-form>
@@ -300,19 +313,19 @@
 		</title>
 		<contactUs-text>
 			<text>
-				The REGA HIV-1 Subtyping tool is developed and mantained by Tulio de Oliveira, Koen Deforche, Sharon Cassol, Andrew Rambaut and Anne-Mieke Vandamme.
-				<br/>
+The REGA HIV-1 Subtyping tool was developed by a number of researchers; please see the complete list of authors in the publications associated with the tool. The tool is currently maintained by Tulio de Oliveira, Pieter Libin, Koen Deforche, Sharon Cassol and Anne-Mieke Vandamme.				<br/>
 				<br/>
 				<b>Suggestions or problems on the program please contact:</b><br/>
-				<a href="http://evolve.zoo.ox.ac.uk/people.html?id=oliveirat" TARGET="_blank">Dr Tulio de Oliveira</a><br/>
-				Marie Curie Fellow<br/>
-				Evolutionary Biology Group<br/>
-				Zoology Department<br/>
-				University of Oxford<br/>
-				OX1 3PS, UK.<br/>
+				<a href="http://www.bioafrica.net/aboutus.html" TARGET="_blank">Dr Tulio de Oliveira</a><br/>
+				Senior Bioinformatics Researcher<br/>
+				Africa Centre for Health and Population Studies<br/>
+				Nelson R Mandela School of Medicine<br/>
+				University of KwaZulu-Natal<br/>
+				Durban, South Africa.<br/>
 				<br/>
-				Tel: +44 1865 281 997<br/>
-				Fax: +44 1865 271 249<br/>
+				Tel: +27 35 550 7531<br/>
+				Fax: +27 35 550 7565<br/>
+				Websites: <a href="http://www.bioafrica.net" TARGET="_blank">www.bioafrica.net</a> <a href="http://www.africacentre.ac.za"  TARGET="_blank"> www.africacentre.ac.za</a>
 			</text>
 		</contactUs-text>
 	</contactUs-form>

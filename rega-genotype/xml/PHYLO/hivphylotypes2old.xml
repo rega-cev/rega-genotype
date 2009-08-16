@@ -2,285 +2,250 @@
   <alignment file="phylotypes1.fasta" trim="true" />
 
   <clusters>
-    <cluster id="38" name="Subtype A">
-      <description>Original subtype found in the DRC; Also identified in East and West Africa; old reference strain date from 1985; child clusters A1 and A2</description>
-      <cluster id="39" name="Subtype A (A1)">
-      	 <description>Descendant from subtype A; Identified in East Africa (Kenya); First Reference strain dates back to 1992.</description>
+    <cluster id="A" name="Subtype A">
+      <description>blabla</description>
+      <cluster id="A1" name="Subtype A (A1)">
+      	 <description>blabla</description>
          <taxus name="A1UG85U455" />
     	 <taxus name="A1UG9292UG037" />
       </cluster>
-      <cluster id="46" name="Subtype A (A2)">
-      	<description>Descendant from subtype A; Identified in Central Africa and Europe (Cyprus); only few isolates identified; old reference strain dates back to 1994</description>
+      <cluster id="A2" name="Subtype A (A2)">
 	     <taxus name="A2CD9797CDKTB48" />
 		 <taxus name="A2CY9494CY01741" />
     	 <tags>CRF</tags>
       </cluster>
     </cluster>
    
-    <cluster id="31" name="Subtype B">
-    <description>Related to subtype D found in Africa; Identified in the United States of America; Causes worldwide Homosexual epidemic; first reference strain dates back to 1983</description>
+    <cluster id="B" name="Subtype B">
       <taxus name="BUS83RF" />
       <taxus name="BUS90WEAU160" />
     </cluster>
 
-    <cluster id="4" name="Subtype C">
-    <description>Original subtype found in Central Africa (DRC); Idenitified in Southern and East Africa; Causes explosive heterosexual epidemic in Africa, Asia and South America; First reference strain dates back to 1986; Child clusters C India and C South America.</description>
+    <cluster id="C" name="Subtype C">
 	  <taxus name="CBR9292BR025" />
       <taxus name="CBW9696BW0502" />
     </cluster>
 
- 	<cluster id="26" name="Subtype D">
-    <description>Original subtype found in the Central Africa (DRC); Identified in East, West and Southern Africa; Causes epidemic in East and West Africa; First reference strain identified in 1999; Child clusters D Uganda, D South Africa and D Cameroon.</description>
+ 	<cluster id="D" name="Subtype D">
    	  <taxus name="D.UG.99.99UGA07412" />
       <taxus name="D.UG.99.99UGE08364" />
     </cluster>
     
-    <cluster id="33" name="Subtype F">
- 	  <cluster id="34" name="Subtype F (F1)">
- 	  	 <description>Descendent from subtype F; Identified in Central Africa, South America and Europe. First reference strain dates back to 1993.</description>
- 	  	 
+    <cluster id="F" name="Subtype F">
+ 	  <cluster id="F1" name="Subtype F (F1)">
 	 	<taxus name="F1BE93VI850" />
     	<taxus name="F1FR96MP411" />
  	  </cluster>
- 	  <cluster id="35" name="Subtype F (F2)">
-    <description>Descendant from subtype F; Identified in West Africa (Cameroon); Only few isolates identified; First reference strain dates back to 1995.</description>
+ 	  <cluster id="F2" name="Subtype F (F2)">
      	<taxus name="F2CM195MP255" />
     	<taxus name="F2CM95MP257" />
     	 <tags>CRF</tags>
 	  </cluster>		
     </cluster>
      
-    <cluster id="9" name="Subtype G">
-    <description>Original subtype found in the Central Africa (DRC); Identified in West, Central Africa and Europe; First reference strain dates back to 1992; Child clusters G Nigeria and G Spain.</description>
+    <cluster id="G" name="Subtype G">
 	  <taxus name="GFI93HH8793121" />
       <taxus name="GNG9292NG083" />
     </cluster>
 
-    <cluster id="23" name="Subtype H">
-    <description>Original subtype found in the Central Africa (DRC); Identified in Central Africa; Only few isolates identified; First reference strain dates back to 1990.</description>
+    <cluster id="H" name="Subtype H">
 	  <taxus name="HBE93VI997" />
       <taxus name="HCF9090CF056" />
     </cluster>
 
-    <cluster id="17" name="Subtype J">
-    <description>Original subtype found in the Central Africa (DRC); Identified in Central Africa; Only few isolates identified; First reference strain dates back to 1993.</description>
+    <cluster id="J" name="Subtype J">
       <taxus name="JSE93SE7887" />
       <taxus name="JSE94SE7022" />
     </cluster>
 
-    <cluster id="45" name="Subtype K">
-    <description>Original subtype found in the Central Africa (DRC); Identified in Central and West Africa; Only few isolates identified; First reference strain dates back to 1996.</description>
+    <cluster id="K" name="Subtype K">
 	  <taxus name="KCD97EQTB11C" />
       <taxus name="KCM96MP535" />
     </cluster>
 
-    <cluster id="42" name="CRF 01_AE">
-    <description>Descendant from subtypes A and E; Idenitified in South Asia; Causes heterosexual epidemic in Asia and Europe; First reference strain dates back to 1990.</description>
+    <cluster id="01_AE" name="CRF 01_AE">
       <taxus name="01_AECF19090CF11697" />
 	  <taxus name="01_AETH90CM240" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="43" name="CRF 02_AG">
-    <description>Descendant from subtypes A and G; Identified in West Africa; First reference strain dates back to 1991.</description>
+    <cluster id="02_AG" name="CRF 02_AG">
 	  <taxus name="02_AGCM9797CMP807" />
       <taxus name="02_AGFR91DJ264" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="32" name="CRF 03_AB">
-    <description>Descendant from subtypes A and B; Identified in Russia; Causes injection drug use epidemic in Russia; First reference strain dates back to 1997.</description>
+    <cluster id="03_AB" name="CRF 03_AB">
 	  <taxus name="03_ABRU97KAL153" />
       <taxus name="03_ABRU98RU98001" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="22" name="CRF 04_CPX">
-    <description>Identified in Europe (Greece and Cyprus); First reference strain dates back to 1991.</description>
+    <cluster id="04_CPX" name="CRF 04_CPX">
 	  <taxus name="04_CPXG1R9197PVCH" />
       <taxus name="04_CPXGR9797PVMY" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="37" name="CRF 05_DF">
-    <description>Descendant from subtypes D and F; Identified in Central Africa; First reference strain dates back to 1993.</description>
+    <cluster id="05_DF" name="CRF 05_DF">
 	  <taxus name="05_DFBEVI1310" />
       <taxus name="05_DFBE93VI961" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="14" name="CRF 06_CPX">
-    <description>Identified in West Africa; Causes epidemic in West Africa and Europe (UK); First reference strain dates back to 1995.</description>
+    <cluster id="06_CPX" name="CRF 06_CPX">
    	  <taxus name="06_CPXAU96BFP90" />
    	  <taxus name="06_CPXML9595ML84" />
       <tags>CRF</tags>
     </cluster>
     
-    <cluster id="24" name="CRF 07_BC">
-    <description>Descendet from cluster C from India; Identified in China; First refence strain dates back to 1997.</description>
+    <cluster id="07_BC" name="CRF 07_BC">
    	  <taxus name="07_BCC1N9797CN001" />
       <taxus name="07_BCCN9898CN009" />
       <tags>CRF</tags>
+      <description>http://evolve.zoo.ox.ac.uk/HIV/phylotypes.html?phylotype=24</description>
     </cluster>
     
-    <cluster id="7" name="CRF 08_BC">
-    <description>Descendant from cluster C from India; Identified in China; First reference strain dates back to 1997.</description>
+    <cluster id="08_BC" name="CRF 08_BC">
 	  <taxus name="08_BCCN19797CNGX7F" />
       <taxus name="08_BCCN9898CN006" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="25" name="CRF 10_CD">
-    <description>Descendant from subtypes C and D; identified in East Africa; First reference strain dates back to 1996.</description>
+    <cluster id="10_CD" name="CRF 10_CD">
 	  <taxus name="10_CDTZ19696TZBF071" />
       <taxus name="10_CDTZ9696TZBF110" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="16" name="CRF 11_CPX">
-    <description>Identified in Europe (Greece); First reference strain dates back to 1999.</description>
+    <cluster id="11_CPX" name="CRF 11_CPX">
 	  <taxus name="11_CPXF1R99MP1298" />
       <taxus name="11_CPXGRGR17" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="36" name="CRF 12_BF">
-    <description>Descendant from subtypes B and F; Identified in South America; First reference strain dates back to 1997.</description>
+    <cluster id="12_BF" name="CRF 12_BF">
 	  <taxus name="12_BFAR97A32989" />
    	  <taxus name="12_BFU1Y99URTR23" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="19" name="CRF 13_CPX">
-    <description>Identified in West Africa; First reference strain dates back to 1996.</description>
+    <cluster id="13_CPX" name="CRF 13_CPX">
 	  <taxus name="13_CPXC1M961849" />
       <taxus name="13_CPXCM964164" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="12" name="CRF 14_BG">
-    <description>Descendant from subtypes B and G; Identified in Europe (Spain); First reference strains dates back to 1999.</description>
+    <cluster id="14_BG" name="CRF 14_BG">
 	  <taxus name="14_BGE1S00X477" />
       <taxus name="14_BGES99X397" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="20" name="CRF 09_cpx">
-    <description>Identified in West Africa; First reference strain dates back to 1996.</description>
+    <cluster id="09_cpx" name="CRF 09_cpx">
          <taxus name="09_cpx.GH.96.96GH2911" />
          <taxus name="09_cpx.US.99.99DE4057" />
       <tags>CRF</tags>
     </cluster>
     
-    <cluster id="13" name="CRF 18_cpx">    
-    <description>Identified in Central America (Cuba); First reference strain dates back to 1997.</description>
+    <cluster id="18_cpx" name="CRF 18_cpx">    
          <taxus name="18_cpx.CM.97.CM53379" />
          <taxus name="18_cpx.CU.99.CU76" />
       <tags>CRF</tags>
     </cluster>
     
-        <cluster id="44" name="CRF 19_cpx">
-    <description>Descendant from M group; Identified in Central America (Cuba); First reference strain dates back to 1999.</description>
+        <cluster id="19_cpx" name="CRF 19_cpx">
          <taxus name="19_cpx.CU.99.CU29" />
          <taxus name="19_cpx.CU.99.CU7" />
        <tags>CRF</tags>
     </cluster>
          
-    <cluster id="40" name="Subtype A">
-     <description>Descendant from subtype A; Identified in West Africa (Senegal).</description>
- 		 <taxus name="A.SN.01.DDI579" />
+    <cluster id="A1SN" name="A1 Senegal">
+         <taxus name="A.SN.01.DDI579" />
          <taxus name="A.SN.01.DDJ369" />
          <taxus name="A.SN.96.DDJ360" />
       <tags>CRF</tags>
     </cluster>    
     
-    <cluster id="A1KE" name="Subtype A (A1)">
-    <description>Descendant from subtype A; Identified in East Africa (Kenya); First Reference strain dates back to 1992.</description>
+    <cluster id="A1KE" name="A1 Kenya">
          <taxus name="A1.KE.00.KNH1199" />
          <taxus name="A1.KE.97.ML752" />
          <taxus name="A1.TZ.01.A341" />
       <tags>CRF</tags>
     </cluster>
 
-    <cluster id="41" name="Subtype A (A1)">
-    <description>Descendant from subtype A; Identified in Uzbekistan; First reference strain dates back to 2001.</description>
+    <cluster id="01UZ" name="A1 UZ">
          <taxus name="A1.UZ.02.02UZ0659" />
          <taxus name="A1.UZ.02.02UZ0663" />
+
       <tags>CRF</tags>
     </cluster>
     
-    <cluster id="21" name="URF AHJU">
-    <description>Identified in West Africa (Cameroon); First reference strain dates back to 2001.</description>
+        <cluster id="AHJU" name="AHJU CM">
          <taxus name="AHJU.CM.01.01CM_1278NG" />
          <taxus name="AHJU.CM.01.01CM_1296NG" />
       <tags>CRF</tags>
     </cluster>
     
-        <cluster id="8" name="Subtype C">
-    <description>Descendant from subtype C; Identified in South America (Brazil, Argentina and Uruguay); First reference strain dates back to 1992.</description>
+        <cluster id="CBR" name="C Brazil">
          <taxus name="C.AR.01.ARG4006" />
          <taxus name="C.BR.x.04BR013" />
       <tags>CRF</tags>
     </cluster>
     
-        <cluster id="6" name="Subtype C">
-    <description>Descendant from subtype C; Identified in South East Asia (India); First reference strain dates back to 1993.</description>
+        <cluster id="CIN" name="C India">
          <taxus name="C.IN.93.93IN904" />
          <taxus name="C.IN.98.98IN022" />
       <tags>CRF</tags>
     </cluster>
     
-    <cluster id="29" name="Subtype D">    
-    <description>Descendant from subtype D; Identified in West Africa (Cameroon); First reference strain dates back to 2001.</description>
+    <cluster id="DCM" name="D Cameroon">    
          <taxus name="D.CM.01.01CM_0009BBY" />
          <taxus name="D.CM.01.01CM_4412HAL" />
           <tags>CRF</tags>
     </cluster>
     
-        <cluster id="27" name="Subtype D">
-    <description>Descendant from subtype D; Identified in East Africa (Uganda); First reference strain dates back to 1992.</description>
+        <cluster id="DUG" name="D Uganda">
          <taxus name="D.UG.99.99UGA07412" />
          <taxus name="D.UG.99.99UGB21875" />
          <taxus name="D.UG.99.99UGE08364" />
         <tags>CRF</tags>
     </cluster>
     
-    <cluster id="28" name="Subtype D">    
-    <description>Descendant from subtype D; Identified in Southern Africa (South Africa); Extinct strain; First reference strain dates back to 1985.</description>
+    <cluster id="DZA" name="D South Africa">    
          <taxus name="D.ZA.85.R214" />
          <taxus name="D.ZA.85.R286" />
       <tags>CRF</tags>
     </cluster>
     
-        <cluster id="10" name="Subtype G">
-    <description>Descendant from subtype G; Identified in Europe (Spain); Causes epidemic in Europe (Spain, Portugal and UK); First reference strain dates back to 1999.</description>
+        <cluster id="GES" name="G Spain">
          <taxus name="G.ES.00.X558" />
          <taxus name="G.ES.99.X138" />
       <tags>CRF</tags>
     </cluster>
     
-    <cluster id="11" name="Subtype G">
-    <description>Descendant from subtype G; Identified in West Africa (Nigeria); First reference strain dates back to 2001.</description>
+    <cluster id="GNG" name="G Nigeria">
          <taxus name="G.NG.x.01NGPL0669" />
          <taxus name="G.NG.x.01NGPL0760" />
       <tags>CRF</tags>
     </cluster>
-        <cluster id="18" name="URF GKU">
-    <description>Identified in West Africa (Senegal).</description>
+        <cluster id="GKU" name="GKU Senegal">
          <taxus name="GKU.SE.x.SE8646" />
          <taxus name="GKU.SE.x.SE9010" />
       <tags>CRF</tags>
     </cluster>
+
+
+
     <cluster id="Group_O" name="Group O">
-    <description></description>
 	  <taxus name="OCM91MVP5180" />
     </cluster>
   </clusters>
 
   <analysis id="pure" type="paup">
     <identify>
-      46,31,33,34,35,42,43,32,22,37,14,24,7,25,16,36,19,12,20,13,44,40,A1KE,41,21,8,6,29,27,28,10,11,18,23,17,45,Group_O
-    </identify>
+      A1,B,C,D,F1,G,H,J,K,A2,F1,F2,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
+</identify>
     <cutoff>
       70
     </cutoff>
