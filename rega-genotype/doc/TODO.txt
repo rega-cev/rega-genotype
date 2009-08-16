@@ -1,11 +1,11 @@
 PRIORITY
-* image sizes (f.e. header image -> too small?)
+* image sizes (f.e. header image -> too small?) (Stijn)
 *jwt bug
 	* WTextArea setText() with '>' -> &gt; (Koen)
-* image centering -> sometimes refresh is needed
+* image centering -> sometimes refresh is needed (Stijn)
 * write installation doc
 * maven
-* layout 
+* layout (Stijn)
 	* start form
 	* monitor form
 	* decision trees
