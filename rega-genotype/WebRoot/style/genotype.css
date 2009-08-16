@@ -23,8 +23,9 @@ body {
 }
 
 div.imgDiv {
+	position: relative;
 	margin: 1em auto 1em auto;
-	width: 100%;
+	width: 640px;	
 	text-align: center;
 }
 
