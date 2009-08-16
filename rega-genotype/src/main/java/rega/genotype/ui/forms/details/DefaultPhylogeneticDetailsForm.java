@@ -48,21 +48,21 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		li = ul.addItem(new WText(lt("Download the ")));
 		li.addWidget(GenotypeLib.getAnchor("Alignment (NEXUS format)",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment"))));
+				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")), null));
 
 		li = ul.addItem(new WText(lt("Export or View the Phylogenetic Tree: ")));
 		li.addWidget(GenotypeLib.getAnchor("PDF",
 				"application/pdf",
-				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")))));
+				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))), null));
 		li.addWidget(new WText(lt(", ")));
 		li.addWidget(GenotypeLib.getAnchor("NEXUS Format",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))));
+				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")),null));
 		
 		li = ul.addItem(new WText(lt("View the ")));
 		li.addWidget(GenotypeLib.getAnchor("PAUP* Log file",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".log"))));
+				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".log")), "paup-log.doc"));
 		li.addWidget(new WText(lt(" (Contains bootstrap values)")));
 		
 	}

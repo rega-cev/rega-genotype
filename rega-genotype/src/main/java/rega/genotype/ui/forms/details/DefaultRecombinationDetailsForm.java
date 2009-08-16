@@ -52,9 +52,9 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		addWidget(new WText(lt(p.getEscapedValue(path+".support['best']"))));
 		addWidget(new WBreak());
 		addWidget(new WText(lt(tr("defaultRecombinationAnalyses.download").value() +" ")));
-		addWidget(GenotypeLib.getAnchor("CSV", "application/excel", RecombinationPlot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"))));
+		addWidget(GenotypeLib.getAnchor("CSV", "application/excel", RecombinationPlot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data")), null));
 		addWidget(new WText(lt(", ")));
-		addWidget(GenotypeLib.getAnchor(" PDF ", "application/pdf", RecombinationPlot.getRecombinationPDF(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"), od)));
+		addWidget(GenotypeLib.getAnchor(" PDF ", "application/pdf", RecombinationPlot.getRecombinationPDF(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"), od), null));
 		addWidget(new WBreak());
 		WString m = tr("defaultRecombinationAnalyses.bootscanAnalysis");
 		m.arg(p.getValue(path+".window"));

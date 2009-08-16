@@ -254,12 +254,15 @@ public class GenotypeLib {
 		return new File(jobDir.getAbsolutePath() + File.separatorChar + fileName);
 	}
 	
-	public static WAnchor getAnchor(String text, String fileType, File f) {
+	public static WAnchor getAnchor(String text, String fileType, File f, String suggestedName) {
 		WAnchor anchor = new WAnchor("", WContainerWidget.lt(text));
 		anchor.setStyleClass("link");
 		anchor.setTarget(AnchorTarget.TargetNewWindow);
 		WResource fr = new WFileResource(fileType, f.getAbsolutePath());
-		fr.suggestFileName(f.getName());
+		if (suggestedName == null)
+			fr.suggestFileName(f.getName());
+		else
+			fr.suggestFileName(suggestedName);
 		anchor.setRef(fr.generateUrl());
 		return anchor;
 	}
