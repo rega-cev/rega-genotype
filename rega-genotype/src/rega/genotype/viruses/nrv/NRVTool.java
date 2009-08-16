@@ -39,8 +39,11 @@ public class NRVTool extends GenotypeTool {
         nrv = readAnalyses("NRV/nrvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) nrv.getAnalysis("blast");
 
+        phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()] = readAnalyses("NRV/nrv-ORF1.xml", workingDir);
+        phyloAnalyses[GroupRegion.GroupII_ORF1.ordinal()] = phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()];
         phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("NRV/nrvI-ORF2.xml", workingDir);
         phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("NRV/nrvII-ORF2.xml", workingDir);
+        
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {
@@ -54,15 +57,13 @@ public class NRVTool extends GenotypeTool {
 
     		if (t.getRegions() != null) {
         		for (Region region:t.getRegions()) {
-        			if (region.overlaps(blastResult.getStart(), blastResult.getEnd())) {
-        				if (region.getName().equals("ORF2")) {
-        					int rs = Math.max(1, region.getBegin() - blastResult.getStart());
-        					int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
+        			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), 200)) {
+        				int rs = Math.max(1, region.getBegin() - blastResult.getStart());
+        				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
         					
-        					AbstractSequence s2 = rs < re ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
-        					if (phyloAnalysis(s2, c.getId(), region.getName()))
-        						phyloAssignment = true;
-        				}
+        				AbstractSequence s2 = rs < re ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
+        				if (phyloAnalysis(s2, c.getId(), region.getName()))
+        					phyloAssignment = true;
         			}
         		}
         	}
@@ -70,7 +71,7 @@ public class NRVTool extends GenotypeTool {
     		if (!phyloAssignment)
     			conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff());
         } else {
-            conclude("Unassigned", "Unassigned because of BLAST score &lt " + blastAnalysis.getCutoff());
+            conclude("Unassigned", "Unassigned because of BLAST score &lt; " + blastAnalysis.getCutoff());
         }
     }
 
@@ -91,17 +92,19 @@ public class NRVTool extends GenotypeTool {
 		}
 		
 		if (phylo != null) {
-			PhyloClusterAnalysis a = (PhyloClusterAnalysis) phylo.getAnalysis("phylo");
+			PhyloClusterAnalysis a = (PhyloClusterAnalysis) phylo.getAnalysis("phylo-" + regionName);
 			
 			PhyloClusterAnalysis.Result r = a.run(s);
 
+			String phyloName = "phylogenetic analysis (" + regionName + ")";
+			
 			if (r.haveSupport())
-				conclude(r, "Supported with phylogenetic analysis and bootstrap &gt;= 70");
+				conclude(r, "Supported with " + phyloName + " and bootstrap &gt;= 70");
 			else {
 				if (r.getSupportInner() >= 100)
-					conclude(r, "Supported with phylogenetic analysis with bootstrap &lt; 70 but inner clustering support &gt;= 100");
+					conclude(r, "Supported with " + phyloName + " with bootstrap &lt; 70 but inner clustering support &gt;= 100");
 				else
-					conclude("Could not assign", "Not supported by phylogenetic analysis");
+					conclude("Could not assign", "Not supported by " + phyloName);
 			}
 
 			return true;

@@ -53,7 +53,7 @@
     </cluster>
   </clusters>
 
-  <analysis id="phylo" type="paup">
+  <analysis id="phylo-ORF2" type="paup">
     <identify>
       1,2,3,4,5,6,7,8,O
     </identify>

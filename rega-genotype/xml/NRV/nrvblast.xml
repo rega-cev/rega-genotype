@@ -4,13 +4,17 @@
   <clusters>
     <cluster id="I" name="I">
       <taxus name="NC_001959">
-        <!--<region name="ORF1" begin="" end=".." />-->
+        <region name="ORF1" begin="4590" end="5357" />
         <region name="ORF2" begin="5321" end="6992" />
       </taxus>
     </cluster>
     <cluster id="II" name="II">
+      <taxus name="X86557">
+        <region name="ORF1" begin="4299" end="5084" />
+        <region name="ORF2" begin="5084" end="6692" />
+      </taxus>
       <taxus name="U07611">
-        <!--<region name="pol" begin=".." end=".." />-->
+        <region name="ORF1" begin="4299" end="5084" />
         <region name="ORF2" begin="5084" end="6692" />
       </taxus>
     </cluster>
@@ -30,10 +34,11 @@
       I,II,III,IV,V
     </identify>
     <cutoff>
-      50
+      100
     </cutoff>
     <options>
-      -q -1 -r 1
+ <!--      -q -4 -r 1 -->
+ 	-p tblastx -M BLOSUM80
     </options>
   </analysis>
 

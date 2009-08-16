@@ -22,7 +22,6 @@ import rega.genotype.AlignmentAnalyses.Cluster;
 
 public class BlastAnalysis extends AbstractAnalysis {
 	public static String blastPath = "";
-	
     static public String formatDbCommand = "formatdb";
     static public String blastCommand = "blastall";
 
@@ -155,7 +154,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                         
                 Runtime runtime = Runtime.getRuntime();
 
-                String cmd = blastPath + File.separatorChar + formatDbCommand + " -o T -p F -i " + db.getAbsolutePath();
+                String cmd = blastPath + formatDbCommand + " -o T -p F -i " + db.getAbsolutePath();
                 System.err.println(cmd);
                 formatdb = runtime.exec(cmd, null, workingDir);
                 int result = formatdb.waitFor();
@@ -166,7 +165,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 
                 db.delete();
                 
-                cmd = blastPath + File.separatorChar + blastCommand + " -p blastn -i " + query.getAbsolutePath() + " "
+                cmd = blastPath + blastCommand + " -p blastn -i " + query.getAbsolutePath() + " "
                     + (options != null ? options : "") + " -m 8 -d " + db.getAbsolutePath();
                 System.err.println(cmd);
                 blast = runtime.exec(cmd, null, workingDir);

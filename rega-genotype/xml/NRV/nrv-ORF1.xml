@@ -1,0 +1,255 @@
+<genotype-analyses>
+  <alignment file="nrv-ORF1.fasta" trim="false" />
+
+  <clusters>
+    <cluster id="I.1" name="NRV I.1">
+      <taxus name="8FIIb|I.1" />
+      <taxus name="L23828|I.1" />
+    </cluster>
+   
+    <cluster id="I.2" name="NRV I.2">
+      <taxus name="L07418|I.2" />
+      <taxus name="OB2001045-441|I.2" />
+    </cluster>
+
+    <cluster id="I.3B" name="NRV I.3B">
+      <taxus name="AY038598|I.3B" />
+      <taxus name="OB2001057-mix|I.3B" />
+    </cluster>
+
+    <cluster id="I.3D" name="NRV I.3D">
+      <taxus name="U04469|I.3D" />
+    </cluster>
+    
+    <cluster id="I.4" name="MRV I.4">
+      <taxus name="AB042808|I.4" />
+      <taxus name="OB2000038-252|I.4" />
+    </cluster>
+     
+    <cluster id="I.5" name="NRV I.5">
+      <taxus name="OB2005138-764|I.5" />
+    </cluster>
+
+    <cluster id="I.5b" name="NRV I.5b">
+      <taxus name="AB039774|I.5b" />
+    </cluster>
+
+    <cluster id="I.6" name="NRV I.6">
+      <taxus name="AF093797|I.6" />
+    </cluster>
+
+    <cluster id="I.6b" name="NRV I.6b"> <!-- 14 -->
+      <taxus name="AB081723|I.6b" />
+      <taxus name="OB2003056-363|I.6b" />
+    </cluster>
+
+    <cluster id="I.7" name="NRV I.7">
+      <taxus name="OB2003000-541|I.7" />
+    </cluster>
+
+    <cluster id="I.8" name="NRV I.8">
+      <taxus name="SW1045-06|I.8" />
+    </cluster>
+
+    <cluster id="I.13" name="NRV I.13">
+      <taxus name="EF529737|I.13" />
+    </cluster>
+
+    <cluster id="I.14" name="NRV I.14">
+      <taxus name="AB187514|I.14" />
+    </cluster>
+
+    <cluster id="I.HK2K" name="NRV I.HK2K">
+      <taxus name="EF190919|I.HK2K" />
+    </cluster>
+
+    <cluster id="II.1" name="NRV II.1">
+      <taxus name="OB2000046-309|II.1" />
+      <taxus name="U07611|II.1" />
+    </cluster>
+
+    <cluster id="II.2" name="NRV II.2">
+      <taxus name="X81879|II.2" />
+      <taxus name="DQ456824|II.2" />
+    </cluster>
+
+    <cluster id="II.3" name="NRV II.3">
+      <taxus name="OB2006021-121|II.3" />
+      <taxus name="AB039782|II.3" />
+      <!-- <taxus name="DQ379713|II.3" /> -->
+    </cluster>
+
+    <cluster id="II.3R" name="NRV II.3R">
+      <taxus name="AB190457|II.3R" />
+      <taxus name="AF190817|II.3R" />
+    </cluster>
+
+    <cluster id="II.4" name="NRV II.4"> <!-- 28 -->
+      <taxus name="AB294779|II.4" />
+      <taxus name="X86557|II.4" />
+      <taxus name="AB294785|II.4" />
+      <taxus name="AF145896|II.4" />
+    </cluster>
+
+    <cluster id="II.5" name="NRV II.5">
+      <taxus name="AF397156|II.5" />
+    </cluster>
+
+    <cluster id="II.5FR" name="NRV II.5FR">
+      <taxus name="AY682550|II.5FR" />
+    </cluster>
+
+    <cluster id="II.5H" name="NRV II.5H">
+      <taxus name="AB212306|II.5H" />
+      <taxus name="DQ366347|II.5H" />
+    </cluster>
+
+    <cluster id="II.6" name="NRV II.6">
+      <taxus name="AB039778|II.6" />
+      <taxus name="AB039779|II.6" />
+    </cluster>
+
+    <cluster id="II.7" name="NRV II.7">
+      <taxus name="AB039777|II.7" />
+      <taxus name="EF670650|II.7" />
+      <taxus name="DQ379715|II.7" />
+    </cluster>
+
+    <cluster id="II.8" name="NRV II.8">
+      <taxus name="AB039780|II.8" />
+    </cluster>
+
+    <cluster id="II.11" name="NRV II.11">
+      <taxus name="AB074892|II.11" />
+      <!-- <taxus name="AB074893|II.11" /> -->
+    </cluster>
+
+    <cluster id="II.12" name="NRV II.12">
+      <taxus name="AB039775|II.12" />
+      <taxus name="EU794698|II.12" />
+    </cluster>
+
+    <cluster id="II.15" name="NRV II.15">
+      <taxus name="AB360387|II.15" />
+    </cluster>
+
+    <cluster id="II.16" name="NRV II.16">
+      <taxus name="AY682551|II.16" />
+      <taxus name="AY772730|II.16" />
+    </cluster>
+
+    <cluster id="II.17" name="NRV II.17">
+      <taxus name="EF529741|II.17" />
+      <taxus name="EF529742|II.17" />
+    </cluster>
+
+    <cluster id="II.18" name="NRV II.18"> <!-- 50 -->
+      <taxus name="AY823304|II.18" />
+      <taxus name="AY823305|II.18" />
+    </cluster>
+
+    <cluster id="II.19" name="NRV II.19">
+      <taxus name="AY823306|II.19" />
+      <taxus name="AY823307|II.19" />
+    </cluster>
+
+    <cluster id="II.20" name="NRV II.20">
+      <taxus name="EU424333|II.20" />
+    </cluster>
+
+    <cluster id="II.21" name="NRV II.21">
+      <taxus name="AB083780|II.21" />
+      <taxus name="AB231337|II.21" />
+      <!-- <taxus name="AB231337|II.21" /> -->
+    </cluster>
+
+    <cluster id="II.a" name="NRV II.a">
+      <taxus name="97007005|II.a" />
+    </cluster>
+
+    <cluster id="II.b" name="NRV II.b">
+      <taxus name="AB365435|II.b" />
+      <taxus name="AY682549|II.b" />
+    </cluster>
+
+    <cluster id="II.c" name="NRV II.c">
+      <taxus name="DQ379714|II.c" />
+      <taxus name="OB2001008-107|II.c" />
+    </cluster>
+
+    <cluster id="II.erfurt" name="NRV II.erfurt">
+      <taxus name="OB20061510970|II.Erfurt" />
+      <taxus name="AB434770|II.Erfurt" />
+    </cluster>
+
+    <cluster id="II.U" name="NRV II.U">
+      <taxus name="AY682552|II.U" />
+    </cluster>
+
+    <cluster id="II.2SMA" name="NRV II.2SMA">
+      <taxus name="AY134748|II.2SMA" />
+    </cluster>
+
+    <cluster id="II.SN89" name="NRV II.SN89">
+      <taxus name="AF315813|II.SN89JA1989JP" />
+    </cluster>
+
+  </clusters>
+
+  <analysis id="phylo-ORF1" type="paup">
+    <identify>
+      I.1,I.2,I.3B,I.3D,I.4,I.5,I.5b,I.6,I.6b,I.7,I.8,I.13,I.14,I.HK2K,II.1,II.2,II.3,II.3R,II.4,II.5,II.5FR,II.5H,II.6,II.7,II.8,II.11,II.12,II.15,II.16,II.17,II.18,II.19,II.20,II.21,II.a,II.b,II.c,II.erfurt,II.U,II.2SMA,II.SN89
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      export format=phylip file=paup.fasta replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      set criterion=distance;
+      dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
+      constraints CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(9,10),(14,15),(21,22),(23,24),(25,26),(27,28),(29,30,31,32),(35,36),(37,38),(39,40,41),(44,45),(47,48),(49,50),(51,52),(53,54),(56,57),(59,60),(61,62),(63,64));
+      NJ constraints=CONSTRE enforce=yes;
+      savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree,inner,outer
+    </options>
+  </analysis>
+
+  <analysis id="scan-self" type="scan">
+    <window>
+      300
+    </window>
+    <step>
+      50
+    </step>
+    <analysis type="paup">
+      <identify>
+       I.1,I.2,I.3B,I.3D,I.4,I.5,I.5b,I.6,I.6b,I.7,I.8,I.13,I.14,I.HK2K,II.1,II.2,II.3,II.3R,II.4,II.5,II.5FR,II.5H,II.6,II.7,II.8,II.11,II.12,II.15,II.16,II.17,II.18,II.19,II.20,II.21,II.a,II.b,II.c,II.erfurt,II.U,II.2SMA,II.SN89
+      </identify>
+      <block>
+        begin paup;
+        log file=paup.log replace=yes;
+        exclude gapped;
+        export format=nexus file=paup.nex replace=yes;
+	set criterion=distance outroot=monophyl;
+	dset distance=TamNei rates=gamma shape=0.324463 NegBrLen=SetAbsVal;
+	outgroup EU360814|III.1;
+        NJ;
+        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        bootstrap nreps=100 search=nj;
+        end;
+        quit;
+      </block>
+    </analysis>
+  </analysis>
+    
+</genotype-analyses>
+

@@ -44,8 +44,8 @@ public class AlignmentAnalyses {
 			return name;
 		}
 
-		public boolean overlaps(int queryBegin, int queryEnd) {
-			return (queryBegin < end && queryEnd > begin);
+		public boolean overlaps(int queryBegin, int queryEnd, int minimumOverlap) {
+			return (end - queryBegin >= minimumOverlap && queryEnd - begin >= minimumOverlap);
 		}
     }
 
