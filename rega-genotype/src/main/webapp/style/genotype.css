@@ -8,6 +8,10 @@ html {
 	border: 0px;
 }
 
+h3 {
+	color: darkblue;
+}
+
 body {
 	background-color: #fbfbfb;
 	font-family: arial,sans-serif;
@@ -23,17 +27,15 @@ div.imgDiv, div.downloadContainer{
 	text-align: center;
 }
 
-*.seqInput {
+.seqInput {
 	margin-top: 2em;
 	margin-left: auto;
 	margin-right: auto;
 	width: 680px;
 }
-.fileUpload {
-	text-align: center;
-}
-.monitor {
-	text-align: center;
+
+.seqInput button {
+	margin: 3px;	
 }
 
 .root {

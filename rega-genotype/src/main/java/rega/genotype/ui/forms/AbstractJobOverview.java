@@ -46,14 +46,21 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 	private WContainerWidget downloadContainer;
 
-	private boolean fillingTable = false;	
+	private boolean fillingTable = false;
+
+	private String jobId;
+
+	private WText explainText;	
 
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main, "monitor-form");
-	
-		WString aipm = tr("monitorForm.analysisInProgress");
-		aipm.arg(getMain().getOrganismDefinition().getUpdateInterval()/1000);
-		analysisInProgress = new WText(aipm, this);
+
+		explainText = new WText(this);
+
+		WString msg = tr("monitorForm.analysisInProgress");
+		msg.arg(getMain().getOrganismDefinition().getUpdateInterval()/1000);
+		analysisInProgress = new WText(msg, this);
+
 		analysisInProgress.setStyleClass("analysisProgress");
 		
 		new WBreak(this);
@@ -101,10 +108,15 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		super.setHidden(hidden);
 	}
 
-	public void init(File jobDir) {
+	public void init(File jobDir, String jobId) {
 		boolean otherJob = !jobDir.equals(this.jobDir);
 		
 		this.jobDir = jobDir;
+		this.jobId = jobId;
+
+		WString msg = tr("monitorForm.explain");
+		msg.arg(jobId);
+		explainText.setText(msg);
 
 		if (updater != null) {
 			updater.stop();

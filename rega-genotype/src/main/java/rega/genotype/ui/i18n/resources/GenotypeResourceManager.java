@@ -119,6 +119,10 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 
 	@Override
 	public String resolveKey(String key) {
-		return resources.get(key);
+		String v = resources.get(key);
+		if (v == null)
+			return "??" + key + "??";
+		else
+			return v;
 	}
 }

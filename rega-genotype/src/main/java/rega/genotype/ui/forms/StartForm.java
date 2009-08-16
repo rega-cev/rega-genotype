@@ -5,7 +5,6 @@
  */
 package rega.genotype.ui.forms;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -63,26 +62,11 @@ public class StartForm extends AbstractForm {
 		seqinput.setStyleClass("seqInput");
 		
 		new WText(tr("sequenceInput.inputSequenceInFastaFormat"), seqinput);
-		new WBreak(seqinput);
-		
 		ta = new WTextArea(seqinput);
 		ta.setColumns(83);
 		ta.setRows(15);
 		new WBreak(seqinput);
-	
-		fileUpload = new FileUpload();
-		seqinput.addWidget(fileUpload);
-		fileUpload.getUploadFile().uploaded.addListener(this, new Signal.Listener() {
-            public void trigger() {                
-				try {
-					String fasta = FileUtils.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
-					verifyFasta(fasta);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            }
-        });
-		
+
 		run = new WPushButton(seqinput);
 		run.setText(tr("sequenceInput.run"));
 		
@@ -99,17 +83,27 @@ public class StartForm extends AbstractForm {
 				verifyFasta(ta.text());
 			}
 		});
+		
+		new WText(tr("sequenceInput.uploadSequenceInFastaFormat"), seqinput);
+
+		fileUpload = new FileUpload();
+		seqinput.addWidget(fileUpload);
+		fileUpload.getUploadFile().uploaded.addListener(this, new Signal.Listener() {
+            public void trigger() {                
+				try {
+					String fasta = FileUtils.readFileToString(new File(fileUpload.getUploadFile().spoolFileName()));
+					verifyFasta(fasta);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            }
+        });
 		errorSeq = new WText(tr("startForm.errorSequence"), seqinput);
 		
-		new WBreak(this);
-		
-		WContainerWidget monitorContainer = new WContainerWidget(this);
-		monitorContainer.setStyleClass("monitor");
-		new WText(tr("startForm.provideJobId"), monitorContainer);
-		new WBreak(monitorContainer);
-		new WText(tr("startForm.jobId"), monitorContainer);
-		jobIdTF = new WLineEdit(monitorContainer);
-		monitorButton = new WPushButton(tr("startForm.monitor"), monitorContainer);
+		new WText(tr("startForm.monitorJob"), seqinput);
+		new WText(tr("startForm.labelJobId"), seqinput);
+		jobIdTF = new WLineEdit(seqinput);
+		monitorButton = new WPushButton(tr("startForm.monitor"), seqinput);
 		monitorButton.clicked.addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
 				File jobDir = getMain().getJobDir(jobIdTF.text());
@@ -121,7 +115,7 @@ public class StartForm extends AbstractForm {
 				}
 			}
 		});
-		errorJobId = new WText(tr("startForm.errorJobId"), monitorContainer);
+		errorJobId = new WText(tr("startForm.errorJobId"), seqinput);
 
 		errorJobId.setStyleClass("error");
 		errorJobId.hide();

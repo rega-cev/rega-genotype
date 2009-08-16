@@ -132,7 +132,7 @@ public class GenotypeWindow extends WContainerWidget
 						File jobDir = getJobDir(jobId);
 						if (monitorForm == null)
 							monitorForm = od.getJobOverview(GenotypeWindow.this);
-						monitorForm.init(jobDir);
+						monitorForm.init(jobDir, jobId);
 						monitor.setVarValue(jobId(jobDir));
 					} else
 						setForm(startForm);
@@ -171,7 +171,7 @@ public class GenotypeWindow extends WContainerWidget
 	public void monitorForm(File jobDir, boolean setUrl) {
 		if (monitorForm==null)
 			monitorForm = od.getJobOverview(this);
-		monitorForm.init(jobDir);
+		monitorForm.init(jobDir, jobId(jobDir));
 		monitor.setVarValue(jobId(jobDir));
 		
 		if (setUrl) {

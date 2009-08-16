@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <common-settings>
-	<resource name="sequenceInput.uploadFile">Upload file</resource>
+	<resource name="sequenceInput.uploadFile">Upload file and start!</resource>
 	<resource name="sequenceInput.uploadingFile">Uploading file</resource>
-  	<resource name="sequenceInput.run">Run</resource>
+  	<resource name="sequenceInput.run">Start!</resource>
   	<resource name="sequenceInput.clear">Clear</resource>
-  	<resource name="sequenceInput.inputSequenceInFastaFormat">Enter your input data in FASTA format. </resource>
-  	
-  	<resource name="startForm.provideJobId">Monitor a running or finished job by providing the job-id.</resource>
-  	<resource name="startForm.jobId">Job-id:</resource>
-  	<resource name="startForm.monitor">Monitor</resource>
+  	<resource name="sequenceInput.inputSequenceInFastaFormat">
+  		<p>You may can either:
+  		  <ul>
+  		    <li>A) genotype sequences that you paste in FASTA format in the input field.</li>
+  		    <li>B) upload a FASTA file.</li>
+  		    <li>C) revisit results of a previous run</li>
+  		  </ul>
+  		</p>
+  		<h3>A) Paste nucleotide sequence(s) in FASTA format:</h3>
+    </resource>
+  	<resource name="sequenceInput.uploadSequenceInFastaFormat">
+  		<h3>B) Or, upload a FASTA with nucleotide sequences:</h3>
+    </resource>
+  	<resource name="startForm.monitorJob">
+  		<h3>C) Or, revisit results from a previous run:</h3>
+    </resource>  	
+  	<resource name="startForm.labelJobId">Job-id:</resource>
+  	<resource name="startForm.monitor">Go!</resource>
   	<resource name="startForm.errorJobId">Invalid job id.</resource>
   	<resource name="startForm.errorSequence">Too many sequences.</resource>
-  	
+
+	<resource name="monitorForm.explain">
+		<p>You may bookmark this page to revisit results of this job ({1}) later.</p>
+	</resource>  	
   	<resource name="monitorForm.analysisInProgress">
   		Analysis in progress... (Showing partial results). <br/>
   		This page will be automatically updated every {1} seconds...<br/>
