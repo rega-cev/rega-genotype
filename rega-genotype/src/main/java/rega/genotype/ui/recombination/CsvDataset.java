@@ -8,6 +8,8 @@ package rega.genotype.ui.recombination;
 import org.jfree.data.DomainOrder;
 import org.jfree.data.xy.AbstractXYDataset;
 
+import rega.genotype.utils.Table;
+
 /**
  * Implementation of an XYDataset which extracts its data from a CSV file.
  * 

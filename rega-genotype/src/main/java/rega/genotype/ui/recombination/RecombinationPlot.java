@@ -31,6 +31,7 @@ import org.jfree.ui.RectangleEdge;
 
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.utils.Table;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;

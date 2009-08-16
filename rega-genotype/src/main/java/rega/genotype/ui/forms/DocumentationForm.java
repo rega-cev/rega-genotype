@@ -10,8 +10,8 @@ import java.io.File;
 import org.jdom.Element;
 
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.recombination.Table;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.utils.Table;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WTable;

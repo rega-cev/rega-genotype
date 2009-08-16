@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.recombination;
+package rega.genotype.utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
