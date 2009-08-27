@@ -111,8 +111,7 @@ public class GenotypeWindow extends WContainerWidget
 
 		StateLink monitor = new StateLink(tr("main.navigation.monitor"), JobForm.JOB_URL, navigation);
 		monitor.setId("monitor-link");
-		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
-		jobForm.setStateLink(monitor);
+		JobForm jobForm = new JobForm(this, od.getJobOverview(this), monitor);
 		forms.put(JobForm.JOB_URL, jobForm);
 
 		form = createDocForm("howToCite-form", "howToCite-text");
@@ -169,7 +168,7 @@ public class GenotypeWindow extends WContainerWidget
 			return;
 		
 		WAnchor a = new WAnchor("", text, parent);
-		a.setId("");
+		a.setObjectName("link");
 		a.setRefInternalPath(url);
 		a.setStyleClass("link");
 		forms.put(url, form);

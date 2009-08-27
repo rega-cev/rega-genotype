@@ -22,8 +22,10 @@ public class JobForm extends AbstractForm {
 	
 	private StateLink stateLink;
 	
-	public JobForm(GenotypeWindow main, AbstractJobOverview jobOverview) {
+	public JobForm(GenotypeWindow main, AbstractJobOverview jobOverview, StateLink stateLink) {
 		super(main, null, null);
+		
+		this.stateLink = stateLink;
 		
 		details = new DetailsForm(main);
 		addWidget(details);
@@ -38,6 +40,8 @@ public class JobForm extends AbstractForm {
 						handleInternalPath();
 					}
 				});
+		
+		handleInternalPath();
 	}
 	
 	public void handleInternalPath() {
@@ -74,9 +78,5 @@ public class JobForm extends AbstractForm {
 		for (WWidget w : this.getChildren()) {
 			w.setHidden(w != form);
 		}
-	}
-	
-	public void setStateLink(StateLink stateLink) {
-		this.stateLink = stateLink;
 	}
 }

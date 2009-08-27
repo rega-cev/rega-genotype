@@ -198,7 +198,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			WText l = new WText(tr("monitorForm.downloadResults"), div);
 			l.setId("");
 			WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"), div);
-			xmlFileDownload.setId("");
+			xmlFileDownload.setObjectName("xml-download");
 			xmlFileDownload.setTarget(AnchorTarget.TargetNewWindow);
 			xmlFileDownload.setStyleClass("link");
 			WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
@@ -224,7 +224,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 				final File jobArchive = GenotypeLib.getZipArchiveFileName(jobDir);
 				WAnchor jobFileDownload = new WAnchor("", tr("monitorForm.jobFile"), div);
-				jobFileDownload.setId("");
+				jobFileDownload.setObjectName("zip-download");
 				jobFileDownload.setStyleClass("link");
 				jobFileDownload.setTarget(AnchorTarget.TargetNewWindow);
 				WResource jobResource = new WFileResource("application/zip", jobArchive.getAbsolutePath()) {
@@ -243,7 +243,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	private WAnchor createTableDownload(WString label, final boolean csv) {
 		WAnchor csvTableDownload = new WAnchor("", label);
-		csvTableDownload.setId("");
+		csvTableDownload.setObjectName("csv-table-download");
 		csvTableDownload.setStyleClass("link");
 		csvTableDownload.setTarget(AnchorTarget.TargetNewWindow);
 
@@ -274,7 +274,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					WTableCell cell = jobTable.getElementAt(getSequenceIndex()+1, i);
 					cell.setId("");
 					cell.addWidget(data.get(i));
-					if (data.get(i).getObjectName().length() > 0)
+					if (data.get(i).getObjectName().length() == 0)
 						data.get(i).setId("");
 					
 					if (WApplication.getInstance().getEnvironment().agentIsIE())

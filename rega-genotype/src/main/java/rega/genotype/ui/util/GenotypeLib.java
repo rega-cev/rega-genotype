@@ -289,7 +289,7 @@ public class GenotypeLib {
 
 	public static WAnchor getAnchor(String text, String fileType, WResource resource, String suggestedName) {
 		WAnchor anchor = new WAnchor("", text);
-		anchor.setId("");
+		anchor.setObjectName("resource");
 		anchor.setStyleClass("link");
 		anchor.setTarget(AnchorTarget.TargetNewWindow);
 		if (suggestedName != null)

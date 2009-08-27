@@ -69,11 +69,11 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		WAnchor anchorTreePdf = GenotypeLib.getAnchor("PDF",
 				"application/pdf",
 				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))), null);
-		anchorTreePdf.setId("");
+		anchorTreePdf.setObjectName("pdf-tree");
 		WAnchor anchorTreeNexus = GenotypeLib.getAnchor("NEXUS Format",
 				"application/txt",
 				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")),null);
-		anchorTreeNexus.setId("");
+		anchorTreeNexus.setObjectName("nexus-tree");
 
 		if (!showTree) {
 			li = ul.addItem(new WText("Export or View the Phylogenetic Tree: "));

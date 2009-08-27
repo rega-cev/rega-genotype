@@ -26,6 +26,7 @@ public abstract class GenotypeMain extends WtServlet
 		super();
 		
 		getConfiguration().setSendXHTMLMimeType(true);
+		getConfiguration().setProgressiveBootstrap(true);
 	}
 	
 	public static GenotypeApplication getApp() {
