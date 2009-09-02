@@ -11,5 +11,7 @@ LATER
 * WMessage args, WAnchors
   ??
 * reference alignment table, add support for *_URL colomn name
-* download entire jobDir contents as tar.gz (monitor-form)
-  [now is a zip file, that is okay?]
+
+* remove treegraph dependency (figtree?)
+  
+  
