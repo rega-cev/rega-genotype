@@ -323,7 +323,19 @@ span.refseq{
 
 .bibitem {
 	font-size: 80%;
+}
 
 .bibitem span {
 	color: blue;
+}
+
+.assignment-overview {
+	border: 1px solid black;
+}
+.assignment-overview th {
+	background-color: rgb(200,200,200);
+}
+.assignment-overview th, .assignment-overview td {
+	border-left: 1px solid black;
+	padding: 1em;
 }

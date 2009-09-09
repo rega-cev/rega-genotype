@@ -34,6 +34,7 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 			super(parent);
 			setModel(model);
 			initTotalRow();
+			setStyleClass("assignment-overview");
 		}
 
 		private void initTotalRow() {
