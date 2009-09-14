@@ -330,6 +330,10 @@ span.refseq{
 }
 
 .assignment-overview {
+	margin-left: auto;
+	margin-right: auto;
+}
+.assignment-overview table {
 	border: 1px solid black;
 }
 .assignment-overview th {
@@ -337,5 +341,11 @@ span.refseq{
 }
 .assignment-overview th, .assignment-overview td {
 	border-left: 1px solid black;
-	padding: 1em;
+	padding: 0.5em;
+}
+.assignment-overview-total {
+	border-top: 1px solid black;
+}
+.assignment-overview table, .assignment-overview div {
+	float: left;	
 }

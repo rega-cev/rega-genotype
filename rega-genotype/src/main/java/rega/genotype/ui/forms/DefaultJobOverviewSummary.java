@@ -34,7 +34,6 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 			super(parent);
 			setModel(model);
 			initTotalRow();
-			setStyleClass("assignment-overview");
 		}
 
 		private void initTotalRow() {
@@ -42,6 +41,7 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 			table_.insertRow(rowCount);
 			table_.getElementAt(rowCount, 0).addWidget(
 					new WText(tr("detailsForm.summary.total")));
+			table_.getRowAt(rowCount).setStyleClass("assignment-overview-total");
 			table_.getElementAt(rowCount, 2).addWidget(new WText("100%"));
 		}
 
@@ -57,6 +57,8 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	}
 	
 	private void init() {
+		setStyleClass("assignment-overview");
+		
 		model = new WStandardItemModel();
 		
 		model.insertColumns(0, 3);
