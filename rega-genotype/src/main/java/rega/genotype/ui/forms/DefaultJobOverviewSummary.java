@@ -41,6 +41,7 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 			table_.insertRow(rowCount);
 			table_.getElementAt(rowCount, 0).addWidget(
 					new WText(tr("detailsForm.summary.total")));
+			table_.getRowAt(rowCount).setStyleClass("assignment-overview-total");
 			table_.getElementAt(rowCount, 2).addWidget(new WText("100%"));
 		}
 
@@ -56,17 +57,11 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	}
 	
 	private void init() {
+		setStyleClass("assignment-overview");
+		
 		model = new WStandardItemModel();
 		
 		model.insertColumns(0, 3);
-		model.insertRow(0);
-		model.setData(0, 0, CHECK_THE_BOOTSCAN);
-		model.setData(0, 1, 0);
-		model.setData(0, 2, 0);
-		model.insertRow(1);
-		model.setData(1, 0, NOT_ASSIGNED);
-		model.setData(1, 1, 0);
-		model.setData(1, 2, 0);
 
 		model.setHeaderData(0, tr("detailsForm.summary.assignment"));
 		model.setHeaderData(1, tr("detailsForm.summary.numberSeqs"));
@@ -97,7 +92,7 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 			init();
 		}
 		
-		Integer insertPosition = 0;
+		boolean inserted = true;
 		String label;
 		int cmp;
 		for (int i = 0; i < model.getRowCount(); i++) {
@@ -105,14 +100,14 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 			cmp = assignment.compareTo(label);
 			if (cmp == 0) {
 				model.setData(i, 1, (Integer)model.getData(i, 1) + 1);
-				insertPosition = null;
+				inserted = false;
 				break;
-			} else if (cmp > 0 && i < model.getRowCount() - 2) {
-				insertPosition = i + 1;
 			}
 		}
 		
-		if (insertPosition != null) {
+		if (inserted) {
+			int insertPosition = determinePosition(assignment);
+							
 			model.insertRow(insertPosition);
 			
 			String majorAssignment = parser.getEscapedValue("genotype_result.sequence.conclusion.assigned.major.assigned.id");
@@ -135,6 +130,22 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 			if (v > 0)
 				model.setData(i, 2, String.format("%.3g%%", v / total * 100.0));
 		}
+	}
+	
+	private int determinePosition(String assignment) {
+		if (assignment.equals(CHECK_THE_BOOTSCAN) ||
+				assignment.equals(this.NOT_ASSIGNED))
+			return model.getRowCount();
+			
+		String label;
+		for (int i = 0; i < model.getRowCount(); i++) {
+			label = (String)model.getData(i, 0);
+			if (label.equals(CHECK_THE_BOOTSCAN) ||
+					label.equals(this.NOT_ASSIGNED))
+				return i;
+		}
+
+		return 0;
 	}
 	
 	protected String formatAssignment(String assignment) {
