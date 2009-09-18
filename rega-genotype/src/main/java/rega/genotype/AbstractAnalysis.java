@@ -235,6 +235,10 @@ public abstract class AbstractAnalysis {
 	public void setOptions(String options) {
 		this.options = options;
 	}
+	
+	public String getOptions() {
+		return this.options;
+	}
     
     public static double trimDouble(double d) {
         return (Math.round(d * 1000.) / 1000.);

@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import rega.genotype.AbstractAnalysis.Result;
+import rega.genotype.AbstractAnalysis.Scannable;
+
 /**
  * A sliding window version of a wrapped analysis.
  * 
@@ -21,15 +24,22 @@ import java.util.TreeMap;
  * @author koen
  */
 public class ScanAnalysis extends AbstractAnalysis {
+	private static class FragmentResult {
+		public int start, end;
+		public AbstractAnalysis.Result result;
+	};
+	
     public class Result extends AbstractAnalysis.Result implements Scannable {
-        List<Scannable> windowResults;
+        private List<Scannable> windowResults;
+		private List<FragmentResult> recombinationResults;
 
-        public Result(AbstractSequence sequence, List<Scannable> windowResults) {
+        public Result(AbstractSequence sequence, List<Scannable> windowResults, List<FragmentResult> recombinationResults) {
             super(sequence);
             this.windowResults = windowResults;
+            this.recombinationResults = recombinationResults;
         }
 
-        public double getBootscanSupport() {
+		public double getBootscanSupport() {
         	return getBootscanSupport(windowResults.get(0).scanDiscreteLabels().get(0));
         }
         
@@ -136,6 +146,20 @@ public class ScanAnalysis extends AbstractAnalysis {
                 tracer.printNoindent("\n");
             }
             tracer.printlnClose("</data>");
+            
+            if (haveOption("recombination") && recombinationResults != null) {
+            	tracer.printlnOpen("<recombination>");
+
+            	for (FragmentResult r : recombinationResults) {
+            		tracer.printlnOpen("<region>");
+                    tracer.add("start", String.valueOf(r.start));
+                    tracer.add("end", String.valueOf(r.end));
+            		r.result.writeXML(tracer);
+            		tracer.printlnClose("</region>");
+            	}
+            	
+            	tracer.printlnClose("</recombination>");
+            }
         }
 
 		private void writeXMLSupports(ResultTracer tracer) {
@@ -242,14 +266,95 @@ public class ScanAnalysis extends AbstractAnalysis {
             for (int i = 0; i < windows.size(); ++i) {
                 windowResults.add((Scannable) analysis.run(windows.get(i), sequence));
             }
-            
-            return new Result(sequence, windowResults);
+
+        	List<FragmentResult> recombinationResults = null;
+            if (haveOption("recombination")) {
+				recombinationResults = doRecombinationAnalysis(getOption("recombination"), windowResults, aligned, sequence);
+            }
+
+            return new Result(sequence, windowResults, recombinationResults);
         } catch (AlignmentException e) {
             throw new AnalysisException(getId(), sequence, e);
         }
     }
 
-    /**
+    private List<FragmentResult> doRecombinationAnalysis(String label, List<Scannable> windowResults, SequenceAlignment aligned,
+    		AbstractSequence sequence) throws AnalysisException {
+    	int labelIdx = windowResults.get(0).scanDiscreteLabels().indexOf(label);
+
+    	boolean haveRecombination = false;
+
+    	String current = null;
+    	for (Scannable result : windowResults) {
+    		String thisWindow = result.scanDiscreteValues().get(labelIdx);
+    		if (thisWindow != null) {
+    			if (current != null && !thisWindow.equals(current)) {
+    				haveRecombination = true;
+    				break;
+    			}
+    			current = thisWindow;
+    		}
+    	}
+    	
+    	if (haveRecombination) {
+			List<FragmentResult> recombinationResults = new ArrayList<FragmentResult>();
+
+    		int firstWindow = 0;
+    		int lastWindow = 0;
+    		current = null;
+
+    		// make sure tree is saved as well
+    		String originalOptions = analysis.getOptions();
+    		analysis.setOptions(originalOptions + ",tree");
+
+    		try {
+        		for (Scannable result : windowResults) {
+            		String thisWindow = result.scanDiscreteValues().get(labelIdx);
+
+            		boolean handleFragment = (windowResults.indexOf(result) == windowResults.size() - 1)
+            			|| (thisWindow != null && current != null && !thisWindow.equals(current));
+
+            		if (handleFragment) {
+        				FragmentResult r = new FragmentResult();
+        				r.start = firstWindow * step;
+        				r.end = Math.min(aligned.getLength(), lastWindow * step + window);
+        				
+        				SequenceAlignment fragment = aligned.getSubSequence(r.start, r.end);
+        
+        				r.result = analysis.run(fragment, sequence);
+        				recombinationResults.add(r);
+
+        				firstWindow = windowResults.indexOf(result);
+        			}
+
+            		if (thisWindow != null) {
+            			current = thisWindow;
+        				lastWindow = windowResults.indexOf(result);
+            		}
+            	}
+    		} finally {
+    			analysis.setOptions(originalOptions);
+    		}
+    		
+    		return recombinationResults;
+    	} else
+    		return null;
+	}
+
+	private String getOption(String option) {
+    	String[] options = getOptions().split(",");
+
+    	for (String o : options) {
+    		String[] ov = o.split(":");
+    		
+    		if (ov[0].equals(option))
+    			return ov[1];
+    	}
+    	
+    	return null;
+	}
+
+	/**
      * @return Returns the analysis.
      */
     public AbstractAnalysis getAnalysis() {

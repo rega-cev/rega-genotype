@@ -304,7 +304,6 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 				}	
 			};
 		}
-
     }
 
 	private boolean runMrBayes(SequenceAlignment a, File outputDir,

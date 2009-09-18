@@ -225,17 +225,7 @@
     </options>
   </analysis>
 
-  <analysis id="scan" type="scan">
-    <window>
-      400
-    </window>
-    <step>
-      50
-    </step>
-    <cutoff>
-      0.9
-    </cutoff>
-    <analysis type="paup">
+  <analysis id="paupfragment" type="paup">
       <identify>
  	A1,B,C,D,F1,G,H,J,K
       </identify>
@@ -255,8 +245,20 @@
       quit;
       </block>
       <cutoff>70</cutoff>
-    </analysis>
-      <options>data-all</options>
+   </analysis>
+
+  <analysis id="scan" type="scan">
+    <window>
+      400
+    </window>
+    <step>
+      50
+    </step>
+    <cutoff>
+      0.9
+    </cutoff>
+    <analysis id="paupfragment" type="paup" />
+    <options>data-all,recombination:assigned</options>
   </analysis>
 
   <analysis id="crfscan" type="scan">
