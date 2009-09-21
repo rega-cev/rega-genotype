@@ -299,8 +299,8 @@ public class ScanAnalysis extends AbstractAnalysis {
     	if (haveRecombination) {
 			List<FragmentResult> recombinationResults = new ArrayList<FragmentResult>();
 
-    		int firstWindow = 0;
-    		int lastWindow = 0;
+    		int firstIndex = 0;
+    		int lastIndex = 0;
     		current = null;
 
     		// make sure tree is saved as well
@@ -311,25 +311,29 @@ public class ScanAnalysis extends AbstractAnalysis {
         		for (Scannable result : windowResults) {
             		String thisWindow = result.scanDiscreteValues().get(labelIdx);
 
-            		boolean handleFragment = (windowResults.indexOf(result) == windowResults.size() - 1)
-            			|| (thisWindow != null && current != null && !thisWindow.equals(current));
+            		boolean handleFragment = (thisWindow != null && current != null && !thisWindow.equals(current));
+            		
+            		if (windowResults.indexOf(result) == windowResults.size() - 1) {
+       					lastIndex = aligned.getLength();
+       					handleFragment = true;
+            		}
 
             		if (handleFragment) {
         				FragmentResult r = new FragmentResult();
-        				r.start = firstWindow * step;
-        				r.end = Math.min(aligned.getLength(), lastWindow * step + window);
-        				
+        				r.start = firstIndex;
+        				r.end = lastIndex;
+
         				SequenceAlignment fragment = aligned.getSubSequence(r.start, r.end);
         
         				r.result = analysis.run(fragment, sequence);
         				recombinationResults.add(r);
 
-        				firstWindow = windowResults.indexOf(result);
+        				firstIndex = windowResults.indexOf(result) * step + window/2;
         			}
 
             		if (thisWindow != null) {
             			current = thisWindow;
-        				lastWindow = windowResults.indexOf(result);
+        				lastIndex = windowResults.indexOf(result) * step + window/2;
             		}
             	}
     		} finally {
