@@ -11,6 +11,7 @@ import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WStandardItemModel;
+import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.LabelOption;
@@ -59,6 +60,9 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	private void init() {
 		setStyleClass("assignment-overview");
 		
+		WTable layout = new WTable(this);
+		layout.setStyleClass("jobOverviewSummary");
+		
 		model = new WStandardItemModel();
 		
 		model.insertColumns(0, 3);
@@ -67,14 +71,14 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 		model.setHeaderData(1, tr("detailsForm.summary.numberSeqs"));
 		model.setHeaderData(2, tr("detailsForm.summary.percentage"));
 		
-		table = new SummaryTableView(model, this);
+		table = new SummaryTableView(model, layout.getElementAt(0, 0));
 		model.dataChanged().addListener(this, new Signal2.Listener<WModelIndex, WModelIndex>() {
 			public void trigger(WModelIndex arg1, WModelIndex arg2) {
 				table.updateTotalRow(total);
 			}
 		});
 		
-		pieChart = new WPieChart(this);
+		pieChart = new WPieChart(layout.getElementAt(0, 1));
 		pieChart.setModel(model);
 		pieChart.setLabelsColumn(0);
 		pieChart.setDataColumn(1);
