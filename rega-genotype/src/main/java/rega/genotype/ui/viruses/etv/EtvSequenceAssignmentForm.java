@@ -30,16 +30,16 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 		block.setId("");
 
 		WText t = new WText(tr("defaultSequenceAssignment.name-length")
-				.arg(p.getEscapedValue("genotype_result.sequence[name]"))
-				.arg(p.getEscapedValue("genotype_result.sequence[length]")), block);
+				.arg(p.getEscapedValue("/genotype_result/sequence/@name"))
+				.arg(p.getEscapedValue("/genotype_result/sequence/@length")), block);
 		t.setId("");
 
-		boolean havePhyloAnalysis = p.getValue("genotype_result.sequence.result['phylo-serotype'].best.id") != null;
-		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("genotype_result.sequence.conclusion['unassigned'].assigned.id") == null;
+		boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-serotype']/best/id") != null;
+		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("/genotype_result/sequence/conclusion[@id='unassigned']/assigned/id") == null;
 
 		if (haveBlastAssignment) {
-			String blastConclusion = p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.name");
-			String blastScore = p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.score");
+			String blastConclusion = p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/cluster/name");
+			String blastScore = p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/cluster/score");
 			t = new WText(tr("etvSequenceAssignment.blast").arg(blastConclusion).arg(blastScore), block);
 			t.setId("");
 		}
@@ -63,8 +63,8 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 		int start = 0;
 		int end = 0;
 		try {
-			start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
-			end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
+			start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+			end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
 		} catch (NumberFormatException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -83,7 +83,7 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
 		refSeq.arg(start);
 		refSeq.arg(end);
-		refSeq.arg(p.getEscapedValue("genotype_result.sequence.result['blast'].refseq"));
+		refSeq.arg(p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/refseq"));
 
 		t = new WText(refSeq, block);
 		t.setId("");

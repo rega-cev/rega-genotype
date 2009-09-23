@@ -13,7 +13,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.xpath.XPath;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -33,12 +39,12 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 
 	private List<String> currentPath = new ArrayList<String>();
 
-	private StringBuilder values = new StringBuilder();
+	protected StringBuilder values = new StringBuilder();
 	
 	private Map<String, String> valuesMap = new HashMap<String, String>();
 	private List<String> elements = new ArrayList<String>();
 		
-	private int sequenceIndex = -1;
+	protected int sequenceIndex = -1;
 	
 	private boolean stop = false;
 
@@ -51,9 +57,9 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 			
 			for(int i = 0; i<attributes.getLength(); i++) {
 				if(attributes.getQName(i).equals("id")) {
-					specifier += "[\'" + attributes.getValue(i) + "\']";
+					specifier += "[@"+ attributes.getQName(i) +"=\'" + attributes.getValue(i) + "\']";
 				} else {
-					valuesMap.put(getCurrentPath()+"."+qName+'['+attributes.getQName(i)+']', attributes.getValue(i));
+					valuesMap.put(getCurrentPath()+"/"+qName+"/@"+attributes.getQName(i), attributes.getValue(i));
 				}
 			}
 	
@@ -73,7 +79,7 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 	    	values.delete(0, values.length());
 	    	
 	    	
-	    	if(getCurrentPath().equals("genotype_result.sequence")) {
+	    	if(getCurrentPath().equals("/genotype_result/sequence")) {
 	    		sequenceIndex++;
 	    		endSequence();
 	    		if(!stop) {
@@ -126,19 +132,25 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 			}
     	}
     }
+	
+	private String toXPath(String path){
+		return '/'+ path.replace('.', '/')
+				   .replace("[","[@id='")
+				   .replace("]", "']");
+	}
     
     private void reset() {
     	currentPath.clear();
     	sequenceIndex = -1;
     }
     
-    private String getCurrentPath() {
-    	StringBuilder tmp = new StringBuilder();
+    protected String getCurrentPath() {
+    	StringBuilder tmp = new StringBuilder("/");
     	
     	for(int i = 0; i<currentPath.size(); i++) {
     		tmp.append(currentPath.get(i));
     		if(i!=currentPath.size()-1)
-    			tmp.append('.');
+    			tmp.append('/');
     	}
     	
     	return tmp.toString();
@@ -189,28 +201,145 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 
 		System.err.println("End dump:");
 	}
+	
+	public boolean stopped(){
+		return stop;
+	}
 
 	public static class SkipToSequenceParser extends GenotypeResultParser {
-
-		private boolean found;
 		private int selectedSequenceIndex;
+		private Document doc;
+		private Element root;
+		private Stack<Element> stack;
 
 		public SkipToSequenceParser(int selectedSequenceIndex) {
-			this.selectedSequenceIndex = selectedSequenceIndex;
-			this.found = false;
-		}
+			super();
 
-		@Override
-		public void endSequence() {
-			if (getSequenceIndex() == selectedSequenceIndex) {
-				found = true;
-				stopParsing();
+			this.selectedSequenceIndex = selectedSequenceIndex; 
+			
+			stack = new Stack<Element>();
+			root = new Element("genotype_result");
+			doc = new Document(root);
+			stack.push(root);
+		}
+		
+		public int getSelectedSequenceIndex(){
+			return selectedSequenceIndex;
+		}
+		
+		public String getValue(String xpath){
+			Object o = getObject(xpath);
+			if(o != null){
+				if(o instanceof Element)
+					return ((Element)o).getText();
+				if(o instanceof Attribute)
+					return ((Attribute)o).getValue();
+			}
+			return null;
+		}
+		
+		public boolean elementExists(String xpath) {
+			return getElement(xpath) != null;
+	    }
+		
+		public Element getElement(String xpath){
+			Object o = getObject(xpath);
+			if(o != null && o instanceof Element)
+				return (Element)o;
+			else
+				return null;
+		}
+		
+		private Object getObject(String xpath){
+			try {
+				XPath x = XPath.newInstance(xpath);
+				return x.selectSingleNode(doc);
+			} catch (JDOMException e) {
+				return null;
 			}
 		}
+		
+		@Override
+		public void endSequence() {
+			if(getSequenceIndex() == getSelectedSequenceIndex())
+				stopParsing();
+		}
+		
+		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+			if(!stopped()){
+				if(qName.equals("sequence") && getCurrentPath().equals("/genotype_result"))
+					++sequenceIndex;
+				
+				if(getSequenceIndex() == getSelectedSequenceIndex()){
+					Element e = new Element(qName);
+					for(int i = 0; i<attributes.getLength(); i++)
+						e.setAttribute(attributes.getQName(i),attributes.getValue(i));
+					stack.peek().addContent(e);
+					stack.push(e);
+				}
+			}
+		}
+		
+	    @Override
+	    public void characters(char[] ch, int start, int length) throws SAXException {
+	    	if(!stopped() && getSequenceIndex() == getSelectedSequenceIndex()) {
+	    		values.append(new String(ch, start, length));
+	    	}
+	    }
+	    
+	    @Override
+	    public void endElement(String uri, String localName, String qName) throws SAXException {
+	    	if(!stopped()) {
+		    	if(getSequenceIndex() == getSelectedSequenceIndex()){
+		    		String value = values.toString().trim();
+			    	if(!value.equals(""))
+			    		stack.peek().setText(value);
+			    	values.delete(0, values.length());
+			    	
+		    		stack.pop();
+		    	}
+		    	if(qName.equals("sequence") && getCurrentPath().equals("/genotype_result")) {
+		    		endSequence();
+		    	}
+	    	}
+	    }
+		
+	    protected String getCurrentPath(){
+	    	StringBuilder sb = new StringBuilder("/");
+	    	boolean first = true;
+	    	for(Element e : stack){
+	    		if(first)
+	    			first = false;
+	    		else
+	    			sb.append('/');
+	    		sb.append(e.getName());
+	    	}
+	    	return sb.toString();
+	    }
+	    
+	    public void dumpDebug(){
+	    	System.err.println("Start debug:");
+	    	dumpDebug(root, "");
+	    	System.err.println("End dump:");
+	    }
+	    private void dumpDebug(Element e, String pfx){
+	    	System.err.print(pfx + e.getName());
+	    	for(Object o : e.getAttributes()){
+	    		Attribute a = (Attribute)o;
+	    		System.err.print(" "+ a.getName() +"='"+ a.getValue() +"'");
+	    	}
+	    	System.err.println();
+	    	if(e.getTextTrim().length() > 0)
+	    		System.err.println(e.getText());
+	    	
+	    	for(Object o : e.getChildren())
+	    		dumpDebug((Element)o,pfx+"-");
+	    }
 
 		public boolean indexOutOfBounds() {
-			return !found;
+			return getSelectedSequenceIndex() > getSequenceIndex();
 		}
+	    
 	}
 
 	public static GenotypeResultParser parseFile(File jobDir, int selectedSequenceIndex) {
@@ -221,5 +350,15 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 			return p;
 		else
 			return null;
+	}
+	
+	public static void main(String args[]){
+		File jobDir = new File(args[0]);
+		String sequence = args.length > 1 ? args[1]:null;
+		
+		GenotypeResultParser p = GenotypeResultParser.parseFile(jobDir, Integer.parseInt(sequence));
+		p.dumpDebug();
+		System.err.println(p.getValue("/genotype_result/sequence/result/start"));
+		System.err.println(p.getSequenceIndex());
 	}
 }

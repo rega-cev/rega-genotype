@@ -18,6 +18,7 @@ public class JobForm extends AbstractForm {
 	
 	private DetailsForm details;
 	private AbstractJobOverview jobOverview;
+	private RecombinationForm recombination;
 	private WText error;
 	
 	private StateLink stateLink;
@@ -31,6 +32,8 @@ public class JobForm extends AbstractForm {
 		addWidget(details);
 		this.jobOverview = jobOverview;
 		addWidget(jobOverview);
+		recombination = new RecombinationForm(main);
+		addWidget(recombination);
 		error = new WText();
 		addWidget(error);
 		
@@ -62,10 +65,22 @@ public class JobForm extends AbstractForm {
 				stateLink.setVarValue(jobId);
 				showWidget(jobOverview);
 			} else {
-				WString errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
+				String detailed = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/" + sequenceId +"/");
+				
+				WString errorMsg;
+				WWidget widget;
+				if(RecombinationForm.URL.equals(detailed)){
+					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId);
+					widget = recombination;
+				}
+				else{
+					errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
+					widget = details;
+				}
+				
 				if (errorMsg == null) {
 					stateLink.setVarValue(jobId);
-					showWidget(details);
+					showWidget(widget);
 				} else {
 					error.setText(errorMsg.arg(jobId));
 					showWidget(error);

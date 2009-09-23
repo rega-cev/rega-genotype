@@ -30,7 +30,7 @@ import eu.webtoolkit.jwt.WString;
  * @author plibin0
  */
 public class HcvDefinition implements OrganismDefinition {
-	private HcvGenome genome = new HcvGenome(this);
+	private Genome genome = new Genome(new HcvGenome(this));
 
 	public AbstractDataTableGenerator getDataTableGenerator(DataTable t)
 			throws IOException {
@@ -46,7 +46,7 @@ public class HcvDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(2, "genotype_result.sequence.result['scan'].data");
+		return new DefaultSequenceAssignmentForm(2, "/genotype_result/sequence/result[@id='scan']/data");
 	}
 
 	public String getOrganismDirectory() {
@@ -62,23 +62,23 @@ public class HcvDefinition implements OrganismDefinition {
 
 		WString m = new WString("Phylogenetic analysis with pure subtypes:");
 		
-		if (p.elementExists("genotype_result.sequence.result['pure']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m, false));
-		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m, false));
+		if (p.elementExists("/genotype_result/sequence/result[@id='pure']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure']", m, m, false));
+		else if (p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure-puzzle']", m, m, false));
 
 		m = new WString("Phylogenetic analysis with pure subtypes and CRFs:");
 
-		if (p.elementExists("genotype_result.sequence.result['crf']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m, false));
+		if (p.elementExists("/genotype_result/sequence/result[@id='crf']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='crf']", m, m, false));
 		
-		if (p.elementExists("genotype_result.sequence.result['scan']"))
+		if (p.elementExists("/genotype_result/sequence/result[@id='scan']"))
 			forms.add(new DefaultRecombinationDetailsForm());
 		
-		if (p.elementExists("genotype_result.sequence.result['crfscan']"))
+		if (p.elementExists("/genotype_result/sequence/result[@id='crfscan']"))
 			forms.add(new DefaultRecombinationDetailsForm());
 
-		if(p.elementExists("genotype_result.sequence.result['pure-puzzle']")) {
+		if(p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']")) {
 			forms.add(new DefaultSignalDetailsForm());
 		}
 		
@@ -98,5 +98,9 @@ public class HcvDefinition implements OrganismDefinition {
 		HCVTool hcv = new HCVTool(jobDir);
 		hcv.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 				jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+	}
+
+	public Genome getLargeGenome() {
+		return getGenome();
 	}
 }

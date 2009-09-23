@@ -41,8 +41,8 @@ public class NovJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		data.clear();
 
-		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[name]"))));
-		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[length]"))));
+		data.add(new WText(new WString(p.getEscapedValue("/genotype_result/sequence/@name"))));
+		data.add(new WText(new WString(p.getEscapedValue("/genotype_result/sequence/@length"))));
 
 		WAnchor report = createReportLink(p);
 		data.add(report);
@@ -60,8 +60,8 @@ public class NovJobOverview extends AbstractJobOverview {
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
 					"-",
-					Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start")), 
-					Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end")),
+					Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start")), 
+					Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end")),
 					0, "", null)));
 		} catch (IOException e) {
 			e.printStackTrace();

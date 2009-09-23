@@ -74,7 +74,7 @@ public class RecombinationPlot {
 		chart.getLegend().setPosition(RectangleEdge.RIGHT);
 		
 		//colors curves
-		Map<String, Color> genomeColors = od.getGenome().COLORS();
+		Map<String, Color> genomeColors = od.getGenome().getAttributes().getColors();
 		for(int i=0; i<n.getSeriesCount();i++) {
 			Color c = genomeColors.get(n.getSeriesKey(i));
 			if(c!=null) {

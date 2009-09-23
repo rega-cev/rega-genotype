@@ -86,7 +86,7 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	}
 	
 	public void update(GenotypeResultParser parser, OrganismDefinition od) {
-		String assignment = formatAssignment(parser.getEscapedValue("genotype_result.sequence.conclusion.assigned.name"));
+		String assignment = formatAssignment(parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name"));
 		
 		if (table == null) {
 			init();
@@ -110,9 +110,9 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 							
 			model.insertRow(insertPosition);
 			
-			String majorAssignment = parser.getEscapedValue("genotype_result.sequence.conclusion.assigned.major.assigned.id");
+			String majorAssignment = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id");
 			WBrush brush = pieChart.getBrush(insertPosition);
-			Color c = od.getGenome().COLORS().get(majorAssignment);
+			Color c = od.getGenome().getAttributes().getColors().get(majorAssignment);
 			if (c != null) {
 				brush.setColor(new WColor(c.getRed(), c.getGreen(), c.getBlue()));
 				pieChart.setBrush(insertPosition, brush);

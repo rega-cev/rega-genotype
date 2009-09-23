@@ -105,6 +105,6 @@ public class DetailsForm extends AbstractForm {
 	}
 	
 	public String getSequenceName() {
-		return p.getEscapedValue("genotype_result.sequence[name]");
+		return p.getEscapedValue("/genotype_result/sequence/@name");
 	}
 }

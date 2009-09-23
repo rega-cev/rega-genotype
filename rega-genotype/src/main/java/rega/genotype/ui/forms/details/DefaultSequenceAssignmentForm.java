@@ -44,35 +44,35 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 	public void fillForm(GenotypeResultParser p, final OrganismDefinition od, File jobDir) {
 		String id;
 
-		if (!p.elementExists("genotype_result.sequence.conclusion")) {
+		if (!p.elementExists("/genotype_result/sequence/conclusion")) {
 			id = "-";
 		} else {
-			id = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.id");
+			id = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/id");
 		}
 			
 		text.clear();
 		
 		new WText(tr("defaultSequenceAssignment.name-length")
-				.arg(p.getEscapedValue("genotype_result.sequence[name]"))
-				.arg(p.getEscapedValue("genotype_result.sequence[length]")), text);
+				.arg(p.getEscapedValue("/genotype_result/sequence/@name"))
+				.arg(p.getEscapedValue("/genotype_result/sequence/@length")), text);
 		
 		text.addWidget(new WText(tr("defaultSequenceAssignment.assignment")));
 
-		if(!p.elementExists("genotype_result.sequence.conclusion")) {
+		if(!p.elementExists("/genotype_result/sequence/conclusion")) {
 			text.addWidget(new WText(" Sequence error"));
 		} else {
-			text.addWidget(new WText(" " +p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name")));
+			text.addWidget(new WText(" " +p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name")));
 		}
 		text.addWidget(new WText(", "));
 		text.addWidget(new WText(tr("defaultSequenceAssignment.bootstrap")));
-		if(!p.elementExists("genotype_result.sequence.conclusion.assigned.support")) {
+		if(!p.elementExists("/genotype_result/sequence/conclusion/assigned/support")) {
 			text.addWidget(new WText(" NA"));
 		} else {
-			text.addWidget(new WText(" " +p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support")+"%"));
+			text.addWidget(new WText(" " +p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/support")+"%"));
 		}
 		
-		int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
-		int end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
+		int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+		int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
 		String csvData = genomeDataXPath != null ? p.getValue(genomeDataXPath) : null;
 		
 		images.clear();
@@ -92,17 +92,17 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 			WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
 			refSeq.arg(start);
 			refSeq.arg(end);
-			refSeq.arg(p.getEscapedValue("genotype_result.sequence.result['blast'].refseq"));
+			refSeq.arg(p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/refseq"));
 			WText refSeqWidget = new WText(refSeq);
 			refSeqWidget.setStyleClass("refseq");
 			motivation.addWidget(refSeqWidget);
 
 			motivation.addWidget(new WBreak());
 			motivation.addWidget(new WText(tr("defaultSequenceAssignment.motivation")));
-			if(!p.elementExists("genotype_result.sequence.conclusion")) {
-				motivation.addWidget(new WText(p.getEscapedValue("genotype_result.sequence.error")));
+			if(!p.elementExists("/genotype_result/sequence/conclusion")) {
+				motivation.addWidget(new WText(p.getEscapedValue("/genotype_result/sequence/error")));
 			} else {
-				motivation.addWidget(new WText(p.getEscapedValue("genotype_result.sequence.conclusion.motivation")));
+				motivation.addWidget(new WText(p.getEscapedValue("/genotype_result/sequence/conclusion/motivation")));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

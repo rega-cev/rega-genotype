@@ -30,8 +30,8 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 		block.setId("");
 
 		WText t = new WText(tr("defaultSequenceAssignment.name-length")
-				.arg(p.getEscapedValue("genotype_result.sequence[name]"))
-				.arg(p.getEscapedValue("genotype_result.sequence[length]")), block);
+				.arg(p.getEscapedValue("/genotype_result/sequence/@name"))
+				.arg(p.getEscapedValue("/genotype_result/sequence/@length")), block);
 		t.setId("");
 
 		String blastConclusion = NovResults.getBlastConclusion(p);
@@ -72,8 +72,8 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 		int start = 0;
 		int end = 0;
 		try {
-			start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
-			end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
+			start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+			end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
 		} catch (NumberFormatException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -92,7 +92,7 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
 		refSeq.arg(start);
 		refSeq.arg(end);
-		refSeq.arg(p.getEscapedValue("genotype_result.sequence.result['blast'].refseq"));
+		refSeq.arg(p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/refseq"));
 
 		t = new WText(refSeq, block);
 		t.setId("");

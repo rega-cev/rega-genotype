@@ -82,7 +82,7 @@ public class HIVGenotypeAnalysisTest extends TestCase {
     	GenotypeResultParser p = new GenotypeResultParser(){
 			@Override
 			public void endSequence() {
-				String assignment = getValue("genotype_result.sequence.conclusion.assigned.major.assigned.name");
+				String assignment = getValue("/genotype_result/sequence/conclusion/assigned/major/assigned/name");
 				assertEquals(assignment, "HIV-1 Subtype B");
 			}    		
     	};

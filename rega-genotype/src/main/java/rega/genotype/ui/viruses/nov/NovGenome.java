@@ -6,46 +6,41 @@
 package rega.genotype.ui.viruses.nov;
 
 import java.awt.Color;
-import java.util.HashMap;
-import java.util.Map;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.util.Genome;
+import rega.genotype.ui.util.DefaultGenomeAttributes;
 
 /**
  * NoV genome map drawing implementation.
  */
-public class NovGenome extends Genome {
-	private Map<String, Color> colorMap = new HashMap<String, Color>();
-	private OrganismDefinition od;
+public class NovGenome extends DefaultGenomeAttributes {
 	
 	public NovGenome(OrganismDefinition od) {
-		colorMap.put("-", new Color(0x53, 0xb8, 0x08));
-		
-		this.od = od;
-	}
-	
-	public Map<String, Color> COLORS() {
-		return colorMap;
+		super(od);
+		getColors().put("-", new Color(0x53, 0xb8, 0x08));
 	}
 
-	public int GENOMEEND() {
+	public int getGenomeEnd() {
 		return 7582;
 	}
 
-	public int GENOMESTART() {
+	public int getGenomeStart() {
 		return 1;
 	}
 
-	public int IMGGENOMEEND() {
+	public int getGenomeImageEndX() {
 		return 584;
 	}
 
-	public int IMGGENOMESTART() {
+	public int getGenomeImageStartX() {
 		return 0;
 	}
 	
-	public OrganismDefinition getOrganismDefinition() {
-		return od;
+	public int getGenomeImageEndY() {
+		return 100;
+	}
+
+	public int getGenomeImageStartY() {
+		return 13;
 	}
 }

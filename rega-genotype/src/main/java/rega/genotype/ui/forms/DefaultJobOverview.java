@@ -41,22 +41,22 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		List<WWidget> data = new ArrayList<WWidget>();
 
-		data.add(new WText(p.getEscapedValue("genotype_result.sequence[name]")));
-		data.add(new WText(p.getEscapedValue("genotype_result.sequence[length]")));
+		data.add(new WText(p.getEscapedValue("/genotype_result/sequence/@name")));
+		data.add(new WText(p.getEscapedValue("/genotype_result/sequence/@length")));
 		
 		WAnchor report = createReportLink(p);
 		data.add(report);
 
 		String id;
-		if (!p.elementExists("genotype_result.sequence.conclusion")) {
+		if (!p.elementExists("/genotype_result/sequence/conclusion")) {
 			id = "-";
 			data.add(new WText("NA"));
 			data.add(new WText("NA"));
 		} else {
-			id = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.id");
-			data.add(new WText(p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name")));
+			id = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/id");
+			data.add(new WText(p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name")));
 			
-			String support = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support");
+			String support = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/support");
 			if(support==null) {
 				support = "NA";
 			}
@@ -64,11 +64,11 @@ public class DefaultJobOverview extends AbstractJobOverview {
 			try {
 				data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
 						id,
-						Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start")), 
-						Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end")),
+						Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start")), 
+						Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end")),
 						0, 
 						"pure", 
-						p.getValue("genotype_result.sequence.result['scan'].data"))));
+						p.getValue("/genotype_result/sequence/result[@id='scan']/data"))));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -47,8 +47,8 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
 	}
     
 	public void endSequence() {
-    	addNamedValue("genotype_result.sequence[name]", ValueFormat.Label);
-    	addNamedValue("genotype_result.sequence[length]", ValueFormat.Number);
+    	addNamedValue("/genotype_result/sequence/@name", ValueFormat.Label);
+    	addNamedValue("/genotype_result/sequence/@length", ValueFormat.Number);
 
 		NovResults.Conclusion c = NovResults.getConclusion(this, "ORF1");
 
@@ -60,13 +60,13 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
 		addValue(c.majorAssignment == NovResults.NA ? "" : c.majorAssignment);
 		addValue(c.variantAssignmentForOverview == null ? "" : c.variantAssignmentForOverview);
 
-    	addNamedValue("genotype_result.sequence.result['blast'].start", ValueFormat.Number);
-    	addNamedValue("genotype_result.sequence.result['blast'].end", ValueFormat.Number);
-    	addNamedValue("genotype_result.sequence.result['blast'].cluster.name", ValueFormat.Label);
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/start", ValueFormat.Number);
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/end", ValueFormat.Number);
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/name", ValueFormat.Label);
     	
     	addPhyloResults("phylo-ORF1", false);
 
-    	String id = getValue("genotype_result.sequence.result['phylo-ORF1'].best.id");
+    	String id = getValue("/genotype_result/sequence/result[@id='phylo-ORF1']/best/id");
     	if (id != null)
     		addPhyloResults("phylo-ORF1-" + id, true);
     	else
@@ -75,7 +75,7 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
 
     	addPhyloResults("phylo-ORF2", false);
 
-    	id = getValue("genotype_result.sequence.result['phylo-ORF2'].best.id");
+    	id = getValue("/genotype_result/sequence/result[@id='phylo-ORF2']/best/id");
     	if (id != null)
     		addPhyloResults("phylo-ORF2-" + id, true);
     	else

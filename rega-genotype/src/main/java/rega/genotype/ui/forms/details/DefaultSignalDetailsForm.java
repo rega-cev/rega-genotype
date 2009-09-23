@@ -26,10 +26,10 @@ public class DefaultSignalDetailsForm extends IDetailsForm {
 		WListContainerWidget ul = new WListContainerWidget(this);
 		WContainerWidget li;
 		li = ul.addItem(new WText(tr("defaultSignalAnalysis.signalValue")));
-		li.addWidget(new WText(p.getEscapedValue("genotype_result.sequence.result['pure-puzzle'].signal")));
+		li.addWidget(new WText(p.getEscapedValue("/genotype_result/sequence/result[@id='pure-puzzle']/signal")));
 		li = ul.addItem(new WText(tr("defaultSignalAnalysis.signalComment")));
 		
-		addWidget(GenotypeLib.getWImageFromFile(GenotypeLib.getSignalPNG(GenotypeLib.getFile(jobDir, p.getValue("genotype_result.sequence.result['pure-puzzle'].puzzle")))));
+		addWidget(GenotypeLib.getWImageFromFile(GenotypeLib.getSignalPNG(GenotypeLib.getFile(jobDir, p.getValue("/genotype_result/sequence/result[@id='pure-puzzle']/puzzle")))));
 	}
 	
 	@Override

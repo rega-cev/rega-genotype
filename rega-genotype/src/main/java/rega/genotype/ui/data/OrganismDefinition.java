@@ -16,7 +16,6 @@ import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
-import rega.genotype.ui.util.StateLink;
 
 /**
  * An interface describing all attributes and functions specific to an organism.
@@ -27,6 +26,7 @@ public interface OrganismDefinition {
 	public AbstractDataTableGenerator getDataTableGenerator(DataTable t) throws IOException;
 	public String getOrganismDirectory();
 	public Genome getGenome();
+	public Genome getLargeGenome();
 	public IDetailsForm getMainDetailsForm();
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p);
 	public int getUpdateInterval();

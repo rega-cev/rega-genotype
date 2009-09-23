@@ -238,6 +238,7 @@ h1 {
 	text-align: center;
 	height: 30px;
 	width: 80%;
+	clear: both;
 }
 
 .navigation div {
@@ -332,9 +333,11 @@ span.refseq{
 .assignment-overview {
 	margin-left: auto;
 	margin-right: auto;
+	max-width: 900px;
 }
 .assignment-overview table {
 	border: 1px solid black;
+	max-width: 400px;
 }
 .assignment-overview th {
 	background-color: rgb(200,200,200);
@@ -347,5 +350,27 @@ span.refseq{
 	border-top: 1px solid black;
 }
 .assignment-overview table, .assignment-overview div {
-	float: left;	
+	float: left;
+}
+
+.recombination-form {
+	width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.recombination-form table {
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.recombination-form .region {
+	border: 1px solid black;
+	margin: 2px;
+	padding: 1em;
+}
+.recombination-form .region:first-line{
+	font-size: 120%;
+	font-weight: bold;
+	text-align: center;
 }

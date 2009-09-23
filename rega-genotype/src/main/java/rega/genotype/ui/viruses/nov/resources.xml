@@ -24,6 +24,9 @@
 	<details-form>
 		<title>Norovirus Genotyping Details</title>
 	</details-form>
+	<recombination-form>
+		<title>Norovirus Recombination Details</title>
+	</recombination-form>
 	<howToCite-form>
 		<title>How to Cite the Norovirus Automated Genotyping Tool</title>
 		<howToCite-text>

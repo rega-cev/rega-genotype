@@ -40,20 +40,20 @@ public class EtvJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		List<WWidget> data = new ArrayList<WWidget>();
 
-		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[name]"))));
-		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[length]"))));
+		data.add(new WText(new WString(p.getEscapedValue("/genotype_result/sequence/@name"))));
+		data.add(new WText(new WString(p.getEscapedValue("/genotype_result/sequence/@length"))));
 
-		boolean havePhyloAnalysis = p.getValue("genotype_result.sequence.result['phylo-serotype'].best.id") != null;
-		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("genotype_result.sequence.conclusion['unassigned'].assigned.id") == null;
+		boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-serotype']/best/id") != null;
+		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("/genotype_result/sequence/conclusion[@id='unassigned']/assigned/id") == null;
 
 		if (haveBlastAssignment) {
-			String blastAssignment = p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.name");
+			String blastAssignment = p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/cluster/name");
 			data.add(new WText(new WString(notNull(blastAssignment))));
 		} else
 			data.add(new WText("Could not assign"));
 		
 		if (havePhyloAnalysis) {
-			String serotypeAssignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.id");
+			String serotypeAssignment = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/id");
 			data.add(new WText(new WString(notNull(serotypeAssignment))));
 		} else
 			data.add(new WText());
@@ -67,8 +67,8 @@ public class EtvJobOverview extends AbstractJobOverview {
 		try {
 			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
 					"-",
-					Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start")), 
-					Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end")),
+					Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start")), 
+					Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end")),
 					0, "", null)));
 		} catch (IOException e) {
 			e.printStackTrace();

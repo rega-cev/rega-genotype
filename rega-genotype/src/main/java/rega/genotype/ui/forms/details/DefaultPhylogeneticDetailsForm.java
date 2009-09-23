@@ -51,28 +51,28 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		WListContainerWidget ul = new WListContainerWidget(this);
 		ul.setId("");
 		WContainerWidget li;
-		li = ul.addItem(new WText("Bootstrap support: " + p.getValue(phyloPath + ".best.support")));
+		li = ul.addItem(new WText("Bootstrap support: " + p.getValue(phyloPath + "/best/support")));
 		
 		li = ul.addItem(new WText("Download the alignment ("));
 		li.addWidget(GenotypeLib.getAnchor("NEXUS format",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")), null));
+				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/alignment")), null));
 		li.addWidget(w = new WText(", "));
 		w.setId("");
 		li.addWidget(GenotypeLib.getAnchor("FASTA format",
 				"application/txt",
-				new AlignmentResource(GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")),
+				new AlignmentResource(GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/alignment")),
 						SequenceAlignment.SEQUENCE_ANY, SequenceAlignment.FILETYPE_FASTA), "alignment.fasta"));
 		li.addWidget(w= new WText(")"));
 		w.setId("");
 
 		WAnchor anchorTreePdf = GenotypeLib.getAnchor("PDF",
 				"application/pdf",
-				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))), null);
+				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/tree"))), null);
 		anchorTreePdf.setObjectName("pdf-tree");
 		WAnchor anchorTreeNexus = GenotypeLib.getAnchor("NEXUS Format",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")),null);
+				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/tree")),null);
 		anchorTreeNexus.setObjectName("nexus-tree");
 
 		if (!showTree) {
@@ -91,7 +91,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 			w.setId("");
 
 			WImage treePng = GenotypeLib.getWImageFromFile
-				(GenotypeLib.getTreePNG(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))));
+				(GenotypeLib.getTreePNG(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/tree"))));
 			treePng.setId("");
 			treePng.setStyleClass("phyloTree");
 			li.addWidget(treePng);
@@ -100,7 +100,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		li = ul.addItem(new WText("View the "));
 		li.addWidget(GenotypeLib.getAnchor("PAUP* Log file",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".log")), "paup-log.doc"));
+				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/log")), "paup-log.doc"));
 		li.addWidget(w = new WText(" (Contains bootstrap values)"));
 		w.setId("");
 	}

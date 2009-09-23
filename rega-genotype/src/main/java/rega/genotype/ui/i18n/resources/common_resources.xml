@@ -86,6 +86,7 @@
 	</resource>
 	
 	<resource name="defaultRecombinationAnalyses.title">Recombination analyses</resource>
+	<resource name="defaultRecombinationAnalyses.detailedRecombination">Detailed recombination analyses</resource>
 	<resource name="defaultRecombinationAnalyses.comment">
 		This section contains the recombination plots, and data from which they were derived.
 	</resource>

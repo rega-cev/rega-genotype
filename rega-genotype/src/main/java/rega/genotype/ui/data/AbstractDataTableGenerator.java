@@ -66,19 +66,19 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
     }
 
 	protected void addPhyloResults(String analysisId, boolean useIdNotName) {
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best."
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/"
 					+ (useIdNotName ? "id" : "name"), ValueFormat.Label);
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best.support", ValueFormat.Number);
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best.inner", ValueFormat.Number);
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].best.outer", ValueFormat.Number);
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/support", ValueFormat.Number);
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/inner", ValueFormat.Number);
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/outer", ValueFormat.Number);
 	}
 
 	protected void addPhyloScanResults(String analysisId) {
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].support['assigned']", ValueFormat.Label);
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].support['best']", ValueFormat.Label);
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].nosupport['best']", ValueFormat.Label);
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].profile['assigned']", ValueFormat.Label);
-		addNamedValue("genotype_result.sequence.result['" + analysisId + "'].profile['best']", ValueFormat.Label);
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/support[@id='best']", ValueFormat.Label);
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/support[@id='assigned']", ValueFormat.Label);
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/nosupport[@id='assigned']", ValueFormat.Label);
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/profile[@id='best']", ValueFormat.Label);
+		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/profile[@id='assigned']", ValueFormat.Label);
 	}
 
 	@Override
