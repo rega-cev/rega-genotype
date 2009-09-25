@@ -374,3 +374,7 @@ span.refseq{
 	font-weight: bold;
 	text-align: center;
 }
+
+table.jobOverviewSummary {
+	width: 100%;
+}
