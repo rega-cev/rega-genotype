@@ -10,18 +10,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.util.Genome;
+import rega.genotype.ui.util.DefaultGenomeAttributes;
 
 /**
  * Enterovirus genome map drawing implementation.
  */
-public class GiardiaGenome extends Genome {
+public class GiardiaGenome extends DefaultGenomeAttributes {
 	private Map<String, Color> colorMap = new HashMap<String, Color>();
 	private OrganismDefinition od;
 	
 	public static String regions[] = { "16S", "B-giardin", "GDH", "TPI" };
 
 	public GiardiaGenome(OrganismDefinition od) {
+		super();
+		
 		colorMap.put("-", new Color(0x53, 0xb8, 0x08));
 		colorMap.put("A", new Color(0xff, 0x33, 0x00));
 		colorMap.put("AIII", new Color(0xff, 0x66, 0x00));
@@ -39,20 +41,30 @@ public class GiardiaGenome extends Genome {
 		return colorMap;
 	}
 
-	public int GENOMEEND() {
+	public int getGenomeEnd() {
 		return 7550;
 	}
 
-	public int GENOMESTART() {
+	public int getGenomeStart() {
 		return 80;
 	}
 
-	public int IMGGENOMEEND() {
+	public int getGenomeImageEndX() {
 		return 605;
 	}
 
-	public int IMGGENOMESTART() {
+	public int getGenomeImageStartX() {
 		return 1;
+	}
+
+	public int getGenomeImageEndY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getGenomeImageStartY() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	public OrganismDefinition getOrganismDefinition() {

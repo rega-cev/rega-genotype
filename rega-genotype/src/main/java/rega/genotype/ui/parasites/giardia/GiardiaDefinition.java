@@ -29,7 +29,7 @@ import eu.webtoolkit.jwt.WString;
  * Enterovirus OrganismDefinition implementation.
  */
 public class GiardiaDefinition implements OrganismDefinition {
-	private GiardiaGenome genome = new GiardiaGenome(this);
+	private Genome genome = new Genome(new GiardiaGenome(this));
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
 		GiardiaTool giardiaTool = new GiardiaTool(jobDir);
@@ -83,5 +83,10 @@ public class GiardiaDefinition implements OrganismDefinition {
 
 	public boolean haveDetailsNavigationForm() {
 		return false;
+	}
+
+	//TODO
+	public Genome getLargeGenome() {
+		return null;
 	}
 }
