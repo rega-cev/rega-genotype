@@ -37,18 +37,18 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 		}
 
 		private void initTotalRow() {
-			int rowCount = table_.getRowCount();
-			table_.insertRow(rowCount);
-			table_.getElementAt(rowCount, 0).addWidget(
+			int rowCount = getTable().getRowCount();
+			getTable().insertRow(rowCount);
+			getTable().getElementAt(rowCount, 0).addWidget(
 					new WText(tr("detailsForm.summary.total")));
-			table_.getRowAt(rowCount).setStyleClass("assignment-overview-total");
-			table_.getElementAt(rowCount, 2).addWidget(new WText("100%"));
+			getTable().getRowAt(rowCount).setStyleClass("assignment-overview-total");
+			getTable().getElementAt(rowCount, 2).addWidget(new WText("100%"));
 		}
 
 		public void updateTotalRow(double total) {
-			int rowCount = table_.getRowCount()-1;
-			table_.getElementAt(rowCount, 1).clear();
-			table_.getElementAt(rowCount, 1).addWidget(new WText((int)total + ""));
+			int rowCount = getTable().getRowCount()-1;
+			getTable().getElementAt(rowCount, 1).clear();
+			getTable().getElementAt(rowCount, 1).addWidget(new WText((int)total + ""));
 		}
 	}
 	
@@ -162,8 +162,8 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 
 	public void reset() {
 		if (table != null) {
-			this.removeChild(table);
-			this.removeChild(pieChart);
+			this.removeWidget(table);
+			this.removeWidget(pieChart);
 			table = null;
 			total = 0;
 		}

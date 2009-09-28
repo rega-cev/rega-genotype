@@ -22,7 +22,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import eu.webtoolkit.jwt.utils.StringUtils;
+import eu.webtoolkit.jwt.StringUtils;
+import eu.webtoolkit.jwt.WWebWidget;
 
 /**
  * A sax parser which parses the rega-genotype analysis result file and stores 
@@ -165,7 +166,7 @@ public abstract class GenotypeResultParser extends DefaultHandler {
     	if(value==null)
     		return null;
     	else
-    		return StringUtils.escapeText(value, true);
+    		return WWebWidget.escapeText(value, true);
     }
     
     public boolean elementExists(String name) {

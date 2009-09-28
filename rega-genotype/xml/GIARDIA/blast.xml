@@ -1,0 +1,36 @@
+<genotype-analyses>
+  <alignment file="blast.fasta" data="dna"/>
+
+  <clusters>
+    <cluster id="16S" name="16S">
+      <taxus name="16S" />
+    </cluster>
+
+    <cluster id="B-giardin" name="B-giardin">
+      <taxus name="B-giardin" />
+    </cluster>
+
+    <cluster id="GDH" name="GDH">
+      <taxus name="GDH" />
+    </cluster>
+
+    <cluster id="TPI" name="TPI">
+      <taxus name="TPI" />
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>
+      16S, B-giardin, GDH, TPI
+    </identify>
+
+    <cutoff>
+      100
+    </cutoff>
+
+    <options>
+      -q -1 -r 1
+    </options>
+  </analysis>
+</genotype-analyses>
+
