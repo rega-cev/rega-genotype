@@ -19,8 +19,8 @@ import org.jdom.input.SAXBuilder;
 
 import eu.webtoolkit.jwt.WLocalizedStrings;
 import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WWebWidget;
 import eu.webtoolkit.jwt.WWidget;
-import eu.webtoolkit.jwt.utils.StringUtils;
 
 public class GenotypeResourceManager extends WLocalizedStrings {
 	private Map<String, String> resources = new HashMap<String, String>();
@@ -97,13 +97,13 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 	private void extractFormattedText(StringBuilder textToReturn, Element child) {
 		for(Object o : child.getContent()) {
 			if(o instanceof Text) {
-				textToReturn.append(StringUtils.escapeText(((Text)o).getText(), false));
+				textToReturn.append(WWebWidget.escapeText(((Text)o).getText(), false));
 			} else {
 				Element e = (Element)o;
 				textToReturn.append("<"+e.getName());
 				for(Object oa : e.getAttributes()) {
 					Attribute a = (Attribute)oa;
-					textToReturn.append(" "+ a.getName() + "=\"" + StringUtils.escapeText(a.getValue(), false) + "\"");
+					textToReturn.append(" "+ a.getName() + "=\"" + WWebWidget.escapeText(a.getValue(), false) + "\"");
 				}
 				textToReturn.append(">");
 				extractFormattedText(textToReturn, e);

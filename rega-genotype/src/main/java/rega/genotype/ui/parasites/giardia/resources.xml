@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<organism-settings>
+	<main-form>
+		<footer>
+			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
+			and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
+			<p>Contact: TBD</p>
+		</footer>
+	</main-form>
+	<start-form>
+		<title>Enterovirus Genotyping Tool Version 0.1</title>
+		<note>
+			<div>
+				This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequences.
+			</div>
+			<div>
+				<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
+			</div>
+		</note>
+	</start-form>
+	<monitor-form>
+		<title>Enterovirus Genotyping Tool Results</title>
+	</monitor-form>
+	<details-form>
+		<title>Enterovirus Genotyping Details</title>
+	</details-form>
+	<howToCite-form>
+		<title>How to Cite the Enterovirus Automated Genotyping Tool</title>
+		<howToCite-text>
+			<text>
+				<p>Please use the following citation:</p>
+				<p>TBD.</p>
+			</text>
+		</howToCite-text>
+	</howToCite-form>
+	<introduction-form>
+		<title>The Enterovirus Automated Genotyping Tool: introduction.</title>
+		<introduction-text>
+			<text>
+				To be completed.
+			</text>
+		</introduction-text>
+	</introduction-form>
+	<tutorial-form>
+		<title>Enterovirus Genotyping Tutorial</title>
+		<tutorial-text>
+			<text>
+				To be completed.
+			</text>
+		</tutorial-text>
+	</tutorial-form>
+	<decisionTrees-form>
+	</decisionTrees-form>
+	<subtypingProcess-form>
+		<title>Enterovirus Genotyping Tool Methods</title>
+		<subtypingProcess-text>
+			<text>
+				To be completed.
+			</text>
+		</subtypingProcess-text>
+	</subtypingProcess-form>
+	<exampleSequences-form>
+		<title>
+			Example Sequences for the Enterovirus Genotyping Tool 
+		</title>
+		<exampleSequences-sequences>
+			<sequence name="AM292468">
+GGGGATCCCATTGCAGATATGATTGACCAAACCGTGAACAATCAAGTGAATCGCTCCCTATCTGCATTGCAAGTACTACC
+CACAGCTGCCAATACTGAAGCAAGTAGTCACAGATTAGGCACTGGTGTTGTGCCAGCACTACAGGCTGCGGAGACAGGGG
+CGTCATCAAATGCCAGTGACAAGAACCTCATTGAAACTAGGTGTGTGCTGAATCATCACTCCACACAGGAGACGGCCATT
+GGAAACTTCTTCAGCCGCGCCGGTTTGGTCAGCATTATCACAATGCCCACCACGGGCACCCAGAACACGGATGGATATGT
+TAATTGGGATATTGATTTGATGGGGTACGCACAATTGCGGCGGAAGTGCGAATTGTTCACCTACATGCGCTTTGATGCCG
+AATTCACATTTGTCGTGGCCAAACCCAACGGTGAATTAGTCCCTCAATTACTGCAGTACATGTATGTTCCACCAGGGGCC
+CCGAAACCCACTTCCAGAGATTCATTCGCTTGGCAGACAGCCACCAACCCGTCTGTGTTTGTGAAAATGACAGATCCTCC
+AGCCCAGGTGTCAGTTCCCTTCATGTCACCAGCCAGTGCGTACCAATGGTTTTATGATGGCTACCCCACTTTCGGAGAGC
+ACCTCCAAGCAAATGACCTAGATTATGGCCAATGCCCTAATAACATGATGGGCACCTTTAGCATTAGGACAGTGGGGACT
+GAGAAGTCACCACACTCCATCACCCTGAGAGTGTACATGAGAATTAAGCACGTCAGGGCGTGGATACCAAGACCTCTGAG
+AAACCAACCCTATTTGTTTAAGACTAACCCAAATTACAAAGGCAATGACATTAAGTGCACTAGCGCTAGCAGAGATAAGA
+TCACAACTTTG
+	        </sequence>
+		</exampleSequences-sequences>
+	</exampleSequences-form>
+
+	<resource name="etvSequenceAssignment.blast">
+		<h3>Genogroup assignment</h3>
+		<p>
+			<span class="label">Species assignment:</span> <span class="nov-genotype">{1}</span>
+		</p>
+		<p>
+			<span class="label"></span> Based on relative blast score of {2}.
+		</p>
+	</resource>
+
+	<resource name="etvSequenceAssignment.phylo">
+		<h3>{1} assignment</h3>
+		<p>
+			<span class="label">Serotype assignment:</span> <span class="nov-genotype">{2}</span>
+		</p>
+		<p>
+			<span class="label"></span> {3}
+		</p>
+	</resource>
+
+	<resource name="etvTool.title">Enterovirus Genotyping Tool</resource>
+
+	<resource name="main.navigation.introduction">Introduction</resource>	
+	<resource name="main.navigation.subtypingProcess">(Sub)typing process</resource>
+	<resource name="main.navigation.tutorial">How to use</resource>
+</organism-settings>
