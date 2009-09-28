@@ -117,7 +117,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		JobOverviewSummary summary = getSummary(filter);
 		if (summary != null) {
 			summary.reset();
-			this.insertBefore(summary.getWidget(), analysisInProgress);
+			int index = getIndexOf(analysisInProgress);
+			this.insertWidget(++index, summary.getWidget());
 		}
 
 		if (updater != null) {

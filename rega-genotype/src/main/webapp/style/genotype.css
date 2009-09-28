@@ -349,3 +349,7 @@ span.refseq{
 .assignment-overview table, .assignment-overview div {
 	float: left;	
 }
+
+table.jobOverviewSummary {
+	width: 100%;
+}
