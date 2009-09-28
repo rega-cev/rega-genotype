@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import rega.genotype.AbstractAnalysis.Result;
-import rega.genotype.AbstractAnalysis.Scannable;
-
 /**
  * A sliding window version of a wrapped analysis.
  * 
@@ -32,6 +29,7 @@ public class ScanAnalysis extends AbstractAnalysis {
     public class Result extends AbstractAnalysis.Result implements Scannable {
         private List<Scannable> windowResults;
 		private List<FragmentResult> recombinationResults;
+		private Map<String, Float> supportedTypes = null; 
 
         public Result(AbstractSequence sequence, List<Scannable> windowResults, List<FragmentResult> recombinationResults) {
             super(sequence);
@@ -115,6 +113,45 @@ public class ScanAnalysis extends AbstractAnalysis {
             else
                 return getBootscanSupport() > cutoff;
         }
+        
+        /**
+         * @return Returns map of types with their window support rate, where the support rate > 0.1
+         */
+        public Map<String, Float> getSupportedTypes(){
+        	if(supportedTypes == null){
+        		supportedTypes = new TreeMap<String, Float>();
+        	
+		        List<String> supportLabels = windowResults.get(0).scanDiscreteLabels();
+		        Map<String, Integer> windowCount = new TreeMap<String, Integer>();
+		        int total = 0;
+		        
+		        for (int j = 0; j < supportLabels.size(); ++j) {
+		        	for (int i = 0; i < windowResults.size(); ++i) {
+		            	List<String> values = windowResults.get(i).scanDiscreteValues();
+		            	
+		            	String value = values.get(j);
+		            	if (value == null)
+		            		value = "-";
+		            	
+		            	Integer count = windowCount.get(value);
+		            	if(count == null)
+		            		count = 0;
+		            	windowCount.put(value, ++count);
+		            	
+		            	++total;
+		            }
+		        }
+		        
+		        for(Map.Entry<String, Integer> me : windowCount.entrySet()){
+		        	if(!me.getKey().equals("-")){
+			        	float ratio = (float)me.getValue()/total;
+			        	if(ratio > 0.1)
+			        		supportedTypes.put(me.getKey(), ratio);
+		        	}
+		        }
+        	}
+        	return supportedTypes;
+        }
 
         public void writeXMLTable(ResultTracer tracer) {
             tracer.printlnOpen("<data>");
@@ -178,7 +215,6 @@ public class ScanAnalysis extends AbstractAnalysis {
 			List<String> supportLabels = windowResults.get(0).scanDiscreteLabels();
             for (int j = 0; j < supportLabels.size(); ++j) {
             	tracer.printlnOpen("<profile id=" + tracer.quote(supportLabels.get(j)) + ">");
-            	String last = null;
             	for (int i = 0; i < windowResults.size(); ++i) {
                 	List<String> values = windowResults.get(i).scanDiscreteValues();
                 	
@@ -186,10 +222,7 @@ public class ScanAnalysis extends AbstractAnalysis {
                 	if (value == null)
                 		value = "-";
 
-                	if (value != last) {
-                		tracer.printNoindent(value + " ");
-                		last = value;
-                	}
+               		tracer.printNoindent(value + " ");
                 }
 
             	tracer.println("");
