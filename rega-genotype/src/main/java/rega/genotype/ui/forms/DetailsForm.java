@@ -32,9 +32,9 @@ public class DetailsForm extends AbstractForm {
 		mainTable.setStyleClass("detailsForm");
 	}
 	
-	WString init(File jobDir, String selectedSequenceIndex) {
+	WString init(File jobDir, Integer selectedSequenceIndex) {
 		try {
-			p = GenotypeResultParser.parseFile(jobDir, Integer.parseInt(selectedSequenceIndex));
+			p = GenotypeResultParser.parseFile(jobDir, selectedSequenceIndex);
 		
 			if (p == null) {
 				return tr("detailsForm.nonExistingSequenceId").arg(selectedSequenceIndex);

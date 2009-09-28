@@ -49,6 +49,16 @@
 	<resource name="detailsForm.summary.percentage">Percentage</resource>
 	<resource name="detailsForm.summary.total">Total</resource>
 	
+	<resource name="detailsForm.summary.filter.njTreeStats">NJ Tree Statistics</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrap">Average bootstrap</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrapInside">Average bootstrap inside</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrapInside">Average bootstrap outside</resource>
+	
+	<resource name="detailsForm.summary.filter.bootscanStats">Bootscan Statistics</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscan">Average bootscan</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscanSupport">Average bootscan support</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport">Average bootscan no support</resource>
+	
 	<resource name="main.navigation.start">Submit job</resource>
 	<resource name="main.navigation.monitor">Monitor job [{1}]</resource>
 	<resource name="main.navigation.details">Analysis details [{1}]</resource>

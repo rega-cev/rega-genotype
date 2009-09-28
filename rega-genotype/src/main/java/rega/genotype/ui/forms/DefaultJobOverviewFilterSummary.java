@@ -13,6 +13,11 @@ import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WCartesianChart;
 
 public class DefaultJobOverviewFilterSummary extends WContainerWidget implements JobOverviewSummary {
+	private BarView njTreeScanStats;
+	private BarView bootscanStats;
+	
+	private String filter;
+	
 	class Average {
 		Double total;
 		Double min, max;
@@ -26,7 +31,7 @@ public class DefaultJobOverviewFilterSummary extends WContainerWidget implements
 		int nrSequences;
 		private Map<CharSequence, Average> averageMap = new HashMap<CharSequence, Average>();
 		
-		public BarView(WContainerWidget barParent, WContainerWidget tableParent, String filter, String chartTitle) {
+		public BarView(WContainerWidget barParent, WContainerWidget tableParent, CharSequence chartTitle) {
 			barChart = new WCartesianChart(barParent);
 			table = new WTable(tableParent);
 			model = new WStandardItemModel(); 
@@ -89,15 +94,40 @@ public class DefaultJobOverviewFilterSummary extends WContainerWidget implements
 		}
 	}
 	
+	private void init(String filter) {
+		WTable layout = new WTable(this);
+		
+		njTreeScanStats = new BarView(layout.getElementAt(0, 0), 
+				layout.getElementAt(0, 1), 
+				tr("detailsForm.summary.filter.njTreeStats"));
+		njTreeScanStats.setHeaders(filter, tr("detailsForm.summary.filter.njTreeStats.avgBootstrap"), 
+				tr("detailsForm.summary.filter.njTreeStats.avgBootstrapInside"), 
+				tr("detailsForm.summary.filter.njTreeStats.avgBootstrapOutside"));
+		
+		bootscanStats = new BarView(layout.getElementAt(1, 0),
+				layout.getElementAt(1, 1),
+				tr("detailsForm.summary.filter.bootscanStats"));
+		bootscanStats.setHeaders(filter, tr("detailsForm.summary.filter.njTreeStats.avgBootscan"), 
+				tr("detailsForm.summary.filter.njTreeStats.avgBootscanSupport"), 
+				tr("detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport"));
+	}
+	
 	public WContainerWidget getWidget() {
 		return this;
 	}
 
 	public void reset() {
-		
+		this.clear();
+		njTreeScanStats = null;
+	}
+	
+	public void setFilter(String filter) {
+		this.filter = filter;
 	}
 
 	public void update(GenotypeResultParser parser, OrganismDefinition od) {
-		
+		if (njTreeScanStats == null) {
+			init(this.filter);
+		}
 	}
 }

@@ -6,10 +6,12 @@ import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.WAbstractItemModel;
+import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WModelIndex;
+import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableView;
@@ -122,7 +124,9 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 				pieChart.setBrush(insertPosition, brush);
 			}
 			
-			model.setData(insertPosition, 0, assignment);
+			WStandardItem item = new WStandardItem(assignment);
+			item.setInternalPath(WApplication.getInstance().getInternalPath() + "/" + assignment);
+			model.setItem(insertPosition, 0, item);
 			model.setData(insertPosition, 1, 1);
 			model.setData(insertPosition, 2, 0.0);
 		}
