@@ -19,7 +19,7 @@ import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
 
-public class DefaultJobOverviewSummary extends WContainerWidget implements JobOverviewSummary {
+public class DefaultJobOverviewSummary extends JobOverviewSummary {
 	private WStandardItemModel model;
 	
 	private WPieChart pieChart;
@@ -27,9 +27,6 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 	
 	//TODO use the text in the table
 	private double total = 0;
-	
-	private final String CHECK_THE_BOOTSCAN = "Check the bootscan";
-	private final String NOT_ASSIGNED = "Not assigned";
 	
 	private class SummaryTableView extends WTableView {
 		public SummaryTableView(WAbstractItemModel model,
@@ -155,23 +152,10 @@ public class DefaultJobOverviewSummary extends WContainerWidget implements JobOv
 
 		return 0;
 	}
-	
-	protected String formatAssignment(String assignment) {
-		if (assignment == null) {
-			assignment = NOT_ASSIGNED;
-		}
-		
-		return assignment;
-	}
-
-	public WContainerWidget getWidget() {
-		return this;
-	}
 
 	public void reset() {
 		if (table != null) {
-			this.removeWidget(table);
-			this.removeWidget(pieChart);
+			this.clear();
 			table = null;
 			total = 0;
 		}

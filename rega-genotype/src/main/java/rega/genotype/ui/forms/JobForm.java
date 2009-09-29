@@ -66,7 +66,7 @@ public class JobForm extends AbstractForm {
 			} catch (NumberFormatException nfe) {
 			}
 			
-			if (filter.trim().equals(""))
+			if (filter != null && filter.trim().equals(""))
 				filter = null;
 			
 			if (sequenceId == null) {

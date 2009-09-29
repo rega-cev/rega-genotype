@@ -67,6 +67,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WContainerWidget downloadTableContainer, downloadResultsContainer;
 
 	private WText explainText;
+	
+	private JobOverviewSummary summary;
+	private String filter;
 
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main, "monitor-form");
@@ -103,10 +106,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public void init(String jobId, String filter) {
-		File jobDir = getJobDir(jobId);
+		this.filter = filter;
 		
-		if(jobDir.equals(this.jobDir))
-			return;
+		File jobDir = getJobDir(jobId);
 		
 		this.jobDir = jobDir;
 
@@ -114,11 +116,14 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		msg.arg(jobId);
 		explainText.setText(msg);
 		
-		JobOverviewSummary summary = getSummary(filter);
+		if(summary != null)
+			this.removeWidget(summary);
+		
+		summary = getSummary(filter);
 		if (summary != null) {
 			summary.reset();
 			int index = getIndexOf(analysisInProgress);
-			this.insertWidget(++index, summary.getWidget());
+			this.insertWidget(++index, summary);
 		}
 
 		if (updater != null) {
@@ -267,12 +272,17 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private GenotypeResultParser tableFiller = new GenotypeResultParser(){
 		@Override
 		public void endSequence() {
+			String assignment = getEscapedValue("/genotype_result/sequence/conclusion/assigned/name");
+			if (filter != null && !filter.equals(assignment))
+				return;
+			
 			int numRows = jobTable.getRowCount()-1;
 			if(getSequenceIndex()>=numRows) {
 				List<WWidget> data = getData(tableFiller);
 				
+				int row = jobTable.getRowCount();
 				for (int i = 0; i < data.size(); i++) {
-					WTableCell cell = jobTable.getElementAt(getSequenceIndex()+1, i);
+					WTableCell cell = jobTable.getElementAt(row, i);
 					cell.setId("");
 					cell.addWidget(data.get(i));
 					if (data.get(i).getObjectName().length() == 0)
@@ -283,7 +293,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				}
 				jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
 				
-				JobOverviewSummary summary = getSummary(null);
 				if (summary != null) 
 					summary.update(tableFiller, getMain().getOrganismDefinition());
 			}

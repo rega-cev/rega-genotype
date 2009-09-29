@@ -88,7 +88,6 @@ public class DefaultJobOverview extends AbstractJobOverview {
 		if (filter == null)
 			return summary;
 		else {
-			filterSummary.setFilter(filter);
 			return filterSummary;
 		}
 	}

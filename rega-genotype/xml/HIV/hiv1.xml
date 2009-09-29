@@ -169,7 +169,7 @@
       quit;
     </block>
     <options>
-      log,alignment,tree
+      log,alignment,tree,inner,outer
     </options>
   </analysis>
 
