@@ -18,4 +18,8 @@ public abstract class JobOverviewSummary extends WContainerWidget {
 		
 		return assignment;
 	}
+	
+	protected String encodeAssignment(String assignment) {
+		return assignment.replace(' ', '_');
+	}
 }

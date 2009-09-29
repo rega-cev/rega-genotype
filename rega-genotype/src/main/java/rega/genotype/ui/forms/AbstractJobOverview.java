@@ -273,7 +273,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		@Override
 		public void endSequence() {
 			String assignment = getEscapedValue("/genotype_result/sequence/conclusion/assigned/name");
-			if (filter != null && !filter.equals(assignment))
+			if (filter != null && !filter.equals(summary.encodeAssignment(assignment)))
 				return;
 			
 			int numRows = jobTable.getRowCount()-1;
@@ -316,7 +316,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public boolean existsJob(String jobId) {
 		return getJobDir(jobId).exists();
 	}
-	
 
 	public File getJobDir(String jobId) {
 		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()+File.separatorChar+jobId);
@@ -328,6 +327,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	public static String jobPath(File jobDir) {
 		return JobForm.JOB_URL + '/' + jobId(jobDir);
+	}
+	
+	public String getJobPath() {
+		return jobPath(jobDir);
 	}
 	
 	public static String jobId(File jobDir) {

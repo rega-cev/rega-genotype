@@ -25,6 +25,8 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 	private WPieChart pieChart;
 	private SummaryTableView table;
 	
+	private AbstractJobOverview jobOverview;
+	
 	//TODO use the text in the table
 	private double total = 0;
 	
@@ -52,7 +54,8 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 		}
 	}
 	
-	public DefaultJobOverviewSummary() {
+	public DefaultJobOverviewSummary(AbstractJobOverview jobOverview) {
+		this.jobOverview = jobOverview;
 		this.setHidden(true);
 	}
 	
@@ -122,7 +125,7 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			}
 			
 			WStandardItem item = new WStandardItem(assignment);
-			item.setInternalPath(WApplication.getInstance().getInternalPath() + "/" + assignment);
+			item.setInternalPath(jobOverview.getJobPath() + "/" + encodeAssignment(assignment));
 			model.setItem(insertPosition, 0, item);
 			model.setData(insertPosition, 1, 1);
 			model.setData(insertPosition, 2, 0.0);
