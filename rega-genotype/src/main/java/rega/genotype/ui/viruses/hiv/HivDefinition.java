@@ -72,7 +72,7 @@ public class HivDefinition implements OrganismDefinition {
 		
 		if (p.elementExists("/genotype_result/sequence/result[@id='pure']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure']", m, m, false));
-		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
+		else if (p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure-puzzle']", m, m, false));
 
 		m = new WString("Phylogenetic analysis with pure subtypes and CRFs:");
