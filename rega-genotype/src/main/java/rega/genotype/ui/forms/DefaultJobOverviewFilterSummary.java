@@ -123,18 +123,16 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 	}
 	
 	private void init(String filter) {
-		WTable layout = new WTable(this);
-		
-		njTreeScanStats = new BarView(layout.getElementAt(0, 0), 
-				layout.getElementAt(0, 1), 
+		njTreeScanStats = new BarView(this.getElementAt(0, 0), 
+				this.getElementAt(0, 1), 
 				tr("detailsForm.summary.filter.njTreeStats"),
 				"%.0f");
 		njTreeScanStats.setHeaders(filter, tr("detailsForm.summary.filter.njTreeStats.avgBootstrap"), 
 				tr("detailsForm.summary.filter.njTreeStats.avgBootstrapInside"), 
 				tr("detailsForm.summary.filter.njTreeStats.avgBootstrapOutside"));
 		
-		bootscanStats = new BarView(layout.getElementAt(1, 0),
-				layout.getElementAt(1, 1),
+		bootscanStats = new BarView(this.getElementAt(1, 0),
+				this.getElementAt(1, 1),
 				tr("detailsForm.summary.filter.bootscanStats"),
 				"%.2f");
 		bootscanStats.setHeaders(filter, tr("detailsForm.summary.filter.njTreeStats.avgBootscan"), 

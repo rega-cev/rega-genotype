@@ -2,9 +2,9 @@ package rega.genotype.ui.forms;
 
 import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
-import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WTable;
 
-public abstract class JobOverviewSummary extends WContainerWidget {
+public abstract class JobOverviewSummary extends WTable {
 	protected final String CHECK_THE_BOOTSCAN = "Check the bootscan";
 	protected final String NOT_ASSIGNED = "Not assigned";
 	

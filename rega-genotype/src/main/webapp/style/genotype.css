@@ -330,27 +330,24 @@ span.refseq{
 	color: blue;
 }
 
-.assignment-overview {
-	margin-left: auto;
-	margin-right: auto;
-	max-width: 900px;
-}
-.assignment-overview table {
+table.assignment-overview {
 	border: 1px solid black;
-	max-width: 400px;
+	max-width: 500px;
 }
+
 .assignment-overview th {
 	background-color: rgb(200,200,200);
+	padding: 0.5em;
+	text-align: center;
 }
+
 .assignment-overview th, .assignment-overview td {
 	border-left: 1px solid black;
 	padding: 0.5em;
 }
+
 .assignment-overview-total {
 	border-top: 1px solid black;
-}
-.assignment-overview table, .assignment-overview div {
-	float: left;
 }
 
 .recombination-form {
@@ -377,4 +374,5 @@ span.refseq{
 
 table.jobOverviewSummary {
 	width: 100%;
+	margin: 5px;
 }
