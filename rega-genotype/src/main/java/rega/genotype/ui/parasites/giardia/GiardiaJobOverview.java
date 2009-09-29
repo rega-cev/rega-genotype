@@ -46,7 +46,7 @@ public class GiardiaJobOverview extends AbstractJobOverview {
 		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[length]"))));
 		data.add(createReportLink(p));
 
-		boolean hasAssignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.id") != null;
+		boolean hasAssignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support") != null;
 		for (String region : GiardiaGenome.regions) {
 			String phyloResult = p.getEscapedValue("genotype_result.sequence.result['phylo-" + region + "'].best.id");
 			if (phyloResult != null)

@@ -59,11 +59,13 @@ public class GiardiaDefinition implements OrganismDefinition {
 
 	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms) {
 		String result = "genotype_result.sequence.result";
-		
-		String phyloResult = result + "['phylo']";
-		if (p.elementExists(phyloResult)) {
-			WString title = new WString("Phylogenetic analyses");
-			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
+
+		for (String region : GiardiaGenome.regions) {
+			String phyloResult = result + "['phylo-" + region + "']";
+			if (p.elementExists(phyloResult)) {
+				WString title = new WString("Phylogenetic analyses for " + region);
+				forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
+			}
 		}
 	}
 	
