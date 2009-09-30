@@ -82,7 +82,8 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 	    	
 	    	if(getCurrentPath().equals("/genotype_result/sequence")) {
 	    		sequenceIndex++;
-	    		endSequence();
+	    		if (!skipSequence())
+	    			endSequence();
 	    		if(!stop) {
 	    		valuesMap.clear();
 	    		elements.clear();
@@ -94,6 +95,8 @@ public abstract class GenotypeResultParser extends DefaultHandler {
     }
     
     public abstract void endSequence();
+    
+    public abstract boolean skipSequence();
 
 	public void endFile() { }
 
@@ -340,7 +343,11 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 		public boolean indexOutOfBounds() {
 			return getSelectedSequenceIndex() > getSequenceIndex();
 		}
-	    
+
+		@Override
+		public boolean skipSequence() {
+			return false;
+		}
 	}
 
 	public static GenotypeResultParser parseFile(File jobDir, int selectedSequenceIndex) {

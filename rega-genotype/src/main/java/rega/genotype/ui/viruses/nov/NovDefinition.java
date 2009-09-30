@@ -44,8 +44,8 @@ public class NovDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/nov/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable table) throws IOException {
-		return new NovTableGenerator(table);
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
+		return new NovTableGenerator(jobOverview, table);
 	}
 
 	public Genome getGenome() {

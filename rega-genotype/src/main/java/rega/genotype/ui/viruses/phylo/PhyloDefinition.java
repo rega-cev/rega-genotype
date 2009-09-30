@@ -90,9 +90,9 @@ public class PhyloDefinition implements OrganismDefinition {
 
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable t)
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t)
 			throws IOException {
-		return new DefaultTableGenerator(t);
+		return new DefaultTableGenerator(jobOverview, t);
 	}
 
 	public boolean haveDetailsNavigationForm() {

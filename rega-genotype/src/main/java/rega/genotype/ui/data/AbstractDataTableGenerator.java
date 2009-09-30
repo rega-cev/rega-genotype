@@ -7,6 +7,7 @@ package rega.genotype.ui.data;
 
 import java.io.IOException;
 
+import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.util.DataTable;
 
 /**
@@ -20,8 +21,10 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 	}
 	
 	private DataTable table;
+	private AbstractJobOverview jobOverview;
 
-	public AbstractDataTableGenerator(DataTable table) {
+	public AbstractDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) {
+		this.jobOverview = jobOverview;
 		this.table = table;
 	}
 
@@ -89,4 +92,8 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 			throw new RuntimeException(e);
 		}
 	}
+	
+    public boolean skipSequence() {
+    	return jobOverview.isExcludedByFilter(this);
+    }
 }

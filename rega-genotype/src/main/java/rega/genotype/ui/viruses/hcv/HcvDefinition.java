@@ -32,9 +32,9 @@ import eu.webtoolkit.jwt.WString;
 public class HcvDefinition implements OrganismDefinition {
 	private Genome genome = new Genome(new HcvGenome(this));
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable t)
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t)
 			throws IOException {
-		return new DefaultTableGenerator(t);
+		return new DefaultTableGenerator(jobOverview, t);
 	}
 
 	public Genome getGenome() {

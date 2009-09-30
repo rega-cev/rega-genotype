@@ -84,6 +84,11 @@ public class HIVGenotypeAnalysisTest extends TestCase {
 			public void endSequence() {
 				String assignment = getValue("/genotype_result/sequence/conclusion/assigned/major/assigned/name");
 				assertEquals(assignment, "HIV-1 Subtype B");
+			}
+
+			@Override
+			public boolean skipSequence() {
+				return false;
 			}    		
     	};
     	p.parseFile(jobDir);

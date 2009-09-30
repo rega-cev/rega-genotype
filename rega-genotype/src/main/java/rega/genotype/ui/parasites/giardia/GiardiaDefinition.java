@@ -45,8 +45,8 @@ public class GiardiaDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/parasites/giardia/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable table) throws IOException {
-		return new GiardiaTableGenerator(table);
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
+		return new GiardiaTableGenerator(jobOverview, table);
 	}
 
 	public Genome getGenome() {

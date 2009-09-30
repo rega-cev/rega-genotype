@@ -44,8 +44,8 @@ public class EtvDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/etv/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable table) throws IOException {
-		return new EtvTableGenerator(table);
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
+		return new EtvTableGenerator(jobOverview, table);
 	}
 
 	public Genome getGenome() {
