@@ -33,6 +33,51 @@ public class GiardiaSequenceAssignmentForm extends IDetailsForm {
 				.arg(p.getEscapedValue("genotype_result.sequence[name]"))
 				.arg(p.getEscapedValue("genotype_result.sequence[length]")), block);
 		t.setId("");
+
+		boolean hasAssignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support") != null;
+		String assignedId = "-";
+		for (String region : GiardiaGenome.regions) {
+			String phyloResult = p.getEscapedValue("genotype_result.sequence.result['phylo-" + region + "'].best.id");
+			if (phyloResult != null) {
+				if (hasAssignment)
+					assignedId = phyloResult;
+
+				WString motivation = new WString(p.getEscapedValue("genotype_result.sequence.conclusion.motivation"));
+				motivation.arg(p.getValue("genotype_result.sequence.conclusion.assigned.support"));
+
+				t = new WText(tr("sequenceAssignment.phylo")
+						.arg(region)
+						.arg(p.getValue("genotype_result.sequence.conclusion.assigned.name"))
+						.arg(motivation), block);
+				t.setId("");
+			}
+		}
+
+		t = new WText("<h3>Genome region</h3>", block);
+		t.setId("");
+
+		try {
+			int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
+			int end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
+			String region = p.getValue("genotype_result.sequence.result['blast'].cluster.id");
+
+			if (region != null) {
+				System.err.println(region);
+				start = GiardiaGenome.mapToImageGenome(start, region);
+				end = GiardiaGenome.mapToImageGenome(end, region);
+			} else {
+				start = 0; end = 0;
+			}
+
+			WImage genome = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), assignedId, start, end, 0, "", null));
+			genome.setId("");
+			block.addWidget(genome);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override

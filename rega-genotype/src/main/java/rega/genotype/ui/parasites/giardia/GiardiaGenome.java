@@ -6,6 +6,7 @@
 package rega.genotype.ui.parasites.giardia;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +21,11 @@ public class GiardiaGenome extends Genome {
 	private OrganismDefinition od;
 	
 	public static String regions[] = { "16S", "B-giardin", "GDH", "TPI" };
-
+	public static int imgGenomeStart[] = { 1, 1602, 2550, 4049 }; 
+	public static int imgGenomeEnd[] = { 1454, 2421, 3900, 4823 }; 
+	
 	public GiardiaGenome(OrganismDefinition od) {
-		colorMap.put("-", new Color(0x53, 0xb8, 0x08));
+		colorMap.put("-", new Color(0xff, 0xff, 0xff));
 		colorMap.put("A", new Color(0xff, 0x33, 0x00));
 		colorMap.put("AIII", new Color(0xff, 0x66, 0x00));
 		colorMap.put("B", new Color(0x00, 0x33, 0xcc));
@@ -40,22 +43,29 @@ public class GiardiaGenome extends Genome {
 	}
 
 	public int GENOMEEND() {
-		return 7550;
+		return 4823;
 	}
 
 	public int GENOMESTART() {
-		return 80;
+		return 1;
 	}
 
 	public int IMGGENOMEEND() {
-		return 605;
+		return 580;
 	}
 
 	public int IMGGENOMESTART() {
-		return 1;
+		return 20;
 	}
 	
 	public OrganismDefinition getOrganismDefinition() {
 		return od;
+	}
+
+	public static int mapToImageGenome(int blastPos, String region) {
+		int regionIndex = Arrays.asList(regions).indexOf(region);
+		
+		int result = imgGenomeStart[regionIndex] + blastPos;
+		return Math.max(imgGenomeStart[regionIndex], Math.min(imgGenomeEnd[regionIndex], result));
 	}
 }
