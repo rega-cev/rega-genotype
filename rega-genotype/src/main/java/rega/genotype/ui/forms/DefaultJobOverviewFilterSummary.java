@@ -5,6 +5,7 @@ import java.util.Map;
 
 import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
+import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WStandardItem;
@@ -37,6 +38,7 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 		public BarView(WContainerWidget barParent, WContainerWidget tableParent, CharSequence chartTitle, String axisFormat) {
 			barChart = new WCartesianChart(barParent);
 			table = new WTable(tableParent);
+			table.setStyleClass("assignment-overview-filter");
 			model = new WStandardItemModel(); 
 			barChart.setModel(model);
 	
@@ -51,6 +53,11 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 			barChart.getAxis(Axis.YAxis).setLabelFormat(axisFormat);
 			
 			barChart.setTitle(chartTitle);
+			
+			barParent.setContentAlignment(AlignmentFlag.AlignRight);
+			barParent.setVerticalAlignment(AlignmentFlag.AlignMiddle);
+			tableParent.setContentAlignment(AlignmentFlag.AlignLeft);
+			tableParent.setVerticalAlignment(AlignmentFlag.AlignMiddle);
 		}
 		
 		public void setHeaders(String filter, WString h1, WString h2, WString h3) {			
@@ -123,6 +130,8 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 	}
 	
 	private void init(String filter) {
+		this.setStyleClass("jobOverviewSummary");
+		
 		njTreeScanStats = new BarView(this.getElementAt(0, 0), 
 				this.getElementAt(0, 1), 
 				tr("detailsForm.summary.filter.njTreeStats"),

@@ -350,6 +350,16 @@ table.assignment-overview {
 	border-top: 1px solid black;
 }
 
+table.assignment-overview-filter {
+	border: 1px solid black;
+	padding: 0.5em;
+}
+
+.assignment-overview-filter th, .assignment-overview-filter td {
+	border-left: 1px solid black;
+	padding: 0.5em;
+}
+
 .recombination-form {
 	width: 1200px;
 	margin-left: auto;
