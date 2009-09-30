@@ -36,6 +36,7 @@
 	<resource name="monitorForm.downloadResults">Download results:</resource>
 	<resource name="monitorForm.csvTable">Table (CSV format)</resource>
 	<resource name="monitorForm.xlsTable">Table (Excell format)</resource>
+	<resource name="monitorForm.fasta">Fasta</resource>
 	<resource name="monitorForm.xmlFile">XML File</resource>
 	<resource name="monitorForm.downloadJob">Download all job files:</resource>
 	<resource name="monitorForm.jobFile">ZIP</resource>

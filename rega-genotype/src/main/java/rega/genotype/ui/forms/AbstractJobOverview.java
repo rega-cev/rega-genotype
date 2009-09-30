@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.List;
 
 import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.GenotypeResultParser;
-import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
 import rega.genotype.ui.util.DataTable;
@@ -21,7 +21,6 @@ import rega.genotype.ui.util.XlsDataTable;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
-import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -222,6 +221,11 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			l.setId("");
 
 			div.addWidget(createTableDownload(tr("monitorForm.xlsTable"), false));
+			
+			l = new WText(", ", div);
+			l.setId("");
+			
+			div.addWidget(createFastaDownload());
 
 			if (downloadResultsContainer != null) {
 				div = new WContainerWidget(downloadResultsContainer);
@@ -250,6 +254,28 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		}
 	}
 
+	private WAnchor createFastaDownload() {
+		WAnchor fastaDownload = new WAnchor("", tr("monitorForm.fasta"));
+		fastaDownload.setObjectName("fasta-download");
+		fastaDownload.setStyleClass("link");
+		fastaDownload.setTarget(AnchorTarget.TargetNewWindow);
+
+		WResource fastaResource = new WResource() {
+			@Override
+			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				response.setContentType("text/plain");
+				
+				FastaGenerator generateFasta = new FastaGenerator(AbstractJobOverview.this, response.getOutputStream());
+				generateFasta.parseFile(new File(jobDir.getAbsolutePath()));
+			}
+			
+		};
+		fastaResource.suggestFileName("sequences.fasta");
+		fastaDownload.setResource(fastaResource);
+
+		return fastaDownload;
+	}
+	
 	private WAnchor createTableDownload(WString label, final boolean csv) {
 		WAnchor csvTableDownload = new WAnchor("", label);
 		csvTableDownload.setObjectName("csv-table-download");
