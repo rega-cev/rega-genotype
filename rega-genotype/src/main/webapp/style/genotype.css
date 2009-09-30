@@ -346,6 +346,11 @@ table.assignment-overview {
 	padding: 0.5em;
 }
 
+.assignment-overview div {
+	width: 35px;
+	height: 10px;
+}
+
 .assignment-overview-total {
 	border-top: 1px solid black;
 }

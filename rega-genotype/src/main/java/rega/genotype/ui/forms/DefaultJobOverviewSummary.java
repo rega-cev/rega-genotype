@@ -1,20 +1,27 @@
 package rega.genotype.ui.forms;
 
 import java.awt.Color;
+import java.util.EnumSet;
 
 import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import eu.webtoolkit.jwt.AlignmentFlag;
+import eu.webtoolkit.jwt.ItemDataRole;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal2;
+import eu.webtoolkit.jwt.ViewItemRenderFlag;
+import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAbstractItemModel;
 import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
 
@@ -64,11 +71,12 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 		
 		model = new WStandardItemModel();
 		
-		model.insertColumns(0, 3);
+		model.insertColumns(0, 4);
 
 		model.setHeaderData(0, tr("detailsForm.summary.assignment"));
 		model.setHeaderData(1, tr("detailsForm.summary.numberSeqs"));
 		model.setHeaderData(2, tr("detailsForm.summary.percentage"));
+		model.setHeaderData(3, tr("detailsForm.summary.legend"));
 		
 		table = new SummaryTableView(model, this.getElementAt(0, 0));
 		this.getElementAt(0, 0).setContentAlignment(AlignmentFlag.AlignRight);
@@ -76,6 +84,21 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 		model.dataChanged().addListener(this, new Signal2.Listener<WModelIndex, WModelIndex>() {
 			public void trigger(WModelIndex arg1, WModelIndex arg2) {
 				table.updateTotalRow(total);
+			}
+		});
+		table.setItemDelegateForColumn(3, new WAbstractItemDelegate(){
+			@Override
+			public WWidget update(WWidget widget, WModelIndex index,
+					EnumSet<ViewItemRenderFlag> flags) {
+				WContainerWidget w = new WContainerWidget();
+				w.setStyleClass("legend-item");
+				WColor c = (WColor)index.getData(ItemDataRole.UserRole + 1);
+				if (c != null)
+					w.getDecorationStyle().setBackgroundColor(c);
+				
+				w.setMargin(WLength.Auto, Side.Left, Side.Right);
+				
+				return w;
 			}
 		});
 		
@@ -119,9 +142,13 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			String majorAssignment = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id");
 			WBrush brush = pieChart.getBrush(insertPosition);
 			Color c = od.getGenome().getAttributes().getColors().get(majorAssignment);
+			WColor wc;
 			if (c != null) {
-				brush.setColor(new WColor(c.getRed(), c.getGreen(), c.getBlue()));
+				wc = new WColor(c.getRed(), c.getGreen(), c.getBlue());
+				brush.setColor(wc);
 				pieChart.setBrush(insertPosition, brush);
+			} else {
+				wc = brush.getColor();
 			}
 			
 			WStandardItem item = new WStandardItem(assignment);
@@ -129,6 +156,7 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			model.setItem(insertPosition, 0, item);
 			model.setData(insertPosition, 1, 1);
 			model.setData(insertPosition, 2, 0.0);
+			model.setData(insertPosition, 3, wc, ItemDataRole.UserRole + 1);
 		}
 		
 		total++;

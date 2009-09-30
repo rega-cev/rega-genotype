@@ -47,6 +47,7 @@
 	<resource name="detailsForm.summary.assignment">Rega Assignment</resource>
 	<resource name="detailsForm.summary.numberSeqs">Number of sequences</resource>
 	<resource name="detailsForm.summary.percentage">Percentage</resource>
+	<resource name="detailsForm.summary.legend">Legend</resource>
 	<resource name="detailsForm.summary.total">Total</resource>
 	
 	<resource name="detailsForm.summary.filter.nrSequences">Number of sequences</resource>
