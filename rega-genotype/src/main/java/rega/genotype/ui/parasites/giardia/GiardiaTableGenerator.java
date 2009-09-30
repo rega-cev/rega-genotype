@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.viruses.etv;
+package rega.genotype.ui.parasites.giardia;
 
 import java.io.IOException;
 
@@ -14,8 +14,8 @@ import rega.genotype.ui.util.DataTable;
 /**
  * Create a csv file of Enterovirus job results 
  */
-public class EtvTableGenerator extends AbstractDataTableGenerator {
-	public EtvTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
+public class GiardiaTableGenerator extends AbstractDataTableGenerator {
+	public GiardiaTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
 		super(jobOverview, table);
 
 		table.addLabel("name");
@@ -36,17 +36,17 @@ public class EtvTableGenerator extends AbstractDataTableGenerator {
 	}
     
 	public void endSequence() {
-    	addNamedValue("/genotype_result/sequence/@name", ValueFormat.Label);
-    	addNamedValue("/genotype_result/sequence/@length", ValueFormat.Number);
+    	addNamedValue("genotype_result.sequence[name]", ValueFormat.Label);
+    	addNamedValue("genotype_result.sequence[length]", ValueFormat.Number);
 
-    	addNamedValue("/genotype_result/sequence/conclusion/assigned/name", ValueFormat.Label);
+    	addNamedValue("genotype_result.sequence.conclusion.assigned.name", ValueFormat.Label);
 
-    	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/name", ValueFormat.Label);
-    	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/score", ValueFormat.Number);
-    	addNamedValue("/genotype_result/sequence/result[@id='blast']/start", ValueFormat.Number);
-    	addNamedValue("/genotype_result/sequence/result[@id='blast']/end", ValueFormat.Number);
+    	addNamedValue("genotype_result.sequence.result['blast'].cluster.name", ValueFormat.Label);
+    	addNamedValue("genotype_result.sequence.result['blast'].cluster.score", ValueFormat.Number);
+    	addNamedValue("genotype_result.sequence.result['blast'].start", ValueFormat.Number);
+    	addNamedValue("genotype_result.sequence.result['blast'].end", ValueFormat.Number);
 
-    	String id = getValue("/genotype_result/sequence/result[@id='phylo-serotype']/best/id");
+    	String id = getValue("genotype_result.sequence.result['phylo-serotype'].best.id");
     	if (id != null)
     		addPhyloResults("phylo-serotype", true);
     	else

@@ -28,8 +28,8 @@ public class HtlvDefinition implements OrganismDefinition {
 
 	private Genome genome = new Genome(new HtlvGenome(this));
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable t) throws IOException {
-		return new DefaultTableGenerator(t);	
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException {
+		return new DefaultTableGenerator(jobOverview, t);	
 	}
 
 	public Genome getGenome() {

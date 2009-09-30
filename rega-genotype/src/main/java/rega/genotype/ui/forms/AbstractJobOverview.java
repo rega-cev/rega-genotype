@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.List;
 
 import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.GenotypeResultParser;
-import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
 import rega.genotype.ui.util.DataTable;
@@ -21,7 +21,6 @@ import rega.genotype.ui.util.XlsDataTable;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
-import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -67,6 +66,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WContainerWidget downloadTableContainer, downloadResultsContainer;
 
 	private WText explainText;
+	
+	private JobOverviewSummary summary;
+	private String filter;
 
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main, "monitor-form");
@@ -103,10 +105,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public void init(String jobId, String filter) {
-		File jobDir = getJobDir(jobId);
+		this.filter = filter;
 		
-		if(jobDir.equals(this.jobDir))
-			return;
+		File jobDir = getJobDir(jobId);
 		
 		this.jobDir = jobDir;
 
@@ -114,11 +115,14 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		msg.arg(jobId);
 		explainText.setText(msg);
 		
-		JobOverviewSummary summary = getSummary(filter);
+		if(summary != null)
+			this.removeWidget(summary);
+		
+		summary = getSummary(filter);
 		if (summary != null) {
 			summary.reset();
 			int index = getIndexOf(analysisInProgress);
-			this.insertWidget(++index, summary.getWidget());
+			this.insertWidget(++index, summary);
 		}
 
 		if (updater != null) {
@@ -198,16 +202,18 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			
 			WText l = new WText(tr("monitorForm.downloadResults"), div);
 			l.setId("");
-			WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"), div);
-			xmlFileDownload.setObjectName("xml-download");
-			xmlFileDownload.setTarget(AnchorTarget.TargetNewWindow);
-			xmlFileDownload.setStyleClass("link");
-			WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
-			xmlResource.suggestFileName("result.xml");
-			xmlFileDownload.setRef(xmlResource.generateUrl());
 			
-			l = new WText(", ", div);
-			l.setId("");
+			if (filter == null) {
+				WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"), div);
+				xmlFileDownload.setObjectName("xml-download");
+				xmlFileDownload.setTarget(AnchorTarget.TargetNewWindow);
+				xmlFileDownload.setStyleClass("link");
+				WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+				xmlResource.suggestFileName("result.xml");
+				xmlFileDownload.setRef(xmlResource.generateUrl());
+				l = new WText(", ", div);
+				l.setId("");
+			}
 			
 			div.addWidget(createTableDownload(tr("monitorForm.csvTable"), true));
 
@@ -215,6 +221,11 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			l.setId("");
 
 			div.addWidget(createTableDownload(tr("monitorForm.xlsTable"), false));
+			
+			l = new WText(", ", div);
+			l.setId("");
+			
+			div.addWidget(createFastaDownload());
 
 			if (downloadResultsContainer != null) {
 				div = new WContainerWidget(downloadResultsContainer);
@@ -239,9 +250,32 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				jobResource.suggestFileName(jobArchive.getName());
 				jobFileDownload.setRef(jobResource.generateUrl());
 			}
+			downloadResultsContainer.setHidden(filter!=null);
 		}
 	}
 
+	private WAnchor createFastaDownload() {
+		WAnchor fastaDownload = new WAnchor("", tr("monitorForm.fasta"));
+		fastaDownload.setObjectName("fasta-download");
+		fastaDownload.setStyleClass("link");
+		fastaDownload.setTarget(AnchorTarget.TargetNewWindow);
+
+		WResource fastaResource = new WResource() {
+			@Override
+			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				response.setContentType("text/plain");
+				
+				FastaGenerator generateFasta = new FastaGenerator(AbstractJobOverview.this, response.getOutputStream());
+				generateFasta.parseFile(new File(jobDir.getAbsolutePath()));
+			}
+			
+		};
+		fastaResource.suggestFileName("sequences.fasta");
+		fastaDownload.setResource(fastaResource);
+
+		return fastaDownload;
+	}
+	
 	private WAnchor createTableDownload(WString label, final boolean csv) {
 		WAnchor csvTableDownload = new WAnchor("", label);
 		csvTableDownload.setObjectName("csv-table-download");
@@ -253,7 +287,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 				response.setContentType("application/excell");
 				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ';', '"') : new XlsDataTable(response.getOutputStream());
-				AbstractDataTableGenerator acsvgen = AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(t);
+				AbstractDataTableGenerator acsvgen = 
+					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this, t);
 				acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
 			}
 			
@@ -271,22 +306,27 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			if(getSequenceIndex()>=numRows) {
 				List<WWidget> data = getData(tableFiller);
 				
+				int row = jobTable.getRowCount();
 				for (int i = 0; i < data.size(); i++) {
-					WTableCell cell = jobTable.getElementAt(getSequenceIndex()+1, i);
+					WTableCell cell = jobTable.getElementAt(row, i);
 					cell.setId("");
 					cell.addWidget(data.get(i));
 					if (data.get(i).getObjectName().length() == 0)
 						data.get(i).setId("");
 					
-					if (WApplication.getInstance().getEnvironment().agentIsIE())
+					if (WApplication.getInstance().getEnvironment().getUserAgent().indexOf("MSIE") != -1)
 						cell.setStyleClass(jobTable.getColumnAt(i).getStyleClass());
 				}
 				jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
 				
-				JobOverviewSummary summary = getSummary(null);
 				if (summary != null) 
 					summary.update(tableFiller, getMain().getOrganismDefinition());
 			}
+		}
+
+		@Override
+		public boolean skipSequence() {
+			return isExcludedByFilter(this);
 		}
 	};
 	
@@ -304,10 +344,14 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return report;
 	}
 	
+	public boolean isExcludedByFilter(GenotypeResultParser p) {
+		String assignment = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name");
+		return filter != null && !filter.equals(summary.encodeAssignment(assignment));
+	}
+	
 	public boolean existsJob(String jobId) {
 		return getJobDir(jobId).exists();
 	}
-	
 
 	public File getJobDir(String jobId) {
 		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()+File.separatorChar+jobId);
@@ -319,6 +363,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	public static String jobPath(File jobDir) {
 		return JobForm.JOB_URL + '/' + jobId(jobDir);
+	}
+	
+	public String getJobPath() {
+		return jobPath(jobDir);
 	}
 	
 	public static String jobId(File jobDir) {

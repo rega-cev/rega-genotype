@@ -36,11 +36,11 @@ public class RecombinationForm extends AbstractForm{
 		return AbstractJobOverview.reportPath(jobDir, sequenceIndex)+"/"+URL;
 	}
 	
-	WString init(File jobDir, String selectedSequenceIndex) {
+	WString init(File jobDir, Integer selectedSequenceIndex) {
 		recombinationImage.clear();
 		recombinationTable.clear();
 		
-		p = new SkipToSequenceParser(Integer.parseInt(selectedSequenceIndex));
+		p = new SkipToSequenceParser(selectedSequenceIndex);
 		p.parseFile(jobDir);
 		
 		String id;

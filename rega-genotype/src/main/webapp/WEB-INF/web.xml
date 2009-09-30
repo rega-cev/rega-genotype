@@ -10,7 +10,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeHIV</servlet-name>
-    <url-pattern>/GenotypeHIV/*</url-pattern>
+    <url-pattern>/hiv/typingtool/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -22,7 +22,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeNoV</servlet-name>
-    <url-pattern>/nov/typingtool/*</url-pattern>
+    <url-pattern>/norovirus/typingtool/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -38,7 +38,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeNoV-service</servlet-name>
-    <url-pattern>/nov/typingservice</url-pattern>
+    <url-pattern>/norovirus/typingservice</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -50,7 +50,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeEnterovirus</servlet-name>
-    <url-pattern>/etv/typingtool/*</url-pattern>
+    <url-pattern>/enterovirus/typingtool/*</url-pattern>
   </servlet-mapping>
   
   <servlet>
@@ -87,6 +87,18 @@
   <servlet-mapping>
     <servlet-name>GenotypeHCV</servlet-name>
     <url-pattern>/GenotypeHCV/*</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>Giardia</servlet-name>
+    <display-name>Giardia Genotyping</display-name>
+    <description>Giardia Genotyping</description>
+    <servlet-class>rega.genotype.ui.parasites.giardia.GiardiaMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Giardia</servlet-name>
+    <url-pattern>/giardia/typingtool/*</url-pattern>
   </servlet-mapping>
 </web-app>
 

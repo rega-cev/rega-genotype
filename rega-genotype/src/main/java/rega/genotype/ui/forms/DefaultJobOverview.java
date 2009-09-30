@@ -24,7 +24,8 @@ import eu.webtoolkit.jwt.WWidget;
  */
 public class DefaultJobOverview extends AbstractJobOverview {
 	private List<Header> headers = new ArrayList<Header>();
-	private DefaultJobOverviewSummary summary = new DefaultJobOverviewSummary();
+	private DefaultJobOverviewSummary summary = new DefaultJobOverviewSummary(this);
+	private DefaultJobOverviewFilterSummary filterSummary = new DefaultJobOverviewFilterSummary();
 	
 	public DefaultJobOverview(GenotypeWindow main) {
 		super(main);
@@ -84,7 +85,10 @@ public class DefaultJobOverview extends AbstractJobOverview {
 
 	@Override
 	public JobOverviewSummary getSummary(String filter) {
-		//TODO
-		return summary;
+		if (filter == null)
+			return summary;
+		else {
+			return filterSummary;
+		}
 	}
 }

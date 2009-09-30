@@ -57,11 +57,20 @@ public class JobForm extends AbstractForm {
 				return;
 			}
 			
-			String sequenceId = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/");
+			Integer sequenceId = null;
+			String filter = null;
+			try {
+				filter = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/");
+				sequenceId = Integer.parseInt(filter);
+				filter = null;
+			} catch (NumberFormatException nfe) {
+			}
 			
-			if (sequenceId.equals("")) {
-				//TODO pass filter if there is one
-				jobOverview.init(jobId, null);
+			if (filter != null && filter.trim().equals(""))
+				filter = null;
+			
+			if (sequenceId == null) {
+				jobOverview.init(jobId, filter);
 				stateLink.setVarValue(jobId);
 				showWidget(jobOverview);
 			} else {

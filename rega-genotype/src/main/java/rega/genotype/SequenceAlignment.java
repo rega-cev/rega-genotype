@@ -470,6 +470,7 @@ public class SequenceAlignment
         name = name.replace('-', '_');
         name = name.replace(',', '_');
         name = name.replace('/', '_');
+        name = name.replace('=', '_');
         if (names.contains(name)) {
   
             String base = name.substring(0, name.length() - 3) + '_';

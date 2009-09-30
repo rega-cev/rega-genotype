@@ -28,7 +28,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import eu.webtoolkit.jwt.utils.StringUtils;
+import eu.webtoolkit.jwt.StringUtils;
+import eu.webtoolkit.jwt.WWebWidget;
 
 /**
  * A sax parser which parses the rega-genotype analysis result file and stores 
@@ -81,7 +82,8 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 	    	
 	    	if(getCurrentPath().equals("/genotype_result/sequence")) {
 	    		sequenceIndex++;
-	    		endSequence();
+	    		if (!skipSequence())
+	    			endSequence();
 	    		if(!stop) {
 	    		valuesMap.clear();
 	    		elements.clear();
@@ -93,6 +95,8 @@ public abstract class GenotypeResultParser extends DefaultHandler {
     }
     
     public abstract void endSequence();
+    
+    public abstract boolean skipSequence();
 
 	public void endFile() { }
 
@@ -177,7 +181,7 @@ public abstract class GenotypeResultParser extends DefaultHandler {
     	if(value==null)
     		return null;
     	else
-    		return StringUtils.escapeText(value, true);
+    		return WWebWidget.escapeText(value, true);
     }
     
     public boolean elementExists(String name) {
@@ -339,7 +343,11 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 		public boolean indexOutOfBounds() {
 			return getSelectedSequenceIndex() > getSequenceIndex();
 		}
-	    
+
+		@Override
+		public boolean skipSequence() {
+			return false;
+		}
 	}
 
 	public static GenotypeResultParser parseFile(File jobDir, int selectedSequenceIndex) {

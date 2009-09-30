@@ -1,0 +1,107 @@
+<genotype-analyses>
+	<alignment file="GDH.fasta" />
+
+	<clusters>
+		<cluster id="A" name="G.duodenalis Assemblage A">
+			<taxus name="GDH|A01|WBATCC50803" />
+			<taxus name="GDH|A02|EF685688" />
+		</cluster>
+
+		<cluster id="AIII" name="G.duodenalis Assemblage A subtype III">
+			<taxus name="GDH|AIII001|PM0006" />
+		</cluster>
+
+		<cluster id="B" name="G.duodenalis Assemblage B">
+			<taxus name="GDH|B01|AY178755" />
+			<taxus name="GDH|B02|AY178750" />
+		</cluster>
+
+		<cluster id="C" name="G.duodenalis Assemblage C">
+			<taxus name="GDH|C01|EF507621" />
+			<taxus name="GDH|C03|EF507637" />
+		</cluster>
+
+		<cluster id="D" name="G.duodenalis Assemblage D">
+			<taxus name="GDH|D01|EF507620" />
+			<taxus name="GDH|D03|EF507634" />
+		</cluster>
+
+		<cluster id="E" name="G.duodenalis Assemblage E">
+			<taxus name="GDH|E01|mixEF507644" />
+			<taxus name="GDH|E02|P15" />
+		</cluster>
+
+		<cluster id="F" name="G.duodenalis Assemblage F">
+			<taxus name="GDH|F01|AY178744" />
+			<taxus name="GDH|F02|EF029888" />
+		</cluster>
+
+		<cluster id="G" name="G.duodenalis Assemblage G">
+			<taxus name="GDH|G01|AY178745" />
+			<taxus name="GDH|G02|AY178746" />
+		</cluster>
+
+		<cluster id="G.ardea" name="G.ardea">
+		        <taxus name="GDH|Outgroup|G.ardeae" />
+		</cluster>
+	</clusters>
+
+	<analysis id="phylo-GDH" type="paup">
+		<identify>
+		  A, AIII, B, C, D, E, F, G, G.ardea
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=phylip file=paup.fasta replace=yes;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup GDH|Outgroup|G.ardea;
+			set criterion=distance outroot=monophyl;
+			dset distance=TamNei rates=gamma shape=0.393955 pinvar=0 NegBrLen=SetAbsVal;
+			constraints
+			CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="scan-self" type="scan">
+		<window>
+			300
+		</window>
+		<step>
+			50
+		</step>
+		<analysis type="paup">
+			<identify>
+				A
+			</identify>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				outgroup EU360814|III.1;
+				set criterion=distance outroot=monophyl;
+				dset distance=TamNei rates=gamma shape=0.413123 NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+
+</genotype-analyses>
+

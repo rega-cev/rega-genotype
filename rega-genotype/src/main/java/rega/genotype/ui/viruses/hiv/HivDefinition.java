@@ -53,8 +53,8 @@ public class HivDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/hiv/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable t) throws IOException {
-		return new DefaultTableGenerator(t);
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException {
+		return new DefaultTableGenerator(jobOverview, t);
 	}
 
 	public Genome getGenome() {
@@ -72,7 +72,7 @@ public class HivDefinition implements OrganismDefinition {
 		
 		if (p.elementExists("/genotype_result/sequence/result[@id='pure']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure']", m, m, false));
-		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
+		else if (p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure-puzzle']", m, m, false));
 
 		m = new WString("Phylogenetic analysis with pure subtypes and CRFs:");
