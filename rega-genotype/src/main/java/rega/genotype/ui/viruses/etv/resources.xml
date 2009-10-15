@@ -11,7 +11,7 @@
 		<title>Enterovirus Genotyping Tool Version 0.1</title>
 		<note>
 			<div>
-				This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequences.
+				This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequence.
 			</div>
 			<div>
 				<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
@@ -85,9 +85,9 @@ TCACAACTTTG
 	</exampleSequences-form>
 
 	<resource name="etvSequenceAssignment.blast">
-		<h3>Genogroup assignment</h3>
+		<h3>Genus/Species assignment</h3>
 		<p>
-			<span class="label">Species assignment:</span> <span class="nov-genotype">{1}</span>
+			<span class="label"></span> <span class="nov-genotype">{1}</span>
 		</p>
 		<p>
 			<span class="label"></span> Based on relative blast score of {2}.
@@ -97,7 +97,7 @@ TCACAACTTTG
 	<resource name="etvSequenceAssignment.phylo">
 		<h3>{1} assignment</h3>
 		<p>
-			<span class="label">Serotype assignment:</span> <span class="nov-genotype">{2}</span>
+			<span class="label"></span> <span class="nov-genotype">{2}</span>
 		</p>
 		<p>
 			<span class="label"></span> {3}
