@@ -11,7 +11,7 @@
 		<title>Enterovirus Genotyping Tool Version 0.1</title>
 		<note>
 			<div>
-				This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequences.
+				This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequence.
 			</div>
 			<div>
 				<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
