@@ -2,34 +2,23 @@ package rega.genotype.ui.hiv;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
-
-import org.apache.commons.io.FileUtils;
-
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.GenotypeResultParser;
-import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.Settings;
+import rega.genotype.ui.utils.Utils;
 import rega.genotype.viruses.hiv.HIVTool;
 
 public class HIVGenotypeAnalysisTest extends TestCase {
-    private File jobDir;
+    private String hiv_fasta;
     
-	private File fasta;
-    private File result;
+    private List<File> jobDirs = new ArrayList<File>();
     
 	protected void setUp() {
-		do {
-			jobDir = new File(System.getProperty("java.io.tmpdir") + File.separatorChar +"jobDir" + File.separatorChar + System.currentTimeMillis());
-			System.err.println(jobDir.getAbsolutePath());
-		} while (jobDir.exists());
-		jobDir.mkdirs();
-		
-		fasta = new File(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta");
-		
-		String fastaContent = ">gi|20136660|gb|AF493411.1\n" + 
+		hiv_fasta = ">gi|20136660|gb|AF493411.1\n" + 
 			"CCTCAGATCACTCTTTGGCAGCGACCCTTCGTTACAATAAAAATAGGGGGACAACTAATAGAAGCCCTAT" + 
 			"TAGATACAGGAGCAGATGATACAGTATTAGAAGACATAGATTTGCCAGGAAGATGGAAACCAAAAATAAT" + 
 			"AGGAGGAGTTGGAGGTTTTATCAAAGTAAGACAGTATGATCAGGTACCTGTAGAAATCTGCGGACATAAA" + 
@@ -45,31 +34,21 @@ public class HIVGenotypeAnalysisTest extends TestCase {
 			"ATCTGTCAATACATGGATGATTTGTATGTAGCATCTGACTTAGAAATAGGGCAGCATAGAACAAAAATAG" + 
 			"AGGAACTGAGACAACATTTGTGGAAGTGGGGATTCTACACACCAGACAAAAAATATCAGAAAGAACCCCC" + 
 			"ATTCCTTTGGATG";
-		try {
-			GenotypeLib.writeStringToFile(fasta, fastaContent);
-		} catch (IOException e) {
-			fail("Could not write fasta String to fasta file: " + e.getMessage());
-		}
-		
-		result = new File(jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
-		
-		GenotypeLib.initSettings(Settings.getInstance());
     }
 
-    protected void tearDown() {
-        try {
-			FileUtils.deleteDirectory(jobDir);
-		} catch (IOException e) {
-			fail("Could not delete the jobDir directory");
-		}
-    }
+	protected void tearDown() {
+		Utils.deleteJobDirs(jobDirs);
+	}
 
     public void testAnalysisRuntime() {
+       	File jobDir = Utils.setup(hiv_fasta);
+    	jobDirs.add(jobDir);
+    	
 		HIVTool hiv;
 		try {
 			hiv = new HIVTool(jobDir);
-			hiv.analyze(fasta.getAbsolutePath(),
-					result.getAbsolutePath());
+			hiv.analyze(Utils.getFastaFile(jobDir).getAbsolutePath(),
+					Utils.getResultFile(jobDir).getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("IOException occured during analysis runtime");
