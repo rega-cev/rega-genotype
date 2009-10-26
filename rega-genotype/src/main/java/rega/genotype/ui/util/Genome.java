@@ -142,7 +142,8 @@ public class Genome {
 	    	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    	
 	    	int prevREnd = -1;
-	    	int i=1;
+	    	int prevX = attributes.getGenomeImageStartX();
+	    	int i=0;
 	    	for(Object o : recombination.getChildren("region")){
 	    		Element e = (Element)o;
 	    		int rStart = Integer.parseInt(e.getChildTextTrim("start"));
@@ -150,14 +151,19 @@ public class Genome {
 	    		if(prevREnd != -1){
 	    			int pos = start + (rStart+prevREnd)/2;
 	    			int x = imgX(pos);
+	    			
 	    			g2d.drawLine(x, attributes.getGenomeImageStartY(), x, attributes.getGenomeImageEndY());
 	    			drawCenteredString(g2d, pos+"", x, attributes.getGenomeImageEndY()+g2d.getFontMetrics().getHeight());
+	    			
+	    			drawCenteredString(g2d,"( "+i+" )",(prevX+x)/2,attributes.getGenomeImageEndY());
+	    			prevX = x;
 	    		}
-	    		drawCenteredString(g2d,"( "+i+" )",imgX(start + (rStart+rEnd)/2),attributes.getGenomeImageEndY());
 	    		
 	    		prevREnd = rEnd;
 	    		++i;
 	    	}
+	    	drawCenteredString(g2d,"( "+i+" )",(prevX+ attributes.getGenomeImageEndX())/2,attributes.getGenomeImageEndY());
+	    	
 	    }
 	    return image;
 	}
