@@ -126,10 +126,6 @@ public class Table {
             }
         }
 
-        /**
-         * @param j
-         * @return
-         */
         public int row(int j) {
             if (j == 0)
                 return 0;

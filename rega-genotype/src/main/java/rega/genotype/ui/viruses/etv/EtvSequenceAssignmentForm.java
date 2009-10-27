@@ -54,7 +54,7 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 						.arg("Serotype (VP1)")
 						.arg(c.majorAssignment)
 						.arg(motivation), block);
-				t.setId("");
+			t.setId("");
 		}
 
 		t = new WText("<h3>Genome region</h3>", block);

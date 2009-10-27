@@ -2,16 +2,16 @@
 <organism-settings>
 	<main-form>
 		<footer>
-			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
+			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Hein Spront)
 			and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
 			<p>Contact: TBD</p>
 		</footer>
 	</main-form>
 	<start-form>
-		<title>Enterovirus Genotyping Tool Version 0.1</title>
+		<title>Giadia Genotyping Tool Version 0.1</title>
 		<note>
 			<div>
-				This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequence.
+				This tool is designed to use phylogenetic methods in order to identify ... of a nucleotide sequence.
 			</div>
 			<div>
 				<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
@@ -19,13 +19,13 @@
 		</note>
 	</start-form>
 	<monitor-form>
-		<title>Enterovirus Genotyping Tool Results</title>
+		<title>Giardia Genotyping Tool Results</title>
 	</monitor-form>
 	<details-form>
-		<title>Enterovirus Genotyping Details</title>
+		<title>Giardia Genotyping Details</title>
 	</details-form>
 	<howToCite-form>
-		<title>How to Cite the Enterovirus Automated Genotyping Tool</title>
+		<title>How to Cite the Giardia Automated Genotyping Tool</title>
 		<howToCite-text>
 			<text>
 				<p>Please use the following citation:</p>
@@ -34,7 +34,7 @@
 		</howToCite-text>
 	</howToCite-form>
 	<introduction-form>
-		<title>The Enterovirus Automated Genotyping Tool: introduction.</title>
+		<title>The Giardia Automated Genotyping Tool: introduction.</title>
 		<introduction-text>
 			<text>
 				To be completed.
@@ -42,7 +42,7 @@
 		</introduction-text>
 	</introduction-form>
 	<tutorial-form>
-		<title>Enterovirus Genotyping Tutorial</title>
+		<title>Giardia Genotyping Tutorial</title>
 		<tutorial-text>
 			<text>
 				To be completed.
@@ -52,7 +52,7 @@
 	<decisionTrees-form>
 	</decisionTrees-form>
 	<subtypingProcess-form>
-		<title>Enterovirus Genotyping Tool Methods</title>
+		<title>Giardia Genotyping Tool Methods</title>
 		<subtypingProcess-text>
 			<text>
 				To be completed.
@@ -61,49 +61,28 @@
 	</subtypingProcess-form>
 	<exampleSequences-form>
 		<title>
-			Example Sequences for the Enterovirus Genotyping Tool 
+			Example Sequences for the Giardia Genotyping Tool 
 		</title>
 		<exampleSequences-sequences>
-			<sequence name="AM292468">
-GGGGATCCCATTGCAGATATGATTGACCAAACCGTGAACAATCAAGTGAATCGCTCCCTATCTGCATTGCAAGTACTACC
-CACAGCTGCCAATACTGAAGCAAGTAGTCACAGATTAGGCACTGGTGTTGTGCCAGCACTACAGGCTGCGGAGACAGGGG
-CGTCATCAAATGCCAGTGACAAGAACCTCATTGAAACTAGGTGTGTGCTGAATCATCACTCCACACAGGAGACGGCCATT
-GGAAACTTCTTCAGCCGCGCCGGTTTGGTCAGCATTATCACAATGCCCACCACGGGCACCCAGAACACGGATGGATATGT
-TAATTGGGATATTGATTTGATGGGGTACGCACAATTGCGGCGGAAGTGCGAATTGTTCACCTACATGCGCTTTGATGCCG
-AATTCACATTTGTCGTGGCCAAACCCAACGGTGAATTAGTCCCTCAATTACTGCAGTACATGTATGTTCCACCAGGGGCC
-CCGAAACCCACTTCCAGAGATTCATTCGCTTGGCAGACAGCCACCAACCCGTCTGTGTTTGTGAAAATGACAGATCCTCC
-AGCCCAGGTGTCAGTTCCCTTCATGTCACCAGCCAGTGCGTACCAATGGTTTTATGATGGCTACCCCACTTTCGGAGAGC
-ACCTCCAAGCAAATGACCTAGATTATGGCCAATGCCCTAATAACATGATGGGCACCTTTAGCATTAGGACAGTGGGGACT
-GAGAAGTCACCACACTCCATCACCCTGAGAGTGTACATGAGAATTAAGCACGTCAGGGCGTGGATACCAAGACCTCTGAG
-AAACCAACCCTATTTGTTTAAGACTAACCCAAATTACAAAGGCAATGACATTAAGTGCACTAGCGCTAGCAGAGATAAGA
-TCACAACTTTG
+			<sequence name="BfR156">
+			  GATCAAGGACGCCATCGCACACCTCGACAGGCTCATCCAGACGGAGTCGAGGAAGCGCCAGGCCTCGTTCGAGGACATCCGCGAGGAGGTCAAGAAGTCCGCCGACAACATGTACCTAACGATCAAGGAGGAGATCGACACCATGGCTGCAAACTTCCGCAAGTCCCTTGCGGAGATGGGCGACACACTCAACAACGTTGAGACAAATCTCCAGAACCAGATCGCCATCCATAACGACGCCTCGCGGCTCTCAGGAAGGAGGCCCTCAAGAGCTTGAACGACCTCGAGACGGGCATTGCCACGGAGAACGCAGAAAGGAAGAAGATGTACGACCAGCTCAACGAGAAGGTCGCAGAGGGCTTCGCCCGCATCTCCGCCGCGATCGAGAAGGAGACGATCGCCCGCGAGAGGGCCGTTAGTGCTGCCACGACAGAAGCGCTCACAAACACGA
 	        </sequence>
 		</exampleSequences-sequences>
 	</exampleSequences-form>
 
-	<resource name="etvSequenceAssignment.blast">
-		<h3>Genogroup assignment</h3>
+	<resource name="sequenceAssignment.phylo">
+		<h3>Locus: {1}</h3>
 		<p>
-			<span class="label">Species assignment:</span> <span class="nov-genotype">{1}</span>
+			<span class="label">Assignment:</span> <span class="nov-genotype">{2}</span>
 		</p>
 		<p>
-			<span class="label"></span> Based on relative blast score of {2}.
-		</p>
-	</resource>
-
-	<resource name="etvSequenceAssignment.phylo">
-		<h3>{1} assignment</h3>
-		<p>
-			<span class="label">Serotype assignment:</span> <span class="nov-genotype">{2}</span>
-		</p>
-		<p>
-			<span class="label"></span> {3}
+			<span class="label">Motiviation:</span> {3}
 		</p>
 	</resource>
 
-	<resource name="etvTool.title">Enterovirus Genotyping Tool</resource>
+	<resource name="giardiaTool.title">Giardia Genotyping Tool</resource>
 
 	<resource name="main.navigation.introduction">Introduction</resource>	
-	<resource name="main.navigation.subtypingProcess">(Sub)typing process</resource>
+	<resource name="main.navigation.subtypingProcess">Typing process</resource>
 	<resource name="main.navigation.tutorial">How to use</resource>
 </organism-settings>
