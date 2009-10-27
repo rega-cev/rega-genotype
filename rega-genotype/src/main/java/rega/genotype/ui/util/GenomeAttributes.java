@@ -7,6 +7,7 @@ import rega.genotype.ui.data.OrganismDefinition;
 
 public interface GenomeAttributes {
 	public Map<String, Color> getColors();
+	public Color getAssignmentColor(String assignment);
 	public int getGenomeImageStartX();
 	public int getGenomeImageEndX();
 	public int getGenomeImageStartY();

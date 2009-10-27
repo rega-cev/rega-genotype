@@ -21,6 +21,23 @@ public abstract class DefaultGenomeAttributes implements GenomeAttributes{
 	public Map<String, Color> getColors() {
 		return colorMap;
 	}
+	
+	public Color getAssignmentColor(String assignment){
+		Color c = colorMap.get(assignment);
+		if(c == null){
+			c = createAssignmentColor(assignment);
+			colorMap.put(assignment, c);
+		}
+		return c;
+	}
+	
+	protected Color createAssignmentColor(String assignment){
+		int hash = assignment.hashCode();
+		int red = Math.abs(hash/3 % 256);
+		int green = Math.abs(hash/7 % 256);
+		int blue = Math.abs(hash/13 % 256);
+		return new Color(red,green,blue);
+	}
 
 	public int getFontSize() {
 		return 8;

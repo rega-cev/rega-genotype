@@ -15,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -102,11 +101,9 @@ public class Genome {
 	    g2d.setColor(new Color(230, 230, 230));
 	    g2d.fillRect(0, 0, imgWidth, imgHeight);
 	    
-	    Map<String, Color> colorMap = attributes.getColors();
-	    
-	    Color bgcolor = colorMap.get("-");
+	    Color bgcolor = attributes.getAssignmentColor("-");
 	    if (w.length == 0) {
-	      bgcolor = colorMap.get(genotype);
+	      bgcolor = attributes.getAssignmentColor(genotype);
 	    }
 	    
 	    g2d.setColor(bgcolor);
@@ -124,7 +121,7 @@ public class Genome {
 	        else
 	        	x2 = start + w[c] + scanStepSize/2;
 
-	        g2d.setColor(colorMap.get(assign[c]));
+	        g2d.setColor(attributes.getAssignmentColor(assign[c]));
 	        g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
 	    }
 	    

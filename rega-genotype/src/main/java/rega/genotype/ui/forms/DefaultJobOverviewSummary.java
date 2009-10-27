@@ -1,7 +1,9 @@
 package rega.genotype.ui.forms;
 
 import java.awt.Color;
+import java.util.Date;
 import java.util.EnumSet;
+import java.util.Random;
 
 import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
@@ -141,15 +143,10 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			
 			String majorAssignment = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id");
 			WBrush brush = pieChart.getBrush(insertPosition);
-			Color c = od.getGenome().getAttributes().getColors().get(majorAssignment);
-			WColor wc;
-			if (c != null) {
-				wc = new WColor(c.getRed(), c.getGreen(), c.getBlue());
-				brush.setColor(wc);
-				pieChart.setBrush(insertPosition, brush);
-			} else {
-				wc = brush.getColor();
-			}
+			Color c = od.getGenome().getAttributes().getAssignmentColor(majorAssignment == null ? assignment : majorAssignment);
+			WColor wc = new WColor(c.getRed(), c.getGreen(), c.getBlue());
+			brush.setColor(wc);
+			pieChart.setBrush(insertPosition, brush);
 			
 			WStandardItem item = new WStandardItem(assignment);
 			item.setInternalPath(jobOverview.getJobPath() + "/" + encodeAssignment(assignment));
