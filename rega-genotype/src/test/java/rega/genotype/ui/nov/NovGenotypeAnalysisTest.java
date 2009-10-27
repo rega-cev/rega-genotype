@@ -69,6 +69,11 @@ public class NovGenotypeAnalysisTest extends TestCase {
 			public void endSequence() {
 				String assignment = getValue("genotype_result.sequence.conclusion.assigned.id");
 				assertEquals(assignment, "Unassigned");
+			}
+
+			@Override
+			public boolean skipSequence() {
+				return false;
 			}    		
     	};
     	p.parseFile(jobDir);
@@ -97,6 +102,11 @@ public class NovGenotypeAnalysisTest extends TestCase {
 			public void endSequence() {
 				String assignment = getValue("genotype_result.sequence.conclusion['ORF2'].assigned.id");
 				assertEquals(assignment, "II.7");
+			}
+
+			@Override
+			public boolean skipSequence() {
+				return false;
 			}    		
     	};
     	p.parseFile(jobDir);

@@ -23,7 +23,7 @@ import java.util.Set;
  * Represents an alignment of multiple sequences, and provides I/O methods to read and
  * the alignment from FASTA and to various file formats.
  * 
- * @note It can also simply hold a set of unaligned sequences.
+ * Note: It can also simply hold a set of unaligned sequences.
  */
 public class SequenceAlignment
 {

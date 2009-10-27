@@ -47,17 +47,37 @@ public class GiardiaJobOverview extends AbstractJobOverview {
 		data.add(createReportLink(p));
 
 		boolean hasAssignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support") != null;
+		String assignedId = "-";
 		for (String region : GiardiaGenome.regions) {
 			String phyloResult = p.getEscapedValue("genotype_result.sequence.result['phylo-" + region + "'].best.id");
 			if (phyloResult != null)
-				if (hasAssignment)
+				if (hasAssignment) {
+					assignedId = phyloResult;
 					data.add(new WText(phyloResult));
-				else
+				} else
 					data.add(new WText("Could not assign"));
 			else
 				data.add(new WText());
 		}
-		data.add(new WText());
+		
+		try {
+			int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
+			int end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
+			String region = p.getValue("genotype_result.sequence.result['blast'].cluster.id");
+
+			if (region != null) {
+				System.err.println(region);
+				start = GiardiaGenome.mapToImageGenome(start, region);
+				end = GiardiaGenome.mapToImageGenome(end, region);
+			} else {
+				start = 0; end = 0;
+			}
+
+			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
+					 assignedId, start, end, 0, "", null)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		return data;
 	}
