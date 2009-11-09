@@ -67,7 +67,7 @@ public class NovGenotypeAnalysisTest extends TestCase {
     	GenotypeResultParser p = new GenotypeResultParser(){
 			@Override
 			public void endSequence() {
-				String assignment = getValue("genotype_result.sequence.conclusion.assigned.id");
+				String assignment = getValue("/genotype_result/sequence/conclusion/assigned/id");
 				assertEquals(assignment, "Unassigned");
 			}
 
@@ -100,7 +100,7 @@ public class NovGenotypeAnalysisTest extends TestCase {
     	GenotypeResultParser p = new GenotypeResultParser(){
 			@Override
 			public void endSequence() {
-				String assignment = getValue("genotype_result.sequence.conclusion['ORF2'].assigned.id");
+				String assignment = getValue("/genotype_result/sequence/conclusion[@id='ORF2']/assigned/id");
 				assertEquals(assignment, "II.7");
 			}
 
