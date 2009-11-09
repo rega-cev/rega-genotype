@@ -140,16 +140,18 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			model.insertRow(insertPosition);
 			
 			String majorAssignment = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id");
-			WBrush brush = pieChart.getBrush(insertPosition);
+			if (majorAssignment == null) 
+				majorAssignment = assignment;
+			
 			Color c = od.getGenome().getAttributes().getColors().get(majorAssignment);
 			WColor wc;
 			if (c != null) {
 				wc = new WColor(c.getRed(), c.getGreen(), c.getBlue());
-				brush.setColor(wc);
-				pieChart.setBrush(insertPosition, brush);
 			} else {
-				wc = brush.getColor();
+				wc = pieChart.getPalette().getBrush(model.getRowCount()).getColor();
 			}
+			WBrush b = new WBrush(wc);
+			pieChart.setBrush(insertPosition, b);
 			
 			WStandardItem item = new WStandardItem(assignment);
 			item.setInternalPath(jobOverview.getJobPath() + "/" + encodeAssignment(assignment));
