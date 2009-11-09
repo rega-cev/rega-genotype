@@ -182,15 +182,15 @@ public class HIV1SubtypeTool extends GenotypeTool {
                     "Subtype assigned based on sequence > 800 bps " +
                     "clustering with a pure subtype and CRF or sub-subtype with bootstrap > 70% " +
                     recombinationConclusion);  
-            } else if (pureResult.getSupportInner() > pureResult.getSupportOuter()) {
+            } else if (pureResult.getSupportInner() - pureResult.getSupportOuter() > -50) {
                 conclude(pureResult,
                         "Subtype assigned based on sequence > 800 bps "
                         + "clustering with a pure subtype with bootstrap > 70% "
                         + recombinationConclusion);
             	// Rule 1a (pure)
-            } else if (pureResult.getSupportInner() > pureResult.getSupportOuter() - 30) {
+            } else if (pureResult.getSupportInner() - pureResult.getSupportOuter() > -100) {
             	// Rule 1b
-            	conclude(pureResult,"Rule 1B: pure like");
+            	conclude(pureResult + "-Like","Rule 1B: pure like");
             } else {
                 // Rule 1c
                 conclude("Check the Report",
