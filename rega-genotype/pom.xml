@@ -47,7 +47,7 @@
 	<dependency>
     	<groupId>jwt</groupId>
     	<artifactId>jwt</artifactId>
-    	<version>3.0.0</version>
+    	<version>3.0.1</version>
     </dependency>
 	<dependency>
 		<groupId>javax.servlet</groupId>
