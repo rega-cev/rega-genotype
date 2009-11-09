@@ -3,13 +3,13 @@
 
 	<clusters>
 		<cluster id="A" name="G.duodenalis Assemblage A">
-			<taxus name="16S|A03|AJ293299" />
 			<taxus name="16S|A01|AF199446" />
+			<taxus name="16S|A02|consensus" />
 		</cluster>
 
 		<cluster id="B" name="G.duodenalis Assemblage B">
 			<taxus name="16S|B01|L29192" />
-			<taxus name="16S|B03|AJ293300" />
+			<taxus name="16S|B02|consensus" />
 		</cluster>
 
 		<cluster id="C" name="G.duodenalis Assemblage C">
@@ -19,17 +19,16 @@
 
 		<cluster id="D" name="G.duodenalis Assemblage D">
 			<taxus name="16S|D01|AF199443" />
-			<taxus name="16S|D03|U60986" />
+			<taxus name="16S|D02|consensus" />
 		</cluster>
 
 		<cluster id="E" name="G.duodenalis Assemblage E">
 			<taxus name="16S|E01|DQ157272" />
-			<!--  <taxus name=""16S|E02|K4217 /> too short -->
+			<taxus name="16S|E02|consensus" />
 		</cluster>
 
 		<cluster id="F" name="G.duodenalis Assemblage F">
-			<taxus name="16S|F01|AF069057" />
-			<taxus name="16S|F02|AF199444" />
+			<taxus name="16S|F01|AF199444" />
 		</cluster>
 
 		<cluster id="G" name="G.duodenalis Assemblage G">
@@ -46,7 +45,7 @@
 		  A, B, C, D, E, F, G, G.ardeae
 		</identify>
 		<cutoff>
-			70
+			40
 		</cutoff>
 		<block>
 			begin paup;

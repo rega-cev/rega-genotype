@@ -351,7 +351,7 @@ public class ScanAnalysis extends AbstractAnalysis {
        					handleFragment = true;
             		}
 
-            		if (handleFragment) {
+            		if (handleFragment && lastIndex > firstIndex) {
         				FragmentResult r = new FragmentResult();
         				r.start = firstIndex;
         				r.end = lastIndex;
