@@ -1,9 +1,7 @@
 package rega.genotype.ui.forms;
 
 import java.awt.Color;
-import java.util.Date;
 import java.util.EnumSet;
-import java.util.Random;
 
 import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
