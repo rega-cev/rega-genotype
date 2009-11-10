@@ -190,7 +190,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
             	// Rule 1a (pure)
             } else if (pureResult.getSupportInner() - pureResult.getSupportOuter() > -100) {
             	// Rule 1b
-            	conclude(pureResult + "-Like","Rule 1B: pure like");
+            	conclude(pureResult.getConcludedCluster().getName() + "-Like", "Rule 1B: pure like");
             } else {
                 // Rule 1c
                 conclude("Check the Report",
