@@ -24,7 +24,6 @@
 
 		<cluster id="I.5" name="NoV I.5">
 			<taxus name="I.5|OB2005138" />
-			<taxus name="I.5|AF414406" />
 		</cluster>
 
 		<cluster id="I.6" name="NoV I.6">
@@ -53,7 +52,7 @@
 		</cluster>
 
 		<cluster id="I.d" name="NoV I.d">
-			<taxus name="I.d|EF190919" />
+			<taxus name="I.d|EF529738" />
 		</cluster>
 
 		<cluster id="I.e" name="NoV I.e">
@@ -65,7 +64,7 @@
 		</cluster>
 
 		<cluster id="II.1" name="NoV II.1">
-			<taxus name="II.1|OB2001003" />
+			<taxus name="II.1|OB2000046" />
 			<taxus name="II.1|U07611" />
 		</cluster>
 
@@ -88,7 +87,6 @@
 			<cluster id="II.4|Brist" name="Bristol">
 				<description>Variant Bristol</description>
 				<taxus name="II.4|Brist|X76716" />
-				<taxus name="II.4|Brist|X86557" />
 			</cluster>
 			<cluster id="II.4|1996" name="1996">
 				<description>Variant 1996</description>
@@ -107,7 +105,6 @@
 			</cluster>
 			<cluster id="II.4|2002/CN" name="2002/CN">
 				<description>Variant 2002/CN</description>
-				<taxus name="II.4|2002CN|DQ364459" />
 				<taxus name="II.4|2002CN|EU310927" />
 			</cluster>
 			<cluster id="II.4|2004" name="2004">
@@ -125,24 +122,24 @@
 				<taxus name="II.4|2006b|EF126965" />  
 				<taxus name="II.4|2006b|EF126966" />
 			</cluster>
+			<cluster id="II.4|2008" name="2008">
+				<description>Variant 2008</description>
+				<taxus name="II.4|2008|OC08086" />  
+				<taxus name="II.4|2008|OB2008179" />
+			</cluster>
 		</cluster>
 
 		<cluster id="II.5" name="NoV II.5">
 			<taxus name="II.5|AF397156" />
-			<!-- too short: <taxus name="II.5|AB112318" /> -->
 		</cluster>
 
 		<cluster id="II.6" name="NoV II.6">
 			<taxus name="II.6|AB039778" />
-			<taxus name="II.6|AB039779" />
 		</cluster>
 
 		<cluster id="II.7" name="NoV II.7">
 			<taxus name="II.7|AB039777" />
-			<taxus name="II.7|AB233474" /> 
-			<taxus name="II.7|AY038599" /> 
 			<taxus name="II.7|AB258331" />
-			<taxus name="II.7|EF670650" /> 
 		</cluster>
 
 		<cluster id="II.8" name="NoV II.8">
@@ -154,11 +151,7 @@
 		</cluster>
 
 		<cluster id="II.12" name="NoV II.12">
-			<taxus name="II.12|AB220921" />
-			<taxus name="II.12|AB039775" />
 			<taxus name="II.12|AB354299" />
-			<taxus name="II.12|AF504671" />
-			<taxus name="II.12|AX441291" />
 			<taxus name="II.12|EU187437" />
 		</cluster>
 
@@ -193,7 +186,6 @@
 
 		<cluster id="II.b" name="NoV II.b">
 			<taxus name="II.b|AY682549" />
-			<taxus name="II.b|AY845056" />
 			<taxus name="II.b|AY919139" />
 		</cluster>
 
@@ -201,13 +193,9 @@
 			<taxus name="II.c|AY134748" />
 		</cluster>
 
-		<cluster id="II.d1" name="NoV II.d1">
-			<taxus name="II.d1|AB212306" />
-			<!-- too short: <taxus name="II.d1|AB279554" /> -->
-		</cluster>
-
-		<cluster id="II.d2" name="NoV II.d2">
-			<taxus name="II.d2|AB112321" /> <!--too short-->
+		<cluster id="II.d" name="NoV II.d">
+			<taxus name="II.d|AB212306" />
+			<taxus name="II.d|DQ366347" />
 		</cluster>
 
 		<cluster id="II.e" name="NoV II.e"> 
@@ -226,7 +214,6 @@
 
 		<cluster id="II.h" name="NoV II.h">
 			<taxus name="II.h|AB089882" />
-			<!-- too short: <taxus name="II.h|AB279553" /> -->
 		</cluster>
 
 		<cluster id="II.j" name="NoV II.j">
@@ -239,6 +226,7 @@
 
 		<cluster id="II.NA1" name="NoV II.NA1">
 			<taxus name="II.NA1|EU424333" />
+			<taxus name="II.NA1|EU275779" />
 		</cluster>
 
 		<cluster id="II.NA2" name="NoV II.NA2">
@@ -255,9 +243,9 @@
 	<analysis id="phylo-ORF1" type="paup">
 		<identify>
 			I.1, I.2, I.3, I.4, I.5, I.6, I.7, I.8, I.a, I.b, I.c, I.d, I.e, I.f,
-			II.1, II.2, II.3, II.4[0;13], II.5, II.6, II.7, II.8, 
+			II.1, II.2, II.3, II.4[2;11], II.5, II.6, II.7, II.8, 
 			II.11, II.12, II.15, II.16, II.17, II.18, II.19,
-			II.a, II.b, II.c, II.d1, II.d2, II.e, II.f, II.g, II.h, II.j, II.k,
+			II.a, II.b, II.c, II.d, II.e, II.f, II.g, II.h, II.j, II.k,
 			II.NA1, II.NA2, O
 		</identify>
 		<cutoff>
@@ -273,7 +261,7 @@
 			set criterion=distance;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
 			constraints
-			CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(16,17),(22,23),(24,25),(26,27),(28,29),(31,32),(33,34,35,36,37),(40,41,42,43,44,45),(47,48),(49,50),(51,52),(53,54),(55,56),(57,58,59),(63,64),(66,67)(72,73));
+			CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(15,16),(21,22),(23,24),(25,26),(27,28),(31,32),(35,36),(38,39),(40,41),(42,43),(44,45),(46,47),(48,49),(51,52),(53,54),(56,57),(61,62),(63,64));
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
@@ -288,7 +276,7 @@
 	<analysis id="phylo-ORF1-II.4" type="paup">
 		<identify>
 			II.4|Camb, II.4|Brist, II.4|1996, II.4|2001, II.4|2002, II.4|2002/CN,
-			II.4|2004, II.4|2006a, II.4|2006b, II.1[0]
+			II.4|2004, II.4|2006a, II.4|2006b, II.4|2008, II.1[0]
     </identify>
 		<cutoff>
 			70
@@ -299,11 +287,11 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup II.1|OB2001003;
+			outgroup II.1|OB2000046;
 			set criterion=distance;
 			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
-			constraints CONSTRE(BACKBONE)
-			=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19));
+			constraints 
+			CONSTRE(BACKBONE)=((2,3),(5,6),(7,8),(9,10),(12,13),(14,15),(16,17),(18,19));
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
