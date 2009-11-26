@@ -181,7 +181,7 @@
 
 	<analysis id="phylo-ORF2" type="paup">
 		<identify>
-			II.1, II.2, II.3, II.4[6;22], II.5, II.6, II.7, II.8, II.9,
+			II.1, II.2, II.3, II.4[0;22], II.5, II.6, II.7, II.8, II.9,
 			II.10, II.11, II.12, II.13, II.14, II.15, II.16, II.17,
 			II.18, II.19, II.NA1, II.NA2, II.NA3, II.NA4, O
     </identify>
