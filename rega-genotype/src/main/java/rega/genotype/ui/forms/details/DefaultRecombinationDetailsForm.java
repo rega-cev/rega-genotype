@@ -27,9 +27,12 @@ import eu.webtoolkit.jwt.WText;
 public class DefaultRecombinationDetailsForm extends IDetailsForm {
 	private String path;
 	private String type;
-	public DefaultRecombinationDetailsForm(String path, String type){
+	private WString title;
+	
+	public DefaultRecombinationDetailsForm(String path, String type, WString title){
 		this.path = path;
 		this.type = type;
+		this.title = title;
 		setStyleClass("recombinationDetails");
 	}
 	@Override
@@ -81,7 +84,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 
 	@Override
 	public WString getTitle() {
-		return tr("defaultRecombinationAnalyses.title");
+		return title;
 	}
 
 	@Override

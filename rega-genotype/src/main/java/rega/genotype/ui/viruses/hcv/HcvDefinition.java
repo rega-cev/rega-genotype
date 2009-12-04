@@ -74,11 +74,11 @@ public class HcvDefinition implements OrganismDefinition {
 		
 		String scan = "/genotype_result/sequence/result[@id='scan']";
 		if (p.elementExists(scan))
-			forms.add(new DefaultRecombinationDetailsForm(scan, "pure"));
+			forms.add(new DefaultRecombinationDetailsForm(scan, "pure", new WString("HCV Subtype Recombination Analysis")));
 		
 		String crfScan = "/genotype_result/sequence/result[@id='crfscan']";
 		if (p.elementExists(crfScan))
-			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf"));
+			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf", new WString("HCV CRF/Subtype Recombination Analysis")));
 
 		if(p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']")) {
 			forms.add(new DefaultSignalDetailsForm());

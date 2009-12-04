@@ -14,8 +14,8 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.DefaultTableGenerator;
-import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -82,11 +82,11 @@ public class HivDefinition implements OrganismDefinition {
 		
 		String scan = "/genotype_result/sequence/result[@id='scan']";
 		if (p.elementExists(scan))
-			forms.add(new DefaultRecombinationDetailsForm(scan, "pure"));
+			forms.add(new DefaultRecombinationDetailsForm(scan, "pure", new WString("HIV-1 Subtype Recombination Analysis")));
 		
 		String crfScan = "/genotype_result/sequence/result[@id='crfscan']";
 		if (p.elementExists(crfScan))
-			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf"));
+			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf", new WString("HIV-1 CRF/Subtype Recombination Analysis")));
 
 		if(p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']")) {
 			forms.add(new DefaultSignalDetailsForm());
