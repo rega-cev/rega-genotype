@@ -187,13 +187,19 @@ public abstract class GenotypeTool {
      * Conclude the "unassigned" conclusion.
      */
     protected void conclude(String conclusion, String motivation) {
-    	conclude(conclusion, motivation, null);
+    	concludeRule(null,conclusion,motivation);
+    }
+    protected void concludeRule(String rule, String conclusion, String motivation) {
+    	concludeRule(rule, conclusion, motivation, null);
     }
 
     /**
      * Conclude the "unassigned" conclusion.
      */
     protected void conclude(String conclusion, String motivation, String id) {
+    	concludeRule(null,conclusion,motivation,id);
+    }
+    protected void concludeRule(String rule, String conclusion, String motivation, String id) {
         getTracer().printlnOpen("<conclusion type=\"unassigned\""
         		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
         getTracer().printlnOpen("<assigned>");
@@ -201,6 +207,7 @@ public abstract class GenotypeTool {
         getTracer().add("name", (String) conclusion);
         getTracer().printlnClose("</assigned>");
         getTracer().add("motivation", motivation);
+    	getTracer().add("rule", rule==null ? "":rule);
         getTracer().printlnClose("</conclusion>");    	
     }
 
@@ -208,17 +215,24 @@ public abstract class GenotypeTool {
      * Conclude a plain conclusion.
      */
     protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation) {
-    	conclude(conclusion, motivation, null);
+    	concludeRule(null,conclusion,motivation);
+    }
+    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, String motivation) {
+    	concludeRule(rule, conclusion, motivation, null);
     }
 
     /**
      * Conclude a plain conclusion.
      */
     protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation, String id) {
+    	concludeRule(null,conclusion,motivation,id);
+    }
+    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, String motivation, String id) {
         getTracer().printlnOpen("<conclusion type=\"simple\""
         		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
         conclusion.writeConclusion(getTracer());
         getTracer().add("motivation", motivation);
+    	getTracer().add("rule", rule==null ? "":rule);
         getTracer().printlnClose("</conclusion>");
     }
 
@@ -226,11 +240,16 @@ public abstract class GenotypeTool {
      * Conclude a combined major/minor conclusion.
      */
     protected void conclude(AbstractAnalysis.Concludable major, AbstractAnalysis.Concludable minor,
+			String motivation) {
+    	concludeRule(null,major,minor,motivation);
+    }
+    protected void concludeRule(String rule, AbstractAnalysis.Concludable major, AbstractAnalysis.Concludable minor,
     						String motivation) {
         getTracer().printlnOpen("<conclusion type=\"composed\">");
         AbstractAnalysis.ComposedConclusion r = new AbstractAnalysis.ComposedConclusion(major, minor);
         r.writeConclusion(getTracer());
         getTracer().add("motivation", motivation);
+        getTracer().add("rule", rule==null ? "":rule);
         getTracer().printlnClose("</conclusion>");    	
     }
 
