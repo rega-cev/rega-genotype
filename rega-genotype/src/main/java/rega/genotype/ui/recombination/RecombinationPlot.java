@@ -25,7 +25,6 @@ import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WPen;
 import eu.webtoolkit.jwt.WSvgImage;
 import eu.webtoolkit.jwt.chart.Axis;
-import eu.webtoolkit.jwt.chart.AxisLocation;
 import eu.webtoolkit.jwt.chart.AxisValue;
 import eu.webtoolkit.jwt.chart.ChartType;
 import eu.webtoolkit.jwt.chart.SeriesType;
@@ -72,7 +71,9 @@ public class RecombinationPlot extends WCartesianChart {
         	Color c = genomeColors.get(model.getHeaderData(i));
         	WDataSeries ds = new WDataSeries(i, SeriesType.LineSeries);
         	if (c != null) {
-        		ds.setPen(new WPen(new WColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha())));
+        		WPen pen = new WPen(new WColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha()));
+        		pen.setWidth(new WLength(3));
+        		ds.setPen(pen);
         	}
     		this.addSeries(ds);
         }
