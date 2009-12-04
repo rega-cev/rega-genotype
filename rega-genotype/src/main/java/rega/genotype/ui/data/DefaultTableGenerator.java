@@ -20,6 +20,7 @@ public class DefaultTableGenerator extends AbstractDataTableGenerator {
 		table.addLabel("name");
 		table.addLabel("length");
 		table.addLabel("assignment");
+		table.addLabel("rule");
 		table.addLabel("support");
 		table.addLabel("begin");
 		table.addLabel("end");
@@ -51,10 +52,14 @@ public class DefaultTableGenerator extends AbstractDataTableGenerator {
     	addNamedValue("/genotype_result/sequence/@name", ValueFormat.Label);
     	addNamedValue("/genotype_result/sequence/@length", ValueFormat.Number);
 
-    	if (!elementExists("/genotype_result/sequence/conclusion"))
+    	if (!elementExists("/genotype_result/sequence/conclusion")){
     		addValue(",\"Sequence error\"");
-    	else
+    		addValue(",");
+    	}
+    	else{
     		addNamedValue("/genotype_result/sequence/conclusion/assigned/name", ValueFormat.Label);
+    		addNamedValue("/genotype_result/sequence/conclusion/rule", ValueFormat.Label);
+    	}
     	
     	addNamedValue("/genotype_result/sequence/conclusion/assigned/support", ValueFormat.Number);
 
