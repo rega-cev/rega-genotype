@@ -13,14 +13,9 @@ import rega.genotype.ui.util.Settings;
 
 public class Utils {
 	public static File setup(String fastaContent) {
-		File jobDir = null;
+		File jobDir;
 		do {
-			try {
-				jobDir = File.createTempFile("test-rega-genotype" + System.currentTimeMillis(), "dir");
-				jobDir.delete();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			jobDir = new File(System.getProperty("java.io.tmpdir") + File.separatorChar +"jobDir" + File.separatorChar + System.currentTimeMillis());
 			System.err.println(jobDir.getAbsolutePath());
 		} while (jobDir.exists());
 		jobDir.mkdirs();
