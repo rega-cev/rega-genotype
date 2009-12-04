@@ -5,169 +5,110 @@
  */
 package rega.genotype.ui.recombination;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleEdge;
 
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.util.ImageConverter;
 import rega.genotype.utils.Table;
-
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.DefaultFontMapper;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfTemplate;
-import com.lowagie.text.pdf.PdfWriter;
+import eu.webtoolkit.jwt.Side;
+import eu.webtoolkit.jwt.WColor;
+import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WPainter;
+import eu.webtoolkit.jwt.WPen;
+import eu.webtoolkit.jwt.WSvgImage;
+import eu.webtoolkit.jwt.chart.Axis;
+import eu.webtoolkit.jwt.chart.AxisLocation;
+import eu.webtoolkit.jwt.chart.AxisValue;
+import eu.webtoolkit.jwt.chart.ChartType;
+import eu.webtoolkit.jwt.chart.SeriesType;
+import eu.webtoolkit.jwt.chart.WCartesianChart;
+import eu.webtoolkit.jwt.chart.WDataSeries;
+import eu.webtoolkit.jwt.servlet.UploadedFile;
 
 /**
- * Constructs recombination plots using the jfreechart api.
+ * Recombination plot.
  * 
- * @author simbre1
- *
+ * @author pieter
  */
-public class RecombinationPlot {
-	public static JFreeChart getRecombinationPlot(String dataCsv, OrganismDefinition od) throws FileNotFoundException, UnsupportedEncodingException {
-		CsvDataset n = new CsvDataset(new Table(new ByteArrayInputStream(dataCsv.getBytes()), false, '\t'));
-		JFreeChart chart = ChartFactory.createXYLineChart("Bootscan Analyses", 																			
-				"nuleotides position", 
-				"bootstrap values", 
-				n, 
-				PlotOrientation.VERTICAL, 
-				true, 
-				true, 
-				false 
-				);
+public class RecombinationPlot extends WCartesianChart {
+	private String csvData;
+	private OrganismDefinition od;
+	
+	public RecombinationPlot(String csvData, OrganismDefinition od) {
+		this.csvData = csvData;
+		this.od = od;
 		
-		XYPlot plot = chart.getXYPlot();
-		plot.setDomainGridlinesVisible(false);
-		plot.setRangeGridlinesVisible(false);
-		
-		NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-		yAxis.setTickUnit(new NumberTickUnit(20), true, true);
-		
-		NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
-		xAxis.setTickUnit(new NumberTickUnit(200), true, true);
-		xAxis.setRange(n.getXValue(0, 0), n.getXValue(0, n.getItemCount(0)-1));
-		
-		chart.getLegend().setPosition(RectangleEdge.RIGHT);
-		
-		//colors curves
-		Map<String, Color> genomeColors = od.getGenome().getAttributes().getColors();
-		for(int i=0; i<n.getSeriesCount();i++) {
-			Color c = genomeColors.get(n.getSeriesKey(i));
-			if(c!=null) {
-				plot.getRenderer().setSeriesPaint(i, c);
-			} else {
-				System.err.println("Error: cannot find genome color: " + n.getSeriesKey(i));
-			}
-		}
-		//colors curves
-		
-		//cutoff
-		XYSeriesCollection cutoffCollection = new XYSeriesCollection();
-		XYSeries cutoffSeries = new XYSeries("70% cutoff");
-		cutoffSeries.add(n.getXValue(0, 0), 70.0);
-		cutoffSeries.add(n.getXValue(0, n.getItemCount(0)-1), 70.0);
-		cutoffCollection.addSeries(cutoffSeries);
-		plot.setDataset(1, cutoffCollection);
-		plot.setRenderer(1, new XYLineAndShapeRenderer(true, false));
-		plot.getRenderer(1).setBaseStroke(new BasicStroke(2.0f,
-	                       BasicStroke.CAP_ROUND,
-	                       BasicStroke.JOIN_ROUND,
-	                       1.0f,
-	                       new float[] {10.0f, 6.0f},
-	                       0.0f));
-		plot.getRenderer(1).setSeriesPaint(0, Color.RED);
-		//cutoff
+		CsvModel model = new CsvModel(new Table(new ByteArrayInputStream(csvData.getBytes()), false, '\t'));
+        this.setModel(model);
+        this.setXSeriesColumn(0);
+        this.setLegendEnabled(true);
 
-		return chart;
+        this.setType(ChartType.ScatterPlot);
+
+        this.getAxis(Axis.XAxis).setLocation(AxisValue.ZeroValue);
+        this.getAxis(Axis.YAxis).setLocation(AxisValue.ZeroValue);
+        this.getAxis(Axis.XAxis).setLabelFormat("%.1f");
+        this.getAxis(Axis.YAxis).setLabelFormat("%.1f");
+
+        this.setPlotAreaPadding(60, Side.Left);
+        this.setPlotAreaPadding(80, Side.Right);
+        this.setPlotAreaPadding(50, Side.Top, Side.Bottom);
+        
+        this.getAxis(Axis.XAxis).setTitle("Nucleotide positions");
+        this.getAxis(Axis.YAxis).setTitle("Support");
+        
+        this.setTitle("Bootscan analysis");
+
+        Map<String, Color> genomeColors = od.getGenome().getAttributes().getColors();
+        for (int i = 1; i < model.getColumnCount(); i++) {
+        	Color c = genomeColors.get(model.getHeaderData(i));
+        	WDataSeries ds = new WDataSeries(i, SeriesType.LineSeries);
+        	if (c != null) {
+        		ds.setPen(new WPen(new WColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha())));
+        	}
+    		this.addSeries(ds);
+        }
+
+        this.resize(720, 450);
 	}
 	
-	public static File getRecombinationPNG(File jobDir, int sequenceIndex, String type, String csvData, OrganismDefinition od) throws UnsupportedEncodingException, IOException {
-		File pngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".png");
-		if(!pngFile.exists()) {
-			FileOutputStream fos = new FileOutputStream(pngFile);
-			ChartUtilities.writeChartAsPNG(fos, getRecombinationPlot(csvData, od), 720, 450);
-			fos.flush();
-			fos.close();
-		}
-		return pngFile;
-	}
-	
-	public static File getRecombinationCSV(File jobDir, int sequenceIndex, String type, String csvData) {
-		File pdfFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
-		if(!pdfFile.exists()) {
+	public File getRecombinationCSV(File jobDir, int sequenceIndex, String type) {
+		File csvFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
+		if(!csvFile.exists()) {
 			try {
-				GenotypeLib.writeStringToFile(pdfFile, csvData);
+				GenotypeLib.writeStringToFile(csvFile, csvData);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		return pdfFile;
+		return csvFile;
 	}
 	
-	public static File getRecombinationPDF(File jobDir, int sequenceIndex, String type, String csvData, OrganismDefinition od) throws IOException {
+	public File getRecombinationPDF(File jobDir, int sequenceIndex, String type)
+			throws IOException {
 		File pdfFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".pdf");
-		
-		if(!pdfFile.exists()) {
-			FileOutputStream fos = new FileOutputStream(pdfFile);
-			int width = 720;
-			int height = 450;
-			
-			Rectangle pagesize = new Rectangle(width, height);
-			Document document = new Document(pagesize, 50, 50, 50, 50);
-			try {
-				PdfWriter writer = PdfWriter.getInstance(document, fos);
-				document.addAuthor("Rega Genotype Tool");
-				document.addSubject("Recombination plot");
-				document.open();
-				PdfContentByte cb = writer.getDirectContent();
-				PdfTemplate tp = cb.createTemplate(width, height);
-				Graphics2D g2 = tp.createGraphics(width, height, new DefaultFontMapper());
-				Rectangle2D r2D = new Rectangle2D.Double(0, 0, width, height);
-				getRecombinationPlot(csvData, od).draw(g2, r2D, null);
-				g2.dispose();
-				cb.addTemplate(tp, 0, 0);
-			} catch (DocumentException de) {
-				System.err.println(de.getMessage());
-			}
-			document.close();
+		if (!pdfFile.exists()) {
+			WSvgImage image = new WSvgImage(new WLength(400), new WLength(300));
+			WPainter painter = new WPainter(image);
+			this.paint(painter);
+			painter.end();
+			File tmp = File.createTempFile("recombination", "svg");
+			FileOutputStream fos = new FileOutputStream(tmp);
+			//TODO use simplified write(fos) method
+			image.write(fos, new HashMap<String, List<String>>(), new HashMap<String, UploadedFile>());
+			fos.flush();
+			fos.close();
+			ImageConverter.svgToPdf(tmp, pdfFile);
+			tmp.delete();
 		}
-		
 		return pdfFile;
-	}
-
-	
-	public static void main(String[] args) throws IOException {
-//		JFrame f = new JFrame();
-//		ChartPanel chartPanel = new ChartPanel(getRecombinationPlot(new File("/home/plibin0/projects/utrecht/recombination/data.csv")));
-//		chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
-//		f.setContentPane(chartPanel);
-//		f.setVisible(true);
-//		
-//		getRecombinationPNG(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "pure");
-//		getRecombinationPDF(new File("/home/plibin0/projects/subtypetool/genomePng"), 0, "pure");
 	}
 }

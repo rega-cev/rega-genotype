@@ -67,11 +67,13 @@ public class HtlvDefinition implements OrganismDefinition {
 		if (p.elementExists("/genotype_result/sequence/result[@id='crf']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='crf']", m, m, false));
 		
-		if (p.elementExists("/genotype_result/sequence/result[@id='scan']"))
-			forms.add(new DefaultRecombinationDetailsForm());
+		String scan = "/genotype_result/sequence/result[@id='scan']";
+		if (p.elementExists(scan))
+			forms.add(new DefaultRecombinationDetailsForm(scan, "pure"));
 		
-		if (p.elementExists("/genotype_result/sequence/result[@id='crfscan']"))
-			forms.add(new DefaultRecombinationDetailsForm());
+		String crfScan = "/genotype_result/sequence/result[@id='crfscan']";
+		if (p.elementExists(crfScan))
+			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf"));
 
 		if(p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']")) {
 			forms.add(new DefaultSignalDetailsForm());

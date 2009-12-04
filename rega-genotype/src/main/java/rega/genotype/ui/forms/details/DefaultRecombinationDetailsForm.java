@@ -15,6 +15,7 @@ import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.RecombinationForm;
 import rega.genotype.ui.recombination.RecombinationPlot;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WString;
@@ -24,19 +25,17 @@ import eu.webtoolkit.jwt.WText;
  * A default extension of IDetailsForm for visualizing recombination details, used by different virus implementations.
  */
 public class DefaultRecombinationDetailsForm extends IDetailsForm {
-
-	public DefaultRecombinationDetailsForm(){
-		super();
+	private String path;
+	private String type;
+	public DefaultRecombinationDetailsForm(String path, String type){
+		this.path = path;
+		this.type = type;
 		setStyleClass("recombinationDetails");
 	}
 	@Override
 	public void fillForm(GenotypeResultParser p, OrganismDefinition od, File jobDir) {
 		try {
-			if(p.elementExists("/genotype_result/sequence.result[@id='scan']")) {
-				initRecombinationSection(p, jobDir, "/genotype_result/sequence/result[@id='scan']", "pure", od);
-			} else if(p.elementExists("/genotype_result/sequence/result[@id='crfscan']")) {
-				initRecombinationSection(p, jobDir, "/genotype_result/sequence/result[@id='crfscan']", "crf", od);
-			}
+			initRecombinationSection(p, jobDir, od);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -44,7 +43,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		}
 	}
 	
-	private void initRecombinationSection(GenotypeResultParser p, File jobDir, String path, String type, OrganismDefinition od) throws UnsupportedEncodingException, IOException {
+	private void initRecombinationSection(GenotypeResultParser p, File jobDir, OrganismDefinition od) throws UnsupportedEncodingException, IOException {
 		if(p.elementExists("/genotype_result/sequence/result[@id='scan']/recombination")){
 			WAnchor detailed = new WAnchor("", tr("defaultRecombinationAnalyses.detailedRecombination"));
 			detailed.setObjectName("report-" + p.getSequenceIndex());
@@ -57,20 +56,22 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		addWidget(new WText(tr("defaultRecombinationAnalyses.sequenceName")));
 		addWidget(new WText(p.getEscapedValue("/genotype_result/sequence/@name")));
 		addWidget(new WBreak());
-		addWidget(GenotypeLib.getWImageFromFile(RecombinationPlot.getRecombinationPNG(jobDir, p.getSequenceIndex(), type, p.getValue(path+"/data"), od)));
+		RecombinationPlot plot = new RecombinationPlot(p.getValue(path+"/data"), od);
+		addWidget(plot);
 		addWidget(new WBreak());
 		addWidget(new WText(tr("defaultRecombinationAnalyses.bootscanClusterSupport")));
 		addWidget(new WText(p.getEscapedValue(path+"/support[@id='best']")));
 		addWidget(new WBreak());
 		addWidget(new WText(tr("defaultRecombinationAnalyses.download").getValue() +" "));
-		addWidget(GenotypeLib.getAnchor("CSV", "application/excel", RecombinationPlot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type, p.getValue(path+"/data")), null));
+		addWidget(GenotypeLib.getAnchor("CSV", "application/excel", plot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type), null));
 		addWidget(new WText(", "));
-		addWidget(GenotypeLib.getAnchor(" PDF ", "application/pdf", RecombinationPlot.getRecombinationPDF(jobDir, p.getSequenceIndex(), type, p.getValue(path+"/data"), od), null));
+		addWidget(GenotypeLib.getAnchor(" PDF ", "application/pdf", plot.getRecombinationPDF(jobDir, p.getSequenceIndex(), type), null));
 		addWidget(new WBreak());
 		WString m = tr("defaultRecombinationAnalyses.bootscanAnalysis");
 		m.arg(p.getValue(path+"/window"));
 		m.arg(p.getValue(path+"/step"));
 		addWidget(new WText(m));
+		this.setContentAlignment(AlignmentFlag.AlignCenter);
 	}
 	
 	@Override
