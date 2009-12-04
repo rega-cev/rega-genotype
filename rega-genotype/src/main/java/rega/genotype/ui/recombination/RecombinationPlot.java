@@ -18,11 +18,14 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.ImageConverter;
 import rega.genotype.utils.Table;
+import eu.webtoolkit.jwt.PenStyle;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WPaintDevice;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WPen;
+import eu.webtoolkit.jwt.WPointF;
 import eu.webtoolkit.jwt.WSvgImage;
 import eu.webtoolkit.jwt.chart.Axis;
 import eu.webtoolkit.jwt.chart.AxisValue;
@@ -40,10 +43,12 @@ import eu.webtoolkit.jwt.servlet.UploadedFile;
 public class RecombinationPlot extends WCartesianChart {
 	private String csvData;
 	private OrganismDefinition od;
+	private int cutoff;
 	
 	public RecombinationPlot(String csvData, OrganismDefinition od) {
 		this.csvData = csvData;
 		this.od = od;
+		this.cutoff = 70;
 		
 		CsvModel model = new CsvModel(new Table(new ByteArrayInputStream(csvData.getBytes()), false, '\t'));
         this.setModel(model);
@@ -79,6 +84,18 @@ public class RecombinationPlot extends WCartesianChart {
         }
 
         this.resize(720, 450);
+	}
+	
+	protected void paintEvent(WPaintDevice paintDevice) {
+		super.paintEvent(paintDevice);
+		
+		//draw cutoff
+		WPointF from = this.mapToDevice(0, cutoff);
+		WPointF to = this.mapToDevice(this.getAxis(Axis.XAxis).getMaximum(), cutoff);
+		WPen cutoffPen = new WPen(WColor.red);
+		cutoffPen.setStyle(PenStyle.DashLine);
+		paintDevice.getPainter().setPen(cutoffPen);
+		paintDevice.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
 	}
 	
 	public File getRecombinationCSV(File jobDir, int sequenceIndex, String type) {
