@@ -29,7 +29,7 @@ public class ScanAnalysis extends AbstractAnalysis {
     public class Result extends AbstractAnalysis.Result implements Scannable {
         private List<Scannable> windowResults;
 		private List<FragmentResult> recombinationResults;
-		private Map<String, Float> supportedTypes = null; 
+		private Map<String, Integer> supportedTypes = null; 
 
         public Result(AbstractSequence sequence, List<Scannable> windowResults, List<FragmentResult> recombinationResults) {
             super(sequence);
@@ -117,40 +117,37 @@ public class ScanAnalysis extends AbstractAnalysis {
         /**
          * @return Returns map of types with their window support rate, where the support rate > 0.1
          */
-        public Map<String, Float> getSupportedTypes(){
+        public Map<String, Integer> getSupportedTypes(){
         	if(supportedTypes == null){
-        		supportedTypes = new TreeMap<String, Float>();
+        		supportedTypes = new TreeMap<String, Integer>();
         	
-		        List<String> supportLabels = windowResults.get(0).scanDiscreteLabels();
 		        Map<String, Integer> windowCount = new TreeMap<String, Integer>();
-		        int total = 0;
+		        int j = windowResults.get(0).scanDiscreteLabels().indexOf("assigned");
 		        
-		        for (int j = 0; j < supportLabels.size(); ++j) {
-		        	for (int i = 0; i < windowResults.size(); ++i) {
-		            	List<String> values = windowResults.get(i).scanDiscreteValues();
-		            	
-		            	String value = values.get(j);
-		            	if (value == null)
-		            		value = "-";
-		            	
-		            	Integer count = windowCount.get(value);
+	        	for (int i = 0; i < windowResults.size(); ++i) {
+	            	List<String> values = windowResults.get(i).scanDiscreteValues();
+	            	
+	            	String value = values.get(j);
+	            	if (value != null){
+		            	Integer count = supportedTypes.get(value);
 		            	if(count == null)
-		            		count = 0;
-		            	windowCount.put(value, ++count);
-		            	
-		            	++total;
-		            }
-		        }
+		            		supportedTypes.put(value, 1);
+		            	else
+		            		supportedTypes.put(value, ++count);
+	            	}
+	            }
 		        
 		        for(Map.Entry<String, Integer> me : windowCount.entrySet()){
-		        	if(!me.getKey().equals("-")){
-			        	float ratio = (float)me.getValue()/total;
-			        	if(ratio > 0.1)
-			        		supportedTypes.put(me.getKey(), ratio);
-		        	}
+		        	float ratio = (float)me.getValue()/windowResults.size();
+		        	if(ratio <= 0.1)
+		        		supportedTypes.remove(me.getKey());
 		        }
         	}
         	return supportedTypes;
+        }
+        
+        public int getWindowCount(){
+        	return windowResults.size();
         }
 
         public void writeXMLTable(ResultTracer tracer) {

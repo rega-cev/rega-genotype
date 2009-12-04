@@ -66,22 +66,24 @@ public class HIV1SubtypeTool extends GenotypeTool {
                 rule1(pureResult, crfResult);
             } else {                
                 if (!crfResult.haveSupport()) {
-                	Map<String,Float> supported = scanResult.getSupportedTypes();
+                	Map<String,Integer> supported = scanResult.getSupportedTypes();
                 	
                 	if (supported.size() >= 2) {
                 		//Rule 2A
-                		conclude("Recombinant "+ toRecombinantString(supported),
+                		conclude("Recombinant "+ toRecombinantString(scanResult.getWindowCount(),supported),
                 				"Rule 2A");
                 		return;
                 	} else if (supported.size() == 1) {
-                		Map.Entry<String, Float> support = supported.entrySet().iterator().next();
+                		Map.Entry<String, Integer> support = supported.entrySet().iterator().next();
+                		float supportRatio = support.getValue() / scanCRFResult.getWindowCount();
                 		
-                		if (support.getValue() >= 0.7) {
+                		if (supportRatio >= 0.7) {
                 			//Rule 2B goto Rule 1
                 			rule2B(pureResult, crfResult);
-                		} else if (support.getValue() >= 0.5) {
+                		} else if (supportRatio >= 0.5) {
                 			//Rule 2C
-                			conclude(support.getValue()+", potential recombinant",
+                			conclude(support.getKey()+" ("+support.getValue()+"/"+ scanResult.getWindowCount()+")"
+                					+", potential recombinant",
                 					"Rule 2C");
                 			return;
                 		}
@@ -94,12 +96,12 @@ public class HIV1SubtypeTool extends GenotypeTool {
                             "and failure to classify as a CRF or sub-subtype (bootstrap support).");
                 } else {
                     if (crfResult.getBestCluster().hasTag("CRF")) {
-                    	Map<String,Float> supported = scanCRFResult.getSupportedTypes();
+                    	Map<String,Integer> supported = scanCRFResult.getSupportedTypes();
                     	
                         if (!scanCRFResult.haveSupport()) {
                         	if( scanCRFSupport > 0.1 && supported.size() >= 1) {
                         		//Rule 3A
-                        		conclude("Recombinant "+ toRecombinantString(supported),
+                        		conclude("Recombinant "+ toRecombinantString(scanCRFResult.getWindowCount(),supported),
                         				"Rule 3A");
                         	} else if (scanCRFSupport > 0.7 && supported.size() == 0) {
                         		//Rule 3B goto Rule 1
@@ -207,17 +209,17 @@ public class HIV1SubtypeTool extends GenotypeTool {
         }
     }
     
-    private String toRecombinantString(Map<String,Float> m){
+    private String toRecombinantString(int totalWindows, Map<String,Integer> m){
     	StringBuilder sb = new StringBuilder();
     	
     	boolean first = true;
-    	for(Map.Entry<String, Float> me : m.entrySet()){
+    	for(Map.Entry<String, Integer> me : m.entrySet()){
     		if(!first)
     			sb.append(", ");
     		else
     			first = false;
     		
-    		sb.append(me.getKey() +" ("+ (int)(me.getValue()*100) +"%)");
+    		sb.append(me.getKey() +" ("+ me.getValue() +"/"+ totalWindows +")");
     	}
     	
     	return sb.toString();
