@@ -44,7 +44,7 @@ public class EtvJobOverview extends AbstractJobOverview {
 		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[length]"))));
 
 		boolean havePhyloAnalysis = p.getValue("genotype_result.sequence.result['phylo-serotype'].best.id") != null;
-		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("genotype_result.sequence.conclusion['unassigned'].assigned.id") == null;
+		boolean haveBlastAssignment = havePhyloAnalysis || !"Unassigned".equals(p.getValue("genotype_result.sequence.conclusion.assigned.id"));
 
 		if (haveBlastAssignment) {
 			String blastAssignment = p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.name");

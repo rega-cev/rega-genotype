@@ -150,6 +150,8 @@ public class BlastAnalysis extends AbstractAnalysis {
                 tracer.add("description", cluster.getDescription());
             }
             tracer.add("reverse-compliment", String.valueOf(reverseCompliment));
+            tracer.add("concluded-id", haveSupport() ? cluster.getId() : "Unassigned");
+            tracer.add("concluded-name", haveSupport() ? cluster.getName() : "Unassigned");
             tracer.printlnClose("</cluster>");
             if (refseq != null)
             	tracer.add("refseq", refseq.getTaxus());
