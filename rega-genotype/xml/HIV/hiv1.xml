@@ -258,7 +258,7 @@
       0.9
     </cutoff>
     <analysis id="paupfragment" type="paup" />
-    <options>data-all,recombination:assigned</options>
+    <options>data-all,recombination:best</options>
   </analysis>
 
   <analysis id="crfscan" type="scan">
