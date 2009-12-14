@@ -116,7 +116,7 @@ public class RecombinationPlot extends WCartesianChart {
 	public File getRecombinationPDF(File jobDir, int sequenceIndex, String type) throws IOException {
 		File pdfFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".pdf");
 		if (!pdfFile.exists()) {
-			WSvgImage image = new WSvgImage(new WLength(400), new WLength(300));
+			WSvgImage image = new WSvgImage(new WLength(720), new WLength(450));
 			WPainter painter = new WPainter(image);
 			this.paint(painter);
 			painter.end();

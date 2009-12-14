@@ -220,7 +220,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             float   resultSupport = 0;
 
             if (cutoff != null) {
-                for (int i = 0; i < allSupports.size(); ++i) {
+                for (int i = 0; i < allSupports.size() && i < clusters.size(); ++i) {
                     if (allSupports.get(i) >= cutoff) {
                         if ((result == null)
                             || (result.depth() < clusters.get(i).depth())
@@ -256,10 +256,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
         }
 
         public void writeConclusion(ResultTracer tracer) {
-            Cluster c = getSpecificCluster();
-
-            if (c == null)
-            	c = getBestCluster();
+            Cluster c = getConcludedCluster();
             
             writeConclusion(tracer, c);
         }
@@ -282,11 +279,16 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
         }
 
 		public Cluster getConcludedCluster() {
-			return getSpecificCluster();
+			Cluster c = getSpecificCluster();
+
+            if (c == null)
+            	c = getBestCluster();
+
+           	return c;
 		}
 
 		public float getConcludedSupport() {
-			return (float) getSupport(getConcludedCluster());
+			return getSupport();
 		}
 
 		public Concludable concludeForCluster(final Cluster cluster) {

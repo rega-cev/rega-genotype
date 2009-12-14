@@ -15,6 +15,7 @@ import eu.webtoolkit.jwt.ViewItemRenderFlag;
 import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAbstractItemModel;
 import eu.webtoolkit.jwt.WBrush;
+import eu.webtoolkit.jwt.WBrushStyle;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
@@ -156,8 +157,6 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			} else {
 				wc = pieChart.getPalette().getBrush(Math.abs(assignment.hashCode())).getColor();
 			}
-			WBrush b = new WBrush(wc);
-			pieChart.setBrush(insertPosition, b);
 			
 			WStandardItem item = new WStandardItem(assignment);
 			item.setInternalPath(jobOverview.getJobPath() + "/" + encodeAssignment(assignment));
@@ -175,25 +174,11 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			int v = ((Integer)model.getData(i, 1));
 			if (v > 0)
 				model.setData(i, 2, String.format("%.3g%%", v / total * 100.0));
+			WBrush b = new WBrush((WColor) model.getData(i, 3, ItemDataRole.UserRole + 1));
+			pieChart.setBrush(i, b);
 		}
 	}
 	
-	private int determinePosition(String assignment) {
-		if (assignment.equals(CHECK_THE_BOOTSCAN) ||
-				assignment.equals(this.NOT_ASSIGNED))
-			return model.getRowCount();
-			
-		String label;
-		for (int i = 0; i < model.getRowCount(); i++) {
-			label = (String)model.getData(i, 0);
-			if (label.equals(CHECK_THE_BOOTSCAN) ||
-					label.equals(this.NOT_ASSIGNED))
-				return i;
-		}
-
-		return 0;
-	}
-
 	public void reset() {
 		if (table != null) {
 			this.clear();
