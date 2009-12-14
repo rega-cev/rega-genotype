@@ -32,4 +32,5 @@ public interface OrganismDefinition {
 	public int getUpdateInterval();
 	public String getOrganismName();
 	public boolean haveDetailsNavigationForm();
+	public String getProfileScanType(GenotypeResultParser p);
 }

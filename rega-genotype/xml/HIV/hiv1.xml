@@ -247,7 +247,7 @@
       <cutoff>70</cutoff>
    </analysis>
 
-  <analysis id="scan" type="scan">
+  <analysis id="scan-pure" type="scan">
     <window>
       400
     </window>
@@ -261,7 +261,7 @@
     <options>data-all,recombination:best</options>
   </analysis>
 
-  <analysis id="crfscan" type="scan">
+  <analysis id="scan-crf" type="scan">
     <window>
       400
     </window>
@@ -291,7 +291,7 @@
       </block>
       <cutoff>70</cutoff>
     </analysis>
-      <options>data-all</options>
+      <options>data-all,recombination:best</options>
   </analysis>
 
   <analysis id="scan-pure-self" type="scan">

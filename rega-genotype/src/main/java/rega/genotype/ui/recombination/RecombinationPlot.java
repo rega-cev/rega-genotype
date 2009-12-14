@@ -59,14 +59,14 @@ public class RecombinationPlot extends WCartesianChart {
 
         this.getAxis(Axis.XAxis).setLocation(AxisValue.ZeroValue);
         this.getAxis(Axis.YAxis).setLocation(AxisValue.ZeroValue);
-        this.getAxis(Axis.XAxis).setLabelFormat("%.1f");
-        this.getAxis(Axis.YAxis).setLabelFormat("%.1f");
+        this.getAxis(Axis.XAxis).setLabelFormat("%.0f");
+        this.getAxis(Axis.YAxis).setLabelFormat("%.0f");
 
         this.setPlotAreaPadding(60, Side.Left);
         this.setPlotAreaPadding(80, Side.Right);
         this.setPlotAreaPadding(50, Side.Top, Side.Bottom);
-        
-        this.getAxis(Axis.XAxis).setTitle("Nucleotide positions");
+
+        this.getAxis(Axis.XAxis).setTitle("Nucleotide position");
         this.getAxis(Axis.YAxis).setTitle("Support");
         
         this.setTitle("Bootscan analysis");
@@ -74,6 +74,9 @@ public class RecombinationPlot extends WCartesianChart {
         Map<String, Color> genomeColors = od.getGenome().getAttributes().getColors();
         for (int i = 1; i < model.getColumnCount(); i++) {
         	Color c = genomeColors.get(model.getHeaderData(i));
+        	if (c == null)
+        		c = genomeColors.get("CRF");
+
         	WDataSeries ds = new WDataSeries(i, SeriesType.LineSeries);
         	if (c != null) {
         		WPen pen = new WPen(new WColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha()));
@@ -110,8 +113,7 @@ public class RecombinationPlot extends WCartesianChart {
 		return csvFile;
 	}
 	
-	public File getRecombinationPDF(File jobDir, int sequenceIndex, String type)
-			throws IOException {
+	public File getRecombinationPDF(File jobDir, int sequenceIndex, String type) throws IOException {
 		File pdfFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".pdf");
 		if (!pdfFile.exists()) {
 			WSvgImage image = new WSvgImage(new WLength(400), new WLength(300));

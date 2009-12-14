@@ -30,7 +30,7 @@ public class HCVSubtypeToolGeno extends GenotypeTool {
         hcv = readAnalyses("HCV/hcvgeno.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure-puzzle");
-        scanAnalysis = (ScanAnalysis) hcv.getAnalysis("scan");
+        scanAnalysis = (ScanAnalysis) hcv.getAnalysis("scan-pure");
 
     }
 

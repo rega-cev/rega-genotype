@@ -5,6 +5,7 @@
  */
 package rega.genotype.ui.forms;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,12 @@ import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * A default extension of AbstractJobOverview, used by different virus implementations.
@@ -24,8 +28,6 @@ import eu.webtoolkit.jwt.WWidget;
  */
 public class DefaultJobOverview extends AbstractJobOverview {
 	private List<Header> headers = new ArrayList<Header>();
-	private DefaultJobOverviewSummary summary = new DefaultJobOverviewSummary(this);
-	private DefaultJobOverviewFilterSummary filterSummary = new DefaultJobOverviewFilterSummary();
 	
 	public DefaultJobOverview(GenotypeWindow main) {
 		super(main);
@@ -48,7 +50,7 @@ public class DefaultJobOverview extends AbstractJobOverview {
 		WAnchor report = createReportLink(p);
 		data.add(report);
 
-		String id;
+		final String id;
 		if (!p.elementExists("/genotype_result/sequence/conclusion")) {
 			id = "-";
 			data.add(new WText("NA"));
@@ -62,17 +64,27 @@ public class DefaultJobOverview extends AbstractJobOverview {
 				support = "NA";
 			}
 			data.add(new WText(support));
-			try {
-				data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
-						id,
-						Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start")), 
-						Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end")),
-						0, 
-						"pure", 
-						p.getValue("/genotype_result/sequence/result[@id='scan']/data"))));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			final String scanType = getMain().getOrganismDefinition().getProfileScanType(p);
+			final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+			final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+			final int sequenceIndex = p.getSequenceIndex();
+			final String csvData = p.getValue("/genotype_result/sequence/result[@id='scan-" + scanType + "']/data");
+
+			data.add(GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
+				@Override
+				public void handleRequest(WebRequest request, WebResponse response) {
+					try {
+						if (getFileName().isEmpty()) {
+							File file = getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, sequenceIndex, id, start, end, 0, scanType, csvData);
+							setFileName(file.getAbsolutePath());
+						}
+						super.handleRequest(request, response);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				}				
+			}));
 		}
 		
 		return data;
@@ -86,9 +98,8 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	@Override
 	public JobOverviewSummary getSummary(String filter) {
 		if (filter == null)
-			return summary;
-		else {
-			return filterSummary;
-		}
+			return new DefaultJobOverviewSummary(this);
+		else
+			return new DefaultJobOverviewFilterSummary();
 	}
 }

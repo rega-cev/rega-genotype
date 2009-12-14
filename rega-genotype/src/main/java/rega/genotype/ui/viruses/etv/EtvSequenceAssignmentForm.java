@@ -13,9 +13,12 @@ import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * Enterovirus assignment-details implementation.
@@ -25,7 +28,7 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 	}
 
 	@Override
-	public void fillForm(GenotypeResultParser p, final OrganismDefinition od, File jobDir) {
+	public void fillForm(GenotypeResultParser p, final OrganismDefinition od, final File jobDir) {
 		WContainerWidget block = new WContainerWidget(this);
 		block.setId("");
 
@@ -60,25 +63,28 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 		t = new WText("<h3>Genome region</h3>", block);
 		t.setId("");
 
-		int start = 0;
-		int end = 0;
-		try {
-			start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
-			end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
-		} catch (NumberFormatException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+		final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+		final int sequenceIndex = p.getSequenceIndex();
 
-		try {
-			WImage genome = GenotypeLib.getWImageFromFile(od.getGenome().getGenomePNG(jobDir, p.getSequenceIndex(), "-", start, end, 0, "nrv", null));
-			genome.setId("");
-			block.addWidget(genome);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		WImage genome = GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
+			@Override
+			public void handleRequest(WebRequest request, WebResponse response) {
+				try {
+					if (getFileName().isEmpty()) {
+						File file = od.getGenome().getGenomePNG(jobDir, sequenceIndex, "-", start, end, 0, "etv", null);
+						setFileName(file.getAbsolutePath());
+					}
+	
+					super.handleRequest(request, response);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}				
+		});
+		
+		genome.setId("");
+		block.addWidget(genome);
 
 		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
 		refSeq.arg(start);

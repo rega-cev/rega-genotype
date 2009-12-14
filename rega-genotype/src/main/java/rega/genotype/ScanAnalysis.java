@@ -118,7 +118,7 @@ public class ScanAnalysis extends AbstractAnalysis {
          * @return Returns map of types with their window support rate, where the support rate > 0.1
          */
         public Map<String, Integer> getSupportedTypes(){
-        	if(supportedTypes == null){
+        	if (supportedTypes == null) {
         		supportedTypes = new TreeMap<String, Integer>();
         	
 		        Map<String, Integer> windowCount = new TreeMap<String, Integer>();
@@ -344,7 +344,7 @@ public class ScanAnalysis extends AbstractAnalysis {
 
             		boolean handleFragment = (thisWindow != null && current != null && !thisWindow.equals(current));
             		
-            		if (windowResults.indexOf(result) == windowResults.size() - 1) {
+            		if (i == windowResults.size() - 1) {
        					lastIndex = aligned.getLength();
        					handleFragment = true;
             		}

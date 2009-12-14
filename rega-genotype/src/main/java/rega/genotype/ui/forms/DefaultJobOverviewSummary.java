@@ -8,7 +8,9 @@ import rega.genotype.ui.data.OrganismDefinition;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Side;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal2;
+import eu.webtoolkit.jwt.SortOrder;
 import eu.webtoolkit.jwt.ViewItemRenderFlag;
 import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAbstractItemModel;
@@ -33,23 +35,28 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 	
 	private AbstractJobOverview jobOverview;
 	
-	//TODO use the text in the table
 	private double total = 0;
 	
 	private class SummaryTableView extends WTableView {
-		public SummaryTableView(WAbstractItemModel model,
+		public SummaryTableView(final WAbstractItemModel model,
 				WContainerWidget parent) {
 			super(parent);
 			getTable().setStyleClass("assignment-overview");
 			setModel(model);
 			initTotalRow();
+			
+			model.layoutChanged().addListener(this, new Signal.Listener() {
+				public void trigger() {
+					setModel(model);
+					initTotalRow();
+				}
+			});
 		}
 
 		private void initTotalRow() {
 			int rowCount = getTable().getRowCount();
 			getTable().insertRow(rowCount);
-			getTable().getElementAt(rowCount, 0).addWidget(
-					new WText(tr("detailsForm.summary.total")));
+			getTable().getElementAt(rowCount, 0).addWidget(new WText(tr("detailsForm.summary.total")));
 			getTable().getRowAt(rowCount).setStyleClass("assignment-overview-total");
 			getTable().getElementAt(rowCount, 2).addWidget(new WText("100%"));
 		}
@@ -77,19 +84,20 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 		model.setHeaderData(1, tr("detailsForm.summary.numberSeqs"));
 		model.setHeaderData(2, tr("detailsForm.summary.percentage"));
 		model.setHeaderData(3, tr("detailsForm.summary.legend"));
+
+		new WText(tr("detailsForm.summary.title"), this.getElementAt(0, 0));
 		
 		table = new SummaryTableView(model, this.getElementAt(0, 0));
-		this.getElementAt(0, 0).setContentAlignment(AlignmentFlag.AlignRight);
 		this.getElementAt(0, 0).setVerticalAlignment(AlignmentFlag.AlignMiddle);
 		model.dataChanged().addListener(this, new Signal2.Listener<WModelIndex, WModelIndex>() {
 			public void trigger(WModelIndex arg1, WModelIndex arg2) {
 				table.updateTotalRow(total);
 			}
 		});
-		table.setItemDelegateForColumn(3, new WAbstractItemDelegate(){
+
+		table.setItemDelegateForColumn(3, new WAbstractItemDelegate() {
 			@Override
-			public WWidget update(WWidget widget, WModelIndex index,
-					EnumSet<ViewItemRenderFlag> flags) {
+			public WWidget update(WWidget widget, WModelIndex index, EnumSet<ViewItemRenderFlag> flags) {
 				WContainerWidget w = new WContainerWidget();
 				w.setStyleClass("legend-item");
 				WColor c = (WColor)index.getData(ItemDataRole.UserRole + 1);
@@ -103,13 +111,13 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 		});
 		
 		pieChart = new WPieChart(this.getElementAt(0, 1));
-		this.getElementAt(0, 1).setContentAlignment(AlignmentFlag.AlignLeft);
 		this.getElementAt(0, 1).setVerticalAlignment(AlignmentFlag.AlignMiddle);
 		pieChart.setModel(model);
 		pieChart.setLabelsColumn(0);
 		pieChart.setDataColumn(1);
         pieChart.setDisplayLabels(LabelOption.NoLabels);
         pieChart.resize(200, 150);
+        pieChart.setStartAngle(90);
         
 		this.setHidden(false);
 	}
@@ -122,11 +130,9 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 		}
 		
 		boolean inserted = true;
-		String label;
-		int cmp;
 		for (int i = 0; i < model.getRowCount(); i++) {
-			label = (String)model.getData(i, 0);
-			cmp = assignment.compareTo(label);
+			String label = (String)model.getData(i, 0);
+			int cmp = assignment.compareTo(label);
 			if (cmp == 0) {
 				model.setData(i, 1, (Integer)model.getData(i, 1) + 1);
 				inserted = false;
@@ -135,20 +141,20 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 		}
 		
 		if (inserted) {
-			int insertPosition = determinePosition(assignment);
+			int insertPosition = model.getRowCount();
 							
 			model.insertRow(insertPosition);
 			
-			String majorAssignment = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id");
-			if (majorAssignment == null) 
-				majorAssignment = assignment;
+			String id = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id");
+			if (id == null) 
+				id = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/id");
 			
-			Color c = od.getGenome().getAttributes().getColors().get(majorAssignment);
+			Color c = od.getGenome().getAttributes().getColors().get(id);
 			WColor wc;
 			if (c != null) {
 				wc = new WColor(c.getRed(), c.getGreen(), c.getBlue());
 			} else {
-				wc = pieChart.getPalette().getBrush(model.getRowCount()).getColor();
+				wc = pieChart.getPalette().getBrush(Math.abs(assignment.hashCode())).getColor();
 			}
 			WBrush b = new WBrush(wc);
 			pieChart.setBrush(insertPosition, b);
@@ -160,7 +166,9 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			model.setData(insertPosition, 2, 0.0);
 			model.setData(insertPosition, 3, wc, ItemDataRole.UserRole + 1);
 		}
-		
+
+		model.sort(1, SortOrder.DescendingOrder);
+
 		total++;
 		
 		for (int i = 0; i < model.getRowCount(); i++) {
@@ -192,5 +200,10 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			table = null;
 			total = 0;
 		}
+	}
+
+	@Override
+	public Side getLocation() {
+		return Side.Top;
 	}
 }

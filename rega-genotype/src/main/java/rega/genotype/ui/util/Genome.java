@@ -15,12 +15,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import org.jdom.Element;
-
+import rega.genotype.ui.forms.RecombinationForm.Region;
 import rega.genotype.utils.Table;
 
 /**
@@ -46,23 +46,23 @@ public class Genome {
 		         *((double)attributes.getGenomeImageEndX() - attributes.getGenomeImageStartX()));
 	}
 	
-	public File getGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, int variant, String type, String csvData, Element recombination) throws IOException{
+	public File getGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, int variant, String type, String csvData, List<Region> regions) throws IOException{
 		File pngFile = new File(jobDir.getAbsolutePath() 
 				+ File.separatorChar + "genome"
 				+ "_" + sequenceIndex 
 				+ "_" + type 
-				+ "_" + (recombination == null ? variant : "large") 
+				+ "_" + (regions == null ? variant : "large") 
 				+".png");
 	
 		if (!pngFile.exists()) {
-			BufferedImage image = drawImage(genotype,start,end,variant,csvData,recombination);
+			BufferedImage image = drawImage(genotype,start,end,variant,csvData,regions);
 		    ImageIO.write(image, "png", pngFile);
 		}
 		
 		return pngFile;
 	}
 	
-	protected BufferedImage drawImage(String genotype, int start, int end, int variant, String csvData, Element recombination) throws IOException{
+	protected BufferedImage drawImage(String genotype, int start, int end, int variant, String csvData, List<Region> regions) throws IOException{
 		int w[];
 		String assign[];
 		int scanWindowSize;
@@ -90,7 +90,7 @@ public class Genome {
 	    Image genomePng = ImageIO.read(
 	    		this.getClass().getResourceAsStream(
 	    				attributes.getOrganismDefinition().getOrganismDirectory()
-	    				+"/genome_"+ (recombination == null ? variant : "large") +".png"));
+	    				+"/genome_"+ (regions == null ? variant : "large") +".png"));
 
 		int imgWidth = genomePng.getWidth(null);
 	    int imgHeight = genomePng.getHeight(null);
@@ -105,6 +105,7 @@ public class Genome {
 	    Map<String, Color> colorMap = attributes.getColors();
 	    
 	    Color bgcolor = colorMap.get("-");
+
 	    if (w.length == 0) {
 	      bgcolor = colorMap.get(genotype);
 	    }
@@ -124,13 +125,16 @@ public class Genome {
 	        else
 	        	x2 = start + w[c] + scanStepSize/2;
 
-	        g2d.setColor(colorMap.get(assign[c]));
+	        Color color = colorMap.get(assign[c]);
+	        if (color == null)
+	        	color = colorMap.get("CRF");
+	        g2d.setColor(color);
 	        g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
 	    }
 	    
 	    g2d.drawImage(genomePng, 0, 0, imgWidth, imgHeight, null);
 	    
-	    if(recombination != null){
+	    if(regions != null){
 	    	g2d.setColor(Color.BLACK);
 	    	g2d.setStroke(new BasicStroke(1,
 	    			BasicStroke.CAP_BUTT,
@@ -138,32 +142,18 @@ public class Genome {
 	    			0,
 	    			new float[] {5},
 	    			0));
+
 	    	g2d.setFont(new Font("sans serif", Font.BOLD, attributes.getFontSize()));
 	    	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	    	
-	    	int prevREnd = -1;
-	    	int prevX = attributes.getGenomeImageStartX();
-	    	int i=0;
-	    	for(Object o : recombination.getChildren("region")){
-	    		Element e = (Element)o;
-	    		int rStart = Integer.parseInt(e.getChildTextTrim("start"));
-	    		int rEnd = Integer.parseInt(e.getChildTextTrim("end"));
-	    		if(prevREnd != -1){
-	    			int pos = start + (rStart+prevREnd)/2;
-	    			int x = imgX(pos);
+
+	    	for (Region region : regions) {
+	    		int xstart = imgX(region.start);
+    			g2d.drawLine(xstart, attributes.getGenomeImageStartY(), xstart, attributes.getGenomeImageEndY());
+	    		int xend = imgX(region.end);
+    			g2d.drawLine(xend, attributes.getGenomeImageStartY(), xend, attributes.getGenomeImageEndY());
 	    			
-	    			g2d.drawLine(x, attributes.getGenomeImageStartY(), x, attributes.getGenomeImageEndY());
-	    			drawCenteredString(g2d, pos+"", x, attributes.getGenomeImageEndY()+g2d.getFontMetrics().getHeight());
-	    			
-	    			drawCenteredString(g2d,"( "+i+" )",(prevX+x)/2,attributes.getGenomeImageEndY());
-	    			prevX = x;
-	    		}
-	    		
-	    		prevREnd = rEnd;
-	    		++i;
-	    	}
-	    	drawCenteredString(g2d,"( "+i+" )",(prevX+ attributes.getGenomeImageEndX())/2,attributes.getGenomeImageEndY());
-	    	
+    			drawCenteredString(g2d,"( " + (regions.indexOf(region) + 1) + " )", (xstart+xend) / 2,attributes.getGenomeImageEndY());
+    		}	    	
 	    }
 	    return image;
 	}

@@ -249,15 +249,13 @@ public class GenotypeLib {
 		return d;
 	}
 
-	public static WImage getWImageFromFile(final File f) {
-		System.out.println("*** getWImageFromFile: "+ f.getAbsolutePath());
-		WImage chartImage = new WImage(new WFileResource("image/png", f.getAbsolutePath()), new WString(""), (WContainerWidget)null);
-		chartImage.getResource().suggestFileName("x.png");
-		return chartImage;
+	public static WImage getWImageFromResource(WResource resource) {
+		WImage result = new WImage(resource, new WString(""));
+		result.getResource().suggestFileName("x.png");
+		return result;
 	}
 	
 	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) {
-		System.out.println("*** getWImageFromResource: "+ fileName);
 		return new WImage(new WResource() {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
@@ -281,17 +279,11 @@ public class GenotypeLib {
 		return new File(jobDir.getAbsolutePath() + File.separatorChar + fileName);
 	}
 	
-	public static WAnchor getAnchor(String text, String fileType, File f, String suggestedName) {
-		WResource fr = new WFileResource(fileType, f.getAbsolutePath());
-		fr.suggestFileName(f.getName());
-		return getAnchor(text, fileType, fr, suggestedName);
-	}
-
 	public static WAnchor getAnchor(String text, String fileType, WResource resource, String suggestedName) {
 		WAnchor anchor = new WAnchor("", text);
 		anchor.setObjectName("resource");
 		anchor.setStyleClass("link");
-		anchor.setTarget(AnchorTarget.TargetNewWindow);
+		//anchor.setTarget(AnchorTarget.TargetNewWindow);
 		if (suggestedName != null)
 			resource.suggestFileName(suggestedName);
 		anchor.setRef(resource.generateUrl());

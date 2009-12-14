@@ -99,4 +99,8 @@ public class NovDefinition implements OrganismDefinition {
 	public Genome getLargeGenome() {
 		return getGenome();
 	}
+
+	public String getProfileScanType(GenotypeResultParser p) {
+		return null;
+	}
 }

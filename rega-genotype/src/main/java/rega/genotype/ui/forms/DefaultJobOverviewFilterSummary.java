@@ -1,5 +1,6 @@
 package rega.genotype.ui.forms;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,9 +42,9 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 			table.setStyleClass("assignment-overview-filter");
 			model = new WStandardItemModel(); 
 			barChart.setModel(model);
-	
-			barChart.resize(450, 250);
-			
+
+			barChart.resize(400, 200);
+
 			barChart.setXSeriesColumn(0);
 			barChart.setLegendEnabled(true);
 
@@ -51,9 +52,9 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 			barChart.setPlotAreaPadding(250, Side.Right);
 			barChart.setPlotAreaPadding(50, Side.Top, Side.Bottom);
 			barChart.getAxis(Axis.YAxis).setLabelFormat(axisFormat);
-			
+
 			barChart.setTitle(chartTitle);
-			
+
 			barParent.setContentAlignment(AlignmentFlag.AlignRight);
 			barParent.setVerticalAlignment(AlignmentFlag.AlignMiddle);
 			tableParent.setContentAlignment(AlignmentFlag.AlignLeft);
@@ -99,22 +100,24 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 		
 		public void updateData(String assignment) {
 			table.getElementAt(1, 1).clear();
-			table.getElementAt(1, 1).addWidget(new WText(nrSequences+""));
+			table.getElementAt(1, 1).addWidget(new WText(nrSequences + ""));
 			
 			if (model.getRowCount() < 1)
 				model.insertRow(0);
-			
-			model.setData(0, 0, assignment);
-			
+
+			model.setData(0, 0, "");
+
+			DecimalFormat formatter = new DecimalFormat("0.00");
 			for (int i = 0; i < 3; i++) {
 				WString header = ((WText)table.getElementAt(i + 2, 0).getChildren().get(0)).getText();
 				Average average = averageMap.get(header.getKey());
 				table.getElementAt(i + 2, 1).clear();
-				table.getElementAt(i + 2, 1).addWidget(new WText(average.total/nrSequences+""));
+				table.getElementAt(i + 2, 1).addWidget(new WText(formatter.format(average.total/nrSequences)));
 				table.getElementAt(i + 2, 2).clear();
-				table.getElementAt(i + 2, 2).addWidget(new WText("(" + average.min + " - " + average.max + ")"));
-				
-				model.setItem(0, i + 1, new WStandardItem(average.total/nrSequences+""));
+				table.getElementAt(i + 2, 2).addWidget(new WText("(" + formatter.format(average.min)
+						+ " - " + formatter.format(average.max) + ")"));
+
+				model.setItem(0, i + 1, new WStandardItem(formatter.format(average.total/nrSequences)));
 			}
 		}
 		
@@ -132,16 +135,20 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 	private void init(String filter) {
 		this.setStyleClass("jobOverviewSummary");
 		
-		njTreeScanStats = new BarView(this.getElementAt(0, 0), 
-				this.getElementAt(0, 1), 
+		new WText(tr("detailsForm.summary.filter.title"), this.getElementAt(0, 0));
+		this.getElementAt(0, 0).setColumnSpan(2);
+		this.getElementAt(0, 0).setContentAlignment(AlignmentFlag.AlignCenter);
+		
+		njTreeScanStats = new BarView(this.getElementAt(1, 0), 
+				this.getElementAt(1, 1), 
 				tr("detailsForm.summary.filter.njTreeStats"),
 				"%.0f");
 		njTreeScanStats.setHeaders(filter, tr("detailsForm.summary.filter.njTreeStats.avgBootstrap"), 
 				tr("detailsForm.summary.filter.njTreeStats.avgBootstrapInside"), 
 				tr("detailsForm.summary.filter.njTreeStats.avgBootstrapOutside"));
 		
-		bootscanStats = new BarView(this.getElementAt(1, 0),
-				this.getElementAt(1, 1),
+		bootscanStats = new BarView(this.getElementAt(2, 0),
+				this.getElementAt(2, 1),
 				tr("detailsForm.summary.filter.bootscanStats"),
 				"%.2f");
 		bootscanStats.setHeaders(filter, tr("detailsForm.summary.filter.njTreeStats.avgBootscan"), 
@@ -157,19 +164,15 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 	public void update(GenotypeResultParser p, OrganismDefinition od) {
 		String assignment = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name");
 		
-		if (njTreeScanStats == null) {
+		if (njTreeScanStats == null)
 			init(assignment);
-		}
+
+		String id = od.getProfileScanType(p);
 		
-		String id = "";
-		if (p.elementExists("/genotype_result/sequence/result[@id='crf']"))
-			id = "crf";
-		else if (p.elementExists("/genotype_result/sequence/result[@id='pure']")) 
-			id = "pure";
-		else if (p.elementExists("genotype_result/sequence/result[@id='pure-puzzle']"))
-			id = "pure-puzzle";
+		if (!p.elementExists("/genotype_result/sequence/result[@id='" + id + "']"))
+			id += "-puzzle";
 		
-		if (!id.equals("")) {
+		if (p.elementExists("/genotype_result/sequence/result[@id='" + id + "']")) {
 			njTreeScanStats.nrSequences++;
 			
 			njTreeScanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootstrap", 
@@ -182,20 +185,25 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 			njTreeScanStats.updateData(assignment);
 		}
 		
-		if (p.elementExists("/genotype_result/sequence/result[@id='scan']")) {
+		if (p.elementExists("/genotype_result/sequence/result[@id='scan-" + id + "']")) {
 			bootscanStats.nrSequences++;
 			
 			bootscanStats.setHidden(false);
 			bootscanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootscan", 
-					p.getEscapedValue("/genotype_result/sequence/result[@id='scan']/support[@id='best']"));
+					p.getEscapedValue("/genotype_result/sequence/result[@id='scan-" + id + "']/support[@id='best']"));
 			bootscanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootscanSupport",
-					p.getEscapedValue("/genotype_result/sequence/result[@id='scan']/support[@id='assigned']"));
+					p.getEscapedValue("/genotype_result/sequence/result[@id='scan-" + id + "']/support[@id='assigned']"));
 			bootscanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport",
-					p.getEscapedValue("/genotype_result/sequence/result[@id='scan']/nosupport[@id='assigned']"));
+					p.getEscapedValue("/genotype_result/sequence/result[@id='scan-" + id + "']/nosupport[@id='assigned']"));
 			
 			bootscanStats.updateData(assignment);
 		} else {
 			bootscanStats.setHidden(true);
 		}
+	}
+
+	@Override
+	public Side getLocation() {
+		return Side.Bottom;
 	}
 }
