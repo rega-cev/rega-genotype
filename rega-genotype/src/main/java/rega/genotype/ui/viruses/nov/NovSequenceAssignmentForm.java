@@ -46,6 +46,9 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 			String orf = "ORF" + i;
 			NovResults.Conclusion c = NovResults.getConclusion(p, orf);
 
+			if (c.majorAssignment == null || c.majorAssignment.isEmpty())
+				c.majorAssignment = NovResults.NA;
+			
 			WString motivation = new WString(c.majorMotivation);
 			motivation.arg(c.majorBootstrap);
 
