@@ -71,7 +71,7 @@
     <identify>
       I,II,III,IV,V,SaV I,SaV II,SaV III,SaV IV,SaV V,vesivirus,lagovirus,becovirus,valovirus,recovirus
     </identify>
-    <cutoff >
+    <cutoff>
       50
     </cutoff>
   </analysis>

@@ -4,47 +4,47 @@
 	<clusters>
 		<cluster id="CV-A2" name="Enterovirus A, serotype CV-A2">
 			<taxus name="CV-A2|AB119643" />
-			<taxus name="CV-A2|L28146" />
+			<taxus name="CV-A2|AY421760" />
 		</cluster>
 
 		<cluster id="CV-A4" name="Enterovirus A, serotype CV-A4">
-			<taxus name="CV-A4|AF081295" />
+			<taxus name="CV-A4|AY421762" />
 			<taxus name="CV-A4|AB457644" />
 		</cluster>
 
 		<cluster id="CV-A5" name="Enterovirus A, serotype CV-A5">
-			<taxus name="CV-A5|AF081296" />
+			<taxus name="CV-A5|AY421763" />
 			<taxus name="CV-A5|AB114089" />
 		</cluster>
 
 		<cluster id="CV-A6" name="Enterovirus A, serotype CV-A6">
 			<taxus name="CV-A6|AB090799" />
-			<taxus name="CV-A6|AF081297" />
+			<taxus name="CV-A6|AY421764" />
 		</cluster>
 
 		<cluster id="CV-A7" name="Enterovirus A, serotype CV-A7">
 			<taxus name="CV-A7|AY919499" />
-			<taxus name="CV-A7|AF081298" />
+			<taxus name="CV-A7|AY421765" />
 		</cluster>
 
 		<cluster id="CV-A8" name="Enterovirus A, serotype CV-A8">
 			<taxus name="CV-A8|AB167803" />
-			<taxus name="CV-A8|AF081299" />
+			<taxus name="CV-A8|AY421766" />
 		</cluster>
 
 		<cluster id="CV-A10" name="Enterovirus A, serotype CV-A10">
 			<taxus name="CV-A10|AB119639" />
-			<taxus name="CV-A10|AF081300" />
+			<taxus name="CV-A10|AY421767" />
 		</cluster>
 
 		<cluster id="CV-A12" name="Enterovirus A, serotype CV-A12">
 			<taxus name="CV-A12|AB162731" />
-			<taxus name="CV-A12|AF081302" />
+			<taxus name="CV-A12|AY421768" />
 		</cluster>
 
 		<cluster id="CV-A14" name="Enterovirus A, serotype CV-A14">
 			<taxus name="CV-A14|AY919443" />
-			<taxus name="CV-A14|AF081304" />
+			<taxus name="CV-A14|AY421769" />
 		</cluster>
 
 		<cluster id="CV-A16" name="Enterovirus A, serotype CV-A16">
@@ -79,7 +79,7 @@
 
 		<!-- singletons in the end -->
 		<cluster id="CV-A3" name="Enterovirus A, serotype CV-A3">
-			<taxus name="CV-A3|AF081294" />
+			<taxus name="CV-A3|AY421761" />
 		</cluster>
 
 		<cluster id="EV-92" name="Enterovirus A, serotype EV-92">
