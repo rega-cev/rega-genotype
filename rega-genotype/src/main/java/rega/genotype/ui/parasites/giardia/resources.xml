@@ -2,13 +2,13 @@
 <organism-settings>
 	<main-form>
 		<footer>
-			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Hein Spront)
+			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Hein Sprong)
 			and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
 			<p>Contact: TBD</p>
 		</footer>
 	</main-form>
 	<start-form>
-		<title>Giadia Genotyping Tool Version 0.1</title>
+		<title>Giardia Genotyping Tool Version 0.1</title>
 		<note>
 			<div>
 				This tool is designed to use phylogenetic methods in order to identify ... of a nucleotide sequence.

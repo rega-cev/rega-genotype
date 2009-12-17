@@ -115,7 +115,7 @@
 			<cluster id="II.4|2006a" name="2006a">
 				<description>Variant 2006a</description>
 				<taxus name="II.4|2006a|EF126963" />
-				<taxus name="II.4|2006a|EF126964" />
+				<taxus name="II.4|2006a|AB447433" />
 			</cluster>
 			<cluster id="II.4|2006b" name="2006b">
 				<description>Variant 2006b</description>
@@ -126,6 +126,11 @@
 				<description>Variant 2008</description>
 				<taxus name="II.4|2008|OC08086" />  
 				<taxus name="II.4|2008|OB2008179" />
+			</cluster>
+			<cluster id="II.4|2008r" name="2008r">
+				<description>Variant 2008r</description>
+				<taxus name="II.4|2008r|GQ845367" />  
+				<taxus name="II.4|2008r|OB2009166" />
 			</cluster>
 		</cluster>
 
@@ -243,7 +248,7 @@
 	<analysis id="phylo-ORF1" type="paup">
 		<identify>
 			I.1, I.2, I.3, I.4, I.5, I.6, I.7, I.8, I.a, I.b, I.c, I.d, I.e, I.f,
-			II.1, II.2, II.3, II.4[2;11], II.5, II.6, II.7, II.8, 
+			II.1, II.2, II.3, II.4[0;11], II.5, II.6, II.7, II.8, 
 			II.11, II.12, II.15, II.16, II.17, II.18, II.19,
 			II.a, II.b, II.c, II.d, II.e, II.f, II.g, II.h, II.j, II.k,
 			II.NA1, II.NA2, O
@@ -276,7 +281,7 @@
 	<analysis id="phylo-ORF1-II.4" type="paup">
 		<identify>
 			II.4|Camb, II.4|Brist, II.4|1996, II.4|2001, II.4|2002, II.4|2002/CN,
-			II.4|2004, II.4|2006a, II.4|2006b, II.4|2008, II.1[0]
+			II.4|2004, II.4|2006a, II.4|2006b, II.4|2008, II.4|2008r, II.1[0]
     </identify>
 		<cutoff>
 			70
@@ -291,7 +296,7 @@
 			set criterion=distance;
 			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
 			constraints 
-			CONSTRE(BACKBONE)=((2,3),(5,6),(7,8),(9,10),(12,13),(14,15),(16,17),(18,19));
+			CONSTRE(BACKBONE)=((2,3),(5,6),(7,8),(9,10),(12,13),(14,15),(16,17),(18,19),(20,21));
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;

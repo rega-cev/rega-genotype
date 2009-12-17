@@ -53,7 +53,7 @@ public class NovResults {
 				result.variantMotivation = p.getEscapedValue(variantConclusionP + "/motivation");
 			}
 		} else {
-			result.majorAssignment = getBlastConclusion(p);
+			result.majorAssignment = "";
 			result.majorMotivation = "Sequence does not overlap sufficiently (>100 nucleotides) with " + region;
 		}
 
@@ -61,9 +61,7 @@ public class NovResults {
 	}
 	
 	public static String getBlastConclusion(GenotypeResultParser p) {
-		return p.elementExists("/genotype_result/sequence/conclusion")
-		? p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name")
-		: NA;
+		return p.getEscapedValue("genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
 	}
 
 	public static String getBlastMotivation(GenotypeResultParser p) {

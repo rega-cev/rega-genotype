@@ -57,9 +57,16 @@ div.imgDiv, div.downloadContainer{
 	margin: 0px auto;
 }
 
-table.jobTable {
+table.jobTable{
 	width: 100%;
 	margin-left: auto;
+	margin-right: auto;
+	border-spacing: 2px;
+}
+
+table.reftable {
+	width: 70%;
+	margin-left: 0;
 	margin-right: auto;
 	border-spacing: 2px;
 }
@@ -72,12 +79,21 @@ table.jobTable td, table.jobTable th {
 	line-height: 60px;
 }
 
-table.jobTable col {
+table.reftable td, table.reftable th {
+	border-top: 1px inset gray;
+	border-bottom: 1px inset gray;
+	padding: 0.5em;
+	text-align: left;
+}
+
+table.jobTable col,
+table.reftable col {
 	border-left: 1px outset gray;
 	border-right: 1px outset gray;
 }
 
-table.jobTable td, table.jobTable th {
+table.jobTable td, table.jobTable th, 
+table.reftable td, table.reftable th {
 	border-left: 1px outset gray;
 	border-right: 1px outset gray;
 }
@@ -117,7 +133,7 @@ table.jobTable td img, .detailsForm img {
 	margin: 2px;
 	padding: 0.5em;
 	text-align: left;
-}
+
 .detailsForm h2 {
 	border: 1px inset gray;
 	margin: 2px;
@@ -391,3 +407,29 @@ table.assignment-overview {
 .jobOverviewSummary {
 	margin: 30px auto;
 }
+
+/* Background info pages */
+.bold{
+  font-weight:bold;
+}
+.centerimage{
+  text-align:center;
+  margin-top:0px;
+  margin-bottom:0px;
+  padding:0px;
+}
+.centertext{
+  text-align:center;
+}
+.pic-label{
+  font-weight:bold;
+  font-size:110%;
+  margin-bottom:20px;
+  text-align:center;
+}
+table.reftable caption{
+  font-weight:bold;
+  font-size:110%;
+  margin:5px 0 5px 0;
+}
+

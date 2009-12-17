@@ -32,6 +32,7 @@ public class NovJobOverview extends AbstractJobOverview {
 		headers.add(new Header(new WString("Name")));
 		headers.add(new Header(new WString("Length")));
 		headers.add(new Header(new WString("Report")));
+		headers.add(new Header(new WString("Genus / Genogroup")));
 		headers.add(new Header(new WString("ORF 1"), 2));
 		headers.add(new Header(new WString("ORF 2"), 2));
 		headers.add(new Header(new WString("Genome")));
@@ -47,6 +48,9 @@ public class NovJobOverview extends AbstractJobOverview {
 		WAnchor report = createReportLink(p);
 		data.add(report);
 
+		String blastResult = NovResults.getBlastConclusion(p);
+		data.add(new WText(new WString(notNull(blastResult))));
+		
 		NovResults.Conclusion c = NovResults.getConclusion(p, "ORF1");
 
 		data.add(new WText(new WString(notNull(c.majorAssignment))));
@@ -57,7 +61,7 @@ public class NovJobOverview extends AbstractJobOverview {
 		data.add(new WText(new WString(notNull(c.majorAssignment))));
 		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
 
-		data.add(createGenomeImage(p, "-"));
+		data.add(createGenomeImage(p, "-", blastResult.equals("Unassigned")));
 		
 		return data;
 	}
