@@ -8,7 +8,12 @@ package rega.genotype.viruses.hiv;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
@@ -17,11 +22,45 @@ import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
+import rega.genotype.ResultTracer;
 import rega.genotype.ScanAnalysis;
+import rega.genotype.AbstractAnalysis.Concludable;
+import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.PhyloClusterAnalysis.Result;
 
 public class HIV1SubtypeTool extends GenotypeTool {
-    private AlignmentAnalyses hiv1;
+    private final class ClusterLike implements Concludable {
+		private final Result pureResult;
+		private String id;
+		private String name;
+
+		private ClusterLike(Result result, String id, String name) {
+			this.pureResult = result;
+			this.id = id;
+			this.name = name;
+		}
+
+		public Cluster getConcludedCluster() {
+			return pureResult.getConcludedCluster();
+		}
+
+		public float getConcludedSupport() {
+			return pureResult.getConcludedSupport();
+		}
+
+		public void writeConclusion(ResultTracer tracer) {
+			tracer.printlnOpen("<assigned>");
+		    tracer.add("id", id);
+		    tracer.add("name", name);
+		    tracer.add("support", getConcludedSupport());
+		    if (getConcludedCluster().getDescription() != null) {
+		       tracer.add("description", getConcludedCluster().getDescription());
+		    }
+		    tracer.printlnClose("</assigned>");
+		}
+	}
+
+	private AlignmentAnalyses hiv1;
     private PhyloClusterAnalysis pureAnalysis;
     private ScanAnalysis scanAnalysis;
     private PhyloClusterAnalysis crfAnalysis;
@@ -34,15 +73,15 @@ public class HIV1SubtypeTool extends GenotypeTool {
         hiv1 = readAnalyses("HIV/hiv1.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure-puzzle");
-        scanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan");
-        crfScanAnalysis = (ScanAnalysis) hiv1.getAnalysis("crfscan");
+        scanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan-pure");
+        crfScanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan-crf");
         crfScanPhyloAnalysis = (PhyloClusterAnalysis) crfScanAnalysis.getAnalysis();
         crfAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("crf");
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {
         if (s.getLength() > 800) {
-            PhyloClusterAnalysis.Result pureResult = pureAnalysis.run(s);
+            final PhyloClusterAnalysis.Result pureResult = pureAnalysis.run(s);
             ScanAnalysis.Result scanResult = scanAnalysis.run(s);
             PhyloClusterAnalysis.Result crfResult = crfAnalysis.run(s);
             ScanAnalysis.Result scanCRFResult = null;
@@ -63,77 +102,56 @@ public class HIV1SubtypeTool extends GenotypeTool {
             }
 
             if (scanResult.haveSupport()) {
+            	// No recombination in bootscan
                 rule1(pureResult, crfResult);
             } else {                
-                if (!crfResult.haveSupport()) {
+                if (!crfResult.haveSupport() || !crfResult.getBestCluster().hasTag("CRF")) {
+                	// those that span >0.1 of windows
                 	Map<String,Integer> supported = scanResult.getSupportedTypes();
                 	
                 	if (supported.size() >= 2) {
-                		//Rule 2A
-                		concludeRule("2A","Recombinant "+ toRecombinantString(scanResult.getWindowCount(),supported),
-                				"Rule 2A");
-                		return;
-                	} else if (supported.size() == 1) {
-                		Map.Entry<String, Integer> support = supported.entrySet().iterator().next();
-                		float supportRatio = support.getValue() / scanResult.getWindowCount();
-                		
-                		if (supportRatio >= 0.7) {
-                			//Rule 2B goto Rule 1
-                			rule2B(pureResult, crfResult);
-                		} else if (supportRatio >= 0.5) {
-                			//Rule 2C
-                			concludeRule("2C",support.getKey()+" ("+support.getValue()+"/"+ scanResult.getWindowCount()+")"
-                					+", potential recombinant",
-                					"Rule 2C");
-                			return;
-                		}
+                		//Rule 2a: recombinant of pure types
+                		concludeRule("2a", "Recombinant of " + toRecombinantString(scanResult.getWindowCount(), supported), "Rule 2a");
+                	} else if (scanResult.getBootscanSupport() >= 0.7) {
+                		//Rule 2b=5 like rule 1
+                		rule2b(pureResult, crfResult);
+                	} else if (scanResult.getBootscanSupport() >= 0.5) {
+                		//Rule 2c
+                		Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
+                				pureResult.getConcludedCluster().getName() + ", potential recombinant");
+                		concludeRule("2c", concluded, "Rule 2c");
+                	} else {
+                		//Rule 2d
+                		concludeRule("2d", "Recombinant", "Rule 2d");
                 	}
-                	//Rule 2D
-                    concludeRule("2D","Check the bootscan",
-                            "Subtype unassigned based on sequence > 800 bps " +
-                            "clustering with a pure subtype with bootstrap > 70% " +
-                            "with detection of recombination in the bootscan, " +
-                            "and failure to classify as a CRF or sub-subtype (bootstrap support).");
                 } else {
-                    if (crfResult.getBestCluster().hasTag("CRF")) {
-                    	Map<String,Integer> supported = scanCRFResult.getSupportedTypes();
-                    	
-                        if (!scanCRFResult.haveSupport()) {
-                        	if( scanCRFSupport > 0.1 && supported.size() >= 1) {
-                        		//Rule 3A
-                        		concludeRule("3A","Recombinant "+ toRecombinantString(scanCRFResult.getWindowCount(),supported),
-                        				"Rule 3A");
-                        	} else if (scanCRFSupport > 0.7 && supported.size() == 0) {
-                        		//Rule 3B goto Rule 1
-                        		rule3B(crfPhyloResult);
-                        	} else if (scanCRFSupport > 0.5 && supported.size() == 0) {
-                        		//Rule 3C
-                        		concludeRule("3C",crfResult,"potential recombinant subtype",
-                        				"Rule 3C");
-                        	} else {
-                        		//Rule 3D
-                                concludeRule("3D","Check the bootscan",
-                                        "Subtype unassigned based on sequence > 800bp, " +
-                                        "clustering with a pure subtype and CRF or sub-subtype with bootstrap >70 %, " +
-                                        "with detection of recombination in the pure subtype bootscan, " +
-                                        "and failure to classify as a CRF or sub-subtype by bootscan analysis.");
-                        	}
-
-                        } else {
-                            // Rule 4-8
-                            concludeRule("4-8",crfResult,
-                                    "Subtype assigned based on sequence > 800bp, " +
-                                    "clustering with a CRF or sub-subtype with bootstrap > 70%, " +
-                                    "with detection of recombination in the pure subtype bootscan, " +
-                                    "and further confirmed as a CRF or sub-subtype by bootscan analysis.");
-                        }
+                	Map<String,Integer> supported = scanCRFResult.getSupportedTypes();
+                	
+                    if (!scanCRFResult.haveSupport()) {
+                    	if (supported.size() >= 2) {
+                    		//Rule 3a: recombinant of CRF and pure types
+                    		concludeRule("3a", "Recombinant of " + toRecombinantString(scanCRFResult.getWindowCount(), supported), "Rule 3a");
+                    	} else if (scanCRFResult.getBootscanSupport() > 0.7) {
+                    		//Rule 3b=5 like rule 1 but for the CRF now
+                    		rule3b(crfPhyloResult);
+                    	} else if (scanCRFResult.getBootscanSupport() > 0.5) {
+                    		//Rule 3c
+                    		Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
+                    				pureResult.getConcludedCluster().getName() + ", potential recombinant");
+                    		concludeRule("3c", concluded, "Rule 3c");
+                    	} else {
+                    		//Rule 3d
+                            concludeRule("3d", "Recombinant", "Rule 3d");
+                    	}
                     } else {
-                        concludeRule("-","Check the bootscan", 
-                        		  	"Subtype unassigned based on sequence > 800bp, " +
-                        			"not clustering with a pure subtype with bootstrap >70 %," +
-                        			"with or without detection of recombination in the pure subtype bootscan");
+                        // Rule 4
+                        concludeRule("4", crfResult,
+                                "Subtype assigned based on sequence > 800bp, " +
+                                "clustering with a CRF or subtype with bootstrap > 70%, " +
+                                "with detection of recombination in the pure subtype bootscan, " +
+                                "and further confirmed as a CRF or sub-subtype by bootscan analysis.");
                     }
-                }
+               }
             }
         } else {
             PhyloClusterAnalysis.Result pure = purePuzzleAnalysis.run(s);
@@ -164,62 +182,69 @@ public class HIV1SubtypeTool extends GenotypeTool {
     private void rule1(Result pureResult, Result crfResult){
     	pureRules("1", pureResult, crfResult, true);
     }
-    private void rule3B(Result crfPhyloResult){
-    	pureRules("3B", crfPhyloResult, null, true);
+
+    private void rule3b(Result crfPhyloResult){
+    	pureRules("5", crfPhyloResult, null, true);
     }
-    private void rule2B(Result pureResult, Result crfResult){
-    	pureRules("2B", pureResult, crfResult, false);
+
+    private void rule2b(Result pureResult, Result crfResult){
+    	pureRules("6", pureResult, crfResult, false);
     }
+
     private void pureRules(String rule, Result pureResult, Result crfResult, boolean clearlyNoRecombination){
     	String recombinationConclusion = clearlyNoRecombination ? 
-    			"without recombination in the bootscan."
-    			: "without significant recombination in the bootscan.";
+    			"without recombination in the bootscan." : "without significant recombination in the bootscan.";
     	
     	if (pureResult.haveSupport()) {
-            if (crfResult != null
-            	&& crfResult.haveSupport()
-                && (crfResult.getSupportInner() > crfResult.getSupportOuter())) {
-                // Rule 1C (CRF)
-                concludeRule(rule+"C",pureResult,crfResult,
+            if (crfResult != null && crfResult.haveSupport() && (crfResult.getSupportInner() > crfResult.getSupportOuter())) {
+                // Rule 1a pure (crf)
+                concludeRule(rule + "a", pureResult, crfResult,
                     "Subtype assigned based on sequence > 800 bps " +
                     "clustering with a pure subtype and CRF or sub-subtype with bootstrap > 70% " +
                     recombinationConclusion);  
-            } else if (pureResult.getSupportInner() - pureResult.getSupportOuter() > -50) {
-                concludeRule(rule+"-",pureResult,
+            } else if (pureResult.getSupportInner() > pureResult.getSupportOuter()) {
+            	// rule 1b 
+                concludeRule(rule + "b", pureResult,
                         "Subtype assigned based on sequence > 800 bps "
                         + "clustering with a pure subtype with bootstrap > 70% "
                         + recombinationConclusion);
-            	// Rule 1a (pure)
-            } else if (pureResult.getSupportInner() - pureResult.getSupportOuter() >= -100) {
-            	// Rule 1b
-            	concludeRule(rule+"b",pureResult.getConcludedCluster().getName() + "-Like", "Rule 1B: pure like");
             } else {
                 // Rule 1c
-                concludeRule(rule+"c","Check the Report",
+            	Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
+        				pureResult.getConcludedCluster().getName() + "-like");
+                concludeRule(rule + "c", concluded,
                         "Subtype unassigned based on sequence > 800 bps " +
                         "failure to classify as pure subtype (Bootstrap Support)" +
                         recombinationConclusion);
             }
         } else {
-        	//Rule 5
-            concludeRule(rule+"5","Check the Report",
+        	// Rule 1d
+            concludeRule(rule + "d", "Check the report",
                "Subtype unassigned based on sequence > 800 bps " +
-               "failure to classify as pure subtype (Bootstrap Support)" +
+               "failure to classify as pure subtype (insufficient bootstrap support)" +
                recombinationConclusion);
         }
     }
     
-    private String toRecombinantString(int totalWindows, Map<String,Integer> m){
-    	StringBuilder sb = new StringBuilder();
+    private String toRecombinantString(int totalWindows, Map<String, Integer> m) {
     	
+    	// Order by prevalence
+    	List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(m.entrySet());
+    	Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
+				return o1.getValue().compareTo(o2.getValue());
+			}
+		});
+   
+    	StringBuilder sb = new StringBuilder();
+
     	boolean first = true;
-    	for(Map.Entry<String, Integer> me : m.entrySet()){
+    	for(Map.Entry<String, Integer> me : entries){
     		if(!first)
     			sb.append(", ");
     		else
     			first = false;
-    		
-    		sb.append(me.getKey() +" ("+ me.getValue() +"/"+ totalWindows +")");
+    		sb.append(me.getKey() /* +" ("+ me.getValue() +"/"+ totalWindows +")" */);
     	}
     	
     	return sb.toString();

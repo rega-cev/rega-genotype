@@ -57,17 +57,7 @@ public class NovJobOverview extends AbstractJobOverview {
 		data.add(new WText(new WString(notNull(c.majorAssignment))));
 		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
 
-		try {
-			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
-					"-",
-					Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start")), 
-					Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end")),
-					0, "", null)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
+		data.add(createGenomeImage(p, "-"));
 		
 		return data;
 	}

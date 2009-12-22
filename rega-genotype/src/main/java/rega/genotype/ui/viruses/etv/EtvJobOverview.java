@@ -5,7 +5,6 @@
  */
 package rega.genotype.ui.viruses.etv;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
@@ -64,18 +62,8 @@ public class EtvJobOverview extends AbstractJobOverview {
 		} else
 			data.add(new WText());
 
-		try {
-			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
-					"-",
-					Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start")), 
-					Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end")),
-					0, "", null)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
-		
+		data.add(createGenomeImage(p, "-"));
+	
 		return data;
 	}
 

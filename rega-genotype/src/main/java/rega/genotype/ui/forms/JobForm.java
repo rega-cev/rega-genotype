@@ -78,15 +78,15 @@ public class JobForm extends AbstractForm {
 				
 				WString errorMsg;
 				WWidget widget;
-				if(RecombinationForm.URL.equals(detailed)){
-					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId);
+				if (detailed.startsWith(RecombinationForm.URL) && detailed.length() > RecombinationForm.URL.length() + 1) {
+					String type = detailed.substring(RecombinationForm.URL.length() + 1);
+					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId, type);
 					widget = recombination;
-				}
-				else{
+				} else {
 					errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
 					widget = details;
 				}
-				
+
 				if (errorMsg == null) {
 					stateLink.setVarValue(jobId);
 					showWidget(widget);

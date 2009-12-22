@@ -23,7 +23,7 @@ public abstract class AbstractAnalysis {
 	 * 
 	 * A conclusion can be serialized as a <conclusion> in the results file.
 	 */
-	interface Concludable {
+	public interface Concludable {
         public void writeConclusion(ResultTracer tracer);
         public Cluster getConcludedCluster();
         public float getConcludedSupport();

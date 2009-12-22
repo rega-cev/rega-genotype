@@ -30,7 +30,7 @@ public class HBVSubtypeTool extends GenotypeTool {
         hbv = readAnalyses("hbv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hbv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hbv.getAnalysis("pure-puzzle");
-        scanAnalysis = (ScanAnalysis) hbv.getAnalysis("scan");
+        scanAnalysis = (ScanAnalysis) hbv.getAnalysis("scan-pure");
 
     }
 

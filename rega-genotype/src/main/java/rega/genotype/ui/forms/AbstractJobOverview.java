@@ -20,11 +20,13 @@ import rega.genotype.ui.util.Settings;
 import rega.genotype.ui.util.XlsDataTable;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Orientation;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
@@ -106,23 +108,33 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	public void init(String jobId, String filter) {
 		this.filter = filter;
-		
+
+		if (filter != null)
+			setTitle(getMain().getResourceManager().getOrganismValue("monitor-form", "title-filtered").arg(filter));
+		else {
+			setTitle(getMain().getResourceManager().getOrganismValue("monitor-form", "title"));
+			WString msg = tr("monitorForm.explain");
+			msg.arg(jobId);
+			explainText.setText(msg);
+		}
+
 		File jobDir = getJobDir(jobId);
 		
 		this.jobDir = jobDir;
 
-		WString msg = tr("monitorForm.explain");
-		msg.arg(jobId);
-		explainText.setText(msg);
-		
-		if(summary != null)
+		if (summary != null)
 			this.removeWidget(summary);
 		
 		summary = getSummary(filter);
+
 		if (summary != null) {
 			summary.reset();
 			int index = getIndexOf(analysisInProgress);
-			this.insertWidget(++index, summary);
+			
+			if (summary.getLocation() == Side.Top)
+				this.insertWidget(++index, summary);
+			else
+				this.addWidget(summary);
 		}
 
 		if (updater != null) {
@@ -150,15 +162,15 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				}
 			});
 		}
-		
+
 		fillTable();		
-		if (updater != null) {
+
+		if (updater != null)
 			updater.start();
-		}
 	}
 
 	public void fillTable() {
-		if(jobTable.getRowCount()==0) {
+		if (jobTable.getRowCount()==0) {
 			List<Header> headers = getHeaders();
 
 			int col = 0;
@@ -333,7 +345,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public abstract List<Header> getHeaders();
 	
 	public abstract List<WWidget> getData(GenotypeResultParser p);
-	
+
 	public abstract JobOverviewSummary getSummary(String filter);
 
 	protected WAnchor createReportLink(final GenotypeResultParser p) {
@@ -369,6 +381,28 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return jobPath(jobDir);
 	}
 	
+	protected WImage createGenomeImage(final GenotypeResultParser p, final String assignedId) {
+		final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+		final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+		final int sequenceIndex = p.getSequenceIndex();
+	
+		return GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
+			@Override
+			public void handleRequest(WebRequest request, WebResponse response) {
+				try {
+					if (getFileName().isEmpty()) {
+						File file = getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, sequenceIndex, assignedId, start, end, 0, "", null);
+						setFileName(file.getAbsolutePath());
+					}
+	
+					super.handleRequest(request, response);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}				
+		});
+	}
+
 	public static String jobId(File jobDir) {
 		return jobDir.getAbsolutePath().substring(jobDir.getAbsolutePath().lastIndexOf(File.separatorChar)+1);
 	}	

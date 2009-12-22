@@ -117,8 +117,7 @@ table.jobTable td img, .detailsForm img {
 	margin: 2px;
 	padding: 0.5em;
 	text-align: left;
-}
-	
+}
 .detailsForm h2 {
 	border: 1px inset gray;
 	margin: 2px;
@@ -137,9 +136,9 @@ table.jobTable td img, .detailsForm img {
 .details .dsa-text {
 	text-align: center;
 	font-weight: bold;
-	line-height: 200%;
-	padding-top: 2em;
-	padding-bottom: 2em;
+	line-height: 150%;
+	padding-top: 1.5em;
+	padding-bottom: 1.5em;
 	font-size: 110%;
 }
 
@@ -171,6 +170,8 @@ table.jobTable td img, .detailsForm img {
 	color: darkblue;
 	width: auto;
 	display: inline;
+	padding-left: 3ex;
+	padding-right: 0.5ex;
 }
 
 .details .dsa-text span + span + br + span + span {
@@ -355,7 +356,7 @@ table.assignment-overview {
 	border-top: 1px solid black;
 }
 
-table.assignment-overview-filter {
+.assignment-overview-filter {
 	border: 1px solid black;
 	padding: 0.5em;
 }
@@ -387,7 +388,6 @@ table.assignment-overview-filter {
 	text-align: center;
 }
 
-table.jobOverviewSummary {
-	width: 100%;
-	margin: 5px;
+.jobOverviewSummary {
+	margin: 30px auto;
 }

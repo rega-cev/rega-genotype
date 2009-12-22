@@ -87,8 +87,11 @@ public class GiardiaDefinition implements OrganismDefinition {
 		return false;
 	}
 
-	//TODO
 	public Genome getLargeGenome() {
+		return null;
+	}
+
+	public String getProfileScanType(GenotypeResultParser p) {
 		return null;
 	}
 }

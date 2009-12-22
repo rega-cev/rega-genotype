@@ -356,7 +356,7 @@
     </options>
   </analysis>
 
-  <analysis id="scan" type="scan">
+  <analysis id="scan-pure" type="scan">
     <window>
       500
     </window>
@@ -388,7 +388,7 @@
     </analysis>
       <options>data-all</options>
   </analysis>
- <analysis id="crfscan" type="scan">
+ <analysis id="scan-crf" type="scan">
     <window>
       400
     </window>

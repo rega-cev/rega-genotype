@@ -46,7 +46,11 @@ public class HcvDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(2, "/genotype_result/sequence/result[@id='scan']/data");
+		return new DefaultSequenceAssignmentForm(2);
+	}
+
+	public String getProfileScanType(GenotypeResultParser p) {
+		return "pure";
 	}
 
 	public String getOrganismDirectory() {
@@ -72,11 +76,11 @@ public class HcvDefinition implements OrganismDefinition {
 		if (p.elementExists("/genotype_result/sequence/result[@id='crf']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='crf']", m, m, false));
 		
-		String scan = "/genotype_result/sequence/result[@id='scan']";
+		String scan = "/genotype_result/sequence/result[@id='scan-pure']";
 		if (p.elementExists(scan))
 			forms.add(new DefaultRecombinationDetailsForm(scan, "pure", new WString("HCV Subtype Recombination Analysis")));
 		
-		String crfScan = "/genotype_result/sequence/result[@id='crfscan']";
+		String crfScan = "/genotype_result/sequence/result[@id='scan-crf']";
 		if (p.elementExists(crfScan))
 			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf", new WString("HCV CRF/Subtype Recombination Analysis")));
 

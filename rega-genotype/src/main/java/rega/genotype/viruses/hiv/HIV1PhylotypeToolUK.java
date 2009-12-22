@@ -32,8 +32,8 @@ public class HIV1PhylotypeToolUK extends GenotypeTool {
         hiv1 = readAnalyses("hivphylotypesUK.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure-puzzle");
-        scanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan");
-        crfScanAnalysis = (ScanAnalysis) hiv1.getAnalysis("crfscan");
+        scanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan-pure");
+        crfScanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan-crf");
         crfScanPhyloAnalysis = (PhyloClusterAnalysis) crfScanAnalysis.getAnalysis();
         crfAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("crf");
     }

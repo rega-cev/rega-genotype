@@ -29,7 +29,7 @@ public class HTLV1SubtypeTool extends GenotypeTool {
         htlv1 = readAnalyses("htlv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) htlv1.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) htlv1.getAnalysis("pure-puzzle");
-        scanAnalysis = (ScanAnalysis) htlv1.getAnalysis("scan");
+        scanAnalysis = (ScanAnalysis) htlv1.getAnalysis("scan-pure");
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {
