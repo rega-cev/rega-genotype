@@ -46,10 +46,15 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 	private List<String> elements = new ArrayList<String>();
 		
 	protected int sequenceIndex = -1;
-	
+	private int filteredSequences = 0;
+
 	private boolean stop = false;
 
 	public GenotypeResultParser() {
+	}
+	
+	public int getFilteredSequences() {
+		return filteredSequences;
 	}
 	
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -82,8 +87,11 @@ public abstract class GenotypeResultParser extends DefaultHandler {
 	    	
 	    	if(getCurrentPath().equals("/genotype_result/sequence")) {
 	    		sequenceIndex++;
-	    		if (!skipSequence())
+	    		if (!skipSequence()) {
 	    			endSequence();
+	    		} else {
+	    			filteredSequences++;
+	    		}
 	    		if(!stop) {
 	    		valuesMap.clear();
 	    		elements.clear();
@@ -146,6 +154,7 @@ public abstract class GenotypeResultParser extends DefaultHandler {
     private void reset() {
     	currentPath.clear();
     	sequenceIndex = -1;
+    	filteredSequences = 0;
     }
     
     protected String getCurrentPath() {

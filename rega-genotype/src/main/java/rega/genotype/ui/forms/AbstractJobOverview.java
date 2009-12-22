@@ -315,7 +315,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		@Override
 		public void endSequence() {
 			int numRows = jobTable.getRowCount()-1;
-			if(getSequenceIndex()>=numRows) {
+			if(getSequenceIndex() - getFilteredSequences() >= numRows) {
 				List<WWidget> data = getData(tableFiller);
 				
 				int row = jobTable.getRowCount();
