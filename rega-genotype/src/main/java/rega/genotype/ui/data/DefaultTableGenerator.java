@@ -72,11 +72,11 @@ public class DefaultTableGenerator extends AbstractDataTableGenerator {
     	else
     		addPhyloResults("pure-puzzle", false);
 
-		addPhyloScanResults("scan");
+		addPhyloScanResults("scan-pure");
 
 		addPhyloResults("crf", false);
 
-		addPhyloScanResults("crfscan");
+		addPhyloScanResults("scan-crf");
 		
 		addNamedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id", ValueFormat.Label);
 		addNamedValue("/genotype_result/sequence/conclusion/assigned/minor/assigned/id", ValueFormat.Label);
