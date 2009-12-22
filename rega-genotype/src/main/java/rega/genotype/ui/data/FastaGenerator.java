@@ -20,6 +20,7 @@ public class FastaGenerator extends GenotypeResultParser {
 	@Override
 	public void endSequence() {
 		try {
+			outputStream.write(">".getBytes());
 			outputStream.write(getEscapedValue("/genotype_result/sequence/@name").getBytes());
 			outputStream.write("\n".getBytes());
 			outputStream.write(getEscapedValue("/genotype_result/sequence/nucleotides").getBytes());
