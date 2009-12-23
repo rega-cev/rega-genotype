@@ -7,6 +7,8 @@ package rega.genotype.ui.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,16 @@ public class Settings {
 		return maxAllowedSeqs;
 	}
 	
+	public Integer getMaxJobDirLifeTime() {
+		return maxJobDirLifeTime;
+	}
+	
+	public List<File> getJobDirs() {
+		List<File> dirs = new ArrayList<File>();
+		dirs.addAll(jobDirs.values());
+		return dirs;
+	}
+	
 	private File xmlPath;
 	private String paupCmd;
 	private String clustalWCmd;
@@ -68,6 +80,7 @@ public class Settings {
 	private String treePuzzleCmd;
 	private String treeGraphCmd;
 	private int maxAllowedSeqs;
+	private Integer maxJobDirLifeTime = null;
 	
 	private Map<String, File> jobDirs = new HashMap<String, File>();
 
@@ -108,6 +121,8 @@ public class Settings {
             	jobDirs.put(organism, new File(e.getValue().trim()));
             } else if(name.equals("maxAllowedSequences")) {
             	maxAllowedSeqs = Integer.parseInt(e.getValue().trim());
+            } else if(name.equals("maxJobDirLifeTime")) {
+            	maxJobDirLifeTime = Integer.parseInt(e.getValue().trim());
             }
         }
     }
