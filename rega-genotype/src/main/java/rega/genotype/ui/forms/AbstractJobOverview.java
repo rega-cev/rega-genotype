@@ -381,9 +381,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return jobPath(jobDir);
 	}
 	
-	protected WImage createGenomeImage(final GenotypeResultParser p, final String assignedId) {
-		final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
-		final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+	protected WImage createGenomeImage(final GenotypeResultParser p, final String assignedId, boolean unassigned) {
+		final int start = unassigned ? -1 : Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+		final int end = unassigned ? -1 : Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
 		final int sequenceIndex = p.getSequenceIndex();
 	
 		return GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {

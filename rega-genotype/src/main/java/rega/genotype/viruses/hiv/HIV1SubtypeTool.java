@@ -232,7 +232,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
     	List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(m.entrySet());
     	Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
 			public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
-				return o1.getValue().compareTo(o2.getValue());
+				return -o1.getValue().compareTo(o2.getValue());
 			}
 		});
    

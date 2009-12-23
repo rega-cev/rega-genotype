@@ -57,7 +57,7 @@ div.imgDiv, div.downloadContainer{
 	margin: 0px auto;
 }
 
-table.jobTable{
+table.jobTable {
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
@@ -133,6 +133,7 @@ table.jobTable td img, .detailsForm img {
 	margin: 2px;
 	padding: 0.5em;
 	text-align: left;
+}
 
 .detailsForm h2 {
 	border: 1px inset gray;
@@ -145,7 +146,7 @@ table.jobTable td img, .detailsForm img {
 	text-align: center;
 }
 
-.detailsForm *.recombinationDetails{
+.detailsForm .recombinationDetails{
 	text-align: center;
 }
 
@@ -211,7 +212,7 @@ table.jobTable td img, .detailsForm img {
 	margin: 1em auto;
 }
 
-.decisionTreeHeader{
+.decisionTreeHeader {
 	display: block;
 	margin: 1em auto 0.5em auto;
 	text-align: center;
@@ -220,7 +221,7 @@ table.jobTable td img, .detailsForm img {
 	color: darkblue;
 }
 	
-.listContainer{
+.listContainer {
 	margin-top: 0.5em;
 	margin-bottom: 1em;
 }
@@ -233,7 +234,7 @@ h1 {
   	text-align: center;
 }
 
-*.note, *.footer{
+.note, .footer {
 	padding: 0.5em 3em 0.5em 0.5em;
 	background-color: rgb(204, 204, 255);
 	display: block;
@@ -241,12 +242,12 @@ h1 {
 	margin: 0px auto;
 }
 
-*.footer{
+.footer{
 	text-align: center;
 	font-style: italic;
 }
 
-*.navigation{
+.navigation{
 	margin: 1em auto;
 	border-color: black;
 	border-style: solid;
@@ -268,7 +269,7 @@ a, .link{
 	cursor: pointer;
 }
 
-*.navigation a {
+.navigation a {
 	display: inline-block;
 	width: 12%;
 	text-align: center;
@@ -282,7 +283,7 @@ a, .link{
 .edit-valid {
 }
 
-*.details-extraComments {
+.details-extraComments {
 	font-style:italic;
 }
 

@@ -62,7 +62,7 @@ public class EtvJobOverview extends AbstractJobOverview {
 		} else
 			data.add(new WText());
 
-		data.add(createGenomeImage(p, "-"));
+		data.add(createGenomeImage(p, "-", !haveBlastAssignment));
 	
 		return data;
 	}
