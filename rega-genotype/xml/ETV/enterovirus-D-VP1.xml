@@ -8,7 +8,7 @@
 		</cluster>
 
 		<cluster id="EV-70" name="Enterovirus D, serotype EV-70">
-			<taxus name="EV-70|NC_001430" />
+			<taxus name="EV-70|D00820" />
 			<taxus name="EV-70|D17599" />
 		</cluster>
 
