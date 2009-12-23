@@ -13,11 +13,13 @@ import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.RecombinationForm;
+import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.recombination.RecombinationPlot;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WBreak;
+import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
@@ -95,7 +97,30 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		m.arg(p.getValue(path + "/window"));
 		m.arg(p.getValue(path + "/step"));
 		addWidget(new WText(m));
+		
+		addWidget(new WBreak());
+		addWidget(new WBreak());
+		WContainerWidget recombinationProfile = new WContainerWidget(this);
+		recombinationProfile.addWidget(new WText(tr("defaultRecombinationAnalyses.profile")));
+		WListContainerWidget profileList = new WListContainerWidget(recombinationProfile);
+		profileList.addItem(tr("defaultRecombinationAnalyses.profile.short")
+				.arg(toShortProfile(p.getValue(path + "/profile[@id='assigned']"))));
+		profileList.addItem(tr("defaultRecombinationAnalyses.profile.long")
+				.arg(p.getValue(path + "/profile[@id='assigned']")));
+		profileList.addItem(tr("defaultRecombinationAnalyses.profile.best")
+				.arg(p.getValue(path + "/profile[@id='best']")));
+		recombinationProfile.setContentAlignment(AlignmentFlag.AlignLeft);
+		
 		this.setContentAlignment(AlignmentFlag.AlignCenter);
+	}
+
+	private String toShortProfile(String profile) {
+		String shortProfile = "";
+		for (String p : profile.split(" ")) {
+			if (!shortProfile.contains(p)) 
+				shortProfile += p + " ";
+		}
+		return shortProfile;
 	}
 	
 	@Override
