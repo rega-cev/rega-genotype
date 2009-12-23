@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Date;
@@ -44,10 +45,8 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.ui.data.OrganismDefinition;
-import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
@@ -290,16 +289,12 @@ public class GenotypeLib {
 		return anchor;
 	}
 	
-	public static File getZipArchiveFileName(File dir){
-		return new File(dir.getAbsolutePath()+".zip");
-	}
-
-	public static void zip(File dir, File zipFile) {
+	public static void zip(File dir, OutputStream os) {
 		byte[] buffer = new byte[1024*1024];
 
 		try {
 
-			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+			ZipOutputStream out = new ZipOutputStream(os);
 
 			out.setLevel(Deflater.DEFAULT_COMPRESSION);
 
