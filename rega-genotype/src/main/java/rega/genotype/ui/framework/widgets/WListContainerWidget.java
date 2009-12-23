@@ -8,6 +8,8 @@ package rega.genotype.ui.framework.widgets;
 import java.util.ArrayList;
 
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 
 /**
@@ -34,6 +36,10 @@ public class WListContainerWidget extends WContainerWidget{
 
 	public WContainerWidget addItem() {
 		return addItem(new WContainerWidget(this));
+	}
+	
+	public WContainerWidget addItem(WString text) {
+		return addItem(new WText(text));
 	}
 
 	public WContainerWidget addItem(WContainerWidget cw){
