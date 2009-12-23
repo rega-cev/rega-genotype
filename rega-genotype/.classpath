@@ -38,6 +38,7 @@
   <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar" sourcepath="M2_REPO/junit/junit/3.8.1/junit-3.8.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/jwt/jwt/3.0.1/jwt-3.0.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/jexcelapi/jxl/2.4.2/jxl-2.4.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/quartz/quartz/1.5.2/quartz-1.5.2.jar" sourcepath="M2_REPO/quartz/quartz/1.5.2/quartz-1.5.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar" sourcepath="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/xalan/xalan/2.6.0/xalan-2.6.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/xerces/xercesImpl/2.6.2/xercesImpl-2.6.2.jar" sourcepath="M2_REPO/xerces/xercesImpl/2.6.2/xercesImpl-2.6.2-sources.jar"/>

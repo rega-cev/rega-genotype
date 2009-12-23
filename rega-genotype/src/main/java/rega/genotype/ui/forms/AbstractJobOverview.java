@@ -246,20 +246,18 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 				div.setObjectName("donwload-results-contents");
 
-				final File jobArchive = GenotypeLib.getZipArchiveFileName(jobDir);
 				WAnchor jobFileDownload = new WAnchor("", tr("monitorForm.jobFile"), div);
 				jobFileDownload.setObjectName("zip-download");
 				jobFileDownload.setStyleClass("link");
 				jobFileDownload.setTarget(AnchorTarget.TargetNewWindow);
-				WResource jobResource = new WFileResource("application/zip", jobArchive.getAbsolutePath()) {
+				WResource jobResource = new WResource() {
 					@Override
-					public void handleRequest(WebRequest request, WebResponse response) {
-						GenotypeLib.zip(jobDir, jobArchive);
-						super.handleRequest(request, response);
+					protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+						response.setContentType("application/zip");
+						GenotypeLib.zip(jobDir, response.getOutputStream());
 					}
-						
 				};
-				jobResource.suggestFileName(jobArchive.getName());
+				jobResource.suggestFileName(jobDir.getName() + ".zip");
 				jobFileDownload.setRef(jobResource.generateUrl());
 			}
 			downloadResultsContainer.setHidden(filter!=null);
@@ -315,7 +313,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		@Override
 		public void endSequence() {
 			int numRows = jobTable.getRowCount()-1;
-			if(getSequenceIndex()>=numRows) {
+			if(getSequenceIndex() - getFilteredSequences() >= numRows) {
 				List<WWidget> data = getData(tableFiller);
 				
 				int row = jobTable.getRowCount();

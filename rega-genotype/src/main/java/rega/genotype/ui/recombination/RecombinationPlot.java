@@ -122,8 +122,7 @@ public class RecombinationPlot extends WCartesianChart {
 			painter.end();
 			File tmp = File.createTempFile("recombination", "svg");
 			FileOutputStream fos = new FileOutputStream(tmp);
-			//TODO use simplified write(fos) method
-			image.write(fos, new HashMap<String, List<String>>(), new HashMap<String, UploadedFile>());
+			image.write(fos);
 			fos.flush();
 			fos.close();
 			ImageConverter.svgToPdf(tmp, pdfFile);
