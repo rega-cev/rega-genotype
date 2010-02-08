@@ -35,6 +35,7 @@
       <taxus name="AF114383" />
       <taxus name="AY466029" />
       <taxus name="AY302539" />
+      <taxus name="AY302550" />
       <taxus name="DQ534205" />
       <taxus name="AF524866" />
       <taxus name="FJ007373" />
@@ -107,6 +108,10 @@
     <regions taxus="EF667344">
       <region name="VP1" begin="2394" end="3349" />
     </regions>
+    
+	<regions taxus="U22521">
+	  <region name="VP1" begin="2445" end="3363" />
+	</regions>
 
     <!-- B -->
     <regions taxus="NC_001472">

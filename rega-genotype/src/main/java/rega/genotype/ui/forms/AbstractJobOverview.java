@@ -11,7 +11,6 @@ import java.util.List;
 
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.GenotypeResultParser;
-import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
 import rega.genotype.ui.util.DataTable;
@@ -21,7 +20,6 @@ import rega.genotype.ui.util.XlsDataTable;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
-import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;

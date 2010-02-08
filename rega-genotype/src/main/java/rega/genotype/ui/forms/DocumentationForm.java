@@ -12,6 +12,7 @@ import org.jdom.Element;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Table;
+import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
@@ -37,13 +38,13 @@ public class DocumentationForm extends AbstractForm {
 		for(Object o : text.getChildren()) {
 			final Element e = (Element)o;
 			if(e.getName().equals("header")) {
-				WText header = new WText((++headerNr) + ". " + getMain().getResourceManager().extractFormattedText(e) +":", this);
+				WText header = new WText((++headerNr) + ". " + getMain().getResourceManager().extractFormattedText(e) +":", TextFormat.XHTMLUnsafeText, this);
 				header.setId("");
 				header.setStyleClass("decisionTreeHeader");
 			} else if(e.getName().equals("rule")){
 				ruleNumber = e.getAttributeValue("number");
 				ruleName = e.getAttributeValue("name");
-				WText w = new WText(ruleNumber + ": " + ruleName + "<br></br>" + getMain().getResourceManager().extractFormattedText(e) + "<br></br>", this);
+				WText w = new WText(ruleNumber + ": " + ruleName + "<br></br>" + getMain().getResourceManager().extractFormattedText(e) + "<br></br>", TextFormat.XHTMLUnsafeText, this);
 				w.setId("");
 			} else if(e.getName().equals("figure")) {
 				WContainerWidget imgDiv = new WContainerWidget(this);
@@ -59,7 +60,7 @@ public class DocumentationForm extends AbstractForm {
 			} else if(e.getName().equals("table")) {
 				createTable(e.getTextTrim(), this);
 			} if(e.getName().equals("text")) {
-				WText w = new WText(getMain().getResourceManager().extractFormattedText(e), this);
+				WText w = new WText(getMain().getResourceManager().extractFormattedText(e), TextFormat.XHTMLUnsafeText, this);
 				w.setId("");
 			}
 		}
