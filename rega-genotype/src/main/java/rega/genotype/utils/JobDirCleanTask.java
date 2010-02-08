@@ -2,7 +2,6 @@ package rega.genotype.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
@@ -11,6 +10,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import rega.genotype.ui.util.Settings;
+import eu.webtoolkit.jwt.WDate;
 
 public class JobDirCleanTask implements Job {
 	public void execute(JobExecutionContext context)
@@ -19,7 +19,7 @@ public class JobDirCleanTask implements Job {
 		
 		Settings settings = Settings.getInstance();
 		
-		Date fileAgeLimit = addMilliseconds(new Date(), -Settings.getInstance().getMaxJobDirLifeTime());
+		Date fileAgeLimit = (new WDate(new Date()).addMilliseconds(-Settings.getInstance().getMaxJobDirLifeTime())).getDate(); 
 		
 		for (File jobDir : settings.getJobDirs()) 
 			processJobDir(jobDir, fileAgeLimit);			
@@ -44,15 +44,6 @@ public class JobDirCleanTask implements Job {
 				}
 			}
 		}
-	}
-
-	//TODO
-	//use wdate
-	private Date addMilliseconds(Date d, int nMilliseconds) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(d);
-		c.add(Calendar.MILLISECOND, (int)nMilliseconds);
-		return c.getTime();
 	}
 	
 	public static void main(String [] args) throws JobExecutionException {

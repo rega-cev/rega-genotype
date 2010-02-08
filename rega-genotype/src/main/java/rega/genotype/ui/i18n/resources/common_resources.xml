@@ -115,7 +115,11 @@
 	<resource name="defaultRecombinationAnalyses.bootscanClusterSupport">Bootscan cluster support:</resource>
 	<resource name="defaultRecombinationAnalyses.download">Download: </resource>
 	<resource name="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size {1} and step size {2}.</resource>
-
+	<resource name="defaultRecombinationAnalyses.profile">Recombination profile: </resource>
+	<resource name="defaultRecombinationAnalyses.profile.short">short: {1}</resource>
+	<resource name="defaultRecombinationAnalyses.profile.long">long: {1}</resource>
+	<resource name="defaultRecombinationAnalyses.profile.best">best: {1}</resource>
+	
 	<resource name="defaultSignalAnalysis.title">Phylogenetic signal analysis</resource>
 	<resource name="defaultSignalAnalysis.comment">This section contains details of the phylogenetic signal analysis.</resource>
 	<resource name="defaultSignalAnalysis.extraComment">Recombination Analyses are only performed for sequences with more than 800 bp.</resource>
