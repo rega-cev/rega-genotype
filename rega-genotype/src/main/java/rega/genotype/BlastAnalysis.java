@@ -365,7 +365,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                     float score = Float.valueOf(best[11]);
                 	float pValue = Float.valueOf(best[10]);
                     if (maxPValue != null && pValue > maxPValue)
-                    	score = 0;
+                    	score = -1;
 
                     if (relativeCutoff) {
                    		if (secondBest != null)

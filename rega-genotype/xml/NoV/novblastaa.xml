@@ -72,7 +72,7 @@
       I,II,III,IV,V,SaV I,SaV II,SaV III,SaV IV,SaV V,vesivirus,lagovirus,becovirus,valovirus,recovirus
     </identify>
     <cutoff max-p-value="1E-5">
-      0
+      1
     </cutoff>
   </analysis>
 
