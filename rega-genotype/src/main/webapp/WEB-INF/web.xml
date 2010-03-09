@@ -42,17 +42,33 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>GenotypeEnterovirus</servlet-name>
+    <servlet-name>GenotypeEntero</servlet-name>
     <display-name>Enterovirus Genotyping</display-name>
     <description>Enterovirus Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.etv.EtvMain</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>GenotypeEnterovirus</servlet-name>
+    <servlet-name>GenotypeEntero</servlet-name>
     <url-pattern>/enterovirus/typingtool/*</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>GenotypeEntero-service</servlet-name>
+    <display-name>Entero Genotyping service</display-name>
+    <description>Entero Genotyping service</description>
+    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
+    <init-param>
+    	<param-name>genotypeTool</param-name>
+    	<param-value>rega.genotype.viruses.etv.EnteroTool</param-value>
+   	</init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeEntero-service</servlet-name>
+    <url-pattern>/enterovirus/typingservice</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>GenotypeHTLV</servlet-name>
     <display-name>HTLV Genotyping</display-name>

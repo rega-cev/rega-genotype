@@ -262,7 +262,7 @@ presented in four tables below:</p>
   <li><a href="#/whole-genome-table/">The whole
 genome sequences,</a></li>
   <li><a href="#/ORF2-table/">The ORF2 sequences</a></li>
-  <li><a href="#/ORF2-table/">The ORF1 sequences</a></li>
+  <li><a href="#/ORF1-table/">The ORF1 sequences</a></li>
   <li><a href="#/II.4-table/">The II.4 variant
 sequences for both ORF1 and ORF2.</a></li>
 </ul><br />
@@ -1070,9 +1070,7 @@ Virology. 2006 Mar 15;346(2):312-23. Epub 2005</div>
   </tbody>
 </table>
 
-<a name="/ORF2-table/"><br />
-</a><a name="/ORF2-table/">
-</a>
+<a name="/ORF1-table/"/>
 <table class="reftable">
   <caption>3: ORF 1 reference set</caption>
   <tbody>
@@ -1883,7 +1881,7 @@ replaced by GenBank Accession Number</a></p>
     </tr>
    </tbody>
 </table>
-
+			
 			</text>
 		</subtypingProcess-text>
 	</subtypingProcess-form>

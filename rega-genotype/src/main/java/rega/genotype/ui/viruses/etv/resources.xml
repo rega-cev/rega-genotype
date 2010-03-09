@@ -1,109 +1,269 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <organism-settings>
-	<main-form>
-		<footer>
-			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
+  <main-form>
+    <footer>
+      <p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
 			and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
-			<p>Contact: TBD</p>
-		</footer>
-	</main-form>
-	<start-form>
-		<title>Enterovirus Genotyping Tool Version 0.1</title>
-		<note>
-			<div>
+      <p>Contact: TBD</p>
+    </footer>
+  </main-form>
+  <start-form>
+    <title>Enterovirus Genotyping Tool Version 0.1</title>
+    <note>
+      <div>
 				This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequence.
 			</div>
-			<div>
-				<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
+      <div><b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
 			</div>
-		</note>
-	</start-form>
-	<monitor-form>
-		<title>Enterovirus Genotyping Tool Results</title>
-	</monitor-form>
-	<details-form>
-		<title>Enterovirus Genotyping Details</title>
-	</details-form>
-	<howToCite-form>
-		<title>How to Cite the Enterovirus Automated Genotyping Tool</title>
-		<howToCite-text>
-			<text>
-				<p>Please use the following citation:</p>
-				<p>TBD.</p>
-			</text>
-		</howToCite-text>
-	</howToCite-form>
-	<introduction-form>
-		<title>The Enterovirus Automated Genotyping Tool: introduction.</title>
-		<introduction-text>
-			<text>
-				To be completed.
-			</text>
-		</introduction-text>
-	</introduction-form>
-	<tutorial-form>
-		<title>Enterovirus Genotyping Tutorial</title>
-		<tutorial-text>
-			<text>
-				To be completed.
-			</text>
-		</tutorial-text>
-	</tutorial-form>
-	<decisionTrees-form>
+    </note>
+  </start-form>
+  <monitor-form>
+    <title>Enterovirus Genotyping Tool Results</title>
+  </monitor-form>
+  <details-form>
+    <title>Enterovirus Genotyping Details</title>
+  </details-form>
+  <howToCite-form>
+    <title>How to Cite the Enterovirus Automated Genotyping Tool</title>
+    <howToCite-text>
+      <text>
+        <p>Please use the following citation:</p>
+        <p>TBD.</p>
+      </text>
+    </howToCite-text>
+  </howToCite-form>
+  <introduction-form>
+    <title>The Enterovirus Automated Genotyping Tool: introduction.</title>
+    <introduction-text>
+      <text>
+        <p>This typingtool provides virological labs with an appropriate reference set
+                for molecular typing of materials positive in the enterovirus diagnostic PCR.<br/>
+                The tool uses a regularly updated set of human
+                Picornaviridae genera and enterovirus species and (sero)types, both
+                definite and proposed types.<br/>
+                For the nomenclature and selection of prototype strains in this tool the <a href="http://www.picornaviridae.com/">picornavirus home page</a> 
+                has been used. The corresponding sequences have been downloaded from <a href="http://www.ncbi.nlm.nih.gov/Genbank/">GenBank</a>
+      </p>
+      </text>
+    </introduction-text>
+  </introduction-form>
+  <tutorial-form>
+    <title>Enterovirus Genotyping Tutorial</title>
+    <tutorial-text>
+      <text>
+        <p>One or more (up to 10.000 per run) enterovirus sequences can be pasted
+          (A) oruploaded (B) in Fasta format (see fig. 1). Sequences of all regions of
+          the genome can be used.
+        </p>
+        <p>When pasting a single sequence the Identifier of the sequence
+          (&gt;Sequencename) should be included (Fasta format).<br/>
+          One example sequence is present as a default. A set of three <a href="http://www.rivm.nl/mpf/enterovirus/typingtool#/examples">
+          example sequences</a>
+          is also available.
+        </p>
+        <div class="centerimage">
+          <img src="../pics/startingpage-entero.jpg"/>
+          <div class="pic-label">The startingpage of the enterovirus typingtool</div>
+        </div>
+        <p>
+          The analysis takes up to a few seconds per sequence. Thus, for large
+          batches the run can be viewed later, by typing the Job-Id at C. Here
+          also runs by others can be viewed, if the Job-Id has been communicated.<br/>
+          Runs are kept on the server for 1 week. 
+        </p>
+        <div>
+          <img src="../pics/resultlist-entero.jpg"/>
+          <div class="pic-label">Overview of the results</div>
+        </div>
+        <p>
+          As soon as the 'Start' button is pushed the results overview is shown.
+          While the analysis is still in progress the following message is
+          displayed: 
+        </p>
+        <p>'Analysis in progress... (Showing partial results). This page
+          will be automatically updated every 5 seconds...'.<br/><br/>
+          The Job Id number, which can be used to retrieve the results later is
+          displayed at the top of the page as soon as the job is started.
+        </p>
+        <p>For each sequence the length, positioning on the enterovirus
+          genome and assigned genus/species is determined. <br/>
+          If a picornavirus other than enterovirus is submitted the genus is
+          reported and no further analysis is performed. <br/>
+          If the sequence is an enterovirus, species rhinovirus A, B or C, only
+          the species is determine and nofurhter anaysis is performed<br/>
+          If the sequence is of the genus enterovirus, species enterovirus A, B, C or D
+          and of the VP1 gene (&gt; 100 nt), the (sero)type is
+          determined and a report of the details is available<br/>
+          After the complete analysis is finished the analysis results can be
+          downloaded as XML, CSV or Excel file. 
+        </p>
+        <p>The report contains information on:
+        </p>
+        <ul style="text-align: left;">
+          <li>The sequence submitted (name and length)</li>
+          <li>The genus and/or species of the submitted sequence</li>
+          <li>The (sero)type assignment for VP1 (if &gt;100nt overlap)</li>
+          <li>The robustness of the assignment using bootstrap values. Only with bootstrap &gt; 70 a (sero)type is assigned </li>
+          <li>A graphical representation of the norovirus genome showing the genomic region of the query sequence with the start and end positions</li>
+          <li>A NJ tree is computed with the submitted sequence at the top.</li>
+          <li>The bootstrap tree can be viewed and downloaded in the PAUP* log file</li>
+          <li>The alignment can be downloaded in NEXUS or FASTA format</li>
+        </ul>
+        <p>
+          The genus/species and the localisation on the genome can be
+          determined for sequences of any part of the genome.<br/>
+          For subsequent (sero)typing the sequence has to overlap at least 100 nt
+          with the VP1 gene.<br/>
+        </p>
+        <br/>
+        <div class="centerimage">
+          <img src="../pics/genome-entero.jpg" height="173" width="805"/>
+        </div>
+        <span class="pic-label">Schematic representation of genomic regions for which the typing tool assigns genus/species and (sero)type</span>
+        <p/>
+        <p>No (sero)type is assigned if:</p>
+        <ul style="text-align: left;">
+          <li>The submitted sequence belongs to anothere picornaviridae
+            genus. In this case the genus is indicated and
+            the analysis stops.
+          </li>
+          <li>The submitted sequence does not overlap &gt; 100 bp
+              with VP1. In this case only assignment of the Genus/Species is possible. 
+          </li>
+          <li>The bootstrap value &lt; 70. In this case an alignment
+            and a NJ tree are produced which can be used to get an indication of the
+            phylogeny. 
+          </li>
+        </ul>
+      </text>
+    </tutorial-text>
+  </tutorial-form>
+  <decisionTrees-form>
 	</decisionTrees-form>
-	<subtypingProcess-form>
-		<title>Enterovirus Genotyping Tool Methods</title>
-		<subtypingProcess-text>
-			<text>
-				To be completed.
-			</text>
-		</subtypingProcess-text>
-	</subtypingProcess-form>
-	<exampleSequences-form>
-		<title>
+  <subtypingProcess-form>
+    <title>Enterovirus Genotyping Tool Methods</title>
+    <subtypingProcess-text>
+      <text>
+        <p class="bold">The (sero)typing process consists of up to two steps:</p>
+        <ol>
+          <li>The initial step performs an nucleotide blast scan, using <a href="http://blast.ncbi.nlm.nih.gov/Blast.cgi">Blastn</a>.
+            The submitted sequence is blasted against a set of whole genome sequences for determination of the genus within the Picornaviridae
+            family and the species for enterovirus (enterovirus A, B, C, and D and rhinovirus A, B and C).
+            The start and end positions of the fragment are determined.
+            A genus/species is only assigned if the relative blastscore &gt;1.5. The reletive blastscore is the highest blastscore divided
+            by the next highest blastscore of the submitted sequence with the whole genome sequence of another genus/species. Besides this relative score
+            an absolute cutoff is used: the E value &lt; 1E-5, as a measure for statistic significance.
+          </li>
+          <li>This second step is performed for sequences which were
+            identified asgenus enterovirus, species enterovirus A, B, C or D in step 1.
+            Sequences of each enterovirus species are analysed sperately
+            using a different reference set. For each submitted sequence that overlaps sufficiently (≤ 100nt) with VP1, an
+            alignment is performed using ClustalW and a phylogenetic tree (NJ) is constructed with the HKY85<span class="cite">1</span>
+            method using PAUP*<span class="cite">2</span> software. HKY85 is a likelyhood method with 100 bootstrap replicates.
+            The alignment contains the sequence together with the pre-aligned reference sequences for each (sero)type. In the PAUP* log file also the
+            bootstrap tree is presented. For each (sero)type two, in some cases more,
+            reference sequences have been selected, representing the level of variance within the cluster.
+            The reference strains in this tool have been selected based on the <a href="http://www.picornaviridae.com/">picornavirus home page</a>
+          </li>
+        </ol>
+        <div class="centerimage">
+          <img src="../pics/genome-entero.jpg" height="180" width="800"/>
+        </div>
+        <p class="pic-label">Regions supported by the tool</p>
+        <p>T</p>
+        <br/>
+        <div class="centerimage">
+          <img src="../pics/flowchart-entero.jpg" height="610" width="500"/>
+        </div>
+        <p class="pic-label">Flowchart of the genotyping process</p>
+        <div class="bibitem">
+          <span>1:</span>
+          <a href="http://www.ncbi.nlm.nih.gov/pubmed/3934395?ordinalpos=8&amp;itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_DefaultReportPanel.Pubmed_RVDocSum">
+        Hasegawa M, Kishino H, Yano T: Dating of the human-ape splitting by a
+        molecular clock of mitochondrial DNA.
+        J Mol Evol 1985, 22:160-174.</a>
+        </div>
+        <div class="bibitem">
+          <span>2:</span>
+          <a href="http://www.ncbi.nlm.nih.gov/pubmed/18428704?ordinalpos=1&amp;itool=EntrezSystem2.PEntrez.Pubmed.Pubmed_ResultsPanel.Pubmed_DefaultReportPanel.Pubmed_RVDocSum">
+        Wilgenbusch JC, Swofford D. Inferring evolutionary trees with PAUP*.
+        Curr Protoc Bioinformatics 2003; Chapter 6:Unit 6.4</a>
+        </div>
+      </text>
+    </subtypingProcess-text>
+  </subtypingProcess-form>
+  <exampleSequences-form>
+    <title>
 			Example Sequences for the Enterovirus Genotyping Tool 
 		</title>
-		<exampleSequences-sequences>
-			<sequence name="AM292468">
-GGGGATCCCATTGCAGATATGATTGACCAAACCGTGAACAATCAAGTGAATCGCTCCCTATCTGCATTGCAAGTACTACC
-CACAGCTGCCAATACTGAAGCAAGTAGTCACAGATTAGGCACTGGTGTTGTGCCAGCACTACAGGCTGCGGAGACAGGGG
-CGTCATCAAATGCCAGTGACAAGAACCTCATTGAAACTAGGTGTGTGCTGAATCATCACTCCACACAGGAGACGGCCATT
-GGAAACTTCTTCAGCCGCGCCGGTTTGGTCAGCATTATCACAATGCCCACCACGGGCACCCAGAACACGGATGGATATGT
-TAATTGGGATATTGATTTGATGGGGTACGCACAATTGCGGCGGAAGTGCGAATTGTTCACCTACATGCGCTTTGATGCCG
-AATTCACATTTGTCGTGGCCAAACCCAACGGTGAATTAGTCCCTCAATTACTGCAGTACATGTATGTTCCACCAGGGGCC
-CCGAAACCCACTTCCAGAGATTCATTCGCTTGGCAGACAGCCACCAACCCGTCTGTGTTTGTGAAAATGACAGATCCTCC
-AGCCCAGGTGTCAGTTCCCTTCATGTCACCAGCCAGTGCGTACCAATGGTTTTATGATGGCTACCCCACTTTCGGAGAGC
-ACCTCCAAGCAAATGACCTAGATTATGGCCAATGCCCTAATAACATGATGGGCACCTTTAGCATTAGGACAGTGGGGACT
-GAGAAGTCACCACACTCCATCACCCTGAGAGTGTACATGAGAATTAAGCACGTCAGGGCGTGGATACCAAGACCTCTGAG
-AAACCAACCCTATTTGTTTAAGACTAACCCAAATTACAAAGGCAATGACATTAAGTGCACTAGCGCTAGCAGAGATAAGA
-TCACAACTTTG
+    <exampleSequences-sequences>
+      <sequence name="AY879326">
+AATGACCCTGAAAGTGCACTCAATAGGGCAGTGGGCAGGGTAGCTGATACTATAGC
+CAGTGGACCTGTTAACACTGAGCAAATTCCTGCTTTAACAGCAGTGGAGACAGGGCA
+CACATCACAAGTGGTACCGAGCGACACGATGCAGACACGCCACGTGGTCAACTACC
+ACACCAGATCAGAGTCATCGATAGAGAACTTCATGGGGAGAGCGGCGTGCGTGTACA
+TTGCCCAGTACGCCACAGAGAAGGTCAACGACGAGTTAGACAGATATACCAACTGGGA
+GATAACAACCAGACAAGTCGCACAGTTAAGGCGTAAACTGGAAATGTTCACATACATGA
+GGTTCGATCTTGAGATCACGTTTGTCATCACCAGCTCCCAGCGCACTTCAACCACATACG
+CATCAGACTCCCCTCCACTAACGCATCAAGTAATGTATGTACCACCAGGAGGCCCAATTCC
+TAGAAGTTATGAAGATTTTGCCTGGCAGACATCAACCAACCCAAGTGTGTTCTGGACGGA
+AGGCAATGCCCCTCCCAGGATGTCGATACCATTCATGAGTGTTGGTAACGCATATTGTAAT
+TTCTATGATGGATGGTCTCATTTCAGCCAGAGCGGTGTGTATGGGTACACTACTTTAAACAA
+CATGGGACACTTGTATTTTAGACACGTGAACAAATCGACTGCATATCCAGTTAACAGTGTT
+GCCCGCGTCTATTTCAAGCCCAAGCACGTGAAGGCGTGGGTGCCTCGTGCGCCACGCTT
+ATGCCCGTATCTGTATGCAAGAAATGTCAATTTTGATGTGCAAGGGGTAACTGAATCCCGA
+GGCAAAATCACTCTTGATCGATCAACACACAACCCTTTGTCAAACACT
 	        </sequence>
-		</exampleSequences-sequences>
-	</exampleSequences-form>
-
-	<resource name="etvSequenceAssignment.blast">
-		<h3>Genus/Species assignment</h3>
-		<p>
-			<span class="label"></span> <span class="nov-genotype">{1}</span>
+      <sequence name="AM292468">
+GGGGATCCCATTGCAGATATGATTGACCAAACCGTGAACAATCAAGTGAATCGCTCCCTATC
+TGCATTGCAAGTACTACCCACAGCTGCCAATACTGAAGCAAGTAGTCACAGATTAGGCA
+CTGGTGTTGTGCCAGCACTACAGGCTGCGGAGACAGGGGCGTCATCAAATGCCAGTGA
+CAAGAACCTCATTGAAACTAGGTGTGTGCTGAATCATCACTCCACACAGGAGACGGCCAT
+TGGAAACTTCTTCAGCCGCGCCGGTTTGGTCAGCATTATCACAATGCCCACCACGGGCAC
+CCAGAACACGGATGGATATGTTAATTGGGATATTGATTTGATGGGGTACGCACAATTGCGGC
+GGAAGTGCGAATTGTTCACCTACATGCGCTTTGATGCCGAATTCACATTTGTCGTGGCCAAA
+CCCAACGGTGAATTAGTCCCTCAATTACTGCAGTACATGTATGTTCCACCAGGGGCCCCGAA
+ACCCACTTCCAGAGATTCATTCGCTTGGCAGACAGCCACCAACCCGTCTGTGTTTGTGAAA
+ATGACAGATCCTCCAGCCCAGGTGTCAGTTCCCTTCATGTCACCAGCCAGTGCGTACCAAT
+GGTTTTATGATGGCTACCCCACTTTCGGAGAGCACCTCCAAGCAAATGACCTAGATTATGGCC
+AATGCCCTAATAACATGATGGGCACCTTTAGCATTAGGACAGTGGGGACTGAGAAGTCACCA
+CACTCCATCACCCTGAGAGTGTACATGAGAATTAAGCACGTCAGGGCGTGGATACCAAGAC
+CTCTGAGAAACCAACCCTATTTGTTTAAGACTAACCCAAATTACAAAGGCAATGACATTAAGT
+GCACTAGCGCTAGCAGAGATAAGATCACAACTTTG
+	        </sequence>
+      <sequence name="EF095539">
+AGTTGTCGCGGACGGAGATCATCCCCCGGTTACCCCCTTTCGACGCGGGTACTGCGATA
+GTGCCACCCCAGTCTTTCCTACTCCCGACTCCCGACCCTAACCCAGGTTCCTCGGAACAG
+GAACACCAATTTACTCATCCCCTGGATGCCGACTAATCAGAGGAACGTCAGCATTTTCCGGC
+CCAGGCTAAGAGAAGTAGATAAGTTAGAATCCAAATTGATTTATCATCCCCTTGACGAATTCGC
+GTTGGAAAAACACCTCTCACTTGCCGCTCTTCACACCCATTAATTTAATTCGGCCTCTGTGTTG
+AGCCCCTTGTTGAAGTGTTTCCCTCCATCGCGACGTGGTTGGAGATCTAAGTCAACCGACTCC
+GACGAAACTACCATCATGCCTCCCCGATTATGTGATGCTTTCTGCCCTGCTGGGTGGAGCACC
+CTCGGGTTGAGAAAACCTTCTTCCTTTTTCCTTGGACTCCGGTCCCCCGGTCTAAGCCGCTCG
+GAATATGACAGG
+	        </sequence>
+    </exampleSequences-sequences>
+  </exampleSequences-form>
+  <resource name="etvSequenceAssignment.blast">
+    <h3>Genus/Species assignment</h3>
+    <p>
+      <span class="label"/>
+      <span class="nov-genotype">{1}</span>
+    </p>
+    <p><span class="label"/> Based on relative blast score of {2}.
 		</p>
-		<p>
-			<span class="label"></span> Based on relative blast score of {2}.
+  </resource>
+  <resource name="etvSequenceAssignment.phylo">
+    <h3>{1} assignment</h3>
+    <p>
+      <span class="label"/>
+      <span class="nov-genotype">{2}</span>
+    </p>
+    <p><span class="label"/> {3}
 		</p>
-	</resource>
-
-	<resource name="etvSequenceAssignment.phylo">
-		<h3>{1} assignment</h3>
-		<p>
-			<span class="label"></span> <span class="nov-genotype">{2}</span>
-		</p>
-		<p>
-			<span class="label"></span> {3}
-		</p>
-	</resource>
-
-	<resource name="etvTool.title">Enterovirus Genotyping Tool</resource>
-
-	<resource name="main.navigation.introduction">Introduction</resource>	
-	<resource name="main.navigation.subtypingProcess">(Sub)typing process</resource>
-	<resource name="main.navigation.tutorial">How to use</resource>
+  </resource>
+  <resource name="etvTool.title">Enterovirus Genotyping Tool</resource>
+  <resource name="main.navigation.introduction">Introduction</resource>
+  <resource name="main.navigation.subtypingProcess">(Sub)typing process</resource>
+  <resource name="main.navigation.tutorial">How to use</resource>
 </organism-settings>

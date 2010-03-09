@@ -3,23 +3,23 @@
 
 	<clusters>
 		<cluster id="CV-A11" name="Enterovirus C, serotype CV-A11">
-			<taxus name="CV-A11|AF081305" />
-			<taxus name="CV-A11|AF081301" />
+			<taxus name="CV-A11|AF499638" />
+			<taxus name="CV-A11|AF499636" />
 		</cluster>
 
 		<cluster id="CV-A13" name="Enterovirus C, serotype CV-A13">
-			<taxus name="CV-A13|AF465513" />
-			<taxus name="CV-A13|AF081303" />
+			<taxus name="CV-A13|DQ995639" />
+			<taxus name="CV-A13|AF499640" />
 		</cluster>
 
 		<cluster id="CV-A17" name="Enterovirus C, serotype CV-A17">
 			<taxus name="CV-A17|AB207263" />
-			<taxus name="CV-A17|AF081306" />
+			<taxus name="CV-A17|AF499639" />
 		</cluster>
 
 		<cluster id="CV-A20" name="Enterovirus C, serotype CV-A20">
-			<taxus name="CV-A20|AF081309" />
-			<taxus name="CV-A20|AY919448" />
+			<taxus name="CV-A20|AF499642" />
+			<taxus name="CV-A20|EF015013" />
 		</cluster>
 
 		<cluster id="CV-A21" name="Enterovirus C, serotype CV-A21">
@@ -28,18 +28,23 @@
 		</cluster>
 
 		<cluster id="CV-A22" name="Enterovirus C, serotype CV-A22">
-			<taxus name="CV-A22|AY919412" />
-			<taxus name="CV-A22|AF081310" />
+			<taxus name="CV-A22|DQ995647" />
+			<taxus name="CV-A22|AF499643" />
 		</cluster>
 
 		<cluster id="CV-A24" name="Enterovirus C, serotype CV-A24">
-			<taxus name="CV-A24|AF081347" />
-			<taxus name="CV-A24|AF081311" />
+			<taxus name="CV-A24|EF026081" />
+			<taxus name="CV-A24|D90457" />
 		</cluster>
 
 		<cluster id="EV-96" name="Enterovirus C, serotype EV-96">
-			<taxus name="EV-96|AY919472" />
+			<taxus name="EV-96|EF015886" />
 			<taxus name="EV-96|EF364404" />
+		</cluster>
+
+		<cluster id="EV-99" name="Enterovirus C, serotype EV-99">
+			<taxus name="EV-99|AY919447" />
+			<taxus name="EV-99|EF555644" />
 		</cluster>
 
 		<cluster id="PV-1" name="Poliovirus, serotype PV-1">
@@ -59,19 +64,15 @@
 
 		<!-- singletons in the end -->
 		<cluster id="CV-A1" name="Enterovirus C, serotype CV-A1">
-			<taxus name="CV-A1|AF081293" />
+			<taxus name="CV-A1|AF499635" />
 		</cluster>
 
 		<cluster id="CV-A19" name="Enterovirus C, serotype CV-A19">
-			<taxus name="CV-A19|AF081308" />
-		</cluster>
-
-		<cluster id="EV-99" name="Enterovirus C, serotype EV-99">
-			<taxus name="EV-99|AY919447" />
+			<taxus name="CV-A19|AF499641" />
 		</cluster>
 
 		<cluster id="EV-102" name="Enterovirus C, serotype EV-102">
-			<taxus name="EV-102|AY919409" />
+			<taxus name="EV-102|EF555645" />
 		</cluster>
 
 		<cluster id="enterovirus-B" name="Enterovirus B">
@@ -81,9 +82,9 @@
 
 	<analysis id="phylo-serotype" type="paup">
 		<identify>
-		  CV-A11, CV-A13, CV-A17, CV-A20, CV-A21, CV-A22, CV-A24, EV-96,
+		  CV-A11, CV-A13, CV-A17, CV-A20, CV-A21, CV-A22, CV-A24, EV-96, EV-99,
 		  PV-1, PV-2, PV-3,
-		  CV-A1, CV-A19, EV-99, EV-102,
+		  CV-A1, CV-A19, EV-102,
 		  enterovirus-B
 		</identify>
 		<cutoff>

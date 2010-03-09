@@ -56,8 +56,16 @@
     </cluster>
 
     <cluster id="hepatovirus" name="Hepatovirus">
-      <taxus name="AB279734" />
+      <taxus name="EF207320" />
+      <taxus name="X83302" />
+      <taxus name="M20273" />
       <taxus name="NC_001489" />
+      <taxus name="AY644676" />
+      <taxus name="AY644670AY032861" />
+      <taxus name="AB279734" />
+      <taxus name="AY644337" />
+      <taxus name="AB300205" />
+      <taxus name="AB279735" />
     </cluster>
 
     <cluster id="kobuvirus" name="Kobuvirus">
@@ -96,6 +104,15 @@
   </clusters>
 
   <analysis id="blast" type="blast">
+    <!-- cardiovirus -->
+    <regions taxus="NC_009448">
+      <region name="VP1" begin="2907" end="3794" />
+    </regions>
+
+    <regions taxus="NC_010810">
+      <region name="VP1" begin="2882" end="3700" />
+    </regions>
+
     <!-- A -->
     <regions taxus="NC_001612">
       <region name="VP1" begin="2442" end="3360" />
@@ -109,9 +126,9 @@
       <region name="VP1" begin="2394" end="3349" />
     </regions>
     
-	<regions taxus="U22521">
-	  <region name="VP1" begin="2445" end="3363" />
-	</regions>
+    <regions taxus="U22521">
+      <region name="VP1" begin="2445" end="3363" />
+    </regions>
 
     <!-- B -->
     <regions taxus="NC_001472">
@@ -154,6 +171,72 @@
 
     <regions taxus="NC_001430">
       <region name="VP1" begin="2359" end="3333" />
+    </regions>
+
+    <!-- hepatovirus -->
+    <regions taxus="EF207320">
+      <region name="VP1" begin="2161" end="3060" />
+    </regions>
+
+    <regions taxus="X83302">
+      <region name="VP1" begin="2179" end="3060" />
+    </regions>
+
+    <regions taxus="NC_001489">
+      <region name="VP1" begin="2208" end="3107" />
+    </regions>
+
+    <regions taxus="M20273">
+      <region name="VP1" begin="2200" end="3099" />
+    </regions>
+
+    <regions taxus="AY644676">
+      <region name="VP1" begin="2159" end="3058" />
+    </regions>
+
+    <regions taxus="AY644670AY032861">
+      <region name="VP1" begin="2158" end="3057" />
+    </regions>
+
+    <regions taxus="AB279734">
+      <region name="VP1" begin="2190" end="3089" />
+    </regions>
+
+    <regions taxus="AY644337">
+      <region name="VP1" begin="2144" end="3043" />
+    </regions>
+
+    <regions taxus="AB279735">
+      <region name="VP1" begin="2189" end="3088" />
+    </regions>
+
+    <regions taxus="AB300205">
+      <region name="VP1" begin="2190" end="3089" />
+    </regions>
+
+    <!-- kobuvirus -->
+    <regions taxus="NC_001918">
+      <region name="VP1" begin="3005" end="3838" />
+    </regions>
+
+    <!-- parechovirus -->
+    <regions taxus="NC_001897">
+      <region name="VP1" begin="2329" end="3018" />
+    </regions>
+
+    <!-- rhinovirus-A -->
+    <regions taxus="NC_001617">
+      <region name="VP1" begin="2341" end="3234" />
+    </regions>
+
+    <!-- rhinovirus-B -->
+    <regions taxus="NC_001490">
+      <region name="VP1" begin="2320" end="3196" />
+    </regions>
+
+    <!-- rhinovirus-C -->
+    <regions taxus="NC_009996">
+      <region name="VP1" begin="2305" end="3126" />
     </regions>
 
     <identify>
