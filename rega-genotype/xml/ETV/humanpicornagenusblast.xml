@@ -125,6 +125,14 @@
     <regions taxus="AF039205">
       <region namee="VP1" begin="2541" end="3338" />
     </regions>
+    
+    <regions taxus="AY466029">
+      <region name="VP1" begin="2403" end="3361" />
+    </regions>
+    
+    <regions taxus="AF524866">
+      <region name="VP1" begin="2405" end="3370" />
+    </regions>
 
     <!-- C -->
     <regions taxus="NC_001428">

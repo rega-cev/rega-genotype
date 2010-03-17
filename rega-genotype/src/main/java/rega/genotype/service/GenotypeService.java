@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+
 import rega.genotype.GenotypeTool;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.Settings;
@@ -52,6 +54,8 @@ public class GenotypeService extends HttpServlet {
 			throw new ServletException(e);
 		} catch (NoSuchMethodException e) {
 			throw new ServletException(e);
+		} finally {
+			FileUtils.deleteDirectory(workingDir);
 		}
 	}
 

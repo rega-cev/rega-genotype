@@ -314,12 +314,20 @@ public class BlastAnalysis extends AbstractAnalysis {
                         ReferenceTaxus referenceTaxus = referenceTaxa.get(values[1]);
                         if ((referenceTaxa.isEmpty() && values == best) || referenceTaxus != null) {
                         	refseq = referenceTaxus;
-                        	reverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
+                        	boolean queryReverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
+                        	boolean refReverseCompliment = Integer.parseInt(values[9]) - Integer.parseInt(values[8]) < 0;
                         	int offsetBegin = Integer.parseInt(values[6]);
                         	int offsetEnd = sequence.getLength() - Integer.parseInt(values[7]);
-                        	if (reverseCompliment) {
+                        	if (queryReverseCompliment) {
                         		offsetBegin = sequence.getLength() - offsetBegin;
                         		offsetEnd = sequence.getLength() - offsetEnd;
+                        		reverseCompliment = true;
+                        	}
+                        	if (refReverseCompliment) {
+                        		String tmp = values[8];
+                        		values[8] = values[9];
+                        		values[9] = tmp;
+                        		reverseCompliment = true;
                         	}
                         	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
                         	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
@@ -365,7 +373,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                     float score = Float.valueOf(best[11]);
                 	float pValue = Float.valueOf(best[10]);
                     if (maxPValue != null && pValue > maxPValue)
-                    	score = 0;
+                    	score = -1;
 
                     if (relativeCutoff) {
                    		if (secondBest != null)
