@@ -162,7 +162,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
                         "Subtype unassigned based on sequence &lt; 800bp, " +
                         "and not clustering with a pure subtype with bootstrap >70 %.");
             } else {
-                if ((pure.getSupportInner() - pure.getSupportOuter()) > -50) {
+                if ((pure.getSupportInner() - pure.getSupportOuter()) >= -30) {
                     // Rule 11
                     concludeRule("11",pure,
                             "Subtype assigned based on sequence &lt; 800bp, " +
@@ -180,29 +180,29 @@ public class HIV1SubtypeTool extends GenotypeTool {
     }
     
     private void rule1(Result pureResult, Result crfResult){
-    	pureRules("1", pureResult, crfResult, true);
+    	pureRules("1", pureResult, crfResult, true, false);
     }
 
     private void rule3b(Result crfPhyloResult){
-    	pureRules("5", crfPhyloResult, null, true);
+    	pureRules("5", crfPhyloResult, null, true, true);
     }
 
     private void rule2b(Result pureResult, Result crfResult){
-    	pureRules("6", pureResult, crfResult, false);
+    	pureRules("6", pureResult, crfResult, false, true);
     }
 
-    private void pureRules(String rule, Result pureResult, Result crfResult, boolean clearlyNoRecombination){
+    private void pureRules(String rule, Result pureResult, Result crfResult, boolean clearlyNoRecombination, boolean detectPureLike) {
     	String recombinationConclusion = clearlyNoRecombination ? 
     			"without recombination in the bootscan." : "without significant recombination in the bootscan.";
     	
     	if (pureResult.haveSupport()) {
-            if (crfResult != null && crfResult.haveSupport() && (crfResult.getSupportInner() > crfResult.getSupportOuter())) {
+            if (crfResult != null && crfResult.haveSupport() && (crfResult.getSupportInner() - crfResult.getSupportOuter() >= -30)) {
                 // Rule 1a pure (crf)
                 concludeRule(rule + "a", pureResult, crfResult,
                     "Subtype assigned based on sequence > 800 bps " +
                     "clustering with a pure subtype and CRF or sub-subtype with bootstrap > 70% " +
                     recombinationConclusion);  
-            } else if (pureResult.getSupportInner() > pureResult.getSupportOuter()) {
+            } else if (!detectPureLike || pureResult.getSupportInner() - pureResult.getSupportOuter() >= -30) {
             	// rule 1b 
                 concludeRule(rule + "b", pureResult,
                         "Subtype assigned based on sequence > 800 bps "
