@@ -49,7 +49,7 @@
 		<tutorial-text>
 			<text>
 			Up to 1000 sequences can be submitted at once to the BioAfrica HHV8 subtyping tool. 
-			<br/>
+			<br/><br/>
 			<b>The batch report</b> (figure1) contains information on the sequence name, length, 
 			assigned subtype and a figure of the HHV8 genome. 
 			Accessing the report link will take the user to a report of each submitted sequence. 
@@ -58,7 +58,7 @@
 			files/tutorial_1.gif
 			</figure>
 			<text>
-				<b>The sequence report</b>(figure 2) is composed of three areas named: sequence assignment,
+				<b>The sequence report</b> (figure 2) is composed of three areas named: sequence assignment,
 				analysis details and phylogenetic analyses. 
 				<br/> <br/>
 	
