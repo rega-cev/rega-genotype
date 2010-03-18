@@ -77,7 +77,7 @@
     <url-pattern>/GenotypePHYLO/*</url-pattern>
   </servlet-mapping>
   
-	<servlet>
+  <servlet>
     <servlet-name>GenotypeHCV</servlet-name>
     <display-name>HCV Genotyping</display-name>
     <description>HCV Genotyping</description>
@@ -89,7 +89,19 @@
     <url-pattern>/hcv/typingtool/*</url-pattern>
   </servlet-mapping>
   
-    <servlet>
+  <servlet>
+    <servlet-name>GenotypeHBV</servlet-name>
+    <display-name>HBV Genotyping</display-name>
+    <description>HBV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hbv.HbvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHBV</servlet-name>
+    <url-pattern>/hbv/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>Giardia</servlet-name>
     <display-name>Giardia Genotyping</display-name>
     <description>Giardia Genotyping</description>

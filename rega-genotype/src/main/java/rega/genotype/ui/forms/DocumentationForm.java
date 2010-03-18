@@ -77,7 +77,9 @@ public class DocumentationForm extends AbstractForm {
 
 		for(int i = 0; i<csvTable.numRows(); i++) {
 			for(int j = 0; j<csvTable.numColumns(); j++) {
-				table.getElementAt(i, j).addWidget(new WText(csvTable.valueAt(j, i)));
+				WText wt = new WText(csvTable.valueAt(j, i));
+				wt.setTextFormat(TextFormat.XHTMLText);
+				table.getElementAt(i, j).addWidget(wt);
 			}
 		}
 		return table;
