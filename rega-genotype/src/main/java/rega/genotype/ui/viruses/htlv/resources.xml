@@ -7,13 +7,13 @@
 	</main-form>
 	<start-form>
 		<title>
-		REGA HTLV Subtyping Tool Version 3.0
+		LASP HTLV-1 Subtyping Tool Version 3.0
 		</title>
 		<note>
 		This tool is designed to use phylogenetic methods in order to identify the subtype of a specific sequence.
 		The sequence is analysed for recombination using bootscanning methods.
 		<br/>
-		<b>Note for batch analysis:</b> The REGA subtype tool accepts up to {1} sequences at a time. 
+		<b>Note for batch analysis:</b> The LASP subtype tool accepts up to {1} sequences at a time. 
 		</note>
 	</start-form>
 	<monitor-form>
@@ -28,7 +28,7 @@
 	</details-form>
 	<howToCite-form>
 		<title>
-		How to Cite the REGA HTLV-1 Automated Subtyping Tool
+		How to Cite the LASP HTLV-1 Automated Subtyping Tool
 		</title>
 		<howToCite-text>
 			<text>
@@ -53,7 +53,7 @@
 			The first two areas, show the phylogenetic trees constructed with pure subtypes (part one) and CRFs forms (part two).
 			For sequences with more than 1.000 bp a bootscanning analysis is performed and a graphical result displayed,
 			for sequences below 1.000 bp the bootscanning is  replaced by phylogenetic signal analysis to determine if the alignment is well suitable for phylogenetic analysis.<br/>
-			Multiple sequences can be submitted to the REGA HTLV-1 subtyping tool.<br/>
+			Multiple sequences can be submitted to the LASP HTLV-1 subtyping tool.<br/>
 			<b>The batch report </b> (figure1) will be the batch report and contain information on the sequence name, length, assigned subtype and a figure of the HTLV-1 genome. Accessing the report link will take the user to a report to each submitted sequence.
 			</text>
 			<figure>
@@ -83,7 +83,7 @@
 	</tutorial-form>
 	<decisionTrees-form>
 		<title>
-			REGA HTLV-1 Subtying Classification Rules
+			LASP HTLV-1 Subtying Classification Rules
 		</title>
 		<decisionTrees-text>
 			<header>
@@ -180,7 +180,7 @@
 	</subtypingProcess-form>
 	<exampleSequences-form>
 		<title>
-			Example Sequences for the REGA HTLV Subtyping Tool 
+			Example Sequences for the LASP HTLV-1 Subtyping Tool 
 		</title>
 		<exampleSequences-sequences>
 			<sequence name="HTLV24_DQ005565">
@@ -244,11 +244,11 @@ CCGTTGGCTCGGAGCCAGCGACAGCCCATTCTAG
 	</exampleSequences-form>
 	<contactUs-form>
 		<title>
-			Contact the developers of the REGA HTLV-1 &amp; 2 subtyping tool
+			Contact the developers of the LASP HTLV-1 &amp; 2 subtyping tool
 		</title>
 		<contactUs-text>
 			<text>
-				The REGA HTLV-1 Subtyping tool is developed and mantained by Tulio de Oliveira, Koen Deforche, Sharon Cassol, Andrew Rambaut and Anne-Mieke Vandamme.
+				The LASP HTLV-1 Subtyping tool is developed and mantained by Tulio de Oliveira, Koen Deforche, Sharon Cassol, Andrew Rambaut and Anne-Mieke Vandamme.
 				<br/>
 				<br/>
 				<b>Suggestions or problems on the program please contact:</b><br/>
