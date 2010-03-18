@@ -40,7 +40,7 @@ public class HHV8Tool extends GenotypeTool {
             if (result.getCluster().getId().equals("1")) 
             	if  (result.getStart() < 1000) {
                 hhv8subtypetool.analyze(s);
-                conclude(result, "K1 region Identified with BLAST score > 200");
+                //conclude(result, "K1 region Identified with BLAST score > 200");
             	}
                 else
                 conclude(result, "HHV8 genomic region not supported for subtyping analysis identified with BLAST score > 200");
