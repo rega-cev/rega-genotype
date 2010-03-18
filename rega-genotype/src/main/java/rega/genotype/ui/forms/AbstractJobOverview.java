@@ -259,8 +259,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				};
 				jobResource.suggestFileName(jobDir.getName() + ".zip");
 				jobFileDownload.setRef(jobResource.generateUrl());
+				
+				downloadResultsContainer.setHidden(filter!=null);
 			}
-			downloadResultsContainer.setHidden(filter!=null);
+			
 		}
 	}
 
