@@ -5,7 +5,6 @@ PRIORITY
 * check the jobDir whether it exists, if not give an appropriate error message
 * google find the subtypetool (meta content)
 * HIV/HTLV report bootstrap is not showing
-* wrong assignment HTLV
 
 LATER
 * WMessage args, WAnchors
