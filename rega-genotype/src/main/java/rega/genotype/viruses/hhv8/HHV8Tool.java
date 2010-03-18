@@ -25,7 +25,7 @@ public class HHV8Tool extends GenotypeTool {
 
     
     public HHV8Tool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hhv8 = readAnalyses("hhv8blast.xml", workingDir);
+        hhv8 = readAnalyses("HHV8/hhv8blast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hhv8.getAnalysis("blast");
         
         hhv8subtypetool = new HHV8SubtypeTool(workingDir);
