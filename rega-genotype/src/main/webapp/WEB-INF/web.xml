@@ -86,7 +86,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeHCV</servlet-name>
-    <url-pattern>/GenotypeHCV/*</url-pattern>
+    <url-pattern>/hcv/typingtool/*</url-pattern>
   </servlet-mapping>
   
     <servlet>
