@@ -62,7 +62,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeHTLV</servlet-name>
-    <url-pattern>/GenotypeHTLV/*</url-pattern>
+    <url-pattern>/htlv/typingtool/*</url-pattern>
   </servlet-mapping>
   
     <servlet>
