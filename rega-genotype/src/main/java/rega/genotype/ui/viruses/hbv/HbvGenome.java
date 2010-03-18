@@ -27,19 +27,19 @@ public class HbvGenome extends DefaultGenomeAttributes {
 	}
 	
 	public int getGenomeEnd() {
-		return 9600;
+		return 3250;
 	}
 
 	public int getGenomeStart() {
-		return 1;
+		return 0;
 	}
 
 	public int getGenomeImageEndX() {
-		return 576;
+		return 580;
 	}
 
 	public int getGenomeImageStartX() {
-		return 4;
+		return -4;
 	}
 
 	public int getGenomeImageEndY() {

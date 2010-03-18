@@ -52,7 +52,7 @@
 		<tutorial-text>
 			<text>
 			Multiple sequences can be submitted to the Oxford HBV subtyping tool.
-			<br/>
+			<br/><br/>
 			<b>The batch report</b> (figure1) will be the batch report and contain information on the sequence name, length, assigned subtype and a figure of the HBV genome. 
 			Accessing the report link will take the user to a report to each submitted sequence. 
 			</text>
