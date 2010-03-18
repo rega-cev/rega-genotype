@@ -100,5 +100,17 @@
     <servlet-name>Giardia</servlet-name>
     <url-pattern>/giardia/typingtool/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>HHV8</servlet-name>
+    <display-name>HHV8 Genotyping</display-name>
+    <description>HHV8 Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hhv8.Hhv8Main</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>HHV8</servlet-name>
+    <url-pattern>/hhv8/typingtool/*</url-pattern>
+  </servlet-mapping>
 </web-app>
 
