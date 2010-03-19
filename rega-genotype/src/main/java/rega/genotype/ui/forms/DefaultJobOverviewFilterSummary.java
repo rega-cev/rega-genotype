@@ -84,6 +84,9 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 		}
 		
 		public void setData(String header, String valueS) {
+			if(valueS == null)
+				return;
+			
 			double value = Double.parseDouble(valueS);
 			
 			Average average = averageMap.get(header);
@@ -112,12 +115,14 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 				WString header = ((WText)table.getElementAt(i + 2, 0).getChildren().get(0)).getText();
 				Average average = averageMap.get(header.getKey());
 				table.getElementAt(i + 2, 1).clear();
-				table.getElementAt(i + 2, 1).addWidget(new WText(formatter.format(average.total/nrSequences)));
+				table.getElementAt(i + 2, 1).addWidget(new WText(
+						average.total == null ? "n/a" : formatter.format(average.total/nrSequences)));
 				table.getElementAt(i + 2, 2).clear();
-				table.getElementAt(i + 2, 2).addWidget(new WText("(" + formatter.format(average.min)
-						+ " - " + formatter.format(average.max) + ")"));
+				table.getElementAt(i + 2, 2).addWidget(new WText(average.min == null ? "n/a" :
+						"(" + formatter.format(average.min)	+ " - " + formatter.format(average.max) + ")"));
 
-				model.setItem(0, i + 1, new WStandardItem(formatter.format(average.total/nrSequences)));
+				model.setItem(0, i + 1, new WStandardItem(
+						average.total == null ? "n/a" : formatter.format(average.total/nrSequences)));
 			}
 		}
 		

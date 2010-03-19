@@ -89,7 +89,7 @@ public class NoVTool extends GenotypeTool {
 			 * If no conclusion: conclude the blast result
 			 */
     		if (!haveConclusion)
-    			conclude(blastResult, "Assigned based on BLAST p-Value &lt;= 1E-5");
+    			conclude(blastResult, "Assigned based on BLAST p-value &lt; 1E-5");
         } else {
             conclude("Unassigned", "Unassigned because of BLAST p-Value &gt; 1E-5");
         }

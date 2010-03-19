@@ -33,24 +33,24 @@ public class GiardiaSequenceAssignmentForm extends IDetailsForm {
 		block.setId("");
 
 		WText t = new WText(tr("defaultSequenceAssignment.name-length")
-				.arg(p.getEscapedValue("genotype_result.sequence[name]"))
-				.arg(p.getEscapedValue("genotype_result.sequence[length]")), block);
+				.arg(p.getEscapedValue("/genotype_result/sequence/@name"))
+				.arg(p.getEscapedValue("/genotype_result/sequence/@length")), block);
 		t.setId("");
 
-		boolean hasAssignment = p.getEscapedValue("genotype_result.sequence.conclusion.assigned.support") != null;
+		boolean hasAssignment = p.elementExists("/genotype_result/sequence/conclusion/assigned/support");
 		String assignedId = "-";
 		for (String region : GiardiaGenome.regions) {
-			String phyloResult = p.getEscapedValue("genotype_result.sequence.result['phylo-" + region + "'].best.id");
+			String phyloResult = p.getEscapedValue("/genotype_result/sequence/result[@id='phylo-" + region + "']/best/id");
 			if (phyloResult != null) {
 				if (hasAssignment)
 					assignedId = phyloResult;
 
-				WString motivation = new WString(p.getEscapedValue("genotype_result.sequence.conclusion.motivation"));
-				motivation.arg(p.getValue("genotype_result.sequence.conclusion.assigned.support"));
+				WString motivation = new WString(p.getEscapedValue("/genotype_result/sequence/conclusion/motivation"));
+				motivation.arg(p.getValue("/genotype_result/sequence/conclusion/assigned/support"));
 
 				t = new WText(tr("sequenceAssignment.phylo")
 						.arg(region)
-						.arg(p.getValue("genotype_result.sequence.conclusion.assigned.name"))
+						.arg(p.getValue("/genotype_result/sequence/conclusion/assigned/name"))
 						.arg(motivation), block);
 				t.setId("");
 			}
@@ -59,9 +59,9 @@ public class GiardiaSequenceAssignmentForm extends IDetailsForm {
 		t = new WText("<h3>Genome region</h3>", block);
 		t.setId("");
 
-		int start = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
-		int end = Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
-		String region = p.getValue("genotype_result.sequence.result['blast'].cluster.id");
+		int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+		int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+		String region = p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id");
 
 		if (region != null) {
 			System.err.println(region);

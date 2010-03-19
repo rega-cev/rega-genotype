@@ -148,6 +148,7 @@ public class GenotypeWindow extends WContainerWidget
 		try {
 			return new DocumentationForm(this, name, content);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

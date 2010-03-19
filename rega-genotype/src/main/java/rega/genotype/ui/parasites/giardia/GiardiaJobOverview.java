@@ -46,14 +46,14 @@ public class GiardiaJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		List<WWidget> data = new ArrayList<WWidget>();
 
-		data.add(new WText(new WString(p.getEscapedValue("genotype_result/sequence/@name"))));
-		data.add(new WText(new WString(p.getEscapedValue("genotype_result/sequence/@length"))));
+		data.add(new WText(new WString(p.getEscapedValue("/genotype_result/sequence/@name"))));
+		data.add(new WText(new WString(p.getEscapedValue("/genotype_result/sequence/@length"))));
 		data.add(createReportLink(p));
 
-		boolean hasAssignment = p.getEscapedValue("genotype_result/sequence/conclusion/assigned/support") != null;
+		boolean hasAssignment = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/support") != null;
 		String assignedId = "-";
 		for (String region : GiardiaGenome.regions) {
-			String phyloResult = p.getEscapedValue("genotype_result/sequence/result[@id='phylo-" + region + "']/best/id");
+			String phyloResult = p.getEscapedValue("/genotype_result/sequence/result[@id='phylo-" + region + "']/best/id");
 			if (phyloResult != null)
 				if (hasAssignment) {
 					assignedId = phyloResult;
@@ -67,7 +67,7 @@ public class GiardiaJobOverview extends AbstractJobOverview {
 		int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
 		int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
 		final int sequenceIndex = p.getSequenceIndex();
-		String region = p.getValue("genotype_result/sequence/result[@id='blast']/cluster/id");
+		String region = p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id");
 
 		if (region != null) {
 			start = GiardiaGenome.mapToImageGenome(start, region);

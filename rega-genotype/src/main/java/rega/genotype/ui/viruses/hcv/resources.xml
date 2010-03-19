@@ -17,18 +17,14 @@
 		</note>
 	</start-form>
 	<monitor-form>
-		<title>
-		Oxford HCV Genotyping Results
-		</title>
+		<title>Oxford HCV Genotyping Results</title>
+		<title-filtered>Oxford HCV Genotyping Results: {1} assignments</title-filtered>
 	</monitor-form>
 	<details-form>
 		<title>
 		Oxford HCV Genotyping Details
 		</title>
 	</details-form>
-	<recombination-form>
-		<title>Oxford HCV Recombination Details</title>
-	</recombination-form>
 	<howToCite-form>
 		<title>
 		How to Cite the Oxford HCV Automated Subtyping Tool

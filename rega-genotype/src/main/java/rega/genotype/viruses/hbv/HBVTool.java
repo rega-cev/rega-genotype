@@ -25,7 +25,7 @@ public class HBVTool extends GenotypeTool {
 
     
     public HBVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hbv = readAnalyses("hbvblast.xml", workingDir);
+        hbv = readAnalyses("HBV/hbvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hbv.getAnalysis("blast");
         
         hbvsubtypetool = new HBVSubtypeTool(workingDir);

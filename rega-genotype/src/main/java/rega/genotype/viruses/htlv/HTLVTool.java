@@ -40,7 +40,7 @@ public class HTLVTool extends GenotypeTool {
             if (result.getCluster().getId().equals("1")) 
             	if  (result.getStart() < 750) {
                 htlv1subtypetool.analyze(s);
-                conclude(result, "LTR region Identified with BLAST score > 200");
+                ///conclude(result, "LTR region Identified with BLAST score > 200");
             	}
                 else
                 conclude(result, "HTLV1 genomic region not supported for subtyping analysis identified with BLAST score > 200");

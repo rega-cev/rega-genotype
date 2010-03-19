@@ -32,8 +32,12 @@ public class JobForm extends AbstractForm {
 		addWidget(details);
 		this.jobOverview = jobOverview;
 		addWidget(jobOverview);
-		recombination = new RecombinationForm(main);
-		addWidget(recombination);
+		try {
+			recombination = new RecombinationForm(main);
+			addWidget(recombination);
+		} catch (RuntimeException e) {
+			
+		}
 		error = new WText();
 		addWidget(error);
 		
@@ -78,7 +82,9 @@ public class JobForm extends AbstractForm {
 				
 				WString errorMsg;
 				WWidget widget;
-				if (detailed.startsWith(RecombinationForm.URL) && detailed.length() > RecombinationForm.URL.length() + 1) {
+				if (detailed.startsWith(RecombinationForm.URL) 
+						&& detailed.length() > RecombinationForm.URL.length() + 1
+						&& recombination != null) {
 					String type = detailed.substring(RecombinationForm.URL.length() + 1);
 					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId, type);
 					widget = recombination;

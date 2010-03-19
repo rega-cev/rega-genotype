@@ -25,7 +25,7 @@ public class HHV8Tool extends GenotypeTool {
 
     
     public HHV8Tool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hhv8 = readAnalyses("hhv8blast.xml", workingDir);
+        hhv8 = readAnalyses("HHV8/hhv8blast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hhv8.getAnalysis("blast");
         
         hhv8subtypetool = new HHV8SubtypeTool(workingDir);
@@ -40,7 +40,7 @@ public class HHV8Tool extends GenotypeTool {
             if (result.getCluster().getId().equals("1")) 
             	if  (result.getStart() < 1000) {
                 hhv8subtypetool.analyze(s);
-                conclude(result, "K1 region Identified with BLAST score > 200");
+                //conclude(result, "K1 region Identified with BLAST score > 200");
             	}
                 else
                 conclude(result, "HHV8 genomic region not supported for subtyping analysis identified with BLAST score > 200");

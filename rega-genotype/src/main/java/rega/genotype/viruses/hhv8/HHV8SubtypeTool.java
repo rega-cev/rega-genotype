@@ -24,7 +24,7 @@ public class HHV8SubtypeTool extends GenotypeTool {
 
 
     public HHV8SubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
-        hhv8 = readAnalyses("hhv8K1.xml", workingDir);
+        hhv8 = readAnalyses("HHV8/hhv8K1.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hhv8.getAnalysis("pure-puzzle");
 
     }
