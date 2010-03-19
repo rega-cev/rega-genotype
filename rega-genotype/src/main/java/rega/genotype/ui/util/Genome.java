@@ -81,8 +81,8 @@ public class Genome {
 		    scanWindowSize = w[0]*2;
 		    scanStepSize = w[1] - w[0];
 		} else {
-			w = new int[]{start};
-			assign = new String[]{genotype};
+			w = new int[0];
+			assign = new String[0];
 			scanWindowSize = 0;
 			scanStepSize = 0;
 		}
