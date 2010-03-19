@@ -43,12 +43,10 @@ public class HbvGenome extends DefaultGenomeAttributes {
 	}
 
 	public int getGenomeImageEndY() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 
 	public int getGenomeImageStartY() {
-		// TODO Auto-generated method stub
 		return 120;
 	}
 }
