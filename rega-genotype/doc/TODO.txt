@@ -9,8 +9,18 @@ PRIORITY
 LATER
 * WMessage args, WAnchors
   ??
-* reference alignment table, add support for *_URL colomn name
 
 * remove treegraph dependency (figtree?)
+
+* htlv 	-> tutorial, decision trees, subtyping process, contact us 
+		-> filter overview -> error brackets ( in url
+* hpv (add web ui + doc)
+* no introduction-form exception
+* is title-filtered field allways nececessary?
+* doc rule css
+* example seqs formatting
+* upload file, # seqs in fasta > # allowed seqs -> no message, just nothing happens
+
+
   
   
