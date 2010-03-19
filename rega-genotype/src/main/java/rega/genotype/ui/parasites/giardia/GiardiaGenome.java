@@ -17,7 +17,6 @@ import rega.genotype.ui.util.DefaultGenomeAttributes;
  * Enterovirus genome map drawing implementation.
  */
 public class GiardiaGenome extends DefaultGenomeAttributes {
-	private Map<String, Color> colorMap = new HashMap<String, Color>();
 	private OrganismDefinition od;
 	
 	public static String regions[] = { "16S", "B-giardin", "GDH", "TPI" };
@@ -27,21 +26,17 @@ public class GiardiaGenome extends DefaultGenomeAttributes {
 	public GiardiaGenome(OrganismDefinition od) {
 		super();
 		
-		colorMap.put("-", new Color(0xff, 0xff, 0xff));
-		colorMap.put("A", new Color(0xff, 0x33, 0x00));
-		colorMap.put("AIII", new Color(0xff, 0x66, 0x00));
-		colorMap.put("B", new Color(0x00, 0x33, 0xcc));
-		colorMap.put("C", new Color(0x00, 0x99, 0x00));
-		colorMap.put("D", new Color(0x00, 0xff, 0x00));
-		colorMap.put("E", new Color(0xff, 0xff, 0x00));
-		colorMap.put("F", new Color(0xff, 0x00, 0xff));
-		colorMap.put("G", new Color(0xcc, 0x66, 0x00));
+		getColors().put("-", new Color(0xff, 0xff, 0xff));
+		getColors().put("A", new Color(0xff, 0x33, 0x00));
+		getColors().put("AIII", new Color(0xff, 0x66, 0x00));
+		getColors().put("B", new Color(0x00, 0x33, 0xcc));
+		getColors().put("C", new Color(0x00, 0x99, 0x00));
+		getColors().put("D", new Color(0x00, 0xff, 0x00));
+		getColors().put("E", new Color(0xff, 0xff, 0x00));
+		getColors().put("F", new Color(0xff, 0x00, 0xff));
+		getColors().put("G", new Color(0xcc, 0x66, 0x00));
 		
 		this.od = od;
-	}
-	
-	public Map<String, Color> COLORS() {
-		return colorMap;
 	}
 
 	public int getGenomeEnd() {
