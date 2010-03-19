@@ -124,5 +124,17 @@
     <servlet-name>HHV8</servlet-name>
     <url-pattern>/hhv8/typingtool/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>GenotypeHPV</servlet-name>
+    <display-name>HPV Genotyping</display-name>
+    <description>HPV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hpv.HpvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHPV</servlet-name>
+    <url-pattern>/hpv/typingtool/*</url-pattern>
+  </servlet-mapping>
 </web-app>
 

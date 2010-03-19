@@ -25,7 +25,7 @@ public class HPVTool extends GenotypeTool {
 
     
     public HPVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hpv = readAnalyses("hpvblast.xml", workingDir);
+        hpv = readAnalyses("HPV/hpvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hpv.getAnalysis("blast");
         
         hpvsubtypetool = new HPVSubtypeTool(workingDir);
@@ -40,7 +40,7 @@ public class HPVTool extends GenotypeTool {
             if (result.getCluster().getId().equals("1")) 
             	if  (result.getStart() > 5000 && result.getEnd() <7000) {
                 hpvsubtypetool.analyze(s);
-                conclude(result, "L1 ORF region Identified with BLAST score > 200");
+//                conclude(result, "L1 ORF region Identified with BLAST score > 200");
             	}
                 else
                 conclude(result, "HPV genomic region not supported for subtyping analysis identified with BLAST score > 200");

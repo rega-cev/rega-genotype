@@ -14,7 +14,11 @@ LATER
 
 * htlv 	-> tutorial, decision trees, subtyping process, contact us 
 		-> filter overview -> error brackets ( in url
-* hpv (add web ui + doc)
+
+* hpv:
+ - 'subtyping process', classification.csv table is not working
+ - two genomes on details form
+
 * no introduction-form exception
 * is title-filtered field allways nececessary?
 * doc rule css
