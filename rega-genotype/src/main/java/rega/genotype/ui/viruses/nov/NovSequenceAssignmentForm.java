@@ -97,6 +97,7 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 		});
 
 		genome.setId("");
+		block.addWidget(genome);
 
 		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
 		refSeq.arg(start);
