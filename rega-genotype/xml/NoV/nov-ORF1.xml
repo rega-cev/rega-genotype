@@ -274,7 +274,7 @@
 			quit;
     </block>
 		<options>
-			log,alignment,tree,inner,outer
+			log,alignment,tree
     </options>
 	</analysis>
 
@@ -304,7 +304,7 @@
 			quit;
     </block>
 		<options>
-			log,alignment,tree,inner,outer
+			log,alignment,tree
     </options>
 	</analysis>
 
