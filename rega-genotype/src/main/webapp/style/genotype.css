@@ -287,18 +287,18 @@ a, .link{
 	font-style:italic;
 }
 
-table.files_referenceSequences-csv{
+table.csv {
 	width: 800px;
 	empty-cells: hide;
 	margin-left: auto;
 	margin-right: auto;
 }
-table.files_referenceSequences-csv td{
+table.csv td, table.csv td{
 	padding: 0.2em;
 	background-color: rgb(240,240,240);
 	border: 2px solid white;
 }
-table.files_referenceSequences-csv tr:first-child td{
+table.csv tr:first-child td{
 	color: white;
 	background-color: darkblue;
 }

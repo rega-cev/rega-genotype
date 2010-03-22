@@ -73,7 +73,7 @@ public class DocumentationForm extends AbstractForm {
 						), false);
 		WTable table = new WTable(parent);
 		table.setId("");
-		table.setStyleClass(getCssClass(csvFile));
+		table.setStyleClass("csv "+ getCssClass(csvFile));
 
 		for(int i = 0; i<csvTable.numRows(); i++) {
 			for(int j = 0; j<csvTable.numColumns(); j++) {
