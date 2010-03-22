@@ -41,7 +41,7 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 		if (!blastConclusion.equals(NovResults.NA)) {
 			t = new WText(tr("nrvSequenceAssignment.blast")
 					.arg(blastConclusion)
-					.arg(NovResults.getBlastMotivation(p)), block);
+					.arg(""), block);
 			t.setId("");
 		}
 

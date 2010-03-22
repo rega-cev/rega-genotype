@@ -63,10 +63,4 @@ public class NovResults {
 	public static String getBlastConclusion(GenotypeResultParser p) {
 		return p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
 	}
-
-	public static String getBlastMotivation(GenotypeResultParser p) {
-		return p.elementExists("/genotype_result/sequence/conclusion")
-		? p.getEscapedValue("/genotype_result/sequence/conclusion/motivation")
-		: "";
-	}
 }
