@@ -5,6 +5,7 @@ import java.util.EnumSet;
 
 import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.framework.widgets.TableView;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Side;
@@ -15,14 +16,12 @@ import eu.webtoolkit.jwt.ViewItemRenderFlag;
 import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAbstractItemModel;
 import eu.webtoolkit.jwt.WBrush;
-import eu.webtoolkit.jwt.WBrushStyle;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
-import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.chart.LabelOption;
@@ -38,7 +37,7 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 	
 	private double total = 0;
 	
-	private class SummaryTableView extends WTableView {
+	private class SummaryTableView extends TableView {
 		public SummaryTableView(final WAbstractItemModel model,
 				WContainerWidget parent) {
 			super(parent);
