@@ -101,6 +101,11 @@
 				</descriptors>
 				<appendAssemblyId>true</appendAssemblyId>
 				<attach>true</attach>
+				<archive>
+					<manifest>
+              			<mainClass>rega.genotype.GenotypeTool</mainClass>
+                	</manifest>
+                </archive>
 			</configuration>
 			<executions>
 				<execution>
