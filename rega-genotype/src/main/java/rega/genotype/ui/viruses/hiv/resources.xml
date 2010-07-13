@@ -5,10 +5,10 @@
 		Rega HIV subtyping tool V.3 is maintained by: Tulio de Oliveira, Pieter Libin, Koen Deforche, Sharon Cassol and Anne-Mieke Vandamme.
 		</footer>
 	</main-form>
+
 	<start-form>
-		<title>
-		REGA HIV Subtyping Tool Version 3.0
-		</title>
+		<title>REGA HIV Subtyping Tool Version 3.0</title>
+
 		<note>
 		This tool is designed to use phylogenetic methods in order to identify the subtype of a specific sequence.
 		The sequence is analysed for recombination using bootscanning methods.
@@ -16,20 +16,22 @@
 		<b>Note for batch analysis:</b> The REGA subtype tool accepts up to {1} sequences at a time. 
 		</note>
 	</start-form>
+
 	<monitor-form>
-		<title>
-		HIV Genotyping Tool Results
-		</title>
+		<title>HIV Genotyping Tool Results</title>
+		<title-filtered>HIV Genotyping Tool Results: {1} assignments</title-filtered>
 	</monitor-form>
+
 	<details-form>
-		<title>
-		HIV Genotyping Details
-		</title>
+		<title>HIV Genotyping Details</title>
 	</details-form>
+
+	<recombination-form>
+		<title>HIV Recombination Details</title>
+	</recombination-form>
+	
 	<howToCite-form>
-		<title>
-		How to Cite the REGA HIV-1 Automated Subtyping Tool
-		</title>
+		<title>How to Cite the REGA HIV-1 Automated Subtyping Tool</title>
 		<howToCite-text>
 			<text>
 				<b>These REGA HIV-1 subtyping tool version 3 is not yet published.</b> 

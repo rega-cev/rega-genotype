@@ -8,7 +8,7 @@ package rega.genotype.ui.forms.details;
 import java.io.File;
 
 import rega.genotype.SequenceAlignment;
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
@@ -16,10 +16,13 @@ import rega.genotype.ui.util.AlignmentResource;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * A default extension of IDetailsForm for visualizing phylogenetic details, used by different virus implementations.
@@ -43,7 +46,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		initPhyloSection(p, commentTitle, jobDir, phyloPath);
 	}
 	
-	private void initPhyloSection(GenotypeResultParser p, WString header, File jobDir, String phyloPath) {
+	private void initPhyloSection(GenotypeResultParser p, WString header, final File jobDir, String phyloPath) {
 		WWidget w;
 		w = new WText(header, this);
 		w.setId("");
@@ -51,28 +54,46 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		WListContainerWidget ul = new WListContainerWidget(this);
 		ul.setId("");
 		WContainerWidget li;
-		li = ul.addItem(new WText("Bootstrap support: " + p.getValue(phyloPath + ".best.support")));
+		
+		String inner = p.getValue(phyloPath + "/best/inner");
+		String outer = p.getValue(phyloPath + "/best/outer");
+		
+		if (inner != null && outer != null)
+			li = ul.addItem(new WText("Bootstrap support: " + p.getValue(phyloPath + "/best/support")
+					+ ", bootstrap inside " + inner + ", bootstrap outside " + outer));
+		else
+			li = ul.addItem(new WText("Bootstrap support: " + p.getValue(phyloPath + "/best/support")));
 		
 		li = ul.addItem(new WText("Download the alignment ("));
 		li.addWidget(GenotypeLib.getAnchor("NEXUS format",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")), null));
+				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/alignment")).getAbsolutePath()), null));
 		li.addWidget(w = new WText(", "));
 		w.setId("");
 		li.addWidget(GenotypeLib.getAnchor("FASTA format",
 				"application/txt",
-				new AlignmentResource(GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".alignment")),
+				new AlignmentResource(GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/alignment")),
 						SequenceAlignment.SEQUENCE_ANY, SequenceAlignment.FILETYPE_FASTA), "alignment.fasta"));
 		li.addWidget(w= new WText(")"));
 		w.setId("");
 
-		WAnchor anchorTreePdf = GenotypeLib.getAnchor("PDF",
-				"application/pdf",
-				GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))), null);
+		final String treeFile = p.getValue(phyloPath+"/tree");
+		WAnchor anchorTreePdf = GenotypeLib.getAnchor("PDF", "application/pdf", new WFileResource("", "") {
+			@Override
+			public void handleRequest(WebRequest request, WebResponse response) {
+				if (getFileName().equals("")) {
+					File file = GenotypeLib.getTreePDF(jobDir, GenotypeLib.getFile(jobDir, treeFile));
+					setFileName(file.getAbsolutePath());
+				}
+				super.handleRequest(request, response);
+			}
+	
+		}, null);
+
 		anchorTreePdf.setObjectName("pdf-tree");
 		WAnchor anchorTreeNexus = GenotypeLib.getAnchor("NEXUS Format",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree")),null);
+				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/tree")).getAbsolutePath()), null);
 		anchorTreeNexus.setObjectName("nexus-tree");
 
 		if (!showTree) {
@@ -89,9 +110,19 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 			li.addWidget(anchorTreeNexus);
 			li.addWidget(w = new WText("):"));
 			w.setId("");
+			final String tree = p.getValue(phyloPath + "/tree");
 
-			WImage treePng = GenotypeLib.getWImageFromFile
-				(GenotypeLib.getTreePNG(jobDir, GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".tree"))));
+			WImage treePng = GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
+				@Override
+				public void handleRequest(WebRequest request, WebResponse response) {
+					if (getFileName().isEmpty()) {
+						File file = GenotypeLib.getTreePNG(jobDir, GenotypeLib.getFile(jobDir, tree));
+						setFileName(file.getAbsolutePath());
+					}
+					super.handleRequest(request, response);
+				}				
+			});
+
 			treePng.setId("");
 			treePng.setStyleClass("phyloTree");
 			li.addWidget(treePng);
@@ -100,7 +131,7 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		li = ul.addItem(new WText("View the "));
 		li.addWidget(GenotypeLib.getAnchor("PAUP* Log file",
 				"application/txt",
-				GenotypeLib.getFile(jobDir, p.getValue(phyloPath+".log")), "paup-log.doc"));
+				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/log")).getAbsolutePath()), "paup-log.doc"));
 		li.addWidget(w = new WText(" (Contains bootstrap values)"));
 		w.setId("");
 	}

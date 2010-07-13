@@ -157,7 +157,7 @@ Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6
     </options>
   </analysis>
 
-  <analysis id="scan" type="scan">
+  <analysis id="scan-pure" type="scan">
     <window>
       500
     </window>
@@ -190,7 +190,7 @@ Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6
       <options>data-all</options>
   </analysis>
 
-  <analysis id="crfscan" type="scan">
+  <analysis id="scan-crf" type="scan">
     <window>
       400
     </window>

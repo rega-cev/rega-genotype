@@ -12,8 +12,8 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -21,6 +21,7 @@ import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.viruses.nov.NoVTool;
 import eu.webtoolkit.jwt.WString;
 
@@ -28,7 +29,7 @@ import eu.webtoolkit.jwt.WString;
  * NoV OrganismDefinition implementation.
  */
 public class NovDefinition implements OrganismDefinition {
-	private NovGenome genome = new NovGenome(this);
+	private Genome genome = new Genome(new NovGenome(this));
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
 		NoVTool nrvTool = new NoVTool(jobDir);
@@ -44,8 +45,8 @@ public class NovDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/nov/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable table) throws IOException {
-		return new NovTableGenerator(table);
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
+		return new NovTableGenerator(jobOverview, table);
 	}
 
 	public Genome getGenome() {
@@ -57,16 +58,16 @@ public class NovDefinition implements OrganismDefinition {
 	}
 
 	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms, String region) {
-		String result = "genotype_result.sequence.result";
+		String result = "/genotype_result/sequence/result";
 		
-		String phyloResult = result + "['phylo-" + region + "']";
+		String phyloResult = result + "[@id='phylo-" + region + "']";
 		if (p.elementExists(phyloResult)) {
 			WString title = new WString("Phylogenetic analyses (" + region + ")");
 			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
 
-			String bestGenotype = p.getEscapedValue(phyloResult + ".best.id");
+			String bestGenotype = GenotypeLib.getEscapedValue(p, phyloResult + "/best/id");
 			
-			String variantResult = result + "['phylo-" + region + "-" + bestGenotype + "']";
+			String variantResult = result + "[@id='phylo-" + region + "-" + bestGenotype + "']";
 			if (p.elementExists(variantResult)) {
 				WString variantTitle = new WString("Phylogenetic analyses (" + region + ") for variant within "
 						+ bestGenotype);
@@ -94,5 +95,13 @@ public class NovDefinition implements OrganismDefinition {
 
 	public boolean haveDetailsNavigationForm() {
 		return false;
+	}
+
+	public Genome getLargeGenome() {
+		return getGenome();
+	}
+
+	public String getProfileScanType(GenotypeResultParser p) {
+		return null;
 	}
 }

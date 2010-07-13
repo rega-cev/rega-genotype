@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import rega.genotype.AbstractAnalysis.Result;
-import rega.genotype.AbstractAnalysis.Scannable;
-
 /**
  * A sliding window version of a wrapped analysis.
  * 
@@ -32,6 +29,7 @@ public class ScanAnalysis extends AbstractAnalysis {
     public class Result extends AbstractAnalysis.Result implements Scannable {
         private List<Scannable> windowResults;
 		private List<FragmentResult> recombinationResults;
+		private Map<String, Integer> supportedTypes = null; 
 
         public Result(AbstractSequence sequence, List<Scannable> windowResults, List<FragmentResult> recombinationResults) {
             super(sequence);
@@ -115,6 +113,42 @@ public class ScanAnalysis extends AbstractAnalysis {
             else
                 return getBootscanSupport() > cutoff;
         }
+        
+        /**
+         * @return Returns map of types with their window support rate, where the support rate > 0.1
+         */
+        public Map<String, Integer> getSupportedTypes(){
+        	if (supportedTypes == null) {
+        		supportedTypes = new TreeMap<String, Integer>();
+        	
+		        Map<String, Integer> windowCount = new TreeMap<String, Integer>();
+		        int j = windowResults.get(0).scanDiscreteLabels().indexOf("assigned");
+		        
+	        	for (int i = 0; i < windowResults.size(); ++i) {
+	            	List<String> values = windowResults.get(i).scanDiscreteValues();
+	            	
+	            	String value = values.get(j);
+	            	if (value != null){
+		            	Integer count = supportedTypes.get(value);
+		            	if(count == null)
+		            		supportedTypes.put(value, 1);
+		            	else
+		            		supportedTypes.put(value, ++count);
+	            	}
+	            }
+		        
+		        for(Map.Entry<String, Integer> me : windowCount.entrySet()){
+		        	float ratio = (float)me.getValue()/windowResults.size();
+		        	if(ratio <= 0.1)
+		        		supportedTypes.remove(me.getKey());
+		        }
+        	}
+        	return supportedTypes;
+        }
+        
+        public int getWindowCount(){
+        	return windowResults.size();
+        }
 
         public void writeXMLTable(ResultTracer tracer) {
             tracer.printlnOpen("<data>");
@@ -178,7 +212,6 @@ public class ScanAnalysis extends AbstractAnalysis {
 			List<String> supportLabels = windowResults.get(0).scanDiscreteLabels();
             for (int j = 0; j < supportLabels.size(); ++j) {
             	tracer.printlnOpen("<profile id=" + tracer.quote(supportLabels.get(j)) + ">");
-            	String last = null;
             	for (int i = 0; i < windowResults.size(); ++i) {
                 	List<String> values = windowResults.get(i).scanDiscreteValues();
                 	
@@ -186,10 +219,7 @@ public class ScanAnalysis extends AbstractAnalysis {
                 	if (value == null)
                 		value = "-";
 
-                	if (value != last) {
-                		tracer.printNoindent(value + " ");
-                		last = value;
-                	}
+               		tracer.printNoindent(value + " ");
                 }
 
             	tracer.println("");
@@ -308,32 +338,35 @@ public class ScanAnalysis extends AbstractAnalysis {
     		analysis.setOptions(originalOptions + ",tree");
 
     		try {
-        		for (Scannable result : windowResults) {
+    			for (int i = 0; i < windowResults.size(); ++i) {
+    				Scannable result = windowResults.get(i);
             		String thisWindow = result.scanDiscreteValues().get(labelIdx);
 
             		boolean handleFragment = (thisWindow != null && current != null && !thisWindow.equals(current));
             		
-            		if (windowResults.indexOf(result) == windowResults.size() - 1) {
+            		if (i == windowResults.size() - 1) {
        					lastIndex = aligned.getLength();
        					handleFragment = true;
             		}
 
             		if (handleFragment) {
-        				FragmentResult r = new FragmentResult();
-        				r.start = firstIndex;
-        				r.end = lastIndex;
+            			if (lastIndex >= firstIndex + window) {
+            				FragmentResult r = new FragmentResult();
+            				r.start = firstIndex;
+            				r.end = lastIndex;
 
-        				SequenceAlignment fragment = aligned.getSubSequence(r.start, r.end);
-        
-        				r.result = analysis.run(fragment, sequence);
-        				recombinationResults.add(r);
+            				SequenceAlignment fragment = aligned.getSubSequence(r.start, r.end);
+            
+            				r.result = analysis.run(fragment, sequence);
+            				recombinationResults.add(r);
+            			}
 
-        				firstIndex = windowResults.indexOf(result) * step + window/2;
+        				firstIndex = i * step + window/2 - step/2;
         			}
 
             		if (thisWindow != null) {
             			current = thisWindow;
-        				lastIndex = windowResults.indexOf(result) * step + window/2;
+        				lastIndex = i * step + window/2 + step/2;
             		}
             	}
     		} finally {

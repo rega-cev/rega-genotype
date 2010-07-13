@@ -29,7 +29,7 @@ public class SIVSubtypeTool extends GenotypeTool{
         siv = readAnalyses("hcv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) siv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis)  siv.getAnalysis("puzzle-pure");
-        scanAnalysis = (ScanAnalysis) siv.getAnalysis("scan");
+        scanAnalysis = (ScanAnalysis) siv.getAnalysis("scan-pure");
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {

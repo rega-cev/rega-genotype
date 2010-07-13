@@ -24,7 +24,7 @@ public class HPVSubtypeTool extends GenotypeTool {
 
 
     public HPVSubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
-        hpv = readAnalyses("PVgeneraL1v2.xml", workingDir);
+        hpv = readAnalyses("HPV/PVgeneraL1v2.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hpv.getAnalysis("pure");
 
     }

@@ -8,10 +8,10 @@ import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
 
-import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.Settings;
+import rega.genotype.utils.Settings;
+import rega.genotype.utils.Utils;
 
-public class Utils {
+public class TestUtils {
 	public static File setup(String fastaContent) {
 		File jobDir;
 		do {
@@ -23,12 +23,12 @@ public class Utils {
 		File fasta = getFastaFile(jobDir);
 		
 		try {
-			GenotypeLib.writeStringToFile(fasta, fastaContent);
+			Utils.writeStringToFile(fasta, fastaContent);
 		} catch (IOException e) {
 			TestCase.fail("Could not write fasta String to fasta file: " + e.getMessage());
 		}
 		
-		GenotypeLib.initSettings(Settings.getInstance());
+		Settings.initSettings(Settings.getInstance());
 		
 		return jobDir;
 	}

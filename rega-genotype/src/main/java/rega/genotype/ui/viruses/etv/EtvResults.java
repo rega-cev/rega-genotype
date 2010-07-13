@@ -5,7 +5,8 @@
  */
 package rega.genotype.ui.viruses.etv;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.util.GenotypeLib;
 
 /**
  * Utility class to parse and interpret the analysis' results.xml file.
@@ -27,12 +28,12 @@ public class EtvResults {
 	public static Conclusion getSerotype(GenotypeResultParser p) {
 		Conclusion result = new Conclusion();
 
-		String conclusionP = "genotype_result.sequence.conclusion";
+		String conclusionP = "/genotype_result/sequence/conclusion";
 
 		if (p.elementExists(conclusionP)) {
-			result.majorAssignment = p.getEscapedValue(conclusionP + ".assigned.name");
-			result.majorBootstrap = p.getEscapedValue(conclusionP + ".assigned.support");
-			result.majorMotivation = p.getEscapedValue(conclusionP + ".motivation");
+			result.majorAssignment = GenotypeLib.getEscapedValue(p, conclusionP + "/assigned/name");
+			result.majorBootstrap = GenotypeLib.getEscapedValue(p, conclusionP + "/assigned/support");
+			result.majorMotivation = GenotypeLib.getEscapedValue(p, conclusionP + "/motivation");
 		} else {
 			result.majorAssignment = getBlastConclusion(p);
 			result.majorMotivation = "Sequence does not overlap sufficiently (>100 nucleotides) with VP1";
@@ -42,14 +43,14 @@ public class EtvResults {
 	}
 	
 	public static String getBlastConclusion(GenotypeResultParser p) {
-		return p.elementExists("genotype_result.sequence.conclusion")
-		? p.getEscapedValue("genotype_result.sequence.conclusion.assigned.name")
+		return p.elementExists("/genotype_result/sequence/conclusion")
+		? GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/assigned/name")
 		: NA;
 	}
 
 	public static String getBlastMotivation(GenotypeResultParser p) {
-		return p.elementExists("genotype_result.sequence.conclusion")
-		? p.getEscapedValue("genotype_result.sequence.conclusion.motivation")
+		return p.elementExists("/genotype_result/sequence/conclusion")
+		? GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/motivation")
 		: "";
 	}
 }

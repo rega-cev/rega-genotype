@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 import java.util.Date;
@@ -39,18 +40,15 @@ import javax.swing.ImageIcon;
 import org.apache.commons.io.IOUtils;
 
 import rega.genotype.ApplicationException;
-import rega.genotype.BlastAnalysis;
-import rega.genotype.GenotypeTool;
-import rega.genotype.PhyloClusterAnalysis;
-import rega.genotype.SequenceAlign;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
-import eu.webtoolkit.jwt.AnchorTarget;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WWebWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
 
@@ -61,18 +59,6 @@ import eu.webtoolkit.jwt.servlet.WebResponse;
  *
  */
 public class GenotypeLib {
-	
-	public static String treeGraphCommand = "/usr/bin/tgf";
-	
-	public static void initSettings(Settings s) {
-		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
-		SequenceAlign.clustalWPath = s.getClustalWCmd();
-		GenotypeTool.setXmlBasePath(s.getXmlPath().getAbsolutePath() + File.separatorChar);
-		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
-		PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
-		treeGraphCommand = s.getTreeGraphCmd();
-	}
-
 	@SuppressWarnings("unchecked")
 	public static void startAnalysis(File jobDir, Class analysis,
 			Settings settings) {
@@ -164,7 +150,7 @@ public class GenotypeLib {
 		int result;
 		String cmd;
 
-		cmd = treeGraphCommand +" -t "+ treeFile.getAbsolutePath();
+		cmd = Settings.treeGraphCommand +" -t "+ treeFile.getAbsolutePath();
 		System.err.println(cmd);
 		proc = runtime.exec(cmd, null, jobDir);
 		
@@ -224,7 +210,7 @@ public class GenotypeLib {
 		tgfFile.delete();
 		resizedTgfFile.renameTo(tgfFile);
 		
-		cmd = treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
+		cmd = Settings.treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
 		System.err.println(cmd);
 		proc = runtime.exec(cmd, null, jobDir);
 		if((result = proc.waitFor()) != 0)
@@ -249,15 +235,13 @@ public class GenotypeLib {
 		return d;
 	}
 
-	public static WImage getWImageFromFile(final File f) {
-		System.out.println("*** getWImageFromFile: "+ f.getAbsolutePath());
-		WImage chartImage = new WImage(new WFileResource("image/png", f.getAbsolutePath()), new WString(""), (WContainerWidget)null);
-		chartImage.getResource().suggestFileName("x.png");
-		return chartImage;
+	public static WImage getWImageFromResource(WResource resource) {
+		WImage result = new WImage(resource, new WString(""));
+		result.getResource().suggestFileName("x.png");
+		return result;
 	}
 	
 	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) {
-		System.out.println("*** getWImageFromResource: "+ fileName);
 		return new WImage(new WResource() {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
@@ -281,33 +265,23 @@ public class GenotypeLib {
 		return new File(jobDir.getAbsolutePath() + File.separatorChar + fileName);
 	}
 	
-	public static WAnchor getAnchor(String text, String fileType, File f, String suggestedName) {
-		WResource fr = new WFileResource(fileType, f.getAbsolutePath());
-		fr.suggestFileName(f.getName());
-		return getAnchor(text, fileType, fr, suggestedName);
-	}
-
 	public static WAnchor getAnchor(String text, String fileType, WResource resource, String suggestedName) {
 		WAnchor anchor = new WAnchor("", text);
 		anchor.setObjectName("resource");
 		anchor.setStyleClass("link");
-		anchor.setTarget(AnchorTarget.TargetNewWindow);
+		//anchor.setTarget(AnchorTarget.TargetNewWindow);
 		if (suggestedName != null)
 			resource.suggestFileName(suggestedName);
 		anchor.setRef(resource.generateUrl());
 		return anchor;
 	}
 	
-	public static File getZipArchiveFileName(File dir){
-		return new File(dir.getAbsolutePath()+".zip");
-	}
-
-	public static void zip(File dir, File zipFile) {
+	public static void zip(File dir, OutputStream os) {
 		byte[] buffer = new byte[1024*1024];
 
 		try {
 
-			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+			ZipOutputStream out = new ZipOutputStream(os);
 
 			out.setLevel(Deflater.DEFAULT_COMPRESSION);
 
@@ -341,7 +315,7 @@ public class GenotypeLib {
 	public static void main(String[] args) {
 		Settings s = Settings.getInstance();
 
-		initSettings(s);
+		Settings.initSettings(s);
 
 // try {
 // HIVTool hiv = new HIVTool(new File(
@@ -379,14 +353,12 @@ public class GenotypeLib {
 
 	    return contents.toString();
 	}
-
-	public static void writeStringToFile(File f, String s) throws IOException {
-	      Writer output = new BufferedWriter(new FileWriter(f));
-	      try {
-	        output.write( s );
-	      }
-	      finally {
-	        output.close();
-	      }
-	}
+	
+    public static String getEscapedValue(GenotypeResultParser p, String name) {
+    	String value = p.getValue(name);
+    	if(value==null)
+    		return null;
+    	else
+    		return WWebWidget.escapeText(value, true);
+    }
 }

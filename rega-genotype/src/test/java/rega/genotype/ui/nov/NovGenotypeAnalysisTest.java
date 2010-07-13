@@ -8,8 +8,8 @@ import java.util.List;
 import junit.framework.TestCase;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.ui.data.GenotypeResultParser;
-import rega.genotype.ui.utils.Utils;
+import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.utils.TestUtils;
 import rega.genotype.viruses.nov.NoVTool;
 
 public class NovGenotypeAnalysisTest extends TestCase {
@@ -43,18 +43,18 @@ public class NovGenotypeAnalysisTest extends TestCase {
     }
 	
 	protected void tearDown() {
-		Utils.deleteJobDirs(jobDirs);
+		TestUtils.deleteJobDirs(jobDirs);
 	}
 
     public void testQualityCheck() {
-    	File jobDir = Utils.setup(hiv_fasta);
+    	File jobDir = TestUtils.setup(hiv_fasta);
     	jobDirs.add(jobDir);
 		
     	NoVTool nov;
 		try {
 			nov = new NoVTool(jobDir);
-			nov.analyze(Utils.getFastaFile(jobDir).getAbsolutePath(),
-					Utils.getResultFile(jobDir).getAbsolutePath());
+			nov.analyze(TestUtils.getFastaFile(jobDir).getAbsolutePath(),
+					TestUtils.getResultFile(jobDir).getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("IOException occured during analysis runtime");
@@ -67,22 +67,27 @@ public class NovGenotypeAnalysisTest extends TestCase {
     	GenotypeResultParser p = new GenotypeResultParser(){
 			@Override
 			public void endSequence() {
-				String assignment = getValue("genotype_result.sequence.conclusion.assigned.id");
+				String assignment = getValue("/genotype_result/sequence/conclusion/assigned/id");
 				assertEquals(assignment, "Unassigned");
+			}
+
+			@Override
+			public boolean skipSequence() {
+				return false;
 			}    		
     	};
     	p.parseFile(jobDir);
     }
     
     public void testAnalysisRuntime() {
-       	File jobDir = Utils.setup(nov_fasta);
+       	File jobDir = TestUtils.setup(nov_fasta);
     	jobDirs.add(jobDir);
     	
 		NoVTool nov;
 		try {
 			nov = new NoVTool(jobDir);
-			nov.analyze(Utils.getFastaFile(jobDir).getAbsolutePath(),
-					Utils.getResultFile(jobDir).getAbsolutePath());
+			nov.analyze(TestUtils.getFastaFile(jobDir).getAbsolutePath(),
+					TestUtils.getResultFile(jobDir).getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("IOException occured during analysis runtime");
@@ -95,8 +100,13 @@ public class NovGenotypeAnalysisTest extends TestCase {
     	GenotypeResultParser p = new GenotypeResultParser(){
 			@Override
 			public void endSequence() {
-				String assignment = getValue("genotype_result.sequence.conclusion['ORF2'].assigned.id");
+				String assignment = getValue("/genotype_result/sequence/conclusion[@id='ORF2']/assigned/id");
 				assertEquals(assignment, "II.7");
+			}
+
+			@Override
+			public boolean skipSequence() {
+				return false;
 			}    		
     	};
     	p.parseFile(jobDir);

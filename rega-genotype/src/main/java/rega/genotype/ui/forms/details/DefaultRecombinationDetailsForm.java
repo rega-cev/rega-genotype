@@ -9,32 +9,41 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
+import rega.genotype.ui.forms.RecombinationForm;
+import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.recombination.RecombinationPlot;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.AlignmentFlag;
+import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WBreak;
+import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * A default extension of IDetailsForm for visualizing recombination details, used by different virus implementations.
  */
 public class DefaultRecombinationDetailsForm extends IDetailsForm {
-
-	public DefaultRecombinationDetailsForm(){
-		super();
+	private String path;
+	private String type;
+	private WString title;
+	
+	public DefaultRecombinationDetailsForm(String path, String type, WString title){
+		this.path = path;
+		this.type = type;
+		this.title = title;
 		setStyleClass("recombinationDetails");
 	}
 	@Override
 	public void fillForm(GenotypeResultParser p, OrganismDefinition od, File jobDir) {
 		try {
-			if(p.elementExists("genotype_result.sequence.result['scan']")) {
-				initRecombinationSection(p, jobDir, "genotype_result.sequence.result['scan']", "pure", od);
-			} else if(p.elementExists("genotype_result.sequence.result['crfscan']")) {
-				initRecombinationSection(p, jobDir, "genotype_result.sequence.result['crfscan']", "crf", od);
-			}
+			initRecombinationSection(p, jobDir, od);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -42,24 +51,76 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		}
 	}
 	
-	private void initRecombinationSection(GenotypeResultParser p, File jobDir, String path, String type, OrganismDefinition od) throws UnsupportedEncodingException, IOException {
-		addWidget(new WText(tr("defaultRecombinationAnalyses.sequenceName")));
-		addWidget(new WText(p.getEscapedValue("genotype_result.sequence[name]")));
-		addWidget(new WBreak());
-		addWidget(GenotypeLib.getWImageFromFile(RecombinationPlot.getRecombinationPNG(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"), od)));
-		addWidget(new WBreak());
+	private void initRecombinationSection(GenotypeResultParser p, final File jobDir, OrganismDefinition od)
+		throws UnsupportedEncodingException, IOException {
+
+		// FIXME: we should not show a link to a detailed recombination section if we concluded a pure or CRF
+		// this should be passed as an argument ?
+
+		if (p.elementExists(path + "/recombination")) {
+			WAnchor detailed = new WAnchor("", tr("defaultRecombinationAnalyses.detailedRecombination"));
+			detailed.setObjectName("report-" + p.getSequenceIndex());
+			detailed.setStyleClass("link");
+			detailed.setRefInternalPath(RecombinationForm.recombinationPath(jobDir, p.getSequenceIndex(), type));
+			addWidget(detailed);
+			addWidget(new WBreak());
+		}
+
+		final RecombinationPlot plot = new RecombinationPlot(p.getValue(path+"/data"), od);
+		addWidget(plot);
 		addWidget(new WText(tr("defaultRecombinationAnalyses.bootscanClusterSupport")));
-		addWidget(new WText(p.getEscapedValue(path+".support['best']")));
+		addWidget(new WText(GenotypeLib.getEscapedValue(p, path+"/support[@id='best']")));
 		addWidget(new WBreak());
 		addWidget(new WText(tr("defaultRecombinationAnalyses.download").getValue() +" "));
-		addWidget(GenotypeLib.getAnchor("CSV", "application/excel", RecombinationPlot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data")), null));
+		addWidget(GenotypeLib.getAnchor("CSV", "application/excel",
+				new WFileResource("", plot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type).getAbsolutePath()), null));
 		addWidget(new WText(", "));
-		addWidget(GenotypeLib.getAnchor(" PDF ", "application/pdf", RecombinationPlot.getRecombinationPDF(jobDir, p.getSequenceIndex(), type, p.getValue(path+".data"), od), null));
+		final int sequenceIndex = p.getSequenceIndex();
+		addWidget(GenotypeLib.getAnchor(" PDF ", "application/pdf", new WFileResource("", "") {
+			@Override
+			public void handleRequest(WebRequest request, WebResponse response) {
+				if (getFileName().equals("")) {
+					File file;
+					try {
+						file = plot.getRecombinationPDF(jobDir, sequenceIndex, type);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+					setFileName(file.getAbsolutePath());
+				}
+				super.handleRequest(request, response);
+			}
+			
+		}, null));
 		addWidget(new WBreak());
 		WString m = tr("defaultRecombinationAnalyses.bootscanAnalysis");
-		m.arg(p.getValue(path+".window"));
-		m.arg(p.getValue(path+".step"));
+		m.arg(p.getValue(path + "/window"));
+		m.arg(p.getValue(path + "/step"));
 		addWidget(new WText(m));
+		
+		addWidget(new WBreak());
+		addWidget(new WBreak());
+		WContainerWidget recombinationProfile = new WContainerWidget(this);
+		recombinationProfile.addWidget(new WText(tr("defaultRecombinationAnalyses.profile")));
+		WListContainerWidget profileList = new WListContainerWidget(recombinationProfile);
+		profileList.addItem(tr("defaultRecombinationAnalyses.profile.short")
+				.arg(toShortProfile(p.getValue(path + "/profile[@id='assigned']"))));
+		profileList.addItem(tr("defaultRecombinationAnalyses.profile.long")
+				.arg(p.getValue(path + "/profile[@id='assigned']")));
+		profileList.addItem(tr("defaultRecombinationAnalyses.profile.best")
+				.arg(p.getValue(path + "/profile[@id='best']")));
+		recombinationProfile.setContentAlignment(AlignmentFlag.AlignLeft);
+		
+		this.setContentAlignment(AlignmentFlag.AlignCenter);
+	}
+
+	private String toShortProfile(String profile) {
+		String shortProfile = "";
+		for (String p : profile.split(" ")) {
+			if (!shortProfile.contains(p)) 
+				shortProfile += p + " ";
+		}
+		return shortProfile;
 	}
 	
 	@Override
@@ -69,7 +130,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 
 	@Override
 	public WString getTitle() {
-		return tr("defaultRecombinationAnalyses.title");
+		return title;
 	}
 
 	@Override

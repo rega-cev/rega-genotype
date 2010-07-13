@@ -7,18 +7,20 @@ package rega.genotype.ui.data;
 
 import java.io.IOException;
 
+import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.util.DataTable;
 
 /**
  * A default extension of AbstractCsvGenerator, used by different virus implementations.
  */
 public class DefaultTableGenerator extends AbstractDataTableGenerator {
-	public DefaultTableGenerator(DataTable table) throws IOException {
-		super(table);
+	public DefaultTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
+		super(jobOverview, table);
 
 		table.addLabel("name");
 		table.addLabel("length");
 		table.addLabel("assignment");
+		table.addLabel("rule");
 		table.addLabel("support");
 		table.addLabel("begin");
 		table.addLabel("end");
@@ -47,33 +49,37 @@ public class DefaultTableGenerator extends AbstractDataTableGenerator {
 	}
     
 	public void endSequence() {
-    	addNamedValue("genotype_result.sequence[name]", ValueFormat.Label);
-    	addNamedValue("genotype_result.sequence[length]", ValueFormat.Number);
+    	addNamedValue("/genotype_result/sequence/@name", ValueFormat.Label);
+    	addNamedValue("/genotype_result/sequence/@length", ValueFormat.Number);
 
-    	if (!elementExists("genotype_result.sequence.conclusion"))
+    	if (!elementExists("/genotype_result/sequence/conclusion")){
     		addValue(",\"Sequence error\"");
-    	else
-    		addNamedValue("genotype_result.sequence.conclusion.assigned.name", ValueFormat.Label);
+    		addValue(",");
+    	}
+    	else{
+    		addNamedValue("/genotype_result/sequence/conclusion/assigned/name", ValueFormat.Label);
+    		addNamedValue("/genotype_result/sequence/conclusion/rule", ValueFormat.Label);
+    	}
     	
-    	addNamedValue("genotype_result.sequence.conclusion.assigned.support", ValueFormat.Number);
+    	addNamedValue("/genotype_result/sequence/conclusion/assigned/support", ValueFormat.Number);
 
-    	addNamedValue("genotype_result.sequence.result['blast'].start", ValueFormat.Number);
-    	addNamedValue("genotype_result.sequence.result['blast'].end", ValueFormat.Number);
-    	addNamedValue("genotype_result.sequence.result['blast'].cluster.name", ValueFormat.Label);
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/start", ValueFormat.Number);
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/end", ValueFormat.Number);
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/name", ValueFormat.Label);
     		
-    	if (elementExists("genotype_result.sequence.result['pure']"))
+    	if (elementExists("/genotype_result/sequence/result[@id='pure']"))
     		addPhyloResults("pure", false);
     	else
     		addPhyloResults("pure-puzzle", false);
 
-		addPhyloScanResults("scan");
+		addPhyloScanResults("scan-pure");
 
 		addPhyloResults("crf", false);
 
-		addPhyloScanResults("crfscan");
+		addPhyloScanResults("scan-crf");
 		
-		addNamedValue("genotype_result.sequence.conclusion.assigned.major.assigned.id", ValueFormat.Label);
-		addNamedValue("genotype_result.sequence.conclusion.assigned.minor.assigned.id", ValueFormat.Label);
+		addNamedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id", ValueFormat.Label);
+		addNamedValue("/genotype_result/sequence/conclusion/assigned/minor/assigned/id", ValueFormat.Label);
     	
     	super.endSequence();
     }

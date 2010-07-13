@@ -12,9 +12,9 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.parasites.giardia.GiardiaTool;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -29,7 +29,7 @@ import eu.webtoolkit.jwt.WString;
  * Enterovirus OrganismDefinition implementation.
  */
 public class GiardiaDefinition implements OrganismDefinition {
-	private GiardiaGenome genome = new GiardiaGenome(this);
+	private Genome genome = new Genome(new GiardiaGenome(this));
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
 		GiardiaTool giardiaTool = new GiardiaTool(jobDir);
@@ -45,8 +45,8 @@ public class GiardiaDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/parasites/giardia/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable table) throws IOException {
-		return new GiardiaTableGenerator(table);
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
+		return new GiardiaTableGenerator(jobOverview, table);
 	}
 
 	public Genome getGenome() {
@@ -58,10 +58,10 @@ public class GiardiaDefinition implements OrganismDefinition {
 	}
 
 	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms) {
-		String result = "genotype_result.sequence.result";
+		String result = "/genotype_result/sequence/result";
 
 		for (String region : GiardiaGenome.regions) {
-			String phyloResult = result + "['phylo-" + region + "']";
+			String phyloResult = result + "[@id='phylo-" + region + "']";
 			if (p.elementExists(phyloResult)) {
 				WString title = new WString("Phylogenetic analyses for " + region);
 				forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
@@ -85,5 +85,13 @@ public class GiardiaDefinition implements OrganismDefinition {
 
 	public boolean haveDetailsNavigationForm() {
 		return false;
+	}
+
+	public Genome getLargeGenome() {
+		return null;
+	}
+
+	public String getProfileScanType(GenotypeResultParser p) {
+		return null;
 	}
 }

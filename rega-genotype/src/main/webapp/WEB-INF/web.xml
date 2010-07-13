@@ -78,7 +78,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeHTLV</servlet-name>
-    <url-pattern>/GenotypeHTLV/*</url-pattern>
+    <url-pattern>/htlv/typingtool/*</url-pattern>
   </servlet-mapping>
   
     <servlet>
@@ -93,7 +93,7 @@
     <url-pattern>/GenotypePHYLO/*</url-pattern>
   </servlet-mapping>
   
-	<servlet>
+  <servlet>
     <servlet-name>GenotypeHCV</servlet-name>
     <display-name>HCV Genotyping</display-name>
     <description>HCV Genotyping</description>
@@ -102,10 +102,22 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeHCV</servlet-name>
-    <url-pattern>/GenotypeHCV/*</url-pattern>
+    <url-pattern>/hcv/typingtool/*</url-pattern>
   </servlet-mapping>
   
-    <servlet>
+  <servlet>
+    <servlet-name>GenotypeHBV</servlet-name>
+    <display-name>HBV Genotyping</display-name>
+    <description>HBV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hbv.HbvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHBV</servlet-name>
+    <url-pattern>/hbv/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>Giardia</servlet-name>
     <display-name>Giardia Genotyping</display-name>
     <description>Giardia Genotyping</description>
@@ -115,6 +127,30 @@
   <servlet-mapping>
     <servlet-name>Giardia</servlet-name>
     <url-pattern>/giardia/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>HHV8</servlet-name>
+    <display-name>HHV8 Genotyping</display-name>
+    <description>HHV8 Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hhv8.Hhv8Main</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>HHV8</servlet-name>
+    <url-pattern>/hhv8/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>GenotypeHPV</servlet-name>
+    <display-name>HPV Genotyping</display-name>
+    <description>HPV Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.hpv.HpvMain</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHPV</servlet-name>
+    <url-pattern>/hpv/typingtool/*</url-pattern>
   </servlet-mapping>
 </web-app>
 

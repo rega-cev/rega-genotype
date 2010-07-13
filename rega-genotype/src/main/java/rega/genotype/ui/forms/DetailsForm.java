@@ -7,9 +7,10 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
+import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
@@ -32,9 +33,9 @@ public class DetailsForm extends AbstractForm {
 		mainTable.setStyleClass("detailsForm");
 	}
 	
-	WString init(File jobDir, String selectedSequenceIndex) {
+	WString init(File jobDir, Integer selectedSequenceIndex) {
 		try {
-			p = GenotypeResultParser.parseFile(jobDir, Integer.parseInt(selectedSequenceIndex));
+			p = GenotypeResultParser.parseFile(jobDir, selectedSequenceIndex);
 		
 			if (p == null) {
 				return tr("detailsForm.nonExistingSequenceId").arg(selectedSequenceIndex);
@@ -105,6 +106,6 @@ public class DetailsForm extends AbstractForm {
 	}
 	
 	public String getSequenceName() {
-		return p.getEscapedValue("genotype_result.sequence[name]");
+		return GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name");
 	}
 }

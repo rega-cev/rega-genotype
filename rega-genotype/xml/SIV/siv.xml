@@ -97,7 +97,7 @@ SMM,AGM,SKY,COL,LHoest,CPZ
     </options>
   </analysis>
 
-  <analysis id="scan" type="scan">
+  <analysis id="scan-pure" type="scan">
     <window>
       400
     </window>

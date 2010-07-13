@@ -57,7 +57,7 @@ div.imgDiv, div.downloadContainer{
 	margin: 0px auto;
 }
 
-table.jobTable{
+table.jobTable {
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
@@ -134,7 +134,7 @@ table.jobTable td img, .detailsForm img {
 	padding: 0.5em;
 	text-align: left;
 }
-	
+
 .detailsForm h2 {
 	border: 1px inset gray;
 	margin: 2px;
@@ -146,16 +146,16 @@ table.jobTable td img, .detailsForm img {
 	text-align: center;
 }
 
-.detailsForm *.recombinationDetails{
+.detailsForm .recombinationDetails{
 	text-align: center;
 }
 
 .details .dsa-text {
 	text-align: center;
 	font-weight: bold;
-	line-height: 200%;
-	padding-top: 2em;
-	padding-bottom: 2em;
+	line-height: 150%;
+	padding-top: 1.5em;
+	padding-bottom: 1.5em;
 	font-size: 110%;
 }
 
@@ -187,6 +187,8 @@ table.jobTable td img, .detailsForm img {
 	color: darkblue;
 	width: auto;
 	display: inline;
+	padding-left: 3ex;
+	padding-right: 0.5ex;
 }
 
 .details .dsa-text span + span + br + span + span {
@@ -210,7 +212,7 @@ table.jobTable td img, .detailsForm img {
 	margin: 1em auto;
 }
 
-.decisionTreeHeader{
+.decisionTreeHeader {
 	display: block;
 	margin: 1em auto 0.5em auto;
 	text-align: center;
@@ -219,7 +221,7 @@ table.jobTable td img, .detailsForm img {
 	color: darkblue;
 }
 	
-.listContainer{
+.listContainer {
 	margin-top: 0.5em;
 	margin-bottom: 1em;
 }
@@ -232,7 +234,7 @@ h1 {
   	text-align: center;
 }
 
-*.note, *.footer{
+.note, .footer {
 	padding: 0.5em 3em 0.5em 0.5em;
 	background-color: rgb(204, 204, 255);
 	display: block;
@@ -240,12 +242,12 @@ h1 {
 	margin: 0px auto;
 }
 
-*.footer{
+.footer{
 	text-align: center;
 	font-style: italic;
 }
 
-*.navigation{
+.navigation{
 	margin: 1em auto;
 	border-color: black;
 	border-style: solid;
@@ -254,6 +256,7 @@ h1 {
 	text-align: center;
 	height: 30px;
 	width: 80%;
+	clear: both;
 }
 
 .navigation div {
@@ -266,7 +269,7 @@ a, .link{
 	cursor: pointer;
 }
 
-*.navigation a {
+.navigation a {
 	display: inline-block;
 	width: 12%;
 	text-align: center;
@@ -280,22 +283,22 @@ a, .link{
 .edit-valid {
 }
 
-*.details-extraComments {
+.details-extraComments {
 	font-style:italic;
 }
 
-table.files_referenceSequences-csv{
+table.csv {
 	width: 800px;
 	empty-cells: hide;
 	margin-left: auto;
 	margin-right: auto;
 }
-table.files_referenceSequences-csv td{
+table.csv td, table.csv td{
 	padding: 0.2em;
 	background-color: rgb(240,240,240);
 	border: 2px solid white;
 }
-table.files_referenceSequences-csv tr:first-child td{
+table.csv tr:first-child td{
 	color: white;
 	background-color: darkblue;
 }
@@ -345,29 +348,65 @@ span.refseq{
 	color: blue;
 }
 
-.assignment-overview {
-	margin-left: auto;
-	margin-right: auto;
-}
-.assignment-overview table {
+table.assignment-overview {
 	border: 1px solid black;
+	max-width: 500px;
 }
+
 .assignment-overview th {
 	background-color: rgb(200,200,200);
+	padding: 0.5em;
+	text-align: center;
 }
+
 .assignment-overview th, .assignment-overview td {
 	border-left: 1px solid black;
 	padding: 0.5em;
 }
+
+.assignment-overview div {
+	width: 35px;
+	height: 10px;
+}
+
 .assignment-overview-total {
 	border-top: 1px solid black;
 }
-.assignment-overview table, .assignment-overview div {
-	float: left;	
+
+.assignment-overview-filter {
+	border: 1px solid black;
+	padding: 0.5em;
 }
 
-table.jobOverviewSummary {
-	width: 100%;
+.assignment-overview-filter th, .assignment-overview-filter td {
+	border-left: 1px solid black;
+	padding: 0.5em;
+}
+
+.recombination-form {
+	width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.recombination-form table {
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.recombination-form .region {
+	border: 1px solid black;
+	margin: 2px;
+	padding: 1em;
+}
+.recombination-form .region:first-line{
+	font-size: 120%;
+	font-weight: bold;
+	text-align: center;
+}
+
+.jobOverviewSummary {
+	margin: 30px auto;
 }
 
 /* Background info pages */

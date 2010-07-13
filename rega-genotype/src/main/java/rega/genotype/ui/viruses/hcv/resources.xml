@@ -17,9 +17,8 @@
 		</note>
 	</start-form>
 	<monitor-form>
-		<title>
-		Oxford HCV Genotyping Results
-		</title>
+		<title>Oxford HCV Genotyping Results</title>
+		<title-filtered>Oxford HCV Genotyping Results: {1} assignments</title-filtered>
 	</monitor-form>
 	<details-form>
 		<title>

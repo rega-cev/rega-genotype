@@ -25,6 +25,9 @@
 		HIV Phylotyping Details
 		</title>
 	</details-form>
+	<recombination-form>
+		<title>HIV Recombination Details</title>
+	</recombination-form>
 	<howToCite-form>
 		<title>
 		How to Cite the REGA HIV-1 Automated Subtyping Tool

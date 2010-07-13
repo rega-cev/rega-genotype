@@ -5,7 +5,8 @@
  */
 package rega.genotype.ui.viruses.nov;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.util.GenotypeLib;
 
 /**
  * Utility class to parse and interpret the analysis' results.xml file.
@@ -27,30 +28,30 @@ public class NovResults {
 	public static Conclusion getConclusion(GenotypeResultParser p, String region) {
 		Conclusion result = new Conclusion();
 
-		String conclusionP = "genotype_result.sequence.conclusion['" + region + "']";
+		String conclusionP = "/genotype_result/sequence/conclusion[@id='" + region + "']";
 
 		if (p.elementExists(conclusionP)) {
-			result.majorAssignment = p.getEscapedValue(conclusionP + ".assigned.name");
-			result.majorBootstrap = p.getEscapedValue(conclusionP + ".assigned.support");
-			result.majorMotivation = p.getEscapedValue(conclusionP + ".motivation");
+			result.majorAssignment = GenotypeLib.getEscapedValue(p, conclusionP + "/assigned/name");
+			result.majorBootstrap = GenotypeLib.getEscapedValue(p, conclusionP + "/assigned/support");
+			result.majorMotivation = GenotypeLib.getEscapedValue(p, conclusionP + "/motivation");
 
-			String variantConclusionP = "genotype_result.sequence.conclusion['" + region + "-variant']";
+			String variantConclusionP = "/genotype_result/sequence/conclusion[@id='" + region + "-variant']";
 
 			if (p.elementExists(variantConclusionP)) {
-				result.variantAssignment = p.getEscapedValue(variantConclusionP + ".assigned.name");
+				result.variantAssignment = GenotypeLib.getEscapedValue(p, variantConclusionP + "/assigned/name");
 
-				boolean showVariantNotAssigned = p.getValue(conclusionP + ".assigned.id").equals("II.4");
-				boolean variantNotAssigned = p.getValue(variantConclusionP + ".assigned.id").equals("Unassigned");
+				boolean showVariantNotAssigned = p.getValue(conclusionP + "/assigned/id").equals("II.4");
+				boolean variantNotAssigned = p.getValue(variantConclusionP + "/assigned/id").equals("Unassigned");
 
 				if (!variantNotAssigned || showVariantNotAssigned)
 					result.variantAssignmentForOverview = result.variantAssignment;
 
-				result.variantBootstrap = p.getEscapedValue(variantConclusionP + ".assigned.support");
+				result.variantBootstrap = GenotypeLib.getEscapedValue(p, variantConclusionP + "/assigned/support");
 				if (!variantNotAssigned)
-					result.variantDescription = p.getEscapedValue(variantConclusionP + ".assigned.description");
+					result.variantDescription = GenotypeLib.getEscapedValue(p, variantConclusionP + "/assigned/description");
 				else
 					result.variantDescription = "Not assigned";
-				result.variantMotivation = p.getEscapedValue(variantConclusionP + ".motivation");
+				result.variantMotivation = GenotypeLib.getEscapedValue(p, variantConclusionP + "/motivation");
 			}
 		} else {
 			result.majorAssignment = "";
@@ -61,12 +62,6 @@ public class NovResults {
 	}
 	
 	public static String getBlastConclusion(GenotypeResultParser p) {
-		return p.getEscapedValue("genotype_result.sequence.result['blast'].cluster.concluded-name");
-	}
-
-	public static String getBlastMotivation(GenotypeResultParser p) {
-		return p.elementExists("genotype_result.sequence.conclusion")
-		? p.getEscapedValue("genotype_result.sequence.conclusion.motivation")
-		: "";
+		return GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
 	}
 }

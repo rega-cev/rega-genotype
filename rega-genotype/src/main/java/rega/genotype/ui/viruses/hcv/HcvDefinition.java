@@ -7,10 +7,10 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.DefaultTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -30,11 +30,11 @@ import eu.webtoolkit.jwt.WString;
  * @author plibin0
  */
 public class HcvDefinition implements OrganismDefinition {
-	private HcvGenome genome = new HcvGenome(this);
+	private Genome genome = new Genome(new HcvGenome(this));
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable t)
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t)
 			throws IOException {
-		return new DefaultTableGenerator(t);
+		return new DefaultTableGenerator(jobOverview, t);
 	}
 
 	public Genome getGenome() {
@@ -46,7 +46,11 @@ public class HcvDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(2, "genotype_result.sequence.result['scan'].data");
+		return new DefaultSequenceAssignmentForm(2);
+	}
+
+	public String getProfileScanType(GenotypeResultParser p) {
+		return "pure";
 	}
 
 	public String getOrganismDirectory() {
@@ -62,23 +66,25 @@ public class HcvDefinition implements OrganismDefinition {
 
 		WString m = new WString("Phylogenetic analysis with pure subtypes:");
 		
-		if (p.elementExists("genotype_result.sequence.result['pure']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m, false));
-		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m, false));
+		if (p.elementExists("/genotype_result/sequence/result[@id='pure']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure']", m, m, false));
+		else if (p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure-puzzle']", m, m, false));
 
 		m = new WString("Phylogenetic analysis with pure subtypes and CRFs:");
 
-		if (p.elementExists("genotype_result.sequence.result['crf']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m, false));
+		if (p.elementExists("/genotype_result/sequence/result[@id='crf']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='crf']", m, m, false));
 		
-		if (p.elementExists("genotype_result.sequence.result['scan']"))
-			forms.add(new DefaultRecombinationDetailsForm());
+		String scan = "/genotype_result/sequence/result[@id='scan-pure']";
+		if (p.elementExists(scan))
+			forms.add(new DefaultRecombinationDetailsForm(scan, "pure", new WString("HCV Subtype Recombination Analysis")));
 		
-		if (p.elementExists("genotype_result.sequence.result['crfscan']"))
-			forms.add(new DefaultRecombinationDetailsForm());
+		String crfScan = "/genotype_result/sequence/result[@id='scan-crf']";
+		if (p.elementExists(crfScan))
+			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf", new WString("HCV CRF/Subtype Recombination Analysis")));
 
-		if(p.elementExists("genotype_result.sequence.result['pure-puzzle']")) {
+		if(p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']")) {
 			forms.add(new DefaultSignalDetailsForm());
 		}
 		
@@ -98,5 +104,9 @@ public class HcvDefinition implements OrganismDefinition {
 		HCVTool hcv = new HCVTool(jobDir);
 		hcv.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 				jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+	}
+
+	public Genome getLargeGenome() {
+		return getGenome();
 	}
 }

@@ -36,6 +36,7 @@
 	<resource name="monitorForm.downloadResults">Download results:</resource>
 	<resource name="monitorForm.csvTable">Table (CSV format)</resource>
 	<resource name="monitorForm.xlsTable">Table (Excell format)</resource>
+	<resource name="monitorForm.fasta">Fasta</resource>
 	<resource name="monitorForm.xmlFile">XML File</resource>
 	<resource name="monitorForm.downloadJob">Download all job files:</resource>
 	<resource name="monitorForm.jobFile">ZIP</resource>
@@ -44,10 +45,26 @@
 	
 	<resource name="detailsForm.nonExistingSequenceId">Sequence id {1} doesn't exist</resource>
 	
+	<resource name="detailsForm.summary.title"><h2><i>Summary</i></h2></resource>
 	<resource name="detailsForm.summary.assignment">Rega Assignment</resource>
 	<resource name="detailsForm.summary.numberSeqs">Number of sequences</resource>
 	<resource name="detailsForm.summary.percentage">Percentage</resource>
-	<resource name="detailsForm.summary.total">Total</resource>
+	<resource name="detailsForm.summary.legend">Legend</resource>
+	<resource name="detailsForm.summary.total"><i>Total</i></resource>
+	
+	<resource name="detailsForm.summary.filter.title"><h2>Phylogenetic statistics</h2></resource>
+	
+	<resource name="detailsForm.summary.filter.nrSequences">Number of sequences</resource>
+	
+	<resource name="detailsForm.summary.filter.njTreeStats">NJ Tree Statistics</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrap">Average bootstrap</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrapInside">Average bootstrap inside</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrapOutside">Average bootstrap outside</resource>
+	
+	<resource name="detailsForm.summary.filter.bootscanStats">Bootscan Statistics</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscan">Average bootscan</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscanSupport">Average bootscan support</resource>
+	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport">Average bootscan no support</resource>
 	
 	<resource name="main.navigation.start">Submit job</resource>
 	<resource name="main.navigation.monitor">Monitor job [{1}]</resource>
@@ -64,17 +81,21 @@
 
 	<resource name="defaultSequenceAssignment.name-length">
 		<div class="dsa-text">
-			<span class="label">Name:</span> {1}, <span class="label">Length:</span> {2}
+			<span class="label">Name:</span> {1} <span class="label">Length:</span> {2}
 		</div>
 	</resource>
 
-	<resource name="defaultSequenceAssignment.assignment">Assignment: </resource>
-	<resource name="defaultSequenceAssignment.bootstrap">Bootstrap: </resource>
+	<resource name="defaultSequenceAssignment.assignment-bootstrap">
+		<div class="dsa-text">
+			<span class="label">Assignment:</span> {1} <span class="label">Bootstrap:</span> {2}
+		</div>
+	</resource>
+
 	<resource name="defaultSequenceAssignment.motivation">Motivation: </resource>
 
 	<resource name="defaultSequenceAssignment.referenceSequence">
 		<p class="refseq">
-			Your sequence starts at position {1} and finishes at position {2} in the {3} genome.
+			Your sequence starts at position {1} and finishes at position {2} relative to the {3} reference sequence.
 		</p>
 	</resource>
 	
@@ -86,6 +107,7 @@
 	</resource>
 	
 	<resource name="defaultRecombinationAnalyses.title">Recombination analyses</resource>
+	<resource name="defaultRecombinationAnalyses.detailedRecombination">Detailed recombination analyses</resource>
 	<resource name="defaultRecombinationAnalyses.comment">
 		This section contains the recombination plots, and data from which they were derived.
 	</resource>
@@ -93,7 +115,11 @@
 	<resource name="defaultRecombinationAnalyses.bootscanClusterSupport">Bootscan cluster support:</resource>
 	<resource name="defaultRecombinationAnalyses.download">Download: </resource>
 	<resource name="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size {1} and step size {2}.</resource>
-
+	<resource name="defaultRecombinationAnalyses.profile">Recombination profile: </resource>
+	<resource name="defaultRecombinationAnalyses.profile.short">short: {1}</resource>
+	<resource name="defaultRecombinationAnalyses.profile.long">long: {1}</resource>
+	<resource name="defaultRecombinationAnalyses.profile.best">best: {1}</resource>
+	
 	<resource name="defaultSignalAnalysis.title">Phylogenetic signal analysis</resource>
 	<resource name="defaultSignalAnalysis.comment">This section contains details of the phylogenetic signal analysis.</resource>
 	<resource name="defaultSignalAnalysis.extraComment">Recombination Analyses are only performed for sequences with more than 800 bp.</resource>

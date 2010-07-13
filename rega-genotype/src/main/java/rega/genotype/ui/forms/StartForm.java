@@ -20,7 +20,8 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.Settings;
+import rega.genotype.utils.Settings;
+import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -147,10 +148,10 @@ public class StartForm extends AbstractForm {
 			public void run() {
 				try {
 					File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
-					GenotypeLib.writeStringToFile(seqFile, fastaContent);
+					Utils.writeStringToFile(seqFile, fastaContent);
 					getMain().getOrganismDefinition().startAnalysis(thisJobDir);
 					File done = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"DONE");
-					GenotypeLib.writeStringToFile(done, System.currentTimeMillis()+"");
+					Utils.writeStringToFile(done, System.currentTimeMillis()+"");
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (ParameterProblemException e) {

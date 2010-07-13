@@ -18,6 +18,7 @@ public class JobForm extends AbstractForm {
 	
 	private DetailsForm details;
 	private AbstractJobOverview jobOverview;
+	private RecombinationForm recombination;
 	private WText error;
 	
 	private StateLink stateLink;
@@ -31,6 +32,12 @@ public class JobForm extends AbstractForm {
 		addWidget(details);
 		this.jobOverview = jobOverview;
 		addWidget(jobOverview);
+		try {
+			recombination = new RecombinationForm(main);
+			addWidget(recombination);
+		} catch (RuntimeException e) {
+			
+		}
 		error = new WText();
 		addWidget(error);
 		
@@ -54,18 +61,41 @@ public class JobForm extends AbstractForm {
 				return;
 			}
 			
-			String sequenceId = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/");
+			Integer sequenceId = null;
+			String filter = null;
+			try {
+				filter = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/");
+				sequenceId = Integer.parseInt(filter);
+				filter = null;
+			} catch (NumberFormatException nfe) {
+			}
 			
-			if (sequenceId.equals("")) {
-				//TODO pass filter if there is one
-				jobOverview.init(jobId, null);
+			if (filter != null && filter.trim().equals(""))
+				filter = null;
+			
+			if (sequenceId == null) {
+				jobOverview.init(jobId, filter);
 				stateLink.setVarValue(jobId);
 				showWidget(jobOverview);
 			} else {
-				WString errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
+				String detailed = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/" + sequenceId +"/");
+				
+				WString errorMsg;
+				WWidget widget;
+				if (detailed.startsWith(RecombinationForm.URL) 
+						&& detailed.length() > RecombinationForm.URL.length() + 1
+						&& recombination != null) {
+					String type = detailed.substring(RecombinationForm.URL.length() + 1);
+					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId, type);
+					widget = recombination;
+				} else {
+					errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
+					widget = details;
+				}
+
 				if (errorMsg == null) {
 					stateLink.setVarValue(jobId);
-					showWidget(details);
+					showWidget(widget);
 				} else {
 					error.setText(errorMsg.arg(jobId));
 					showWidget(error);

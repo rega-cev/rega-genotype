@@ -11,13 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.util.Genome;
+import rega.genotype.ui.util.DefaultGenomeAttributes;
 
 /**
  * Enterovirus genome map drawing implementation.
  */
-public class GiardiaGenome extends Genome {
-	private Map<String, Color> colorMap = new HashMap<String, Color>();
+public class GiardiaGenome extends DefaultGenomeAttributes {
 	private OrganismDefinition od;
 	
 	public static String regions[] = { "16S", "B-giardin", "GDH", "TPI" };
@@ -25,37 +24,45 @@ public class GiardiaGenome extends Genome {
 	public static int imgGenomeEnd[] = { 1454, 2421, 3900, 4823 }; 
 	
 	public GiardiaGenome(OrganismDefinition od) {
-		colorMap.put("-", new Color(0xff, 0xff, 0xff));
-		colorMap.put("A", new Color(0xff, 0x33, 0x00));
-		colorMap.put("AIII", new Color(0xff, 0x66, 0x00));
-		colorMap.put("B", new Color(0x00, 0x33, 0xcc));
-		colorMap.put("C", new Color(0x00, 0x99, 0x00));
-		colorMap.put("D", new Color(0x00, 0xff, 0x00));
-		colorMap.put("E", new Color(0xff, 0xff, 0x00));
-		colorMap.put("F", new Color(0xff, 0x00, 0xff));
-		colorMap.put("G", new Color(0xcc, 0x66, 0x00));
+		super();
+		
+		getColors().put("-", new Color(0xff, 0xff, 0xff));
+		getColors().put("A", new Color(0xff, 0x33, 0x00));
+		getColors().put("AIII", new Color(0xff, 0x66, 0x00));
+		getColors().put("B", new Color(0x00, 0x33, 0xcc));
+		getColors().put("C", new Color(0x00, 0x99, 0x00));
+		getColors().put("D", new Color(0x00, 0xff, 0x00));
+		getColors().put("E", new Color(0xff, 0xff, 0x00));
+		getColors().put("F", new Color(0xff, 0x00, 0xff));
+		getColors().put("G", new Color(0xcc, 0x66, 0x00));
 		
 		this.od = od;
 	}
-	
-	public Map<String, Color> COLORS() {
-		return colorMap;
-	}
 
-	public int GENOMEEND() {
+	public int getGenomeEnd() {
 		return 4823;
 	}
 
-	public int GENOMESTART() {
+	public int getGenomeStart() {
 		return 1;
 	}
 
-	public int IMGGENOMEEND() {
+	public int getGenomeImageEndX() {
 		return 580;
 	}
 
-	public int IMGGENOMESTART() {
+	public int getGenomeImageStartX() {
 		return 20;
+	}
+
+	public int getGenomeImageEndY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getGenomeImageStartY() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	public OrganismDefinition getOrganismDefinition() {

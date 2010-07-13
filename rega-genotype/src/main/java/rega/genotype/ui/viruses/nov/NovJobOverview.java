@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
@@ -42,8 +42,8 @@ public class NovJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		data.clear();
 
-		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[name]"))));
-		data.add(new WText(new WString(p.getEscapedValue("genotype_result.sequence[length]"))));
+		data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name"))));
+		data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length"))));
 
 		WAnchor report = createReportLink(p);
 		data.add(report);
@@ -61,16 +61,7 @@ public class NovJobOverview extends AbstractJobOverview {
 		data.add(new WText(new WString(notNull(c.majorAssignment))));
 		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
 
-		try {
-			int start = blastResult == null || blastResult.equals("Unassigned") ? -1 : Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].start"));
-			int end = blastResult == null || blastResult.equals("Unassigned") ? -1 : Integer.parseInt(p.getValue("genotype_result.sequence.result['blast'].end"));
-			data.add(GenotypeLib.getWImageFromFile(getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, p.getSequenceIndex(), 
-					"-", start, end, 0, "", null)));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
+		data.add(createGenomeImage(p, "-", blastResult.equals("Unassigned")));
 		
 		return data;
 	}

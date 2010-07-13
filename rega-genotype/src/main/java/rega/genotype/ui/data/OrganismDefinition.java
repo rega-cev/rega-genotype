@@ -11,12 +11,12 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
-import rega.genotype.ui.util.StateLink;
 
 /**
  * An interface describing all attributes and functions specific to an organism.
@@ -24,12 +24,14 @@ import rega.genotype.ui.util.StateLink;
 public interface OrganismDefinition {
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException;
 	public AbstractJobOverview getJobOverview(GenotypeWindow main);
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable t) throws IOException;
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException;
 	public String getOrganismDirectory();
 	public Genome getGenome();
+	public Genome getLargeGenome();
 	public IDetailsForm getMainDetailsForm();
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p);
 	public int getUpdateInterval();
 	public String getOrganismName();
 	public boolean haveDetailsNavigationForm();
+	public String getProfileScanType(GenotypeResultParser p);
 }

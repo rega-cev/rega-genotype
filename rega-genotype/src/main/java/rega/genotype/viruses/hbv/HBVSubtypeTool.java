@@ -27,10 +27,10 @@ public class HBVSubtypeTool extends GenotypeTool {
 
 
     public HBVSubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hbv = readAnalyses("hbv.xml", workingDir);
+        hbv = readAnalyses("HBV/hbv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hbv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hbv.getAnalysis("pure-puzzle");
-        scanAnalysis = (ScanAnalysis) hbv.getAnalysis("scan");
+        scanAnalysis = (ScanAnalysis) hbv.getAnalysis("scan-pure");
 
     }
 

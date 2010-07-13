@@ -12,10 +12,10 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.DefaultTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -36,7 +36,8 @@ import eu.webtoolkit.jwt.WString;
  *
  */
 public class HivDefinition implements OrganismDefinition {
-	private HivGenome genome = new HivGenome(this);
+	private Genome genome = new Genome(new HivGenome(this));
+	private Genome largeGenome = new Genome(new LargeHivGenome(this));
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
 		HIVTool hiv = new HIVTool(jobDir);
@@ -52,8 +53,8 @@ public class HivDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/hiv/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(DataTable t) throws IOException {
-		return new DefaultTableGenerator(t);
+	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException {
+		return new DefaultTableGenerator(jobOverview, t);
 	}
 
 	public Genome getGenome() {
@@ -61,7 +62,15 @@ public class HivDefinition implements OrganismDefinition {
 	}
 
 	public IDetailsForm getMainDetailsForm() {
-		return new DefaultSequenceAssignmentForm(2, null);
+		return new DefaultSequenceAssignmentForm(2);
+	}
+	
+	public String getProfileScanType(GenotypeResultParser p) {
+		String rule = p.getValue("/genotype_result/sequence/conclusion/rule");
+		if (rule != null && (rule.equals("3a") || rule.equals("5c")))
+			return "crf";
+		else
+			return "pure";
 	}
 
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p) {
@@ -69,23 +78,25 @@ public class HivDefinition implements OrganismDefinition {
 
 		WString m = new WString("Phylogenetic analysis with pure subtypes:");
 		
-		if (p.elementExists("genotype_result.sequence.result['pure']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure']", m, m, false));
-		else if (p.elementExists("genotype_result.sequence.result['pure-puzzle']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['pure-puzzle']", m, m, false));
+		if (p.elementExists("/genotype_result/sequence/result[@id='pure']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure']", m, m, false));
+		else if (p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='pure-puzzle']", m, m, false));
 
 		m = new WString("Phylogenetic analysis with pure subtypes and CRFs:");
 
-		if (p.elementExists("genotype_result.sequence.result['crf']"))
-			forms.add(new DefaultPhylogeneticDetailsForm("genotype_result.sequence.result['crf']", m, m, false));
+		if (p.elementExists("/genotype_result/sequence/result[@id='crf']"))
+			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='crf']", m, m, false));
 		
-		if (p.elementExists("genotype_result.sequence.result['scan']"))
-			forms.add(new DefaultRecombinationDetailsForm());
+		String scan = "/genotype_result/sequence/result[@id='scan-pure']";
+		if (p.elementExists(scan))
+			forms.add(new DefaultRecombinationDetailsForm(scan, "pure", new WString("HIV-1 Subtype Recombination Analysis")));
 		
-		if (p.elementExists("genotype_result.sequence.result['crfscan']"))
-			forms.add(new DefaultRecombinationDetailsForm());
+		String crfScan = "/genotype_result/sequence/result[@id='scan-crf']";
+		if (p.elementExists(crfScan))
+			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf", new WString("HIV-1 CRF/Subtype Recombination Analysis")));
 
-		if(p.elementExists("genotype_result.sequence.result['pure-puzzle']")) {
+		if(p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']")) {
 			forms.add(new DefaultSignalDetailsForm());
 		}
 		
@@ -102,5 +113,9 @@ public class HivDefinition implements OrganismDefinition {
 
 	public boolean haveDetailsNavigationForm() {
 		return true;
+	}
+
+	public Genome getLargeGenome() {
+		return largeGenome;
 	}
 }
