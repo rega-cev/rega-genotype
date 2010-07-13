@@ -8,7 +8,7 @@ package rega.genotype.ui.forms.details;
 import java.io.File;
 
 import rega.genotype.SequenceAlignment;
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;

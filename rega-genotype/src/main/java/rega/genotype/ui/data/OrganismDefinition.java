@@ -11,6 +11,7 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;

@@ -40,16 +40,15 @@ import javax.swing.ImageIcon;
 import org.apache.commons.io.IOUtils;
 
 import rega.genotype.ApplicationException;
-import rega.genotype.BlastAnalysis;
-import rega.genotype.GenotypeTool;
-import rega.genotype.PhyloClusterAnalysis;
-import rega.genotype.SequenceAlign;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WWebWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
 
@@ -60,18 +59,6 @@ import eu.webtoolkit.jwt.servlet.WebResponse;
  *
  */
 public class GenotypeLib {
-	
-	public static String treeGraphCommand = "/usr/bin/tgf";
-	
-	public static void initSettings(Settings s) {
-		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
-		SequenceAlign.clustalWPath = s.getClustalWCmd();
-		GenotypeTool.setXmlBasePath(s.getXmlPath().getAbsolutePath() + File.separatorChar);
-		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
-		PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
-		treeGraphCommand = s.getTreeGraphCmd();
-	}
-
 	@SuppressWarnings("unchecked")
 	public static void startAnalysis(File jobDir, Class analysis,
 			Settings settings) {
@@ -163,7 +150,7 @@ public class GenotypeLib {
 		int result;
 		String cmd;
 
-		cmd = treeGraphCommand +" -t "+ treeFile.getAbsolutePath();
+		cmd = Settings.treeGraphCommand +" -t "+ treeFile.getAbsolutePath();
 		System.err.println(cmd);
 		proc = runtime.exec(cmd, null, jobDir);
 		
@@ -223,7 +210,7 @@ public class GenotypeLib {
 		tgfFile.delete();
 		resizedTgfFile.renameTo(tgfFile);
 		
-		cmd = treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
+		cmd = Settings.treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
 		System.err.println(cmd);
 		proc = runtime.exec(cmd, null, jobDir);
 		if((result = proc.waitFor()) != 0)
@@ -328,7 +315,7 @@ public class GenotypeLib {
 	public static void main(String[] args) {
 		Settings s = Settings.getInstance();
 
-		initSettings(s);
+		Settings.initSettings(s);
 
 // try {
 // HIVTool hiv = new HIVTool(new File(
@@ -366,14 +353,12 @@ public class GenotypeLib {
 
 	    return contents.toString();
 	}
-
-	public static void writeStringToFile(File f, String s) throws IOException {
-	      Writer output = new BufferedWriter(new FileWriter(f));
-	      try {
-	        output.write( s );
-	      }
-	      finally {
-	        output.close();
-	      }
-	}
+	
+    public static String getEscapedValue(GenotypeResultParser p, String name) {
+    	String value = p.getValue(name);
+    	if(value==null)
+    		return null;
+    	else
+    		return WWebWidget.escapeText(value, true);
+    }
 }

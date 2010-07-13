@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
@@ -44,8 +44,8 @@ public class DefaultJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		List<WWidget> data = new ArrayList<WWidget>();
 
-		data.add(new WText(p.getEscapedValue("/genotype_result/sequence/@name")));
-		data.add(new WText(p.getEscapedValue("/genotype_result/sequence/@length")));
+		data.add(new WText(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name")));
+		data.add(new WText(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length")));
 		
 		WAnchor report = createReportLink(p);
 		data.add(report);
@@ -56,10 +56,10 @@ public class DefaultJobOverview extends AbstractJobOverview {
 			data.add(new WText("NA"));
 			data.add(new WText("NA"));
 		} else {
-			id = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/id");
-			data.add(new WText(p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name")));
+			id = GenotypeLib.getEscapedValue(p,"/genotype_result/sequence/conclusion/assigned/id");
+			data.add(new WText(GenotypeLib.getEscapedValue(p,"/genotype_result/sequence/conclusion/assigned/name")));
 			
-			String support = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/support");
+			String support = GenotypeLib.getEscapedValue(p,"/genotype_result/sequence/conclusion/assigned/support");
 			if(support==null) {
 				support = "NA";
 			}

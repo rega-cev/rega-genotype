@@ -7,10 +7,10 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.DefaultTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;

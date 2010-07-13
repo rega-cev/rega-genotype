@@ -7,8 +7,8 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.GenotypeResultParser;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
 

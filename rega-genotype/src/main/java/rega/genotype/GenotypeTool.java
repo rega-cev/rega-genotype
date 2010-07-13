@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
 
-import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.utils.Settings;
 
 /**
  * Main class for the genotype tool.
@@ -93,7 +93,7 @@ public abstract class GenotypeTool {
         
         String treeGraphCmd = (String) parser.getOptionValue(treeGraphCmdOption);        
         if (treeGraphCmd != null)
-        	GenotypeLib.treeGraphCommand = treeGraphCmd;
+        	Settings.treeGraphCommand = treeGraphCmd;
 
         return parser.getRemainingArgs();
 	}

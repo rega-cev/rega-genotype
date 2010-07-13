@@ -8,8 +8,8 @@ package rega.genotype.ui.viruses.etv;
 import java.io.File;
 import java.io.IOException;
 
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -33,16 +33,16 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 		block.setId("");
 
 		WText t = new WText(tr("defaultSequenceAssignment.name-length")
-				.arg(p.getEscapedValue("/genotype_result/sequence/@name"))
-				.arg(p.getEscapedValue("/genotype_result/sequence/@length")), block);
+				.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name"))
+				.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length")), block);
 		t.setId("");
 
 		boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-serotype']/best/id") != null;
 		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("/genotype_result/sequence/conclusion[@id='unassigned']/assigned/id") == null;
 
 		if (haveBlastAssignment) {
-			String blastConclusion = p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/cluster/name");
-			String blastScore = p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/cluster/score");
+			String blastConclusion = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/name");
+			String blastScore = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/score");
 			t = new WText(tr("etvSequenceAssignment.blast").arg(blastConclusion).arg(blastScore), block);
 			t.setId("");
 		}
@@ -89,7 +89,7 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
 		refSeq.arg(start);
 		refSeq.arg(end);
-		refSeq.arg(p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/refseq"));
+		refSeq.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/refseq"));
 
 		t = new WText(refSeq, block);
 		t.setId("");

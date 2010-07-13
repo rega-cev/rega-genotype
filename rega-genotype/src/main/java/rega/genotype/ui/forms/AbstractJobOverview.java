@@ -9,15 +9,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.FastaGenerator;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.Settings;
 import rega.genotype.ui.util.XlsDataTable;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Side;
@@ -33,6 +33,7 @@ import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableCell;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTimer;
+import eu.webtoolkit.jwt.WWebWidget;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
@@ -105,7 +106,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	protected boolean downloadResultsLink() {
 		return true;
 	}
-
+	
 	public void init(String jobId, String filter) {
 		this.filter = filter;
 
@@ -357,7 +358,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 	
 	public boolean isExcludedByFilter(GenotypeResultParser p) {
-		String assignment = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name");
+		String assignment = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/assigned/name");
 		return filter != null && !filter.equals(summary.encodeAssignment(assignment));
 	}
 	

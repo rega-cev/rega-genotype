@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.data;
+package rega.genotype.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -183,14 +183,6 @@ public abstract class GenotypeResultParser extends DefaultHandler {
     
     public String getValue(String name) {
     	return valuesMap.get(name);
-    }
-    
-    public String getEscapedValue(String name) {
-    	String value = getValue(name);
-    	if(value==null)
-    		return null;
-    	else
-    		return WWebWidget.escapeText(value, true);
     }
     
     public boolean elementExists(String name) {

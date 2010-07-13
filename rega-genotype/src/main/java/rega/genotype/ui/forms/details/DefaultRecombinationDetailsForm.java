@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.RecombinationForm;
@@ -69,7 +69,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		final RecombinationPlot plot = new RecombinationPlot(p.getValue(path+"/data"), od);
 		addWidget(plot);
 		addWidget(new WText(tr("defaultRecombinationAnalyses.bootscanClusterSupport")));
-		addWidget(new WText(p.getEscapedValue(path+"/support[@id='best']")));
+		addWidget(new WText(GenotypeLib.getEscapedValue(p, path+"/support[@id='best']")));
 		addWidget(new WBreak());
 		addWidget(new WText(tr("defaultRecombinationAnalyses.download").getValue() +" "));
 		addWidget(GenotypeLib.getAnchor("CSV", "application/excel",

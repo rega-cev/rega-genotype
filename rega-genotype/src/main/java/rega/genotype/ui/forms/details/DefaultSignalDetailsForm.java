@@ -8,8 +8,8 @@ package rega.genotype.ui.forms.details;
 import java.io.File;
 import java.io.IOException;
 
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;
@@ -30,7 +30,7 @@ public class DefaultSignalDetailsForm extends IDetailsForm {
 		WListContainerWidget ul = new WListContainerWidget(this);
 		WContainerWidget li;
 		li = ul.addItem(new WText(tr("defaultSignalAnalysis.signalValue")));
-		li.addWidget(new WText(p.getEscapedValue("/genotype_result/sequence/result[@id='pure-puzzle']/signal")));
+		li.addWidget(new WText(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='pure-puzzle']/signal")));
 		li = ul.addItem(new WText(tr("defaultSignalAnalysis.signalComment")));
 		final String puzzleFile = p.getValue("/genotype_result/sequence/result[@id='pure-puzzle']/puzzle");
 

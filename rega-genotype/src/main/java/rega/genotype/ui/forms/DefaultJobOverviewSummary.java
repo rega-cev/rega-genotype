@@ -3,9 +3,10 @@ package rega.genotype.ui.forms;
 import java.awt.Color;
 import java.util.EnumSet;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.widgets.TableView;
+import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Side;
@@ -123,7 +124,7 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 	}
 	
 	public void update(GenotypeResultParser parser, OrganismDefinition od) {
-		String assignment = formatAssignment(parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name"));
+		String assignment = formatAssignment(GenotypeLib.getEscapedValue(parser, "/genotype_result/sequence/conclusion/assigned/name"));
 		
 		if (table == null) {
 			init();
@@ -145,9 +146,9 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 							
 			model.insertRow(insertPosition);
 			
-			String id = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/major/assigned/id");
+			String id = GenotypeLib.getEscapedValue(parser, "/genotype_result/sequence/conclusion/assigned/major/assigned/id");
 			if (id == null) 
-				id = parser.getEscapedValue("/genotype_result/sequence/conclusion/assigned/id");
+				id = GenotypeLib.getEscapedValue(parser, "/genotype_result/sequence/conclusion/assigned/id");
 			
 			Color c = od.getGenome().getAttributes().getColors().get(id);
 			WColor wc;

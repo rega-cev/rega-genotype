@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import rega.genotype.ui.data.GenotypeResultParser.SkipToSequenceParser;
+import rega.genotype.data.GenotypeResultParser.SkipToSequenceParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
@@ -62,7 +62,7 @@ public class RecombinationForm extends AbstractForm{
 		if (!p.elementExists("/genotype_result/sequence/conclusion")) {
 			id = "-";
 		} else {
-			id = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/id");
+			id = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/assigned/id");
 		}
 		
 		final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));

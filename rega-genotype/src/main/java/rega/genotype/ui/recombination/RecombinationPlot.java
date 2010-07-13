@@ -10,14 +10,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.ImageConverter;
 import rega.genotype.utils.Table;
+import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.PenStyle;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WColor;
@@ -33,7 +31,6 @@ import eu.webtoolkit.jwt.chart.ChartType;
 import eu.webtoolkit.jwt.chart.SeriesType;
 import eu.webtoolkit.jwt.chart.WCartesianChart;
 import eu.webtoolkit.jwt.chart.WDataSeries;
-import eu.webtoolkit.jwt.servlet.UploadedFile;
 
 /**
  * Recombination plot.
@@ -105,7 +102,7 @@ public class RecombinationPlot extends WCartesianChart {
 		File csvFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
 		if(!csvFile.exists()) {
 			try {
-				GenotypeLib.writeStringToFile(csvFile, csvData);
+				Utils.writeStringToFile(csvFile, csvData);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

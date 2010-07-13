@@ -1,6 +1,6 @@
 package rega.genotype.ui.forms;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WTable;

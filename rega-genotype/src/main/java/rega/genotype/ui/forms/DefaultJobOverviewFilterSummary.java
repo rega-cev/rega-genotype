@@ -4,8 +4,9 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -167,7 +168,7 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 	}
 
 	public void update(GenotypeResultParser p, OrganismDefinition od) {
-		String assignment = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/name");
+		String assignment = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/assigned/name");
 		
 		if (njTreeScanStats == null)
 			init(assignment);
@@ -181,11 +182,11 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 			njTreeScanStats.nrSequences++;
 			
 			njTreeScanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootstrap", 
-					p.getEscapedValue("/genotype_result/sequence/result[@id='" + id + "']/best/support"));
+					GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='" + id + "']/best/support"));
 			njTreeScanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootstrapInside",
-					p.getEscapedValue("/genotype_result/sequence/result[@id='" + id + "']/best/inner"));
+					GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='" + id + "']/best/inner"));
 			njTreeScanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootstrapOutside",
-					p.getEscapedValue("/genotype_result/sequence/result[@id='" + id + "']/best/outer"));
+					GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='" + id + "']/best/outer"));
 			
 			njTreeScanStats.updateData(assignment);
 		}
@@ -195,11 +196,11 @@ public class DefaultJobOverviewFilterSummary extends JobOverviewSummary {
 			
 			bootscanStats.setHidden(false);
 			bootscanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootscan", 
-					p.getEscapedValue("/genotype_result/sequence/result[@id='scan-" + id + "']/support[@id='best']"));
+					GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='scan-" + id + "']/support[@id='best']"));
 			bootscanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootscanSupport",
-					p.getEscapedValue("/genotype_result/sequence/result[@id='scan-" + id + "']/support[@id='assigned']"));
+					GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='scan-" + id + "']/support[@id='assigned']"));
 			bootscanStats.setData("detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport",
-					p.getEscapedValue("/genotype_result/sequence/result[@id='scan-" + id + "']/nosupport[@id='assigned']"));
+					GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='scan-" + id + "']/nosupport[@id='assigned']"));
 			
 			bootscanStats.updateData(assignment);
 		} else {

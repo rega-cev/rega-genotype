@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.util;
+package rega.genotype.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,10 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import rega.genotype.BlastAnalysis;
+import rega.genotype.GenotypeTool;
+import rega.genotype.PhyloClusterAnalysis;
+import rega.genotype.SequenceAlign;
 import rega.genotype.ui.data.OrganismDefinition;
 
 /**
@@ -83,6 +87,7 @@ public class Settings {
 	private Integer maxJobDirLifeTime = null;
 	
 	private Map<String, File> jobDirs = new HashMap<String, File>();
+	public static String treeGraphCommand = "/usr/bin/tgf";
 
     @SuppressWarnings("unchecked")
 	private void parseConfFile(File confFile) {
@@ -127,6 +132,15 @@ public class Settings {
         }
     }
     
+	public static void initSettings(Settings s) {
+		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
+		SequenceAlign.clustalWPath = s.getClustalWCmd();
+		GenotypeTool.setXmlBasePath(s.getXmlPath().getAbsolutePath() + File.separatorChar);
+		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
+		PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
+		treeGraphCommand = s.getTreeGraphCmd();
+	}
+
 	public static Settings getInstance() {
         String configFile = System.getenv("REGA_GENOTYPE_CONF_DIR");
         

@@ -17,9 +17,8 @@ import org.quartz.SchedulerFactory;
 import org.quartz.SimpleTrigger;
 import org.quartz.impl.StdSchedulerFactory;
 
-import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.Settings;
 import rega.genotype.utils.JobDirCleanTask;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WtServlet;
 
@@ -46,7 +45,7 @@ public abstract class GenotypeMain extends WtServlet
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		GenotypeLib.initSettings(Settings.getInstance());
+		Settings.initSettings(Settings.getInstance());
 		
 		scheduleCleanJobDir();
 		

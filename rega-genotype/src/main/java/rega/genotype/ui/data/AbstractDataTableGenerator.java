@@ -7,6 +7,7 @@ package rega.genotype.ui.data;
 
 import java.io.IOException;
 
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.util.DataTable;
 

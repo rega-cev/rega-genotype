@@ -9,7 +9,6 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import rega.genotype.ui.util.Settings;
 import eu.webtoolkit.jwt.WDate;
 
 public class JobDirCleanTask implements Job {

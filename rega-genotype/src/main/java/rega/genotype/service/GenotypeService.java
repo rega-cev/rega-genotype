@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.GenotypeTool;
-import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.Settings;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
 @SuppressWarnings("serial")
@@ -75,7 +74,7 @@ public class GenotypeService extends HttpServlet {
 		else
 			throw new ServletException("Need 'genotypeTool' parameter");
 
-		GenotypeLib.initSettings(Settings.getInstance());
+		Settings.initSettings(Settings.getInstance());
 		
 		super.init(config);
 	}

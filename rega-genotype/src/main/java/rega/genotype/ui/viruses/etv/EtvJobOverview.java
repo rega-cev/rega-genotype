@@ -8,10 +8,11 @@ package rega.genotype.ui.viruses.etv;
 import java.util.ArrayList;
 import java.util.List;
 
-import rega.genotype.ui.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
@@ -38,20 +39,20 @@ public class EtvJobOverview extends AbstractJobOverview {
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		List<WWidget> data = new ArrayList<WWidget>();
 
-		data.add(new WText(new WString(p.getEscapedValue("/genotype_result/sequence/@name"))));
-		data.add(new WText(new WString(p.getEscapedValue("/genotype_result/sequence/@length"))));
+		data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name"))));
+		data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length"))));
 
 		boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-serotype']/best/id") != null;
 		boolean haveBlastAssignment = havePhyloAnalysis || !"Unassigned".equals(p.getValue("/genotype_result/sequence/conclusion/assigned/id"));
 
 		if (haveBlastAssignment) {
-			String blastAssignment = p.getEscapedValue("/genotype_result/sequence/result[@id='blast']/cluster/name");
+			String blastAssignment = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/name");
 			data.add(new WText(new WString(notNull(blastAssignment))));
 		} else
 			data.add(new WText("Could not assign"));
 		
 		if (havePhyloAnalysis) {
-			String serotypeAssignment = p.getEscapedValue("/genotype_result/sequence/conclusion/assigned/id");
+			String serotypeAssignment = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/assigned/id");
 			data.add(new WText(new WString(notNull(serotypeAssignment))));
 		} else
 			data.add(new WText());

@@ -8,8 +8,8 @@ package rega.genotype.ui.parasites.giardia;
 import java.io.File;
 import java.io.IOException;
 
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.GenotypeResultParser;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -33,19 +33,19 @@ public class GiardiaSequenceAssignmentForm extends IDetailsForm {
 		block.setId("");
 
 		WText t = new WText(tr("defaultSequenceAssignment.name-length")
-				.arg(p.getEscapedValue("/genotype_result/sequence/@name"))
-				.arg(p.getEscapedValue("/genotype_result/sequence/@length")), block);
+				.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name"))
+				.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length")), block);
 		t.setId("");
 
 		boolean hasAssignment = p.elementExists("/genotype_result/sequence/conclusion/assigned/support");
 		String assignedId = "-";
 		for (String region : GiardiaGenome.regions) {
-			String phyloResult = p.getEscapedValue("/genotype_result/sequence/result[@id='phylo-" + region + "']/best/id");
+			String phyloResult = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='phylo-" + region + "']/best/id");
 			if (phyloResult != null) {
 				if (hasAssignment)
 					assignedId = phyloResult;
 
-				WString motivation = new WString(p.getEscapedValue("/genotype_result/sequence/conclusion/motivation"));
+				WString motivation = new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/motivation"));
 				motivation.arg(p.getValue("/genotype_result/sequence/conclusion/assigned/support"));
 
 				t = new WText(tr("sequenceAssignment.phylo")

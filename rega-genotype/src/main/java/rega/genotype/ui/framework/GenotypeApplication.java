@@ -12,7 +12,7 @@ import javax.servlet.ServletContext;
 
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.Settings;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 

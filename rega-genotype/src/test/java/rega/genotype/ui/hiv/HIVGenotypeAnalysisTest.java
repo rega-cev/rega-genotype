@@ -8,8 +8,8 @@ import java.util.List;
 import junit.framework.TestCase;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.ui.data.GenotypeResultParser;
-import rega.genotype.ui.utils.Utils;
+import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.utils.TestUtils;
 import rega.genotype.viruses.hiv.HIVTool;
 
 public class HIVGenotypeAnalysisTest extends TestCase {
@@ -37,18 +37,18 @@ public class HIVGenotypeAnalysisTest extends TestCase {
     }
 
 	protected void tearDown() {
-		Utils.deleteJobDirs(jobDirs);
+		TestUtils.deleteJobDirs(jobDirs);
 	}
 
     public void testAnalysisRuntime() {
-       	File jobDir = Utils.setup(hiv_fasta);
+       	File jobDir = TestUtils.setup(hiv_fasta);
     	jobDirs.add(jobDir);
     	
 		HIVTool hiv;
 		try {
 			hiv = new HIVTool(jobDir);
-			hiv.analyze(Utils.getFastaFile(jobDir).getAbsolutePath(),
-					Utils.getResultFile(jobDir).getAbsolutePath());
+			hiv.analyze(TestUtils.getFastaFile(jobDir).getAbsolutePath(),
+					TestUtils.getResultFile(jobDir).getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail("IOException occured during analysis runtime");
