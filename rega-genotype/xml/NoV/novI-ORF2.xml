@@ -13,9 +13,20 @@
     </cluster>
 
     <cluster id="I.3" name="NoV I.3">
-      <taxus name="I.3|U04469" />
-      <taxus name="I.3|AY038598" />
       <taxus name="I.3|AJ277612" />
+      <taxus name="I.3|AY038598" />
+    </cluster>
+
+    <cluster id="I.NA1" name="NoV I.NA1">
+      <taxus name="I.NA1|U04469" />
+    </cluster>
+
+    <cluster id="I.NA2" name="NoV I.NA2">
+      <taxus name="I.NA2|AB187514" />
+    </cluster>
+
+    <cluster id="I.NA3" name="NoV I.NA3">
+      <taxus name="I.NA3|EF547396" />
     </cluster>
 
     <cluster id="I.4" name="NoV I.4">
@@ -35,21 +46,26 @@
 
     <cluster id="I.7" name="NoV I.7">
       <taxus name="I.7|AJ277609" />
-      <taxus name="I.7|AY675555" />
+    </cluster>
+
+    <cluster id="I.NA4" name="NoV I.NA4">
+      <taxus name="I.NA4|AY675555" />
+      <taxus name="I.NA4|AJ844469" />
     </cluster>
 
     <cluster id="I.8" name="NoV I.8">
       <taxus name="I.8|AF538679" />
+      <taxus name="I.8|GU299761" />
     </cluster>
 
-    <cluster id="O" name="NoV III.1">
+    <cluster id="O" name="Outgroup">
       <taxus name="III.1|EU360814" />
     </cluster>
   </clusters>
 
   <analysis id="phylo-ORF2" type="paup">
     <identify>
-      I.1,I.2,I.3,I.4,I.5,I.6,I.7,I.8,O
+      I.1,I.2,I.3,I.4,I.5,I.6,I.7,I.NA1,I.NA2,I.NA3,I.NA4,I.8,O
     </identify>
     <cutoff>
       70
@@ -63,7 +79,7 @@
       outgroup III.1|EU360814;
       set criterion=distance outroot=monophyl;
       dset distance=TamNei rates=gamma shape=0.324463 NegBrLen=SetAbsVal;
-      constraints CONSTRE(BACKBONE)=((2,3),(4,5),(6,7,8),(9,10),(11,12),(13,14),(15,16));
+      constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
       NJ constraints=CONSTRE enforce=yes;
       savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -71,7 +87,7 @@
       quit;
     </block>
     <options>
-      log,alignment,tree
+      log,alignment,tree,inner,outer
     </options>
   </analysis>
 
@@ -85,7 +101,7 @@
     </step>
     <analysis type="paup">
       <identify>
-       I.1,I.2,I.3,I.4,I.5,I.6,I.7,I.8,O
+       I.1,I.2,I.3,I.4,I.5,I.6,I.7,I.NA1,I.NA2,I.NA3,I.NA4,I.8,O
       </identify>
       <block>
         begin paup;
@@ -94,7 +110,7 @@
         export format=nexus file=paup.nex replace=yes;
 	set criterion=distance outroot=monophyl;
 	dset distance=TamNei rates=gamma shape=0.324463 NegBrLen=SetAbsVal;
-	outgroup EU360814|III.1;
+	outgroup III.1|EU360814;
         NJ;
         savetree format=phylip brlens=yes file=paup.tre replace=yes;
         bootstrap nreps=100 search=nj;
