@@ -75,8 +75,8 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 		t = new WText("<h3>Genome region</h3>", block);
 		t.setId("");
 
-		final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
-		final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+		final int start = NovJobOverview.getAdjustedImageStart(p, false);
+		final int end = NovJobOverview.getAdjustedImageEnd(p, false);
 
 		final int sequenceIndex = p.getSequenceIndex();
 

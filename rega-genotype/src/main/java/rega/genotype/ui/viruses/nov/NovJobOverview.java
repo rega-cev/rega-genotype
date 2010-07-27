@@ -5,6 +5,7 @@
  */
 package rega.genotype.ui.viruses.nov;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,14 +16,19 @@ import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * NoV job overview implementation.
  */
 public class NovJobOverview extends AbstractJobOverview {
+	private static final int NOVII_TO_NOVI_POSITION_OFFSET = 260;
 	private List<Header> headers = new ArrayList<Header>();
 	private List<WWidget> data = new ArrayList<WWidget>();
 	
@@ -84,4 +90,60 @@ public class NovJobOverview extends AbstractJobOverview {
 	public JobOverviewSummary getSummary(String filter) {
 		return null;
 	}
+
+	/**
+	 * Adjusts the blast-determined position for novII, since these are offset but we use
+	 * the same image.
+	 */
+	public static int getAdjustedImageStart(GenotypeResultParser p, boolean unassigned) {
+		int start = -1;
+		
+		if (!unassigned) {
+			start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+			
+			if (p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id").equals("II"))
+				start += NOVII_TO_NOVI_POSITION_OFFSET;
+		}
+		
+		return start;
+	}
+	
+
+	public static int getAdjustedImageEnd(GenotypeResultParser p, boolean unassigned) {
+		int end = -1;
+		
+		if (!unassigned) {
+			end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+			
+			if (p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id").equals("II")) {
+				end += NOVII_TO_NOVI_POSITION_OFFSET;
+			}
+		}
+		return end;
+	}
+
+	@Override
+	protected WImage createGenomeImage(GenotypeResultParser p, final String assignedId, boolean unassigned) {
+		
+		final int sequenceIndex = p.getSequenceIndex();
+		final int start = getAdjustedImageStart(p, unassigned);
+		final int end = getAdjustedImageEnd(p, unassigned);
+
+		return GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
+			@Override
+			public void handleRequest(WebRequest request, WebResponse response) {
+				try {
+					if (getFileName().isEmpty()) {
+						File file = getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, sequenceIndex, assignedId, start, end, 0, "", null);
+						setFileName(file.getAbsolutePath());
+					}
+	
+					super.handleRequest(request, response);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			}				
+		});
+	}
+
 }
