@@ -30,7 +30,7 @@ public class EtvJobOverview extends AbstractJobOverview {
 		headers.add(new Header(new WString("Name")));
 		headers.add(new Header(new WString("Length")));
 		headers.add(new Header(new WString("Genus/Species")));
-		headers.add(new Header(new WString("Serotype")));
+		headers.add(new Header(new WString("Serotype (subgenogroup)"), 2));
 		headers.add(new Header(new WString("Report")));
 		headers.add(new Header(new WString("Genome")));
 	}
@@ -42,27 +42,20 @@ public class EtvJobOverview extends AbstractJobOverview {
 		data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name"))));
 		data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length"))));
 
+		String blastResult = EtvResults.getBlastConclusion(p);
+		data.add(new WText(new WString(notNull(blastResult))));
+
+		EtvResults.Conclusion c = EtvResults.getConclusion(p);
+
+		data.add(new WText(new WString(notNull(c.majorAssignmentForOverview))));
+		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
+		
+		WAnchor report = createReportLink(p);
+		data.add(report);
+
+		// XX could be through EtvResults ?
 		boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-serotype']/best/id") != null;
 		boolean haveBlastAssignment = havePhyloAnalysis || !"Unassigned".equals(p.getValue("/genotype_result/sequence/conclusion/assigned/id"));
-
-		if (haveBlastAssignment) {
-			String blastAssignment = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/name");
-			data.add(new WText(new WString(notNull(blastAssignment))));
-		} else
-			data.add(new WText("Could not assign"));
-		
-		if (havePhyloAnalysis) {
-			String serotypeAssignment = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/assigned/id");
-			data.add(new WText(new WString(notNull(serotypeAssignment))));
-		} else
-			data.add(new WText());
-
-		if (havePhyloAnalysis) {
-			WAnchor report = createReportLink(p);
-			data.add(report);
-		} else
-			data.add(new WText());
-
 		data.add(createGenomeImage(p, "-", !haveBlastAssignment));
 	
 		return data;

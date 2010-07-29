@@ -21,6 +21,7 @@ import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.viruses.etv.EnteroTool;
 import eu.webtoolkit.jwt.WString;
 
@@ -67,6 +68,15 @@ public class EtvDefinition implements OrganismDefinition {
 		if (p.elementExists(phyloResult)) {
 			WString title = new WString("Phylogenetic analyses");
 			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
+
+			String bestGenotype = GenotypeLib.getEscapedValue(p, phyloResult + "/best/id");
+			
+			String variantResult = result + "[@id='phylo-VP1-" + bestGenotype + "']";
+			if (p.elementExists(variantResult)) {
+				WString variantTitle = new WString("Phylogenetic analyses for subgenogroup within "
+						+ bestGenotype);
+				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle, true));
+			}
 		}
 	}
 	

@@ -262,6 +262,16 @@ GAATATGACAGG
     <p><span class="label"/> {3}
 		</p>
   </resource>
+ 
+  	<resource name="etvSequenceAssignment.phylo-variant">
+		<p>
+			<span class="label">Subgenogroup:</span> <span class="nov-subclustering">{1}</span>
+		</p>
+		<p>
+			<span class="label"></span> {2}
+		</p>
+	</resource>
+  
   <resource name="etvTool.title">Enterovirus Genotyping Tool</resource>
   <resource name="main.navigation.introduction">Introduction</resource>
   <resource name="main.navigation.subtypingProcess">(Sub)typing process</resource>

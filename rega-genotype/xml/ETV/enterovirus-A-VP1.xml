@@ -1,5 +1,5 @@
 <genotype-analyses>
-	<alignment file="enterovirus-A-EV71-VP1.fasta" trim="false" />
+	<alignment file="enterovirus-A-VP1-aaligned.fasta" trim="false" />
 
 	<clusters>
 		<cluster id="CV-A2" name="Enterovirus A, serotype CV-A2">
@@ -53,17 +53,17 @@
 		</cluster>
 
 		<cluster id="EV-71" name="Enterovirus A, serotype EV-71">
-			<cluster id="EV-71_Br" name="EV71 Br">
+			<cluster id="EV-71_Br" name="Br">
 				<description>subgenogroup Br</description>
 				<taxus name="U22521|Br" />
 				<taxus name="GU434678|Br" />
 			</cluster>
-			<cluster id="EV-71_B0" name="EV71 B0">
+			<cluster id="EV-71_B0" name="B0">
 				<description>subgenogroup B0</description>
 				<taxus name="6984|B0" />
 				<taxus name="10076|B0" />
 			</cluster>
-			<cluster id="EV-71_B1" name="EV71 B1">
+			<cluster id="EV-71_B1" name="B1">
 				<description>subgenogroup B1</description>
 				<taxus name="12702|B1" />
 				<taxus name="15213|B1" />
@@ -72,44 +72,44 @@
 				<taxus name="4312|B1" />
 				<taxus name="AB482183|B1" />
 			</cluster>
-			<cluster id="EV-71_B2" name="EV71 B2">
+			<cluster id="EV-71_B2" name="B2">
 				<description>subgenogroup B2</description>
 				<taxus name="10196|B2" />
 				<taxus name="11347|B2" />
 				<taxus name="13459|B2" />
 				<taxus name="8304|B2" />
 			</cluster>
-			<cluster id="EV-71_B5" name="EV71 B5">
+			<cluster id="EV-71_B5" name="B5">
 				<description>subgenogroup B5</description>
 				<taxus name="FM201330|B5" />
 				<taxus name="EU527985|B5" />
 			</cluster>
-			<cluster id="EV-71_B4" name="EV71 B4">
+			<cluster id="EV-71_B4" name="B4">
 				<description>subgenogroup B4</description>
 				<taxus name="AF376111|B4" />
 				<taxus name="AF376066|B4" />
 			</cluster>
-			<cluster id="EV-71_B3" name="EV71 B3">
+			<cluster id="EV-71_B3" name="B3">
 				<description>subgenogroup B3</description>
 				<taxus name="EU376004|B3" />
 				<taxus name="DQ341368|B3" />
 			</cluster>
-			<cluster id="EV-71_C3" name="EV71 C3">
+			<cluster id="EV-71_C3" name="C3">
 				<description>subgenogroup C3</description>
 				<taxus name="AY125966|C3" />
 				<taxus name="DQ341356|C3" />
 			</cluster>
-			<cluster id="EV-71_C5" name="EV71 C5">
+			<cluster id="EV-71_C5" name="C5">
 				<description>subgenogroup C5</description>
 				<taxus name="AM490149|C5" />
 				<taxus name="AM490161|C5" />
 			</cluster>
-			<cluster id="EV-71_C4" name="EV71 C4">
+			<cluster id="EV-71_C4" name="C4">
 				<description>subgenogroup C4</description>
 				<taxus name="AB433892|C4" />
 				<taxus name="AB115492|C4" />
 			</cluster>
-			<cluster id="EV-71_C1" name="EV71 C1">
+			<cluster id="EV-71_C1" name="C1">
 				<description>subgenogroup C1</description>
 				<taxus name="11391|C1" />
 				<taxus name="1185|C1" />
@@ -121,7 +121,7 @@
 				<taxus name="9985|C1" />
 				<taxus name="10096|C1" />
 			</cluster>
-			<cluster id="EV-71_C2" name="EV71 C2">
+			<cluster id="EV-71_C2" name="C2">
 				<description>subgenogroup C2</description>
 				<taxus name="1478|C2" />
 				<taxus name="3128|C2" />
@@ -209,7 +209,7 @@
 		</options>
 	</analysis>
 
-	<analysis id="phylo-subgenogroup-EV-71" type="paup">
+	<analysis id="phylo-VP1-EV-71" type="paup">
 		<identify>
 			EV-71_Br, 
 			EV-71_B0, EV-71_B1, EV-71_B2, EV-71_B3, EV-71_B4, EV-71_B5,
@@ -225,7 +225,7 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup CV-A16|U05876;
+			outgroup CV_A16|U05876;
 			set criterion=distance;
 			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
 			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};

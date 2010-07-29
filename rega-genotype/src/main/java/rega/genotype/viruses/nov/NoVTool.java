@@ -98,7 +98,7 @@ public class NoVTool extends GenotypeTool {
     /**
      * Does the phylogenetic analyses for given genogroup and region.
      * 
-     * @return wheter a conclusion could be made based on a phylogenetic analysis.
+     * @return whether a conclusion could be made based on a phylogenetic analysis.
      */
 	private boolean phyloAnalysis(AbstractSequence s, String groupId, String regionName) throws AnalysisException {
 		System.err.println("Phylo analysis: GenoGroup = " + groupId + ", region = " + regionName);

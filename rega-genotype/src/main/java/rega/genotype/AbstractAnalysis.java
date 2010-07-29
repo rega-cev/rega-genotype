@@ -161,6 +161,10 @@ public abstract class AbstractAnalysis {
         this.options = null;
     }
 
+    public AlignmentAnalyses getOwner() {
+    	return this.owner;
+    }
+    
     /**
      * This is the internal call for running an an analysis for a
      * given alignment + sequence.

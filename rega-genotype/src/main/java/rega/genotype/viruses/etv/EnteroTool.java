@@ -23,12 +23,13 @@ import rega.genotype.SubSequence;
 import rega.genotype.AlignmentAnalyses.Cluster;
 
 /**
- * NoVTool implements the genotyping algorithm for norovirus.
+ * NoVTool implements the genotyping algorithm for enterovirus.
  * 
  * @author koen
  */
 public class EnteroTool extends GenotypeTool {
     private static final int MINIMUM_REGION_OVERLAP = 100;
+
 	private AlignmentAnalyses picorna;
     private BlastAnalysis blastAnalysis;
     private Map<String, PhyloClusterAnalysis> serotypeAnalyses = new HashMap<String, PhyloClusterAnalysis>();
@@ -75,7 +76,7 @@ public class EnteroTool extends GenotypeTool {
         				 * Cut the overlapping part to not confuse the alignment
         				 */
         				AbstractSequence s2 = re > rs ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
-        				if (phyloAnalysis(pca, s2))
+        				if (phyloAnalysis(pca, s2, region.getName()))
             				haveConclusion = true;
         			}        			
         		}
@@ -91,18 +92,54 @@ public class EnteroTool extends GenotypeTool {
         }
     }
 
-	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s) throws AnalysisException {
+	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s, String regionName) throws AnalysisException {
 		PhyloClusterAnalysis.Result r = pca.run(s);
 
-		if (r.haveSupport())
-			conclude(r.concludeForCluster(r.getConcludedCluster()), "Supported with phylogenetic analysis and bootstrap {1} (&gt;= 70)");
-		else
-			conclude("Could not assign", "Not supported by phylogenetic analysis");
+		if (r.haveSupport()) {
+			conclude(r, "Supported with phylogenetic analysis and bootstrap {1} (&gt;= 70)", "serotype");
+
+			subgenogroupPhyloAnalysis(s, pca.getOwner(), regionName, r.getConcludedCluster());
+		} else
+			conclude("Could not assign", "Not supported by phylogenetic analysis", "serotype");
 
 		return true;
 	}
 
-    public void analyzeSelf() throws AnalysisException {
+    private boolean subgenogroupPhyloAnalysis(AbstractSequence s, AlignmentAnalyses phylo, String regionName, Cluster cluster) throws AnalysisException {
+    	String analysisName = "phylo-" + regionName + "-" + cluster.getId();
+    	
+		/*
+		 * Only if that analysis is described in the XML file.
+		 */
+		if (!phylo.haveAnalysis(analysisName))
+			return false;
+
+		PhyloClusterAnalysis a = (PhyloClusterAnalysis) phylo.getAnalysis(analysisName);
+
+		PhyloClusterAnalysis.Result r = a.run(s);
+		
+		String phyloName = "phylogenetic subgenogroup analysis within " + cluster.getId();
+
+		/*
+		 * If we are clustering with the outgroup, then clearly we could not identify a variant.
+		 * 
+		 * WARNING: the following test is based on a variant cluster to start with the same
+		 * name as the genotype for which it is a variant!
+		 * This is to differentiate with the outgroup. It would be better to mark the
+		 * outgroup with some attribute ?
+		 */
+		if (r == null
+			|| r.getConcludedCluster() == null
+			|| !r.getConcludedCluster().getId().startsWith(cluster.getId())
+			|| !r.haveSupport())
+			conclude("Could not assign", "Not supported by " + phyloName, "subgenogroup");
+		else
+			conclude(r, "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", "subgenogroup");
+
+		return true;
+	}
+
+	public void analyzeSelf() throws AnalysisException {
 	}
 }
 

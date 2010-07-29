@@ -12,6 +12,7 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.viruses.nov.NovResults;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
@@ -37,26 +38,34 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 				.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length")), block);
 		t.setId("");
 
-		boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-serotype']/best/id") != null;
-		boolean haveBlastAssignment = havePhyloAnalysis || p.getValue("/genotype_result/sequence/conclusion[@id='unassigned']/assigned/id") == null;
-
-		if (haveBlastAssignment) {
-			String blastConclusion = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/name");
+		String blastConclusion = EtvResults.getBlastConclusion(p);
+		if (!blastConclusion.equals(EtvResults.NA)) {
 			String blastScore = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/score");
 			t = new WText(tr("etvSequenceAssignment.blast").arg(blastConclusion).arg(blastScore), block);
 			t.setId("");
 		}
 
-		if (havePhyloAnalysis) {
-			EtvResults.Conclusion c = EtvResults.getSerotype(p);
+		EtvResults.Conclusion c = EtvResults.getConclusion(p);
 
-			WString motivation = new WString(c.majorMotivation);
-			motivation.arg(c.majorBootstrap);
+		if (c.majorAssignment == null || c.majorAssignment.isEmpty())
+			c.majorAssignment = NovResults.NA;
+		
+		WString motivation = new WString(c.majorMotivation);
+		motivation.arg(c.majorBootstrap);
 
-			t = new WText(tr("etvSequenceAssignment.phylo")
-						.arg("Serotype (VP1)")
-						.arg(c.majorAssignment)
-						.arg(motivation), block);
+		t = new WText(tr("etvSequenceAssignment.phylo")
+				.arg("Serotype (VP1)")
+				.arg(c.majorAssignment)
+				.arg(motivation), block);
+		t.setId("");
+
+		if (c.variantDescription != null) {
+			motivation = new WString(c.variantMotivation);
+			motivation.arg(c.variantBootstrap);
+
+			t = new WText(tr("etvSequenceAssignment.phylo-variant")
+					.arg(c.variantDescription)
+					.arg(motivation), block);
 			t.setId("");
 		}
 
