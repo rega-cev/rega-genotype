@@ -18,14 +18,14 @@
 		</cluster>
 
 		<!-- singletons in the end -->
-		<cluster id="enterovirus-A" name="Enterovirus A">
+		<cluster id="outgroup" name="Enterovirus A">
 			<taxus name="Outgroup|AB192877" />
 		</cluster>
 	</clusters>
 
 	<analysis id="phylo-serotype" type="paup">
 		<identify>
-		  EV-70, EV-94, EV-68, enterovirus-A
+		  EV-70, EV-94, EV-68, outgroup
 		</identify>
 		<cutoff>
 			80
@@ -47,7 +47,7 @@
 			quit;
 		</block>
 		<options>
-			log,alignment,tree
+			log,alignment,tree,inner,outer
 		</options>
 	</analysis>
 

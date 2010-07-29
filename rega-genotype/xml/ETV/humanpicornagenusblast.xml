@@ -2,178 +2,2087 @@
   <alignment file="humanpicornagenusblast.fasta" data="dna"/>
 
   <clusters>
-    <cluster id="cardiovirus" name="Cardiovirus">
+    <cluster id="aphtovirus-2" name="Bovine rhinitis B virus">
+      <taxus name="NC_010354" />
+    </cluster>
+
+    <cluster id="aphtovirus-3" name="Equine rhinitis A virus">
+      <taxus name="DQ268580" />
+      <taxus name="NC_003982" />
+    </cluster>
+
+    <cluster id="aphtovirus-1" name="Foot-and-mouth disease virus">
+      <taxus name="NC_002554" />
+      <taxus name="NC_003992" />
+      <taxus name="NC_004004" />
+      <taxus name="NC_004915" />
+      <taxus name="NC_011450" />
+      <taxus name="NC_011451" />
+      <taxus name="NC_011452" />
+    </cluster>
+
+    <cluster id="avihepatovirus" name="Avihepatovirus">
+      <taxus name="EF067923" />
+      <taxus name="NC_008250" />
+      <taxus name="NC_009750" />
+    </cluster>
+
+    <cluster id="cardiovirus-3" name="Human cardiovirus">
+      <taxus name="EU681176" />
+      <taxus name="EU681177" />
+      <taxus name="EU681178" />
+      <taxus name="FJ463615" />
+      <taxus name="FJ463616" />
+      <taxus name="FJ463617" />
+      <taxus name="FM207487" />
       <taxus name="NC_009448" />
       <taxus name="NC_010810" />
     </cluster>
 
+    <cluster id="cardiovirus-2" name="Theilovirus">
+      <taxus name="AB090161" />
+      <taxus name="DQ401688" />
+      <taxus name="EU542581" />
+      <taxus name="EU718732" />
+      <taxus name="EU718733" />
+      <taxus name="EU723238" />
+      <taxus name="EU815052" />
+      <taxus name="M20301" />
+      <taxus name="NC_001366" />
+    </cluster>
+
+    <cluster id="cardiovirus-1" name="Encephalomyocarditis virus">
+      <taxus name="AY296731" />
+      <taxus name="DQ835185" />
+      <taxus name="L22089" />
+      <taxus name="NC_001479" />
+      <taxus name="X87335" />
+    </cluster>
+
+    <cluster id="erbovirus" name="Erbovirus">
+      <taxus name="NC_003077" />
+      <taxus name="NC_003983" />
+    </cluster>
+
     <cluster id="enterovirus-A" name="Enterovirus A">
-      <taxus name="NC_001612" />
-      <taxus name="U22521" />
+      <taxus name="AB192877" />
+      <taxus name="AB204852" />
+      <taxus name="AB469183" />
+      <taxus name="AB482183" />
+      <taxus name="AF119795" />
+      <taxus name="AF119796" />
+      <taxus name="AF302996" />
+      <taxus name="AF326764" />
+      <taxus name="AJ586873" />
+      <taxus name="AY421760" />
+      <taxus name="AY421761" />
+      <taxus name="AY421762" />
+      <taxus name="AY421763" />
       <taxus name="AY421764" />
+      <taxus name="AY421765" />
+      <taxus name="AY421766" />
       <taxus name="AY421767" />
+      <taxus name="AY421768" />
+      <taxus name="AY421769" />
       <taxus name="AY697458" />
       <taxus name="AY697459" />
-      <taxus name="AY421760" />
-      <taxus name="AY421765" />
-      <taxus name="AY697461" />
-      <taxus name="AB192877" />
       <taxus name="AY697460" />
-      <taxus name="AY421765" />
-      <taxus name="AY421768" />
+      <taxus name="AY697461" />
+      <taxus name="AY773285" />
+      <taxus name="DQ341356" />
+      <taxus name="DQ341357" />
+      <taxus name="DQ341358" />
+      <taxus name="DQ341359" />
+      <taxus name="DQ341364" />
+      <taxus name="EF063152" />
+      <taxus name="EF373575" />
+      <taxus name="EF373576" />
+      <taxus name="EF667343" />
       <taxus name="EF667344" />
+      <taxus name="EU864507" />
+      <taxus name="FJ198212" />
+      <taxus name="FJ357384" />
+      <taxus name="FJ606450" />
+      <taxus name="NC_001612" />
+      <taxus name="NC_010412" />
+      <taxus name="NC_010413" />
+      <taxus name="U22522" />
     </cluster>
 
     <cluster id="enterovirus-B" name="Enterovirus B">
+      <taxus name="AB426610" />
+      <taxus name="AB426611" />
+      <taxus name="AB501329" />
+      <taxus name="AF029859" />
+      <taxus name="AF083069" />
+      <taxus name="AF085363" />
+      <taxus name="AF105342" />
+      <taxus name="AF114383" />
+      <taxus name="AF231764" />
+      <taxus name="AF233852" />
+      <taxus name="AF241359" />
+      <taxus name="AF311938" />
+      <taxus name="AF311939" />
+      <taxus name="AF317694" />
+      <taxus name="AF328683" />
+      <taxus name="AF465516" />
+      <taxus name="AF504533" />
+      <taxus name="AF524866" />
+      <taxus name="AF524867" />
+      <taxus name="AJ276224" />
+      <taxus name="AJ493062" />
+      <taxus name="AJ577589" />
+      <taxus name="AJ577590" />
+      <taxus name="AJ577594" />
+      <taxus name="AJ849942" />
+      <taxus name="AY036578" />
+      <taxus name="AY167104" />
+      <taxus name="AY167105" />
+      <taxus name="AY167106" />
+      <taxus name="AY167107" />
+      <taxus name="AY186748" />
+      <taxus name="AY302539" />
+      <taxus name="AY302540" />
+      <taxus name="AY302541" />
+      <taxus name="AY302542" />
+      <taxus name="AY302543" />
+      <taxus name="AY302544" />
+      <taxus name="AY302545" />
+      <taxus name="AY302546" />
+      <taxus name="AY302547" />
+      <taxus name="AY302548" />
+      <taxus name="AY302549" />
+      <taxus name="AY302550" />
+      <taxus name="AY302551" />
+      <taxus name="AY302552" />
+      <taxus name="AY302553" />
+      <taxus name="AY302554" />
+      <taxus name="AY302555" />
+      <taxus name="AY302556" />
+      <taxus name="AY302557" />
+      <taxus name="AY302558" />
+      <taxus name="AY302560" />
+      <taxus name="AY466024" />
+      <taxus name="AY466029" />
+      <taxus name="AY466032" />
+      <taxus name="AY556057" />
+      <taxus name="AY556070" />
+      <taxus name="AY673831" />
+      <taxus name="AY843297" />
+      <taxus name="AY843298" />
+      <taxus name="AY843299" />
+      <taxus name="AY843300" />
+      <taxus name="AY843301" />
+      <taxus name="AY843302" />
+      <taxus name="AY843303" />
+      <taxus name="AY843304" />
+      <taxus name="AY843305" />
+      <taxus name="AY843306" />
+      <taxus name="AY843307" />
+      <taxus name="AY843308" />
+      <taxus name="AY875692" />
+      <taxus name="AY896760" />
+      <taxus name="AY896761" />
+      <taxus name="AY896762" />
+      <taxus name="AY896763" />
+      <taxus name="AY896764" />
+      <taxus name="AY896765" />
+      <taxus name="AY896766" />
+      <taxus name="AY896767" />
+      <taxus name="AY948442" />
+      <taxus name="D00627" />
+      <taxus name="D16364" />
+      <taxus name="DQ480420" />
+      <taxus name="DQ534205" />
+      <taxus name="DQ902712" />
+      <taxus name="EF066391" />
+      <taxus name="EF066392" />
+      <taxus name="EF155422" />
+      <taxus name="EF155423" />
+      <taxus name="EF174468" />
+      <taxus name="EF174469" />
+      <taxus name="EF371880" />
+      <taxus name="EF634316" />
+      <taxus name="EU144042" />
+      <taxus name="EU151450" />
+      <taxus name="EU151454" />
+      <taxus name="EU151461" />
+      <taxus name="FJ000001" />
+      <taxus name="FJ172447" />
+      <taxus name="FJ357838" />
+      <taxus name="FJ460595" />
+      <taxus name="FJ766334" />
+      <taxus name="GU550508" />
       <taxus name="NC_001472" />
       <taxus name="NC_009887" />
-      <taxus name="D00627" />
-      <taxus name="AY186745" />
-      <taxus name="FJ357838" />
-      <taxus name="AF039205" />
-      <taxus name="EF371880" />
-      <taxus name="AF114383" />
-      <taxus name="AY466029" />
-      <taxus name="AY302539" />
-      <taxus name="AY302550" />
-      <taxus name="DQ534205" />
-      <taxus name="AF524866" />
+      <taxus name="NC_010411" />
+      <taxus name="NC_013114" />
+      <taxus name="NC_013115" />
+      <taxus name="U57056" />
+      <taxus name="X67706" />
+      <taxus name="X79047" />
+      <taxus name="X80059" />
+      <taxus name="X84981" />
+    </cluster>
+
+    <cluster id="simian-enterovirus-A" name="Simian enterovirus A">
+      <taxus name="AF326759" />
+      <taxus name="NC_003988" />
+    </cluster>
+
+    <cluster id="simian-enterovirus-B" name="Simian enterovirus B">
       <taxus name="FJ007373" />
-      <taxus name="AY896767" />
+      <taxus name="AF326750" />
+      <taxus name="NC_013695" />
+      <taxus name="NC_010384" />
+      <taxus name="NC_010415" />
     </cluster>
 
     <cluster id="enterovirus-C" name="Enterovirus C">
-      <taxus name="NC_001428" />
-      <taxus name="M12197" />
-      <taxus name="AF499643" />
+      <taxus name="AB180070" />
+      <taxus name="AB205395" />
+      <taxus name="AB205396" />
+      <taxus name="AF111953" />
+      <taxus name="AF111961" />
+      <taxus name="AF111966" />
+      <taxus name="AF111981" />
+      <taxus name="AF111982" />
+      <taxus name="AF111983" />
+      <taxus name="AF111984" />
+      <taxus name="AF405666" />
+      <taxus name="AF405669" />
+      <taxus name="AF448782" />
+      <taxus name="AF448783" />
+      <taxus name="AF462419" />
       <taxus name="AF465511" />
-      <taxus name="AF465514" />
+      <taxus name="AF465512" />
+      <taxus name="AF465513" />
+      <taxus name="AF465515" />
+      <taxus name="AF499635" />
+      <taxus name="AF499636" />
+      <taxus name="AF499639" />
+      <taxus name="AF499641" />
+      <taxus name="AF499642" />
+      <taxus name="AF499643" />
+      <taxus name="AJ132960" />
+      <taxus name="AJ132961" />
+      <taxus name="AJ293918" />
+      <taxus name="AJ544513" />
+      <taxus name="AM040035" />
+      <taxus name="AM040036" />
+      <taxus name="AM040038" />
+      <taxus name="AM040039" />
+      <taxus name="AM084224" />
+      <taxus name="AM084225" />
+      <taxus name="AY056702" />
+      <taxus name="AY278550" />
+      <taxus name="AY278551" />
+      <taxus name="AY278552" />
+      <taxus name="AY278553" />
+      <taxus name="AY421739" />
+      <taxus name="AY560657" />
+      <taxus name="AY948201" />
+      <taxus name="D00625" />
+      <taxus name="D90457" />
+      <taxus name="DQ358078" />
+      <taxus name="DQ443001" />
+      <taxus name="DQ890385" />
+      <taxus name="DQ890386" />
+      <taxus name="DQ890388" />
+      <taxus name="DQ995633" />
+      <taxus name="DQ995634" />
+      <taxus name="DQ995635" />
+      <taxus name="DQ995636" />
+      <taxus name="DQ995637" />
+      <taxus name="DQ995638" />
+      <taxus name="DQ995641" />
+      <taxus name="DQ995644" />
+      <taxus name="DQ995645" />
+      <taxus name="DQ995646" />
+      <taxus name="DQ995647" />
+      <taxus name="DQ995648" />
+      <taxus name="EF015008" />
+      <taxus name="EF015009" />
+      <taxus name="EF015010" />
+      <taxus name="EF015011" />
+      <taxus name="EF015012" />
+      <taxus name="EF015013" />
+      <taxus name="EF015014" />
+      <taxus name="EF015015" />
+      <taxus name="EF015016" />
+      <taxus name="EF015017" />
+      <taxus name="EF015018" />
+      <taxus name="EF015019" />
+      <taxus name="EF015020" />
+      <taxus name="EF015021" />
+      <taxus name="EF015023" />
+      <taxus name="EF015027" />
+      <taxus name="EF015030" />
+      <taxus name="EF015031" />
+      <taxus name="EF015033" />
+      <taxus name="EF015034" />
+      <taxus name="EF015036" />
+      <taxus name="EF015038" />
+      <taxus name="EF015039" />
+      <taxus name="EF015040" />
+      <taxus name="EF015886" />
+      <taxus name="EF026081" />
+      <taxus name="EF456706" />
+      <taxus name="EF555644" />
+      <taxus name="EF555645" />
+      <taxus name="EF682355" />
+      <taxus name="EU684056" />
+      <taxus name="EU840733" />
+      <taxus name="FJ460227" />
+      <taxus name="FJ751914" />
+      <taxus name="FJ751915" />
+      <taxus name="FJ914252" />
+      <taxus name="FM955278" />
+      <taxus name="GU256222" />
+      <taxus name="NC_001428" />
+      <taxus name="NC_002058" />
+      <taxus name="X00596" />
+      <taxus name="X04468" />
     </cluster>
 
     <cluster id="enterovirus-D" name="Enterovirus D">
       <taxus name="AY426531" />
+      <taxus name="DQ916376" />
+      <taxus name="EF107097" />
+      <taxus name="EF107098" />
       <taxus name="NC_001430" />
     </cluster>
 
-    <cluster id="hepatovirus" name="Hepatovirus">
+    <cluster id="porcine-enterovirus-B" name="Porcine enterovirus B">
+      <taxus name="AF363455" />
+      <taxus name="NC_004441" />
+    </cluster>
+
+    <cluster id="bovine-enterovirus" name="Bovine enterovirus">
+      <taxus name="AF123432" />
+      <taxus name="AF123433" />
+      <taxus name="AY508697" />
+      <taxus name="DQ092769" />
+      <taxus name="DQ092770" />
+      <taxus name="DQ092771" />
+      <taxus name="DQ092792" />
+      <taxus name="DQ092794" />
+      <taxus name="DQ092795" />
+      <taxus name="NC_001859" />
+      <taxus name="NC_008714" />
+      <taxus name="NC_008715" />
+    </cluster>
+
+    <cluster id="hepatovirusIA" name="Hepatitis A virus IA">
       <taxus name="EF207320" />
       <taxus name="X83302" />
+    </cluster>
+
+    <cluster id="hepatovirusIB" name="Hepatitis A virus IB">
       <taxus name="M20273" />
       <taxus name="NC_001489" />
+    </cluster>
+
+    <cluster id="hepatovirusIIA" name="Hepatitis A virus IIA">
       <taxus name="AY644676" />
-      <taxus name="AY644670AY032861" />
+    </cluster>
+
+    <cluster id="hepatovirusIIB" name="Hepatitis A virus IIB">
+      <taxus name="AY644670" />
+    </cluster>
+
+    <cluster id="hepatovirusIIIA" name="Hepatitis A virus IIIA">
       <taxus name="AB279734" />
       <taxus name="AY644337" />
+    </cluster>
+
+    <cluster id="hepatovirusIIIB" name="Hepatitis A virus IIIB">
       <taxus name="AB300205" />
       <taxus name="AB279735" />
     </cluster>
 
-    <cluster id="kobuvirus" name="Kobuvirus">
+    <cluster id="hepatovirussimian" name="Hepatitis A virus Simian">
+      <taxus name="EU140838" />
+      <taxus name="D00924" />
+    </cluster>
+
+    <cluster id="kobuvirus-1" name="Aichi virus">
       <taxus name="AY747174" />
+      <taxus name="DQ028632" />
+      <taxus name="FJ890523" />
       <taxus name="NC_001918" />
     </cluster>
 
-    <cluster id="parechovirus" name="Parechovirus">
+    <cluster id="kobuvirus-2" name="Bovine kobuvirus">
+      <taxus name="NC_004421" />
+    </cluster>
+
+    <cluster id="kobuvirus-3" name="Porcine kobuvirus">
+      <taxus name="NC_011829" />
+      <taxus name="NC_013755" />
+    </cluster>
+
+    <cluster id="kobuvirus-4" name="Salivirus">
+      <taxus name="GQ253930" />
+      <taxus name="GQ507022" />
+      <taxus name="NC_012957" />
+      <taxus name="NC_012986" />
+    </cluster>
+
+    <cluster id="parechovirus-1-1" name="Human parechovirus 1">
+      <taxus name="EF051629" />
+      <taxus name="FJ840477" />
+      <taxus name="FM178558" />
+      <taxus name="FM242866" />
+      <taxus name="GQ183018" />
+      <taxus name="GQ183019" />
+      <taxus name="GQ183020" />
+      <taxus name="GQ183021" />
+      <taxus name="GQ183022" />
+      <taxus name="GQ183024" />
+      <taxus name="GQ183034" />
+      <taxus name="GQ183035" />
       <taxus name="S45208" />
+    </cluster>
+
+    <cluster id="parechovirus-1-2" name="Human parechovirus 2">
       <taxus name="NC_001897" />
     </cluster>
 
+    <cluster id="parechovirus-1-3" name="Human parechovirus 3">
+      <taxus name="AB084913" />
+      <taxus name="AJ889918" />
+      <taxus name="GQ183029" />
+    </cluster>
+
+    <cluster id="parechovirus-1-4" name="Human parechovirus 4">
+      <taxus name="AB433629" />
+      <taxus name="AM235750" />
+      <taxus name="DQ315670" />
+    </cluster>
+
+    <cluster id="parechovirus-1-5" name="Human parechovirus 5">
+      <taxus name="AF055846" />
+      <taxus name="AM235749" />
+    </cluster>
+
+    <cluster id="parechovirus-1-6" name="Human parechovirus 6">
+      <taxus name="AB252582" />
+      <taxus name="EU022171" />
+      <taxus name="EU024629" />
+      <taxus name="EU077518" />
+    </cluster>
+
+    <cluster id="parechovirus-1-7" name="Human parechovirus 7">
+      <taxus name="EU556224" />
+    </cluster>
+
+    <cluster id="parechovirus-1-8" name="Human parechovirus 8">
+      <taxus name="EU716175" />
+    </cluster>
+
+    <cluster id="parechovirus-2" name="Ljungan virus">
+      <taxus name="AF327921" />
+      <taxus name="AF327922" />
+      <taxus name="AF538689" />
+      <taxus name="EU854568" />
+      <taxus name="NC_003976" />
+    </cluster>
+
     <cluster id="rhinovirus-A" name="Rhinovirus A">
+      <taxus name="AY751783" />
       <taxus name="D00239" />
+      <taxus name="DQ473491" />
+      <taxus name="DQ473492" />
+      <taxus name="DQ473493" />
+      <taxus name="DQ473494" />
+      <taxus name="DQ473495" />
+      <taxus name="DQ473496" />
+      <taxus name="DQ473497" />
+      <taxus name="DQ473498" />
+      <taxus name="DQ473499" />
+      <taxus name="DQ473500" />
+      <taxus name="DQ473501" />
+      <taxus name="DQ473502" />
+      <taxus name="DQ473503" />
+      <taxus name="DQ473504" />
+      <taxus name="DQ473505" />
+      <taxus name="DQ473506" />
+      <taxus name="DQ473507" />
+      <taxus name="DQ473508" />
+      <taxus name="DQ473509" />
+      <taxus name="DQ473510" />
+      <taxus name="DQ473511" />
+      <taxus name="DQ473512" />
+      <taxus name="EF173414" />
+      <taxus name="EF173415" />
+      <taxus name="EF173416" />
+      <taxus name="EF173417" />
+      <taxus name="EF173418" />
+      <taxus name="EF173419" />
+      <taxus name="EU840726" />
+      <taxus name="FJ445111" />
+      <taxus name="FJ445114" />
+      <taxus name="FJ445116" />
+      <taxus name="FJ445117" />
+      <taxus name="FJ445118" />
+      <taxus name="FJ445119" />
+      <taxus name="FJ445120" />
+      <taxus name="FJ445121" />
+      <taxus name="FJ445122" />
+      <taxus name="FJ445123" />
+      <taxus name="FJ445125" />
+      <taxus name="FJ445126" />
+      <taxus name="FJ445127" />
+      <taxus name="FJ445128" />
+      <taxus name="FJ445129" />
+      <taxus name="FJ445131" />
+      <taxus name="FJ445132" />
+      <taxus name="FJ445133" />
+      <taxus name="FJ445134" />
+      <taxus name="FJ445135" />
+      <taxus name="FJ445136" />
+      <taxus name="FJ445138" />
+      <taxus name="FJ445139" />
+      <taxus name="FJ445140" />
+      <taxus name="FJ445141" />
+      <taxus name="FJ445142" />
+      <taxus name="FJ445143" />
+      <taxus name="FJ445144" />
+      <taxus name="FJ445145" />
+      <taxus name="FJ445146" />
+      <taxus name="FJ445147" />
+      <taxus name="FJ445148" />
+      <taxus name="FJ445149" />
+      <taxus name="FJ445150" />
+      <taxus name="FJ445152" />
+      <taxus name="FJ445154" />
+      <taxus name="FJ445156" />
+      <taxus name="FJ445157" />
+      <taxus name="FJ445158" />
+      <taxus name="FJ445160" />
+      <taxus name="FJ445163" />
+      <taxus name="FJ445166" />
+      <taxus name="FJ445167" />
+      <taxus name="FJ445170" />
+      <taxus name="FJ445171" />
+      <taxus name="FJ445173" />
+      <taxus name="FJ445175" />
+      <taxus name="FJ445177" />
+      <taxus name="GQ223229" />
+      <taxus name="GQ415051" />
+      <taxus name="GQ415052" />
+      <taxus name="L24917" />
       <taxus name="NC_001617" />
+      <taxus name="X02316" />
     </cluster>
 
     <cluster id="rhinovirus-B" name="Rhinovirus B">
+      <taxus name="DQ473486" />
+      <taxus name="DQ473487" />
+      <taxus name="DQ473488" />
+      <taxus name="DQ473489" />
+      <taxus name="DQ473490" />
+      <taxus name="EF173420" />
+      <taxus name="EF173421" />
+      <taxus name="EF173422" />
+      <taxus name="EF173423" />
+      <taxus name="EF173424" />
       <taxus name="EF173425" />
+      <taxus name="FJ445112" />
+      <taxus name="FJ445124" />
+      <taxus name="FJ445130" />
+      <taxus name="FJ445137" />
+      <taxus name="FJ445151" />
+      <taxus name="FJ445153" />
+      <taxus name="FJ445155" />
+      <taxus name="FJ445161" />
+      <taxus name="FJ445162" />
+      <taxus name="FJ445164" />
+      <taxus name="FJ445168" />
+      <taxus name="FJ445169" />
+      <taxus name="FJ445172" />
+      <taxus name="FJ445174" />
       <taxus name="NC_001490" />
     </cluster>
 
     <cluster id="rhinovirus-C" name="Rhinovirus C">
+      <taxus name="DQ875932" />
+      <taxus name="EF077279" />
+      <taxus name="EF077280" />
+      <taxus name="EF186077" />
+      <taxus name="EF582386" />
       <taxus name="EF582387" />
+      <taxus name="GQ223227" />
+      <taxus name="GQ223228" />
+      <taxus name="GQ323774" />
       <taxus name="NC_009996" />
     </cluster>
 
-    <cluster id="cosavirus" name="Cosavirus">
-      <taxus name="FJ438907" />
-      <taxus name="FJ438902" />
+    <cluster id="cosavirus-1" name="Human cosavirus E">
+      <taxus name="NC_012798" />
+    </cluster>
+
+    <cluster id="cosavirus-2" name="Human cosavirus A">
+      <taxus name="FJ438903" />
+      <taxus name="NC_012800" />
+    </cluster>
+
+    <cluster id="cosavirus-3" name="Human cosavirus B">
+      <taxus name="NC_012801" />
+    </cluster>
+
+    <cluster id="cosavirus-4" name="Human cosavirus D">
+      <taxus name="NC_012802" />
+    </cluster>
+
+    <cluster id="sapelovirus-1" name="Avian sapelovirus">
+      <taxus name="NC_006553" />
+    </cluster>
+
+    <cluster id="sapelovirus-2" name="Porcine sapelovirus">
+      <taxus name="NC_003987" />
+    </cluster>
+
+    <cluster id="sapelovirus-3" name="Simian sapelovirus">
+      <taxus name="EU789367" />
+      <taxus name="NC_004451" />
     </cluster>
 
     <cluster id="senecavirus" name="Senecavirus">
       <taxus name="NC_011349" />
     </cluster>
+
+    <cluster id="seal-picornavirus" name="Seal picornavirus">
+      <taxus name="NC_009891" />
+    </cluster>
+
+    <cluster id="teschovirus" name="Teschovirus">
+      <taxus name="AF231767" />
+      <taxus name="AF231769" />
+      <taxus name="AF296087" />
+      <taxus name="AF296088" />
+      <taxus name="AF296089" />
+      <taxus name="AF296090" />
+      <taxus name="AF296091" />
+      <taxus name="AF296092" />
+      <taxus name="AF296093" />
+      <taxus name="AF296094" />
+      <taxus name="AF296095" />
+      <taxus name="AF296096" />
+      <taxus name="AF296100" />
+      <taxus name="AF296102" />
+      <taxus name="AF296104" />
+      <taxus name="AF296107" />
+      <taxus name="AF296108" />
+      <taxus name="AF296109" />
+      <taxus name="AF296111" />
+      <taxus name="AF296112" />
+      <taxus name="AF296113" />
+      <taxus name="AF296115" />
+      <taxus name="AF296117" />
+      <taxus name="AF296118" />
+      <taxus name="GQ293233" />
+      <taxus name="NC_003985" />
+    </cluster>
+
+    <cluster id="tremovirus" name="Tremovirus">
+      <taxus name="AY517471" />
+      <taxus name="NC_003990" />
+    </cluster>
+
+    <cluster id="other" name="other + strand ssRNA virus">
+      <taxus name="NC_002470" />
+      <taxus name="NC_003790" />
+      <taxus name="NC_005790" />
+      <taxus name="NC_012437" />
+      <taxus name="NC_001943" />
+      <taxus name="NC_002469" />
+      <taxus name="NC_004579" />
+      <taxus name="NC_013443" />
+      <taxus name="NC_011400" />
+      <taxus name="NC_013060" />
+      <taxus name="NC_004541" />
+      <taxus name="NC_004542" />
+      <taxus name="NC_006875" />
+      <taxus name="NC_013286" />
+      <taxus name="NC_013287" />
+      <taxus name="NC_001543" />
+      <taxus name="NC_002615" />
+      <taxus name="NC_011704" />
+      <taxus name="NC_004064" />
+      <taxus name="NC_007916" />
+      <taxus name="NC_001959" />
+      <taxus name="NC_008311" />
+      <taxus name="NC_000940" />
+      <taxus name="NC_006269" />
+      <taxus name="NC_006554" />
+      <taxus name="NC_010624" />
+      <taxus name="NC_012699" />
+      <taxus name="NC_001481" />
+      <taxus name="NC_002551" />
+      <taxus name="NC_008580" />
+      <taxus name="NC_011050" />
+      <taxus name="NC_001655" />
+      <taxus name="NC_001837" />
+      <taxus name="NC_001564" />
+      <taxus name="NC_003996" />
+      <taxus name="NC_004119" />
+      <taxus name="NC_005064" />
+      <taxus name="NC_008604" />
+      <taxus name="NC_009026" />
+      <taxus name="NC_012533" />
+      <taxus name="NC_012671" />
+      <taxus name="NC_012932" />
+      <taxus name="NC_001474" />
+      <taxus name="NC_001475" />
+      <taxus name="NC_001477" />
+      <taxus name="NC_002640" />
+      <taxus name="NC_000943" />
+      <taxus name="NC_001437" />
+      <taxus name="NC_001563" />
+      <taxus name="NC_006551" />
+      <taxus name="NC_007580" />
+      <taxus name="NC_009942" />
+      <taxus name="NC_009029" />
+      <taxus name="NC_003635" />
+      <taxus name="NC_008719" />
+      <taxus name="NC_009028" />
+      <taxus name="NC_005039" />
+      <taxus name="NC_012534" />
+      <taxus name="NC_003675" />
+      <taxus name="NC_003676" />
+      <taxus name="NC_008718" />
+      <taxus name="NC_012532" />
+      <taxus name="NC_001672" />
+      <taxus name="NC_001809" />
+      <taxus name="NC_003687" />
+      <taxus name="NC_003690" />
+      <taxus name="NC_004355" />
+      <taxus name="NC_005062" />
+      <taxus name="NC_006947" />
+      <taxus name="NC_002031" />
+      <taxus name="NC_012735" />
+      <taxus name="NC_001710" />
+      <taxus name="NC_004102" />
+      <taxus name="NC_009823" />
+      <taxus name="NC_009824" />
+      <taxus name="NC_009825" />
+      <taxus name="NC_009826" />
+      <taxus name="NC_009827" />
+      <taxus name="NC_001461" />
+      <taxus name="NC_002032" />
+      <taxus name="NC_002657" />
+      <taxus name="NC_003678" />
+      <taxus name="NC_003679" />
+      <taxus name="NC_012812" />
+      <taxus name="NC_001434" />
+      <taxus name="NC_001639" />
+      <taxus name="NC_001961" />
+      <taxus name="NC_002532" />
+      <taxus name="NC_003092" />
+      <taxus name="NC_002306" />
+      <taxus name="NC_002645" />
+      <taxus name="NC_003436" />
+      <taxus name="NC_005831" />
+      <taxus name="NC_007025" />
+      <taxus name="NC_009657" />
+      <taxus name="NC_009988" />
+      <taxus name="NC_010438" />
+      <taxus name="NC_010436" />
+      <taxus name="NC_010437" />
+      <taxus name="NC_001846" />
+      <taxus name="NC_003045" />
+      <taxus name="NC_004718" />
+      <taxus name="NC_005147" />
+      <taxus name="NC_006577" />
+      <taxus name="NC_006852" />
+      <taxus name="NC_007732" />
+      <taxus name="NC_009019" />
+      <taxus name="NC_009020" />
+      <taxus name="NC_009021" />
+      <taxus name="NC_010327" />
+      <taxus name="NC_013664" />
+      <taxus name="NC_009693" />
+      <taxus name="NC_009694" />
+      <taxus name="NC_009695" />
+      <taxus name="NC_009696" />
+      <taxus name="NC_008315" />
+      <taxus name="NC_001451" />
+      <taxus name="NC_010646" />
+      <taxus name="NC_010800" />
+      <taxus name="NC_011549" />
+      <taxus name="NC_011550" />
+      <taxus name="NC_012936" />
+      <taxus name="NC_012937" />
+      <taxus name="NC_012948" />
+      <taxus name="NC_012949" />
+      <taxus name="NC_012950" />
+      <taxus name="NC_008516" />
+      <taxus name="NC_007447" />
+      <taxus name="NC_010306" />
+      <taxus name="NC_001786" />
+      <taxus name="NC_003433" />
+      <taxus name="NC_003900" />
+      <taxus name="NC_003930" />
+      <taxus name="NC_003899" />
+      <taxus name="NC_001512" />
+      <taxus name="NC_001544" />
+      <taxus name="NC_003215" />
+      <taxus name="NC_003417" />
+      <taxus name="NC_004162" />
+      <taxus name="NC_006558" />
+      <taxus name="NC_001449" />
+      <taxus name="NC_001547" />
+      <taxus name="NC_003908" />
+      <taxus name="NC_012561" />
+      <taxus name="NC_013528" />
+      <taxus name="NC_001545" />
+    </cluster>
   </clusters>
 
   <analysis id="blast" type="blast">
-    <!-- cardiovirus -->
-    <regions taxus="NC_009448">
-      <region name="VP1" begin="2907" end="3794" />
+    <!-- aphtovirus -->
+    <regions taxus="DQ268580">
+      <region name="VP1" begin="3144" end="3823" />
     </regions>
 
-    <regions taxus="NC_010810">
+    <regions taxus="NC_002554">
+      <region name="VP1" begin="3208" end="3828" />
+    </regions>
+
+    <regions taxus="NC_003077">
+      <region name="VP1" begin="3840" end="4541" />
+    </regions>
+
+    <regions taxus="NC_003982">
+      <region name="VP1" begin="3113" end="3792" />
+    </regions>
+
+    <regions taxus="NC_003983">
+      <region name="VP1" begin="3832" end="4548" />
+    </regions>
+
+    <regions taxus="NC_003992">
+      <region name="VP1" begin="3246" end="3887" />
+    </regions>
+
+    <regions taxus="NC_004004">
+      <region name="VP1" begin="3231" end="3863" />
+    </regions>
+
+    <regions taxus="NC_004915">
+      <region name="VP1" begin="3222" end="3845" />
+    </regions>
+
+    <regions taxus="NC_010354">
+      <region name="VP1" begin="2853" end="3509" />
+    </regions>
+
+    <regions taxus="NC_011450">
+      <region name="VP1" begin="3230" end="3859" />
+    </regions>
+
+    <regions taxus="NC_011451">
+      <region name="VP1" begin="3221" end="3877" />
+    </regions>
+
+    <regions taxus="NC_011452">
+      <region name="VP1" begin="3219" end="3866" />
+    </regions>
+
+    <!-- avihepatovirus -->
+    <regions taxus="NC_008250">
       <region name="VP1" begin="2882" end="3700" />
     </regions>
 
-    <!-- A -->
-    <regions taxus="NC_001612">
-      <region name="VP1" begin="2442" end="3360" />
+    <!-- cardiovirus -->
+    <regions taxus="AB090161">
+      <region name="VP1" begin="2930" end="3755" />
+    </regions>
+
+    <regions taxus="AY296731">
+      <region name="VP1" begin="2571" end="3405" />
+    </regions>
+
+    <regions taxus="DQ401688">
+      <region name="VP1" begin="3007" end="3832" />
+    </regions>
+
+    <regions taxus="DQ835185">
+      <region name="VP1" begin="2393" end="3227" />
+    </regions>
+
+    <regions taxus="EU542581">
+      <region name="VP1" begin="3002" end="3827" />
+    </regions>
+
+    <regions taxus="EU681176">
+      <region name="VP1" begin="2768" end="3584" />
+    </regions>
+
+    <regions taxus="EU681177">
+      <region name="VP1" begin="2735" end="3551" />
+    </regions>
+
+    <regions taxus="EU681178">
+      <region name="VP1" begin="2778" end="3588" />
+    </regions>
+
+    <regions taxus="EU718732">
+      <region name="VP1" begin="3007" end="3832" />
+    </regions>
+
+    <regions taxus="EU718733">
+      <region name="VP1" begin="3003" end="3828" />
+    </regions>
+
+    <regions taxus="EU723238">
+      <region name="VP1" begin="3003" end="3828" />
+    </regions>
+
+    <regions taxus="EU815052">
+      <region name="VP1" begin="2904" end="3729" />
+    </regions>
+
+    <regions taxus="FJ463615">
+      <region name="VP1" begin="2692" end="3508" />
+    </regions>
+
+    <regions taxus="FJ463616">
+      <region name="VP1" begin="2716" end="3532" />
+    </regions>
+
+    <regions taxus="FJ463617">
+      <region name="VP1" begin="2755" end="3572" />
+    </regions>
+
+    <regions taxus="FM207487">
+      <region name="VP1" begin="2983" end="3793" />
+    </regions>
+
+    <regions taxus="L22089">
+      <region name="VP1" begin="2633" end="3467" />
+    </regions>
+
+    <regions taxus="M20301">
+      <region name="VP1" begin="3006" end="3825" />
+    </regions>
+
+    <regions taxus="NC_001366">
+      <region name="VP1" begin="3008" end="3833" />
+    </regions>
+
+    <regions taxus="NC_001479">
+      <region name="VP1" begin="2708" end="3542" />
+    </regions>
+
+    <regions taxus="NC_009448">
+      <region name="VP1" begin="2972" end="3794" />
+    </regions>
+
+    <regions taxus="NC_010810">
+      <region name="VP1" begin="2884" end="3700" />
+    </regions>
+
+    <regions taxus="X87335">
+      <region name="VP1" begin="2694" end="3528" />
+    </regions>
+
+    <!-- erbovirus -->
+    <regions taxus="NC_003077">
+      <region name="VP1" begin="3228" end="4184" />
+    </regions>
+
+    <!-- enterovirus-A -->
+    <regions taxus="AB192877">
+      <region name="VP1" begin="2454" end="3338" />
+    </regions>
+
+    <regions taxus="AB204852">
+      <region name="VP1" begin="2439" end="3329" />
+    </regions>
+
+    <regions taxus="AB469183">
+      <region name="VP1" begin="3176" end="4066" />
+    </regions>
+
+    <regions taxus="AB482183">
+      <region name="VP1" begin="2443" end="3333" />
+    </regions>
+
+    <regions taxus="AF119795">
+      <region name="VP1" begin="2439" end="3329" />
+    </regions>
+
+    <regions taxus="AF119796">
+      <region name="VP1" begin="2439" end="3329" />
+    </regions>
+
+    <regions taxus="AF302996">
+      <region name="VP1" begin="2439" end="3329" />
+    </regions>
+
+    <regions taxus="AF326764">
+      <region name="VP1" begin="2441" end="3313" />
+    </regions>
+
+    <regions taxus="AJ586873">
+      <region name="VP1" begin="2442" end="3332" />
+    </regions>
+
+    <regions taxus="AY421760">
+      <region name="VP1" begin="2435" end="3324" />
+    </regions>
+
+    <regions taxus="AY421761">
+      <region name="VP1" begin="2435" end="3316" />
+    </regions>
+
+    <regions taxus="AY421762">
+      <region name="VP1" begin="2443" end="3357" />
+    </regions>
+
+    <regions taxus="AY421763">
+      <region name="VP1" begin="2434" end="3321" />
+    </regions>
+
+    <regions taxus="AY421764">
+      <region name="VP1" begin="2441" end="3355" />
+    </regions>
+
+    <regions taxus="AY421765">
+      <region name="VP1" begin="2438" end="3325" />
+    </regions>
+
+    <regions taxus="AY421766">
+      <region name="VP1" begin="2436" end="3317" />
     </regions>
 
     <regions taxus="AY421767">
-      <region name="VP1" begin="2433" end="3348" />
+      <region name="VP1" begin="2437" end="3330" />
+    </regions>
+
+    <regions taxus="AY421768">
+      <region name="VP1" begin="2438" end="3325" />
+    </regions>
+
+    <regions taxus="AY421769">
+      <region name="VP1" begin="2451" end="3338" />
+    </regions>
+
+    <regions taxus="AY697458">
+      <region name="VP1" begin="2461" end="3348" />
+    </regions>
+
+    <regions taxus="AY697459">
+      <region name="VP1" begin="2452" end="3339" />
+    </regions>
+
+    <regions taxus="AY697460">
+      <region name="VP1" begin="2454" end="3338" />
+    </regions>
+
+    <regions taxus="AY697461">
+      <region name="VP1" begin="2453" end="3340" />
+    </regions>
+
+    <regions taxus="AY773285">
+      <region name="VP1" begin="2453" end="3337" />
+    </regions>
+
+    <regions taxus="DQ341356">
+      <region name="VP1" begin="2440" end="3330" />
+    </regions>
+
+    <regions taxus="DQ341357">
+      <region name="VP1" begin="2440" end="3330" />
+    </regions>
+
+    <regions taxus="DQ341358">
+      <region name="VP1" begin="2440" end="3330" />
+    </regions>
+
+    <regions taxus="DQ341359">
+      <region name="VP1" begin="2440" end="3330" />
+    </regions>
+
+    <regions taxus="DQ341364">
+      <region name="VP1" begin="2443" end="3333" />
+    </regions>
+
+    <regions taxus="EF063152">
+      <region name="VP1" begin="2440" end="3330" />
+    </regions>
+
+    <regions taxus="EF373575">
+      <region name="VP1" begin="2444" end="3334" />
+    </regions>
+
+    <regions taxus="EF373576">
+      <region name="VP1" begin="2438" end="3328" />
+    </regions>
+
+    <regions taxus="EF667343">
+      <region name="VP1" begin="2429" end="3301" />
     </regions>
 
     <regions taxus="EF667344">
-      <region name="VP1" begin="2394" end="3349" />
-    </regions>
-    
-    <regions taxus="U22521">
-      <region name="VP1" begin="2445" end="3363" />
+      <region name="VP1" begin="2395" end="3285" />
     </regions>
 
-    <!-- B -->
-    <regions taxus="NC_001472">
-      <region name="VP1" begin="2406" end="3357" />
+    <regions taxus="EU864507">
+      <region name="VP1" begin="2439" end="3329" />
+    </regions>
+
+    <regions taxus="FJ198212">
+      <region name="VP1" begin="2441" end="3331" />
+    </regions>
+
+    <regions taxus="FJ357384">
+      <region name="VP1" begin="2444" end="3334" />
+    </regions>
+
+    <regions taxus="FJ606450">
+      <region name="VP1" begin="2438" end="3328" />
+    </regions>
+
+    <regions taxus="NC_001612">
+      <region name="VP1" begin="2446" end="3336" />
+    </regions>
+
+    <regions taxus="NC_010412">
+      <region name="VP1" begin="2399" end="3262" />
+    </regions>
+
+    <regions taxus="NC_010413">
+      <region name="VP1" begin="2397" end="3263" />
+    </regions>
+
+    <regions taxus="U22522">
+      <region name="VP1" begin="2442" end="3332" />
+    </regions>
+
+    <!-- enterovirus-B -->
+    <regions taxus="AB426610">
+      <region name="VP1" begin="2452" end="3321" />
+    </regions>
+
+    <regions taxus="AB426611">
+      <region name="VP1" begin="2450" end="3307" />
+    </regions>
+
+    <regions taxus="AB501329">
+      <region name="VP1" begin="2445" end="3305" />
+    </regions>
+
+    <regions taxus="AF029859">
+      <region name="VP1" begin="2451" end="3293" />
+    </regions>
+
+    <regions taxus="AF083069">
+      <region name="VP1" begin="2453" end="3328" />
+    </regions>
+
+    <regions taxus="AF085363">
+      <region name="VP1" begin="2456" end="3301" />
+    </regions>
+
+    <regions taxus="AF105342">
+      <region name="VP1" begin="2448" end="3293" />
     </regions>
 
     <regions taxus="AF114383">
-      <region name="VP1" begin="2540" end="3340" />
+      <region name="VP1" begin="2447" end="3295" />
     </regions>
 
-    <regions taxus="AF039205">
-      <region namee="VP1" begin="2541" end="3338" />
+    <regions taxus="AF231764">
+      <region name="VP1" begin="2453" end="3295" />
     </regions>
-    
-    <regions taxus="AY466029">
-      <region name="VP1" begin="2403" end="3361" />
+
+    <regions taxus="AF233852">
+      <region name="VP1" begin="2451" end="3291" />
     </regions>
-    
+
+    <regions taxus="AF241359">
+      <region name="VP1" begin="2440" end="3306" />
+    </regions>
+
+    <regions taxus="AF311938">
+      <region name="VP1" begin="2460" end="3335" />
+    </regions>
+
+    <regions taxus="AF311939">
+      <region name="VP1" begin="2449" end="3291" />
+    </regions>
+
+    <regions taxus="AF317694">
+      <region name="VP1" begin="2444" end="3305" />
+    </regions>
+
+    <regions taxus="AF328683">
+      <region name="VP1" begin="2439" end="3284" />
+    </regions>
+
+    <regions taxus="AF465516">
+      <region name="VP1" begin="2447" end="3322" />
+    </regions>
+
+    <regions taxus="AF504533">
+      <region name="VP1" begin="2353" end="3219" />
+    </regions>
+
     <regions taxus="AF524866">
-      <region name="VP1" begin="2405" end="3370" />
+      <region name="VP1" begin="2450" end="3349" />
     </regions>
 
-    <!-- C -->
+    <regions taxus="AF524867">
+      <region name="VP1" begin="2450" end="3349" />
+    </regions>
+
+    <regions taxus="AJ276224">
+      <region name="VP1" begin="2450" end="3325" />
+    </regions>
+
+    <regions taxus="AJ493062">
+      <region name="VP1" begin="2450" end="3310" />
+    </regions>
+
+    <regions taxus="AJ577589">
+      <region name="VP1" begin="2452" end="3327" />
+    </regions>
+
+    <regions taxus="AJ577590">
+      <region name="VP1" begin="2452" end="3327" />
+    </regions>
+
+    <regions taxus="AJ577594">
+      <region name="VP1" begin="2452" end="3327" />
+    </regions>
+
+    <regions taxus="AJ849942">
+      <region name="VP1" begin="2447" end="3322" />
+    </regions>
+
+    <regions taxus="AY036578">
+      <region name="VP1" begin="2446" end="3321" />
+    </regions>
+
+    <regions taxus="AY167104">
+      <region name="VP1" begin="2432" end="3307" />
+    </regions>
+
+    <regions taxus="AY167105">
+      <region name="VP1" begin="2432" end="3307" />
+    </regions>
+
+    <regions taxus="AY167106">
+      <region name="VP1" begin="2429" end="3304" />
+    </regions>
+
+    <regions taxus="AY167107">
+      <region name="VP1" begin="2430" end="3308" />
+    </regions>
+
+    <regions taxus="AY186748">
+      <region name="VP1" begin="2433" end="3266" />
+    </regions>
+
+    <regions taxus="AY302539">
+      <region name="VP1" begin="2444" end="3304" />
+    </regions>
+
+    <regions taxus="AY302540">
+      <region name="VP1" begin="2452" end="3345" />
+    </regions>
+
+    <regions taxus="AY302541">
+      <region name="VP1" begin="2451" end="3332" />
+    </regions>
+
+    <regions taxus="AY302542">
+      <region name="VP1" begin="2453" end="3328" />
+    </regions>
+
+    <regions taxus="AY302543">
+      <region name="VP1" begin="2445" end="3311" />
+    </regions>
+
+    <regions taxus="AY302544">
+      <region name="VP1" begin="2450" end="3328" />
+    </regions>
+
+    <regions taxus="AY302545">
+      <region name="VP1" begin="2449" end="3330" />
+    </regions>
+
+    <regions taxus="AY302546">
+      <region name="VP1" begin="2447" end="3289" />
+    </regions>
+
+    <regions taxus="AY302547">
+      <region name="VP1" begin="2446" end="3321" />
+    </regions>
+
+    <regions taxus="AY302548">
+      <region name="VP1" begin="2447" end="3328" />
+    </regions>
+
+    <regions taxus="AY302549">
+      <region name="VP1" begin="2446" end="3321" />
+    </regions>
+
+    <regions taxus="AY302550">
+      <region name="VP1" begin="2449" end="3318" />
+    </regions>
+
+    <regions taxus="AY302551">
+      <region name="VP1" begin="2452" end="3306" />
+    </regions>
+
+    <regions taxus="AY302552">
+      <region name="VP1" begin="2447" end="3322" />
+    </regions>
+
+    <regions taxus="AY302553">
+      <region name="VP1" begin="2448" end="3323" />
+    </regions>
+
+    <regions taxus="AY302554">
+      <region name="VP1" begin="2452" end="3327" />
+    </regions>
+
+    <regions taxus="AY302555">
+      <region name="VP1" begin="2440" end="3315" />
+    </regions>
+
+    <regions taxus="AY302556">
+      <region name="VP1" begin="2447" end="3289" />
+    </regions>
+
+    <regions taxus="AY302557">
+      <region name="VP1" begin="2447" end="3289" />
+    </regions>
+
+    <regions taxus="AY302558">
+      <region name="VP1" begin="2447" end="3313" />
+    </regions>
+
+    <regions taxus="AY302560">
+      <region name="VP1" begin="2441" end="3306" />
+    </regions>
+
+    <regions taxus="AY466024">
+      <region name="VP1" begin="2448" end="3341" />
+    </regions>
+
+    <regions taxus="AY466029">
+      <region name="VP1" begin="2448" end="3341" />
+    </regions>
+
+    <regions taxus="AY466032">
+      <region name="VP1" begin="2447" end="3340" />
+    </regions>
+
+    <regions taxus="AY556057">
+      <region name="VP1" begin="2447" end="3304" />
+    </regions>
+
+    <regions taxus="AY556070">
+      <region name="VP1" begin="2452" end="3324" />
+    </regions>
+
+    <regions taxus="AY673831">
+      <region name="VP1" begin="2454" end="3296" />
+    </regions>
+
+    <regions taxus="AY843297">
+      <region name="VP1" begin="2456" end="3325" />
+    </regions>
+
+    <regions taxus="AY843298">
+      <region name="VP1" begin="2451" end="3323" />
+    </regions>
+
+    <regions taxus="AY843299">
+      <region name="VP1" begin="2446" end="3310" />
+    </regions>
+
+    <regions taxus="AY843300">
+      <region name="VP1" begin="2456" end="3328" />
+    </regions>
+
+    <regions taxus="AY843301">
+      <region name="VP1" begin="2438" end="3289" />
+    </regions>
+
+    <regions taxus="AY843302">
+      <region name="VP1" begin="2457" end="3317" />
+    </regions>
+
+    <regions taxus="AY843303">
+      <region name="VP1" begin="2447" end="3317" />
+    </regions>
+
+    <regions taxus="AY843304">
+      <region name="VP1" begin="2450" end="3295" />
+    </regions>
+
+    <regions taxus="AY843305">
+      <region name="VP1" begin="2451" end="3317" />
+    </regions>
+
+    <regions taxus="AY843306">
+      <region name="VP1" begin="2452" end="3327" />
+    </regions>
+
+    <regions taxus="AY843307">
+      <region name="VP1" begin="2450" end="3307" />
+    </regions>
+
+    <regions taxus="AY843308">
+      <region name="VP1" begin="2447" end="3340" />
+    </regions>
+
+    <regions taxus="AY875692">
+      <region name="VP1" begin="2450" end="3298" />
+    </regions>
+
+    <regions taxus="AY896760">
+      <region name="VP1" begin="2426" end="3292" />
+    </regions>
+
+    <regions taxus="AY896761">
+      <region name="VP1" begin="2425" end="3291" />
+    </regions>
+
+    <regions taxus="AY896762">
+      <region name="VP1" begin="2433" end="3275" />
+    </regions>
+
+    <regions taxus="AY896763">
+      <region name="VP1" begin="2428" end="3270" />
+    </regions>
+
+    <regions taxus="AY896764">
+      <region name="VP1" begin="2429" end="3304" />
+    </regions>
+
+    <regions taxus="AY896765">
+      <region name="VP1" begin="2423" end="3298" />
+    </regions>
+
+    <regions taxus="AY896766">
+      <region name="VP1" begin="2426" end="3301" />
+    </regions>
+
+    <regions taxus="AY896767">
+      <region name="VP1" begin="2426" end="3301" />
+    </regions>
+
+    <regions taxus="AY948442">
+      <region name="VP1" begin="2448" end="3323" />
+    </regions>
+
+    <regions taxus="D00627">
+      <region name="VP1" begin="2448" end="3344" />
+    </regions>
+
+    <regions taxus="D16364">
+      <region name="VP1" begin="2448" end="3296" />
+    </regions>
+
+    <regions taxus="DQ480420">
+      <region name="VP1" begin="2448" end="3290" />
+    </regions>
+
+    <regions taxus="DQ534205">
+      <region name="VP1" begin="2449" end="3324" />
+    </regions>
+
+    <regions taxus="DQ902712">
+      <region name="VP1" begin="2447" end="3318" />
+    </regions>
+
+    <regions taxus="EF066391">
+      <region name="VP1" begin="2414" end="3289" />
+    </regions>
+
+    <regions taxus="EF066392">
+      <region name="VP1" begin="2414" end="3289" />
+    </regions>
+
+    <regions taxus="EF155422">
+      <region name="VP1" begin="2437" end="3312" />
+    </regions>
+
+    <regions taxus="EF155423">
+      <region name="VP1" begin="2425" end="3300" />
+    </regions>
+
+    <regions taxus="EF174468">
+      <region name="VP1" begin="2456" end="3301" />
+    </regions>
+
+    <regions taxus="EF174469">
+      <region name="VP1" begin="2456" end="3301" />
+    </regions>
+
+    <regions taxus="EF371880">
+      <region name="VP1" begin="2454" end="3296" />
+    </regions>
+
+    <regions taxus="EF634316">
+      <region name="VP1" begin="2453" end="3328" />
+    </regions>
+
+    <regions taxus="EU144042">
+      <region name="VP1" begin="2453" end="3295" />
+    </regions>
+
+    <regions taxus="EU151450">
+      <region name="VP1" begin="2424" end="3272" />
+    </regions>
+
+    <regions taxus="EU151454">
+      <region name="VP1" begin="2424" end="3272" />
+    </regions>
+
+    <regions taxus="EU151461">
+      <region name="VP1" begin="2448" end="3296" />
+    </regions>
+
+    <regions taxus="FJ000001">
+      <region name="VP1" begin="2452" end="3294" />
+    </regions>
+
+    <regions taxus="FJ172447">
+      <region name="VP1" begin="2448" end="3290" />
+    </regions>
+
+    <regions taxus="FJ357838">
+      <region name="VP1" begin="2455" end="3297" />
+    </regions>
+
+    <regions taxus="FJ460595">
+      <region name="VP1" begin="2450" end="3325" />
+    </regions>
+
+    <regions taxus="FJ766334">
+      <region name="VP1" begin="2447" end="3322" />
+    </regions>
+
+    <regions taxus="GU550508">
+      <region name="VP1" begin="2450" end="3289" />
+    </regions>
+
+    <regions taxus="NC_001472">
+      <region name="VP1" begin="2452" end="3285" />
+    </regions>
+
+    <regions taxus="NC_009887">
+      <region name="VP1" begin="2449" end="3315" />
+    </regions>
+
+    <regions taxus="NC_010411">
+      <region name="VP1" begin="2427" end="3269" />
+    </regions>
+
+    <regions taxus="NC_013114">
+      <region name="VP1" begin="2450" end="3316" />
+    </regions>
+
+    <regions taxus="NC_013115">
+      <region name="VP1" begin="2445" end="3317" />
+    </regions>
+
+    <regions taxus="U57056">
+      <region name="VP1" begin="2453" end="3295" />
+    </regions>
+
+    <regions taxus="X67706">
+      <region name="VP1" begin="2448" end="3296" />
+    </regions>
+
+    <regions taxus="X79047">
+      <region name="VP1" begin="2446" end="3318" />
+    </regions>
+
+    <regions taxus="X80059">
+      <region name="VP1" begin="2459" end="3334" />
+    </regions>
+
+    <regions taxus="X84981">
+      <region name="VP1" begin="2447" end="3316" />
+    </regions>
+
+    <!-- enterovirus-C -->
+    <regions taxus="AB180070">
+      <region name="VP1" begin="2480" end="3385" />
+    </regions>
+
+    <regions taxus="AB205395">
+      <region name="VP1" begin="2477" end="3376" />
+    </regions>
+
+    <regions taxus="AB205396">
+      <region name="VP1" begin="2482" end="3408" />
+    </regions>
+
+    <regions taxus="AF111953">
+      <region name="VP1" begin="2484" end="3389" />
+    </regions>
+
+    <regions taxus="AF111961">
+      <region name="VP1" begin="2484" end="3389" />
+    </regions>
+
+    <regions taxus="AF111966">
+      <region name="VP1" begin="2484" end="3389" />
+    </regions>
+
+    <regions taxus="AF111981">
+      <region name="VP1" begin="2484" end="3389" />
+    </regions>
+
+    <regions taxus="AF111982">
+      <region name="VP1" begin="2484" end="3389" />
+    </regions>
+
+    <regions taxus="AF111983">
+      <region name="VP1" begin="2484" end="3389" />
+    </regions>
+
+    <regions taxus="AF111984">
+      <region name="VP1" begin="2483" end="3388" />
+    </regions>
+
+    <regions taxus="AF405666">
+      <region name="VP1" begin="2480" end="3385" />
+    </regions>
+
+    <regions taxus="AF405669">
+      <region name="VP1" begin="2481" end="3386" />
+    </regions>
+
+    <regions taxus="AF448782">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="AF448783">
+      <region name="VP1" begin="2484" end="3386" />
+    </regions>
+
+    <regions taxus="AF462419">
+      <region name="VP1" begin="2480" end="3385" />
+    </regions>
+
+    <regions taxus="AF465511">
+      <region name="VP1" begin="2480" end="3406" />
+    </regions>
+
+    <regions taxus="AF465512">
+      <region name="VP1" begin="2466" end="3386" />
+    </regions>
+
+    <regions taxus="AF465513">
+      <region name="VP1" begin="2479" end="3405" />
+    </regions>
+
+    <regions taxus="AF465515">
+      <region name="VP1" begin="2457" end="3350" />
+    </regions>
+
+    <regions taxus="AF499635">
+      <region name="VP1" begin="2449" end="3336" />
+    </regions>
+
+    <regions taxus="AF499636">
+      <region name="VP1" begin="2478" end="3398" />
+    </regions>
+
+    <regions taxus="AF499639">
+      <region name="VP1" begin="2485" end="3402" />
+    </regions>
+
+    <regions taxus="AF499641">
+      <region name="VP1" begin="2462" end="3349" />
+    </regions>
+
+    <regions taxus="AF499642">
+      <region name="VP1" begin="2473" end="3381" />
+    </regions>
+
+    <regions taxus="AF499643">
+      <region name="VP1" begin="2459" end="3346" />
+    </regions>
+
+    <regions taxus="AJ132960">
+      <region name="VP1" begin="2481" end="3386" />
+    </regions>
+
+    <regions taxus="AJ132961">
+      <region name="VP1" begin="2481" end="3386" />
+    </regions>
+
+    <regions taxus="AJ293918">
+      <region name="VP1" begin="2482" end="3381" />
+    </regions>
+
+    <regions taxus="AJ544513">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="AM040035">
+      <region name="VP1" begin="2386" end="3288" />
+    </regions>
+
+    <regions taxus="AM040036">
+      <region name="VP1" begin="2386" end="3288" />
+    </regions>
+
+    <regions taxus="AM040038">
+      <region name="VP1" begin="2386" end="3288" />
+    </regions>
+
+    <regions taxus="AM040039">
+      <region name="VP1" begin="2386" end="3288" />
+    </regions>
+
+    <regions taxus="AM084224">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="AM084225">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="AY056702">
+      <region name="VP1" begin="2286" end="3191" />
+    </regions>
+
+    <regions taxus="AY278550">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="AY278551">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="AY278552">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="AY278553">
+      <region name="VP1" begin="2476" end="3381" />
+    </regions>
+
+    <regions taxus="AY421739">
+      <region name="VP1" begin="2450" end="3349" />
+    </regions>
+
+    <regions taxus="AY560657">
+      <region name="VP1" begin="2484" end="3389" />
+    </regions>
+
+    <regions taxus="AY948201">
+      <region name="VP1" begin="2483" end="3385" />
+    </regions>
+
+    <regions taxus="D00625">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="D90457">
+      <region name="VP1" begin="2491" end="3405" />
+    </regions>
+
+    <regions taxus="DQ358078">
+      <region name="VP1" begin="2478" end="3389" />
+    </regions>
+
+    <regions taxus="DQ443001">
+      <region name="VP1" begin="2491" end="3405" />
+    </regions>
+
+    <regions taxus="DQ890385">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="DQ890386">
+      <region name="VP1" begin="2484" end="3386" />
+    </regions>
+
+    <regions taxus="DQ890388">
+      <region name="VP1" begin="2482" end="3384" />
+    </regions>
+
+    <regions taxus="DQ995633">
+      <region name="VP1" begin="2476" end="3396" />
+    </regions>
+
+    <regions taxus="DQ995634">
+      <region name="VP1" begin="2478" end="3398" />
+    </regions>
+
+    <regions taxus="DQ995635">
+      <region name="VP1" begin="2482" end="3408" />
+    </regions>
+
+    <regions taxus="DQ995636">
+      <region name="VP1" begin="2483" end="3409" />
+    </regions>
+
+    <regions taxus="DQ995637">
+      <region name="VP1" begin="2482" end="3408" />
+    </regions>
+
+    <regions taxus="DQ995638">
+      <region name="VP1" begin="2480" end="3406" />
+    </regions>
+
+    <regions taxus="DQ995641">
+      <region name="VP1" begin="2482" end="3405" />
+    </regions>
+
+    <regions taxus="DQ995644">
+      <region name="VP1" begin="2482" end="3405" />
+    </regions>
+
+    <regions taxus="DQ995645">
+      <region name="VP1" begin="2481" end="3398" />
+    </regions>
+
+    <regions taxus="DQ995646">
+      <region name="VP1" begin="2483" end="3400" />
+    </regions>
+
+    <regions taxus="DQ995647">
+      <region name="VP1" begin="2454" end="3341" />
+    </regions>
+
+    <regions taxus="DQ995648">
+      <region name="VP1" begin="2455" end="3342" />
+    </regions>
+
+    <regions taxus="EF015008">
+      <region name="VP1" begin="2490" end="3398" />
+    </regions>
+
+    <regions taxus="EF015009">
+      <region name="VP1" begin="2487" end="3395" />
+    </regions>
+
+    <regions taxus="EF015010">
+      <region name="VP1" begin="2487" end="3395" />
+    </regions>
+
+    <regions taxus="EF015011">
+      <region name="VP1" begin="2494" end="3402" />
+    </regions>
+
+    <regions taxus="EF015012">
+      <region name="VP1" begin="2486" end="3394" />
+    </regions>
+
+    <regions taxus="EF015013">
+      <region name="VP1" begin="2474" end="3385" />
+    </regions>
+
+    <regions taxus="EF015014">
+      <region name="VP1" begin="2474" end="3385" />
+    </regions>
+
+    <regions taxus="EF015015">
+      <region name="VP1" begin="2474" end="3385" />
+    </regions>
+
+    <regions taxus="EF015016">
+      <region name="VP1" begin="2474" end="3385" />
+    </regions>
+
+    <regions taxus="EF015017">
+      <region name="VP1" begin="2473" end="3384" />
+    </regions>
+
+    <regions taxus="EF015018">
+      <region name="VP1" begin="2474" end="3385" />
+    </regions>
+
+    <regions taxus="EF015019">
+      <region name="VP1" begin="2475" end="3383" />
+    </regions>
+
+    <regions taxus="EF015020">
+      <region name="VP1" begin="2477" end="3385" />
+    </regions>
+
+    <regions taxus="EF015021">
+      <region name="VP1" begin="2474" end="3382" />
+    </regions>
+
+    <regions taxus="EF015023">
+      <region name="VP1" begin="2456" end="3349" />
+    </regions>
+
+    <regions taxus="EF015027">
+      <region name="VP1" begin="2489" end="3382" />
+    </regions>
+
+    <regions taxus="EF015030">
+      <region name="VP1" begin="2492" end="3385" />
+    </regions>
+
+    <regions taxus="EF015031">
+      <region name="VP1" begin="2491" end="3384" />
+    </regions>
+
+    <regions taxus="EF015033">
+      <region name="VP1" begin="2486" end="3400" />
+    </regions>
+
+    <regions taxus="EF015034">
+      <region name="VP1" begin="2485" end="3399" />
+    </regions>
+
+    <regions taxus="EF015036">
+      <region name="VP1" begin="2488" end="3402" />
+    </regions>
+
+    <regions taxus="EF015038">
+      <region name="VP1" begin="2483" end="3397" />
+    </regions>
+
+    <regions taxus="EF015039">
+      <region name="VP1" begin="2486" end="3400" />
+    </regions>
+
+    <regions taxus="EF015040">
+      <region name="VP1" begin="2486" end="3400" />
+    </regions>
+
+    <regions taxus="EF015886">
+      <region name="VP1" begin="2490" end="3416" />
+    </regions>
+
+    <regions taxus="EF026081">
+      <region name="VP1" begin="2486" end="3400" />
+    </regions>
+
+    <regions taxus="EF456706">
+      <region name="VP1" begin="2433" end="3338" />
+    </regions>
+
+    <regions taxus="EF555644">
+      <region name="VP1" begin="2486" end="3394" />
+    </regions>
+
+    <regions taxus="EF555645">
+      <region name="VP1" begin="2474" end="3382" />
+    </regions>
+
+    <regions taxus="EF682355">
+      <region name="VP1" begin="2454" end="3359" />
+    </regions>
+
+    <regions taxus="EU684056">
+      <region name="VP1" begin="2477" end="3376" />
+    </regions>
+
+    <regions taxus="EU840733">
+      <region name="VP1" begin="2388" end="3284" />
+    </regions>
+
+    <regions taxus="FJ460227">
+      <region name="VP1" begin="2371" end="3270" />
+    </regions>
+
+    <regions taxus="FJ751914">
+      <region name="VP1" begin="2491" end="3417" />
+    </regions>
+
+    <regions taxus="FJ751915">
+      <region name="VP1" begin="2490" end="3415" />
+    </regions>
+
+    <regions taxus="FJ914252">
+      <region name="VP1" begin="2481" end="3380" />
+    </regions>
+
+    <regions taxus="FM955278">
+      <region name="VP1" begin="2485" end="3402" />
+    </regions>
+
+    <regions taxus="GU256222">
+      <region name="VP1" begin="2477" end="3376" />
+    </regions>
+
     <regions taxus="NC_001428">
-      <region name="VP1" begin="2442" end="3345" />
+      <region name="VP1" begin="2455" end="3348" />
     </regions>
 
-    <regions taxus="AF465514">
-      <region name="VP1" begin="2475" end="3381" />
+    <regions taxus="NC_002058">
+      <region name="VP1" begin="2480" end="3385" />
     </regions>
 
-    <regions taxus="M12197">
-      <region name="VP1" begin="2484" end="3387" />
+    <regions taxus="X00596">
+      <region name="VP1" begin="2479" end="3378" />
     </regions>
 
-    <!-- D -->
+    <regions taxus="X04468">
+      <region name="VP1" begin="2481" end="3380" />
+    </regions>
+
+    <!-- enterovirus-D-simian -->
+    <regions taxus="AF326750">
+      <region name="VP1" begin="2447" end="3300" />
+    </regions>
+
+    <regions taxus="AF326759">
+      <region name="VP1" begin="2345" end="3258" />
+    </regions>
+
     <regions taxus="AY426531">
-      <region name="VP1" begin="2358" end="3327" />
+      <region name="VP1" begin="2411" end="3327" />
+    </regions>
+
+    <regions taxus="DQ916376">
+      <region name="VP1" begin="2393" end="3315" />
+    </regions>
+
+    <regions taxus="EF107097">
+      <region name="VP1" begin="2360" end="3282" />
+    </regions>
+
+    <regions taxus="EF107098">
+      <region name="VP1" begin="2377" end="3293" />
+    </regions>
+
+    <regions taxus="FJ007373">
+      <region name="VP1" begin="2410" end="3278" />
     </regions>
 
     <regions taxus="NC_001430">
-      <region name="VP1" begin="2359" end="3333" />
+      <region name="VP1" begin="2411" end="3339" />
     </regions>
 
-    <!-- hepatovirus -->
+    <regions taxus="NC_003988">
+      <region name="VP1" begin="2332" end="3278" />
+    </regions>
+
+    <regions taxus="NC_010384">
+      <region name="VP1" begin="2449" end="3299" />
+    </regions>
+
+    <regions taxus="NC_010415">
+      <region name="VP1" begin="2396" end="3270" />
+    </regions>
+
+    <regions taxus="NC_013695">
+      <region name="VP1" begin="2446" end="3296" />
+    </regions>
+
+    <!-- hepatovirusIA -->
     <regions taxus="EF207320">
       <region name="VP1" begin="2161" end="3060" />
     </regions>
@@ -182,6 +2091,7 @@
       <region name="VP1" begin="2179" end="3060" />
     </regions>
 
+    <!-- hepatovirusIB -->
     <regions taxus="NC_001489">
       <region name="VP1" begin="2208" end="3107" />
     </regions>
@@ -190,14 +2100,17 @@
       <region name="VP1" begin="2200" end="3099" />
     </regions>
 
+    <!-- hepatovirusIIA -->
     <regions taxus="AY644676">
       <region name="VP1" begin="2159" end="3058" />
     </regions>
 
-    <regions taxus="AY644670AY032861">
+    <!-- hepatovirusIIB -->
+    <regions taxus="AY644670">
       <region name="VP1" begin="2158" end="3057" />
     </regions>
 
+    <!-- hepatovirusIIIA -->
     <regions taxus="AB279734">
       <region name="VP1" begin="2190" end="3089" />
     </regions>
@@ -206,6 +2119,7 @@
       <region name="VP1" begin="2144" end="3043" />
     </regions>
 
+    <!-- hepatovirusIIIB -->
     <regions taxus="AB279735">
       <region name="VP1" begin="2189" end="3088" />
     </regions>
@@ -214,49 +2128,848 @@
       <region name="VP1" begin="2190" end="3089" />
     </regions>
 
+    <!-- hepatovirussimian -->
+    <regions taxus="EU140838">
+      <region name="VP1" begin="2155" end="3054" />
+    </regions>
+
+    <regions taxus="D00924">
+      <region name="VP1" begin="2155" end="3054" />
+    </regions>
+
     <!-- kobuvirus -->
+    <regions taxus="AY747174">
+      <region name="VP1" begin="3020" end="3853" />
+    </regions>
+
+    <regions taxus="DQ028632">
+      <region name="VP1" begin="3020" end="3853" />
+    </regions>
+
+    <regions taxus="FJ890523">
+      <region name="VP1" begin="3005" end="3838" />
+    </regions>
+
+    <regions taxus="GQ253930">
+      <region name="VP1" begin="1217" end="2017" />
+    </regions>
+
+    <regions taxus="GQ507022">
+      <region name="VP1" begin="1819" end="2618" />
+    </regions>
+
     <regions taxus="NC_001918">
       <region name="VP1" begin="3005" end="3838" />
     </regions>
 
-    <!-- parechovirus -->
+    <regions taxus="NC_004421">
+      <region name="VP1" begin="3140" end="4015" />
+    </regions>
+
+    <regions taxus="NC_011829">
+      <region name="VP1" begin="2929" end="3771" />
+    </regions>
+
+    <regions taxus="NC_012957">
+      <region name="VP1" begin="2825" end="3625" />
+    </regions>
+
+    <regions taxus="NC_012986">
+      <region name="VP1" begin="2825" end="3625" />
+    </regions>
+
+    <regions taxus="NC_013755">
+      <region name="VP1" begin="2929" end="3771" />
+    </regions>
+
+    <!-- parechovirus-1 -->
+    <regions taxus="AB084913">
+      <region name="VP1" begin="2335" end="3011" />
+    </regions>
+
+    <regions taxus="AB252582">
+      <region name="VP1" begin="2333" end="3034" />
+    </regions>
+
+    <regions taxus="AB433629">
+      <region name="VP1" begin="2342" end="3037" />
+    </regions>
+
+    <regions taxus="AF055846">
+      <region name="VP1" begin="2344" end="3039" />
+    </regions>
+
+    <regions taxus="AJ889918">
+      <region name="VP1" begin="2336" end="3013" />
+    </regions>
+
+    <regions taxus="AM235749">
+      <region name="VP1" begin="2314" end="3009" />
+    </regions>
+
+    <regions taxus="AM235750">
+      <region name="VP1" begin="2341" end="3036" />
+    </regions>
+
+    <regions taxus="DQ315670">
+      <region name="VP1" begin="2341" end="3036" />
+    </regions>
+
+    <regions taxus="EF051629">
+      <region name="VP1" begin="2333" end="3025" />
+    </regions>
+
+    <regions taxus="EU022171">
+      <region name="VP1" begin="2060" end="2761" />
+    </regions>
+
+    <regions taxus="EU024629">
+      <region name="VP1" begin="2060" end="2761" />
+    </regions>
+
+    <regions taxus="EU077518">
+      <region name="VP1" begin="2261" end="2962" />
+    </regions>
+
+    <regions taxus="EU556224">
+      <region name="VP1" begin="2141" end="2818" />
+    </regions>
+
+    <regions taxus="EU716175">
+      <region name="VP1" begin="2323" end="3006" />
+    </regions>
+
+    <regions taxus="FJ840477">
+      <region name="VP1" begin="2292" end="2984" />
+    </regions>
+
+    <regions taxus="FM178558">
+      <region name="VP1" begin="2332" end="3024" />
+    </regions>
+
+    <regions taxus="FM242866">
+      <region name="VP1" begin="2292" end="2984" />
+    </regions>
+
+    <regions taxus="GQ183018">
+      <region name="VP1" begin="2279" end="2971" />
+    </regions>
+
+    <regions taxus="GQ183019">
+      <region name="VP1" begin="2262" end="2954" />
+    </regions>
+
+    <regions taxus="GQ183020">
+      <region name="VP1" begin="2273" end="2965" />
+    </regions>
+
+    <regions taxus="GQ183021">
+      <region name="VP1" begin="2288" end="2980" />
+    </regions>
+
+    <regions taxus="GQ183022">
+      <region name="VP1" begin="2304" end="2996" />
+    </regions>
+
+    <regions taxus="GQ183024">
+      <region name="VP1" begin="2304" end="2996" />
+    </regions>
+
+    <regions taxus="GQ183029">
+      <region name="VP1" begin="2308" end="2985" />
+    </regions>
+
+    <regions taxus="GQ183034">
+      <region name="VP1" begin="2298" end="2990" />
+    </regions>
+
+    <regions taxus="GQ183035">
+      <region name="VP1" begin="2305" end="2997" />
+    </regions>
+
     <regions taxus="NC_001897">
       <region name="VP1" begin="2329" end="3018" />
     </regions>
 
+    <regions taxus="S45208">
+      <region name="VP1" begin="2336" end="3028" />
+    </regions>
+
+    <!-- parechovirus-2 -->
+    <regions taxus=" AF327921">
+      <region name="VP1" begin="2228" end="3118" />
+    </regions>
+
+    <regions taxus="AF327922">
+      <region name="VP1" begin="2224" end="3114" />
+    </regions>
+
+    <regions taxus="AF538689">
+      <region name="VP1" begin="2153" end="3040" />
+    </regions>
+
+    <regions taxus="EU854568">
+      <region name="VP1" begin="2103" end="2990" />
+    </regions>
+
+    <regions taxus="NC_003976">
+      <region name="VP1" begin="2227" end="3117" />
+    </regions>
+
     <!-- rhinovirus-A -->
+    <regions taxus="AY751783">
+      <region name="VP1" begin="2320" end="3174" />
+    </regions>
+
+    <regions taxus="D00239">
+      <region name="VP1" begin="2322" end="3182" />
+    </regions>
+
+    <regions taxus="DQ473491">
+      <region name="VP1" begin="2315" end="3178" />
+    </regions>
+
+    <regions taxus="DQ473492">
+      <region name="VP1" begin="2315" end="3175" />
+    </regions>
+
+    <regions taxus="DQ473493">
+      <region name="VP1" begin="2312" end="3172" />
+    </regions>
+
+    <regions taxus="DQ473494">
+      <region name="VP1" begin="2307" end="3160" />
+    </regions>
+
+    <regions taxus="DQ473495">
+      <region name="VP1" begin="2307" end="3167" />
+    </regions>
+
+    <regions taxus="DQ473496">
+      <region name="VP1" begin="2303" end="3151" />
+    </regions>
+
+    <regions taxus="DQ473497">
+      <region name="VP1" begin="2222" end="3070" />
+    </regions>
+
+    <regions taxus="DQ473498">
+      <region name="VP1" begin="2314" end="3171" />
+    </regions>
+
+    <regions taxus="DQ473499">
+      <region name="VP1" begin="2321" end="3163" />
+    </regions>
+
+    <regions taxus="DQ473500">
+      <region name="VP1" begin="2317" end="3174" />
+    </regions>
+
+    <regions taxus="DQ473501">
+      <region name="VP1" begin="2299" end="3159" />
+    </regions>
+
+    <regions taxus="DQ473502">
+      <region name="VP1" begin="2316" end="3173" />
+    </regions>
+
+    <regions taxus="DQ473503">
+      <region name="VP1" begin="2327" end="3190" />
+    </regions>
+
+    <regions taxus="DQ473504">
+      <region name="VP1" begin="2327" end="3187" />
+    </regions>
+
+    <regions taxus="DQ473505">
+      <region name="VP1" begin="2328" end="3194" />
+    </regions>
+
+    <regions taxus="DQ473506">
+      <region name="VP1" begin="2315" end="3192" />
+    </regions>
+
+    <regions taxus="DQ473507">
+      <region name="VP1" begin="2312" end="3186" />
+    </regions>
+
+    <regions taxus="DQ473508">
+      <region name="VP1" begin="2321" end="3184" />
+    </regions>
+
+    <regions taxus="DQ473509">
+      <region name="VP1" begin="2308" end="3165" />
+    </regions>
+
+    <regions taxus="DQ473510">
+      <region name="VP1" begin="2314" end="3171" />
+    </regions>
+
+    <regions taxus="DQ473511">
+      <region name="VP1" begin="2216" end="3076" />
+    </regions>
+
+    <regions taxus="DQ473512">
+      <region name="VP1" begin="2296" end="3144" />
+    </regions>
+
+    <regions taxus="EF173414">
+      <region name="VP1" begin="2309" end="3166" />
+    </regions>
+
+    <regions taxus="EF173415">
+      <region name="VP1" begin="2313" end="3164" />
+    </regions>
+
+    <regions taxus="EF173416">
+      <region name="VP1" begin="2318" end="3172" />
+    </regions>
+
+    <regions taxus="EF173417">
+      <region name="VP1" begin="2305" end="3162" />
+    </regions>
+
+    <regions taxus="EF173418">
+      <region name="VP1" begin="2325" end="3187" />
+    </regions>
+
+    <regions taxus="EF173419">
+      <region name="VP1" begin="2306" end="3163" />
+    </regions>
+
+    <regions taxus="EU840726">
+      <region name="VP1" begin="2300" end="3157" />
+    </regions>
+
+    <regions taxus="FJ445111">
+      <region name="VP1" begin="2326" end="3186" />
+    </regions>
+
+    <regions taxus="FJ445114">
+      <region name="VP1" begin="2310" end="3167" />
+    </regions>
+
+    <regions taxus="FJ445116">
+      <region name="VP1" begin="2315" end="3175" />
+    </regions>
+
+    <regions taxus="FJ445117">
+      <region name="VP1" begin="2316" end="3176" />
+    </regions>
+
+    <regions taxus="FJ445118">
+      <region name="VP1" begin="2299" end="3159" />
+    </regions>
+
+    <regions taxus="FJ445119">
+      <region name="VP1" begin="2308" end="3168" />
+    </regions>
+
+    <regions taxus="FJ445120">
+      <region name="VP1" begin="2318" end="3199" />
+    </regions>
+
+    <regions taxus="FJ445121">
+      <region name="VP1" begin="2314" end="3174" />
+    </regions>
+
+    <regions taxus="FJ445122">
+      <region name="VP1" begin="2305" end="3162" />
+    </regions>
+
+    <regions taxus="FJ445123">
+      <region name="VP1" begin="2321" end="3166" />
+    </regions>
+
+    <regions taxus="FJ445125">
+      <region name="VP1" begin="2321" end="3163" />
+    </regions>
+
+    <regions taxus="FJ445126">
+      <region name="VP1" begin="2317" end="3165" />
+    </regions>
+
+    <regions taxus="FJ445127">
+      <region name="VP1" begin="2307" end="3164" />
+    </regions>
+
+    <regions taxus="FJ445128">
+      <region name="VP1" begin="2316" end="3173" />
+    </regions>
+
+    <regions taxus="FJ445129">
+      <region name="VP1" begin="2321" end="3178" />
+    </regions>
+
+    <regions taxus="FJ445131">
+      <region name="VP1" begin="2310" end="3167" />
+    </regions>
+
+    <regions taxus="FJ445132">
+      <region name="VP1" begin="2306" end="3153" />
+    </regions>
+
+    <regions taxus="FJ445133">
+      <region name="VP1" begin="2318" end="3166" />
+    </regions>
+
+    <regions taxus="FJ445134">
+      <region name="VP1" begin="2306" end="3154" />
+    </regions>
+
+    <regions taxus="FJ445135">
+      <region name="VP1" begin="2298" end="3158" />
+    </regions>
+
+    <regions taxus="FJ445136">
+      <region name="VP1" begin="2310" end="3191" />
+    </regions>
+
+    <regions taxus="FJ445138">
+      <region name="VP1" begin="2317" end="3174" />
+    </regions>
+
+    <regions taxus="FJ445139">
+      <region name="VP1" begin="2316" end="3173" />
+    </regions>
+
+    <regions taxus="FJ445140">
+      <region name="VP1" begin="2319" end="3176" />
+    </regions>
+
+    <regions taxus="FJ445141">
+      <region name="VP1" begin="2311" end="3165" />
+    </regions>
+
+    <regions taxus="FJ445142">
+      <region name="VP1" begin="2324" end="3184" />
+    </regions>
+
+    <regions taxus="FJ445143">
+      <region name="VP1" begin="2310" end="3170" />
+    </regions>
+
+    <regions taxus="FJ445144">
+      <region name="VP1" begin="2312" end="3178" />
+    </regions>
+
+    <regions taxus="FJ445145">
+      <region name="VP1" begin="2326" end="3171" />
+    </regions>
+
+    <regions taxus="FJ445146">
+      <region name="VP1" begin="2324" end="3181" />
+    </regions>
+
+    <regions taxus="FJ445147">
+      <region name="VP1" begin="2320" end="3201" />
+    </regions>
+
+    <regions taxus="FJ445148">
+      <region name="VP1" begin="2316" end="3173" />
+    </regions>
+
+    <regions taxus="FJ445149">
+      <region name="VP1" begin="2308" end="3165" />
+    </regions>
+
+    <regions taxus="FJ445150">
+      <region name="VP1" begin="2319" end="3200" />
+    </regions>
+
+    <regions taxus="FJ445152">
+      <region name="VP1" begin="2322" end="3197" />
+    </regions>
+
+    <regions taxus="FJ445154">
+      <region name="VP1" begin="2313" end="3170" />
+    </regions>
+
+    <regions taxus="FJ445156">
+      <region name="VP1" begin="2312" end="3180" />
+    </regions>
+
+    <regions taxus="FJ445157">
+      <region name="VP1" begin="2311" end="3165" />
+    </regions>
+
+    <regions taxus="FJ445158">
+      <region name="VP1" begin="2311" end="3165" />
+    </regions>
+
+    <regions taxus="FJ445160">
+      <region name="VP1" begin="2302" end="3159" />
+    </regions>
+
+    <regions taxus="FJ445163">
+      <region name="VP1" begin="2323" end="3180" />
+    </regions>
+
+    <regions taxus="FJ445166">
+      <region name="VP1" begin="2330" end="3196" />
+    </regions>
+
+    <regions taxus="FJ445167">
+      <region name="VP1" begin="2310" end="3164" />
+    </regions>
+
+    <regions taxus="FJ445170">
+      <region name="VP1" begin="2302" end="3152" />
+    </regions>
+
+    <regions taxus="FJ445171">
+      <region name="VP1" begin="2311" end="3168" />
+    </regions>
+
+    <regions taxus="FJ445173">
+      <region name="VP1" begin="2316" end="3173" />
+    </regions>
+
+    <regions taxus="FJ445175">
+      <region name="VP1" begin="2317" end="3174" />
+    </regions>
+
+    <regions taxus="FJ445177">
+      <region name="VP1" begin="2308" end="3165" />
+    </regions>
+
+    <regions taxus="GQ223229">
+      <region name="VP1" begin="2318" end="3169" />
+    </regions>
+
+    <regions taxus="GQ415051">
+      <region name="VP1" begin="2309" end="3170" />
+    </regions>
+
+    <regions taxus="GQ415052">
+      <region name="VP1" begin="2309" end="3170" />
+    </regions>
+
+    <regions taxus="L24917">
+      <region name="VP1" begin="2319" end="3173" />
+    </regions>
+
     <regions taxus="NC_001617">
-      <region name="VP1" begin="2341" end="3234" />
+      <region name="VP1" begin="2330" end="3196" />
+    </regions>
+
+    <regions taxus="X02316">
+      <region name="VP1" begin="2301" end="3149" />
     </regions>
 
     <!-- rhinovirus-B -->
+    <regions taxus="DQ473486">
+      <region name="VP1" begin="2329" end="3195" />
+    </regions>
+
+    <regions taxus="DQ473487">
+      <region name="VP1" begin="2336" end="3199" />
+    </regions>
+
+    <regions taxus="DQ473488">
+      <region name="VP1" begin="2324" end="3205" />
+    </regions>
+
+    <regions taxus="DQ473489">
+      <region name="VP1" begin="2324" end="3211" />
+    </regions>
+
+    <regions taxus="DQ473490">
+      <region name="VP1" begin="2321" end="3184" />
+    </regions>
+
+    <regions taxus="EF173420">
+      <region name="VP1" begin="2320" end="3207" />
+    </regions>
+
+    <regions taxus="EF173421">
+      <region name="VP1" begin="2329" end="3189" />
+    </regions>
+
+    <regions taxus="EF173422">
+      <region name="VP1" begin="2328" end="3191" />
+    </regions>
+
+    <regions taxus="EF173423">
+      <region name="VP1" begin="2332" end="3195" />
+    </regions>
+
+    <regions taxus="EF173424">
+      <region name="VP1" begin="2326" end="3204" />
+    </regions>
+
+    <regions taxus="EF173425">
+      <region name="VP1" begin="2330" end="3190" />
+    </regions>
+
+    <regions taxus="FJ445112">
+      <region name="VP1" begin="2327" end="3190" />
+    </regions>
+
+    <regions taxus="FJ445124">
+      <region name="VP1" begin="2328" end="3188" />
+    </regions>
+
+    <regions taxus="FJ445130">
+      <region name="VP1" begin="2328" end="3191" />
+    </regions>
+
+    <regions taxus="FJ445137">
+      <region name="VP1" begin="2326" end="3204" />
+    </regions>
+
+    <regions taxus="FJ445151">
+      <region name="VP1" begin="2322" end="3200" />
+    </regions>
+
+    <regions taxus="FJ445153">
+      <region name="VP1" begin="2332" end="3198" />
+    </regions>
+
+    <regions taxus="FJ445155">
+      <region name="VP1" begin="2338" end="3201" />
+    </regions>
+
+    <regions taxus="FJ445161">
+      <region name="VP1" begin="2340" end="3206" />
+    </regions>
+
+    <regions taxus="FJ445162">
+      <region name="VP1" begin="2320" end="3180" />
+    </regions>
+
+    <regions taxus="FJ445164">
+      <region name="VP1" begin="2333" end="3196" />
+    </regions>
+
+    <regions taxus="FJ445168">
+      <region name="VP1" begin="2322" end="3209" />
+    </regions>
+
+    <regions taxus="FJ445169">
+      <region name="VP1" begin="2341" end="3207" />
+    </regions>
+
+    <regions taxus="FJ445172">
+      <region name="VP1" begin="2324" end="3184" />
+    </regions>
+
+    <regions taxus="FJ445174">
+      <region name="VP1" begin="2321" end="3184" />
+    </regions>
+
     <regions taxus="NC_001490">
-      <region name="VP1" begin="2320" end="3196" />
+      <region name="VP1" begin="2330" end="3196" />
     </regions>
 
     <!-- rhinovirus-C -->
+    <regions taxus="DQ875932">
+      <region name="VP1" begin="2295" end="3110" />
+    </regions>
+
+    <regions taxus="EF077279">
+      <region name="VP1" begin="2174" end="2989" />
+    </regions>
+
+    <regions taxus="EF077280">
+      <region name="VP1" begin="2240" end="3052" />
+    </regions>
+
+    <regions taxus="EF186077">
+      <region name="VP1" begin="2127" end="2951" />
+    </regions>
+
+    <regions taxus="EF582386">
+      <region name="VP1" begin="2327" end="3151" />
+    </regions>
+
+    <regions taxus="EF582387">
+      <region name="VP1" begin="2298" end="3122" />
+    </regions>
+
+    <regions taxus="GQ223227">
+      <region name="VP1" begin="2321" end="3142" />
+    </regions>
+
+    <regions taxus="GQ223228">
+      <region name="VP1" begin="2332" end="3147" />
+    </regions>
+
+    <regions taxus="GQ323774">
+      <region name="VP1" begin="2277" end="3093" />
+    </regions>
+
     <regions taxus="NC_009996">
       <region name="VP1" begin="2305" end="3126" />
     </regions>
 
+    <!-- bovine-porcine-enterovirus -->
+    <regions taxus="AF123432">
+      <region name="VP1" begin="2490" end="3329" />
+    </regions>
+
+    <regions taxus="AF123433">
+      <region name="VP1" begin="2495" end="3334" />
+    </regions>
+
+    <regions taxus="AF363455">
+      <region name="VP1" begin="2480" end="3328" />
+    </regions>
+
+    <regions taxus="AY508697">
+      <region name="VP1" begin="2495" end="3316" />
+    </regions>
+
+    <regions taxus="DQ092769">
+      <region name="VP1" begin="2496" end="3338" />
+    </regions>
+
+    <regions taxus="DQ092770">
+      <region name="VP1" begin="2497" end="3321" />
+    </regions>
+
+    <regions taxus="DQ092771">
+      <region name="VP1" begin="2498" end="3340" />
+    </regions>
+
+    <regions taxus="DQ092792">
+      <region name="VP1" begin="2497" end="3336" />
+    </regions>
+
+    <regions taxus="DQ092794">
+      <region name="VP1" begin="2497" end="3318" />
+    </regions>
+
+    <regions taxus="DQ092795">
+      <region name="VP1" begin="2493" end="3314" />
+    </regions>
+
+    <regions taxus="NC_001859">
+      <region name="VP1" begin="2496" end="3338" />
+    </regions>
+
+    <regions taxus="NC_004441">
+      <region name="VP1" begin="2469" end="3314" />
+    </regions>
+
+    <regions taxus="NC_008714">
+      <region name="VP1" begin="2493" end="3314" />
+    </regions>
+
+    <regions taxus="NC_008715">
+      <region name="VP1" begin="2494" end="3315" />
+    </regions>
+
+    <!-- sapelovirus -->
+    <regions taxus="NC_006553">
+      <region name="VP1" begin="3474" end="4310" />
+    </regions>
+
+    <regions taxus="NC_003987">
+      <region name="VP1" begin="2271" end="3125" />
+    </regions>
+
+    <regions taxus="NC_004451">
+      <region name="VP1" begin="2644" end="3495" />
+    </regions>
+
+    <!-- seal-picornavirus -->
+    <regions taxus="NC_009891">
+      <region name="VP1" begin="2001" end="2546" />
+    </regions>
+
+    <!-- tremovirus -->
+    <regions taxus="NC_003990">
+      <region name="VP1" begin="1956" end="2798" />
+    </regions>
+
+    <!-- teschovirus -->
+    <regions taxus="NC_003985">
+      <region name="VP1" begin="2475" end="3260" />
+    </regions>
+
+    <!-- cosavirus -->
+    <regions taxus="NC_012798">
+      <region name="VP1" begin="1849" end="2682" />
+    </regions>
+
+    <regions taxus="FJ438903">
+      <region name="VP1" begin="2560" end="3534" />
+    </regions>
+
+    <regions taxus="NC_012800">
+      <region name="VP1" begin="2863" end="3741" />
+    </regions>
+
+    <regions taxus="NC_012801">
+      <region name="VP1" begin="2457" end="3350" />
+    </regions>
+
+    <regions taxus="NC_012802">
+      <region name="VP1" begin="2455" end="3336" />
+    </regions>
+
+    <!-- senecavirus -->
+    <regions taxus="NC_011349">
+      <region name="VP1" begin="2686" end="3432" />
+    </regions>
+
     <identify>
-      cardiovirus,
+      aphtovirus-1,
+      aphtovirus-2,
+      aphtovirus-3,
+      avihepatovirus,
+      cardiovirus-1,
+      cardiovirus-2,
+      cardiovirus-3,
+      erbovirus,
       enterovirus-A,
       enterovirus-B,
+      simian-enterovirus-A,
+      simian-enterovirus-B,
       enterovirus-C,
       enterovirus-D,
-      hepatovirus,
-      kobuvirus,
-      parechovirus,
+      porcine-enterovirus-B,
+      bovine-enterovirus,
+      hepatovirusIA,
+      hepatovirusIB,
+      hepatovirusIIA,
+      hepatovirusIIB,
+      hepatovirusIIIA,
+      hepatovirusIIIB,
+      hepatovirussimian,
+      kobuvirus-1,
+      kobuvirus-2,
+      kobuvirus-3,
+      kobuvirus-4,
+      parechovirus-1-1,
+      parechovirus-1-2,
+      parechovirus-1-3,
+      parechovirus-1-4,
+      parechovirus-1-5,
+      parechovirus-1-6,
+      parechovirus-1-7,
+      parechovirus-1-8,
+      parechovirus-2,
       rhinovirus-A,
       rhinovirus-B,
       rhinovirus-C,
-      cosavirus,
-      senecavirus
+      cosavirus-1,
+      cosavirus-2,
+      cosavirus-3,
+      cosavirus-4,
+      sapelovirus-1,
+      sapelovirus-2,
+      sapelovirus-3,
+      seal-picornavirus,
+      senecavirus,
+      teschovirus,
+      tremovirus,
+      other,
     </identify>
 
     <cutoff type="relative" max-p-value="1E-5">
-      1.5
+      1
     </cutoff>
 
     <options>

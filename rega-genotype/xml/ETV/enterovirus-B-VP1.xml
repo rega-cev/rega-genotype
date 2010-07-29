@@ -1,5 +1,5 @@
 <genotype-analyses>
-	<alignment file="enterovirus-B-VP1.fasta" trim="true" />
+	<alignment file="enterovirus-B-VP1-aaligned.fasta" trim="true" />
 
 	<clusters>
 		<cluster id="CV-A9" name="Enterovirus B, serotype CV-A9">
@@ -227,6 +227,16 @@
 			<taxus name="EV-97|AB426611" />
 		</cluster>
 
+		<cluster id="EV-100" name="Enterovirus B, serotype EV-100">
+			<taxus name="EV-100|DQ902713" />
+			<taxus name="EV-100|AY919484" />
+		</cluster>
+
+		<cluster id="EV-107" name="Enterovirus B, serotype EV-107">
+			<taxus name="EV-107|AB426609" />
+			<taxus name="EV-107|GQ292714" />
+		</cluster>
+
 		<!-- singletons in the end -->
 		<cluster id="E-15" name="Enterovirus B, serotype E-15">
 			<taxus name="E-15|AY302541" />
@@ -264,20 +274,16 @@
 			<taxus name="EV-98|AB426608" />
 		</cluster>
 
-		<cluster id="EV-100" name="Enterovirus B, serotype EV-100">
-			<taxus name="EV-100|DQ902713" />
-		</cluster>
-
 		<cluster id="EV-101" name="Enterovirus B, serotype EV-101">
 			<taxus name="EV-101|AY843308" />
 		</cluster>
 
-		<cluster id="EV-107" name="Enterovirus B, serotype EV-107">
-			<taxus name="EV-107|AB426609" />
+		<cluster id="SA5" name="Enterovirus B, serotype SA5">
+			<taxus name="SA5|NC_010411" />
 		</cluster>
 
-		<cluster id="enterovirus-C" name="Enterovirus C">
-		        <taxus name="Outgroup|AF081306" />
+		<cluster id="outgroup" name="Enterovirus C">
+		       <taxus name="Outgroup|AF081306" />
 		</cluster>
 	</clusters>
 
@@ -290,11 +296,11 @@
 		  E-29, E-30, E-31, E-33,
 		  EV-93,
 		  EV-73, EV-74, EV-75, EV-77, EV-79, EV-80, EV-81, EV-82, EV-83, EV-86,
-		  EV-97,
+		  EV-97, EV-100, EV-107,
 		  E-15,
 		  E-32, EV-69, EV-78, EV-84, EV-85, EV-87, EV-88,
-		  EV-98, EV-100, EV-101, EV-107,
-		  enterovirus-C
+		  EV-98, EV-101, SA5,
+		  outgroup
 		</identify>
 		<cutoff>
 			70
@@ -316,7 +322,7 @@
 			quit;
 		</block>
 		<options>
-			log,alignment,tree
+			log,alignment,tree,inner,outer
 		</options>
 	</analysis>
 

@@ -1,5 +1,5 @@
 <genotype-analyses>
-	<alignment file="enterovirus-C-VP1.fasta" trim="false" />
+	<alignment file="enterovirus-C-VP1.fasta" trim="true" />
 
 	<clusters>
 		<cluster id="CV-A11" name="Enterovirus C, serotype CV-A11">
@@ -10,21 +10,26 @@
 		<cluster id="CV-A13" name="Enterovirus C, serotype CV-A13">
 			<taxus name="CV-A13|DQ995639" />
 			<taxus name="CV-A13|AF499640" />
+			<taxus name="CV-A13|AF499637" />
 		</cluster>
 
 		<cluster id="CV-A17" name="Enterovirus C, serotype CV-A17">
 			<taxus name="CV-A17|AB207263" />
 			<taxus name="CV-A17|AF499639" />
+			<taxus name="CV-A17|DQ995645" />
+			<taxus name="CV-A17|FM955278" />
 		</cluster>
 
 		<cluster id="CV-A20" name="Enterovirus C, serotype CV-A20">
 			<taxus name="CV-A20|AF499642" />
 			<taxus name="CV-A20|EF015013" />
+			<taxus name="CV-A20|EF015015" />
 		</cluster>
 
 		<cluster id="CV-A21" name="Enterovirus C, serotype CV-A21">
 			<taxus name="CV-A21|D00538" />
 			<taxus name="CV-A21|AY919453" />
+			<taxus name="CV-A21|AF546702" />
 		</cluster>
 
 		<cluster id="CV-A22" name="Enterovirus C, serotype CV-A22">
@@ -59,7 +64,7 @@
 
 		<cluster id="PV-3" name="Poliovirus, serotype PV-3">
 			<taxus name="PV-3|K01392" />
-			<taxus name="PV-3|AF541919" />
+			<taxus name="PV-3|X04468" />
 		</cluster>
 
 		<!-- singletons in the end -->
@@ -75,6 +80,10 @@
 			<taxus name="EV-102|EF555645" />
 		</cluster>
 
+		<cluster id="EV-104" name="Enterovirus C, serotype EV-104">
+			<taxus name="EV-104|EU840733" />
+		</cluster>
+
 		<cluster id="enterovirus-B" name="Enterovirus B">
 		        <taxus name="Outgroup|AB426611" />
 		</cluster>
@@ -84,7 +93,7 @@
 		<identify>
 		  CV-A11, CV-A13, CV-A17, CV-A20, CV-A21, CV-A22, CV-A24, EV-96, EV-99,
 		  PV-1, PV-2, PV-3,
-		  CV-A1, CV-A19, EV-102,
+		  CV-A1, CV-A19, EV-102, EV-104,
 		  enterovirus-B
 		</identify>
 		<cutoff>
@@ -107,7 +116,7 @@
 			quit;
 		</block>
 		<options>
-			log,alignment,tree
+			log,alignment,tree,inner,outer
 		</options>
 	</analysis>
 
