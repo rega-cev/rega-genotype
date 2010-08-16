@@ -48,10 +48,17 @@ public class GiardiaSequenceAssignmentForm extends IDetailsForm {
 				WString motivation = new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/motivation"));
 				motivation.arg(p.getValue("/genotype_result/sequence/conclusion/assigned/support"));
 
-				t = new WText(tr("sequenceAssignment.phylo")
+				t = new WText(tr("sequenceAssignment")
 						.arg(region)
 						.arg(p.getValue("/genotype_result/sequence/conclusion/assigned/name"))
 						.arg(motivation), block);
+				t.setId("");
+			} else if (region.equals("16S") 
+					&& "16S".equals(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/id"))) {
+				t = new WText(tr("sequenceAssignment")
+						.arg(region)
+						.arg(region)
+						.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/motivation")), block);
 				t.setId("");
 			}
 		}
