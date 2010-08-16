@@ -57,13 +57,17 @@ public class GiardiaTool extends GenotypeTool {
 
         	PhyloClusterAnalysis pca = phyloAnalyses.get(c.getId());
 			if (!phyloAnalysis(pca, s))
-				conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff());
+				conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff() + 
+						"<br/>Further typing is not supported for the 16S region."); 
         } else {
             conclude("Unassigned", "Unassigned because of BLAST score &lt; " + blastAnalysis.getCutoff());
         }
     }
 
 	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s) throws AnalysisException {
+		if (pca == null)
+			return false;
+		
 		PhyloClusterAnalysis.Result r = pca.run(s);
 
 		if (r.haveSupport())
