@@ -60,8 +60,13 @@ public class GiardiaJobOverview extends AbstractJobOverview {
 					data.add(new WText(phyloResult));
 				} else
 					data.add(new WText("Could not assign"));
-			else
-				data.add(new WText());
+			else {
+				if (region.equals("16S") 
+						&& "16S".equals(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/id")))
+					data.add(new WText("NA"));
+				else 
+					data.add(new WText());
+			}
 		}
 
 		int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
