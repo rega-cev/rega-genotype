@@ -58,7 +58,7 @@ public class GiardiaTool extends GenotypeTool {
         	PhyloClusterAnalysis pca = phyloAnalyses.get(c.getId());
 			if (!phyloAnalysis(pca, s))
 				conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff() + 
-						"<br/>Further typing is not supported for the 16S region."); 
+						" Further typing is not supported for the 16S region."); 
         } else {
             conclude("Unassigned", "Unassigned because of BLAST score &lt; " + blastAnalysis.getCutoff());
         }
