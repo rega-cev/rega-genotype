@@ -45,7 +45,7 @@ public class EtvResults {
 				boolean variantNotAssigned = p.getValue(subgenogroupConclusionP + "/assigned/id").equals("Unassigned");
 
 				if (!variantNotAssigned || showVariantNotAssigned)
-					result.variantAssignmentForOverview = "(" + result.variantAssignment + ")";
+					result.variantAssignmentForOverview = result.variantAssignment;
 
 				result.variantBootstrap = GenotypeLib.getEscapedValue(p, subgenogroupConclusionP + "/assigned/support");
 				if (!variantNotAssigned)

@@ -1,5 +1,5 @@
 <genotype-analyses>
-  <alignment file="hiv1trim.fasta" trim="true" />
+  <alignment file="hiv1trim.CRFsnew.at3.pong.fasta" trim="true" />
 
   <clusters>
     <cluster id="A" name="HIV-1 Subtype A">
@@ -209,6 +209,14 @@
 	  <taxus name="31_BCBR0404BR142AY727527" />
 	        <tags>CRF</tags>
     </cluster>
+    
+    <cluster id="33_01A1" name="HIV-1 CRF 33_01A1">
+	  <taxus name="33_01B_05_DQ366659" />
+	  <taxus name="33_01B_07_AB547463" />
+	        <tags>CRF</tags>
+    </cluster>
+    
+    
       <cluster id="35_AD" name="HIV-1 CRF 35_AD">
 	  <taxus name="35_ADAF0505AF026EF158043" />
 	  <taxus name="35_ADAF0505AF094EF158040" />
@@ -234,11 +242,24 @@
 	  <taxus name="40_BFBR0404BRSQ46EU735540" />
 	        <tags>CRF</tags>
     </cluster>
+        <cluster id="42_BF" name="HIV-1 CRF 42_BF">
+	  <taxus name="42_BF_LU_04_EU170142" />
+	  <taxus name="42_BF_LU_03_EU170151" />
+	        <tags>CRF</tags>
+    </cluster>
+    
       <cluster id="43_02G" name="HIV-1 CRF 43_02G">
 	  <taxus name="43_02GSA03J11223EU697904" />
 	  <taxus name="43_02GSA03J11243EU697907" />   
 	  <tags>CRF</tags>
     </cluster>
+    
+          <cluster id="47_BF" name="HIV-1 CRF 47_BF">
+	  <taxus name="47BFES2008P1942GQ372987" />
+	  <taxus name="47BFES2008X24572FJ670529" />   
+	  <tags>CRF</tags>
+    </cluster>
+    
     <cluster id="Group_O" name="Group O">
 	  <taxus name="OCM91MVP5180" />
     </cluster>
@@ -298,7 +319,7 @@
 
   <analysis id="crf" type="paup">
     <identify>
-      A,A1,A2,B,C,D,F,F1,F2,G,H,J,K,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,20_BG,21_A2D,24_BG,25_cpx,27_cpx,29_BF,31_BC,35_AD,36_cpx,37_cpx,39_BF,40_BF,43_02G
+      A,A1,A2,B,C,D,F,F1,F2,G,H,J,K,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,09_cpx,10_CD,11_CPX,12_BF,13_CPX,14_BG,18_cpx,19_cpx,20_BG,24_BG,25_cpx,27_cpx,29_BF,31_BC,35_AD,37_cpx,39_BF,40_BF,42_BF,43_02G,47_BF
     </identify>
     <cutoff>
       70
@@ -309,8 +330,9 @@
       exclude gapped;
       export format=nexus file=paup.nex replace=yes;
       set rootmethod=midpoint;
+      Lset  Base=(0.4339 0.1431 0.2052)  Nst=6  Rmat=(1.7514 6.1130 0.5873 0.9365 11.4053)  Rates=gamma  Shape=0.8740  Pinvar=0.3775;
       set criterion=distance outroot=monophyl;
-      dset distance=HKY NegBrLen=SetAbsVal;
+      dset distance=ML NegBrLen=SetAbsVal;
       NJ;
       savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;

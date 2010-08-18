@@ -30,7 +30,7 @@ public class EtvJobOverview extends AbstractJobOverview {
 		headers.add(new Header(new WString("Name")));
 		headers.add(new Header(new WString("Length")));
 		headers.add(new Header(new WString("Genus/Species")));
-		headers.add(new Header(new WString("Serotype (subgenogroup)"), 2));
+		headers.add(new Header(new WString("Serotype, Sub-Genogroup"), 2));
 		headers.add(new Header(new WString("Report")));
 		headers.add(new Header(new WString("Genome")));
 	}
