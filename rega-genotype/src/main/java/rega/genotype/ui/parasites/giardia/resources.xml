@@ -70,7 +70,7 @@
 		</exampleSequences-sequences>
 	</exampleSequences-form>
 
-	<resource name="sequenceAssignment.phylo">
+	<resource name="sequenceAssignment">
 		<h3>Locus: {1}</h3>
 		<p>
 			<span class="label">Assignment:</span> <span class="nov-genotype">{2}</span>
