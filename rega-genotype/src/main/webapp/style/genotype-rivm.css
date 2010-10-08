@@ -236,9 +236,9 @@ h1 {
 
 .note, .footer {
 	padding: 0.5em 3em 0.5em 0.5em;
-	background-color: rgb(204, 204, 255);
+	background-color: #deebe3;
 	display: block;
-	width: 80%;
+	width: 100%;
 	margin: 0px auto;
 }
 
@@ -264,18 +264,6 @@ h1 {
 }
 
 a, .link{
-	text-decoration: underline;
-	color: blue;
-	cursor: pointer;
-}
-
-.menulink{
-	text-decoration: underline;
-	color: blue;
-	cursor: pointer;
-}
-
-.menulink-selected {
 	text-decoration: underline;
 	color: blue;
 	cursor: pointer;
@@ -313,6 +301,28 @@ table.csv td, table.csv td{
 table.csv tr:first-child td{
 	color: white;
 	background-color: darkblue;
+}.menulink {
+	font-family: arial,sans-serif;
+	font-size: 18px;
+	color: black;
+	cursor: pointer;
+	font-weight: bold;
+	background-color: #a8cad2;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-decoration: none;
+}
+
+.menulink-selected {
+	font-family: arial,sans-serif;
+	font-size: 18px;
+	color: black;
+	cursor: pointer;
+	font-weight: bold;
+	background-color: #deebe3;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-decoration: none;
 }
 
 div.sequence, div.sequenceName {
@@ -361,7 +371,29 @@ span.refseq{
 }
 
 table.assignment-overview {
-	border: 1px solid black;
+	border: 1px solid black;.menulink {
+	font-family: arial,sans-serif;
+	font-size: 18px;
+	color: black;
+	cursor: pointer;
+	font-weight: bold;
+	background-color: #a8cad2;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-decoration: none;
+}
+
+.menulink-selected {
+	font-family: arial,sans-serif;
+	font-size: 18px;
+	color: black;
+	cursor: pointer;
+	font-weight: bold;
+	background-color: #deebe3;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-decoration: none;
+}
 	max-width: 500px;
 }
 
@@ -387,7 +419,29 @@ table.assignment-overview {
 
 .assignment-overview-filter {
 	border: 1px solid black;
-	padding: 0.5em;
+	padding: 0.5em;.menulink {
+	font-family: arial,sans-serif;
+	font-size: 18px;
+	color: black;
+	cursor: pointer;bottom
+	font-weight: bold;
+	background-color: #a8cad2;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-decoration: none;
+}
+
+.menulink-selected {
+	font-family: arial,sans-serif;
+	font-size: 18px;
+	color: black;
+	cursor: pointer;
+	font-weight: bold;
+	background-color: #deebe3;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-decoration: none;
+}
 }
 
 .assignment-overview-filter th, .assignment-overview-filter td {
@@ -440,9 +494,88 @@ table.assignment-overview {
   margin-bottom:20px;
   text-align:center;
 }
-table.reftable caption{
+
+table.reftable caption {
   font-weight:bold;
   font-size:110%;
   margin:5px 0 5px 0;
 }
 
+.rivm-header div#logo {
+	background-color: ffffff;
+}
+
+.rivm-header img#logo {
+	margin-left: 50%;
+	height: 75px;
+	width: 44px;
+	padding-bottom: 12px;
+}
+
+.rivm-header img#text_logo {
+	padding-top: 20px;
+}
+
+.rivm-header div#application {
+	background-color: #deebe3;
+ 	height: 30px;
+ 	padding-left: 25px;
+ 	width: 100%;
+}
+
+.rivm-header span#name {
+	font-weight: bold; 
+	position: relative;
+	top: 25%;
+}
+
+.rivm-header span#info {
+	font-style: italic;
+	position: relative;
+	top: 25%;
+}
+
+.rivm-header div#navigation {
+	height: 60px;
+	background-color: #a8cad2;
+	padding-left: 10px;
+	width: 100%;
+	line-height: 98px;
+}
+
+.rivm-header div#menu a {
+	font-family: arial,sans-serif;
+	font-size: 18px;
+	color: black;
+	cursor: pointer;
+	font-weight: bold;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	text-decoration: none;
+	vertical-align: text-bottom;
+}
+
+.rivm-header div#navigation-bottom {
+	background-color: #deebe3;
+ 	height: 5px;
+ 	width: 100%;
+}
+
+.menulink {
+	background-color: #a8cad2;
+}
+
+.menulink-selected {
+	background-color: #deebe3;
+}
+
+.rivm-footer div {
+	background-color: ffffff;
+}
+
+.rivm-footer img {
+	height: 25px;
+	width: 44px;
+	margin-left: 50%;
+}

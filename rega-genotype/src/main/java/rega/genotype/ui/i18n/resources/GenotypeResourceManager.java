@@ -6,6 +6,7 @@
 package rega.genotype.ui.i18n.resources;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 
 import eu.webtoolkit.jwt.WLocalizedStrings;
 import eu.webtoolkit.jwt.WString;
@@ -87,6 +89,28 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 	
 	public Element getOrganismElement(String form, String item) {
 		return organism.getChild(form).getChild(item);
+	}
+	
+	public String getOrganismElementAsString(String form, String item) {
+		try {
+			XMLOutputter outputter = new XMLOutputter();
+		    StringWriter sw = new StringWriter();
+		    
+		    for (Object e : organism.getChild(form).getChild(item).getContent()) {
+		    	if (e instanceof Text) {
+		    		outputter.output((Text)e, sw);		
+		    	} else if (e instanceof Element) {
+		    		outputter.output((Element)e, sw);		
+		    	} else {
+		    		throw new RuntimeException("Element " + e.getClass().toString() + " not supported");
+		    	}
+		    }
+		    
+		    return sw.toString();
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public String extractFormattedText(Element child) {

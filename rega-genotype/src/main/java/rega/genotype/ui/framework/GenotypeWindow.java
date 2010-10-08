@@ -18,13 +18,16 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.StateLink;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
+import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WWidget;
 
 /**
  * The frame of the application.
@@ -82,7 +85,8 @@ public class GenotypeWindow extends WContainerWidget
 		
 		app.useStyleSheet(Settings.getInstance().getStyleSheet(od));
 		
-		WTemplate main = new WTemplate(resourceManager.getOrganismValue("app", "template"), this);
+		WTemplate main = new WTemplate(this);
+		main.setTemplateText(resourceManager.getOrganismElementAsString("app", "template"), TextFormat.XHTMLUnsafeText);
 
 		WImage headerImage = GenotypeLib.getWImageFromResource(od, "header.gif", this);
 		main.bindWidget("header-image", headerImage);
@@ -98,7 +102,7 @@ public class GenotypeWindow extends WContainerWidget
 		content.setStyleClass("content");
 
 		WContainerWidget navigation = new WContainerWidget();
-		navigation.setId("");
+		navigation.setId("navigation");
 		main.bindWidget("navigation", navigation);
 
 		WText footer = new WText(resourceManager.getOrganismValue("main-form", "footer"));
@@ -113,6 +117,7 @@ public class GenotypeWindow extends WContainerWidget
 		addLink(navigation, tr("main.navigation.start"), START_URL, form);
 
 		StateLink monitor = new StateLink(tr("main.navigation.monitor"), JobForm.JOB_URL, navigation);
+		addLinkListener(monitor);
 		monitor.setId("monitor-link");
 		JobForm jobForm = new JobForm(this, od.getJobOverview(this), monitor);
 		forms.put(JobForm.JOB_URL, jobForm);
@@ -167,14 +172,29 @@ public class GenotypeWindow extends WContainerWidget
 		}
 	}
 
-	private void addLink(WContainerWidget parent, WString text, String url, AbstractForm form) {
+	private void addLinkListener(final WAnchor a) {
+		a.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
+			public void trigger(WMouseEvent arg) {
+				for(WWidget w : ((WContainerWidget)a.getParent()).getChildren()) {
+					if (w != a) 
+						w.setStyleClass("menulink");
+				}
+				a.setStyleClass("menulink-selected");
+			}
+		});
+	}
+	
+	private void addLink(final WContainerWidget parent, WString text, String url, AbstractForm form) {
 		if (form == null) 
 			return;
 		
-		WAnchor a = new WAnchor("", text, parent);
+		final WAnchor a = new WAnchor("", text, parent);
 		a.setObjectName("link");
 		a.setRefInternalPath(url);
-		a.setStyleClass("link");
+		a.setStyleClass("menulink");
+		
+		addLinkListener(a);
+		
 		forms.put(url, form);
 	}
 
