@@ -16,6 +16,7 @@ import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.StateLink;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
@@ -81,7 +82,7 @@ public class GenotypeWindow extends WContainerWidget
 		setId("");
 		WApplication app = WApplication.getInstance();
 		
-		app.useStyleSheet("../style/genotype.css");
+		app.useStyleSheet(Settings.getInstance().getStyleSheet(od));
 
 		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
 		header.setAlternateText("header");

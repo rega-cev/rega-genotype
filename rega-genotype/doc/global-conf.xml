@@ -50,6 +50,13 @@
   <property name="jobDir-HTLV">/Users/tulio/biotools/rega3/rega2009/jobDirHTLV</property>
   <property name="jobDir-PHYLO">/Users/tulio/biotools/rega3/rega2009/jobDirPHYLO</property>
   
+   <!-- styleSheet-%pathogen%
+	
+	Configures the stylesheet the application should use for a certain pathogen.
+	This configuration is optional, the default is Settings.defaultStyleSheet.
+   -->
+  <property name="styleSheet-NoV">../style/genotype-rivm.css</property>
+  
   <!-- maxAllowedSequences
      The maximum number of sequences that may be submitted in a single batch.
    -->
