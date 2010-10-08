@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <organism-settings>
+	<app>
+		<template>
+		${header-image}
+		${content}
+		<div class="navigation">
+		${navigation}
+		</div>
+		${footer}
+		</template>
+	</app>
 	<main-form>
 		<footer>
 		Developed by: Tulio de Oliveira, Marco Salemi, Oliver Pybus, Sabrina Almeida,  Andrew Rambaut.

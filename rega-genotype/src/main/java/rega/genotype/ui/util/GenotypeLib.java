@@ -242,6 +242,13 @@ public class GenotypeLib {
 	}
 	
 	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) {
+		final InputStream is = GenotypeLib.class.getResourceAsStream(od.getOrganismDirectory()+fileName);
+		
+		if (is == null)
+			return null;
+		else 
+			IOUtils.closeQuietly(is);
+		
 		return new WImage(new WResource() {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {

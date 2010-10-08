@@ -23,6 +23,7 @@ import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -48,9 +49,6 @@ public class GenotypeWindow extends WContainerWidget
 	private AbstractForm activeForm;
 		
 	private WContainerWidget content;
-	
-	private WImage header;
-	private WText footer;
 	
 	private OrganismDefinition od;
 	
@@ -83,26 +81,30 @@ public class GenotypeWindow extends WContainerWidget
 		WApplication app = WApplication.getInstance();
 		
 		app.useStyleSheet(Settings.getInstance().getStyleSheet(od));
+		
+		WTemplate main = new WTemplate(resourceManager.getOrganismValue("app", "template"), this);
 
-		header = GenotypeLib.getWImageFromResource(od, "header.gif", this);
-		header.setAlternateText("header");
-		header.setId("");
-		header.setStyleClass("header");
+		WImage headerImage = GenotypeLib.getWImageFromResource(od, "header.gif", this);
+		main.bindWidget("header-image", headerImage);
+		if (headerImage != null) {
+			headerImage.setAlternateText("header");
+			headerImage.setStyleClass("header");
+			headerImage.setId("");
+		}
 
-		content = new WContainerWidget(this);
+		content = new WContainerWidget();
+		main.bindWidget("content", content);
 		content.setId("content");
 		content.setStyleClass("content");
 
-		WContainerWidget navigationContainer = new WContainerWidget(this);
-		navigationContainer.setId("");
-		navigationContainer.setStyleClass("navigation");
-
-		WContainerWidget navigation = new WContainerWidget(navigationContainer);
+		WContainerWidget navigation = new WContainerWidget();
 		navigation.setId("");
+		main.bindWidget("navigation", navigation);
 
-		footer = new WText(resourceManager.getOrganismValue("main-form", "footer"), this);
-		footer.setId("");
+		WText footer = new WText(resourceManager.getOrganismValue("main-form", "footer"));
 		footer.setStyleClass("footer");
+		footer.setId("");
+		main.bindWidget("footer", footer);
 
 		/*
 		 * Set up the footer: links to all the forms:

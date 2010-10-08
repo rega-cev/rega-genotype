@@ -68,7 +68,11 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 	}
 	
 	public WString getOrganismValue(String form, String item) {
-		return new WString(extractFormattedText(organism.getChild(form).getChild(item)));
+		Element formE = organism.getChild(form);
+		if (formE != null && formE.getChild(item) != null)
+			return new WString(extractFormattedText(formE.getChild(item)));
+		
+		return null;
 	}
 	
 	public WString getOrganismValue(String form, String item, List<String> args) {
