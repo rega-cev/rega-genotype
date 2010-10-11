@@ -247,45 +247,40 @@ h1 {
 	font-style: italic;
 }
 
-.navigation{
+.nav_bar {
 	margin: 1em auto;
 	border-color: black;
 	border-style: solid;
 	border-width: 1px 0px 1px 0px;
-	padding: 1em;
-	text-align: center;
-	height: 30px;
 	width: 80%;
-	clear: both;
+	height: 30px;
+	padding: 1em;
+
 }
 
-.navigation div {
-	margin: 0px auto;
+.nav_main { 
+	list-style: none;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
 }
 
-a, .link{
-	text-decoration: underline;
-	color: blue;
-	cursor: pointer;
+.nav_main li { 
+	background: none; 
+	display: inline; 
+	margin: 0; 
+	padding: 0; 
 }
 
-.menulink{
-	text-decoration: underline;
-	color: blue;
-	cursor: pointer;
-}
-
-.menulink-selected {
-	text-decoration: underline;
-	color: blue;
-	cursor: pointer;
-}
-
-.navigation a {
+.nav_main a {
 	display: inline-block;
 	width: 12%;
 	text-align: center;
 	vertical-align: middle;
+	
+	text-decoration: underline;
+	color: blue;
+	cursor: pointer;
 }
 
 .edit-invalid {

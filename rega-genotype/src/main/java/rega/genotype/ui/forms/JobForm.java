@@ -2,7 +2,6 @@ package rega.genotype.ui.forms;
 
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.StateLink;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
@@ -12,7 +11,7 @@ import eu.webtoolkit.jwt.WWidget;
  * Container grouping together AbstractJobOverview and DetailsForm.
  * 
  * @author pieter
- */
+ */ 
 public class JobForm extends AbstractForm {
 	public static final String JOB_URL = "/job";
 	
@@ -21,12 +20,10 @@ public class JobForm extends AbstractForm {
 	private RecombinationForm recombination;
 	private WText error;
 	
-	private StateLink stateLink;
-	
-	public JobForm(GenotypeWindow main, AbstractJobOverview jobOverview, StateLink stateLink) {
+	private Signal1<String> jobIdChanged = new Signal1<String>();
+
+	public JobForm(GenotypeWindow main, AbstractJobOverview jobOverview) {
 		super(main, null, null);
-		
-		this.stateLink = stateLink;
 		
 		details = new DetailsForm(main);
 		addWidget(details);
@@ -75,7 +72,7 @@ public class JobForm extends AbstractForm {
 			
 			if (sequenceId == null) {
 				jobOverview.init(jobId, filter);
-				stateLink.setVarValue(jobId);
+				jobIdChanged.trigger(jobId);
 				showWidget(jobOverview);
 			} else {
 				String detailed = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/" + sequenceId +"/");
@@ -94,7 +91,7 @@ public class JobForm extends AbstractForm {
 				}
 
 				if (errorMsg == null) {
-					stateLink.setVarValue(jobId);
+					jobIdChanged.trigger(jobId);
 					showWidget(widget);
 				} else {
 					error.setText(errorMsg.arg(jobId));
@@ -108,5 +105,9 @@ public class JobForm extends AbstractForm {
 		for (WWidget w : this.getChildren()) {
 			w.setHidden(w != form);
 		}
+	}
+	
+	public Signal1<String> getJobIdChanged() {
+		return jobIdChanged;
 	}
 }
