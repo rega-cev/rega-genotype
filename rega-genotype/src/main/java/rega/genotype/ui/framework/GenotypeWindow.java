@@ -119,6 +119,7 @@ public class GenotypeWindow extends WContainerWidget
 			public void trigger(String id) {
 				jobItem.setPathComponent(JobForm.JOB_URL + "/" + id);
 				jobItem.setText(tr(monitorNavigation).arg(id));
+				jobItem.select();
 			}
 		});
 
