@@ -249,6 +249,10 @@ h1 {
 	font-style: italic;
 }
 
+.note {
+	padding: 0.5em 3em 0.5em 0.5em;
+}
+
 .edit-invalid {
 	background-color:#f5baaa;
 }
@@ -475,18 +479,34 @@ table.reftable caption {
 }
 
 .rivm-header div#logo {
-	background-color: ffffff;
+	background-color: #ffffff;
 }
 
-.rivm-header img#logo {
+.rivm-header div#logo img {
 	margin-left: 50%;
 	height: 75px;
 	width: 44px;
 	padding-bottom: 12px;
 }
 
-.rivm-header img#text_logo {
-	padding-top: 0px;
+.rivm-header div#text {
+	position: relative;
+	display: inline-block;
+	top: -60px;
+	width: 400px;
+}
+
+.rivm-header span#text_name {
+	font: sans-serif;
+}
+
+.rivm-header span#text_subname {
+	font: sans-serif;
+	font-size: x-small;
+}
+
+.rivm-header div#text div {
+	position: absolute;
 }
 
 .rivm-header div#application {

@@ -4,8 +4,14 @@
 		<template>
 		<div class="rivm-header">
 					<div id="logo">
-						<img id="logo" src="../pics/rivm/logo.png" alt="RIVM Logo" />
-						<img id="text_logo" src="../pics/rivm/text_logo.gif" />
+						<img src="../pics/rivm/logo.png" alt="RIVM Logo" />
+						<div id="text">
+							<div>
+								<span id="text_name">Rijksinstituut voor Volksgezondheid en Milieu</span>
+								<br/>
+								<span id="text_subname">Ministerie van Volksgezondheid, Welzijn en Sport</span>
+							</div>
+						</div>
 					</div>
 				<div id="application">
 					<span id="name">Norovirus Genotyping Tool</span>
