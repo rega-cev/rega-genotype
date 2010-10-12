@@ -238,8 +238,7 @@ h1 {
 }
 
 .note, .footer {
-	padding: 0.5em 3em 0.5em 0.5em;
-	background-color: #deebe3;
+	background-color: #B2D7EE;
 	display: block;
 	width: 100%;
 	margin: 0px auto;
@@ -293,7 +292,7 @@ table.csv tr:first-child td{
 	color: black;
 	cursor: pointer;
 	font-weight: bold;
-	background-color: #deebe3;
+	background-color: #B2D7EE;
 	padding-left: 5px;
 	padding-right: 5px;
 	text-decoration: none;
@@ -363,7 +362,7 @@ table.assignment-overview {
 	color: black;
 	cursor: pointer;
 	font-weight: bold;
-	background-color: #deebe3;
+	background-color: #B2D7EE;
 	padding-left: 5px;
 	padding-right: 5px;
 	text-decoration: none;
@@ -411,7 +410,7 @@ table.assignment-overview {
 	color: black;
 	cursor: pointer;
 	font-weight: bold;
-	background-color: #deebe3;
+	background-color: #B2D7EE;
 	padding-left: 5px;
 	padding-right: 5px;
 	text-decoration: none;
@@ -491,10 +490,10 @@ table.reftable caption {
 }
 
 .rivm-header div#application {
-	background-color: #deebe3;
+	background-color: #B2D7EE;
  	height: 30px;
  	padding-left: 25px;
- 	width: 100%;
+ 	/*width: 100%;*/
 }
 
 .rivm-header span#name {
@@ -517,7 +516,7 @@ table.reftable caption {
 .nav_main a:hover { color: #000; text-decoration: none; }
 
 .rivm-header div#navigation-bottom {
-	background-color: #deebe3;
+	background-color: #B2D7EE;
  	height: 5px;
  	width: 100%;
 }
@@ -527,7 +526,7 @@ table.reftable caption {
 }
 
 .menulink-selected {
-	background-color: #deebe3;
+	background-color: #B2D7EE;
 }
 
 .rivm-footer div {
