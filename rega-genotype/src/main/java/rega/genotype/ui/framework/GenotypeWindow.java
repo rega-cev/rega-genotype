@@ -88,6 +88,8 @@ public class GenotypeWindow extends WContainerWidget
 		WTemplate main = new WTemplate(this);
 		main.setTemplateText(resourceManager.getOrganismElementAsString("app", "template"), TextFormat.XHTMLUnsafeText);
 
+		main.bindString("app.url", app.getBookmarkUrl("/"));
+		
 		WImage headerImage = GenotypeLib.getWImageFromResource(od, "header.gif", this);
 		main.bindWidget("header-image", headerImage);
 		if (headerImage != null) {

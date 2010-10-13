@@ -4,7 +4,9 @@
 		<template>
 		<div class="rivm-header">
 					<div id="logo">
-						<img id="logo" src="../pics/rivm/logo.png" alt="RIVM Logo" />
+						<a href="${app.url}">
+							<img id="logo" src="../pics/rivm/logo.png" alt="RIVM Logo" />
+						</a>
 						<img id="text_logo" src="../pics/rivm/text_logo.gif" />
 					</div>
 				<div id="application">
