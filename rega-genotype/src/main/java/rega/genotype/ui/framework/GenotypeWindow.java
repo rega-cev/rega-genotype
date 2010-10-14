@@ -5,9 +5,6 @@
  */
 package rega.genotype.ui.framework;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.forms.DocumentationForm;
@@ -15,19 +12,18 @@ import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.StateLink;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.TextFormat;
-import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
-import eu.webtoolkit.jwt.WMouseEvent;
-import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WMenu;
+import eu.webtoolkit.jwt.WMenuItem;
+import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WWidget;
 
 /**
  * The frame of the application.
@@ -47,11 +43,7 @@ public class GenotypeWindow extends WContainerWidget
 	private static final String CITE_URL = "/cite";
 	private static final String CONTACT_URL = "/contact";
 
-	private Map<String, AbstractForm> forms = new HashMap<String, AbstractForm>();
-	
-	private AbstractForm activeForm;
-		
-	private WContainerWidget content;
+	private WStackedWidget content;
 	
 	private OrganismDefinition od;
 	
@@ -86,6 +78,7 @@ public class GenotypeWindow extends WContainerWidget
 		app.useStyleSheet(Settings.getInstance().getStyleSheet(od));
 		
 		WTemplate main = new WTemplate(this);
+		main.setStyleClass("azure");
 		main.setTemplateText(resourceManager.getOrganismElementAsString("app", "template"), TextFormat.XHTMLUnsafeText);
 
 		main.bindString("app.url", app.getBookmarkUrl("/"));
@@ -98,60 +91,53 @@ public class GenotypeWindow extends WContainerWidget
 			headerImage.setId("");
 		}
 
-		content = new WContainerWidget();
+		content = new WStackedWidget();
 		main.bindWidget("content", content);
 		content.setId("content");
 		content.setStyleClass("content");
 
 		WContainerWidget navigation = new WContainerWidget();
-		navigation.setId("navigation");
 		main.bindWidget("navigation", navigation);
-
+		navigation.setStyleClass("nav_bar");
+		
+		WMenu menu = new WMenu(content, Orientation.Horizontal, navigation);
+		menu.setRenderAsList(true);
+		menu.setStyleClass("nav_main");
+		
 		WText footer = new WText(resourceManager.getOrganismValue("main-form", "footer"));
 		footer.setStyleClass("footer");
 		footer.setId("");
 		main.bindWidget("footer", footer);
 
 		/*
-		 * Set up the footer: links to all the forms:
+		 * Set up the menu: links to all the forms:
 		 */
-		AbstractForm form = new StartForm(this);
-		addLink(navigation, tr("main.navigation.start"), START_URL, form);
+		addLink(menu, tr("main.navigation.start"), START_URL, new StartForm(this));
 
-		StateLink monitor = new StateLink(tr("main.navigation.monitor"), JobForm.JOB_URL, navigation);
-		addLinkListener(monitor);
-		monitor.setId("monitor-link");
-		JobForm jobForm = new JobForm(this, od.getJobOverview(this), monitor);
-		forms.put(JobForm.JOB_URL, jobForm);
+		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
+		final String monitorNavigation = "main.navigation.monitor";
+		final WMenuItem jobItem = addLink(menu, tr(monitorNavigation).arg(""), "", jobForm);
+		jobForm.getJobIdChanged().addListener(this, new Signal1.Listener<String>() {
+			public void trigger(String id) {
+				jobItem.setPathComponent(JobForm.JOB_URL + "/" + id);
+				jobItem.setText(tr(monitorNavigation).arg(id));
+				jobItem.select();
+			}
+		});
 
-		form = createDocForm("howToCite-form", "howToCite-text");
-		addLink(navigation, tr("main.navigation.howToCite"), CITE_URL, form);
+		addLink(menu, tr("main.navigation.howToCite"), CITE_URL, createDocForm("howToCite-form", "howToCite-text"));
 		
-		form = createDocForm("introduction-form", "introduction-text");
-		addLink(navigation, tr("main.navigation.introduction"), INTRODUCTION_URL, form);
+		addLink(menu, tr("main.navigation.introduction"), INTRODUCTION_URL, createDocForm("introduction-form", "introduction-text"));
 		
-		form = createDocForm("tutorial-form", "tutorial-text");
-		addLink(navigation, tr("main.navigation.tutorial"), TUTORIAL_URL, form);
+		addLink(menu, tr("main.navigation.tutorial"), TUTORIAL_URL, createDocForm("tutorial-form", "tutorial-text"));
 		
-		form = createDocForm("decisionTrees-form", "decisionTrees-text");
-		addLink(navigation, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, form);
+		addLink(menu, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, createDocForm("decisionTrees-form", "decisionTrees-text"));
 		
-		form = createDocForm("subtypingProcess-form", "subtypingProcess-text");
-		addLink(navigation, tr("main.navigation.subtypingProcess"), METHOD_URL, form);
+		addLink(menu, tr("main.navigation.subtypingProcess"), METHOD_URL, createDocForm("subtypingProcess-form", "subtypingProcess-text"));
 		
-		form = createDocForm("exampleSequences-form", "exampleSequences-sequences");
-		addLink(navigation, tr("main.navigation.exampleSequences"), EXAMPLES_URL, form);
+		addLink(menu, tr("main.navigation.exampleSequences"), EXAMPLES_URL, createDocForm("exampleSequences-form", "exampleSequences-sequences"));
 		
-		form = createDocForm("contactUs-form", "contactUs-text");
-		addLink(navigation, tr("main.navigation.contactUs"), CONTACT_URL, form);
-		
-		GenotypeMain.getApp().internalPathChanged().addListener(this, new Signal1.Listener<String>() {
-
-			public void trigger(String internalPath) {
-				handleInternalPath();
-			} });
-		
-		handleInternalPath();
+		addLink(menu, tr("main.navigation.contactUs"), CONTACT_URL, createDocForm("contactUs-form", "contactUs-text"));
 	}
 	
 	private DocumentationForm createDocForm(String name, String content) {
@@ -163,55 +149,15 @@ public class GenotypeWindow extends WContainerWidget
 		}
 	}
 	
-	private void handleInternalPath() {
-		if (GenotypeMain.getApp().internalPathMatches("/")) {
-			String newPath = "/" + GenotypeMain.getApp().getInternalPathNextPart("/");
-
-			AbstractForm f = forms.get(newPath);
-
-			if (f != null)
-				setForm(f);
-		}
-	}
-
-	private void addLinkListener(final WAnchor a) {
-		a.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
-			public void trigger(WMouseEvent arg) {
-				for(WWidget w : ((WContainerWidget)a.getParent()).getChildren()) {
-					if (w != a) 
-						w.setStyleClass("menulink");
-				}
-				a.setStyleClass("menulink-selected");
-			}
-		});
-	}
-	
-	private void addLink(final WContainerWidget parent, WString text, String url, AbstractForm form) {
+	private WMenuItem addLink(final WMenu menu, CharSequence text, String url, AbstractForm form) {
 		if (form == null) 
-			return;
+			return null;
 		
-		final WAnchor a = new WAnchor("", text, parent);
-		a.setObjectName("link");
-		a.setRefInternalPath(url);
-		a.setStyleClass("menulink");
+		WMenuItem i = new WMenuItem(text, form);
+		menu.addItem(i);
+		i.setPathComponent(url);
 		
-		addLinkListener(a);
-		
-		forms.put(url, form);
-	}
-
-	public void setForm(AbstractForm form) {
-		form.show();
-
-		if (form == activeForm)
-			return;
-
-		if(activeForm!=null)
-			activeForm.hide();
-		activeForm = form;
-
-		if (form.getParent() == null)
-			content.addWidget(form);
+		return i;
 	}
 	
 	public void changeInternalPath(String path) {

@@ -5,9 +5,15 @@
 		<div class="rivm-header">
 					<div id="logo">
 						<a href="${app.url}">
-							<img id="logo" src="../pics/rivm/logo.png" alt="RIVM Logo" />
+							<img src="../pics/rivm/logo.png" alt="RIVM Logo" />
 						</a>
-						<img id="text_logo" src="../pics/rivm/text_logo.gif" />
+						<div id="text">
+							<div>
+								<span id="text_name">Rijksinstituut voor Volksgezondheid en Milieu</span>
+								<br/>
+								<span id="text_subname">Ministerie van Volksgezondheid, Welzijn en Sport</span>
+							</div>
+						</div>
 					</div>
 				<div id="application">
 					<span id="name">Norovirus Genotyping Tool</span>
