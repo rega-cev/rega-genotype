@@ -27,6 +27,9 @@ public class EtvMain extends GenotypeMain {
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new EtvDefinition());
 		app.setTitle(WString.tr("etvTool.title"));
 		
+		app.useStyleSheet("../style/genotype-rivm.css");
+		app.useStyleSheet("../style/genotype-rivm-ie.css", "IE lte 7");
+		
 		return app;
 	}
 }

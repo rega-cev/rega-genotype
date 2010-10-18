@@ -27,6 +27,9 @@ public class NovMain extends GenotypeMain {
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new NovDefinition());
 		app.setTitle(WString.tr("nrvTool.title"));
 		
+		app.useStyleSheet("../style/genotype-rivm.css");
+		app.useStyleSheet("../style/genotype-rivm-ie.css", "IE lte 7");
+		
 		return app;
 	}
 }

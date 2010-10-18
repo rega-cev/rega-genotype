@@ -75,8 +75,6 @@ public class GenotypeWindow extends WContainerWidget
 		setId("");
 		WApplication app = WApplication.getInstance();
 		
-		app.useStyleSheet(Settings.getInstance().getStyleSheet(od));
-		
 		WTemplate main = new WTemplate(this);
 		main.setStyleClass("azure");
 		main.setTemplateText(resourceManager.getOrganismElementAsString("app", "template"), TextFormat.XHTMLUnsafeText);

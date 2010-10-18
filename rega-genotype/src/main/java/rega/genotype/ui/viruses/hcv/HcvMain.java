@@ -2,6 +2,7 @@ package rega.genotype.ui.viruses.hcv;
 
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 
@@ -17,6 +18,8 @@ public class HcvMain extends GenotypeMain {
 	public WApplication createApplication(WEnvironment env) {
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new HcvDefinition());
 
+		app.useStyleSheet(Settings.defaultStyleSheet);
+		
 		return app;
 	}
 }

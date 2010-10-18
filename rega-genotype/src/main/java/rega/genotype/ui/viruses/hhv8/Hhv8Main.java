@@ -2,6 +2,7 @@ package rega.genotype.ui.viruses.hhv8;
 
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 
@@ -17,6 +18,8 @@ public class Hhv8Main extends GenotypeMain {
 	public WApplication createApplication(WEnvironment env) {
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new Hhv8Definition());
 
+		app.useStyleSheet(Settings.defaultStyleSheet);
+		
 		return app;
 	}
 }

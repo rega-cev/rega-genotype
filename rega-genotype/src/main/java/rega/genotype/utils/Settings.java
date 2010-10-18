@@ -30,7 +30,7 @@ import rega.genotype.ui.data.OrganismDefinition;
  *
  */
 public class Settings {
-	private final static String defaultStyleSheet = "../style/genotype.css";
+	public final static String defaultStyleSheet = "../style/genotype.css";
 	
 	private Settings(File f) {
 		parseConfFile(f);
@@ -72,14 +72,6 @@ public class Settings {
 		return maxJobDirLifeTime;
 	}
 	
-	public String getStyleSheet(OrganismDefinition od) {
-		String styleSheet = styleSheets.get(od.getOrganismName());
-		if (styleSheet == null)
-			return defaultStyleSheet;
-		
-		return styleSheet;
-	}
-	
 	public List<File> getJobDirs() {
 		List<File> dirs = new ArrayList<File>();
 		dirs.addAll(jobDirs.values());
@@ -95,7 +87,6 @@ public class Settings {
 	private int maxAllowedSeqs;
 	private Integer maxJobDirLifeTime = null;
 	
-	private Map<String, String> styleSheets = new HashMap<String, String>();
 	private Map<String, File> jobDirs = new HashMap<String, File>();
 	public static String treeGraphCommand = "/usr/bin/tgf";
 
@@ -138,9 +129,6 @@ public class Settings {
             	maxAllowedSeqs = Integer.parseInt(e.getValue().trim());
             } else if(name.equals("maxJobDirLifeTime")) {
             	maxJobDirLifeTime = Integer.parseInt(e.getValue().trim());
-            } else if(name.startsWith("styleSheet-")) {
-            	String pathogen = name.split("-")[1];
-            	styleSheets.put(pathogen, e.getValue().trim());
             }
         }
     }
