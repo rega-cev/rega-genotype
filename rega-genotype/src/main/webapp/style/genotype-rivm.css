@@ -507,6 +507,7 @@ table.reftable caption {
 .rivm-header span#text_subname {
 	font: sans-serif;
 	font-size: x-small;
+	font-style: italic;
 }
 
 .rivm-header div#text div {
