@@ -21,7 +21,6 @@ import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
-import rega.genotype.viruses.hcv.HCVTool;
 import rega.genotype.viruses.hhv8.HHV8Tool;
 import eu.webtoolkit.jwt.WString;
 

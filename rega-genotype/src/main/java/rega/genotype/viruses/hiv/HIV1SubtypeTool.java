@@ -15,18 +15,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import rega.genotype.AbstractAnalysis.Concludable;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
+import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AnalysisException;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
+import rega.genotype.PhyloClusterAnalysis.Result;
 import rega.genotype.ResultTracer;
 import rega.genotype.ScanAnalysis;
-import rega.genotype.AbstractAnalysis.Concludable;
-import rega.genotype.AlignmentAnalyses.Cluster;
-import rega.genotype.PhyloClusterAnalysis.Result;
 
 public class HIV1SubtypeTool extends GenotypeTool {
     private final class ClusterLike implements Concludable {

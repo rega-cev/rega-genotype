@@ -28,9 +28,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import eu.webtoolkit.jwt.StringUtils;
-import eu.webtoolkit.jwt.WWebWidget;
-
 /**
  * A sax parser which parses the rega-genotype analysis result file and stores 
  * all values in a Map per sequences. Sequences can be accessed by implementing 

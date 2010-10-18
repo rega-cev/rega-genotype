@@ -33,7 +33,6 @@ import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableCell;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTimer;
-import eu.webtoolkit.jwt.WWebWidget;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;

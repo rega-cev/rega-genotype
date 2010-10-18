@@ -13,13 +13,13 @@ import java.util.Map;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
+import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AnalysisException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
-import rega.genotype.AlignmentAnalyses.Cluster;
 
 public class GiardiaTool extends GenotypeTool {
 	private AlignmentAnalyses giardiaBlast;

@@ -10,7 +10,6 @@ import org.jdom.Element;
 import rega.genotype.data.GenotypeResultParser.SkipToSequenceParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
-import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;

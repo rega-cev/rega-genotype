@@ -19,7 +19,6 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
-import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;

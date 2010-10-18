@@ -15,7 +15,6 @@ import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
-import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;

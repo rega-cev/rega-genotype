@@ -22,7 +22,6 @@ import org.jdom.output.XMLOutputter;
 import eu.webtoolkit.jwt.WLocalizedStrings;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WWebWidget;
-import eu.webtoolkit.jwt.WWidget;
 
 public class GenotypeResourceManager extends WLocalizedStrings {
 	private Map<String, String> resources = new HashMap<String, String>();

@@ -7,8 +7,6 @@ package rega.genotype.ui.parasites.giardia;
 
 import java.awt.Color;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.DefaultGenomeAttributes;

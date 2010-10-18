@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
+import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AnalysisException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
@@ -19,7 +20,6 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.SubSequence;
-import rega.genotype.AlignmentAnalyses.Cluster;
 
 /**
  * NoVTool implements the genotyping algorithm for norovirus.
