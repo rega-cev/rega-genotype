@@ -551,6 +551,7 @@ table.reftable caption {
 
 .rivm-footer div {
 	background-color: ffffff;
+	line-height: 0px;
 }
 
 .rivm-footer img {
