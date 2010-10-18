@@ -1,5 +1,37 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <organism-settings>
+	<app>
+		<template>
+		<div class="rivm-header">
+					<div id="logo">
+						<a href="${app.url}">
+							<img src="../pics/rivm/logo.png" alt="RIVM Logo" />
+						</a>
+						<div id="text">
+							<div>
+								<span id="text_name">Rijksinstituut voor Volksgezondheid en Milieu</span>
+								<br/>
+								<span id="text_subname">Ministerie van Volksgezondheid, Welzijn en Sport</span>
+							</div>
+						</div>
+					</div>
+				<div id="application">
+					<span id="name">Enterovirus Genotyping Tool</span>
+					<span id="info">Version 0.1</span>
+				</div>
+				${navigation}
+				<div id="navigation-bottom" />
+		</div>
+		${content}
+		${footer}
+		<div class="rivm-footer">
+			<div>
+				<img src="../pics/rivm/footer.png" />
+			</div>
+		</div>
+		</template>
+	</app>
+
   <main-form>
     <footer>
       <p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)

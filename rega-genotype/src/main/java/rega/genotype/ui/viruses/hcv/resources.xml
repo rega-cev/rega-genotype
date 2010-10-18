@@ -4,9 +4,7 @@
 		<template>
 		${header-image}
 		${content}
-		<div class="navigation">
 		${navigation}
-		</div>
 		${footer}
 		</template>
 	</app>
