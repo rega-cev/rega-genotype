@@ -482,6 +482,10 @@ table.reftable caption {
 	background-color: #ffffff;
 }
 
+.rivm-header div#logo a {
+	text-decoration:none;
+}
+
 .rivm-header div#logo img {
 	margin-left: 50%;
 	height: 75px;
