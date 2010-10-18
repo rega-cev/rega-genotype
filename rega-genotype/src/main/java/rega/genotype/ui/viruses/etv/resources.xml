@@ -5,7 +5,7 @@
 		<div class="rivm-header">
 					<div id="logo">
 						<a href="${app.url}">
-							<img src="../pics/rivm/logo.png" alt="RIVM Logo" />
+							<img src="../pics/rivm/logo.png" alt="RIVM Logo" > </img>
 						</a>
 						<div id="text">
 							<div>
@@ -20,13 +20,13 @@
 					<span id="info">Version 0.1</span>
 				</div>
 				${navigation}
-				<div id="navigation-bottom" />
+				<div id="navigation-bottom" >  </div>
 		</div>
 		${content}
 		${footer}
 		<div class="rivm-footer">
 			<div>
-				<img src="../pics/rivm/footer.png" />
+				<img src="../pics/rivm/footer.png" > </img>
 			</div>
 		</div>
 		</template>
