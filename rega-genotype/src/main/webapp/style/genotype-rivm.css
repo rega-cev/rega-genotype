@@ -480,34 +480,11 @@ table.reftable caption {
 
 .rivm-header div#logo {
 	background-color: #ffffff;
+	text-align: center;
 }
 
 .rivm-header div#logo a {
-	text-decoration:none;
-}
-
-.rivm-header div#logo img {
-	margin-left: 50%;
-	height: 75px;
-	width: 44px;
-	padding-bottom: 12px;
-}
-
-.rivm-header div#text {
-	position: relative;
-	display: inline-block;
-	top: -60px;
-	width: 400px;
-}
-
-.rivm-header span#text_name {
-	font: sans-serif;
-}
-
-.rivm-header span#text_subname {
-	font: sans-serif;
-	font-size: x-small;
-	font-style: italic;
+	text-decoration: none;
 }
 
 .rivm-header div#text div {

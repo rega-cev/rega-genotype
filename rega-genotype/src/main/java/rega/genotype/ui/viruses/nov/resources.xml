@@ -7,13 +7,6 @@
 						<a href="${app.url}">
 							<img src="../pics/rivm/logo.png" alt="RIVM Logo" > </img>
 						</a>
-						<div id="text">
-							<div>
-								<span id="text_name">Rijksinstituut voor Volksgezondheid en Milieu</span>
-								<br/>
-								<span id="text_subname">Ministerie van Volksgezondheid, Welzijn en Sport</span>
-							</div>
-						</div>
 					</div>
 				<div id="application">
 					<span id="name">Norovirus Genotyping Tool</span>
