@@ -328,6 +328,11 @@ public class AlignmentAnalyses {
         	Element regionsE = (Element) i.next();
         	ReferenceTaxus t = new ReferenceTaxus(regionsE.getAttributeValue("taxus"));
 
+        	if (regionsE.getAttributeValue("report-as") != null) {
+        		t.setReportAsOther(regionsE.getAttributeValue("report-as"),
+        				Integer.valueOf(regionsE.getAttributeValue("report-as-offset")));
+        	}
+        	
             List regionEs = regionsE.getChildren("region");
             for (Iterator j = regionEs.iterator(); j.hasNext();) {
                 Element regionE = (Element) j.next(); 

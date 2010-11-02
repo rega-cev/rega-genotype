@@ -74,10 +74,17 @@ public class BlastAnalysis extends AbstractAnalysis {
     public static class ReferenceTaxus {
     	private String taxus;
     	private List<Region> regions;
+		private String reportOther;
+		private int reportOtherOffset;
 
     	public ReferenceTaxus(String taxus) {
     		this.taxus = taxus;
     		this.regions = new ArrayList<Region>();
+    	}
+    	
+    	void setReportAsOther(String taxus, int offset) {
+    		this.reportOther = taxus;
+    		this.reportOtherOffset = offset;
     	}
 
     	void addRegion(Region r) {
@@ -93,6 +100,14 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 		public String getTaxus() {
 			return taxus;
+		}
+
+		public String reportAsOther() {
+			return reportOther;
+		}
+		
+		public int reportAsOtherOffset() {
+			return reportOtherOffset;
 		}
     }
     
@@ -331,6 +346,12 @@ public class BlastAnalysis extends AbstractAnalysis {
                         	}
                         	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
                         	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
+                        	
+                        	if (refseq.reportAsOther() != null) {
+                        		refseq = referenceTaxa.get(refseq.reportAsOther());
+                        		start += refseq.reportAsOtherOffset();
+                        		end += refseq.reportAsOtherOffset();
+                        	}
                         }
                     }
 
