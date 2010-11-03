@@ -347,7 +347,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                         	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
                         	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
                         	
-                        	if (refseq.reportAsOther() != null) {
+                        	if (refseq != null && refseq.reportAsOther() != null) {
                         		refseq = referenceTaxa.get(refseq.reportAsOther());
                         		start += refseq.reportAsOtherOffset();
                         		end += refseq.reportAsOtherOffset();
