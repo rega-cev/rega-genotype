@@ -103,7 +103,7 @@
         </p>
 
         <div class="centerimage">
-          <img src="../pics/startingpage.jpg" />
+          <img src="../pics/norovirus/startingpage.jpg" />
           <div class="pic-label">The startingpage of the NoV typingtool</div>
         </div>
 
@@ -114,7 +114,7 @@
         Runs are kept on the server for 1 week. </p>
 
         <div>
-          <img src="../pics/overview.jpg" />
+          <img src="../pics/norovirus/overview.jpg" />
           <div class="pic-label">Overview of the results</div>
         </div>
 
@@ -176,7 +176,7 @@
         The genotyping region supported by this tool includes all regions (A to
         E) which are used for genotyping by different groups. </p><br />
      
-        <div class="centerimage"><img src="../pics/typingregions.png" height="233" width="605" />
+        <div class="centerimage"><img src="../pics/norovirus/typingregions.png" height="233" width="605" />
         </div>
 
         <span class="pic-label">Schematic representation of
@@ -246,7 +246,7 @@ the analysis.
 </ol>
 
 <div class="centerimage">
-<img src="../pics/typingregions.png" height="233" width="605" /></div>
+<img src="../pics/norovirus/typingregions.png" height="233" width="605" /></div>
 
 <p class="pic-label">Regions supported by the tool</p>
 
@@ -275,7 +275,7 @@ ORF2 &#160; &#160; &#160; &#160; &#160; &#160;5355 &#160; &#160; &#160;
 gaps in the aligned sequence</p>
 
 <div class="centerimage">
-<img src="../pics/flowchart.png" height="590" width="567" /></div>
+<img src="../pics/norovirus/flowchart.png" height="590" width="567" /></div>
 
 <p class="pic-label">Flowchart of the genotyping process</p>
 
