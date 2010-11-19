@@ -130,6 +130,22 @@
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>Giardia-service</servlet-name>
+    <display-name>Giardia Genotyping service</display-name>
+    <description>Giardia Genotyping service</description>
+    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
+    <init-param>
+    	<param-name>genotypeTool</param-name>
+    	<param-value>rega.genotype.parasites.giardia.GiardiaTool</param-value>
+   	</init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Giardia-service</servlet-name>
+    <url-pattern>/giardia/typingservice</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>HHV8</servlet-name>
     <display-name>HHV8 Genotyping</display-name>
     <description>HHV8 Genotyping</description>
