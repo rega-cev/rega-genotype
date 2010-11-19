@@ -73,7 +73,7 @@ public class GiardiaJobOverview extends AbstractJobOverview {
 		final int sequenceIndex = p.getSequenceIndex();
 		String region = p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id");
 
-		if (region != null) {
+		if (region != null && !region.equals("none")) {
 			start = GiardiaGenome.mapToImageGenome(start, region);
 			end = GiardiaGenome.mapToImageGenome(end, region);
 		} else {
