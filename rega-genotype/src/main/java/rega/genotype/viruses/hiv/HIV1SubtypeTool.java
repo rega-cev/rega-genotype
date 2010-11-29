@@ -92,7 +92,8 @@ public class HIV1SubtypeTool extends GenotypeTool {
                 crfScanPhyloAnalysis.getClusters().add(crfResult.getBestCluster());
 
                 scanCRFResult = crfScanAnalysis.run(s);
-                scanCRFSupport = scanCRFResult.getSupportedTypes().get(crfResult.getBestCluster().getId());
+                Integer i = scanCRFResult.getSupportedTypes().get(crfResult.getBestCluster().getId());
+                scanCRFSupport = i == null ? 0 : i;
                 
                 pureAnalysis.getClusters().add(crfResult.getBestCluster());
                 crfPhyloResult = pureAnalysis.run(s);
