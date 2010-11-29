@@ -67,6 +67,8 @@ public abstract class GenotypeTool {
             return null;
         }
         
+        Settings.initSettings(Settings.getInstance());
+        
         String paupPath = (String) parser.getOptionValue(paupPathOption);        
         if (paupPath != null)
             PhyloClusterAnalysis.paupCommand = paupPath;
