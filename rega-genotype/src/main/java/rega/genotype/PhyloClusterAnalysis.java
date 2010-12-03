@@ -212,6 +212,9 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
         }
 
         private double getSupport(Cluster c) {
+        	int i = clusters.indexOf(c);
+        	if(i == -1 || i >= allSupports.size())
+        		return 0;
             Double support = allSupports.get(clusters.indexOf(c));
             return support == null ? 0 : support;
         }
