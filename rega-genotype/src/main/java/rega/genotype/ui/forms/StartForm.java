@@ -45,7 +45,7 @@ public class StartForm extends AbstractForm {
 	private WLineEdit jobIdTF;
 	private WPushButton monitorButton;
 
-	private WText errorJobId, errorSeq;
+	private WText errorJobId, errorTextField, errorFile;
 	
 	public StartForm(GenotypeWindow main) {
 		super(main, "start-form");
@@ -82,10 +82,12 @@ public class StartForm extends AbstractForm {
 				ta.setText("");
 			}
 		});
+		
+		errorTextField = createErrorText(seqinput);
 	
 		run.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				verifyFasta(ta.getText());
+				verifyFasta(ta.getText(), errorTextField);
 			}
 		});
 		
@@ -100,17 +102,15 @@ public class StartForm extends AbstractForm {
 				try {
 					if (!fileUpload.getUploadFile().getSpoolFileName().equals("")) {
 						String fasta = GenotypeLib.readFileToString(new File(fileUpload.getUploadFile().getSpoolFileName()));
-						verifyFasta(fasta);
+						verifyFasta(fasta, errorFile);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
             }
         });
-		errorSeq = new WText(tr("startForm.errorSequence"), seqinput);
-		errorSeq.setId("sequence-error-message");
-		errorSeq.setStyleClass("error");
-		errorSeq.hide();		
+		
+		errorFile = createErrorText(seqinput);
 
 		h = new WText(tr("startForm.monitorJob"), seqinput);
 		h.setId("");
@@ -130,6 +130,14 @@ public class StartForm extends AbstractForm {
 		errorJobId.hide();
 		
 		init();
+	}
+	
+	private WText createErrorText(WContainerWidget parent) {
+		WText error = new WText(tr("startForm.errorSequence"), parent);
+		error.setStyleClass("error");
+		error.setInline(false);
+		error.hide();
+		return error;
 	}
 	
 	private void setValid(WInteractWidget w, WText errorMsg){
@@ -189,7 +197,7 @@ public class StartForm extends AbstractForm {
 		}
 	}
 
-	private void verifyFasta(String fastaContent) {
+	private void verifyFasta(String fastaContent, WText errorText) {
 		int sequenceCount = 0;
 
 		LineNumberReader r = new LineNumberReader(new StringReader(fastaContent));
@@ -203,17 +211,17 @@ public class StartForm extends AbstractForm {
 			}
 
 			if (sequenceCount <= Settings.getInstance().getMaxAllowedSeqs()) {
-				setValid(ta, errorSeq);
+				setValid(ta, errorText);
 				startJob(fastaContent);
 			}
 
 		} catch (IOException e) {
-			errorSeq.setText("I/O error reading the sequence.");
-			setInvalid(ta, errorSeq);
+			errorText.setText("I/O error reading the sequence.");
+			setInvalid(ta, errorText);
 			e.printStackTrace();
 		} catch (FileFormatException e) {
-			errorSeq.setText(e.getMessage());
-			setInvalid(ta, errorSeq);
+			errorText.setText(e.getMessage());
+			setInvalid(ta, errorText);
 		}
 	}
 }
