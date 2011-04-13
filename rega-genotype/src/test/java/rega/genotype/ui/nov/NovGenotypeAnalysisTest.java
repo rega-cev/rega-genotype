@@ -111,4 +111,45 @@ public class NovGenotypeAnalysisTest extends TestCase {
     	};
     	p.parseFile(jobDir);
     }
+    
+    public void testAsciiFastaIds() {
+		final String seq = "GGCGTCGATGACGCCNCCCCATCTGATGGGTCCACAGCCAACCTCGTCCCAGAGGTCAACAATGAGGTTATGGCTTTGGA"; 
+		
+		int i = 0;
+		StringBuffer fasta = new StringBuffer();
+		for (int c=33; c<127; c++) {
+			char cc = (char)c;
+			if (!Character.isDigit(cc) && !Character.isLetter(cc)) {
+				fasta.append(">A" + String.valueOf(i) + cc + "\n");
+				fasta.append(seq + "\n");
+				
+				i++;
+			}				
+		}
+		
+       	File jobDir = TestUtils.setup(fasta.toString());
+    	jobDirs.add(jobDir);
+		
+		NoVTool nov;
+		try {
+			nov = new NoVTool(jobDir);
+			nov.analyze(TestUtils.getFastaFile(jobDir).getAbsolutePath(),
+					TestUtils.getResultFile(jobDir).getAbsolutePath());
+		} catch (Exception e) {
+			fail("Exception occured during analysis runtime");
+		}
+		
+    	GenotypeResultParser p = new GenotypeResultParser(){
+			@Override
+			public void endSequence() {
+
+			}
+
+			@Override
+			public boolean skipSequence() {
+				return false;
+			}    		
+    	};
+    	p.parseFile(jobDir);
+    }
 }
