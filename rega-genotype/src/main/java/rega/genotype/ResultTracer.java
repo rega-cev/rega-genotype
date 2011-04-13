@@ -47,9 +47,19 @@ public class ResultTracer {
         result.writeXML(this);
     }
 
+    private String escapeXml(String s) {
+    	s = s.replaceAll("&", "&amp;");
+    	s = s.replaceAll("<", "&lt;");
+    	s = s.replaceAll(">", "&gt;");
+    	s = s.replaceAll("\"", "&quot;");
+    	s = s.replaceAll("\'", "&#039;");
+    	
+    	return s;
+    }
+    
     private void startNewSequence(AbstractSequence sequence) {
     	if (sequence != null) {
-            w.println("  <sequence name=\"" + sequence.getName() + "\" length=\""
+            w.println("  <sequence name=\"" + escapeXml(sequence.getName()) + "\" length=\""
                     + sequence.getLength() + "\">");
           w.println("    <nucleotides>");
           w.println("      " + sequence.getSequence());
