@@ -150,6 +150,10 @@ public class NovGenotypeAnalysisTest extends TestCase {
 				return false;
 			}    		
     	};
-    	p.parseFile(jobDir);
+    	try {
+    		p.parseFile(jobDir);
+    	} catch (Exception e) {
+    		fail("Exception occured during XML parsing");
+    	}
     }
 }
