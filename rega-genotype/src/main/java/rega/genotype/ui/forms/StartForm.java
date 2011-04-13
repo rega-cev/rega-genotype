@@ -210,7 +210,10 @@ public class StartForm extends AbstractForm {
 				++sequenceCount;
 			}
 
-			if (sequenceCount <= Settings.getInstance().getMaxAllowedSeqs()) {
+			if(sequenceCount == 0) {
+				errorText.setText(tr("startForm.noSequence"));
+				setInvalid(ta, errorText);
+			} else if (sequenceCount <= Settings.getInstance().getMaxAllowedSeqs()) {
 				setValid(ta, errorText);
 				startJob(fastaContent);
 			}

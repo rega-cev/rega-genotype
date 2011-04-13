@@ -23,6 +23,7 @@
   	<resource name="startForm.monitor">Go!</resource>
   	<resource name="startForm.errorJobId">Invalid job id.</resource>
   	<resource name="startForm.errorSequence">Too many sequences.</resource>
+  	<resource name="startForm.noSequence">No sequences were provided.</resource>
 
 	<resource name="monitorForm.explain">
 		<p>You may bookmark this page to revisit results of this job ({1}) later.</p>
