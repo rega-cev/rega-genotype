@@ -122,7 +122,7 @@ public abstract class GenotypeResultParser extends DefaultHandler {
         	endFile();
         } catch (SAXParseException spe) {
         	if(!spe.getMessage().equals("XML document structures must start and end within the same entity."))
-        		spe.printStackTrace();
+        		throw new RuntimeException(spe);
         }
     }
 
@@ -132,12 +132,8 @@ public abstract class GenotypeResultParser extends DefaultHandler {
     	if(resultFile.exists()) {
 	    	try {
 				parse(new InputSource(new FileReader(resultFile)));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
 			}
     	}
     }
