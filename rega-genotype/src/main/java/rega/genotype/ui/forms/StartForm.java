@@ -217,9 +217,8 @@ public class StartForm extends AbstractForm {
 				setValid(ta, errorText);
 				startJob(fastaContent);
 			}
-
 		} catch (IOException e) {
-			errorText.setText("I/O error reading the sequence.");
+			errorText.setText(tr("startForm.ioError"));
 			setInvalid(ta, errorText);
 			e.printStackTrace();
 		} catch (FileFormatException e) {
