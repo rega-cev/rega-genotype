@@ -161,7 +161,5 @@ public class GenotypeWindow extends WContainerWidget
 	public void changeInternalPath(String path) {
 		WApplication app = WApplication.getInstance();
 		app.setInternalPath(path, true);
-		if (!app.getEnvironment().hasAjax())
-			app.redirect(app.getBookmarkUrl(path));
 	}
 }
