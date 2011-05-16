@@ -87,7 +87,7 @@
           is also available.
         </p>
         <div class="centerimage">
-          <img src="../pics/startingpage-entero.jpg"/>
+          <img src="../pics/enterovirus/startingpage-entero.jpg"/>
           <div class="pic-label">The startingpage of the enterovirus typingtool</div>
         </div>
         <p>
@@ -97,7 +97,7 @@
           Runs are kept on the server for 1 week. 
         </p>
         <div>
-          <img src="../pics/resultlist-entero.jpg"/>
+          <img src="../pics/enterovirus/resultlist-entero.jpg"/>
           <div class="pic-label">Overview of the results</div>
         </div>
         <p>
@@ -142,7 +142,7 @@
         </p>
         <br/>
         <div class="centerimage">
-          <img src="../pics/genome-entero.jpg" height="173" width="805"/>
+          <img src="../pics/enterovirus/genome-entero.jpg" height="173" width="805"/>
         </div>
         <span class="pic-label">Schematic representation of genomic regions for which the typing tool assigns genus/species and (sero)type</span>
         <p/>
@@ -192,13 +192,13 @@
           </li>
         </ol>
         <div class="centerimage">
-          <img src="../pics/genome-entero.jpg" height="180" width="800"/>
+          <img src="../pics/enterovirus/genome-entero.jpg" height="180" width="800"/>
         </div>
         <p class="pic-label">Regions supported by the tool</p>
         <p>T</p>
         <br/>
         <div class="centerimage">
-          <img src="../pics/flowchart-entero.jpg" height="610" width="500"/>
+          <img src="../pics/enterovirus/flowchart-entero.jpg" height="610" width="500"/>
         </div>
         <p class="pic-label">Flowchart of the genotyping process</p>
         <div class="bibitem">
