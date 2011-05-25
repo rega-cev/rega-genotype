@@ -20,39 +20,60 @@ public class EtvTableGenerator extends AbstractDataTableGenerator {
 
 		table.addLabel("name");
 		table.addLabel("length");
-
-		table.addLabel("conclusion");
-		table.addLabel("species");
+		
+		table.addLabel("Genus/Species");
+		table.addLabel("Serotype");
+		table.addLabel("Genogroup");
+		
 		table.addLabel("species_score");
+		table.addLabel("reverse-compliment");
 		table.addLabel("begin");
 		table.addLabel("end");
 
-		table.addLabel("serotype");
 		table.addLabel("serotype_support");
 		table.addLabel("serotype_inner_support");
 		table.addLabel("serotype_outer_support");
 		
+		table.addLabel("genogroup_support");
+		table.addLabel("genogroup_inner_support");
+		table.addLabel("genogroup_outer_support");
+		
 		table.newRow();
 	}
     
+	private final static String serotype = "serotype";
+	private final static String subgenogroup = "subgenogroup";
 	public void endSequence() {
     	addNamedValue("/genotype_result/sequence/@name", ValueFormat.Label);
     	addNamedValue("/genotype_result/sequence/@length", ValueFormat.Number);
 
-    	addNamedValue("/genotype_result/sequence/conclusion/assigned/name", ValueFormat.Label);
-
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/name", ValueFormat.Label);
+    	
+    	String serotype_id = getValue("/genotype_result/sequence/conclusion[@id='" + serotype + "']/assigned/id");
+    	addValue(serotype_id == null ? "" : serotype_id);
+    	
+    	String subgeno_id = getValue("/genotype_result/sequence/conclusion[@id='" + subgenogroup + "']/assigned/id");
+    	addValue(subgeno_id == null ? "" : subgeno_id);
+
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/score", ValueFormat.Number);
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/reverse-compliment", ValueFormat.Label);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/start", ValueFormat.Number);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/end", ValueFormat.Number);
 
-    	String id = getValue("/genotype_result/sequence/result[@id='phylo-serotype']/best/id");
-    	if (id != null)
-    		addPhyloResults("phylo-serotype", true);
-    	else
-    		for (int i = 0; i < 4; ++i)
-    			addValue("");
+   		addConclusion(serotype);
+   		addConclusion(subgenogroup);
     	
     	super.endSequence();
+	}
+	
+	private void addConclusion(String id) {
+		if (getValue("/genotype_result/sequence/conclusion[@id='" + id + "']/assigned/id") != null) {
+			addNamedValue("/genotype_result/sequence/conclusion[@id='" + id + "']/assigned/support", ValueFormat.Number);
+			addNamedValue("/genotype_result/sequence/conclusion[@id='" + id + "']/assigned/inner", ValueFormat.Number);
+			addNamedValue("/genotype_result/sequence/conclusion[@id='" + id + "']/assigned/outer", ValueFormat.Number);
+		} else {
+	  		for (int i = 0; i < 3; ++i)
+    			addValue("");
+		}
 	}
 }
