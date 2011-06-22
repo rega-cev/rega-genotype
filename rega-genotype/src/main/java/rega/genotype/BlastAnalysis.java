@@ -76,9 +76,11 @@ public class BlastAnalysis extends AbstractAnalysis {
     	private List<Region> regions;
 		private String reportOther;
 		private int reportOtherOffset;
+		private int priority; // lower value means higher priority
 
-    	public ReferenceTaxus(String taxus) {
+    	public ReferenceTaxus(String taxus, int priority) {
     		this.taxus = taxus;
+    		this.priority = priority;
     		this.regions = new ArrayList<Region>();
     	}
     	
@@ -100,6 +102,10 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 		public String getTaxus() {
 			return taxus;
+		}
+		
+		public int getPriority() {
+			return priority;
 		}
 
 		public String reportAsOther() {
@@ -325,34 +331,39 @@ public class BlastAnalysis extends AbstractAnalysis {
                     	bestCluster = findCluster(best[1]);
                     }
 
-                    if (end == -1) {
-                        ReferenceTaxus referenceTaxus = referenceTaxa.get(values[1]);
-                        if ((referenceTaxa.isEmpty() && values == best) || referenceTaxus != null) {
-                        	refseq = referenceTaxus;
-                        	boolean queryReverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
-                        	boolean refReverseCompliment = Integer.parseInt(values[9]) - Integer.parseInt(values[8]) < 0;
-                        	int offsetBegin = Integer.parseInt(values[6]);
-                        	int offsetEnd = sequence.getLength() - Integer.parseInt(values[7]);
-                        	if (queryReverseCompliment) {
-                        		offsetBegin = sequence.getLength() - offsetBegin;
-                        		offsetEnd = sequence.getLength() - offsetEnd;
-                        		reverseCompliment = true;
-                        	}
-                        	if (refReverseCompliment) {
-                        		String tmp = values[8];
-                        		values[8] = values[9];
-                        		values[9] = tmp;
-                        		reverseCompliment = true;
-                        	}
-                        	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
-                        	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
-                        	
-                        	if (refseq != null && refseq.reportAsOther() != null) {
-                        		refseq = referenceTaxa.get(refseq.reportAsOther());
-                        		start += refseq.reportAsOtherOffset();
-                        		end += refseq.reportAsOtherOffset();
-                        	}
-                        }
+                    ReferenceTaxus referenceTaxus = referenceTaxa.get(values[1]);
+
+                    /*
+                     * First condition: there are no explicit reference taxa configured -- use best match
+                     * Second condition: the referenceTaxus is the first or has a higher priority than the previous one.
+                     *   (note priority is smaller number means higher priority)
+                     */
+                    if ((referenceTaxa.isEmpty() && values == best)
+                    	|| (referenceTaxus != null && (refseq == null || refseq.getPriority() > referenceTaxus.getPriority()))) {
+                    	refseq = referenceTaxus;
+                    	boolean queryReverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
+                    	boolean refReverseCompliment = Integer.parseInt(values[9]) - Integer.parseInt(values[8]) < 0;
+                    	int offsetBegin = Integer.parseInt(values[6]);
+                    	int offsetEnd = sequence.getLength() - Integer.parseInt(values[7]);
+                    	if (queryReverseCompliment) {
+                    		offsetBegin = sequence.getLength() - offsetBegin;
+                    		offsetEnd = sequence.getLength() - offsetEnd;
+                    		reverseCompliment = true;
+                    	}
+                    	if (refReverseCompliment) {
+                    		String tmp = values[8];
+                    		values[8] = values[9];
+                    		values[9] = tmp;
+                    		reverseCompliment = true;
+                    	}
+                    	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
+                    	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
+                    	
+                    	if (refseq != null && refseq.reportAsOther() != null) {
+                    		refseq = referenceTaxa.get(refseq.reportAsOther());
+                    		start += refseq.reportAsOtherOffset();
+                    		end += refseq.reportAsOtherOffset();
+                    	}
                     }
 
                     if (relativeCutoff && bestCluster != null && secondBestCluster == null) {

@@ -324,9 +324,11 @@ public class AlignmentAnalyses {
         BlastAnalysis analysis = new BlastAnalysis(this, id, cs, cutoff, maxPValue, relativeCutoff, blastOptions, workingDir);
 
         List regionsEs = element.getChildren("regions");
+        
+        int priority = 0;
         for (Iterator i = regionsEs.iterator(); i.hasNext();) {
         	Element regionsE = (Element) i.next();
-        	ReferenceTaxus t = new ReferenceTaxus(regionsE.getAttributeValue("taxus"));
+        	ReferenceTaxus t = new ReferenceTaxus(regionsE.getAttributeValue("taxus"), priority++);
 
         	if (regionsE.getAttributeValue("report-as") != null) {
         		t.setReportAsOther(regionsE.getAttributeValue("report-as"),
