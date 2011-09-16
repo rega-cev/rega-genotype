@@ -286,6 +286,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                         
                 String cmd = blastPath + formatDbCommand + " " + formatDbOptions + " -o T -i " + db.getAbsolutePath();
                 System.err.println(cmd);
+                
                 formatdb = StreamReaderRuntime.exec(cmd, null, workingDir);
                 int result = formatdb.waitFor();
 
