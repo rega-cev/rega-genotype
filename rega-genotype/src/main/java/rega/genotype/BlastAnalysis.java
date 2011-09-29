@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
-import rega.genotype.utils.Settings;
+import rega.genotype.utils.StreamReaderRuntime;
 
 /**
  * Implements similarity based analyses using NCBI blast.
@@ -284,14 +284,11 @@ public class BlastAnalysis extends AbstractAnalysis {
                 //fd2.sync();
                 queryFile.close();
                         
-                Runtime runtime = Runtime.getRuntime();
-
                 String cmd = blastPath + formatDbCommand + " " + formatDbOptions + " -o T -i " + db.getAbsolutePath();
                 System.err.println(cmd);
-                formatdb = runtime.exec(cmd, null, workingDir);
-                InputStream inputStream = formatdb.getInputStream();
+                
+                formatdb = StreamReaderRuntime.exec(cmd, null, workingDir);
                 int result = formatdb.waitFor();
-                inputStream.close();
 
                 if (result != 0) {
                     throw new ApplicationException("formatdb exited with error: " + result);
@@ -301,8 +298,9 @@ public class BlastAnalysis extends AbstractAnalysis {
                 	+ " -i " + query.getAbsolutePath()
                     + " -m 8 -d " + db.getAbsolutePath();
                 System.err.println(cmd);
-                blast = runtime.exec(cmd, null, workingDir);
-                inputStream = blast.getInputStream();
+
+                blast = Runtime.getRuntime().exec(cmd, null, workingDir);
+                InputStream inputStream = blast.getInputStream();
 
                 LineNumberReader reader
                     = new LineNumberReader(new InputStreamReader(inputStream));
