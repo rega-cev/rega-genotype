@@ -104,7 +104,7 @@
 
   <analysis id="pure" type="paup">
     <identify>
-Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
+		Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
     </identify>
     <cutoff>
       70
@@ -130,7 +130,7 @@ Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6
 
   <analysis id="pure-puzzle" type="paup">
     <identify>
-Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
+		Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
     </identify>
     <cutoff>
       70
@@ -166,8 +166,8 @@ Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6
     </cutoff>
     <analysis type="paup">
       <identify>
-1a,1b,1c,2a,2b,2c,2k,3a,3b,3k,4a,5a,Geno_6
-	</identify>
+		1a,1b,1c,2a,2b,2c,2k,3a,3b,3k,4a,5a,Geno_6
+	  </identify>
       <block>
       begin paup;
       log file=paup.log replace=yes;
@@ -187,37 +187,7 @@ Geno_1,1a,1b,1c,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6
       <options>data-all</options>
   </analysis>
 
-  <analysis id="scan-crf" type="scan">
-    <window>
-      400
-    </window>
-    <step>
-      50
-    </step>
-    <cutoff>
-      0.9
-    </cutoff>
-    <analysis type="paup">
-      <identify>
-1a[0],1b[0],1c[0],2a[0],2b[0],2c[0],2k[0],3a[0],3b[0],3k[0],4a[0],5a[0],6a[0],6b[0],6d[0],6g[0],6h[0],6k 
-	</identify>
-      <block>
-      begin paup;
-      log file=paup.log replace=yes;
-      exclude gapped;
-      export format=nexus file=paup.nex replace=yes;
-      set criterion=distance outroot=monophyl;
-      dset distance=HKY NegBrLen=Prohibit;
-      NJ;
-      savetree format=phylip brlens=yes file=paup.tre replace=yes;
-      bootstrap nreps=100 search=nj;
-      end;
-      quit;
-      </block>
-    </analysis>
-  </analysis>
-
-  <analysis id="scan-pure-self" type="scan">
+ <analysis id="scan-pure-self" type="scan">
     <window>
      1500
     </window>

@@ -23,7 +23,6 @@ public class HCVTool extends GenotypeTool {
     private BlastAnalysis blastAnalysis;
     private HCVSubtypeTool hcvsubtypetool;
 
-    
     public HCVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
         hcv = readAnalyses("HCV/hcvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hcv.getAnalysis("blast");
@@ -38,11 +37,10 @@ public class HCVTool extends GenotypeTool {
         
         if (result.haveSupport()) {
             if (result.getCluster().getId().equals("1"))
-                hcvsubtypetool.analyze(s);
+                hcvsubtypetool.analyze(s, result);
             else
                 conclude(result, "Identified with BLAST score > 200");
         } else {
-
             conclude("Unassigned", "Unassigned because of BLAST score &lt; 200.");
         }
     }
