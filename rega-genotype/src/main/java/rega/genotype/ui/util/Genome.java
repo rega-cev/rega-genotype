@@ -108,6 +108,8 @@ public class Genome {
 
 	    if (w.length == 0) {
 	      bgcolor = colorMap.get(genotype);
+	      if (bgcolor == null)
+	    	  bgcolor = colorMap.get("other");
 	    }
 	    
 	    g2d.setColor(bgcolor);
@@ -128,8 +130,12 @@ public class Genome {
 	        Color color = colorMap.get(assign[c]);
 	        if (color == null)
 	        	color = colorMap.get("CRF");
-	        g2d.setColor(color);
-	        g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
+	        if (color == null)
+	        	color = colorMap.get("other");
+	        if (color != null) {
+	        	g2d.setColor(color);
+	        	g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
+	        }
 	    }
 	    
 	    g2d.drawImage(genomePng, 0, 0, imgWidth, imgHeight, null);

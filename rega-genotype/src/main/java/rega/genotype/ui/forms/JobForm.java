@@ -13,7 +13,7 @@ import eu.webtoolkit.jwt.WWidget;
  * @author pieter
  */ 
 public class JobForm extends AbstractForm {
-	public static final String JOB_URL = "/job";
+	public static final String JOB_URL = "job";
 	
 	private DetailsForm details;
 	private AbstractJobOverview jobOverview;
@@ -44,13 +44,11 @@ public class JobForm extends AbstractForm {
 						handleInternalPath();
 					}
 				});
-		
-		handleInternalPath();
 	}
 	
 	public void handleInternalPath() {
-		if (GenotypeMain.getApp().internalPathMatches(JOB_URL + "/")) {
-			String jobId = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/");
+		if (GenotypeMain.getApp().internalPathMatches("/" + JOB_URL + "/")) {
+			String jobId = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/");
 			
 			if (!jobOverview.existsJob(jobId)) {
 				error.setText(tr("monitorForm.nonExistingJobId").arg(jobId));
@@ -61,7 +59,7 @@ public class JobForm extends AbstractForm {
 			Integer sequenceId = null;
 			String filter = null;
 			try {
-				filter = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/");
+				filter = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/");
 				sequenceId = Integer.parseInt(filter);
 				filter = null;
 			} catch (NumberFormatException nfe) {
@@ -75,7 +73,7 @@ public class JobForm extends AbstractForm {
 				jobIdChanged.trigger(jobId);
 				showWidget(jobOverview);
 			} else {
-				String detailed = GenotypeMain.getApp().getInternalPathNextPart(JOB_URL + "/" + jobId + "/" + sequenceId +"/");
+				String detailed = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/" + sequenceId +"/");
 				
 				WString errorMsg;
 				WWidget widget;

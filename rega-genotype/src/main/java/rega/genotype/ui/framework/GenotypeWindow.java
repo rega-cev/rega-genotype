@@ -34,14 +34,14 @@ import eu.webtoolkit.jwt.WText;
  */
 public class GenotypeWindow extends WContainerWidget
 {
-	private static final String START_URL = "/";
-	private static final String EXAMPLES_URL = "/examples";
-	private static final String INTRODUCTION_URL = "/introduction";
-	private static final String METHOD_URL = "/method";
-	private static final String DECISIONTREES_URL = "/decisiontrees";
-	private static final String TUTORIAL_URL = "/tutorial";
-	private static final String CITE_URL = "/cite";
-	private static final String CONTACT_URL = "/contact";
+	private static final String START_URL = "";
+	private static final String EXAMPLES_URL = "examples";
+	private static final String INTRODUCTION_URL = "introduction";
+	private static final String METHOD_URL = "method";
+	private static final String DECISIONTREES_URL = "decisiontrees";
+	private static final String TUTORIAL_URL = "tutorial";
+	private static final String CITE_URL = "cite";
+	private static final String CONTACT_URL = "contact";
 
 	private WStackedWidget content;
 	
@@ -98,7 +98,7 @@ public class GenotypeWindow extends WContainerWidget
 		main.bindWidget("navigation", navigation);
 		navigation.setStyleClass("nav_bar");
 		
-		WMenu menu = new WMenu(content, Orientation.Horizontal, navigation);
+		final WMenu menu = new WMenu(content, Orientation.Horizontal, navigation);
 		menu.setRenderAsList(true);
 		menu.setStyleClass("nav_main");
 		
@@ -114,12 +114,13 @@ public class GenotypeWindow extends WContainerWidget
 
 		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
 		final String monitorNavigation = "main.navigation.monitor";
-		final WMenuItem jobItem = addLink(menu, tr(monitorNavigation).arg(""), "", jobForm);
+		final WMenuItem jobItem = addLink(menu, tr(monitorNavigation).arg(""), JobForm.JOB_URL, jobForm);
 		jobForm.getJobIdChanged().addListener(this, new Signal1.Listener<String>() {
 			public void trigger(String id) {
 				jobItem.setPathComponent(JobForm.JOB_URL + "/" + id);
 				jobItem.setText(tr(monitorNavigation).arg(id));
-				jobItem.select();
+				if (menu.getCurrentItem() != jobItem)
+					jobItem.select();
 			}
 		});
 
@@ -136,6 +137,10 @@ public class GenotypeWindow extends WContainerWidget
 		addLink(menu, tr("main.navigation.exampleSequences"), EXAMPLES_URL, createDocForm("exampleSequences-form", "exampleSequences-sequences"));
 		
 		addLink(menu, tr("main.navigation.contactUs"), CONTACT_URL, createDocForm("contactUs-form", "contactUs-text"));
+		
+		menu.setInternalPathEnabled("/");
+		
+		jobForm.handleInternalPath();
 	}
 	
 	private DocumentationForm createDocForm(String name, String content) {

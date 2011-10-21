@@ -58,13 +58,10 @@ public class GenotypeApplication extends WApplication
 	{
 		File directory = (File)getServletContext().getAttribute("javax.servlet.context.tmpdir");
 		File file = null;
-		try
-		{
+		try	{
 			file = File.createTempFile(prefix, postfix, directory);
-		}
-		catch (IOException e)
-		{
-			
+		} catch (IOException e)	{
+			e.printStackTrace();
 		}
 		
 		return file;

@@ -151,6 +151,8 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 				id = GenotypeLib.getEscapedValue(parser, "/genotype_result/sequence/conclusion/assigned/id");
 			
 			Color c = od.getGenome().getAttributes().getColors().get(id);
+			if (c == null)
+				c = od.getGenome().getAttributes().getColors().get("other");
 			WColor wc;
 			if (c != null) {
 				wc = new WColor(c.getRed(), c.getGreen(), c.getBlue());

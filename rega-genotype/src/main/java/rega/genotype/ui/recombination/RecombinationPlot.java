@@ -73,6 +73,8 @@ public class RecombinationPlot extends WCartesianChart {
         	Color c = genomeColors.get(model.getHeaderData(i));
         	if (c == null)
         		c = genomeColors.get("CRF");
+        	if (c == null)
+        		c = genomeColors.get("other");
 
         	WDataSeries ds = new WDataSeries(i, SeriesType.LineSeries);
         	if (c != null) {
