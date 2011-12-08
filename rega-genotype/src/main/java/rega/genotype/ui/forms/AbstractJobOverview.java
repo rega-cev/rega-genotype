@@ -374,7 +374,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public static String jobPath(File jobDir) {
-		return JobForm.JOB_URL + '/' + jobId(jobDir);
+		return '/' + JobForm.JOB_URL + '/' + jobId(jobDir);
 	}
 	
 	public String getJobPath() {
@@ -382,8 +382,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 	
 	protected WImage createGenomeImage(final GenotypeResultParser p, final String assignedId, boolean unassigned) {
-		final int start = unassigned ? -1 : Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
-		final int end = unassigned ? -1 : Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+		String startV = p.getValue("/genotype_result/sequence/result[@id='blast']/start");
+		final int start = unassigned || startV == null ? -1 : Integer.parseInt(startV);
+		String endV = p.getValue("/genotype_result/sequence/result[@id='blast']/end");
+		final int end = unassigned || endV == null ? -1 : Integer.parseInt(endV);
 		final int sequenceIndex = p.getSequenceIndex();
 	
 		return GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {

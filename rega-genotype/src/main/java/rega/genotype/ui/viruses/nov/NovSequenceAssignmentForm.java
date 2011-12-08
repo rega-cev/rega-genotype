@@ -99,13 +99,15 @@ public class NovSequenceAssignmentForm extends IDetailsForm {
 		genome.setId("");
 		block.addWidget(genome);
 
-		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
-		refSeq.arg(start);
-		refSeq.arg(end);
-		refSeq.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/refseq"));
+		if (start > 0 && end > 0) {
+			WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
+			refSeq.arg(start);
+			refSeq.arg(end);
+			refSeq.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/refseq"));
 
-		t = new WText(refSeq, block);
-		t.setId("");
+			t = new WText(refSeq, block);
+			t.setId("");
+		}
 	}
 
 	@Override

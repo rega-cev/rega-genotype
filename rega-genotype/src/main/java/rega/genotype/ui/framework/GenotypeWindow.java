@@ -12,10 +12,10 @@ import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.TextFormat;
+import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
@@ -62,6 +62,7 @@ public class GenotypeWindow extends WContainerWidget
 	public GenotypeResourceManager getResourceManager() {
 		return resourceManager;
 	}
+
 	private void loadI18nResources()
 	{
 		resourceManager = new GenotypeResourceManager("/rega/genotype/ui/i18n/resources/common_resources.xml", od.getOrganismDirectory()+"resources.xml");
@@ -74,12 +75,11 @@ public class GenotypeWindow extends WContainerWidget
 		setStyleClass("root");
 		setId("");
 		WApplication app = WApplication.getInstance();
-		
+
 		WTemplate main = new WTemplate(this);
 		main.setStyleClass("azure");
 		main.setTemplateText(resourceManager.getOrganismElementAsString("app", "template"), TextFormat.XHTMLUnsafeText);
-
-		main.bindString("app.url", app.getBookmarkUrl("/"));
+		main.bindString("app.url", app.resolveRelativeUrl(app.getBookmarkUrl("/")));
 		
 		WImage headerImage = GenotypeLib.getWImageFromResource(od, "header.gif", this);
 		main.bindWidget("header-image", headerImage);
@@ -159,7 +159,10 @@ public class GenotypeWindow extends WContainerWidget
 		WMenuItem i = new WMenuItem(text, form);
 		menu.addItem(i);
 		i.setPathComponent(url);
-		
+
+		WAnchor a = (WAnchor) i.getItemWidget();
+		a.setWordWrap(true);
+
 		return i;
 	}
 	

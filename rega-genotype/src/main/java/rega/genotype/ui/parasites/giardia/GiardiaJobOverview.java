@@ -68,8 +68,10 @@ public class GiardiaJobOverview extends AbstractJobOverview {
 			}
 		}
 
-		int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
-		int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+		String startV = p.getValue("/genotype_result/sequence/result[@id='blast']/start");
+		int start = startV == null ? -1 : Integer.parseInt(startV);
+		String endV = p.getValue("/genotype_result/sequence/result[@id='blast']/end");
+		int end = startV == null ? -1 : Integer.parseInt(endV);
 		final int sequenceIndex = p.getSequenceIndex();
 		String region = p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id");
 

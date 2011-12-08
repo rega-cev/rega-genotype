@@ -99,10 +99,13 @@ public class NovJobOverview extends AbstractJobOverview {
 		int start = -1;
 		
 		if (!unassigned) {
-			start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
+			String value = p.getValue("/genotype_result/sequence/result[@id='blast']/start");
+			if (value != null) {
+				start = Integer.parseInt(value);
 			
-			if (p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id").equals("II"))
-				start += NOVII_TO_NOVI_POSITION_OFFSET;
+				if (p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id").equals("II"))
+					start += NOVII_TO_NOVI_POSITION_OFFSET;
+			}
 		}
 		
 		return start;
@@ -113,10 +116,12 @@ public class NovJobOverview extends AbstractJobOverview {
 		int end = -1;
 		
 		if (!unassigned) {
-			end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+			String value = p.getValue("/genotype_result/sequence/result[@id='blast']/end");
+			if (value != null) {
+				end = Integer.parseInt(value);
 			
-			if (p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id").equals("II")) {
-				end += NOVII_TO_NOVI_POSITION_OFFSET;
+				if (p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/id").equals("II"))
+					end += NOVII_TO_NOVI_POSITION_OFFSET;
 			}
 		}
 		return end;

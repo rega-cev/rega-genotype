@@ -101,46 +101,48 @@ public class Genome {
 	    //gray background
 	    g2d.setColor(new Color(230, 230, 230));
 	    g2d.fillRect(0, 0, imgWidth, imgHeight);
-	    
-	    Map<String, Color> colorMap = attributes.getColors();
-	    
-	    Color bgcolor = colorMap.get("-");
 
-	    if (w.length == 0) {
-	      bgcolor = colorMap.get(genotype);
-	      if (bgcolor == null)
-	    	  bgcolor = colorMap.get("other");
-	    }
+	    if (start > 0 && end > 0) {
+	    	Map<String, Color> colorMap = attributes.getColors();
 	    
-	    g2d.setColor(bgcolor);
-	    g2d.fillRect(imgX(start), 0, imgX(end)-imgX(start), imgHeight);
-	    
-	    int x1, x2;
-	    for (int c=0; c < w.length; c++) {
-	        if (c == 0)
-	        	x1 = start + w[c] - scanWindowSize/2;
-	        else
-	        	x1 = start + w[c] - scanStepSize/2;
+		    Color bgcolor = colorMap.get("-");
 
-	        if (c == w.length-1)
-	        	x2 = start + w[c] + scanWindowSize/2;
-	        else
-	        	x2 = start + w[c] + scanStepSize/2;
+		    if (w.length == 0) {
+		      bgcolor = colorMap.get(genotype);
+		      if (bgcolor == null)
+		    	  bgcolor = colorMap.get("other");
+		    }
+		    
+		    g2d.setColor(bgcolor);
+		    g2d.fillRect(imgX(start), 0, imgX(end)-imgX(start), imgHeight);
+		    
+		    int x1, x2;
+		    for (int c=0; c < w.length; c++) {
+		        if (c == 0)
+		        	x1 = start + w[c] - scanWindowSize/2;
+		        else
+		        	x1 = start + w[c] - scanStepSize/2;
 
-	        Color color = colorMap.get(assign[c]);
-	        if (color == null)
-	        	color = colorMap.get("CRF");
-	        if (color == null)
-	        	color = colorMap.get("other");
-	        if (color != null) {
-	        	g2d.setColor(color);
-	        	g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
-	        }
+		        if (c == w.length-1)
+		        	x2 = start + w[c] + scanWindowSize/2;
+		        else
+		        	x2 = start + w[c] + scanStepSize/2;
+
+		        Color color = colorMap.get(assign[c]);
+		        if (color == null)
+		        	color = colorMap.get("CRF");
+		        if (color == null)
+		        	color = colorMap.get("other");
+		        if (color != null) {
+		        	g2d.setColor(color);
+		        	g2d.fillRect(imgX(x1), 0, imgX(x2)-imgX(x1), imgHeight);
+		        }
+		    }
 	    }
 	    
 	    g2d.drawImage(genomePng, 0, 0, imgWidth, imgHeight, null);
 	    
-	    if(regions != null){
+	    if (regions != null) {
 	    	g2d.setColor(Color.BLACK);
 	    	g2d.setStroke(new BasicStroke(1,
 	    			BasicStroke.CAP_BUTT,

@@ -44,6 +44,8 @@
 	<classpathentry kind="lib" path="lib/xmlgraphics-commons-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/xmlParserAPIs-2.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/xom-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/jwt-3.1.11.jar"/>
+	<classpathentry kind="lib" path="lib/jwt-3.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

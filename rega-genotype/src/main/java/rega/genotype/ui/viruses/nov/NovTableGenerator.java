@@ -8,6 +8,7 @@ package rega.genotype.ui.viruses.nov;
 import java.io.IOException;
 
 import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.ui.data.AbstractDataTableGenerator.ValueFormat;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.util.DataTable;
 
@@ -24,6 +25,7 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
 		table.addLabel("ORF1_variant");
 		table.addLabel("ORF2");
 		table.addLabel("ORF2_variant");
+		table.addLabel("refseq");
 		table.addLabel("begin");
 		table.addLabel("end");
 		table.addLabel("genogroup");
@@ -61,6 +63,7 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
 		addValue(c.majorAssignment == NovResults.NA ? "" : c.majorAssignment);
 		addValue(c.variantAssignmentForOverview == null ? "" : c.variantAssignmentForOverview);
 
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/refseq", ValueFormat.Label);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/start", ValueFormat.Number);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/end", ValueFormat.Number);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/name", ValueFormat.Label);

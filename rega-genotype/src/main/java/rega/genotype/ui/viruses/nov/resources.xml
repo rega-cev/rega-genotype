@@ -3,23 +3,23 @@
 	<app>
 		<template>
 		<div class="rivm-header">
-					<div id="logo">
-						<a href="${app.url}">
-							<img src="../pics/rivm/logo.png" alt="RIVM Logo" > </img>
-						</a>
-					</div>
-				<div id="application">
-					<span id="name">Norovirus Genotyping Tool</span>
-					<span id="info">Version 1.0</span>
-				</div>
-				${navigation}
-				<div id="navigation-bottom" >  </div>
+			<div id="logo">
+				<a href="${app.url}">
+					<img src="${app.url}/../../pics/rivm/logo.png" alt="RIVM Logo"> </img>
+				</a>
+			</div>
+			<div id="application">
+				<span id="name">Norovirus Genotyping Tool</span>
+				<span id="info">Version 1.0</span>
+			</div>
+			${navigation}
+			<div id="navigation-bottom"></div>
 		</div>
 		${content}
 		${footer}
 		<div class="rivm-footer">
 			<div>
-				<img src="../pics/rivm/footer.png" > </img>
+				<img src="${app.url}/../../pics/rivm/footer.png" > </img>
 			</div>
 		</div>
 		</template>
@@ -103,7 +103,7 @@
         </p>
 
         <div class="centerimage">
-          <img src="../pics/norovirus/startingpage.jpg" />
+          <img src="${app.url}/../../pics/norovirus/startingpage.jpg" />
           <div class="pic-label">The startingpage of the NoV typingtool</div>
         </div>
 
@@ -114,7 +114,7 @@
         Runs are kept on the server for 1 week. </p>
 
         <div>
-          <img src="../pics/norovirus/overview.jpg" />
+          <img src="${app.url}/../../pics/norovirus/overview.jpg" />
           <div class="pic-label">Overview of the results</div>
         </div>
 
@@ -176,7 +176,7 @@
         The genotyping region supported by this tool includes all regions (A to
         E) which are used for genotyping by different groups. </p><br />
      
-        <div class="centerimage"><img src="../pics/norovirus/typingregions.png" height="233" width="605" />
+        <div class="centerimage"><img src="${app.url}/../../pics/norovirus/typingregions.png" height="233" width="605" />
         </div>
 
         <span class="pic-label">Schematic representation of
@@ -246,7 +246,7 @@ the analysis.
 </ol>
 
 <div class="centerimage">
-<img src="../pics/norovirus/typingregions.png" height="233" width="605" /></div>
+<img src="${app.url}/../../pics/norovirus/typingregions.png" height="233" width="605" /></div>
 
 <p class="pic-label">Regions supported by the tool</p>
 
@@ -275,7 +275,7 @@ ORF2 &#160; &#160; &#160; &#160; &#160; &#160;5355 &#160; &#160; &#160;
 gaps in the aligned sequence</p>
 
 <div class="centerimage">
-<img src="../pics/norovirus/flowchart.png" height="590" width="567" /></div>
+<img src="${app.url}/../../pics/norovirus/flowchart.png" height="590" width="567" /></div>
 
 <p class="pic-label">Flowchart of the genotyping process</p>
 
@@ -283,11 +283,11 @@ gaps in the aligned sequence</p>
 presented in four tables below:</p>
 
 <ul style="text-align: left;">
-  <li><a href="#/whole-genome-table/">The whole
+  <li><a href="#whole-genome-table">The whole
 genome sequences,</a></li>
-  <li><a href="#/ORF2-table/">The ORF2 sequences</a></li>
-  <li><a href="#/ORF1-table/">The ORF1 sequences</a></li>
-  <li><a href="#/II.4-table/">The II.4 variant
+  <li><a href="#ORF2-table">The ORF2 sequences</a></li>
+  <li><a href="#ORF1-table">The ORF1 sequences</a></li>
+  <li><a href="#II.4-table">The II.4 variant
 sequences for both ORF1 and ORF2.</a></li>
 </ul><br />
 
@@ -318,7 +318,7 @@ Zheng DP, Ando T, Fankhauser RL, Beard RS, Glass RI, Monroe SS.
 Virology. 2006 Mar 15;346(2):312-23. Epub 2005</div>
 <br />
 
-<a name="/whole-genome-table/"></a>
+<a name="whole-genome-table"></a>
 <table class="reftable">
   <caption>1: Whole genome reference sequences for genogroup assignment</caption>
   <tbody>
@@ -505,8 +505,8 @@ Virology. 2006 Mar 15;346(2):312-23. Epub 2005</div>
   </tbody>
 </table>
 
-<a name="/whole-genome-table/"/><br />
-<a name="/ORF2-table/"></a>
+<a name="whole-genome-table"/><br />
+<a name="ORF2-table"></a>
 <table class="reftable">
   <caption>2: The ORF2 reference set</caption>
   <tbody>
@@ -1094,7 +1094,7 @@ Virology. 2006 Mar 15;346(2):312-23. Epub 2005</div>
   </tbody>
 </table>
 
-<a name="/ORF1-table/"/>
+<a name="ORF1-table"/>
 <table class="reftable">
   <caption>3: ORF 1 reference set</caption>
   <tbody>
@@ -1674,10 +1674,10 @@ reference set</td>
   </tbody>
 </table>
 
-<p><a name="/ORF2-table/">*: will shortly be
+<p><a name="ORF2-table">*: will shortly be
 replaced by GenBank Accession Number</a></p>
-<a name="/ORF2-table/"><br /> </a>
-<a name="/II.4-table/"> </a>
+<a name="ORF2-table"><br /> </a>
+<a name="II.4-table"> </a>
 <table class="reftable">
   <caption>4: II.4 variants reference set for ORF1 and ORF2</caption>
   <tbody>

@@ -27,6 +27,7 @@ public class EtvTableGenerator extends AbstractDataTableGenerator {
 		
 		table.addLabel("species_score");
 		table.addLabel("reverse-compliment");
+		table.addLabel("refseq");
 		table.addLabel("begin");
 		table.addLabel("end");
 
@@ -57,6 +58,7 @@ public class EtvTableGenerator extends AbstractDataTableGenerator {
 
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/score", ValueFormat.Number);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/reverse-compliment", ValueFormat.Label);
+    	addNamedValue("/genotype_result/sequence/result[@id='blast']/refseq", ValueFormat.Label);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/start", ValueFormat.Number);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/end", ValueFormat.Number);
 

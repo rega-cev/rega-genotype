@@ -11,6 +11,7 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
@@ -65,7 +66,7 @@ public class DetailsForm extends AbstractForm {
 			if (ul != null) {
 				String detailTitle = df.getTitle().getValue();
 				WText titleText = new WText("<a href=\"#" + detailTitle.replace(" ", "")
-						.toLowerCase() + "\">"+detailTitle+"</a>");
+						.toLowerCase() + "\">" + detailTitle + "</a>");
 				titleText.setStyleClass("link");
 				li = ul.addItem(titleText);
 				li.addWidget(new WBreak());
@@ -90,7 +91,7 @@ public class DetailsForm extends AbstractForm {
 		cwTitle.setObjectName(df.getIdentifier() + "-title");
 		String detailTitle = df.getTitle().getValue();
 		WText titleText = new WText("<h2><a name=\"" + detailTitle.replace(" ", "").toLowerCase() + "\"></a>"
-				+ detailTitle + "</h2>");
+				+ detailTitle + "</h2>", TextFormat.XHTMLUnsafeText);
 		titleText.setId("");
 
 		cwTitle.addWidget(titleText);
