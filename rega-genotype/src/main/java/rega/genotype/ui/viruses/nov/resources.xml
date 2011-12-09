@@ -53,8 +53,9 @@
 		<howToCite-text>
 			<text>
 				<p>Please use the following citation:</p>
-				<p>Norovirus genotyping tool, National Institute of Public health and the Environment, The Netherlands,
-					<a href="http://www.rivm.nl/">www.rivm.nl</a>.
+				<p><a href="http://www.ncbi.nlm.nih.gov/pubmed/21514213" target="_blank">
+	              Kroneman A, Vennema H, Deforche K, Avoort HV, Peñaranda S, Oberste MS, Vinjé J, Koopmans
+                  An automated genotyping tool for enteroviruses and noroviruses. J Clin Virol. 2011 Jun;51(2):121-5. </a>
 				</p>
 			</text>
 		</howToCite-text>

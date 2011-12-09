@@ -34,9 +34,8 @@ public abstract class GenotypeMain extends WtServlet
 	public GenotypeMain() {
 		super();
 		
-		getConfiguration().setSendXHTMLMimeType(true);
-		getConfiguration().setProgressiveBootstrap(true);
-		getConfiguration().setDebug(true);
+		// progressive bootstrap is broken because Wt is not aware of image URLs in documentation forms 
+		// getConfiguration().setProgressiveBootstrap(true);
 	}
 	
 	public static GenotypeApplication getApp() {
