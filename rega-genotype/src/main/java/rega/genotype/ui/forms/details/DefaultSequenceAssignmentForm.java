@@ -73,8 +73,10 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 				.arg(assignment)
 				.arg(bootstrap)));
 
-		final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
-		final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+		String startV = p.getValue("/genotype_result/sequence/result[@id='blast']/start");
+		String endV = p.getValue("/genotype_result/sequence/result[@id='blast']/end");
+		final int start = startV == null ? -1 : Integer.parseInt(startV);
+		final int end = endV == null ? -1 : Integer.parseInt(endV);
 		
 		final String scanType = od.getProfileScanType(p);
 		final int sequenceIndex = p.getSequenceIndex();
@@ -111,15 +113,18 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 		motivation.clear();
 
 		motivation.addWidget(new WBreak());
-		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
-		refSeq.arg(start);
-		refSeq.arg(end);
-		refSeq.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/refseq"));
-		WText refSeqWidget = new WText(refSeq);
-		refSeqWidget.setStyleClass("refseq");
-		motivation.addWidget(refSeqWidget);
+		
+		if (start > 0 && end > 0) {
+			WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
+			refSeq.arg(start);
+			refSeq.arg(end);
+			refSeq.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/refseq"));
+			WText refSeqWidget = new WText(refSeq);
+			refSeqWidget.setStyleClass("refseq");
+			motivation.addWidget(refSeqWidget);
+			motivation.addWidget(new WBreak());
+		}
 
-		motivation.addWidget(new WBreak());
 		motivation.addWidget(new WText(tr("defaultSequenceAssignment.motivation")));
 		if(!p.elementExists("/genotype_result/sequence/conclusion")) {
 			motivation.addWidget(new WText(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/error")));

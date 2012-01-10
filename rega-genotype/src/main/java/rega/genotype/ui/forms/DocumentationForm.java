@@ -37,29 +37,30 @@ public class DocumentationForm extends AbstractForm {
 		Element text = getMain().getResourceManager().getOrganismElement(formName, formContent);
 		for(Object o : text.getChildren()) {
 			final Element e = (Element)o;
-			if(e.getName().equals("header")) {
+
+			if (e.getName().equals("header")) {
 				WText header = new WText((++headerNr) + ". " + getMain().getResourceManager().extractFormattedText(e) +":", TextFormat.XHTMLUnsafeText, this);
 				header.setId("");
 				header.setStyleClass("decisionTreeHeader");
-			} else if(e.getName().equals("rule")){
+			} else if (e.getName().equals("rule")){
 				ruleNumber = e.getAttributeValue("number");
 				ruleName = e.getAttributeValue("name");
 				WText w = new WText(ruleNumber + ": " + ruleName + "<br></br>" + getMain().getResourceManager().extractFormattedText(e) + "<br></br>", TextFormat.XHTMLUnsafeText, this);
 				w.setId("");
-			} else if(e.getName().equals("figure")) {
+			} else if (e.getName().equals("figure")) {
 				WContainerWidget imgDiv = new WContainerWidget(this);
 				imgDiv.setId("");
 				imgDiv.setStyleClass("imgDiv");
 				GenotypeLib.getWImageFromResource(getMain().getOrganismDefinition(),e.getTextTrim(), imgDiv);
-			} else if(e.getName().equals("sequence")) {
+			} else if (e.getName().equals("sequence")) {
 				String sequence = "<div class=\"sequenceName\">>" + e.getAttributeValue("name") +"<br/></div>";
 				sequence += "<div class=\"sequence\">";
 				sequence += e.getTextTrim() + "</div>";
 				WText w = new WText(sequence, this);
 				w.setId("");
-			} else if(e.getName().equals("table")) {
+			} else if (e.getName().equals("table")) {
 				createTable(e.getTextTrim(), this);
-			} if(e.getName().equals("text")) {
+			} if (e.getName().equals("text")) {
 				WText w = new WText(getMain().getResourceManager().extractFormattedText(e), TextFormat.XHTMLUnsafeText, this);
 				w.setId("");
 			}

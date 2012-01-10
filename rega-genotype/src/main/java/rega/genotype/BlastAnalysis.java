@@ -162,8 +162,10 @@ public class BlastAnalysis extends AbstractAnalysis {
         
         public void writeXML(ResultTracer tracer) {
             writeXMLBegin(tracer);
-            tracer.add("start", String.valueOf(start));
-            tracer.add("end", String.valueOf(end));
+            if (start > 0) {
+            	tracer.add("start", String.valueOf(start));           
+            	tracer.add("end", String.valueOf(end));
+            }
             tracer.printlnOpen("<cluster>");
             tracer.add("id", cluster != null ? cluster.getId() : "none");
             tracer.add("name", cluster != null ? cluster.getName() : "none");
@@ -336,11 +338,16 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                     /*
                      * First condition: there are no explicit reference taxa configured -- use best match
-                     * Second condition: the referenceTaxus is the first or has a higher priority than the previous one.
+                     * 
+                     * Second condition:
+                     *  - the referenceTaxus is the first
+                     *  - or has a higher priority than the current refseq and belongs to the same cluster 
                      *   (note priority is smaller number means higher priority)
                      */
                     if ((referenceTaxa.isEmpty() && values == best)
-                    	|| (referenceTaxus != null && (refseq == null || refseq.getPriority() > referenceTaxus.getPriority()))) {
+                    	|| (referenceTaxus != null
+                    		&& (findCluster(values[1]) == bestCluster)
+                    		&& (refseq == null || referenceTaxus.getPriority() < refseq.getPriority()))) {
                     	refseq = referenceTaxus;
                     	boolean queryReverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
                     	boolean refReverseCompliment = Integer.parseInt(values[9]) - Integer.parseInt(values[8]) < 0;
@@ -413,6 +420,9 @@ public class BlastAnalysis extends AbstractAnalysis {
                    			score = score / Float.valueOf(secondBest[11]);
                     }
 
+                    if (start == Integer.MAX_VALUE)
+                    	start = -1;
+                    
                     return createResult(sequence, bestCluster, refseq, score, start, end, reverseCompliment);
                 } else
                 	return createResult(sequence, null, null, 0, 0, 0, false);

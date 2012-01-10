@@ -249,7 +249,7 @@ public class GenotypeLib {
 		return new WImage(new WResource() {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
-				response.setContentType("image/"+fileName.substring(fileName.lastIndexOf('.')+1));
+				response.setContentType("image/" + fileName.substring(fileName.lastIndexOf('.')+1));
 				
             	InputStream is = this.getClass().getResourceAsStream(od.getOrganismDirectory()+fileName);
             	if (is == null)

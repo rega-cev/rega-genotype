@@ -72,8 +72,10 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 		t = new WText("<h3>Genome region</h3>", block);
 		t.setId("");
 
-		final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
-		final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+		String startV = p.getValue("/genotype_result/sequence/result[@id='blast']/start");
+		final int start = startV == null ? -1 : Integer.parseInt(startV);
+		String endV = p.getValue("/genotype_result/sequence/result[@id='blast']/end");
+		final int end = endV == null ? -1 : Integer.parseInt(endV);
 		final int sequenceIndex = p.getSequenceIndex();
 
 		WImage genome = GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
@@ -95,13 +97,15 @@ public class EtvSequenceAssignmentForm extends IDetailsForm {
 		genome.setId("");
 		block.addWidget(genome);
 
-		WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
-		refSeq.arg(start);
-		refSeq.arg(end);
-		refSeq.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/refseq"));
+		if (start > 0 && end > 0) {
+			WString refSeq = tr("defaultSequenceAssignment.referenceSequence");
+			refSeq.arg(start);
+			refSeq.arg(end);
+			refSeq.arg(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/refseq"));
 
-		t = new WText(refSeq, block);
-		t.setId("");
+			t = new WText(refSeq, block);
+			t.setId("");
+		}
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class StateLink extends WAnchor {
 		 * Update link text
 		 */
 		getText().getArgs().clear();
-		getText().getArgs().add(value);
+		getText().arg(value);
 		
 		if (value.equals("")) {
 			setRefInternalPath(this.internalPath = baseUrl);

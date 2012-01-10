@@ -19,6 +19,7 @@ import org.jdom.Text;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 
+import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WLocalizedStrings;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WWebWidget;
@@ -118,7 +119,7 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 		String result = textToReturn.toString().trim();
 		if (result.charAt(result.length()-1)==':')
 			result += ' ';
-		return result;
+		return result.replaceAll("\\$\\{app.url\\}", WApplication.getInstance().resolveRelativeUrl(WApplication.getInstance().getBookmarkUrl("/")));
 	}
 	
 	private void extractFormattedText(StringBuilder textToReturn, Element child) {
@@ -146,11 +147,7 @@ public class GenotypeResourceManager extends WLocalizedStrings {
 
 	@Override
 	public String resolveKey(String key) {
-		String v = resources.get(key);
-		if (v == null)
-			return "??" + key + "??";
-		else
-			return v;
+		return resources.get(key);
 	}
 
 	public boolean haveForm(String form) {
