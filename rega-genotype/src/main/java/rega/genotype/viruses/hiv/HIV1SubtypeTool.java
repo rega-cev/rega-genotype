@@ -68,6 +68,8 @@ public class HIV1SubtypeTool extends GenotypeTool {
 
     private ScanAnalysis crfScanAnalysis;
     private PhyloClusterAnalysis crfScanPhyloAnalysis;
+    
+    private final int InsideCutoff = -10;
 
     public HIV1SubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
         hiv1 = readAnalyses("HIV/hiv1.xml", workingDir);
@@ -163,7 +165,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
                         "Subtype unassigned based on sequence &lt; 800bp, " +
                         "and not clustering with a pure subtype with bootstrap >70 %.");
             } else {
-                if ((pure.getSupportInner() - pure.getSupportOuter()) >= -30) {
+                if ((pure.getSupportInner() - pure.getSupportOuter()) >= InsideCutoff) {
                     // Rule 11
                     concludeRule("11",pure,
                             "Subtype assigned based on sequence &lt; 800bp, " +
@@ -197,13 +199,13 @@ public class HIV1SubtypeTool extends GenotypeTool {
     			"without recombination in the bootscan." : "without significant recombination in the bootscan.";
     	
     	if (pureResult.haveSupport()) {
-            if (crfResult != null && crfResult.haveSupport() && (crfResult.getSupportInner() - crfResult.getSupportOuter() >= -30)) {
+            if (crfResult != null && crfResult.haveSupport() && (crfResult.getSupportInner() - crfResult.getSupportOuter() >= InsideCutoff)) {
                 // Rule 1a pure (crf)
                 concludeRule(rule + "a", pureResult, crfResult,
                     "Subtype assigned based on sequence > 800 bps " +
                     "clustering with a pure subtype and CRF or sub-subtype with bootstrap > 70% " +
                     recombinationConclusion);  
-            } else if (!detectPureLike || pureResult.getSupportInner() - pureResult.getSupportOuter() >= -30) {
+            } else if (!detectPureLike || pureResult.getSupportInner() - pureResult.getSupportOuter() >= InsideCutoff) {
             	// rule 1b 
                 concludeRule(rule + "b", pureResult,
                         "Subtype assigned based on sequence > 800 bps "
