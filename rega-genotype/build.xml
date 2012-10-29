@@ -36,9 +36,26 @@
       </fileset>
     </copy>
 
-    <jar jarfile="${dist}/${proj.name}-${proj.version}.jar" 
+    <jar jarfile="${dist}/${proj.name}-${proj.version}.jar"
+         basedir="${build}/main/java"
+         excludes="rega/genotype/ui/**" />
+
+    <jar jarfile="${dist}/${proj.name}-cli-tool-${proj.version}.jar" 
 	 basedir="${build}/main/java"
-	 excludes="rega/genotype/ui/**"/>
+	 excludes="rega/genotype/ui/**">
+      <restrict>
+	<name name="**/*.class"/>
+	<archives>
+	  <zips>
+            <fileset dir="lib/" includes="**/*.jar"/>
+	  </zips>
+	</archives>
+      </restrict>
+      <manifest>
+	<attribute name="Main-Class"
+		   value="rega.genotype.GenotypeTool"/>
+      </manifest>
+    </jar>
     
     <javac target="1.5" debug="on" 
 	   srcdir="${src}/test/java" 
