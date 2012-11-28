@@ -7,9 +7,12 @@ package rega.genotype.ui.viruses.hiv;
 
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
+import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WCombinedLocalizedStrings;
 import eu.webtoolkit.jwt.WEnvironment;
+import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 
 /**
  * HIV implementation of the genotype application.
@@ -21,9 +24,25 @@ import eu.webtoolkit.jwt.WEnvironment;
 public class HivMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new HivDefinition());
-
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext());
+		
+		WCombinedLocalizedStrings resources = new WCombinedLocalizedStrings();
+		
+		WXmlLocalizedStrings commonResources = new WXmlLocalizedStrings();
+		commonResources.use("/rega/genotype/ui/i18n/resources/common_resources");
+		resources.add(commonResources);
+		
+		WXmlLocalizedStrings hivResources = new WXmlLocalizedStrings();
+		hivResources.use("rega/genotype/ui/viruses/hiv/resources");
+		resources.add(hivResources);
+		
+		app.setLocalizedStrings(resources);
+		
 		app.useStyleSheet(Settings.defaultStyleSheet);
+		
+		GenotypeWindow window = new GenotypeWindow(new HivDefinition());
+		window.init();
+		app.getRoot().addWidget(window);
 		
 		return app;
 	}

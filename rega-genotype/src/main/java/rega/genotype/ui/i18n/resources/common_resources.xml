@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<common-settings>
-	<resource name="sequenceInput.uploadFile">Upload file and start!</resource>
-	<resource name="sequenceInput.uploadingFile">Uploading file</resource>
-  	<resource name="sequenceInput.run">Start!</resource>
-  	<resource name="sequenceInput.clear">Clear</resource>
-  	<resource name="sequenceInput.inputSequenceInFastaFormat">
+<messages>
+	<message id="sequenceInput.uploadFile">Upload file and start!</message>
+	<message id="sequenceInput.uploadingFile">Uploading file</message>
+  	<message id="sequenceInput.run">Start!</message>
+  	<message id="sequenceInput.clear">Clear</message>
+  	<message id="sequenceInput.inputSequenceInFastaFormat">
   		<p>You may can either:</p>
   		  <ol style="list-style-type: upper-alpha">
   		    <li>paste one or more sequences in FASTA format in the input field.</li>
@@ -12,124 +12,124 @@
   		    <li>revisit results of a previous run</li>
   		  </ol>
   		<h2>A) Paste nucleotide sequence(s) in FASTA format:</h2>
-    </resource>
-  	<resource name="sequenceInput.uploadSequenceInFastaFormat">
+    </message>
+  	<message id="sequenceInput.uploadSequenceInFastaFormat">
   		<h2>B) Or, upload a FASTA with nucleotide sequences:</h2>
-    </resource>
-  	<resource name="startForm.monitorJob">
+    </message>
+  	<message id="startForm.monitorJob">
   		<h2>C) Or, revisit results from a previous run:</h2>
-    </resource>  	
-  	<resource name="startForm.labelJobId">Job-id:</resource>
-  	<resource name="startForm.monitor">Go!</resource>
-  	<resource name="startForm.errorJobId">Invalid job id.</resource>
-  	<resource name="startForm.errorSequence">Too many sequences.</resource>
-  	<resource name="startForm.noSequence">No sequences were provided.</resource>
-  	<resource name="startForm.ioError">I/O error reading the sequence.</resource>
+    </message>  	
+  	<message id="startForm.labelJobId">Job-id:</message>
+  	<message id="startForm.monitor">Go!</message>
+  	<message id="startForm.errorJobId">Invalid job id.</message>
+  	<message id="startForm.errorSequence">Too many sequences.</message>
+  	<message id="startForm.noSequence">No sequences were provided.</message>
+  	<message id="startForm.ioError">I/O error reading the sequence.</message>
 
-	<resource name="monitorForm.explain">
+	<message id="monitorForm.explain">
 		<p>You may bookmark this page to revisit results of this job ({1}) later.</p>
-	</resource>  	
-  	<resource name="monitorForm.analysisInProgress">
+	</message>  	
+  	<message id="monitorForm.analysisInProgress">
   		<p>
   			Analysis in progress... (Showing partial results).<br/>
   			This page will be automatically updated every {1} seconds...
   		</p>
-  	</resource>
-	<resource name="monitorForm.downloadResults">Download results:</resource>
-	<resource name="monitorForm.csvTable">Table (CSV format)</resource>
-	<resource name="monitorForm.xlsTable">Table (Excell format)</resource>
-	<resource name="monitorForm.fasta">Fasta</resource>
-	<resource name="monitorForm.xmlFile">XML File</resource>
-	<resource name="monitorForm.downloadJob">Download all job files:</resource>
-	<resource name="monitorForm.jobFile">ZIP</resource>
+  	</message>
+	<message id="monitorForm.downloadResults">Download results:</message>
+	<message id="monitorForm.csvTable">Table (CSV format)</message>
+	<message id="monitorForm.xlsTable">Table (Excell format)</message>
+	<message id="monitorForm.fasta">Fasta</message>
+	<message id="monitorForm.xmlFile">XML File</message>
+	<message id="monitorForm.downloadJob">Download all job files:</message>
+	<message id="monitorForm.jobFile">ZIP</message>
 	
-	<resource name="monitorForm.nonExistingJobId">Job id {1} doesn't exist</resource>
+	<message id="monitorForm.nonExistingJobId">Job id {1} doesn't exist</message>
 	
-	<resource name="detailsForm.nonExistingSequenceId">Sequence id {1} doesn't exist</resource>
+	<message id="detailsForm.nonExistingSequenceId">Sequence id {1} doesn't exist</message>
 	
-	<resource name="detailsForm.summary.title"><h2><i>Summary</i></h2></resource>
-	<resource name="detailsForm.summary.assignment">Rega Assignment</resource>
-	<resource name="detailsForm.summary.numberSeqs">Number of sequences</resource>
-	<resource name="detailsForm.summary.percentage">Percentage</resource>
-	<resource name="detailsForm.summary.legend">Legend</resource>
-	<resource name="detailsForm.summary.total"><i>Total</i></resource>
+	<message id="detailsForm.summary.title"><h2><i>Summary</i></h2></message>
+	<message id="detailsForm.summary.assignment">Rega Assignment</message>
+	<message id="detailsForm.summary.numberSeqs">Number of sequences</message>
+	<message id="detailsForm.summary.percentage">Percentage</message>
+	<message id="detailsForm.summary.legend">Legend</message>
+	<message id="detailsForm.summary.total"><i>Total</i></message>
 	
-	<resource name="detailsForm.summary.filter.title"><h2>Phylogenetic statistics</h2></resource>
+	<message id="detailsForm.summary.filter.title"><h2>Phylogenetic statistics</h2></message>
 	
-	<resource name="detailsForm.summary.filter.nrSequences">Number of sequences</resource>
+	<message id="detailsForm.summary.filter.nrSequences">Number of sequences</message>
 	
-	<resource name="detailsForm.summary.filter.njTreeStats">NJ Tree Statistics</resource>
-	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrap">Average bootstrap</resource>
-	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrapInside">Average bootstrap inside</resource>
-	<resource name="detailsForm.summary.filter.njTreeStats.avgBootstrapOutside">Average bootstrap outside</resource>
+	<message id="detailsForm.summary.filter.njTreeStats">NJ Tree Statistics</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootstrap">Average bootstrap</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootstrapInside">Average bootstrap inside</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootstrapOutside">Average bootstrap outside</message>
 	
-	<resource name="detailsForm.summary.filter.bootscanStats">Bootscan Statistics</resource>
-	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscan">Average bootscan</resource>
-	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscanSupport">Average bootscan support</resource>
-	<resource name="detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport">Average bootscan no support</resource>
+	<message id="detailsForm.summary.filter.bootscanStats">Bootscan Statistics</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootscan">Average bootscan</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootscanSupport">Average bootscan support</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport">Average bootscan no support</message>
 	
-	<resource name="main.navigation.start">Submit job</resource>
-	<resource name="main.navigation.monitor">Monitor job [{1}]</resource>
-	<resource name="main.navigation.details">Analysis details [{1}]</resource>
-	<resource name="main.navigation.howToCite">How to cite</resource>
-	<resource name="main.navigation.tutorial">Tutorial</resource>
-	<resource name="main.navigation.decisionTrees">Decision trees</resource>
-	<resource name="main.navigation.subtypingProcess">Subtyping process</resource>
-	<resource name="main.navigation.exampleSequences">Example sequences</resource>
-	<resource name="main.navigation.contactUs">Contact us</resource>
+	<message id="main.navigation.start">Submit job</message>
+	<message id="main.navigation.monitor">Monitor job [{1}]</message>
+	<message id="main.navigation.details">Analysis details [{1}]</message>
+	<message id="main.navigation.howToCite">How to cite</message>
+	<message id="main.navigation.tutorial">Tutorial</message>
+	<message id="main.navigation.decisionTrees">Decision trees</message>
+	<message id="main.navigation.subtypingProcess">Subtyping process</message>
+	<message id="main.navigation.exampleSequences">Example sequences</message>
+	<message id="main.navigation.contactUs">Contact us</message>
 	
-	<resource name="defaultSequenceAssignment.title">Sequence Assignment</resource>
+	<message id="defaultSequenceAssignment.title">Sequence Assignment</message>
 	
 
-	<resource name="defaultSequenceAssignment.name-length">
+	<message id="defaultSequenceAssignment.name-length">
 		<div class="dsa-text">
 			<span class="label">Name:</span> {1} <span class="label">Length:</span> {2}
 		</div>
-	</resource>
+	</message>
 
-	<resource name="defaultSequenceAssignment.assignment-bootstrap">
+	<message id="defaultSequenceAssignment.assignment-bootstrap">
 		<div class="dsa-text">
 			<span class="label">Assignment:</span> {1} <span class="label">Bootstrap:</span> {2}
 		</div>
-	</resource>
+	</message>
 
-	<resource name="defaultSequenceAssignment.motivation">Motivation: </resource>
+	<message id="defaultSequenceAssignment.motivation">Motivation: </message>
 
-	<resource name="defaultSequenceAssignment.referenceSequence">
+	<message id="defaultSequenceAssignment.referenceSequence">
 		<p class="refseq">
 			Your sequence starts at position {1} and finishes at position {2} relative to the {3} reference sequence.
 		</p>
-	</resource>
+	</message>
 	
-	<resource name="details.analysisDetails"><h2>Analysis details</h2></resource>
+	<message id="details.analysisDetails"><h2>Analysis details</h2></message>
 	
-	<resource name="defaultPhylogeneticAnalyses.title">Phylogenetic analyses</resource>
-	<resource name="defaultPhylogeneticAnalyses.comment">
+	<message id="defaultPhylogeneticAnalyses.title">Phylogenetic analyses</message>
+	<message id="defaultPhylogeneticAnalyses.comment">
 		This section contains the alignments, inferred phylogenetic trees, and detailed results of the evolutionary analysis.
-	</resource>
+	</message>
 	
-	<resource name="defaultRecombinationAnalyses.title">Recombination analyses</resource>
-	<resource name="defaultRecombinationAnalyses.detailedRecombination">Detailed recombination analyses</resource>
-	<resource name="defaultRecombinationAnalyses.comment">
+	<message id="defaultRecombinationAnalyses.title">Recombination analyses</message>
+	<message id="defaultRecombinationAnalyses.detailedRecombination">Detailed recombination analyses</message>
+	<message id="defaultRecombinationAnalyses.comment">
 		This section contains the recombination plots, and data from which they were derived.
-	</resource>
-	<resource name="defaultRecombinationAnalyses.sequenceName">Sequence name:</resource>
-	<resource name="defaultRecombinationAnalyses.bootscanClusterSupport">Bootscan cluster support:</resource>
-	<resource name="defaultRecombinationAnalyses.download">Download: </resource>
-	<resource name="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size {1} and step size {2}.</resource>
-	<resource name="defaultRecombinationAnalyses.profile">Recombination profile: </resource>
-	<resource name="defaultRecombinationAnalyses.profile.short">short: {1}</resource>
-	<resource name="defaultRecombinationAnalyses.profile.long">long: {1}</resource>
-	<resource name="defaultRecombinationAnalyses.profile.best">best: {1}</resource>
+	</message>
+	<message id="defaultRecombinationAnalyses.sequenceName">Sequence name:</message>
+	<message id="defaultRecombinationAnalyses.bootscanClusterSupport">Bootscan cluster support:</message>
+	<message id="defaultRecombinationAnalyses.download">Download: </message>
+	<message id="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size {1} and step size {2}.</message>
+	<message id="defaultRecombinationAnalyses.profile">Recombination profile: </message>
+	<message id="defaultRecombinationAnalyses.profile.short">short: {1}</message>
+	<message id="defaultRecombinationAnalyses.profile.long">long: {1}</message>
+	<message id="defaultRecombinationAnalyses.profile.best">best: {1}</message>
 	
-	<resource name="defaultSignalAnalysis.title">Phylogenetic signal analysis</resource>
-	<resource name="defaultSignalAnalysis.comment">This section contains details of the phylogenetic signal analysis.</resource>
-	<resource name="defaultSignalAnalysis.extraComment">Recombination Analyses are only performed for sequences with more than 800 bp.</resource>
-	<resource name="defaultSignalAnalysis.signalValue">Phylogenetic signal:</resource>
-	<resource name="defaultSignalAnalysis.signalComment">
+	<message id="defaultSignalAnalysis.title">Phylogenetic signal analysis</message>
+	<message id="defaultSignalAnalysis.comment">This section contains details of the phylogenetic signal analysis.</message>
+	<message id="defaultSignalAnalysis.extraComment">Recombination Analyses are only performed for sequences with more than 800 bp.</message>
+	<message id="defaultSignalAnalysis.signalValue">Phylogenetic signal:</message>
+	<message id="defaultSignalAnalysis.signalComment">
 		Alignments with phylogenetic signal higher than 0.9 are considered suitable for the REGA subtype analysis. View the quartets mapped to the triangle.
-	</resource>
-	<resource name="defaultSignalAnalysis.extraComment">
+	</message>
+	<message id="defaultSignalAnalysis.extraComment">
 		Recombination Analyses are only performed for sequences with more than 800 bp.
-	</resource>	
-</common-settings>
+	</message>	
+</messages>

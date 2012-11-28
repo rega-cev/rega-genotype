@@ -24,9 +24,8 @@ import eu.webtoolkit.jwt.WEnvironment;
 public class GenotypeApplication extends WApplication
 {
 	private ServletContext servletContext_;
-	private GenotypeWindow window_;
 	
-	public GenotypeApplication(WEnvironment env, ServletContext servletContext, OrganismDefinition od)
+	public GenotypeApplication(WEnvironment env, ServletContext servletContext)
 	{
 		super(env);
 
@@ -34,14 +33,6 @@ public class GenotypeApplication extends WApplication
 		useStyleSheet("../style/wt_ie.css", "IE lt 7"); // do not use Wt's inline stylesheet...
 
 		servletContext_ = servletContext;
-		window_ = new GenotypeWindow(od);
-		window_.init();
-		getRoot().addWidget(window_);
-	}
-
-	public GenotypeWindow getWindow()
-	{
-		return window_;
 	}
 
 	public ServletContext getServletContext()

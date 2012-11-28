@@ -28,7 +28,8 @@ public class DetailsForm extends AbstractForm {
 	private GenotypeResultParser p;
 	
 	public DetailsForm(GenotypeWindow main) {
-		super(main, "details-form");
+		super(main);
+		
 		mainTable = new WContainerWidget(this);
 		mainTable.setObjectName("details-container");
 		mainTable.setStyleClass("detailsForm");

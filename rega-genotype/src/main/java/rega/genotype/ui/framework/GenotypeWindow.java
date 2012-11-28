@@ -10,20 +10,15 @@ import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
-import rega.genotype.ui.i18n.resources.GenotypeResourceManager;
-import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal1;
-import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WMenu;
 import eu.webtoolkit.jwt.WMenuItem;
 import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WTemplate;
-import eu.webtoolkit.jwt.WText;
 
 /**
  * The frame of the application.
@@ -51,43 +46,19 @@ public class GenotypeWindow extends WContainerWidget
 		return od;
 	}
 
-	private GenotypeResourceManager resourceManager;
-
 	public GenotypeWindow(OrganismDefinition od)
 	{
 		super();
 		this.od = od;
 	}
 
-	public GenotypeResourceManager getResourceManager() {
-		return resourceManager;
-	}
-
-	private void loadI18nResources()
-	{
-		resourceManager = new GenotypeResourceManager("/rega/genotype/ui/i18n/resources/common_resources.xml", od.getOrganismDirectory()+"resources.xml");
-		WApplication.getInstance().setLocalizedStrings(resourceManager);
-	}
-
 	public void init() {
-		loadI18nResources();
-
 		setStyleClass("root");
 		setId("");
 		WApplication app = WApplication.getInstance();
 
-		WTemplate main = new WTemplate(this);
-		main.setStyleClass("azure");
-		main.setTemplateText(resourceManager.getOrganismElementAsString("app", "template"), TextFormat.XHTMLUnsafeText);
+		WTemplate main = new WTemplate(tr("main"), this);
 		main.bindString("app.url", app.resolveRelativeUrl(app.getBookmarkUrl("/")));
-		
-		WImage headerImage = GenotypeLib.getWImageFromResource(od, "header.gif", this);
-		main.bindWidget("header-image", headerImage);
-		if (headerImage != null) {
-			headerImage.setAlternateText("header");
-			headerImage.setStyleClass("header");
-			headerImage.setId("");
-		}
 
 		content = new WStackedWidget();
 		main.bindWidget("content", content);
@@ -101,11 +72,6 @@ public class GenotypeWindow extends WContainerWidget
 		final WMenu menu = new WMenu(content, Orientation.Horizontal, navigation);
 		menu.setRenderAsList(true);
 		menu.setStyleClass("nav_main");
-		
-		WText footer = new WText(resourceManager.getOrganismValue("main-form", "footer"));
-		footer.setStyleClass("footer");
-		footer.setId("");
-		main.bindWidget("footer", footer);
 
 		/*
 		 * Set up the menu: links to all the forms:
@@ -124,32 +90,23 @@ public class GenotypeWindow extends WContainerWidget
 			}
 		});
 
-		addLink(menu, tr("main.navigation.howToCite"), CITE_URL, createDocForm("howToCite-form", "howToCite-text"));
+		addLink(menu, tr("main.navigation.howToCite"), CITE_URL, new DocumentationForm(this, tr("howToCite-text")));
 		
-		addLink(menu, tr("main.navigation.introduction"), INTRODUCTION_URL, createDocForm("introduction-form", "introduction-text"));
+		addLink(menu, tr("main.navigation.introduction"), INTRODUCTION_URL, new DocumentationForm(this, "introduction-text"));
 		
-		addLink(menu, tr("main.navigation.tutorial"), TUTORIAL_URL, createDocForm("tutorial-form", "tutorial-text"));
+		addLink(menu, tr("main.navigation.tutorial"), TUTORIAL_URL, new DocumentationForm(this, "tutorial-text"));
 		
-		addLink(menu, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, createDocForm("decisionTrees-form", "decisionTrees-text"));
+		addLink(menu, tr("main.navigation.decisionTrees"), DECISIONTREES_URL, new DocumentationForm(this, "decisionTrees-text"));
 		
-		addLink(menu, tr("main.navigation.subtypingProcess"), METHOD_URL, createDocForm("subtypingProcess-form", "subtypingProcess-text"));
+		addLink(menu, tr("main.navigation.subtypingProcess"), METHOD_URL, new DocumentationForm(this, "subtypingProcess-text"));
 		
-		addLink(menu, tr("main.navigation.exampleSequences"), EXAMPLES_URL, createDocForm("exampleSequences-form", "exampleSequences-sequences"));
+		addLink(menu, tr("main.navigation.exampleSequences"), EXAMPLES_URL, new DocumentationForm(this, "exampleSequences-text"));
 		
-		addLink(menu, tr("main.navigation.contactUs"), CONTACT_URL, createDocForm("contactUs-form", "contactUs-text"));
+		addLink(menu, tr("main.navigation.contactUs"), CONTACT_URL, new DocumentationForm(this, "contactUs-text"));
 		
 		menu.setInternalPathEnabled("/");
 		
 		jobForm.handleInternalPath();
-	}
-	
-	private DocumentationForm createDocForm(String name, String content) {
-		try {
-			return new DocumentationForm(this, name, content);
-		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			return null;
-		}
 	}
 	
 	private WMenuItem addLink(final WMenu menu, CharSequence text, String url, AbstractForm form) {

@@ -73,7 +73,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private String filter;
 
 	public AbstractJobOverview(GenotypeWindow main) {
-		super(main, "monitor-form");
+		super(main);
 
 		explainText = new WText(this);
 		explainText.setObjectName("job-overview-explanation");
@@ -110,9 +110,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		this.filter = filter;
 
 		if (filter != null)
-			setTitle(getMain().getResourceManager().getOrganismValue("monitor-form", "title-filtered").arg(filter));
+			new WText(tr("monitor-form.title-filtered"), this);
 		else {
-			setTitle(getMain().getResourceManager().getOrganismValue("monitor-form", "title"));
+			new WText(tr("monitor-form.title"), this);
 			WString msg = tr("monitorForm.explain");
 			msg.arg(jobId);
 			explainText.setText(msg);

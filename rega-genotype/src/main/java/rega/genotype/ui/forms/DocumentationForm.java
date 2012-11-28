@@ -5,88 +5,16 @@
  */
 package rega.genotype.ui.forms;
 
-import java.io.File;
-
-import org.jdom.Element;
-
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.utils.Table;
-import eu.webtoolkit.jwt.TextFormat;
-import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WTable;
-import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WTemplate;
 
 /**
- * A documentation form reads its contents from the resource file.
- * 
- * DocumentationForm supports: headers, rules, figures, sequences, csv-tables and HTML-formatted text.
+ * A documentation form that visualizes the content of the template text passed to the constructor.
  */
 public class DocumentationForm extends AbstractForm {
-	public DocumentationForm(GenotypeWindow main, String formName, String formContent) {
-		super(main, formName);
+	public DocumentationForm(GenotypeWindow main, CharSequence content) {
+		super(main);
 		
-		fillForm(formName, formContent);
-	}
-
-	protected void fillForm(String formName, String formContent) {
-		String ruleNumber;
-		String ruleName;
-		int headerNr=0;
-
-		Element text = getMain().getResourceManager().getOrganismElement(formName, formContent);
-		for(Object o : text.getChildren()) {
-			final Element e = (Element)o;
-
-			if (e.getName().equals("header")) {
-				WText header = new WText((++headerNr) + ". " + getMain().getResourceManager().extractFormattedText(e) +":", TextFormat.XHTMLUnsafeText, this);
-				header.setId("");
-				header.setStyleClass("decisionTreeHeader");
-			} else if (e.getName().equals("rule")){
-				ruleNumber = e.getAttributeValue("number");
-				ruleName = e.getAttributeValue("name");
-				WText w = new WText(ruleNumber + ": " + ruleName + "<br></br>" + getMain().getResourceManager().extractFormattedText(e) + "<br></br>", TextFormat.XHTMLUnsafeText, this);
-				w.setId("");
-			} else if (e.getName().equals("figure")) {
-				WContainerWidget imgDiv = new WContainerWidget(this);
-				imgDiv.setId("");
-				imgDiv.setStyleClass("imgDiv");
-				GenotypeLib.getWImageFromResource(getMain().getOrganismDefinition(),e.getTextTrim(), imgDiv);
-			} else if (e.getName().equals("sequence")) {
-				String sequence = "<div class=\"sequenceName\">>" + e.getAttributeValue("name") +"<br/></div>";
-				sequence += "<div class=\"sequence\">";
-				sequence += e.getTextTrim() + "</div>";
-				WText w = new WText(sequence, this);
-				w.setId("");
-			} else if (e.getName().equals("table")) {
-				createTable(e.getTextTrim(), this);
-			} if (e.getName().equals("text")) {
-				WText w = new WText(getMain().getResourceManager().extractFormattedText(e), TextFormat.XHTMLUnsafeText, this);
-				w.setId("");
-			}
-		}
-	}
-	
-	private WTable createTable(String csvFile, WContainerWidget parent) {
-		Table csvTable = new Table(
-				getClass().getResourceAsStream(
-						getMain().getOrganismDefinition().getOrganismDirectory()+csvFile
-						), false);
-		WTable table = new WTable(parent);
-		table.setId("");
-		table.setStyleClass("csv "+ getCssClass(csvFile));
-
-		for(int i = 0; i<csvTable.numRows(); i++) {
-			for(int j = 0; j<csvTable.numColumns(); j++) {
-				WText wt = new WText(csvTable.valueAt(j, i));
-				wt.setTextFormat(TextFormat.XHTMLText);
-				table.getElementAt(i, j).addWidget(wt);
-			}
-		}
-		return table;
-	}
-	
-	private static String getCssClass(String path){
-		return path.replace(File.separatorChar, '_').replace('.', '-');
+		new WTemplate(content, this);
 	}
 }

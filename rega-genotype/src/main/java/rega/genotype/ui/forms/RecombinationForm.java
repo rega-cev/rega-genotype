@@ -38,7 +38,7 @@ public class RecombinationForm extends AbstractForm{
 	private WTable recombinationTable;
 	
 	public RecombinationForm(GenotypeWindow main) {
-		super(main, "recombination-form");
+		super(main);
 		setStyleClass("recombination-form");
 		
 		recombinationImage = new WContainerWidget(this);

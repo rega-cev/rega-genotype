@@ -12,8 +12,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jdom.Element;
-
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
@@ -29,6 +27,7 @@ import eu.webtoolkit.jwt.WInteractWidget;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
 
@@ -37,7 +36,6 @@ import eu.webtoolkit.jwt.WTextArea;
  * sequences for a new job or get the results of an existing job using the job Id.
  */
 public class StartForm extends AbstractForm {
-	private WText note;
 	private WTextArea ta;
 	private WPushButton run, clear;
 	private FileUpload fileUpload;
@@ -48,13 +46,10 @@ public class StartForm extends AbstractForm {
 	private WText errorJobId, errorTextField, errorFile;
 	
 	public StartForm(GenotypeWindow main) {
-		super(main, "start-form");
+		super(main);
 
-		List<String> noteArgs = new ArrayList<String>();
-		noteArgs.add(Settings.getInstance().getMaxAllowedSeqs()+"");
-		note = new WText(getMain().getResourceManager().getOrganismValue("start-form", "note", noteArgs), this);
-		note.setId("");
-		note.setStyleClass("note");
+		WTemplate note = new WTemplate(tr("start-form"), this);
+		note.bindInt("maxAllowedSeqs", Settings.getInstance().getMaxAllowedSeqs());
 		
 		WContainerWidget seqinput = new WContainerWidget(this);
 		seqinput.setId("");
@@ -176,25 +171,7 @@ public class StartForm extends AbstractForm {
 
 	@SuppressWarnings("unchecked")
 	private void init() {
-		List seqs = getMain().getResourceManager().getOrganismElement("exampleSequences-form", "exampleSequences-sequences").getChildren();
-		
-		if(seqs.size()>0) {
-			Element seq = (Element)seqs.get(0);
-			StringBuilder text = new StringBuilder(">" + seq.getAttributeValue("name") + "\n");
-			final int nucleotidesPerLine = 80;
-			int counter = 0;
-			String nucleotides = seq.getTextTrim();
-			for(int i = 0; i<nucleotides.length(); i++) {
-				if(!Character.isWhitespace(nucleotides.charAt(i))) {
-					text.append(nucleotides.charAt(i));
-					counter++;
-					if(counter%nucleotidesPerLine==0) {
-						text.append("\n");
-					}
-				}
-			}
-			ta.setText(text.toString());
-		}
+		//TODO set example sequence
 	}
 
 	private void verifyFasta(String fastaContent, WText errorText) {

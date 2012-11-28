@@ -23,7 +23,7 @@ public class JobForm extends AbstractForm {
 	private Signal1<String> jobIdChanged = new Signal1<String>();
 
 	public JobForm(GenotypeWindow main, AbstractJobOverview jobOverview) {
-		super(main, null, null);
+		super(main);
 		
 		details = new DetailsForm(main);
 		addWidget(details);

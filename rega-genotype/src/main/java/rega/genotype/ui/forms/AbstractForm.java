@@ -7,7 +7,6 @@ package rega.genotype.ui.forms;
 
 import rega.genotype.ui.framework.GenotypeWindow;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -17,41 +16,13 @@ import eu.webtoolkit.jwt.WText;
  * and unless a specific CSS class is given, also to set the CSS class.
  */
 public abstract class AbstractForm extends WContainerWidget {
-	private WText title;
 	private GenotypeWindow main;
 
-	public AbstractForm(GenotypeWindow main, String title) {
-		this (main, title, getCssClass(title));
-		setObjectName(title);
-	}
-	
-	public AbstractForm(GenotypeWindow main, String title, String cssClass) {
+	public AbstractForm(GenotypeWindow main) {
 		this.main = main;
-
-		if (title != null) {
-			if (!main.getResourceManager().haveForm(title))
-				throw new RuntimeException("No '" + title + "' form.");
-			setTitle(main.getResourceManager().getOrganismValue(title, "title"));
-		}
-
-		this.setStyleClass(cssClass + " form");
 	}
 	
 	public GenotypeWindow getMain() {
 		return main;
-	}
-
-	private static String getCssClass(String title){
-		return title.trim().replace(' ', '_').replace('.','-');
-	}
-	
-	protected void setTitle(WString title) {
-		if (this.title != null)
-			this.title.remove();
-
-		String titleDiv = "<h1>" + title.getValue() + "</h1>";
-		this.title = new WText(titleDiv);
-		this.title.setObjectName("title");
-		insertWidget(0, this.title);
 	}
 }
