@@ -1,61 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rega-genotype-settings>
   <!-- xmlPath
-     Directory containing the xml files and reference sequence alignments, located in
-     this projects xml/ directory
+     Directory containing the xml files and reference sequence alignments, 
+     located in this projects xml/ directory.
      
      These define the input to the various analyses for each organism.
    -->
-  <property name="xmlPath">/Users/tulio/biotools/rega3/rega2009/rega-genotype/xml/</property>
+  <property name="xmlPath">
+    /opt/soft/rega-genotype/xml/
+  </property>
 
   <!-- paupCmd
      Location of your paup executable + name of the paup executable.
      
      Note, you need to get a license for paup.
    -->
-  <property name="paupCmd">/Applications/biotools/paup4b10-ppc-macosx/wrappaup.sh /Applications/biotools/paup4b10-ppc-macosx/paup4b10-ppc-macosx</property>
+  <property name="paupCmd">
+    /opt/soft/paup/paup4b10-x86-linux
+  </property>
 
   <!-- clustalWCmd
      Location of your clustalw executable + name of the clustalw executable
    -->
-  <property name="clustalWCmd">/Applications/biotools/clustalw2</property>
+  <property name="clustalWCmd">
+    /opt/soft/clustal/clustalw2
+  </property>
 
   <!-- blastPath
      Location of your blastall and formatdb executables (from ncbi-tools).     
    -->
-  <property name="blastPath">/Applications/biotools/blast/blast-2.2.20/bin/</property>
+  <property name="blastPath">
+    /opt/soft/blast-2.2.20/bin/
+  </property>
 
   <!-- treePuzzleCmd
-     Location of your tree-puzzle executable + name of the tree-puzzle executable (the svg enabled version!)
+     Location of your tree-puzzle executable + name of the tree-puzzle 
+     executable (the svg enabled version!)
    -->
-  <property name="treePuzzleCmd">/Applications/biotools/treepuzzle/src/puzzle</property>
+  <property name="treePuzzleCmd">
+    /opt/soft/treepuzzle/src/puzzle
+  </property>
 
   <!-- treeGraphCmd
      Location of your treegraph executable + name of the treegraph executable
    -->
-  <property name="treeGraphCmd">/Applications/biotools/tgf10r4/source/tgf</property>
+  <property name="treeGraphCmd">
+    /opt/soft/treegraph/tgf10r4/source/tgf
+  </property>
 
   <!-- jobDir-%organism%
-     Location where the genotypetool can write job-related files for a specific organism.
+     Location where the genotypetool can write job-related files for a 
+     specific organism.
      
      %organism% should correspond to an organism (like the folder name in xml/)
      
-     The tool will never delete any files here. It is your responsibility to implement a
-     policy that will discard old jobs.
+     The tool will never delete any files here. It is your responsibility to 
+     implement a policy that will discard old jobs.
      
-     Each job dir must be different, since jobs cannot be mixed for several organisms.
+     Each job dir must be different, since jobs cannot be mixed for several 
+     organisms.
    -->
-  <property name="jobDir-NoV">/Users/tulio/biotools/rega3/rega2009/jobDir</property>
-  <property name="jobDir-HIV">/Users/tulio/biotools/rega3/rega2009/jobDirHIV</property>
-  <property name="jobDir-HTLV">/Users/tulio/biotools/rega3/rega2009/jobDirHTLV</property>
-  <property name="jobDir-PHYLO">/Users/tulio/biotools/rega3/rega2009/jobDirPHYLO</property>
+  <property name="jobDir-NoV">
+    /opt/rega-genotype/jobDir/NoV
+  </property>
+  <property name="jobDir-HIV">
+    /opt/rega-genotype/jobDir/HIV
+  </property>
+  <property name="jobDir-HTLV">
+    /opt/rega-genotype/jobDir/HTLV
+  </property>
   
   <!-- maxAllowedSequences
      The maximum number of sequences that may be submitted in a single batch.
    -->
-  <property name="maxAllowedSequences">1000</property>
+  <property name="maxAllowedSequences">
+    1000
+  </property>
   
   <!-- maxJobDirLifeTime
   	The maximum life time for a job dir, in milliseconds. -->
-  <property name="maxJobDirLifeTime">604800000</property>
+  <property name="maxJobDirLifeTime">
+    604800000
+  </property>
 </rega-genotype-settings>
