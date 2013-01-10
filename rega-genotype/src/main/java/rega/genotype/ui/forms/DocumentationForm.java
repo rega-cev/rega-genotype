@@ -5,6 +5,7 @@
  */
 package rega.genotype.ui.forms;
 
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import eu.webtoolkit.jwt.WTemplate;
 
@@ -15,6 +16,7 @@ public class DocumentationForm extends AbstractForm {
 	public DocumentationForm(GenotypeWindow main, CharSequence content) {
 		super(main);
 		
-		new WTemplate(content, this);
+		WTemplate t = new WTemplate(content, this);
+		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 	}
 }

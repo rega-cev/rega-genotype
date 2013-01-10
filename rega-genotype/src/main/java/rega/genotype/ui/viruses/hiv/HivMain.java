@@ -12,6 +12,7 @@ import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WCombinedLocalizedStrings;
 import eu.webtoolkit.jwt.WEnvironment;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 
 /**
@@ -20,6 +21,7 @@ import eu.webtoolkit.jwt.WXmlLocalizedStrings;
  * @author simbre1
  *
  */
+
 @SuppressWarnings("serial")
 public class HivMain extends GenotypeMain {
 	@Override
@@ -33,17 +35,25 @@ public class HivMain extends GenotypeMain {
 		resources.add(commonResources);
 		
 		WXmlLocalizedStrings hivResources = new WXmlLocalizedStrings();
-		hivResources.use("rega/genotype/ui/viruses/hiv/resources");
+		hivResources.use("/rega/genotype/ui/viruses/hiv/resources");
 		resources.add(hivResources);
 		
 		app.setLocalizedStrings(resources);
 		
-		app.useStyleSheet(Settings.defaultStyleSheet);
+		app.useStyleSheet("../style/hiv/genotype.css");
 		
 		GenotypeWindow window = new GenotypeWindow(new HivDefinition());
 		window.init();
+		
+		window.addDocumentationLink(tr("main.navigation.documentation"), "examples", tr("documentation-text"));	
+		window.addDocumentationLink(tr("main.navigation.contactUs"), "contact", tr("contactUs-text"));
+			
 		app.getRoot().addWidget(window);
 		
 		return app;
+	}
+	
+	private WString tr(String key) {
+		return WString.tr(key);
 	}
 }

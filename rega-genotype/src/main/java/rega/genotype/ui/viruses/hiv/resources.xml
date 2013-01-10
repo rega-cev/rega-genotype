@@ -1,25 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <messages>
-	<message id="main">
-		<div class="hiv-typing-tool">
-			<img src="header.gif" alg="Header image"></img>
-			${content}
-			${navigation}
-			<div class="maintainers">
-				Rega HIV subtyping tool V.3 is maintained by: Tulio de Oliveira, Pieter Libin, Koen Deforche, Sharon Cassol and Anne-Mieke Vandamme.
-			</div>
-		</div>
-	</message>
+	<message id="maintainers-text"> This application is built and maintained by Tulio de Oliveira, Pieter Libin, Koen Deforche, Sharon Cassol and Anne-Mieke Vandamme.</message>
+
+	<message id="main.navigation.documentation">Documentation</message>
+
+	<message id="sequence-input">Paste your sequence(s) in the input field in FASTA format or upload a FASTA file.</message>
 
 	<message id="start-form">
-		<h1>REGA HIV Subtyping Tool Version 3.0</h1>
-
-		<div class="note">
-			This tool is designed to use phylogenetic methods in order to identify the subtype of a specific sequence.
-			The sequence is analysed for recombination using bootscanning methods.
+		<div class="header alter-0">
+			<img src="${app.context}/pics/hiv/header.png" alg="Header image"></img>
+		</div>
+		<div class="note alter-1">
+			This tool was developed to provide a free HIV subtyping service to researchers and clinicians anywhere in the world. 
+			The tool uses phylogenetic methods to identify the subtype of any HIV sequence uploaded. 
+			The tool can also identify recombination, uses bootscanning methods.
 			<br/>
 			<b>Note for batch analysis:</b> The REGA subtype tool accepts up to ${1} sequences at a time. 
 		</div>
+		<div class="alter-2">
+			<table class="start-form-header">
+				<tr>
+					<td><div class="textCircle">1</div></td> 
+					<td><h2>${tr:sequence-input}</h2></td>
+				</tr>
+			</table>
+			<table style="width : 600px;">
+				<tr><td>${fasta-field}</td></tr>
+					
+				<tr>
+					<td style="float: right"><div>${analyze-button} ${clear-button}</div></td>
+				</tr>
+				<tr><td style="float: right">${file-upload-button}</td></tr>
+					
+				<tr><td>${error-text}</td></tr>
+			</table>
+		</div>
+		<div class="alter-0">
+			<table class="start-form-header">
+				<tr>
+					<td><div class="textCircle">2</div></td> 
+					<td><h2>Search for a previous analysis</h2></td>
+				</tr>
+			</table>
+			${job-id-field}	${search-button} 
+		</div>
+		<div class="alter-1">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
+		<div class="alter-2 nav" style="height: 50px;">
+				${navigation}
+		</div>		
 	</message>
 
 	<message id="monitor-form.title">
@@ -72,7 +104,7 @@
 			Multiple sequences can be submitted to the REGA HIV-1 subtyping tool.<br/>
 			<b>The batch report </b> (figure1) will be the batch report and contain information on the sequence name, length, assigned subtype and a figure of the HIV-1 genome. Accessing the report link will take the user to a report to each submitted sequence.
 			</p>
-			<img src="pics/hiv/tutorial_1.gif" />
+			<img src="${app.context}/pics/hiv/tutorial_1.gif" />
 			<p>
 			<b>The sequence report </b> (figure 2) will be composed of three areas named: sequence assignment, analysis details and phylogenetic analyses.
 			<br/>
@@ -90,7 +122,7 @@
 			    <li>the alignment used.</li>
 		    </ul>
 			</p>
-			<img src="pics/hiv/tutorial_2.gif" />
+			<img src="${app.context}/pics/hiv/tutorial_2.gif" />
 		</div>
 	</message>
 	
@@ -98,8 +130,8 @@
 		<h1>REGA HIV-1 Subtying Classification Rules</h1>
 		<div>
 			<h2>Decision Tree for sequences longer than 800 bp</h2>
-			<img src="pics/hiv/decisionTrees_1.gif" />
-			<img src="pics/hiv/decisionTrees_2.gif" />
+			<img src="${app.context}/pics/hiv/decisionTrees_1.gif" />
+			<img src="${app.context}/pics/hiv/decisionTrees_2.gif" />
 			<div class="rules">
 				<div class="rule" >
 					<span class="rule-number">Rule 1A</span>
@@ -153,7 +185,7 @@
 				</div>
 			</div>
 			<h2>Decision Tree for sequences shorter than 800 bp</h2>
-			<img src="pics/hiv/decisionTrees_3.gif" />
+			<img src="${app.context}/pics/hiv/decisionTrees_3.gif" />
 			<div class="rules">
 				<div class="rule">
 					<span class="rule-number">Rule 9</span>
@@ -186,7 +218,7 @@
 				    <li>Finally, in the fourth step, the alignment is examined to determine whether it contains sufficient phylogenetic signals for subtype determination using Treepuzzle software.</li>
 				</ul>
 			</p>
-			<img src="subtypingProcess.gif" />
+			<img src="${app.context}/pics/hiv/subtypingProcess.gif" />
 			<h2>Reference Alignment</h2>
 			<table>
 				<tr><td>Subtype or CRFs"</td><td>"Sequence Name</td></tr>

@@ -9,21 +9,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Settings;
 import rega.genotype.utils.Utils;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
-import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WInteractWidget;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
@@ -36,112 +33,101 @@ import eu.webtoolkit.jwt.WTextArea;
  * sequences for a new job or get the results of an existing job using the job Id.
  */
 public class StartForm extends AbstractForm {
-	private WTextArea ta;
+	private WTextArea sequenceTA;
 	private WPushButton run, clear;
 	private FileUpload fileUpload;
 	
 	private WLineEdit jobIdTF;
 	private WPushButton monitorButton;
-
-	private WText errorJobId, errorTextField, errorFile;
+	
+	private WText errorText;
 	
 	public StartForm(GenotypeWindow main) {
 		super(main);
-
-		WTemplate note = new WTemplate(tr("start-form"), this);
-		note.bindInt("maxAllowedSeqs", Settings.getInstance().getMaxAllowedSeqs());
 		
-		WContainerWidget seqinput = new WContainerWidget(this);
-		seqinput.setId("");
-		seqinput.setStyleClass("seqInput");
-
-		WText h = new WText(tr("sequenceInput.inputSequenceInFastaFormat"), seqinput);
-		h.setId("");
+		WTemplate t = new WTemplate(tr("start-form"), this);
+		t.addFunction("tr", WTemplate.Functions.tr);
 		
-		WContainerWidget textAreaDiv = new WContainerWidget(seqinput);
-		textAreaDiv.setObjectName("seq-input-fasta-div");
-		ta = new WTextArea(textAreaDiv);
-		ta.setObjectName("seq-input-fasta");
-		ta.setColumns(83);
-		ta.setRows(15);
+		t.bindInt("maxAllowedSeqs", Settings.getInstance().getMaxAllowedSeqs());
+		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
+		
+		errorText = new WText();
+		t.bindWidget("error-text", errorText);
+		
+		t.bindWidget("navigation", main.getMenu());
+		
+		sequenceTA = new WTextArea();
+		t.bindWidget("fasta-field", sequenceTA);
+		sequenceTA.setObjectName("seq-input-fasta");
+		sequenceTA.setRows(15);
+		sequenceTA.setStyleClass("fasta-ta");
 
-		run = new WPushButton(seqinput);
+		run = new WPushButton();
+		t.bindWidget("analyze-button", run);
 		run.setObjectName("button-run");
 		run.setText(tr("sequenceInput.run"));
 	
-		clear = new WPushButton(seqinput);
+		clear = new WPushButton();
+		t.bindWidget("clear-button", clear);
 		clear.setObjectName("button-clear");
 		clear.setText(tr("sequenceInput.clear"));
 		clear.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				ta.setText("");
+				sequenceTA.setText("");
 			}
 		});
-		
-		errorTextField = createErrorText(seqinput);
 	
 		run.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				verifyFasta(ta.getText(), errorTextField);
+				String fasta = sequenceTA.getText();
+				
+				CharSequence error = verifyFasta(fasta);
+				validateInput(error);
+				if (error == null)
+					startJob(fasta);
 			}
 		});
-		
-		h = new WText(tr("sequenceInput.uploadSequenceInFastaFormat"), seqinput);
-		h.setId("");
 
 		fileUpload = new FileUpload();
-		fileUpload.setId("sequences-file-upload");
-		seqinput.addWidget(fileUpload);
-		fileUpload.getUploadFile().uploaded().addListener(this, new Signal.Listener() {
-            public void trigger() {                
+		t.bindWidget("file-upload-button", fileUpload);
+		
+		fileUpload.uploadedFile().addListener(this, new Signal1.Listener<File>() {
+            public void trigger(File f) {                
 				try {
-					if (!fileUpload.getUploadFile().getSpoolFileName().equals("")) {
-						String fasta = GenotypeLib.readFileToString(new File(fileUpload.getUploadFile().getSpoolFileName()));
-						verifyFasta(fasta, errorFile);
+					if (f.exists()) {
+						String fasta = GenotypeLib.readFileToString(f);
+						sequenceTA.setText(fasta);
+						CharSequence error = verifyFasta(fasta);
+						validateInput(error);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
             }
         });
-		
-		errorFile = createErrorText(seqinput);
 
-		h = new WText(tr("startForm.monitorJob"), seqinput);
-		h.setId("");
-		h = new WText(tr("startForm.labelJobId"), seqinput);
-		h.setId("");
-		jobIdTF = new WLineEdit(seqinput);
-		jobIdTF.setObjectName("job-input-field");
-		monitorButton = new WPushButton(tr("startForm.monitor"), seqinput);
+		jobIdTF = new WLineEdit();
+		t.bindWidget("job-id-field", jobIdTF);
+		monitorButton = new WPushButton(tr("startForm.monitor"));
+		t.bindWidget("search-button", monitorButton);
 		monitorButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
 				getMain().changeInternalPath(JobForm.JOB_URL+"/"+jobIdTF.getText());
 			}
 		});
-		errorJobId = new WText(tr("startForm.errorJobId"), seqinput);
-		errorJobId.setId("jobid-error-message");
-		errorJobId.setStyleClass("error");
-		errorJobId.hide();
 		
 		init();
 	}
 	
-	private WText createErrorText(WContainerWidget parent) {
-		WText error = new WText(tr("startForm.errorSequence"), parent);
-		error.setStyleClass("error");
-		error.setInline(false);
-		error.hide();
-		return error;
-	}
-	
-	private void setValid(WInteractWidget w, WText errorMsg){
-		w.setStyleClass("edit-valid");
-		errorMsg.hide();
-	}
-	private void setInvalid(WInteractWidget w, WText errorMsg){
-		w.setStyleClass("edit-invalid");
-		errorMsg.show();
+	private void validateInput(CharSequence error) {
+		if (error == null) {
+			sequenceTA.setStyleClass("edit-valid");
+			errorText.setHidden(true);
+		} else {
+			sequenceTA.setStyleClass("edit-invalid");
+			errorText.setHidden(false);
+			errorText.setText(error);
+		}
 	}
 	
 	private void startJob(final String fastaContent) {
@@ -174,7 +160,7 @@ public class StartForm extends AbstractForm {
 		//TODO set example sequence
 	}
 
-	private void verifyFasta(String fastaContent, WText errorText) {
+	private CharSequence verifyFasta(String fastaContent) {
 		int sequenceCount = 0;
 
 		LineNumberReader r = new LineNumberReader(new StringReader(fastaContent));
@@ -188,19 +174,17 @@ public class StartForm extends AbstractForm {
 			}
 
 			if(sequenceCount == 0) {
-				errorText.setText(tr("startForm.noSequence"));
-				setInvalid(ta, errorText);
+				return tr("startForm.noSequence");
 			} else if (sequenceCount <= Settings.getInstance().getMaxAllowedSeqs()) {
-				setValid(ta, errorText);
-				startJob(fastaContent);
+				return null;
 			}
 		} catch (IOException e) {
-			errorText.setText(tr("startForm.ioError"));
-			setInvalid(ta, errorText);
 			e.printStackTrace();
+			return tr("startForm.ioError");
 		} catch (FileFormatException e) {
-			errorText.setText(e.getMessage());
-			setInvalid(ta, errorText);
+			return e.getMessage();
 		}
+		
+		return null;
 	}
 }
