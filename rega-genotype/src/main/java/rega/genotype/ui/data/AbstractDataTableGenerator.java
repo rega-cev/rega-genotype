@@ -22,6 +22,7 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 	}
 	
 	private DataTable table;
+	//TODO no ui components in this class!
 	private AbstractJobOverview jobOverview;
 
 	public AbstractDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) {
