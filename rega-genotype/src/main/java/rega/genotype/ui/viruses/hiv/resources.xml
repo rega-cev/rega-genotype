@@ -50,8 +50,44 @@
 			</div>
 		</div>
 		<div class="alter-2 nav" style="height: 50px;">
-				${navigation}
+			<ul>
+				<li><a href="${app.base.url}">Submit job</a></li>
+				<li><a href="${app.base.url}/documentation">Documentation</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+			</ul>
 		</div>		
+	</message>
+	
+	<message id="job-overview-form">
+		<div class="header alter-0">
+			<img src="${app.context}/pics/hiv/header.png" alg="Header image"></img>
+		</div>
+		<div class="summary alter-1">
+			${summary}
+		</div>
+		<div class="info alter-2">
+			You may bookmark this page to revisit these results later.
+			${analysis-in-progress}
+		</div>
+		<div class="alter-0">
+			${results}
+		</div>
+		<div class="downloads alter-1">
+			${downloads}
+		</div>
+		<div class="alter-2">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
+		<div class="alter-0 nav" style="height: 50px;">
+			${navigation}
+		</div>		
+	</message>
+	
+	<message id="job-overview-downloads">
+		<span>Download results:</span> ${xls-file}, ${csv-file}, ${xml-file}
 	</message>
 
 	<message id="monitor-form.title">

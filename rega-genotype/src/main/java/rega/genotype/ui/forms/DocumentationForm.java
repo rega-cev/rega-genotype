@@ -17,6 +17,7 @@ public class DocumentationForm extends AbstractForm {
 		super(main);
 		
 		WTemplate t = new WTemplate(content, this);
+		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 	}
 }

@@ -12,6 +12,8 @@ import java.util.List;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.FastaGenerator;
+import rega.genotype.ui.data.SequenceFilter;
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
 import rega.genotype.ui.util.DataTable;
@@ -20,7 +22,6 @@ import rega.genotype.ui.util.XlsDataTable;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Orientation;
-import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
@@ -31,6 +32,7 @@ import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableCell;
+import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTimer;
 import eu.webtoolkit.jwt.WWidget;
@@ -62,114 +64,92 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 	
 	protected File jobDir;
-	private WText analysisInProgress;
 	private WTable jobTable;
-	private WTimer updater;
-	private WContainerWidget downloadTableContainer, downloadResultsContainer;
-
-	private WText explainText;
-	
 	private JobOverviewSummary summary;
-	private String filter;
-
+	private SequenceFilter filter;
+	
+	private WTimer updater;
+	
+	private WTemplate template;
+	
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main);
+		
+		template = new WTemplate(tr("job-overview-form"), this);
+		template.addFunction("tr", WTemplate.Functions.tr);
 
-		explainText = new WText(this);
-		explainText.setObjectName("job-overview-explanation");
-
-		WString msg = tr("monitorForm.analysisInProgress");
-		msg.arg(getMain().getOrganismDefinition().getUpdateInterval()/1000);
-		analysisInProgress = new WText(msg, this);
-		analysisInProgress.setStyleClass("analysisProgress");
-		analysisInProgress.setObjectName("analysis-in-progress");
+		template.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
+		template.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		
 		jobTable = new WTable(this);
+		template.bindWidget("results", jobTable);
 		jobTable.setHeaderCount(1, Orientation.Horizontal);
 		jobTable.setHeaderCount(1, Orientation.Vertical);
 		jobTable.setStyleClass("jobTable");
 		jobTable.setObjectName("job-table");
-
-		downloadTableContainer = new WContainerWidget(this);
-		downloadTableContainer.setStyleClass("downloadContainer");
-		downloadTableContainer.setObjectName("download-table");
-
-		if (downloadResultsLink()) {
-			downloadResultsContainer = new WContainerWidget(this);
-			downloadResultsContainer.setStyleClass("downloadContainer");
-			downloadResultsContainer.setObjectName("download-results");
-		} else
-			downloadResultsContainer = null;
 	}
 
-	protected boolean downloadResultsLink() {
-		return true;
-	}
-	
-	public void init(String jobId, String filter) {
-		this.filter = filter;
+	public void init(final String jobId, final String filter) {
+		this.jobDir = getJobDir(jobId);
 
-		if (filter != null)
-			new WText(tr("monitor-form.title-filtered"), this);
-		else {
-			new WText(tr("monitor-form.title"), this);
-			WString msg = tr("monitorForm.explain");
-			msg.arg(jobId);
-			explainText.setText(msg);
-		}
+		this.summary = getSummary(filter);
+		template.bindWidget("summary", this.summary);
 
-		File jobDir = getJobDir(jobId);
+		this.filter = new SequenceFilter() {
+			public boolean excludeSequence(GenotypeResultParser p) {
+				String assignment = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/assigned/name");
+				return filter != null && !filter.equals(summary.encodeAssignment(assignment));
+			}			
+		};
 		
-		this.jobDir = jobDir;
-
-		if (summary != null)
-			this.removeWidget(summary);
-		
-		summary = getSummary(filter);
-
-		if (summary != null) {
-			summary.reset();
-			int index = getIndexOf(analysisInProgress);
-			
-			if (summary.getLocation() == Side.Top)
-				this.insertWidget(++index, summary);
-			else
-				this.addWidget(summary);
-		}
-
-		if (updater != null) {
-			updater.stop();
-			updater = null;
-		}
-
 		jobTable.clear();
-
-		downloadTableContainer.clear();
-		if (downloadResultsContainer != null)
-			downloadResultsContainer.clear();
-
-		analysisInProgress.setHidden(true);
 		
-		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
-		if (!jobDone.exists()) {
-			analysisInProgress.setHidden(false);
-
+		resetTimer();
+		
+		if (!jobDone()) {
 			updater = new WTimer();
 			updater.setInterval(getMain().getOrganismDefinition().getUpdateInterval());
 			updater.timeout().addListener(this, new Signal.Listener() {
 				public void trigger() {
-					fillTable();
+					fillTable(filter);
+					updateInfo();
+					if (jobDone()) {
+						resetTimer();
+						template.bindWidget("downloads", createDownloadsWidget(filter));
+					}
 				}
 			});
 		}
 
-		fillTable();		
+		fillTable(filter);
+		updateInfo();
+		if (jobDone())
+			template.bindWidget("downloads", createDownloadsWidget(filter));
 
 		if (updater != null)
 			updater.start();
 	}
-
-	public void fillTable() {
+	
+	private void resetTimer() {
+		if (updater != null) {
+			updater.stop();
+			updater = null;
+		}
+	}
+	
+	private boolean jobDone() {
+		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
+		return jobDone.exists();
+	}
+	
+	private void updateInfo() {
+		CharSequence analysisInProgress = "";
+		if (!jobDone())
+			analysisInProgress = tr("monitorForm.analysisInProgress");
+		template.bindString("analysis-in-progress", analysisInProgress);
+	}
+	
+	private void fillTable(String filter) {
 		if (jobTable.getRowCount()==0) {
 			List<Header> headers = getHeaders();
 
@@ -194,78 +174,35 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			jobTable.getRowAt(0).setId("");
 		}
 		
-		tableFiller.parseFile(jobDir);
+		new Parser().parseFile(jobDir);
+	}
+	
+	private WWidget createDownloadsWidget(final String filter) {
+		WTemplate t = new WTemplate(tr("job-overview-downloads"));
 		
-		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
-		if (jobDone.exists()) {
-			downloadTableContainer.clear();
-			
-			if (downloadResultsContainer != null)
-				downloadResultsContainer.clear();
+		if (filter == null)
+			t.bindWidget("xml-file", createXmlDownload());
+		
+		t.bindWidget("csv-file", createTableDownload(tr("monitorForm.csvTable"), true));
 
-			if (updater!=null) {
-				updater.stop();
-				updater = null;
-			}
-			analysisInProgress.setHidden(true);
-
-			WContainerWidget div = new WContainerWidget(downloadTableContainer);
-			div.setObjectName("donwload-table-contents");
-			
-			WText l = new WText(tr("monitorForm.downloadResults"), div);
-			l.setId("");
-			
-			if (filter == null) {
-				WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"), div);
-				xmlFileDownload.setObjectName("xml-download");
-				xmlFileDownload.setTarget(AnchorTarget.TargetNewWindow);
-				xmlFileDownload.setStyleClass("link");
-				WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
-				xmlResource.suggestFileName("result.xml");
-				xmlFileDownload.setRef(xmlResource.generateUrl());
-				l = new WText(", ", div);
-				l.setId("");
-			}
-			
-			div.addWidget(createTableDownload(tr("monitorForm.csvTable"), true));
-
-			l = new WText(", ", div);
-			l.setId("");
-
-			div.addWidget(createTableDownload(tr("monitorForm.xlsTable"), false));
-			
-			l = new WText(", ", div);
-			l.setId("");
-			
-			div.addWidget(createFastaDownload());
-
-			if (downloadResultsContainer != null) {
-				div = new WContainerWidget(downloadResultsContainer);
-				l = new WText(tr("monitorForm.downloadJob"), div);
-				l.setId("");
-
-				div.setObjectName("donwload-results-contents");
-
-				WAnchor jobFileDownload = new WAnchor("", tr("monitorForm.jobFile"), div);
-				jobFileDownload.setObjectName("zip-download");
-				jobFileDownload.setStyleClass("link");
-				jobFileDownload.setTarget(AnchorTarget.TargetNewWindow);
-				WResource jobResource = new WResource() {
-					@Override
-					protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
-						response.setContentType("application/zip");
-						GenotypeLib.zip(jobDir, response.getOutputStream());
-					}
-				};
-				jobResource.suggestFileName(jobDir.getName() + ".zip");
-				jobFileDownload.setRef(jobResource.generateUrl());
-				
-				downloadResultsContainer.setHidden(filter!=null);
-			}
-			
-		}
+		t.bindWidget("xls-file", createTableDownload(tr("monitorForm.xlsTable"), false));
+		
+		t.bindWidget("fasta-file", createFastaDownload());
+		
+		return t;
 	}
 
+	private WAnchor createXmlDownload() {
+		WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"));
+		xmlFileDownload.setObjectName("xml-download");
+		xmlFileDownload.setTarget(AnchorTarget.TargetNewWindow);
+		xmlFileDownload.setStyleClass("link");
+		WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+		xmlResource.suggestFileName("result.xml");
+		xmlFileDownload.setRef(xmlResource.generateUrl());
+		return xmlFileDownload;
+	}
+	
 	private WAnchor createFastaDownload() {
 		WAnchor fastaDownload = new WAnchor("", tr("monitorForm.fasta"));
 		fastaDownload.setObjectName("fasta-download");
@@ -277,7 +214,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 				response.setContentType("text/plain");
 				
-				FastaGenerator generateFasta = new FastaGenerator(AbstractJobOverview.this, response.getOutputStream());
+				FastaGenerator generateFasta = new FastaGenerator(filter, response.getOutputStream());
 				generateFasta.parseFile(new File(jobDir.getAbsolutePath()));
 			}
 			
@@ -311,12 +248,12 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return csvTableDownload;
 	}
 
-	private GenotypeResultParser tableFiller = new GenotypeResultParser(){
+	private class Parser extends GenotypeResultParser {		
 		@Override
 		public void endSequence() {
-			int numRows = jobTable.getRowCount()-1;
+			int numRows = AbstractJobOverview.this.jobTable.getRowCount()-1;
 			if(getSequenceIndex() - getFilteredSequences() >= numRows) {
-				List<WWidget> data = getData(tableFiller);
+				List<WWidget> data = getData(this);
 				
 				int row = jobTable.getRowCount();
 				for (int i = 0; i < data.size(); i++) {
@@ -332,13 +269,13 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
 				
 				if (summary != null) 
-					summary.update(tableFiller, getMain().getOrganismDefinition());
+					summary.update(this, getMain().getOrganismDefinition());
 			}
 		}
 
 		@Override
 		public boolean skipSequence() {
-			return isExcludedByFilter(this);
+			return filter.excludeSequence(this);
 		}
 	};
 	
@@ -354,11 +291,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		report.setStyleClass("link");
 		report.setRefInternalPath(reportPath(jobDir, p.getSequenceIndex()));
 		return report;
-	}
-	
-	public boolean isExcludedByFilter(GenotypeResultParser p) {
-		String assignment = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/conclusion/assigned/name");
-		return filter != null && !filter.equals(summary.encodeAssignment(assignment));
 	}
 	
 	public boolean existsJob(String jobId) {

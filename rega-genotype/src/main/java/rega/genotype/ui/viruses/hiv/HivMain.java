@@ -5,10 +5,10 @@
  */
 package rega.genotype.ui.viruses.hiv;
 
+import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WCombinedLocalizedStrings;
 import eu.webtoolkit.jwt.WEnvironment;
@@ -45,8 +45,9 @@ public class HivMain extends GenotypeMain {
 		GenotypeWindow window = new GenotypeWindow(new HivDefinition());
 		window.init();
 		
-		window.addDocumentationLink(tr("main.navigation.documentation"), "examples", tr("documentation-text"));	
-		window.addDocumentationLink(tr("main.navigation.contactUs"), "contact", tr("contactUs-text"));
+		window.addForm("documentation", new DocumentationForm(window, tr("documentation-text")));	
+		window.addForm("contact-us", new DocumentationForm(window, tr("contactUs-text")));
+		window.addForm("how-to-cite", new DocumentationForm(window, tr("howToCite-text")));
 			
 		app.getRoot().addWidget(window);
 		

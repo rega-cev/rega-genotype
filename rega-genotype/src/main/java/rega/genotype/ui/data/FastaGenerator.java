@@ -12,11 +12,11 @@ import rega.genotype.ui.util.GenotypeLib;
  * FastaGenerator is an implementation of GenotypeResultParser capable of writing in fasta format.
  */
 public class FastaGenerator extends GenotypeResultParser {
-	private AbstractJobOverview jobOverview;
+	private SequenceFilter filter;
 	private OutputStreamWriter writer;
 	
-	public FastaGenerator(AbstractJobOverview jobOverview, OutputStream outputStream) {
-		this.jobOverview = jobOverview;
+	public FastaGenerator(SequenceFilter filter, OutputStream outputStream) {
+		this.filter = filter;
 		this.writer = new OutputStreamWriter(outputStream);
 	}
 
@@ -35,6 +35,6 @@ public class FastaGenerator extends GenotypeResultParser {
 	}
 
     public boolean skipSequence() {
-    	return jobOverview.isExcludedByFilter(this);
+    	return filter.excludeSequence(this);
     }
 }

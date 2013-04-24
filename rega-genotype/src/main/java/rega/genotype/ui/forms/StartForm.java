@@ -49,12 +49,11 @@ public class StartForm extends AbstractForm {
 		t.addFunction("tr", WTemplate.Functions.tr);
 		
 		t.bindInt("maxAllowedSeqs", Settings.getInstance().getMaxAllowedSeqs());
+		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		
 		errorText = new WText();
 		t.bindWidget("error-text", errorText);
-		
-		t.bindWidget("navigation", main.getMenu());
 		
 		sequenceTA = new WTextArea();
 		t.bindWidget("fasta-field", sequenceTA);

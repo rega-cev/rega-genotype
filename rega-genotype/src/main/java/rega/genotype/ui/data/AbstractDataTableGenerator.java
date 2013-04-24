@@ -23,10 +23,10 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 	
 	private DataTable table;
 	//TODO no ui components in this class!
-	private AbstractJobOverview jobOverview;
+	private SequenceFilter filter;
 
-	public AbstractDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) {
-		this.jobOverview = jobOverview;
+	public AbstractDataTableGenerator(SequenceFilter filter, DataTable table) {
+		this.filter = filter;
 		this.table = table;
 	}
 
@@ -96,6 +96,6 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 	}
 	
     public boolean skipSequence() {
-    	return jobOverview.isExcludedByFilter(this);
+    	return filter.excludeSequence(this);
     }
 }

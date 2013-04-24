@@ -7,15 +7,14 @@ package rega.genotype.ui.data;
 
 import java.io.IOException;
 
-import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.util.DataTable;
 
 /**
  * A default extension of AbstractCsvGenerator, used by different virus implementations.
  */
 public class DefaultTableGenerator extends AbstractDataTableGenerator {
-	public DefaultTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
-		super(jobOverview, table);
+	public DefaultTableGenerator(SequenceFilter filter, DataTable table) throws IOException {
+		super(filter, table);
 
 		table.addLabel("name");
 		table.addLabel("length");

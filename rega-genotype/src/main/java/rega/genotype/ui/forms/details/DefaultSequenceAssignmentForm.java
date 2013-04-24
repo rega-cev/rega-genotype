@@ -84,8 +84,10 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 
 		images.clear();
 		WImage legend = GenotypeLib.getWImageFromResource(od, "legend.png", null);
-		legend.setStyleClass("legend");
-		images.addWidget(legend);
+		if (legend != null) {
+			legend.setStyleClass("legend");
+			images.addWidget(legend);
+		}
 
 		for (int i = 0; i < genomeVariantCount; ++i) {
 			final int index = i;
