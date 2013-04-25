@@ -20,4 +20,9 @@ public class DocumentationForm extends AbstractForm {
 		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 	}
+
+	@Override
+	public void handleInternalPath(String internalPath) {
+
+	}
 }

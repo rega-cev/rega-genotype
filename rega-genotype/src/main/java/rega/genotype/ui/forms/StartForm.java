@@ -186,4 +186,9 @@ public class StartForm extends AbstractForm {
 		
 		return null;
 	}
+
+	@Override
+	public void handleInternalPath(String internalPath) {
+		
+	}
 }

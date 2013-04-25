@@ -5,16 +5,17 @@
  */
 package rega.genotype.ui.framework;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
+import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WStackedWidget;
-import eu.webtoolkit.jwt.WWidget;
 
 /**
  * The frame of the application.
@@ -25,10 +26,20 @@ import eu.webtoolkit.jwt.WWidget;
  */
 public class GenotypeWindow extends WContainerWidget
 {
-	private static final String START_URL = "";
+	private static class Form {
+		public Form(String path, AbstractForm form) {
+			this.path = path;
+			this.form = form;
+		}
+		
+		String path;
+		AbstractForm form;
+	}
+	
+	private static final String START_URL = "/";
 
 	private WStackedWidget content;
-	private Map<String, WWidget> widgets = new HashMap<String, WWidget>();
+	private List<Form> forms = new ArrayList<Form>();
 	
 	private OrganismDefinition od;
 	
@@ -51,11 +62,28 @@ public class GenotypeWindow extends WContainerWidget
 		content.setId("content");
 		content.setStyleClass("content");
 		
-		addForm("/", new StartForm(this));
+		addForm(START_URL, new StartForm(this));
 		
 		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
 		addForm(JobForm.JOB_URL, jobForm);
-		jobForm.handleInternalPath();
+		
+		handleInternalPath(app.getInternalPath());
+		app.internalPathChanged().addListener(this,
+				new Signal1.Listener<String>() {
+					public void trigger(String internalPath) {
+						handleInternalPath(internalPath);
+					}
+				});
+	}
+	
+	private void handleInternalPath(String internalPath) {
+		GenotypeApplication app = GenotypeMain.getApp();
+		
+		for (Form f : forms)
+			if (app.internalPathMatches(f.path)) {
+				content.setCurrentWidget(f.form);
+				f.form.handleInternalPath(internalPath.substring(f.path.length()));
+			}
 	}
 	
 	public void changeInternalPath(String path) {
@@ -63,8 +91,8 @@ public class GenotypeWindow extends WContainerWidget
 		app.setInternalPath(path, true);
 	}
 	
-	public void addForm(String url, WWidget widget) {
+	public void addForm(String url, AbstractForm widget) {
 		content.addWidget(widget);
-		widgets.put(url, widget);
+		forms.add(new Form(url, widget));
 	}
 }

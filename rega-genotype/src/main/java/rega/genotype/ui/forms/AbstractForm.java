@@ -25,4 +25,6 @@ public abstract class AbstractForm extends WContainerWidget {
 	public GenotypeWindow getMain() {
 		return main;
 	}
+	
+	public abstract void handleInternalPath(String internalPath);
 }

@@ -13,7 +13,7 @@ import eu.webtoolkit.jwt.WWidget;
  * @author pieter
  */ 
 public class JobForm extends AbstractForm {
-	public static final String JOB_URL = "job";
+	public static final String JOB_URL = "/job";
 	
 	private DetailsForm details;
 	private AbstractJobOverview jobOverview;
@@ -37,65 +37,54 @@ public class JobForm extends AbstractForm {
 		}
 		error = new WText();
 		addWidget(error);
-		
-		GenotypeMain.getApp().internalPathChanged().addListener(this,
-				new Signal1.Listener<String>() {
-					public void trigger(String internalPath) {
-						handleInternalPath();
-					}
-				});
 	}
 	
-	public void handleInternalPath() {
-		if (GenotypeMain.getApp().internalPathMatches("/" + JOB_URL + "/")) {
-			String jobId = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/");
+	public void handleInternalPath(String internalPath) {
+		String jobId = internalPath;
 			
-			if (!jobOverview.existsJob(jobId)) {
-				error.setText(tr("monitorForm.nonExistingJobId").arg(jobId));
-				showWidget(error);
-				return;
-			}
+		if (!jobOverview.existsJob(jobId)) {
+			error.setText(tr("monitorForm.nonExistingJobId").arg(jobId));
+			showWidget(error);
+			return;
+		}
 			
-			Integer sequenceId = null;
-			String filter = null;
-			try {
-				filter = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/");
-				sequenceId = Integer.parseInt(filter);
-				filter = null;
-			} catch (NumberFormatException nfe) {
-			}
+		Integer sequenceId = null;
+		String filter = null;
+		try {
+			filter = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/");
+			sequenceId = Integer.parseInt(filter);
+			filter = null;
+		} catch (NumberFormatException nfe) {
+		}
 			
-			if (filter != null && filter.trim().equals(""))
-				filter = null;
+		if (filter != null && filter.trim().equals(""))
+			filter = null;
 			
-			if (sequenceId == null) {
-				jobOverview.init(jobId, filter);
-				jobIdChanged.trigger(jobId);
-				showWidget(jobOverview);
-			} else {
-				String detailed = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/" + sequenceId +"/");
+		if (sequenceId == null) {
+			jobOverview.init(jobId, filter);
+			jobIdChanged.trigger(jobId);
+			showWidget(jobOverview);
+		} else {
+			String detailed = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/" + sequenceId +"/");
 				
-				WString errorMsg;
-				WWidget widget;
-				if (detailed.startsWith(RecombinationForm.URL) 
-						&& detailed.length() > RecombinationForm.URL.length() + 1
-						&& recombination != null) {
-					String type = detailed.substring(RecombinationForm.URL.length() + 1);
-					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId, type);
-					widget = recombination;
-				} else {
-					errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
-					widget = details;
-				}
-
-				if (errorMsg == null) {
-					jobIdChanged.trigger(jobId);
-					showWidget(widget);
-				} else {
-					error.setText(errorMsg.arg(jobId));
-					showWidget(error);
-				}
+			WString errorMsg;
+			WWidget widget;
+			if (detailed.startsWith(RecombinationForm.URL) 
+					&& detailed.length() > RecombinationForm.URL.length() + 1
+					&& recombination != null) {
+				String type = detailed.substring(RecombinationForm.URL.length() + 1);					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId, type);
+				widget = recombination;
+			} else {
+				errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
+				widget = details;
 			}
+
+		if (errorMsg == null) {
+			jobIdChanged.trigger(jobId);
+			showWidget(widget);
+		} else {
+			error.setText(errorMsg.arg(jobId));
+			showWidget(error);				}
 		}
 	}
 	

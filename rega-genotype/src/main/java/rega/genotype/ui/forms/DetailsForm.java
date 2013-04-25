@@ -110,4 +110,9 @@ public class DetailsForm extends AbstractForm {
 	public String getSequenceName() {
 		return GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name");
 	}
+
+	@Override
+	public void handleInternalPath(String internalPath) {
+
+	}
 }

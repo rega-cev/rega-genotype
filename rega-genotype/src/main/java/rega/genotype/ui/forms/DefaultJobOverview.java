@@ -102,4 +102,9 @@ public class DefaultJobOverview extends AbstractJobOverview {
 		else
 			return new DefaultJobOverviewFilterSummary();
 	}
+
+	@Override
+	public void handleInternalPath(String internalPath) {
+
+	}
 }

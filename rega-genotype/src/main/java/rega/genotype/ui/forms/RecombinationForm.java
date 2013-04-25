@@ -153,4 +153,9 @@ public class RecombinationForm extends AbstractForm{
 		
 		return container;
 	}
+
+	@Override
+	public void handleInternalPath(String internalPath) {
+
+	}
 }
