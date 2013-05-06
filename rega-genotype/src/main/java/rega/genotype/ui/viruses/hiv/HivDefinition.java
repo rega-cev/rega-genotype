@@ -54,7 +54,7 @@ public class HivDefinition implements OrganismDefinition {
 	}
 
 	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException {
-		return new DefaultTableGenerator(jobOverview, t);
+		return new DefaultTableGenerator(jobOverview.getFilter(), t);
 	}
 
 	public Genome getGenome() {

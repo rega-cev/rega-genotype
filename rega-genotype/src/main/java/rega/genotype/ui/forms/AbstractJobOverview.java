@@ -339,4 +339,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public static String jobId(File jobDir) {
 		return jobDir.getAbsolutePath().substring(jobDir.getAbsolutePath().lastIndexOf(File.separatorChar)+1);
 	}	
+	
+	public SequenceFilter getFilter() {
+		return filter;
+	}
 }
