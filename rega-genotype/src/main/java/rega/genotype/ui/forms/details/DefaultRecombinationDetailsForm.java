@@ -23,6 +23,7 @@ import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WResource;
+import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.servlet.WebRequest;
@@ -76,24 +77,29 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		addWidget(new WText(tr("defaultRecombinationAnalyses.download").getValue() +" "));
 		WAnchor csv = new WAnchor();
 		csv.setText("CSV");
-		csv.setLink(new WLink(new WResource() {
-					protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
-						plot.streamRecombinationCSV(jobDir, p.getSequenceIndex(), type, response.getOutputStream());
-					}}));
+		WResource r = new WResource() {
+			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				plot.streamRecombinationCSV(jobDir, p.getSequenceIndex(), type, response.getOutputStream());
+			}};
+		r.setDispositionType(DispositionType.Attachment);
+		csv.setLink(new WLink(r));
 		csv.setTarget(AnchorTarget.TargetNewWindow);
 		addWidget(csv);
 		addWidget(new WText(", "));
 		final int sequenceIndex = p.getSequenceIndex();
 		WAnchor pdf = new WAnchor();
 		pdf.setText("PDF");
-		pdf.setLink(new WLink(new WResource() {
+		r = new WResource() {
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				response.setContentType("application/pdf");
 				try {
 					plot.streamRecombinationPDF(jobDir, sequenceIndex, type, response.getOutputStream());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}}));
+			}};
+		r.setDispositionType(DispositionType.Attachment);
+		pdf.setLink(new WLink(r));
 		pdf.setTarget(AnchorTarget.TargetNewWindow);
 		addWidget(pdf);
 		addWidget(new WBreak());
