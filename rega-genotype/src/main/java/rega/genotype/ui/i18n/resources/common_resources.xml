@@ -20,7 +20,7 @@
   		<h2>C) Or, revisit results from a previous run:</h2>
     </message>  	
   	<message id="startForm.labelJobId">Job-id:</message>
-  	<message id="startForm.monitor">Go!</message>
+  	<message id="startForm.monitor">Retrieve results</message>
   	<message id="startForm.errorJobId">Invalid job id.</message>
   	<message id="startForm.errorSequence">Too many sequences.</message>
   	<message id="startForm.noSequence">No sequences were provided.</message>
