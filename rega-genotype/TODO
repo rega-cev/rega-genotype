@@ -1,0 +1,14 @@
+now:
+* fix upload button
+
+HIV doc:
+* submitting a sequence, revisiting a job 
+	-> documentation
+* A basic phylogenetics explanation or at least a link to a nice explanation is needed for those who are unfamiliar and want to know more
+** Examples questions:
+*** What is the meaning of like?
+*** What is the meaning of the brackets, specially for G (14_BG), A (01_AE)? Even though they are in the decision trees., they do not understand the meaning.
+
+later:
+links to CSV, XLS and XML file: should be accessible via URL (eg: /job/$jobid$/csv)
+
