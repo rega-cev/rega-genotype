@@ -51,7 +51,7 @@
 		</div>
 		<div class="alter-2 nav" style="height: 50px;">
 			<ul>
-				<li><a href="${app.base.url}">Submit job</a></li>
+				<li><a href="${app.base.url}">Submit analysis</a></li>
 				<li><a href="${app.base.url}/documentation">Documentation</a></li>
 				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
@@ -83,7 +83,7 @@
 		</div>
 		<div class="alter-0 nav" style="height: 50px;">
 			<ul>
-				<li><a href="${app.base.url}">Submit job</a></li>
+				<li><a href="${app.base.url}">Submit analysis</a></li>
 				<li><a href="${app.base.url}/documentation">Documentation</a></li>
 				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
