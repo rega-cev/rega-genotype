@@ -10,9 +10,9 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import rega.genotype.ui.data.OrganismDefinition;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
+import eu.webtoolkit.jwt.WLink;
 
 /**
  * The application.
@@ -29,8 +29,8 @@ public class GenotypeApplication extends WApplication
 	{
 		super(env);
 
-		useStyleSheet("../style/wt.css");               // do not use Wt's inline stylesheet...
-		useStyleSheet("../style/wt_ie.css", "IE lt 7"); // do not use Wt's inline stylesheet...
+		useStyleSheet(new WLink("../style/wt.css"));               // do not use Wt's inline stylesheet...
+		useStyleSheet(new WLink("../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 
 		servletContext_ = servletContext;
 	}

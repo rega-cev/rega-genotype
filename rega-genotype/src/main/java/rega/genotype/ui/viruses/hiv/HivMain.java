@@ -12,6 +12,7 @@ import rega.genotype.ui.framework.GenotypeWindow;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WCombinedLocalizedStrings;
 import eu.webtoolkit.jwt.WEnvironment;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 
@@ -40,7 +41,7 @@ public class HivMain extends GenotypeMain {
 		
 		app.setLocalizedStrings(resources);
 		
-		app.useStyleSheet("../style/hiv/genotype.css");
+		app.useStyleSheet(new WLink("../style/hiv/genotype.css"));
 		
 		GenotypeWindow window = new GenotypeWindow(new HivDefinition());
 		window.init();
