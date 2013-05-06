@@ -126,6 +126,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		updateInfo();
 		if (jobDone())
 			template.bindWidget("downloads", createDownloadsWidget(filter));
+		else
+			template.bindWidget("downloads", null);
 
 		if (updater != null)
 			updater.start();
