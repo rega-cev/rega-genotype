@@ -228,8 +228,12 @@ h1 {
   	text-align: center;
 }
 
-.note {
-
+.note, .footer {
+	padding: 0.5em 3em 0.5em 0.5em;
+	background-color: rgb(204, 204, 255);
+	display: block;
+	width: 80%;
+	margin: 0px auto;
 }
 
 .footer{
@@ -245,7 +249,6 @@ h1 {
 	width: 80%;
 	height: 30px;
 	padding: 1em;
-
 }
 
 .nav_main { 
@@ -441,7 +444,15 @@ table.reftable caption{
     width: 100%; 
     list-style-type:none;
 }
-  
+ 
+.nav {
+	align: center;
+
+	margin-left: auto;
+	margin-right: auto;
+	width: 820px;
+}
+
 .nav ul li {
     float: left; 
     padding-right: 0px;
@@ -455,55 +466,21 @@ table.reftable caption{
 	padding-right: 5px;
 }
 
-.alter-0 {
-	background-color: rgb(237,239,229);
+.header {
+	align: center;
 	
-	border-bottom-color: rgb(214,222,217);
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	
-	border-left-color: rgb(78,93,0);
-	border-left-width: 3px;
-	border-left-style: solid;
-	
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 50px;
-	padding-right: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 820px;
 }
 
-.alter-1 {
-	background-color: rgb(229,236,241);
+.div-row {
+	align: center;
 	
-	border-bottom-color: rgb(216,213,217);
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	
-	border-left-color: rgb(10,63,123);
-	border-left-width: 3px;
-	border-left-style: solid;
-	
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 50px;
-	padding-right: 50px;
-}
-
-.alter-2 {
-	background-color: rgb(239,231,229);
-	
-	border-bottom-color: rgb(223,216,206);
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-	
-	border-left-color: rgb(98,24,0);
-	border-left-width: 3px;
-	border-left-style: solid;
-	
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 50px;
-	padding-right: 50px;
+	margin-top: 2em;
+	margin-left: auto;
+	margin-right: auto;
+	width: 820px;
 }
 
 .textCircle {

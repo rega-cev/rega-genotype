@@ -7,49 +7,38 @@
 	<message id="sequence-input">Paste your sequence(s) in the input field in FASTA format or upload a FASTA file.</message>
 
 	<message id="start-form">
-		<div class="header alter-0">
-			<img src="${app.context}/pics/hiv/header.png" alg="Header image"></img>
+		<div class="header">
+			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
 		</div>
-		<div class="note alter-1">
+		<div class="div-row">
+			<h2>REGA HIV Subtyping Tool Version 3.0</h2>
+		</div>
+		<div class="note div-row">
 			This tool was developed to provide a free HIV subtyping service to researchers and clinicians anywhere in the world. 
 			The tool uses phylogenetic methods to identify the subtype of any HIV sequence uploaded. 
 			The tool can also identify recombination, uses bootscanning methods.
 			<br/>
 			<b>Note for batch analysis:</b> The REGA subtype tool accepts up to ${maxAllowedSeqs} sequences at a time. 
 		</div>
-		<div class="alter-2">
-			<table class="start-form-header">
-				<tr>
-					<td><div class="textCircle">1</div></td> 
-					<td><h2>${tr:sequence-input}</h2></td>
-				</tr>
-			</table>
+		<div class="div-row">
+			<h2>A. ${tr:sequence-input}</h2>
 			<table style="width : 600px;">
 				<tr><td>${fasta-field}</td></tr>
 					
 				<tr>
-					<td style="float: right"><div>${analyze-button} ${clear-button}</div></td>
+					<td style="float: right"><div>${clear-button} ${analyze-button}</div></td>
 				</tr>
 				<tr><td style="float: right">${file-upload-button}</td></tr>
 					
 				<tr><td>${error-text}</td></tr>
 			</table>
 		</div>
-		<div class="alter-0">
-			<table class="start-form-header">
-				<tr>
-					<td><div class="textCircle">2</div></td> 
-					<td><h2>Search for a previous analysis</h2></td>
-				</tr>
-			</table>
+		<div class="div-row">
+			<h2>B. Search for a previous analysis</h2>
 			${job-id-field}	${search-button} 
 		</div>
-		<div class="alter-1">
-			<div class="maintainers">
-				${tr:maintainers-text}	
-			</div>
-		</div>
-		<div class="alter-2 nav" style="height: 50px;">
+
+		<div class="nav" style="height: 50px;">
 			<ul>
 				<li><a href="${app.base.url}">Submit analysis</a></li>
 				<li><a href="${app.base.url}/documentation">Documentation</a></li>
@@ -57,31 +46,32 @@
 				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
 			</ul>
 		</div>		
+		
+		<div class="footer">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
 	</message>
 	
 	<message id="job-overview-form">
-		<div class="header alter-0">
-			<img src="${app.context}/pics/hiv/header.png" alg="Header image"></img>
+		<div class="header">
+			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
 		</div>
-		<div class="summary alter-1">
+		<div class="summary div-row">
 			${summary}
 		</div>
-		<div class="info alter-2">
+		<div class="info div-row">
 			You may bookmark this page to revisit these results later.
 			${analysis-in-progress}
 		</div>
-		<div class="alter-0">
+		<div class="div-row">
 			${results}
 		</div>
-		<div class="downloads alter-1">
+		<div class="downloads div-row">
 			${downloads}
 		</div>
-		<div class="alter-2">
-			<div class="maintainers">
-				${tr:maintainers-text}	
-			</div>
-		</div>
-		<div class="alter-0 nav" style="height: 50px;">
+		<div class="nav" style="height: 50px;">
 			<ul>
 				<li><a href="${app.base.url}">Submit analysis</a></li>
 				<li><a href="${app.base.url}/documentation">Documentation</a></li>
@@ -89,6 +79,11 @@
 				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
 			</ul>
 		</div>		
+		<div class="footer">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
 	</message>
 	
 	<message id="job-overview-downloads">
