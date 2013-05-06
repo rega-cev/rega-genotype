@@ -6,25 +6,30 @@
 package rega.genotype.ui.recombination;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.util.ImageConverter;
 import rega.genotype.utils.Table;
-import rega.genotype.utils.Utils;
+
+import com.pdfjet.Letter;
+import com.pdfjet.PDF;
+import com.pdfjet.Page;
+
 import eu.webtoolkit.jwt.PenStyle;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPaintDevice;
 import eu.webtoolkit.jwt.WPainter;
+import eu.webtoolkit.jwt.WPdfImage;
 import eu.webtoolkit.jwt.WPen;
 import eu.webtoolkit.jwt.WPointF;
-import eu.webtoolkit.jwt.WSvgImage;
 import eu.webtoolkit.jwt.chart.Axis;
 import eu.webtoolkit.jwt.chart.AxisValue;
 import eu.webtoolkit.jwt.chart.ChartType;
@@ -88,45 +93,38 @@ public class RecombinationPlot extends WCartesianChart {
         this.resize(720, 450);
 	}
 	
-	protected void paintEvent(WPaintDevice paintDevice) {
-		super.paintEvent(paintDevice);
-		
+	private void paintCutoff(WPainter p) {
 		//draw cutoff
 		WPointF from = this.mapToDevice(0, cutoff);
 		WPointF to = this.mapToDevice(this.getAxis(Axis.XAxis).getMaximum(), cutoff);
 		WPen cutoffPen = new WPen(WColor.red);
 		cutoffPen.setStyle(PenStyle.DashLine);
-		paintDevice.getPainter().setPen(cutoffPen);
-		paintDevice.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
+		p.setPen(cutoffPen);
+		p.drawLine(from.getX(), from.getY(), to.getX(), to.getY());
 	}
 	
-	public File getRecombinationCSV(File jobDir, int sequenceIndex, String type) {
-		File csvFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".csv");
-		if(!csvFile.exists()) {
-			try {
-				Utils.writeStringToFile(csvFile, csvData);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return csvFile;
+	protected void paintEvent(WPaintDevice paintDevice) {
+		super.paintEvent(paintDevice);
+		
+		paintCutoff(paintDevice.getPainter());
 	}
 	
-	public File getRecombinationPDF(File jobDir, int sequenceIndex, String type) throws IOException {
-		File pdfFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "plot_" + sequenceIndex + "_" + type + ".pdf");
-		if (!pdfFile.exists()) {
-			WSvgImage image = new WSvgImage(new WLength(720), new WLength(450));
-			WPainter painter = new WPainter(image);
-			this.paint(painter);
-			painter.end();
-			File tmp = File.createTempFile("recombination", "svg");
-			FileOutputStream fos = new FileOutputStream(tmp);
-			image.write(fos);
-			fos.flush();
-			fos.close();
-			ImageConverter.svgToPdf(tmp, pdfFile);
-			tmp.delete();
-		}
-		return pdfFile;
+	public void streamRecombinationCSV(File jobDir, int sequenceIndex, String type, OutputStream os) throws IOException {
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(os));
+		bw.write(csvData);
+		bw.flush();
+		bw.close();
+		os.flush();
+	}
+	
+	public void streamRecombinationPDF(File jobDir, int sequenceIndex, String type, OutputStream os) throws Exception {
+		PDF pdf = new PDF(os);
+		Page page = new Page(pdf, Letter.PORTRAIT);
+		WPdfImage image = new WPdfImage(pdf, page, 0, 0, new WLength(720), new WLength(450));
+		WPainter painter = new WPainter(image);
+		this.paint(painter);
+		painter.end();
+		pdf.flush();
+		os.flush();
 	}
 }

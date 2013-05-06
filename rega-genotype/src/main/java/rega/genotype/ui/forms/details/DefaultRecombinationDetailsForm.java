@@ -17,10 +17,12 @@ import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.recombination.RecombinationPlot;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
+import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.servlet.WebRequest;
@@ -51,7 +53,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		}
 	}
 	
-	private void initRecombinationSection(GenotypeResultParser p, final File jobDir, OrganismDefinition od)
+	private void initRecombinationSection(final GenotypeResultParser p, final File jobDir, OrganismDefinition od)
 		throws UnsupportedEncodingException, IOException {
 
 		// FIXME: we should not show a link to a detailed recombination section if we concluded a pure or CRF
@@ -72,26 +74,28 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		addWidget(new WText(GenotypeLib.getEscapedValue(p, path+"/support[@id='best']")));
 		addWidget(new WBreak());
 		addWidget(new WText(tr("defaultRecombinationAnalyses.download").getValue() +" "));
-		addWidget(GenotypeLib.getAnchor("CSV", "application/excel",
-				new WFileResource("", plot.getRecombinationCSV(jobDir, p.getSequenceIndex(), type).getAbsolutePath()), null));
+		WAnchor csv = new WAnchor();
+		csv.setText("CSV");
+		csv.setLink(new WLink(new WResource() {
+					protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+						plot.streamRecombinationCSV(jobDir, p.getSequenceIndex(), type, response.getOutputStream());
+					}}));
+		csv.setTarget(AnchorTarget.TargetNewWindow);
+		addWidget(csv);
 		addWidget(new WText(", "));
 		final int sequenceIndex = p.getSequenceIndex();
-		addWidget(GenotypeLib.getAnchor(" PDF ", "application/pdf", new WFileResource("", "") {
-			@Override
-			public void handleRequest(WebRequest request, WebResponse response) {
-				if (getFileName().equals("")) {
-					File file;
-					try {
-						file = plot.getRecombinationPDF(jobDir, sequenceIndex, type);
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-					setFileName(file.getAbsolutePath());
+		WAnchor pdf = new WAnchor();
+		pdf.setText("PDF");
+		pdf.setLink(new WLink(new WResource() {
+			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				try {
+					plot.streamRecombinationPDF(jobDir, sequenceIndex, type, response.getOutputStream());
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				super.handleRequest(request, response);
-			}
-			
-		}, null));
+			}}));
+		pdf.setTarget(AnchorTarget.TargetNewWindow);
+		addWidget(pdf);
 		addWidget(new WBreak());
 		WString m = tr("defaultRecombinationAnalyses.bootscanAnalysis");
 		m.arg(p.getValue(path + "/window"));
