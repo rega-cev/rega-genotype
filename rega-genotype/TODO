@@ -14,6 +14,7 @@ now:
 * example sequence in the input field
 	-> remove, maybe add extra button "Try examples"
 	-> if we do not remove it, should disappear when the text field is clicked?
+* restyle + fix upload button
 
 HIV doc:
 * submitting a sequence, revisiting a job 
