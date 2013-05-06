@@ -106,6 +106,7 @@ public class StartForm extends AbstractForm {
         });
 
 		jobIdTF = new WLineEdit();
+		jobIdTF.setWidth(new WLength(150));
 		t.bindWidget("job-id-field", jobIdTF);
 		monitorButton = new WPushButton(tr("startForm.monitor"));
 		t.bindWidget("search-button", monitorButton);
