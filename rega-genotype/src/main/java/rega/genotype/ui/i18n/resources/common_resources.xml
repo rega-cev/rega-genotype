@@ -2,7 +2,7 @@
 <messages>
 	<message id="sequenceInput.uploadFile">Upload file and start!</message>
 	<message id="sequenceInput.uploadingFile">Uploading file</message>
-  	<message id="sequenceInput.run">Start!</message>
+  	<message id="sequenceInput.run">Analyse!</message>
   	<message id="sequenceInput.clear">Clear</message>
   	<message id="sequenceInput.inputSequenceInFastaFormat">
   		<p>You may can either:</p>
