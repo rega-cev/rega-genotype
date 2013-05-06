@@ -28,6 +28,7 @@ import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
@@ -286,11 +287,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public abstract JobOverviewSummary getSummary(String filter);
 
 	protected WAnchor createReportLink(final GenotypeResultParser p) {
-		WAnchor report = new WAnchor("", "Report");
-		report.setObjectName("report-" + p.getSequenceIndex());
-		report.setStyleClass("link");
-		report.setRefInternalPath(reportPath(jobDir, p.getSequenceIndex()));
-		return report;
+		return new WAnchor(new WLink(WLink.Type.InternalPath, "/job/" + jobId(jobDir) + "/" + JobForm.SEQUENCE_PREFIX + p.getSequenceIndex()), tr("monitorForm.report"));
 	}
 	
 	public boolean existsJob(String jobId) {

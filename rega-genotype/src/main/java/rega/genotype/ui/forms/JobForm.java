@@ -1,5 +1,7 @@
 package rega.genotype.ui.forms;
 
+import java.util.StringTokenizer;
+
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import eu.webtoolkit.jwt.Signal1;
@@ -14,6 +16,9 @@ import eu.webtoolkit.jwt.WWidget;
  */ 
 public class JobForm extends AbstractForm {
 	public static final String JOB_URL = "/job";
+	
+	public static final String SEQUENCE_PREFIX = "sequence-";
+	public static final String FILTER_PREFIX = "filter-";
 	
 	private DetailsForm details;
 	private AbstractJobOverview jobOverview;
@@ -40,21 +45,23 @@ public class JobForm extends AbstractForm {
 	}
 	
 	public void handleInternalPath(String internalPath) {
-		String jobId = internalPath;
+		StringTokenizer internalPathTokenizer = new StringTokenizer(internalPath, "//");
+		
+		String jobId = internalPathTokenizer.nextToken();
+		Integer sequenceId = null;
+		String filter = null;
+		if (internalPathTokenizer.hasMoreElements()) {
+			String token = internalPathTokenizer.nextToken();
+			if (token.startsWith(SEQUENCE_PREFIX))
+				sequenceId = Integer.parseInt(token.substring(SEQUENCE_PREFIX.length()));
+			else if (token.startsWith(FILTER_PREFIX))
+				filter = token.substring(FILTER_PREFIX.length());
+		}
 			
 		if (!jobOverview.existsJob(jobId)) {
 			error.setText(tr("monitorForm.nonExistingJobId").arg(jobId));
 			showWidget(error);
 			return;
-		}
-			
-		Integer sequenceId = null;
-		String filter = null;
-		try {
-			filter = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/");
-			sequenceId = Integer.parseInt(filter);
-			filter = null;
-		} catch (NumberFormatException nfe) {
 		}
 			
 		if (filter != null && filter.trim().equals(""))
