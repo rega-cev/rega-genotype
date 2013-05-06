@@ -33,3 +33,4 @@ HIV doc:
 later:
 * links to CSV, XLS and XML file: should be accessible via URL (eg: /job/$jobid$/csv)
 * exportable citations
+* the bootscan analysis pdf does not have a sample or job id
