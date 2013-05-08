@@ -237,7 +237,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		WResource csvResource = new WResource() {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
-				response.setContentType("application/excell");
+				response.setContentType("application/excel");
 				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ';', '"') : new XlsDataTable(response.getOutputStream());
 				AbstractDataTableGenerator acsvgen = 
 					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this, t);

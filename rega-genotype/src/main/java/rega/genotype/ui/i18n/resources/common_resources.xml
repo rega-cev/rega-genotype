@@ -37,7 +37,7 @@
   	</message>
 	<message id="monitorForm.downloadResults">Download results:</message>
 	<message id="monitorForm.csvTable">Table (CSV format)</message>
-	<message id="monitorForm.xlsTable">Table (Excell format)</message>
+	<message id="monitorForm.xlsTable">Table (Excel format)</message>
 	<message id="monitorForm.fasta">Sequences (Fasta format)</message>
 	<message id="monitorForm.xmlFile">XML File</message>
 	<message id="monitorForm.downloadJob">Download all job files:</message>
