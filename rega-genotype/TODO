@@ -4,7 +4,6 @@ now:
 * job overview:
 	* format summary and overview table
 	* remove the annotations from the genome images
-	* XML export -> has description field with blabla
 * add cancel analysis option
 * test back button in the app
 * is there still a problem with "Retrieve results" button?

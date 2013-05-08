@@ -3,7 +3,6 @@
 
   <clusters>
     <cluster id="1" name="HIV 1">
-      <description>blabla</description>
       <taxus name="H1M_B.FR.83.HXB2_K03455" />
     </cluster>
     <cluster id="2" name="HIV 1 N group">
