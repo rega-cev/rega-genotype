@@ -35,6 +35,7 @@
   			This page will be automatically updated every {1} seconds...
   		</p>
   	</message>
+  	<message id="monitorForm.report">Report</message>
 	<message id="monitorForm.downloadResults">Download results:</message>
 	<message id="monitorForm.csvTable">Table (CSV format)</message>
 	<message id="monitorForm.xlsTable">Table (Excel format)</message>
