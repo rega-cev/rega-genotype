@@ -4,9 +4,7 @@ now:
 * job overview:
 	* format summary and overview table
 	* remove the annotations from the genome images
-	* Excell -> Excel
 	* XML export -> has description field with blabla
-* treepuzzle problem with 1 of the example seqs (is this MacOS specific?)
 * add cancel analysis option
 * test back button in the app
 * is there still a problem with "Retrieve results" button?
