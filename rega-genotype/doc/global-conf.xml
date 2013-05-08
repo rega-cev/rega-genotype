@@ -34,8 +34,8 @@
   </property>
 
   <!-- treePuzzleCmd
-     Location of your tree-puzzle executable + name of the tree-puzzle 
-     executable (the svg enabled version!)
+     Location of your tree-puzzle executable + name of the tree-puzzle 5.2 executable
+     http://www.tree-puzzle.de
    -->
   <property name="treePuzzleCmd">
     /opt/soft/treepuzzle/src/puzzle
@@ -47,6 +47,15 @@
   <property name="treeGraphCmd">
     /opt/soft/treegraph/tgf10r4/source/tgf
   </property>
+  
+  <!-- 
+  	imageMagickPath
+  	Location of your imagemagick binaries
+   -->
+  <property name="imageMagickPath">
+    /opt/soft/imagemagick/bin/
+  </property>
+  
 
   <!-- jobDir-%organism%
      Location where the genotypetool can write job-related files for a 

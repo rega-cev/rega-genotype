@@ -35,6 +35,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.apache.commons.io.IOUtils;
+import org.im4java.core.ConvertCmd;
+import org.im4java.core.IM4JavaException;
+import org.im4java.core.IMOperation;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.data.GenotypeResultParser;
@@ -99,12 +102,29 @@ public class GenotypeLib {
 		ImageIO.write(bufferedImage, "png", out);
 	}
 
-	public static File getSignalPNG(File svgFile) {
-		File pngFile = new File(svgFile.getAbsolutePath().replace(".svg", ".png"));
-		if(!pngFile.exists() && svgFile.exists()){
-			ImageConverter.svgToPng(svgFile, pngFile);
+	public static File getSignalPNG(File epsFile) {
+		try {
+			File pngFile = File.createTempFile("signal", ".png");
+			
+			ConvertCmd cmd = new ConvertCmd();
+			cmd.setSearchPath(Settings.getInstance().getImageMagickPath());
+			
+			IMOperation op = new IMOperation();
+			op.addImage(epsFile.getAbsolutePath());
+			op.addImage(pngFile.getAbsolutePath());
+			
+			cmd.run(op);
+
+			return pngFile;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IM4JavaException e) {
+			e.printStackTrace();
 		}
-		return pngFile;
+		
+		return null;
 	}
 
 	public static File getTreePNG(File jobDir, File treeFile) {

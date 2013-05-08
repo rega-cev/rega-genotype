@@ -60,6 +60,10 @@ public class Settings {
 		return treeGraphCmd;
 	}
 	
+	public String getImageMagickPath() {
+		return imageMagickPath;
+	}
+	
 	public File getJobDir(OrganismDefinition od){
 		return jobDirs.get(od.getOrganismName());
 	}
@@ -84,6 +88,7 @@ public class Settings {
 	private File blastPath;
 	private String treePuzzleCmd;
 	private String treeGraphCmd;
+	private String imageMagickPath;
 	private int maxAllowedSeqs;
 	private Integer maxJobDirLifeTime = null;
 	
@@ -122,6 +127,8 @@ public class Settings {
             	treePuzzleCmd = e.getValue().trim();
             } else if(name.equals("treeGraphCmd")) {
             	treeGraphCmd = e.getValue().trim();
+            } else if(name.equals("imageMagickPath")) {
+            	imageMagickPath = e.getValue().trim();
             } else if(name.startsWith("jobDir-")) {
             	String organism = name.split("-")[1];
             	jobDirs.put(organism, new File(e.getValue().trim()));
