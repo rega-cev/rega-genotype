@@ -18,7 +18,8 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 
 public class HIVTool extends GenotypeTool {
-
+	private File workingDir;
+	
     private AlignmentAnalyses hiv;
     private BlastAnalysis blastAnalysis;
     private HIV1SubtypeTool hiv1subtypetool;
@@ -26,7 +27,9 @@ public class HIVTool extends GenotypeTool {
 
     
     public HIVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hiv = readAnalyses("HIV/hiv.xml", workingDir);
+        this.workingDir = workingDir;
+    	
+    	hiv = readAnalyses("HIV/hiv.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hiv.getAnalysis("blast");
         
         hiv1subtypetool = new HIV1SubtypeTool(workingDir);
@@ -52,6 +55,16 @@ public class HIVTool extends GenotypeTool {
     }
 
 	public void analyzeSelf() throws AnalysisException {
+	}
+
+	@Override
+	protected String currentJob() {
+		return workingDir.getName();
+	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		return new File(workingDir, ".CANCEL").exists();
 	}
 }
 
