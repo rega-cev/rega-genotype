@@ -144,6 +144,11 @@ public abstract class GenotypeTool {
         
         try {
 			for (;;) {
+				if (cancelAnalysis()) {
+					System.err.println("Cancelled job: " + currentJob());
+					break;
+				}
+				
 			    Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
 			    if (s != null) {
                     s.removeGaps();
@@ -172,9 +177,9 @@ public abstract class GenotypeTool {
             System.err.println(e.getMessage());
             e.printStackTrace();
             tracer.printError(e);
+		} finally {
+			stopTracer();
 		}
-        
-        stopTracer();        
     }
 
     protected void stopTracer() {
@@ -267,6 +272,10 @@ public abstract class GenotypeTool {
      */
     abstract public void analyzeSelf() throws AnalysisException;
 
+    abstract protected String currentJob();
+    
+    abstract protected boolean cancelAnalysis();
+    
     /**
      * Read analyses from a given XML file.
      * Each analysis is configured to use the workingDir to store intermediate results.
