@@ -6,6 +6,8 @@
 
 	<message id="sequence-input">Paste your sequence(s) in the input field in FASTA format or upload a FASTA file.</message>
 
+	<message id="monitorForm.analysisCancelled"><p><b>This job was cancelled!</b></p></message>
+
 	<message id="start-form">
 		<div class="header">
 			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
@@ -63,6 +65,7 @@
 		</div>
 		<div class="info div-row">
 			You may bookmark this page to revisit these results later.
+			${analysis-cancelled}
 			${analysis-in-progress}
 		</div>
 		<div class="div-row">

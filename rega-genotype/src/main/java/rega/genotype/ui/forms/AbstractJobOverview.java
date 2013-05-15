@@ -23,12 +23,14 @@ import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
-import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
@@ -145,11 +147,32 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return jobDone.exists();
 	}
 	
+	private boolean jobCancelled() {
+		return new File(jobDir, ".CANCEL").exists();
+	}
+	
 	private void updateInfo() {
-		CharSequence analysisInProgress = "";
-		if (!jobDone())
-			analysisInProgress = tr("monitorForm.analysisInProgress");
-		template.bindString("analysis-in-progress", analysisInProgress);
+		WTemplate analysisInProgress = null;
+		if (!jobDone()) {
+			analysisInProgress = new WTemplate(tr("monitorForm.analysisInProgress"));
+			WPushButton cancelButton = new WPushButton(tr("monitorForm.cancelButton"));
+			analysisInProgress.bindWidget("cancel-button", cancelButton);
+			cancelButton.clicked().addListener(analysisInProgress, new Signal1.Listener<WMouseEvent>(){
+				public void trigger(WMouseEvent arg) {
+					try {
+						new File(jobDir, ".CANCEL").createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		
+		WString analysisCancelled = new WString();
+		if (jobDone() && jobCancelled())
+			analysisCancelled = tr("monitorForm.analysisCancelled");
+		template.bindString("analysis-cancelled", analysisCancelled);
+		template.bindWidget("analysis-in-progress", analysisInProgress);
 	}
 	
 	private void fillTable(String filter) {

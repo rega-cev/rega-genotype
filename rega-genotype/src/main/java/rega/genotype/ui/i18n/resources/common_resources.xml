@@ -26,10 +26,11 @@
   	<message id="startForm.noSequence">No sequences were provided.</message>
   	<message id="startForm.ioError">I/O error reading the sequence.</message>
 
+	<message id="monitorForm.cancelButton">Cancel job</message>
   	<message id="monitorForm.analysisInProgress">
   		<p>
   			Analysis in progress... (Showing partial results).<br/>
-  			This page will be automatically updated every {1} seconds...
+  			This page will be automatically updated every {1} seconds... ${cancel-button}
   		</p>
   	</message>
   	<message id="monitorForm.report">Report</message>
