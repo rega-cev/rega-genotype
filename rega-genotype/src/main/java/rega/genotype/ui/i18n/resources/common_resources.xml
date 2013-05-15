@@ -26,9 +26,6 @@
   	<message id="startForm.noSequence">No sequences were provided.</message>
   	<message id="startForm.ioError">I/O error reading the sequence.</message>
 
-	<message id="monitorForm.explain">
-		<p>You may bookmark this page to revisit results of this job ({1}) later.</p>
-	</message>  	
   	<message id="monitorForm.analysisInProgress">
   		<p>
   			Analysis in progress... (Showing partial results).<br/>
