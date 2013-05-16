@@ -206,8 +206,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WWidget createDownloadsWidget(final String filter) {
 		WTemplate t = new WTemplate(tr("job-overview-downloads"));
 		
+		WAnchor xmlAnchor = null;
 		if (filter == null)
-			t.bindWidget("xml-file", createXmlDownload());
+			xmlAnchor = createXmlDownload();
+		t.bindWidget("xml-file", xmlAnchor);
 		
 		t.bindWidget("csv-file", createTableDownload(tr("monitorForm.csvTable"), true));
 
