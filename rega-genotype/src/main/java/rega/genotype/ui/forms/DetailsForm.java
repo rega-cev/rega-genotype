@@ -8,6 +8,7 @@ package rega.genotype.ui.forms;
 import java.io.File;
 
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;
@@ -15,6 +16,7 @@ import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -30,9 +32,16 @@ public class DetailsForm extends AbstractForm {
 	public DetailsForm(GenotypeWindow main) {
 		super(main);
 		
-		mainTable = new WContainerWidget(this);
+		WTemplate t = new WTemplate(tr("details-form"), this);
+		t.addFunction("tr", WTemplate.Functions.tr);
+		
+		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
+		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
+		
+		mainTable = new WContainerWidget();
 		mainTable.setObjectName("details-container");
 		mainTable.setStyleClass("detailsForm");
+		t.bindWidget("details-form", mainTable);
 	}
 	
 	WString init(File jobDir, Integer selectedSequenceIndex) {

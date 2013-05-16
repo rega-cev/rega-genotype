@@ -86,6 +86,28 @@
 		</div>
 	</message>
 	
+	<message id="details-form">
+		<div class="header">
+			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
+		</div>
+		
+		${details-form}
+		
+		<div class="nav" style="height: 50px;">
+			<ul>
+				<li><a href="${app.base.url}">Submit analysis</a></li>
+				<li><a href="${app.base.url}/documentation">Documentation</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+			</ul>
+		</div>		
+		<div class="footer">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
+	</message>
+	
 	<message id="job-overview-downloads">
 		<span>Download results:</span> ${xls-file}, ${csv-file}, ${xml-file}
 	</message>
