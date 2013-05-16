@@ -37,7 +37,7 @@ public class GenotypeWindow extends WContainerWidget
 		AbstractForm form;
 	}
 	
-	private static final String START_URL = "/";
+	private static final String START_URL = "";
 
 	private WStackedWidget content;
 	private List<Form> forms = new ArrayList<Form>();
@@ -95,6 +95,6 @@ public class GenotypeWindow extends WContainerWidget
 	
 	public void addForm(String url, AbstractForm widget) {
 		content.addWidget(widget);
-		forms.add(new Form(url, widget));
+		forms.add(new Form("/" + url, widget));
 	}
 }

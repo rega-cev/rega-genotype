@@ -15,7 +15,7 @@ import eu.webtoolkit.jwt.WWidget;
  * @author pieter
  */ 
 public class JobForm extends AbstractForm {
-	public static final String JOB_URL = "/job";
+	public static final String JOB_URL = "job";
 	
 	public static final String SEQUENCE_PREFIX = "sequence-";
 	public static final String FILTER_PREFIX = "filter-";
