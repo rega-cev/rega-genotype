@@ -187,6 +187,11 @@ public class StartForm extends AbstractForm {
 		
 		return null;
 	}
+	
+	public void resize(WLength width, WLength height) {
+		super.resize(width, height);
+		this.sequenceTA.resize(new WLength(100, WLength.Unit.Percentage), WLength.Auto);
+	}
 
 	@Override
 	public void handleInternalPath(String internalPath) {
