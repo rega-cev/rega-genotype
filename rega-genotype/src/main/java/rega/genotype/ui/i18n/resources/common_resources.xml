@@ -30,7 +30,7 @@
   	<message id="monitorForm.analysisInProgress">
   		<p>
   			Analysis in progress... (Showing partial results).<br/>
-  			This page will be automatically updated every {1} seconds... ${cancel-button}
+  			This page will be automatically updated every ${update-time-seconds} seconds... ${cancel-button}
   		</p>
   	</message>
   	<message id="monitorForm.report">Report</message>

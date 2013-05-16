@@ -13,6 +13,7 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.SequenceFilter;
+import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
@@ -157,6 +158,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			analysisInProgress = new WTemplate(tr("monitorForm.analysisInProgress"));
 			WPushButton cancelButton = new WPushButton(tr("monitorForm.cancelButton"));
 			analysisInProgress.bindWidget("cancel-button", cancelButton);
+			analysisInProgress.bindInt("update-time-seconds", getMain().getOrganismDefinition().getUpdateInterval()/1000);
 			cancelButton.clicked().addListener(analysisInProgress, new Signal1.Listener<WMouseEvent>(){
 				public void trigger(WMouseEvent arg) {
 					try {
