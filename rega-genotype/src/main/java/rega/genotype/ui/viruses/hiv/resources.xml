@@ -25,12 +25,12 @@
 		<div class="div-row">
 			<h2>A. ${tr:sequence-input}</h2>
 			<table style="width : 600px;">
-				<tr><td>${fasta-field}</td></tr>
+				<tr><td colspan="2">${fasta-field}</td></tr>
 					
 				<tr>
-					<td style="float: right"><div>${clear-button} ${analyze-button}</div></td>
+					<td>${file-upload-button}</td>
+					<td><div style="float:right">${clear-button} ${analyze-button}</div></td>
 				</tr>
-				<tr><td style="float: right">${file-upload-button}</td></tr>
 					
 				<tr><td>${error-text}</td></tr>
 			</table>
