@@ -20,6 +20,7 @@ import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
@@ -161,7 +162,7 @@ public class DefaultJobOverviewSummary extends JobOverviewSummary {
 			}
 			
 			WStandardItem item = new WStandardItem(assignment);
-			item.setInternalPath(jobOverview.getJobPath() + "/" + encodeAssignment(assignment));
+			item.setLink(new WLink(WLink.Type.InternalPath, jobOverview.getJobPath() + "/" + JobForm.FILTER_PREFIX + encodeAssignment(assignment)));
 			model.setItem(insertPosition, 0, item);
 			model.setData(insertPosition, 1, 1);
 			model.setData(insertPosition, 2, 0.0);
