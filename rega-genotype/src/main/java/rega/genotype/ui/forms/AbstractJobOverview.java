@@ -200,6 +200,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			}
 			
 			jobTable.getRowAt(0).setId("");
+			jobTable.setHidden(true);
 		}
 		
 		new Parser().parseFile(jobDir);
@@ -286,6 +287,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		public void endSequence() {
 			int numRows = AbstractJobOverview.this.jobTable.getRowCount()-1;
 			if(getSequenceIndex() - getFilteredSequences() >= numRows) {
+				jobTable.setHidden(false);
+				
 				List<WWidget> data = getData(this);
 				
 				int row = jobTable.getRowCount();
