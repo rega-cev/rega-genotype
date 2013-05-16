@@ -259,5 +259,14 @@ public class HIV1SubtypeTool extends GenotypeTool {
         scanPureSelfAnalysis.run(null);
     }
 
+	@Override
+	protected String currentJob() {
+		return null;
+	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		return false;
+	}
 }
 

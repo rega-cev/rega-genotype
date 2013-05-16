@@ -74,5 +74,15 @@ public class HIV2SubtypeTool extends GenotypeTool {
             = (ScanAnalysis) hiv2.getAnalysis("scan-pure-self");
         scanPureSelfAnalysis.run(null);
     }
+
+	@Override
+	protected String currentJob() {
+		return null;
+	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		return false;
+	}
 }
 
