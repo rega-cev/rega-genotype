@@ -109,7 +109,7 @@
 	</message>
 	
 	<message id="job-overview-downloads">
-		<span>Download results:</span> ${xls-file}, ${csv-file}, ${xml-file}
+		<span>Download results:</span> ${xls-file} ${csv-file} ${xml-file} ${fasta-file}
 	</message>
 
 	<message id="monitor-form.title">
