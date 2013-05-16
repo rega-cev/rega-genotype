@@ -215,7 +215,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		t.bindWidget("xls-file", createTableDownload(tr("monitorForm.xlsTable"), false));
 		
-		t.bindWidget("fasta-file", createFastaDownload());
+		WAnchor fastaAnchor = null;
+		if (filter != null)
+			fastaAnchor = createFastaDownload();
+		t.bindWidget("fasta-file", fastaAnchor);
 		
 		return t;
 	}
