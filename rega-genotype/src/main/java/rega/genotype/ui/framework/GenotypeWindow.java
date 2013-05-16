@@ -15,6 +15,7 @@ import rega.genotype.ui.forms.StartForm;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WStackedWidget;
 
 /**
@@ -83,6 +84,7 @@ public class GenotypeWindow extends WContainerWidget
 			if (app.internalPathMatches(f.path)) {
 				content.setCurrentWidget(f.form);
 				f.form.handleInternalPath(internalPath.substring(f.path.length()));
+				f.form.resize(WLength.Auto, WLength.Auto);
 			}
 	}
 	
