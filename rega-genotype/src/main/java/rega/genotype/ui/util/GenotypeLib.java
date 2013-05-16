@@ -43,10 +43,12 @@ import rega.genotype.ApplicationException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WResource;
+import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WWebWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
@@ -293,10 +295,11 @@ public class GenotypeLib {
 		WAnchor anchor = new WAnchor("", text);
 		anchor.setObjectName("resource");
 		anchor.setStyleClass("link");
-		//anchor.setTarget(AnchorTarget.TargetNewWindow);
+		anchor.setTarget(AnchorTarget.TargetNewWindow);
 		if (suggestedName != null)
 			resource.suggestFileName(suggestedName);
 		anchor.setRef(resource.generateUrl());
+		resource.setDispositionType(DispositionType.Attachment);
 		return anchor;
 	}
 	
