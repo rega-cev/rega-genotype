@@ -12,9 +12,6 @@
 		<div class="header">
 			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
 		</div>
-		<div class="div-row">
-			<h2>REGA HIV Subtyping Tool Version 3.0</h2>
-		</div>
 		<div class="note div-row">
 			This tool was developed to provide a free HIV subtyping service to researchers and clinicians anywhere in the world. 
 			The tool uses phylogenetic methods to identify the subtype of any HIV sequence uploaded. 
