@@ -1028,4 +1028,815 @@
 			</div>
 		</div>
 	</message>
+	
+	<message id="subtyping-process-doc">
+		<div class="header">
+			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
+		</div>
+		
+		<h1>Rega HIV-1 Subtying Tool V3 Methods, Reference Sequences and CRFs</h1>
+	
+		<div class="div-row">
+			<span>
+				<b>The subtyping process consists of four steps:</b>
+			</span>
+			<ul style="text-align: left;">
+				<li>
+					The initial step involves construction of a master alignment for
+					the
+					query sequence and the reference strains of subtypes and CRFs.
+				</li>
+				<li>
+					The second step involves the construction of a phylogenetic tree
+					using
+					HKY distance method in PAUP* software. The alignment contains
+					the
+					sequence under query and group M pure reference sequences for
+					subtypes
+					A-D, F-H, J and K.
+				</li>
+				<li>
+					The next step, involves construction of a second tree using the
+					sequence under query, HIV-1 pure subtypes, and CRFs sequences.
+				</li>
+				<li>
+					In the third step for sequences &gt; 800 bps, the pure subtype
+					alignment is divided into small segments and is analysed for
+					recombination using bootscanning using a sliding window of 400 bps
+					moving in steps of 40 bps.
+				</li>
+				<li>
+					In addition, if recombination and clustering with CRF is detected
+					for
+					&gt; 800 bps, the pure subtype and the detected CRF reference
+					sequences alignment is divided into small segments and is analysed
+					for
+					recombination using bootscanning using a sliding window of 400
+					bps
+					moving in steps of 40 bps.
+				</li>
+				<li>
+					For sequences &lt; 800 bps the alignment is examined to determine
+					whether it contains sufficient phylogenetic signals for subtype
+					determination using Treepuzzle software.
+				</li>
+			</ul>
+			<span class="decisionTreeHeader">1. Reference Alignment:</span>
+			<table class="csv files_referenceSequences-csv">
+				<colgroup>
+					<col  />
+					<col  />
+				</colgroup>
+				<tbody>
+					<tr>
+						<td >
+							<span >Subtypes or CRFs</span>
+						</td>
+						<td >
+							<span >Reference Sequences</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype A1</span>
+						</td>
+						<td >
+							<span >A1_UA_01_01UADN139_DQ823357</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >A1_RU_00_RU00051_EF545108</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >A1_UG_UG031_AB098330</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype A2</span>
+						</td>
+						<td >
+							<span >A2_CD9797CDKTB48</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >A2_CY9494CY01741</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype B</span>
+						</td>
+						<td >
+							<span >B_US_1986_5019_86_AY835780</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >B_US_90_US2_AY173953</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >B_BR_03_BREPM1028_EF637053</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype C</span>
+						</td>
+						<td >
+							<span >C_ZA_98_TV001_AY162223</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >C_IN_x_VB39_EF694033</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >C_IL_99_99ET1_AY255823</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype D</span>
+						</td>
+						<td >
+							<span >D_UG_99_99UGG35093_AF484495</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >D_UG_98_98UG57143_AF484514</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >D_ZA_84_R2_AY773338</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype F1</span>
+						</td>
+						<td >
+							<span >F1_ES_x_X1670_DQ979024</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >F1_BR_89_BZ126_AY173957</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype F2</span>
+						</td>
+						<td >
+							<span >F2_CM_95_MP255_AJ249236</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >F2_CM_97_CM53657_AF377956</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype G</span>
+						</td>
+						<td >
+							<span >G_NG_01_01NGPL0669_DQ168576</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >G_ES_05_ES_EU786670</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >G_GH_2003_GHNJ175_AB231893</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype H</span>
+						</td>
+						<td >
+							<span >H_CF_90_056_AF005496</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >H_BE_93_VI997_AF190128</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >H_BE_93_VI991_AF190127</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype J</span>
+						</td>
+						<td >
+							<span >J_SE_93_SE7887_AF082394</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >J_SE_1994_SE7022_AF082395_1</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >J_CD_97_J_97DC_KTB147_EF614151</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >Subtype K</span>
+						</td>
+						<td >
+							<span >K_CD_97_EQTB11C_AJ249235</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >K_CM_96_MP535_AJ249239</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF01_AE</span>
+						</td>
+						<td >
+							<span >01_AECF19090CF11697</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >01_AETH90CM240</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF02_AG</span>
+						</td>
+						<td >
+							<span >02_AGCM9797CMP807</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >02_AGFR91DJ264</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF03_AB</span>
+						</td>
+						<td >
+							<span >03_ABRU97KAL153</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >03_ABRU98RU98001</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF04_CPX</span>
+						</td>
+						<td >
+							<span >04_CPXG1R9197PVCH</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >04_CPXGR9797PVMY</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF05_DF</span>
+						</td>
+						<td >
+							<span >05_DFBEVI1310</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >05_DFBE93VI961</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF06_CPX</span>
+						</td>
+						<td >
+							<span >06_CPXAU96BFP90</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >06_CPXML9595ML84</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF07_BC</span>
+						</td>
+						<td >
+							<span >07_BCC1N9797CN001</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >07_BCCN9898CN009</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF08_BC</span>
+						</td>
+						<td >
+							<span >08_BCCN19797CNGX7F</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >08_BCCN9898CN006</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF09_CPX</span>
+						</td>
+						<td >
+							<span >09_cpxCI0000IC_10092AJ866553</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >09_cpxGH9696GH2911AY093605</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF10_CD</span>
+						</td>
+						<td >
+							<span >10_CDTZ19696TZBF071</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >10_CDTZ9696TZBF110</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF11_CPX</span>
+						</td>
+						<td >
+							<span >11_CPXF1R99MP1298</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >11_CPXGRGR17</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF12_BF</span>
+						</td>
+						<td >
+							<span >12_BFAR97A32989</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >12_BFU1Y99URTR23</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF13_CPX</span>
+						</td>
+						<td >
+							<span >13_CPXC1M961849</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >13_CPXCM964164</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF14_BG</span>
+						</td>
+						<td >
+							<span >14_BGE1S00X477</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >14_BGES99X397</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF18_CPX</span>
+						</td>
+						<td >
+							<span >18_cpxCM97CM53379AF377959</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >18_cpxCU99CU14AY586541</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF19_CPX</span>
+						</td>
+						<td >
+							<span >19_cpxCU99CU29AY588971</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >19_cpxCU99CU7AY894994</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF20_BG</span>
+						</td>
+						<td >
+							<span >20_BGCU99Cu103AY586545</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >20_BGES99R77AY586544</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF24_BG</span>
+						</td>
+						<td >
+							<span >24_BGCU03CB378AY900574</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >24_BGCU03CB471AY900575</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF25_CPX</span>
+						</td>
+						<td >
+							<span >25_cpxCM0606CM_BA_040EU693240</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >25_cpxSA03J11451EU697908</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF27_CPX</span>
+						</td>
+						<td >
+							<span >27_cpxCD9797CDKTB49AJ404325</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >27_cpxFR0404CD_FR_KZSAM851091</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF29_BF</span>
+						</td>
+						<td >
+							<span >29_BFBR01BREPM16704DQ085876</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >29_BFBR99BREPM11948DQ085871</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF31_BC</span>
+						</td>
+						<td >
+							<span >31_BCBR02110PAEF091932</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >31_BCBR0404BR142AY727527</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF35_AD</span>
+						</td>
+						<td >
+							<span >35_ADAF0505AF026EF158043</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >35_ADAF0505AF094EF158040</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF37_CPX</span>
+						</td>
+						<td >
+							<span >37_cpxCM0000CMNYU926EF116594</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >37_cpxCM97CM53392AF377957</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF39_BF</span>
+						</td>
+						<td >
+							<span >39_BFBR0303BRRJ103EU735534</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >39_BFBR0303BRRJ327EU735536</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF40_BF</span>
+						</td>
+						<td >
+							<span >40_BFBR0404BRRJ115EU735538</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >40_BFBR0404BRSQ46EU735540</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF42_BF</span>
+						</td>
+						<td >
+							<span >42_BF_LU_04_EU170142</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >42_BF_LU_03_EU170151</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF43_02G</span>
+						</td>
+						<td >
+							<span >43_02GSA03J11223EU697904</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >43_02GSA03J11243EU697907</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span >CRF47_BF</span>
+						</td>
+						<td >
+							<span >47BFES2008P1942GQ372987</span>
+						</td>
+					</tr>
+					<tr >
+						<td >
+							<span ></span>
+						</td>
+						<td >
+							<span >47BFES2008X24572FJ670529</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<span>
+				Information on the selection of CRFs for usage in the subytping
+				tool
+				is
+				<a href="http://bioafrica.mrc.ac.za/CRFs/CRFs.php">here</a>
+			</span>
+			<span class="decisionTreeHeader">2. Program software used in the tool:</span>
+			<span></span>
+			<ul style="text-align: left;">
+				<li>
+					<a href="http://paup.csit.fsu.edu" target="_blank">PAUP*</a>
+					- Phylogenetic inference (step 1 and 2)
+				</li>
+				<li>
+					<a href="http://www.tree-puzzle.de/" target="_blank">TreePuzzle</a>
+					- Likelihood mapping (step 4)
+				</li>
+				<li>
+					<a href="http://www.csc.fi/molbio/progs/clustalw/doc.html" target="_blank">
+						Clustalw
+					</a>
+					- Alignment (all steps)
+				</li>
+			</ul>
+		</div>
+    
+    				
+		<div class="div-row nav" style="height: 50px;">
+			<ul>
+				<li><a href="${app.base.url}">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
+			</ul>
+		</div>	
+			
+		<div class="footer">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
+	</message>
 </messages>
