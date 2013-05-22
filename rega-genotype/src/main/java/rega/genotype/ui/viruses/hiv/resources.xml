@@ -37,12 +37,15 @@
 			${job-id-field}	${search-button} 
 		</div>
 
-		<div class="nav" style="height: 50px;">
+		<div class="div-row nav" style="height: 50px;">
 			<ul>
 				<li><a href="${app.base.url}">Submit analysis</a></li>
-				<li><a href="${app.base.url}/documentation">Documentation</a></li>
-				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>		
 		
@@ -71,12 +74,15 @@
 		<div class="downloads div-row">
 			${downloads}
 		</div>
-		<div class="nav" style="height: 50px;">
+		<div class="div-row nav" style="height: 50px;">
 			<ul>
 				<li><a href="${app.base.url}">Submit analysis</a></li>
-				<li><a href="${app.base.url}/documentation">Documentation</a></li>
-				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>		
 		<div class="footer">
@@ -93,12 +99,15 @@
 		
 		${details-form}
 		
-		<div class="nav" style="height: 50px;">
+		<div class="div-row nav" style="height: 50px;">
 			<ul>
 				<li><a href="${app.base.url}">Submit analysis</a></li>
-				<li><a href="${app.base.url}/documentation">Documentation</a></li>
-				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>		
 		<div class="footer">
@@ -167,14 +176,18 @@
 				</a>
 		</div>
 		
-		<div class="nav" style="height: 50px;">
+		<div class="div-row nav" style="height: 50px;">
 			<ul>
 				<li><a href="${app.base.url}">Submit analysis</a></li>
-				<li><a href="${app.base.url}/documentation">Documentation</a></li>
-				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
-		</div>		
+		</div>	
+			
 		<div class="footer">
 			<div class="maintainers">
 				${tr:maintainers-text}	
