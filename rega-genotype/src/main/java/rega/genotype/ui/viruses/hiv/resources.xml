@@ -724,4 +724,304 @@
 			</div>
 		</div>
 	</message>
+	
+	<message id="decision-trees-doc">
+		<div class="header">
+			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
+			</div>
+	
+		<div class="div-row">
+			<span class="decisionTreeHeader">1. Decision Tree for sequences longer
+				than 800 bp:
+			</span>
+			<div class="imgDiv">
+				<img alt=""
+					src="${app.context}/pics/hiv/decision-trees-0.png" />
+			</div>
+			<span>
+				Rule 1: RULE 1 - PURE
+				<br />
+				<br />
+				The rule 1 is for pure
+				subtypes classification.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 1A:
+				PURE
+				<br />
+				<br />Subtype
+				assigned based on sequence &gt; 800 bps,
+				clustering inside a pure subtype with bootstrap &gt; 70% without
+				recombination in the bootscan, and do not clustering with a CRF with
+				bootstrap &gt;70 %.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 1B:
+				PURE-LIKE
+				<br />
+				<br />Subtype
+				assigned based on sequence &gt; 800 bps,
+				clustering outside a pure subtype with bootstrap &gt; 70% without
+				recombination in the bootscan, and do not clustering with a CRF with
+				bootstrap &gt;70 %.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 1C: PURE
+				(CRF)
+				<br />
+				<br />Subtype
+				assigned based on sequence &gt; 800 bps,
+				clustering with a pure subtype with bootstrap &gt; 70% without
+				recombination in the bootscan, clustering inside a CRF with bootstrap &gt;70
+				%.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 1D: NOT ASSIGNED - CHECK THE
+				REPORT
+				<br />
+				<br />Result
+				assigned based on sequence &gt; 800 bps, not
+				clustering with a pure subtype with bootstrap &gt; 70% without
+				recombination in the bootscan.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				2: RULE 2 - PURE RECOMBINANT
+				<br />
+				<br />
+				The rule 2 is for the
+				classification of recombinants with pure subtypes.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				2A: PURE RECOMBINANT
+				<br />
+				<br />Recombinant
+				assigned based on sequence
+				&gt; 800 bps, with pure subtype supported recombination in the bootscan,
+				i.e. two or more pure subtypes with more than 10% of the windows
+				supported
+				by bootstrap &gt; 70%, and not clustering with a CRF with bootstrap
+				&gt;
+				70%.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 2B: POTENTIAL RECOMBINANT
+				<br />
+				<br />Potential
+				recombination assigned based on sequence with only one pure
+				recombinant
+				subtype, supported by bootstrap &gt; 70% (failure to classify a second
+				pure subtype with &gt;10% of windows supported by bootstrap &gt;70%), and
+				failure to classify it as a non-recombinant pure subtype or CRF.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				2C: NOT ASSIGNED - CHECK THE BOOTSCAN
+				<br />
+				<br />Result
+				assigned based
+				on sequence with recombination in the boostscan, i.e &lt; 0.9, however
+				no
+				pure subtype is supported (&gt;70%) in &gt; 50% of the windows.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				3: RULE 3 - CRF
+				<br />
+				<br />
+				The rule 3 specifies the classification of
+				CRFs.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 3A: CRF
+				<br />
+				<br />Subtype
+				assigned based on sequence &gt; 800 bps, clustering with a CRF with
+				bootstrap &gt; 70%, with detection of recombination in the pure
+				subtype
+				bootscan, and further confirmed by CRF bootscan analysis (bootscan &gt;
+				0.9).
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 3B: CRF
+				<br />
+				<br />Subtype
+				assigned based on sequence &gt; 800 bps, clustering inside a CRF with
+				bootstrap &gt; 70%, with detection of recombination in the pure
+				subtype
+				bootscan, and further confirmed by CRF bootscan analysis (bootscan &gt;
+				0.7 with support of 70%).
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 3C:
+				CRF-Like
+				<br />
+				<br />Subtype
+				assigned based on sequence &gt; 800 bps,
+				clustering outside a CRF cluster with bootstrap &gt; 70% with detection of
+				recombination in the bootscan, and further confirmed by CRF bootscan
+				analysis (bootscan &gt; 0.7 with support of 70%).
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				4: RULE 4 - CRF RECOMBINANTS
+				<br />
+				<br />
+				rule 4 is for the
+				classification of recombinants with CRFs.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				4A: CRF PURE RECOMBINANT
+				<br />
+				<br />Recombinant
+				assigned based on
+				sequence &gt; 800 bps, with CRF and pure subtype supported recombination
+				in the bootscan (i.e. one CRF and one or more pure subtypes with more
+				than
+				10% of the windows supported by bootstrap &gt; 70%), and clustering with
+				a
+				CRF with bootstrap &gt; 70%.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 4B:
+				POTENTIAL RECOMBINANT CHECK THE BOOTSCAN
+				<br />
+				<br />Potential
+				recombination assigned based on sequence &gt; 800 bps, with only one
+				recombinant CRF or pure subtype supported by bootstrap &gt; 70%
+				(failure
+				to classify a second pure subtype or CRF with &gt;10% of windows
+				supported
+				by bootstrap &gt;70%), and failure to classify it as a non-recombinant
+				pure subtype or CRF.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 4C: NOT
+				ASSIGNED - CHECK THE BOOTSCAN
+				<br />
+				<br />Result
+				assigned based on
+				sequence &gt; 800 bps, with recombination in the boostscan (&lt; 0.9),
+				clustering with a CRF with bootstrap &gt;70% however the CRF is not
+				confirmed by bootscan analysis (&gt;70%) in &gt; 50% of the windows.
+				<br />
+				<br />
+			</span>
+			<span class="decisionTreeHeader">2. Decision Tree for sequences shorter than 800
+				bp:
+			</span>
+			<div class="imgDiv">
+				<img alt=""
+					src="${app.context}/pics/hiv/decision-trees-1.png" />
+			</div>
+			<span>
+				Rule 11A: PURE
+				<br />
+				<br />Subtype
+				assigned based on sequence
+				&lt; 800 bps, clustering inside a pure subtype cluster with bootstrap
+				&gt;
+				70%.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule 11B: NOT ASSIGNED CHECK THE
+				REPORT
+				<br />
+				<br />Result
+				assigned based on sequence &lt; 800 bps,
+				clustering outside a pure subtype cluster with bootstrap &gt; 70%, and
+				clustering outside of a CRF with bootstrap &gt;70 %.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				11C: CRF
+				<br />
+				<br />Subtype
+				assigned based on sequence &lt; 800 bps,
+				clustering with a pure subtype with bootstrap &gt; 70%, clustering inside
+				a CRF with bootstrap &gt;70 %.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				11D: NOT ASSIGNED CHECK THE REPORT
+				<br />
+				<br />Result
+				assigned based on
+				sequence &gt; 800bp, clustering with a CRF with bootstrap &gt; 70%,with
+				detection of recombination in the pure subtype bootscan, and further
+				confirmed by CRF by bootscan analysis.
+				<br />
+				<br />
+			</span>
+			<span>
+				Rule
+				11E: CRF
+				<br />
+				<br />Result
+				assigned based on sequence &lt; 800 bps,
+				clustering with a CRF inside with bootstrap &gt; 70%, and not clustering
+				with a pure subtype with bootstrap &lt; 70%.
+				<br />
+				<br />
+			</span>
+		</div>
+				
+		<div class="div-row nav" style="height: 50px;">
+			<ul>
+				<li><a href="${app.base.url}">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
+			</ul>
+		</div>	
+			
+		<div class="footer">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
+	</message>
 </messages>
