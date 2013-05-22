@@ -194,4 +194,129 @@
 			</div>
 		</div>
 	</message>
+
+	<message id="how-to-cite-doc">
+		<div class="header">
+			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
+		</div>
+		<h1>How to Cite the REGA HIV-1 Automated Subtyping Tool</h1>
+		<div class="div-row">
+			<p>
+				<b>The REGA HIV-1 subtyping tool version 3 is open for public
+					use.
+				</b>
+			</p>
+			<br />
+			<br />
+			<b>In the moment please cite the usage of REGA HIV-1 subtyping tool
+				V3
+				as:
+			</b>
+			<br />
+			<br />
+			<a href="http://www.kuleuven.be/aidslab/veme.htm">Performance of
+				the Subtyping Tools in the Surveillance of
+				HIV-1 Epidemic:
+				Comparison Between Rega Version 3 and Six Other
+				Automated Tools to
+				Identify Pure Subtypes and Circulating Recombinant
+				Forms.
+			</a>
+			<br />
+			<br />
+			Pe&ntilde;a
+			ACP, Faria NR, Imbrechts S, Libin P, Abecasis
+			AB, Deforche K, Gomez A,
+			Camacho RJ, de Oliveira T, Vandamme
+			A-M.
+			<br />
+			<br />
+			17th International BioInformatics Workshop on Virus Evolution and
+			Molecular Epidemiology University of Belgrade, Faculty of Medicine,
+			Belgrade, Serbia, 27 - 31 August 2012. Abstract presentation.
+			<br />
+			<br />
+			<br />
+			<br />
+			<b>To cite V2 and the others subtyping and genotyping tools (e.g.
+				HCV,
+				HBV, HPV, HTLV-1 and HHV8) please use the reference:
+			</b>
+			<br />
+			<br />
+			<a href="http://www.bioafrica.net/manuscripts/AlcantaraVirusGenotyping.pdf"
+				target="_blank">A Standardized Framework for Accurate,
+				High-throughput
+				Genotyping of Recombinant and Non-recombinant Viral
+				Sequences .
+			</a>
+			<br />
+			<br />
+			Alcantara LCJ, Cassol S, Libin P, Deforche K, Pybus OG, Van Ranst
+			M,
+			Galvao-Castro B, Vandamme A-M and de Oliveira T.
+			<br />
+			<br />
+			Nucleic Acids Research 2009; doi: 10.1093/nar/gkp455, pages
+			1-9.
+			<br />
+			<br />
+			<br />
+			<br />
+			<b>The original REGA HIV-1 subtyping tool V1 paper:</b>
+			<br />
+			<br />
+			<a
+				href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/bti607v1"
+				target="_blank">An Automated Genotyping System for Analysis of
+				HIV-1 and other
+				Microbial Sequences.
+			</a>
+			<br />
+			<br />
+			de Oliveira T,Deforche K, Cassol S, Salminem M, Paraskevis D,
+			Seebregts C, Snoeck J, van Rensburg EJ,Wensing AMJ, van de Vijver
+			DA,
+			Boucher CA, Camacho R and Vandamme A-M.
+			<br />
+			<br />
+			Bioinformatics 2005; 21 (19), 3797-3800.
+			<br />
+			<br />
+			<br />
+			<br />
+			<p>
+				<b>Rega Subtyping tool have been cited over 200 times</b>
+				.
+				<br />
+				<br />
+				You can also see papers that
+				<a
+					href="http://scholar.google.com/scholar?q=An+Automated+Genotyping+System+for+Analysis+of+HIV-1+and+other+Microbial+Sequences"
+					target="_blank">cite Rega HIV-1 subtyping tool in google
+					scholar.
+				</a>
+			</p>
+			<br />
+			<br />
+		</div>
+				
+		<div class="div-row nav" style="height: 50px;">
+			<ul>
+				<li><a href="${app.base.url}">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
+			</ul>
+		</div>	
+			
+		<div class="footer">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
+	</message>
 </messages>
