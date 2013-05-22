@@ -326,6 +326,8 @@
 			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
 		</div>
 
+		<h1>Rega HIV-1 Subtyping Tool Version 3.0 Tutorial</h1>
+
 		<div class="div-row">
 			<span>
 				This version of Rega HIV-1 Subtyping Tool Version 3.0 allows the
@@ -728,7 +730,9 @@
 	<message id="decision-trees-doc">
 		<div class="header">
 			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
-			</div>
+		</div>
+	
+		<h1>REGA V3 HIV-1 Subtying Classification Rules</h1>
 	
 		<div class="div-row">
 			<span class="decisionTreeHeader">1. Decision Tree for sequences longer
