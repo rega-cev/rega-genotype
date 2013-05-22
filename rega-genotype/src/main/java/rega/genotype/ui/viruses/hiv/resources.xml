@@ -141,6 +141,7 @@
 		<div class="header">
 			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
 		</div>
+		<h1>Contact the developers of the REGA HIV-1 &amp; 2 subtyping tool</h1>
 		<div class="div-row">
 				The REGA HIV-1 Subtyping tool was developed by a number of
 				researchers; please see the complete list of authors in the
