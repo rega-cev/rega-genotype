@@ -321,7 +321,7 @@
 		</div>
 	</message>
 	
-	<message id="how-to-cite-doc">
+	<message id="tutorial-doc">
 		<div class="header">
 			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
 		</div>
