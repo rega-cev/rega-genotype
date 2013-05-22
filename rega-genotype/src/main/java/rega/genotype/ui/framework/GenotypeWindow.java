@@ -10,6 +10,7 @@ import java.util.List;
 
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractForm;
+import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import eu.webtoolkit.jwt.Signal1;
@@ -64,6 +65,7 @@ public class GenotypeWindow extends WContainerWidget
 		content.setStyleClass("content");
 		
 		addForm(START_URL, new StartForm(this));
+		addForm("contact-us", new DocumentationForm(this, tr("contact-us-doc")));
 		
 		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
 		addForm(JobForm.JOB_URL, jobForm);

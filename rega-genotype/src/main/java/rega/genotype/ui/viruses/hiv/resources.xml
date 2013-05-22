@@ -127,6 +127,60 @@
 	<message id="recombination-form.title">
 		<h1>HIV Recombination Details</h1>
 	</message>
+
+	<message id="contact-us-doc">
+		<div class="header">
+			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
+		</div>
+		<div class="div-row">
+				The REGA HIV-1 Subtyping tool was developed by a number of
+				researchers; please see the complete list of authors in the
+				publications associated with the tool. The tool is currently
+				maintained by Tulio de Oliveira, Pieter Libin, Koen Deforche, Sharon
+				Cassol and Anne-Mieke Vandamme.
+				<br />
+				<br />
+				<b>Suggestions or problems on the program please contact:</b>
+				<br />
+				<a href="http://www.bioafrica.net/people.php%3fpeopleid%3d1"
+					target="_blank">Dr Tulio de Oliveira</a>
+				<br />
+				Senior Bioinformatics Researcher
+				<br />
+				Africa Centre for Health and Population Studies
+				<br />
+				Nelson R Mandela School of Medicine
+				<br />
+				University of KwaZulu-Natal
+				<br />
+				Durban, South Africa.
+				<br />
+				<br />
+				Tel: +27 35 550 7531
+				<br />
+				Fax: +27 35 550 7565
+				<br />
+				Websites:
+				<a href="http://www.bioafrica.net" target="_blank">www.bioafrica.net</a>
+				<a href="http://www.africacentre.ac.za" target="_blank">
+					www.africacentre.ac.za
+				</a>
+		</div>
+		
+		<div class="nav" style="height: 50px;">
+			<ul>
+				<li><a href="${app.base.url}">Submit analysis</a></li>
+				<li><a href="${app.base.url}/documentation">Documentation</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+			</ul>
+		</div>		
+		<div class="footer">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
+	</message>
 	
 	<message id="howToCite-text">
 		<title>How to Cite the REGA HIV-1 Automated Subtyping Tool</title>
