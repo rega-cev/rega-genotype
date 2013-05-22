@@ -70,6 +70,7 @@ public class GenotypeWindow extends WContainerWidget
 		addForm("tutorial", new DocumentationForm(this, tr("tutorial-doc")));
 		addForm("decision-trees", new DocumentationForm(this, tr("decision-trees-doc")));
 		addForm("subtyping-process", new DocumentationForm(this, tr("subtyping-process-doc")));
+		addForm("example-sequences", new DocumentationForm(this, tr("example-sequences-doc")));
 		
 		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
 		addForm(JobForm.JOB_URL, jobForm);
