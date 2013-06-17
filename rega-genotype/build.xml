@@ -37,8 +37,12 @@
     </copy>
 
     <jar jarfile="${dist}/${proj.name}-${proj.version}.jar" 
-	 basedir="${build}/main/java"
-	 excludes="rega/genotype/ui/**"/>
+	 	basedir="${build}/main/java"
+ 	 	excludes="rega/genotype/ui/**">
+  		<manifest>
+  	    	<attribute name="Main-Class" value="rega.genotype.GenotypeTool"/>
+	  	</manifest>
+  	</jar>
     
     <javac target="1.5" debug="on" 
 	   srcdir="${src}/test/java" 
