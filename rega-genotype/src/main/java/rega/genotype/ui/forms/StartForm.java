@@ -40,13 +40,14 @@ public class StartForm extends AbstractForm {
 	private WLineEdit jobIdTF;
 	private WPushButton monitorButton;
 	
-	private WText errorText;
+	private WText errorJobId, errorText;
 	
 	public StartForm(GenotypeWindow main) {
 		super(main);
 		
 		WTemplate t = new WTemplate(tr("start-form"), this);
 		t.addFunction("tr", WTemplate.Functions.tr);
+		t.setInternalPathEncoding(true);
 		
 		t.bindInt("maxAllowedSeqs", Settings.getInstance().getMaxAllowedSeqs());
 		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
@@ -59,7 +60,9 @@ public class StartForm extends AbstractForm {
 		t.bindWidget("fasta-field", sequenceTA);
 		sequenceTA.setObjectName("seq-input-fasta");
 		sequenceTA.setRows(15);
+		sequenceTA.setColumns(83);
 		sequenceTA.setStyleClass("fasta-ta");
+		sequenceTA.setText(tr("sequenceInput.example").toString());
 
 		run = new WPushButton();
 		t.bindWidget("analyze-button", run);
@@ -106,7 +109,6 @@ public class StartForm extends AbstractForm {
         });
 
 		jobIdTF = new WLineEdit();
-		jobIdTF.setWidth(new WLength(150));
 		t.bindWidget("job-id-field", jobIdTF);
 		monitorButton = new WPushButton(tr("startForm.monitor"));
 		t.bindWidget("search-button", monitorButton);
@@ -115,6 +117,13 @@ public class StartForm extends AbstractForm {
 				getMain().changeInternalPath(JobForm.JOB_URL+"/"+jobIdTF.getText());
 			}
 		});
+		
+		errorJobId = new WText(tr("startForm.errorJobId"));
+		errorJobId.setId("jobid-error-message");
+		errorJobId.setStyleClass("error");
+		errorJobId.hide();
+		
+		t.bindWidget("error-job", errorJobId);
 		
 		init();
 	}

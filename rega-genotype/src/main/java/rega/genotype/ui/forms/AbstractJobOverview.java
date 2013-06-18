@@ -75,6 +75,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WTimer updater;
 	
 	private WTemplate template;
+	private String jobId;
 	
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main);
@@ -94,6 +95,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public void init(final String jobId, final String filter) {
+		this.jobId = jobId;
 		this.jobDir = getJobDir(jobId);
 
 		this.summary = getSummary(filter);
@@ -131,7 +133,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			template.bindWidget("downloads", createDownloadsWidget(filter));
 		else
 			template.bindWidget("downloads", null);
-
+		
 		if (updater != null)
 			updater.start();
 	}
@@ -175,6 +177,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			analysisCancelled = tr("monitorForm.analysisCancelled");
 		template.bindString("analysis-cancelled", analysisCancelled);
 		template.bindWidget("analysis-in-progress", analysisInProgress);
+		template.bindString("job-id", jobId);
 	}
 	
 	private void fillTable(String filter) {

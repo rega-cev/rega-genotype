@@ -29,27 +29,25 @@ public class HivMain extends GenotypeMain {
 	public WApplication createApplication(WEnvironment env) {
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext());
 		
-		WCombinedLocalizedStrings resources = new WCombinedLocalizedStrings();
-		
-		WXmlLocalizedStrings commonResources = new WXmlLocalizedStrings();
-		commonResources.use("/rega/genotype/ui/i18n/resources/common_resources");
-		resources.add(commonResources);
-		
-		WXmlLocalizedStrings hivResources = new WXmlLocalizedStrings();
-		hivResources.use("/rega/genotype/ui/viruses/hiv/resources");
-		resources.add(hivResources);
-		
+		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
+		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
+		resources.use("/rega/genotype/ui/viruses/hiv/resources");
 		app.setLocalizedStrings(resources);
 		
 		app.useStyleSheet(new WLink("../style/hiv/genotype.css"));
 		
 		GenotypeWindow window = new GenotypeWindow(new HivDefinition());
-		window.init();
 		
-		window.addForm("documentation", new DocumentationForm(window, tr("documentation-text")));	
-		window.addForm("contact-us", new DocumentationForm(window, tr("contactUs-text")));
-		window.addForm("how-to-cite", new DocumentationForm(window, tr("howToCite-text")));
-			
+		window.addForm("Tutorial", "tutorial", new DocumentationForm(window, tr("tutorial-doc")));
+		window.addForm("Decision trees", "decision-trees", new DocumentationForm(window, tr("decision-trees-doc")));
+		window.addForm("Subtyping Process", "subtyping-process", new DocumentationForm(window, tr("subtyping-process-doc")));
+		window.addForm("Example Sequences", "example-sequences", new DocumentationForm(window, tr("example-sequences-doc")));
+		window.addForm("Documentation", "documentation", new DocumentationForm(window, tr("documentation-text")));	
+		window.addForm("Contact us", "contact-us", new DocumentationForm(window, tr("contact-us-doc")));
+		window.addForm("How to cite", "how-to-cite", new DocumentationForm(window, tr("how-to-cite-doc")));
+		
+		window.init();
+
 		app.getRoot().addWidget(window);
 		
 		return app;

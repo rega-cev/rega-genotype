@@ -12,6 +12,7 @@ import java.util.List;
 
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.ui.forms.DefaultJobOverviewSummary;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
@@ -82,13 +83,8 @@ public class NovJobOverview extends AbstractJobOverview {
 	}
 
 	@Override
-	protected boolean downloadResultsLink() {
-		return false;
-	}
-
-	@Override
 	public JobOverviewSummary getSummary(String filter) {
-		return null;
+		return new DefaultJobOverviewSummary(this);
 	}
 
 	/**
@@ -149,6 +145,10 @@ public class NovJobOverview extends AbstractJobOverview {
 				}
 			}				
 		});
+	}
+
+	@Override
+	public void handleInternalPath(String internalPath) {
 	}
 
 }

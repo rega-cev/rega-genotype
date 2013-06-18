@@ -10,14 +10,19 @@ import java.util.List;
 
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractForm;
-import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
+import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WMenu;
+import eu.webtoolkit.jwt.WMenuItem;
 import eu.webtoolkit.jwt.WStackedWidget;
+import eu.webtoolkit.jwt.WTemplate;
+import eu.webtoolkit.jwt.Signal1.Listener;
 
 /**
  * The frame of the application.
@@ -44,6 +49,8 @@ public class GenotypeWindow extends WContainerWidget
 	private List<Form> forms = new ArrayList<Form>();
 	
 	private OrganismDefinition od;
+
+	private WMenu menu;
 	
 	public OrganismDefinition getOrganismDefinition() {
 		return od;
@@ -53,29 +60,38 @@ public class GenotypeWindow extends WContainerWidget
 	{
 		super();
 		this.od = od;
+
+		WApplication app = WApplication.getInstance();
+		WTemplate main = new WTemplate(tr("main"), this);
+		
+		main.bindString("app.url", app.resolveRelativeUrl(app.getBookmarkUrl("/")));
+
+		content = new WStackedWidget();
+		content.setId("content");
+
+		menu = new WMenu(content);
+		menu.setId("menu");
+		menu.setInternalPathEnabled("/");
+
+		main.bindWidget("content", content);
+		main.bindWidget("navigation", menu);
+		
+		addForm("Submit Job", START_URL, new StartForm(this));
+		
+		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
+		final WMenuItem item = addForm(tr("main.navigation.monitor").arg(""), JobForm.JOB_URL, jobForm);
+		jobForm.jobIdChanged().addListener(this, new Listener<String>() {
+			public void trigger(String jobId) {
+				item.setText(tr("main.navigation.monitor").arg(jobId));
+				item.setPathComponent(JobForm.JOB_URL + "/" + jobId);
+			}
+		});
 	}
 
 	public void init() {
-		setStyleClass("root");
-		setId("");
-		GenotypeApplication app = GenotypeMain.getApp();
-
-		content = new WStackedWidget(app.getRoot());
-		content.setId("content");
-		content.setStyleClass("content");
-		
-		addForm(START_URL, new StartForm(this));
-		addForm("contact-us", new DocumentationForm(this, tr("contact-us-doc")));
-		addForm("how-to-cite", new DocumentationForm(this, tr("how-to-cite-doc")));
-		addForm("tutorial", new DocumentationForm(this, tr("tutorial-doc")));
-		addForm("decision-trees", new DocumentationForm(this, tr("decision-trees-doc")));
-		addForm("subtyping-process", new DocumentationForm(this, tr("subtyping-process-doc")));
-		addForm("example-sequences", new DocumentationForm(this, tr("example-sequences-doc")));
-		
-		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
-		addForm(JobForm.JOB_URL, jobForm);
-		
+		WApplication app = WApplication.getInstance();
 		handleInternalPath(app.getInternalPath());
+
 		app.internalPathChanged().addListener(this,
 				new Signal1.Listener<String>() {
 					public void trigger(String internalPath) {
@@ -85,14 +101,11 @@ public class GenotypeWindow extends WContainerWidget
 	}
 	
 	private void handleInternalPath(String internalPath) {
-		GenotypeApplication app = GenotypeMain.getApp();
-		
+		WApplication app = WApplication.getInstance();
+
 		for (Form f : forms)
-			if (app.internalPathMatches(f.path)) {
-				content.setCurrentWidget(f.form);
+			if (app.internalPathMatches(f.path))
 				f.form.handleInternalPath(internalPath.substring(f.path.length()));
-				f.form.resize(WLength.Auto, WLength.Auto);
-			}
 	}
 	
 	public void changeInternalPath(String path) {
@@ -100,8 +113,10 @@ public class GenotypeWindow extends WContainerWidget
 		app.setInternalPath(path, true);
 	}
 	
-	public void addForm(String url, AbstractForm widget) {
-		content.addWidget(widget);
-		forms.add(new Form("/" + url, widget));
+	public WMenuItem addForm(CharSequence text, String url, AbstractForm widget) {
+		forms.add(new Form(menu.getInternalBasePath() + url, widget));
+		WMenuItem item = menu.addItem(text, widget);
+		item.setPathComponent(url);
+		return item;
 	}
 }

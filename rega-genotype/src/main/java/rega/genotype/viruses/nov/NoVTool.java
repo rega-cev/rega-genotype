@@ -205,5 +205,15 @@ public class NoVTool extends GenotypeTool {
 			}
 		}
 	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		return false;
+	}
+
+	@Override
+	protected String currentJob() {
+		return null;
+	}
 }
 

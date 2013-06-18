@@ -7,6 +7,7 @@ package rega.genotype.ui.forms;
 
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WTemplate;
 
 /**
@@ -16,9 +17,13 @@ public class DocumentationForm extends AbstractForm {
 	public DocumentationForm(GenotypeWindow main, CharSequence content) {
 		super(main);
 		
+		WApplication app = WApplication.getInstance();
+		
 		WTemplate t = new WTemplate(content, this);
+		t.setInternalPathEncoding(true);
 		t.addFunction("tr", WTemplate.Functions.tr);
-		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
+		t.bindString("app.url", app.resolveRelativeUrl(app.getBookmarkUrl("/")));
+		t.bindString("app.base.url", app.getEnvironment().getDeploymentPath());
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 	}
 

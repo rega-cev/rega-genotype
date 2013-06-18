@@ -4,6 +4,8 @@
 	<message id="sequenceInput.uploadingFile">Uploading file</message>
   	<message id="sequenceInput.run">Analyse!</message>
   	<message id="sequenceInput.clear">Clear</message>
+  	<message id="sequenceInput.example"></message>
+
   	<message id="sequenceInput.inputSequenceInFastaFormat">
   		<p>You may can either:</p>
   		  <ol style="list-style-type: upper-alpha">

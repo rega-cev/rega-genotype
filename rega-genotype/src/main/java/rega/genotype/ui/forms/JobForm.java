@@ -1,5 +1,6 @@
 package rega.genotype.ui.forms;
 
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import rega.genotype.ui.framework.GenotypeMain;
@@ -47,51 +48,61 @@ public class JobForm extends AbstractForm {
 	public void handleInternalPath(String internalPath) {
 		StringTokenizer internalPathTokenizer = new StringTokenizer(internalPath, "//");
 		
-		String jobId = internalPathTokenizer.nextToken();
-		Integer sequenceId = null;
-		String filter = null;
-		if (internalPathTokenizer.hasMoreElements()) {
-			String token = internalPathTokenizer.nextToken();
-			if (token.startsWith(SEQUENCE_PREFIX))
-				sequenceId = Integer.parseInt(token.substring(SEQUENCE_PREFIX.length()));
-			else if (token.startsWith(FILTER_PREFIX))
-				filter = token.substring(FILTER_PREFIX.length());
-		}
+		try {
+			String jobId = internalPathTokenizer.nextToken();
+			Integer sequenceId = null;
+			String filter = null;
+			if (internalPathTokenizer.hasMoreElements()) {
+				String token = internalPathTokenizer.nextToken();
+				if (token.startsWith(SEQUENCE_PREFIX))
+					sequenceId = Integer.parseInt(token.substring(SEQUENCE_PREFIX.length()));
+				else if (token.startsWith(FILTER_PREFIX))
+					filter = token.substring(FILTER_PREFIX.length());
+			}
 			
-		if (!jobOverview.existsJob(jobId)) {
-			error.setText(tr("monitorForm.nonExistingJobId").arg(jobId));
-			showWidget(error);
-			return;
-		}
+
+			if (!jobOverview.existsJob(jobId)) {
+				error.setText(tr("monitorForm.nonExistingJobId").arg(jobId));
+				showWidget(error);
+				return;
+			}
 			
-		if (filter != null && filter.trim().equals(""))
-			filter = null;
+
+			if (filter != null && filter.trim().equals(""))
+				filter = null;
 			
-		if (sequenceId == null) {
-			jobOverview.init(jobId, filter);
-			jobIdChanged.trigger(jobId);
-			showWidget(jobOverview);
-		} else {
-			String detailed = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/" + sequenceId +"/");
+			if (sequenceId == null) {
+				jobOverview.init(jobId, filter);
+				jobIdChanged.trigger(jobId);
+				showWidget(jobOverview);
+			} else {
+				String detailed = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/" + sequenceId +"/");
 				
-			WString errorMsg;
-			WWidget widget;
-			if (detailed.startsWith(RecombinationForm.URL) 
+				WString errorMsg;
+				WWidget widget;
+			
+				if (detailed.startsWith(RecombinationForm.URL) 
 					&& detailed.length() > RecombinationForm.URL.length() + 1
 					&& recombination != null) {
-				String type = detailed.substring(RecombinationForm.URL.length() + 1);					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId, type);
-				widget = recombination;
-			} else {
-				errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
-				widget = details;
+					String type = detailed.substring(RecombinationForm.URL.length() + 1);
+					errorMsg = recombination.init(jobOverview.getJobDir(jobId), sequenceId, type);
+					widget = recombination;
+				} else {
+					errorMsg = details.init(jobOverview.getJobDir(jobId), sequenceId);
+					widget = details;
+				}
+				
+				if (errorMsg == null) {
+					jobIdChanged.trigger(jobId);
+					showWidget(widget);
+				} else {
+					error.setText(errorMsg.arg(jobId));
+					showWidget(error);				
+				}
 			}
-
-		if (errorMsg == null) {
-			jobIdChanged.trigger(jobId);
-			showWidget(widget);
-		} else {
-			error.setText(errorMsg.arg(jobId));
-			showWidget(error);				}
+		} catch (NoSuchElementException e) {
+			error.setText(tr("monitorForm.nonExistingJobId").arg(""));
+			showWidget(error);
 		}
 	}
 	
@@ -101,7 +112,7 @@ public class JobForm extends AbstractForm {
 		}
 	}
 	
-	public Signal1<String> getJobIdChanged() {
+	public Signal1<String> jobIdChanged() {
 		return jobIdChanged;
 	}
 }

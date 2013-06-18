@@ -1,69 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<organism-settings>
-	<app>
-		<template>
-		<div class="rivm-header">
-			<div id="logo">
-				<a href="${app.url}">
-					<img src="${app.url}/../../pics/rivm/logo.png" alt="RIVM Logo"> </img>
-				</a>
+<messages>
+	<message id="main">
+		<div class="azure">
+			<div class="rivm-header">
+				<div id="logo">
+					<a href="${app.url}">
+						<img src="${app.url}/../../pics/rivm/logo.png" alt="RIVM Logo"> </img>
+					</a>
+				</div>
+				<div id="application">
+					<span id="name">Norovirus Genotyping Tool</span>
+					<span id="info">Version 1.0</span>
+				</div>
+				<div class="nav_bar">
+					${navigation class="nav_main"}
+				</div>
+				<div id="navigation-bottom"></div>
 			</div>
-			<div id="application">
-				<span id="name">Norovirus Genotyping Tool</span>
-				<span id="info">Version 1.0</span>
+			${content class="content"}
+
+			<div class="footer">
+				<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
+				and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
+				<p>Contact: <a href="mailto:noronet@rivm.nl">noronet@rivm.nl</a></p>
 			</div>
-			${navigation}
-			<div id="navigation-bottom"></div>
+			<div class="rivm-footer">
+				<div>
+					<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+				</div>
+			</div>
 		</div>
-		${content}
-		${footer}
-		<div class="rivm-footer">
-			<div>
-				<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+	</message>
+
+	<message id="start-form">
+		<div class="start-form form">
+			<h1>Norovirus Genotyping Tool Version 1.0</h1>
+			<div class="note">
+				<div>
+					This tool is designed to use phylogenetic methods in order to identify the norovirus genotype of a nucleotide sequence.
+				</div>
+				<div>
+					<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time. 
+				</div>
 			</div>
-		</div>
-		</template>
-	</app>
-	<main-form>
-		<footer>
-			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
-			and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
-			<p>Contact: <a href="mailto:noronet@rivm.nl">noronet@rivm.nl</a></p>
-		</footer>
-	</main-form>
-	<start-form>
-		<title>Norovirus Genotyping Tool Version 1.0</title>
-		<note>
-			<div>
-				This tool is designed to use phylogenetic methods in order to identify the norovirus genotype of a nucleotide sequence.
+		
+			<div class="seqInput">
+				${tr:sequenceInput.inputSequenceInFastaFormat}
+				<div>
+					${fasta-field}
+				</div>
+				${analyze-button}
+				${clear-button}
+				${error-text class="error"}
+		
+				${tr:sequenceInput.uploadSequenceInFastaFormat}
+
+				${file-upload-button}
+
+				${tr:startForm.monitorJob}
+
+				${tr:startForm.labelJobId} ${job-id-field}	${search-button}
 			</div>
-			<div>
-				<b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
-			</div>
-		</note>
-	</start-form>
-	<monitor-form>
-		<title>Norovirus Genotyping Tool Results</title>
-	</monitor-form>
-	<details-form>
-		<title>Norovirus Genotyping Details</title>
-	</details-form>
-	<howToCite-form>
-		<title>How to Cite the Norovirus Automated Genotyping Tool</title>
-		<howToCite-text>
-			<text>
-				<p>Please use the following citation:</p>
-				<p><a href="http://www.ncbi.nlm.nih.gov/pubmed/21514213" target="_blank">
-	              Kroneman A, Vennema H, Deforche K, Avoort HV, Peñaranda S, Oberste MS, Vinjé J, Koopmans
-                  An automated genotyping tool for enteroviruses and noroviruses. J Clin Virol. 2011 Jun;51(2):121-5. </a>
+		</div> 
+	</message>
+	
+	<message id="sequenceInput.run">Start!</message>
+	<message id="startForm.monitor">Go!</message>
+	<message id="sequenceInput.example">&gt;AB287451
+GGCGTCGATGACGCCNCCCCATCTGATGGGTCCACAGCCAACCTCGTCCCAGAGGTCAAC
+AATGAGGTTATGGCTTTGGAGCCCGTTGTTGGTGCCGCGATTGCGGCACCTGTAGCGGGC
+CAACAAAATGTAATTGACCCCTGGATTAGAAATAATTTTGTACAAGCCA
+	</message>
+	
+	<message id="job-overview-form">
+		<div class="monitor-form form">
+			<h1>Norovirus Genotyping Tool Results</h1>
+			
+			<div class="info">
+				<p>You may bookmark this page to revisit results of this job (${job-id}) later.</p>
+				
+				<p>${analysis-cancelled}</p>
+
+				<p class="analysisProgress">
+					${analysis-in-progress}
 				</p>
-			</text>
-		</howToCite-text>
-	</howToCite-form>
-	<introduction-form>
-		<title>The Norovirus Automated Genotyping Tool: introduction.</title>
-		<introduction-text>
-			<text>
+			</div>
+
+			<div>
+				${results class="jobTable"}
+			</div>
+
+			<div class="downloads div-row">
+				${downloads}
+			</div>
+		</div>
+	</message>
+	
+	<message id="details-form">
+		<h1>Norovirus Genotyping Details</h1>
+		${details-form}
+	</message>
+	
+	<message id="job-overview-downloads">
+		<div class="downloadContainer">
+			<span>Download results:</span> ${xml-file} ${xls-file} ${csv-file} ${fasta-file}
+		</div>
+	</message>
+	
+	<message id="monitorForm.analysisCancelled"><p><b>This job was cancelled!</b></p></message>
+	
+	<message id="nrvSequenceAssignment.blast">
+		<h3>Genogroup assignment</h3>
+		<p>
+			<span class="label">Genogroup assignment:</span> {1}
+		</p>
+		<p>
+			<span class="label"></span> {2}
+		</p>
+	</message>
+
+	<message id="nrvSequenceAssignment.phylo">
+		<h3>{1}</h3>
+		<p>
+			<span class="label">Genotype assignment:</span> <span class="nov-genotype">{2}</span>
+		</p>
+		<p>
+			<span class="label"></span> {3}
+		</p>
+	</message>
+
+	<message id="nrvSequenceAssignment.phylo-variant">
+		<p>
+			<span class="label">Sub-clustering:</span> <span class="nov-subclustering">{1}</span>
+		</p>
+		<p>
+			<span class="label"></span> {2}
+		</p>
+	</message>
+
+	<message id="nrvTool.title">NoV Genotyping Tool</message>
+	<message id="main.navigation.introduction">Introduction</message>	
+	<message id="main.navigation.subtypingProcess">(Sub)typing process</message>
+	<message id="main.navigation.tutorial">How to use</message>
+
+	<message id="how-to-cite-doc">
+		<div class="form">
+			<h1>How to Cite the Norovirus Automated Genotyping Tool</h1>
+
+			<p>Please use the following citation:</p>
+			<p><a href="http://www.ncbi.nlm.nih.gov/pubmed/21514213" target="_blank">
+              Kroneman A, Vennema H, Deforche K, Avoort HV, Peñaranda S, Oberste MS, Vinjé J, Koopmans
+                 An automated genotyping tool for enteroviruses and noroviruses. J Clin Virol. 2011 Jun;51(2):121-5. </a>
+			</p>
+		</div>
+	</message>
+	
+	<message id="introduction-doc">
+		<div class="form">
+			<h1>The Norovirus Automated Genotyping Tool: introduction.</h1>
+		
 				<p>This typingtool offers quick and unequivocal typing of norovirus sequences.</p>
 				<p>
 					The tool makes use of a regularly updated set of reference sequences. Timely availability of newly 
@@ -86,14 +181,14 @@
 				<p>
 					The standardized nomenclature has been drafted by <a href="http://www.noronet.nl">NoroNet</a>				
 				</p>
-			</text>
-		</introduction-text>
-	</introduction-form>
-	<tutorial-form>
-		<title>Norovirus Genotyping Tutorial</title>
-		<tutorial-text>
-			<text>
-          <p>
+			</div>
+	</message>
+
+	<message id="tutorial-doc">
+		<div class="form">
+			<h1>Norovirus Genotyping Tutorial</h1>
+		
+		<p>
         One or more (up to 10.000 per run) NoV sequences can be pasted (A) or
         uploaded (B) in Fasta format (see fig. 1). Sequences of all regions of
         the NoV genome can be used.<br />
@@ -120,12 +215,12 @@
         </div>
 
         <p>
-        As soon as the &apos;Start&apos; button is pushed the results overview is shown.
+        As soon as the 'Start' button is pushed the results overview is shown.
         While the analysis is still in progress the following message is
         displayed:</p>
         
-        <p>&apos;Analysis in progress... (Showing partial results). This page
-        will be automatically updated every 5 seconds...&apos;.<br /><br />
+        <p>'Analysis in progress... (Showing partial results). This page
+        will be automatically updated every 5 seconds...'.<br /><br />
         The Job Id number, which can be used to retrieve the results later is
         displayed at the top of the page as soon as the job is started.</p>
         
@@ -140,7 +235,7 @@
 
         <p>
         For each sequence more details can de viewed in the individual reports
-        by clicking on &apos;<span class="bold">report</span>&apos; in
+        by clicking on '<span class="bold">report</span>' in
         the results table.<br />
         The report of the genotyping details per sequence contains a brief
         overview of the assignment, followed by details of up to four
@@ -172,7 +267,7 @@
         The genogroup (or the genus) and the localisation on the genome can be determined for
         sequences of any part of the genome.<br />
         For subsequent genotyping the sequence has to overlap at least 100 nt
-        with 800 nt at the 3&apos; end of ORF1, which encodes for the polymerase, or
+        with 800 nt at the 3' end of ORF1, which encodes for the polymerase, or
         at least 100 nt with the entire ORF 2 gene, encoding the capsid protein.<br />
         The genotyping region supported by this tool includes all regions (A to
         E) which are used for genotyping by different groups. </p><br />
@@ -200,33 +295,33 @@
                   phylogeny. </li>
         </ul>
   
-			</text>
-		</tutorial-text>
-	</tutorial-form>
-	<decisionTrees-form>
-	</decisionTrees-form>
-	<subtypingProcess-form>
-		<title>Norovirus Genotyping Tool Methods</title>
-		<subtypingProcess-text>
-			<text>
+		</div>
+	</message>
+
+	<message id="method-doc">
+		<div class="form">
+			<h1>Norovirus Genotyping Tool Methods</h1>
+
           <p>Background information on the (sub)typing process and lists of all the reference sequences used in the tool, 
                  can be found at the <a href="http://www.noronet.nl/databases/TypingtoolBackgroundInformation.jsp">NoroNet</a> 
                 website.
           </p>
-			</text>
-		</subtypingProcess-text>
-	</subtypingProcess-form>
-	<exampleSequences-form>
-		<title>
-			Example Sequences for the Norovirus Genotyping Tool 
-		</title>
-		<exampleSequences-sequences>
-			<sequence name="AB287451">
+       	</div>
+    </message>
+	
+	<message id="examples-doc">
+		<div class="form">
+			<h1>Example Sequences for the Norovirus Genotyping Tool</h1>
+
+			<div class="sequenceName">&gt;AB287451</div>
+			<div class="sequence">
 GGCGTCGATGACGCCNCCCCATCTGATGGGTCCACAGCCAACCTCGTCCCAGAGGTCAAC
 AATGAGGTTATGGCTTTGGAGCCCGTTGTTGGTGCCGCGATTGCGGCACCTGTAGCGGGC
 CAACAAAATGTAATTGACCCCTGGATTAGAAATAATTTTGTACAAGCCA
-	        </sequence>
-			<sequence name="AB112331">
+			</div>
+
+			<div class="sequenceName">&gt;AB112331</div>
+			<div class="sequence">
 GTTGGCGACTTCAAAATCACCATAAATGAAGGTTTACCTTCTGGAGTGCCGTGCACATCA
 CAATGGAACTCAATTTCTCACTGGCTAATAACACTATGTGCCATATCAGAAATTTCAGGG
 CTGTCGCCAGATGTGGTACAAACAAACTCCTGTTTCTCCTTCTATGGGGATGATGAGATA
@@ -243,47 +338,14 @@ TAACAATGAGGCAATGGCTCTGGAACCCGTGGTGGGGGCGTCTTTAGCCGCCCCTGTCAC
 TGGCCAAACTAATATAATAGACCCCTGGATTAGAACTAATTTTGTCCAAGCCCCTAATGG
 TGAATTCACAGTTTCCCCTAGAAATTCCCCTGGAGAGATATTGGTCAATTTGGAGTTGGG
 TCCAGAACTGAACCCTTATCTGGCACATTTAGCTAGGA
-			</sequence>
-			<sequence name="AB287450">
+			</div>
+
+			<div class="sequenceName">&gt;AB287450</div>
+			<div class="sequence">
 GGCGTCGATGACGCCGCTCCNTCAAATGATGGTGCTGCCAACCTCGTACCAGAGGCCAAC
 AATGAGGTTATGGCACTTGAACCGGTGGTGGGAGCCTCAATCGCACTCCTGTTGTCGGTC
 AGCAAAATATAATTGACCCCTGGATTAGAGATAATTTTGTACAAGCC
-			</sequence>
-		</exampleSequences-sequences>
-	</exampleSequences-form>
-
-	<resource name="nrvSequenceAssignment.blast">
-		<h3>Genogroup assignment</h3>
-		<p>
-			<span class="label">Genogroup assignment:</span> {1}
-		</p>
-		<p>
-			<span class="label"></span> {2}
-		</p>
-	</resource>
-
-	<resource name="nrvSequenceAssignment.phylo">
-		<h3>{1}</h3>
-		<p>
-			<span class="label">Genotype assignment:</span> <span class="nov-genotype">{2}</span>
-		</p>
-		<p>
-			<span class="label"></span> {3}
-		</p>
-	</resource>
-
-	<resource name="nrvSequenceAssignment.phylo-variant">
-		<p>
-			<span class="label">Sub-clustering:</span> <span class="nov-subclustering">{1}</span>
-		</p>
-		<p>
-			<span class="label"></span> {2}
-		</p>
-	</resource>
-
-	<resource name="nrvTool.title">NoV Genotyping Tool</resource>
-
-	<resource name="main.navigation.introduction">Introduction</resource>	
-	<resource name="main.navigation.subtypingProcess">(Sub)typing process</resource>
-	<resource name="main.navigation.tutorial">How to use</resource>
-</organism-settings>
+			</div>
+		</div>
+	</message>
+</messages>
