@@ -1,0 +1,19 @@
+<genotyping-tool>
+
+	<menu>
+		<menu-item>
+			<label>How to cite</label>
+			<path>how-to-cite</path>
+			<message-id>how-to-cite-doc</message-id>
+		</menu-item>
+	</menu>
+
+	<genome>
+		<color assignment="-">#53b808</color>
+		<start>80</start>
+		<end>7550</end>
+		<image-start>1</image-start>
+		<image-end>605</image-end>
+	</genome>	
+
+</genotyping-tool>

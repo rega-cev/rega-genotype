@@ -23,6 +23,8 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -44,10 +46,13 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.Utils;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WResource;
+import eu.webtoolkit.jwt.Utils.HtmlEncodingFlag;
 import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WWebWidget;
@@ -242,13 +247,13 @@ public class GenotypeLib {
 		return svgFile;
 	}
 	
-	public static File createJobDir(OrganismDefinition od){
+	public static File createJobDir(OrganismDefinition od) {
 		File jobDir = Settings.getInstance().getJobDir(od);
 		File d;
 		Random r = new Random(new Date().getTime());
-		do{
+		do {
 			d = new File(jobDir.getAbsolutePath() + File.separator + r.nextInt(Integer.MAX_VALUE));
-		}while(d.exists());
+		} while(d.exists());
 		
 		d.mkdir();
 		return d;
@@ -256,24 +261,31 @@ public class GenotypeLib {
 
 	public static WImage getWImageFromResource(WResource resource) {
 		WImage result = new WImage(resource, new WString(""));
-		result.getResource().suggestFileName("x.png");
+		resource.suggestFileName("x.png");
 		return result;
 	}
 	
-	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) {
-		final InputStream is = GenotypeLib.class.getResourceAsStream(od.getOrganismDirectory()+fileName);
+	public static InputStream getResourceAsStream(String path) throws IOException {
+		URL url = GenotypeLib.class.getResource(path);
+		if (url == null)
+			url = new URL(path);
+		return url.openStream();
+	}
+
+	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) throws IOException {
+		final InputStream is = getResourceAsStream(od.getOrganismDirectory() + fileName);
 		
 		if (is == null)
 			return null;
 		else 
 			IOUtils.closeQuietly(is);
 		
-		return new WImage(new WResource() {
+		return new WImage(new WLink(new WResource() {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 				response.setContentType("image/" + fileName.substring(fileName.lastIndexOf('.')+1));
 				
-            	InputStream is = this.getClass().getResourceAsStream(od.getOrganismDirectory()+fileName);
+            	InputStream is = getResourceAsStream(od.getOrganismDirectory() + fileName);
             	if (is == null)
             		return;
                 try {
@@ -284,7 +296,7 @@ public class GenotypeLib {
             		IOUtils.closeQuietly(is);
             	}
 			}
-        }, new WString(""), parent);
+        }), new WString(""), parent);
 	}
 	
 	public static File getFile(File jobDir, String fileName) {
@@ -298,7 +310,7 @@ public class GenotypeLib {
 		anchor.setTarget(AnchorTarget.TargetNewWindow);
 		if (suggestedName != null)
 			resource.suggestFileName(suggestedName);
-		anchor.setRef(resource.generateUrl());
+		anchor.setLink(new WLink(resource));
 		resource.setDispositionType(DispositionType.Attachment);
 		return anchor;
 	}
@@ -316,7 +328,7 @@ public class GenotypeLib {
 				FileInputStream in = new FileInputStream(f);
 
 				//new entry, relative path
-				out.putNextEntry(new ZipEntry(f.getAbsolutePath().replace(dir.getAbsolutePath()+File.separatorChar, "")));
+				out.putNextEntry(new ZipEntry(f.getAbsolutePath().replace(dir.getAbsolutePath() + File.separatorChar, "")));
 
 				int len;
 				while ((len = in.read(buffer)) > 0) {
@@ -344,20 +356,6 @@ public class GenotypeLib {
 
 		Settings.initSettings(s);
 
-// try {
-// HIVTool hiv = new HIVTool(new File(
-// "/home/simbre1/tmp/genotype"));
-// hiv.analyze(
-// "/home/simbre1/tmp/genotype/seq.fasta",
-// "/home/simbre1/tmp/genotype/result.xml");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (ParameterProblemException e) {
-//			e.printStackTrace();
-//		} catch (FileFormatException e) {
-//			e.printStackTrace();
-//		}
-		
 		getTreePDF(new File("/home/simbre1/tmp/genotype/"), new File("/home/simbre1/tmp/genotype/r7184492.tre"));
 	}
 	
@@ -383,9 +381,9 @@ public class GenotypeLib {
 	
     public static String getEscapedValue(GenotypeResultParser p, String name) {
     	String value = p.getValue(name);
-    	if(value==null)
+    	if (value == null)
     		return null;
     	else
-    		return WWebWidget.escapeText(value, true);
+    		return Utils.htmlEncode(value, HtmlEncodingFlag.EncodeNewLines);
     }
 }

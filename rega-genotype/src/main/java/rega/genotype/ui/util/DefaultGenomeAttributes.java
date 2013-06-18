@@ -29,6 +29,7 @@ public abstract class DefaultGenomeAttributes implements GenomeAttributes{
 	public OrganismDefinition getOrganismDefinition() {
 		return od;
 	}
+
 	protected void setOrganismDefinition(OrganismDefinition od){
 		this.od = od;
 	}

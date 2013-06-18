@@ -83,7 +83,14 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 		final String csvData = p.getValue("/genotype_result/sequence/result[@id='scan-" + scanType + "']/data");
 
 		images.clear();
-		WImage legend = GenotypeLib.getWImageFromResource(od, "legend.png", null);
+		WImage legend = null;
+		
+		try {
+			legend = GenotypeLib.getWImageFromResource(od, "legend.png", null);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
 		if (legend != null) {
 			legend.setStyleClass("legend");
 			images.addWidget(legend);

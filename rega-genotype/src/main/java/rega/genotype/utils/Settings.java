@@ -64,7 +64,7 @@ public class Settings {
 		return imageMagickPath;
 	}
 	
-	public File getJobDir(OrganismDefinition od){
+	public File getJobDir(OrganismDefinition od) {
 		return jobDirs.get(od.getOrganismName());
 	}
 	

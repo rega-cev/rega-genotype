@@ -124,8 +124,6 @@ public class StartForm extends AbstractForm {
 		errorJobId.hide();
 		
 		t.bindWidget("error-job", errorJobId);
-		
-		init();
 	}
 	
 	private void validateInput(CharSequence error) {
@@ -162,11 +160,6 @@ public class StartForm extends AbstractForm {
 		analysis.start();
 		
 		getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(thisJobDir) + "/");
-	}
-
-	@SuppressWarnings("unchecked")
-	private void init() {
-		//TODO set example sequence
 	}
 
 	private CharSequence verifyFasta(String fastaContent) {

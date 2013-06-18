@@ -216,14 +216,11 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		if (filter == null)
 			xmlAnchor = createXmlDownload();
 		t.bindWidget("xml-file", xmlAnchor);
-		
 		t.bindWidget("csv-file", createTableDownload(tr("monitorForm.csvTable"), true));
-
 		t.bindWidget("xls-file", createTableDownload(tr("monitorForm.xlsTable"), false));
 		
-		WAnchor fastaAnchor = null;
-		if (filter != null)
-			fastaAnchor = createFastaDownload();
+		WAnchor fastaAnchor = createFastaDownload();
+
 		t.bindWidget("fasta-file", fastaAnchor);
 		
 		return t;
@@ -236,7 +233,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		xmlFileDownload.setStyleClass("link");
 		WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 		xmlResource.suggestFileName("result.xml");
-		xmlFileDownload.setRef(xmlResource.generateUrl());
+		xmlFileDownload.setLink(new WLink(xmlResource));
 		return xmlFileDownload;
 	}
 	
@@ -246,18 +243,22 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		fastaDownload.setStyleClass("link");
 		fastaDownload.setTarget(AnchorTarget.TargetNewWindow);
 
-		WResource fastaResource = new WResource() {
-			@Override
-			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
-				response.setContentType("text/plain");
-				
-				FastaGenerator generateFasta = new FastaGenerator(filter, response.getOutputStream());
-				generateFasta.parseFile(new File(jobDir.getAbsolutePath()));
-			}
-			
-		};
+		WResource fastaResource;
+		if (filter != null) {
+			fastaResource = new WResource() {
+				@Override
+				protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+					response.setContentType("text/plain");
+					FastaGenerator generateFasta = new FastaGenerator(filter, response.getOutputStream());
+					generateFasta.parseFile(new File(jobDir.getAbsolutePath()));
+				}
+			};
+		} else {
+			fastaResource = new WFileResource("text/plain", jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta");
+		}
+
 		fastaResource.suggestFileName("sequences.fasta");
-		fastaDownload.setResource(fastaResource);
+		fastaDownload.setLink(new WLink(fastaResource));
 
 		return fastaDownload;
 	}
@@ -280,7 +281,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			
 		};
 		csvResource.suggestFileName("results." + (csv ? "csv" : "xls"));
-		csvTableDownload.setResource(csvResource);
+		csvTableDownload.setLink(new WLink(csvResource));
 
 		return csvTableDownload;
 	}
@@ -325,7 +326,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public abstract JobOverviewSummary getSummary(String filter);
 
 	protected WAnchor createReportLink(final GenotypeResultParser p) {
-		return new WAnchor(new WLink(WLink.Type.InternalPath, "/job/" + jobId(jobDir) + "/" + JobForm.SEQUENCE_PREFIX + p.getSequenceIndex()), tr("monitorForm.report"));
+		WAnchor anchor = new WAnchor(new WLink(WLink.Type.InternalPath, "/job/" + jobId(jobDir) + "/" + JobForm.SEQUENCE_PREFIX + p.getSequenceIndex()), tr("monitorForm.report"));
+		anchor.setObjectName("report");
+		return anchor;
 	}
 	
 	public boolean existsJob(String jobId) {

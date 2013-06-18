@@ -67,7 +67,7 @@ public class Genome {
 		String assign[];
 		int scanWindowSize;
 		int scanStepSize;
-		if(csvData!=null) {
+		if (csvData!=null) {
 			Table csvTable = new Table(new ByteArrayInputStream(csvData.getBytes()), false, '\t');
 		    
 			w = new int[csvTable.numRows()-1];
@@ -87,10 +87,8 @@ public class Genome {
 			scanStepSize = 0;
 		}
 
-	    Image genomePng = ImageIO.read(
-	    		this.getClass().getResourceAsStream(
-	    				attributes.getOrganismDefinition().getOrganismDirectory()
-	    				+"/genome_"+ (regions == null ? variant : "large") +".png"));
+	    Image genomePng = ImageIO.read(GenotypeLib.getResourceAsStream(attributes.getOrganismDefinition().getOrganismDirectory()
+	    				+ "/genome_" + (regions == null ? variant : "large") + ".png"));
 
 		int imgWidth = genomePng.getWidth(null);
 	    int imgHeight = genomePng.getHeight(null);
@@ -160,7 +158,7 @@ public class Genome {
 	    		int xend = imgX(region.end);
     			g2d.drawLine(xend, attributes.getGenomeImageStartY(), xend, attributes.getGenomeImageEndY());
 	    			
-    			drawCenteredString(g2d,"( " + (regions.indexOf(region) + 1) + " )", (xstart+xend) / 2,attributes.getGenomeImageEndY());
+    			drawCenteredString(g2d,"( " + (regions.indexOf(region) + 1) + " )", (xstart+xend) / 2, attributes.getGenomeImageEndY());
     		}	    	
 	    }
 	    return image;

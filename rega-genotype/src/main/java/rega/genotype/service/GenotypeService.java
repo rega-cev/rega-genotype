@@ -58,8 +58,6 @@ public class GenotypeService extends HttpServlet {
 		}
 	}
 
-	
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void init(ServletConfig config) throws ServletException {

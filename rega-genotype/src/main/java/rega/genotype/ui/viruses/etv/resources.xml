@@ -90,9 +90,9 @@ TGATGTGCAAGGGGTAACTGAATCCCGAGGCAAAATCACTCTTGATCGATCAACACACAACCCTTTGTCAAACACT
 				
 				<p>${analysis-cancelled}</p>
 
-				<p class="analysisProgress">
+				<div class="analysisProgress">
 					${analysis-in-progress}
-				</p>
+				</div>
 			</div>
 
 			<div>
