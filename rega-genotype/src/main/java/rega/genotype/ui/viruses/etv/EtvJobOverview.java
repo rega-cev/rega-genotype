@@ -10,6 +10,7 @@ import java.util.List;
 
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.ui.forms.DefaultJobOverviewSummary;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
@@ -71,12 +72,13 @@ public class EtvJobOverview extends AbstractJobOverview {
 	}
 
 	@Override
-	protected boolean downloadResultsLink() {
-		return false;
+	public JobOverviewSummary getSummary(String filter) {
+		return new DefaultJobOverviewSummary(this);
 	}
 
 	@Override
-	public JobOverviewSummary getSummary(String filter) {
-		return null;
+	public void handleInternalPath(String internalPath) {
+		// TODO Auto-generated method stub
+		
 	}
 }

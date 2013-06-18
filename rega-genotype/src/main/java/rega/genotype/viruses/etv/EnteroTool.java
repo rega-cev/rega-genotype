@@ -141,5 +141,16 @@ public class EnteroTool extends GenotypeTool {
 
 	public void analyzeSelf() throws AnalysisException {
 	}
+	
+
+	@Override
+	protected boolean cancelAnalysis() {
+		return false;
+	}
+
+	@Override
+	protected String currentJob() {
+		return null;
+	}
 }
 

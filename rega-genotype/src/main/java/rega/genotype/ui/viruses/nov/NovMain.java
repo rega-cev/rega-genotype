@@ -22,6 +22,7 @@ import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 public class NovMain extends GenotypeMain {
 	public NovMain() {
 		super();
+
 		getConfiguration().setInlineCss(false);
 		getConfiguration().setProgressiveBootstrap(true);
 	}

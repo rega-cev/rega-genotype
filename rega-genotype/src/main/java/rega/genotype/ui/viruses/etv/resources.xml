@@ -1,84 +1,189 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<organism-settings>
-	<app>
-		<template>
-		<div class="rivm-header">
-					<div id="logo">
-						<a href="${app.url}">
-							<img src="${app.url}/../../pics/rivm/logo.png" alt="RIVM Logo" > </img>
-						</a>
-					</div>
+<messages>
+	<message id="main">
+		<div class="azure">
+			<div class="rivm-header">
+				<div id="logo">
+					<a href="${app.url}">
+						<img src="${app.url}/../../pics/rivm/logo.png" alt="RIVM Logo" > </img>
+					</a>
+				</div>
 				<div id="application">
 					<span id="name">Enterovirus Genotyping Tool</span>
 					<span id="info">Version 0.1</span>
 				</div>
-				${navigation}
+				<div class="nav_bar">
+					${navigation class="nav_main"}
+				</div>
 				<div id="navigation-bottom" >  </div>
 		</div>
-		${content}
-		${footer}
+		${content class="content"}
+
+		<div class="footer">
+			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
+				and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
+		    <p>Contact: TBD</p>
+		</div>
+
 		<div class="rivm-footer">
 			<div>
 				<img src="${app.url}/../../pics/rivm/footer.png" > </img>
 			</div>
 		</div>
-		</template>
-	</app>
+	</div>
+	</message>
 
-  <main-form>
-    <footer>
-      <p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
-			and <a href="http://www.mybiodata.eu/">MyBioData bvba</a>.</p>
-      <p>Contact: TBD</p>
-    </footer>
-  </main-form>
-  <start-form>
-    <title>Enterovirus Genotyping Tool Version 0.1</title>
-    <note>
-      <div>
-				This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequence.
+  	<message id="start-form">
+  		<div class="start-form form">
+		    <h1>Enterovirus Genotyping Tool Version 0.1</h1>
+		    <div class="note">
+ 				<div>
+					This tool is designed to use phylogenetic methods in order to identify the enterovirus genotype of a nucleotide sequence.
+				</div>
+      			<div>
+      				<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time. 
+				</div>
+	 	   </div>
+	 	   
+	 	   <div class="seqInput">
+				${tr:sequenceInput.inputSequenceInFastaFormat}
+				<div>
+					${fasta-field}
+				</div>
+				${analyze-button}
+				${clear-button}
+				${error-text class="error"}
+		
+				${tr:sequenceInput.uploadSequenceInFastaFormat}
+
+				${file-upload-button}
+
+				${tr:startForm.monitorJob}
+
+				${tr:startForm.labelJobId} ${job-id-field}	${search-button}
 			</div>
-      <div><b>Note for batch analysis:</b> The genotypetool accepts up to {1} sequences at a time. 
+		</div>
+	</message>
+	
+	<message id="sequenceInput.run">Start!</message>
+	<message id="startForm.monitor">Go!</message>
+	<message id="sequenceInput.example">&gt;AY879326
+AATGACCCTGAAAGTGCACTCAATAGGGCAGTGGGCAGGGTAGCTGATACTATAGCCAGTGGACCTGTTAACACTGAGCA
+AATTCCTGCTTTAACAGCAGTGGAGACAGGGCACACATCACAAGTGGTACCGAGCGACACGATGCAGACACGCCACGTGG
+TCAACTACCACACCAGATCAGAGTCATCGATAGAGAACTTCATGGGGAGAGCGGCGTGCGTGTACATTGCCCAGTACGCC
+ACAGAGAAGGTCAACGACGAGTTAGACAGATATACCAACTGGGAGATAACAACCAGACAAGTCGCACAGTTAAGGCGTAA
+ACTGGAAATGTTCACATACATGAGGTTCGATCTTGAGATCACGTTTGTCATCACCAGCTCCCAGCGCACTTCAACCACAT
+ACGCATCAGACTCCCCTCCACTAACGCATCAAGTAATGTATGTACCACCAGGAGGCCCAATTCCTAGAAGTTATGAAGAT
+TTTGCCTGGCAGACATCAACCAACCCAAGTGTGTTCTGGACGGAAGGCAATGCCCCTCCCAGGATGTCGATACCATTCAT
+GAGTGTTGGTAACGCATATTGTAATTTCTATGATGGATGGTCTCATTTCAGCCAGAGCGGTGTGTATGGGTACACTACTT
+TAAACAACATGGGACACTTGTATTTTAGACACGTGAACAAATCGACTGCATATCCAGTTAACAGTGTTGCCCGCGTCTAT
+TTCAAGCCCAAGCACGTGAAGGCGTGGGTGCCTCGTGCGCCACGCTTATGCCCGTATCTGTATGCAAGAAATGTCAATTT
+TGATGTGCAAGGGGTAACTGAATCCCGAGGCAAAATCACTCTTGATCGATCAACACACAACCCTTTGTCAAACACT
+	</message>
+
+	<message id="job-overview-form">
+	  	<div class="monitor-form form">
+		    <h1>Enterovirus Genotyping Tool Results</h1>
+
+		    <div class="info">
+				<p>You may bookmark this page to revisit results of this job (${job-id}) later.</p>
+				
+				<p>${analysis-cancelled}</p>
+
+				<p class="analysisProgress">
+					${analysis-in-progress}
+				</p>
 			</div>
-    </note>
-  </start-form>
-  <monitor-form>
-    <title>Enterovirus Genotyping Tool Results</title>
-  </monitor-form>
-  <details-form>
-    <title>Enterovirus Genotyping Details</title>
-  </details-form>
-  <howToCite-form>
-    <title>How to Cite the Enterovirus Automated Genotyping Tool</title>
-    <howToCite-text>
-      <text>
-        <p>Please use the following citation:</p>
-        <p><a href="http://www.ncbi.nlm.nih.gov/pubmed/21514213" target="_blank">
-           Kroneman A, Vennema H, Deforche K, Avoort HV, Peñaranda S, Oberste MS, Vinjé J, Koopmans
-           An automated genotyping tool for enteroviruses and noroviruses. J Clin Virol. 2011 Jun;51(2):121-5.</a>
-        </p>
-      </text>
-    </howToCite-text>
-  </howToCite-form>
-  <introduction-form>
-    <title>The Enterovirus Automated Genotyping Tool: introduction.</title>
-    <introduction-text>
-      <text>
-        <p>This typingtool provides virological labs with an appropriate reference set
+
+			<div>
+				${results class="jobTable"}
+			</div>
+
+			<div class="downloads div-row">
+				${downloads}
+			</div>
+		</div>
+	</message>
+
+  	<message id="details-form">
+		<h1>Enterovirus Genotyping Details</h1>
+		${details-form}
+	</message>
+  
+	<message id="job-overview-downloads">
+		<div class="downloadContainer">
+			<span>Download results:</span> ${xml-file} ${xls-file} ${csv-file} ${fasta-file}
+		</div>
+	</message>
+	
+	<message id="monitorForm.analysisCancelled"><p><b>This job was cancelled!</b></p></message>
+
+  <message id="etvSequenceAssignment.blast">
+    <h3>Genus/Species assignment</h3>
+    <p>
+      <span class="label"/>
+      <span class="nov-genotype">{1}</span>
+    </p>
+    <p><span class="label"/> Based on relative blast score of {2}.
+		</p>
+  </message>
+  <message id="etvSequenceAssignment.phylo">
+    <h3>{1} assignment</h3>
+    <p>
+      <span class="label"/>
+      <span class="nov-genotype">{2}</span>
+    </p>
+    <p><span class="label"/> {3}
+		</p>
+  </message>
+ 
+  	<message id="etvSequenceAssignment.phylo-variant">
+		<p>
+			<span class="label">Subgenogroup:</span> <span class="nov-subclustering">{1}</span>
+		</p>
+		<p>
+			<span class="label"></span> {2}
+		</p>
+	</message>
+  
+  <message id="etvTool.title">Enterovirus Genotyping Tool</message>
+  <message id="main.navigation.introduction">Introduction</message>
+  <message id="main.navigation.subtypingProcess">(Sub)typing process</message>
+  <message id="main.navigation.tutorial">How to use</message>
+
+
+	<message id="how-to-cite-doc">
+		<div class="form">
+			<h1>How to Cite the Norovirus Automated Genotyping Tool</h1>
+
+			<p>Please use the following citation:</p>
+			<p><a href="http://www.ncbi.nlm.nih.gov/pubmed/21514213" target="_blank">
+              Kroneman A, Vennema H, Deforche K, Avoort HV, Peñaranda S, Oberste MS, Vinjé J, Koopmans
+                 An automated genotyping tool for enteroviruses and noroviruses. J Clin Virol. 2011 Jun;51(2):121-5. </a>
+			</p>
+		</div>
+	</message>
+	
+
+	<message id="introduction-doc">
+		<div class="form">
+			<h1>The Enterovirus Automated Genotyping Tool: introduction.</h1>
+
+	        <p>This typingtool provides virological labs with an appropriate reference set
                 for molecular typing of materials positive in the enterovirus diagnostic PCR.<br/>
                 The tool uses a regularly updated set of human
                 Picornaviridae genera and enterovirus species and (sero)types, both
                 definite and proposed types.<br/>
                 For the nomenclature and selection of prototype strains in this tool the <a href="http://www.picornaviridae.com/">picornavirus home page</a> 
                 has been used. The corresponding sequences have been downloaded from <a href="http://www.ncbi.nlm.nih.gov/Genbank/">GenBank</a>
-      </p>
-      </text>
-    </introduction-text>
-  </introduction-form>
-  <tutorial-form>
-    <title>Enterovirus Genotyping Tutorial</title>
-    <tutorial-text>
-      <text>
+      		</p>
+      </div>
+	</message>
+      
+  <message id="tutorial-doc">
+		<div class="form">
+			<h1>Enterovirus Genotyping Tutorial</h1>
+
         <p>One or more (up to 10.000 per run) enterovirus sequences can be pasted
           (A) oruploaded (B) in Fasta format (see fig. 1). Sequences of all regions of
           the genome can be used.
@@ -163,15 +268,13 @@
             phylogeny. 
           </li>
         </ul>
-      </text>
-    </tutorial-text>
-  </tutorial-form>
-  <decisionTrees-form>
-	</decisionTrees-form>
-  <subtypingProcess-form>
-    <title>Enterovirus Genotyping Tool Methods</title>
-    <subtypingProcess-text>
-      <text>
+      </div>
+    </message>
+
+	<message id="method-doc">
+		<div class="form">
+			<h1>Enterovirus Genotyping Tool Methods</h1>
+
         <p class="bold">The (sero)typing process consists of up to two steps:</p>
         <ol>
           <li>The initial step performs an nucleotide blast scan, using <a href="http://blast.ncbi.nlm.nih.gov/Blast.cgi">Blastn</a>.
@@ -217,60 +320,61 @@
         Wilgenbusch JC, Swofford D. Inferring evolutionary trees with PAUP*.
         Curr Protoc Bioinformatics 2003; Chapter 6:Unit 6.4</a>
         </div>
-      </text>
-    </subtypingProcess-text>
-  </subtypingProcess-form>
-  <exampleSequences-form>
-    <title>
-			Example Sequences for the Enterovirus Genotyping Tool 
-		</title>
-    <exampleSequences-sequences>
-      <sequence name="AY879326">
-AATGACCCTGAAAGTGCACTCAATAGGGCAGTGGGCAGGGTAGCTGATACTATAGC
-CAGTGGACCTGTTAACACTGAGCAAATTCCTGCTTTAACAGCAGTGGAGACAGGGCA
-CACATCACAAGTGGTACCGAGCGACACGATGCAGACACGCCACGTGGTCAACTACC
-ACACCAGATCAGAGTCATCGATAGAGAACTTCATGGGGAGAGCGGCGTGCGTGTACA
-TTGCCCAGTACGCCACAGAGAAGGTCAACGACGAGTTAGACAGATATACCAACTGGGA
-GATAACAACCAGACAAGTCGCACAGTTAAGGCGTAAACTGGAAATGTTCACATACATGA
-GGTTCGATCTTGAGATCACGTTTGTCATCACCAGCTCCCAGCGCACTTCAACCACATACG
-CATCAGACTCCCCTCCACTAACGCATCAAGTAATGTATGTACCACCAGGAGGCCCAATTCC
-TAGAAGTTATGAAGATTTTGCCTGGCAGACATCAACCAACCCAAGTGTGTTCTGGACGGA
-AGGCAATGCCCCTCCCAGGATGTCGATACCATTCATGAGTGTTGGTAACGCATATTGTAAT
-TTCTATGATGGATGGTCTCATTTCAGCCAGAGCGGTGTGTATGGGTACACTACTTTAAACAA
-CATGGGACACTTGTATTTTAGACACGTGAACAAATCGACTGCATATCCAGTTAACAGTGTT
-GCCCGCGTCTATTTCAAGCCCAAGCACGTGAAGGCGTGGGTGCCTCGTGCGCCACGCTT
-ATGCCCGTATCTGTATGCAAGAAATGTCAATTTTGATGTGCAAGGGGTAACTGAATCCCGA
-GGCAAAATCACTCTTGATCGATCAACACACAACCCTTTGTCAAACACT
-	        </sequence>
-      <sequence name="AM292468">
-GGGGATCCCATTGCAGATATGATTGACCAAACCGTGAACAATCAAGTGAATCGCTCCCTATC
-TGCATTGCAAGTACTACCCACAGCTGCCAATACTGAAGCAAGTAGTCACAGATTAGGCA
-CTGGTGTTGTGCCAGCACTACAGGCTGCGGAGACAGGGGCGTCATCAAATGCCAGTGA
-CAAGAACCTCATTGAAACTAGGTGTGTGCTGAATCATCACTCCACACAGGAGACGGCCAT
-TGGAAACTTCTTCAGCCGCGCCGGTTTGGTCAGCATTATCACAATGCCCACCACGGGCAC
-CCAGAACACGGATGGATATGTTAATTGGGATATTGATTTGATGGGGTACGCACAATTGCGGC
-GGAAGTGCGAATTGTTCACCTACATGCGCTTTGATGCCGAATTCACATTTGTCGTGGCCAAA
-CCCAACGGTGAATTAGTCCCTCAATTACTGCAGTACATGTATGTTCCACCAGGGGCCCCGAA
-ACCCACTTCCAGAGATTCATTCGCTTGGCAGACAGCCACCAACCCGTCTGTGTTTGTGAAA
-ATGACAGATCCTCCAGCCCAGGTGTCAGTTCCCTTCATGTCACCAGCCAGTGCGTACCAAT
-GGTTTTATGATGGCTACCCCACTTTCGGAGAGCACCTCCAAGCAAATGACCTAGATTATGGCC
-AATGCCCTAATAACATGATGGGCACCTTTAGCATTAGGACAGTGGGGACTGAGAAGTCACCA
-CACTCCATCACCCTGAGAGTGTACATGAGAATTAAGCACGTCAGGGCGTGGATACCAAGAC
-CTCTGAGAAACCAACCCTATTTGTTTAAGACTAACCCAAATTACAAAGGCAATGACATTAAGT
-GCACTAGCGCTAGCAGAGATAAGATCACAACTTTG
-	        </sequence>
-      <sequence name="EF095539">
-AGTTGTCGCGGACGGAGATCATCCCCCGGTTACCCCCTTTCGACGCGGGTACTGCGATA
-GTGCCACCCCAGTCTTTCCTACTCCCGACTCCCGACCCTAACCCAGGTTCCTCGGAACAG
-GAACACCAATTTACTCATCCCCTGGATGCCGACTAATCAGAGGAACGTCAGCATTTTCCGGC
-CCAGGCTAAGAGAAGTAGATAAGTTAGAATCCAAATTGATTTATCATCCCCTTGACGAATTCGC
-GTTGGAAAAACACCTCTCACTTGCCGCTCTTCACACCCATTAATTTAATTCGGCCTCTGTGTTG
-AGCCCCTTGTTGAAGTGTTTCCCTCCATCGCGACGTGGTTGGAGATCTAAGTCAACCGACTCC
-GACGAAACTACCATCATGCCTCCCCGATTATGTGATGCTTTCTGCCCTGCTGGGTGGAGCACC
-CTCGGGTTGAGAAAACCTTCTTCCTTTTTCCTTGGACTCCGGTCCCCCGGTCTAAGCCGCTCG
-GAATATGACAGG
-	        </sequence>
-	        <sequence name="HQ424436.1">
+      </div>
+    </message>
+
+ 	<message id="examples-doc">
+		<div class="form">
+			<h1>Example Sequences for the Enterovirus Genotyping Tool</h1>
+
+      <div class="sequenceName">&gt;AY879326</div>
+			<div class="sequence">
+AATGACCCTGAAAGTGCACTCAATAGGGCAGTGGGCAGGGTAGCTGATACTATAGCCAGTGGACCTGTTA
+ACACTGAGCAAATTCCTGCTTTAACAGCAGTGGAGACAGGGCACACATCACAAGTGGTACCGAGCGACAC
+GATGCAGACACGCCACGTGGTCAACTACCACACCAGATCAGAGTCATCGATAGAGAACTTCATGGGGAGA
+GCGGCGTGCGTGTACATTGCCCAGTACGCCACAGAGAAGGTCAACGACGAGTTAGACAGATATACCAACT
+GGGAGATAACAACCAGACAAGTCGCACAGTTAAGGCGTAAACTGGAAATGTTCACATACATGAGGTTCGA
+TCTTGAGATCACGTTTGTCATCACCAGCTCCCAGCGCACTTCAACCACATACGCATCAGACTCCCCTCCA
+CTAACGCATCAAGTAATGTATGTACCACCAGGAGGCCCAATTCCTAGAAGTTATGAAGATTTTGCCTGGC
+AGACATCAACCAACCCAAGTGTGTTCTGGACGGAAGGCAATGCCCCTCCCAGGATGTCGATACCATTCAT
+GAGTGTTGGTAACGCATATTGTAATTTCTATGATGGATGGTCTCATTTCAGCCAGAGCGGTGTGTATGGG
+TACACTACTTTAAACAACATGGGACACTTGTATTTTAGACACGTGAACAAATCGACTGCATATCCAGTTA
+ACAGTGTTGCCCGCGTCTATTTCAAGCCCAAGCACGTGAAGGCGTGGGTGCCTCGTGCGCCACGCTTATG
+CCCGTATCTGTATGCAAGAAATGTCAATTTTGATGTGCAAGGGGTAACTGAATCCCGAGGCAAAATCACT
+CTTGATCGATCAACACACAACCCTTTGTCAAACACT
+	        </div>
+
+			<div class="sequenceName">&gt;AM292468</div>
+			<div class="sequence">
+GGGGATCCCATTGCAGATATGATTGACCAAACCGTGAACAATCAAGTGAATCGCTCCCTATCTGCATTGC
+AAGTACTACCCACAGCTGCCAATACTGAAGCAAGTAGTCACAGATTAGGCACTGGTGTTGTGCCAGCACT
+ACAGGCTGCGGAGACAGGGGCGTCATCAAATGCCAGTGACAAGAACCTCATTGAAACTAGGTGTGTGCTG
+AATCATCACTCCACACAGGAGACGGCCATTGGAAACTTCTTCAGCCGCGCCGGTTTGGTCAGCATTATCA
+CAATGCCCACCACGGGCACCCAGAACACGGATGGATATGTTAATTGGGATATTGATTTGATGGGGTACGC
+ACAATTGCGGCGGAAGTGCGAATTGTTCACCTACATGCGCTTTGATGCCGAATTCACATTTGTCGTGGCC
+AAACCCAACGGTGAATTAGTCCCTCAATTACTGCAGTACATGTATGTTCCACCAGGGGCCCCGAAACCCA
+CTTCCAGAGATTCATTCGCTTGGCAGACAGCCACCAACCCGTCTGTGTTTGTGAAAATGACAGATCCTCC
+AGCCCAGGTGTCAGTTCCCTTCATGTCACCAGCCAGTGCGTACCAATGGTTTTATGATGGCTACCCCACT
+TTCGGAGAGCACCTCCAAGCAAATGACCTAGATTATGGCCAATGCCCTAATAACATGATGGGCACCTTTA
+GCATTAGGACAGTGGGGACTGAGAAGTCACCAACTCCATCACCCTGAGAGTGTACATGAGAATTAAGCAC
+GTCAGGGCGTGGATACCAAGACCTCTGAGAAACCAACCCTATTTGTTTAAGACTAACCCAAATTACAAAG
+GCAATGACATTAAGTGCACTAGCGCTAGCAGAGATAAGATCACAACTTTG
+	        </div>
+
+			<div class="sequenceName">&gt;EF095539</div>
+			<div class="sequence">
+AGTTGTCGCGGACGGAGATCATCCCCCGGTTACCCCCTTTCGACGCGGGTACTGCGATAGTGCCACCCCA
+GTCTTTCCTACTCCCGACTCCCGACCCTAACCCAGGTTCCTCGGAACAGGAACACCAATTTACTCATCCC
+CTGGATGCCGACTAATCAGAGGAACGTCAGCATTTTCCGGCCCAGGCTAAGAGAAGTAGATAAGTTAGAA
+TCCAAATTGATTTATCATCCCCTTGACGAATTCGCGTTGGAAAAACACCTCTCACTTGCCGCTCTTCACA
+CCCATTAATTTAATTCGGCCTCTGTGTTGAGCCCCTTGTTGAAGTGTTTCCCTCCATCGCGACGTGGTTG
+GAGATCTAAGTCAACCGACTCCGACGAAACTACCATCATGCCTCCCCGATTATGTGATGCTTTCTGCCCT
+GCTGGGTGGAGCACCCTCGGGTTGAGAAAACCTTCTTCCTTTTTCCTTGGACTCCGGTCCCCCGGTCTAA
+GCCGCTCGGAATATGACAGG
+	        </div>
+
+			<div class="sequenceName">&gt;HQ424436.1</div>
+			<div class="sequence">
 ACCATGGATCAGCAACACTCATTACAGAGCGCACGGTCGTGACGGTGTGTTTGACTACTACACTACAGGT
 TTGGTTAGCATATGGTACCAGACGAACTATGTGGTCCCAATTGGAGCACCCAATACAGCCTATATAATAG
 CATTAGCGGCAGCTCAGAAGAACTTCACCATGAAGTTGTGTAAGGATGCTAGTGATATCCTGCAGACGGG
@@ -282,39 +386,8 @@ GGAGAAATAGACCTCCCTCTTGAAGGCACGACCAACCCGAATGGGTATGCAAACTGGGACATAGATATAA
 CAGGTTACGCGCAAATGCGTAGAAAAGTGGAGTTGTTCACCTACATGCGTTTCGACGCAGAGTTCACCTT
 TGTTGCATGCACGCCCACCGGGGAAGTCGTCCCGCAGCTGCTCCAGTATATGTTTGTGCCACCCGGAGCC
 CCCAAG
-</sequence>
-    </exampleSequences-sequences>
-  </exampleSequences-form>
-  <resource name="etvSequenceAssignment.blast">
-    <h3>Genus/Species assignment</h3>
-    <p>
-      <span class="label"/>
-      <span class="nov-genotype">{1}</span>
-    </p>
-    <p><span class="label"/> Based on relative blast score of {2}.
-		</p>
-  </resource>
-  <resource name="etvSequenceAssignment.phylo">
-    <h3>{1} assignment</h3>
-    <p>
-      <span class="label"/>
-      <span class="nov-genotype">{2}</span>
-    </p>
-    <p><span class="label"/> {3}
-		</p>
-  </resource>
- 
-  	<resource name="etvSequenceAssignment.phylo-variant">
-		<p>
-			<span class="label">Subgenogroup:</span> <span class="nov-subclustering">{1}</span>
-		</p>
-		<p>
-			<span class="label"></span> {2}
-		</p>
-	</resource>
-  
-  <resource name="etvTool.title">Enterovirus Genotyping Tool</resource>
-  <resource name="main.navigation.introduction">Introduction</resource>
-  <resource name="main.navigation.subtypingProcess">(Sub)typing process</resource>
-  <resource name="main.navigation.tutorial">How to use</resource>
-</organism-settings>
+
+			</div>
+    	</div>
+  	</message>
+</messages>

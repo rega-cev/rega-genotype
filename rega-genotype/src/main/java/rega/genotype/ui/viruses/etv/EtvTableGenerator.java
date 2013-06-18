@@ -16,7 +16,7 @@ import rega.genotype.ui.util.DataTable;
  */
 public class EtvTableGenerator extends AbstractDataTableGenerator {
 	public EtvTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
-		super(jobOverview, table);
+		super(jobOverview.getFilter(), table);
 
 		table.addLabel("name");
 		table.addLabel("length");
