@@ -21,6 +21,7 @@ import eu.webtoolkit.jwt.utils.StreamUtils;
 @SuppressWarnings("serial")
 public class GenotypeService extends HttpServlet {	
 	private Class<? extends GenotypeTool> tool;
+	private String organism;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,7 +36,13 @@ public class GenotypeService extends HttpServlet {
 			f.close();
 			
 			File traceFile = new File(workingDir, "result.xml");
-			GenotypeTool genotypeTool = (GenotypeTool) tool.getConstructor(File.class).newInstance(workingDir);
+
+			GenotypeTool genotypeTool;
+			if (organism == null)
+				genotypeTool = (GenotypeTool) tool.getConstructor(File.class).newInstance(workingDir);
+			else
+				genotypeTool = (GenotypeTool) tool.getConstructor(String.class, File.class).newInstance(organism, workingDir);
+
 			genotypeTool.analyze(sequenceFile.getAbsolutePath(), traceFile.getAbsolutePath());
 			
 			resp.setContentType("application/xml");
@@ -71,6 +78,8 @@ public class GenotypeService extends HttpServlet {
 			}
 		else
 			throw new ServletException("Need 'genotypeTool' parameter");
+
+		this.organism = config.getInitParameter("Organism");
 
 		Settings.initSettings(Settings.getInstance());
 		
