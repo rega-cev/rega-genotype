@@ -26,6 +26,7 @@
   	<message id="startForm.errorJobId">Invalid job id.</message>
   	<message id="startForm.errorSequence">Too many sequences.</message>
   	<message id="startForm.noSequence">No sequences were provided.</message>
+  	<message id="startForm.tooManySequences">Too many sequences were provided.</message>
   	<message id="startForm.ioError">I/O error reading the sequence.</message>
 
 	<message id="monitorForm.cancelButton">Cancel job</message>

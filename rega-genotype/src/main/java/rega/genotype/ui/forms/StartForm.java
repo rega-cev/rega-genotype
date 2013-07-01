@@ -177,8 +177,8 @@ public class StartForm extends AbstractForm {
 
 			if(sequenceCount == 0) {
 				return tr("startForm.noSequence");
-			} else if (sequenceCount <= Settings.getInstance().getMaxAllowedSeqs()) {
-				return null;
+			} else if (sequenceCount > Settings.getInstance().getMaxAllowedSeqs()) {
+				return tr("startForm.tooManySequences");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
