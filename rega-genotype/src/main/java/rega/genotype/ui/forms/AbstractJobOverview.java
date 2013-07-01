@@ -7,13 +7,13 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.List;
 
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.SequenceFilter;
-import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
@@ -22,14 +22,17 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.XlsDataTable;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WResource;
@@ -163,11 +166,27 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			analysisInProgress.bindInt("update-time-seconds", getMain().getOrganismDefinition().getUpdateInterval()/1000);
 			cancelButton.clicked().addListener(analysisInProgress, new Signal1.Listener<WMouseEvent>(){
 				public void trigger(WMouseEvent arg) {
-					try {
-						new File(jobDir, ".CANCEL").createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					final WMessageBox messageBox = new WMessageBox(
+							tr("monitorForm.cancelling"),
+							tr("monitorForm.areYouSureToCancel"),
+		                    Icon.Information, EnumSet.of(StandardButton.Yes, StandardButton.No));
+		            messageBox.setModal(false);
+		            messageBox.buttonClicked().addListener(AbstractJobOverview.this, new Signal1.Listener<StandardButton>() {
+						public void trigger(StandardButton sb) {
+							if (messageBox.getButtonResult() == StandardButton.Yes) {
+								try {
+	        						new File(jobDir, ".CANCEL").createNewFile();
+	        					} catch (IOException e) {
+	        						e.printStackTrace();
+	        					}
+							}
+                        	
+                            if (messageBox != null)
+                                messageBox.remove();
+						}
+					});
+		            
+		            messageBox.show();
 				}
 			});
 		}

@@ -44,6 +44,8 @@
 	<message id="monitorForm.xmlFile">XML File</message>
 	<message id="monitorForm.downloadJob">Download all job files:</message>
 	<message id="monitorForm.jobFile">ZIP</message>
+	<message id="monitorForm.cancelling">Cancelling job</message>
+	<message id="monitorForm.areYouSureToCancel">Are you sure you want to cancel this job?</message>
 	
 	<message id="monitorForm.nonExistingJobId">Job id {1} doesn't exist</message>
 	
