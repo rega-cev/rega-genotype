@@ -52,22 +52,6 @@
     <servlet-name>GenotypeEntero</servlet-name>
     <url-pattern>/enterovirus/typingtool/*</url-pattern>
   </servlet-mapping>
-
-  <servlet>
-    <servlet-name>GenotypeHAV</servlet-name>
-    <display-name>HAV Genotyping</display-name>
-    <description>HAV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>HAV</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHAV</servlet-name>
-    <url-pattern>/hav/typingtool/*</url-pattern>
-  </servlet-mapping>
   
   <servlet>
     <servlet-name>GenotypeEntero-service</servlet-name>
