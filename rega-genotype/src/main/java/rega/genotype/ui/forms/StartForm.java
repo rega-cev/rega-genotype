@@ -54,6 +54,7 @@ public class StartForm extends AbstractForm {
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		
 		errorText = new WText();
+		errorText.setStyleClass("error-text");
 		t.bindWidget("error-text", errorText);
 		
 		sequenceTA = new WTextArea();

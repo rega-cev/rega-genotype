@@ -477,6 +477,9 @@ table.reftable caption{
 	width: 820px;
 }
 
+.error-text {
+	color: rgb(255,0,0);
+}
 
 
 
