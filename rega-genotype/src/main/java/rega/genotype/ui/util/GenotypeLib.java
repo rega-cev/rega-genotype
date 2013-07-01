@@ -23,9 +23,9 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,15 +47,14 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Utils;
+import eu.webtoolkit.jwt.Utils.HtmlEncodingFlag;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WResource;
-import eu.webtoolkit.jwt.Utils.HtmlEncodingFlag;
 import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.WString;
-import eu.webtoolkit.jwt.WWebWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
 
@@ -384,6 +383,6 @@ public class GenotypeLib {
     	if (value == null)
     		return null;
     	else
-    		return Utils.htmlEncode(value, HtmlEncodingFlag.EncodeNewLines);
+    		return Utils.htmlEncode(value, EnumSet.of(HtmlEncodingFlag.EncodeNewLines));
     }
 }
