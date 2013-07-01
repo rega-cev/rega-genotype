@@ -66,25 +66,27 @@ public class DefaultJobOverview extends AbstractJobOverview {
 			data.add(new WText(support));
 
 			final String scanType = getMain().getOrganismDefinition().getProfileScanType(p);
-			final int start = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/start"));
-			final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
+			final String start = p.getValue("/genotype_result/sequence/result[@id='blast']/start");
+			final String end = p.getValue("/genotype_result/sequence/result[@id='blast']/end");
 			final int sequenceIndex = p.getSequenceIndex();
 			final String csvData = p.getValue("/genotype_result/sequence/result[@id='scan-" + scanType + "']/data");
 
-			data.add(GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
-				@Override
-				public void handleRequest(WebRequest request, WebResponse response) {
-					try {
-						if (getFileName().isEmpty()) {
-							File file = getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, sequenceIndex, id, start, end, 0, scanType, csvData);
-							setFileName(file.getAbsolutePath());
+			if (start != null && end != null) {
+				data.add(GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
+					@Override
+					public void handleRequest(WebRequest request, WebResponse response) {
+						try {
+							if (getFileName().isEmpty()) {
+								File file = getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, sequenceIndex, id, Integer.parseInt(start), Integer.parseInt(end), 0, scanType, csvData);
+								setFileName(file.getAbsolutePath());
+							}
+							super.handleRequest(request, response);
+						} catch (IOException e) {
+							throw new RuntimeException(e);
 						}
-						super.handleRequest(request, response);
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-				}				
-			}));
+					}				
+				}));
+			}
 		}
 		
 		return data;
