@@ -164,6 +164,10 @@ public class SequenceAlignment
         if (header.charAt(0) != '>')
             throw new FileFormatException("Expecting a '>'",
                                           reader.getLineNumber());
+        
+        if (!header.substring(1).matches("[^!@#$%^&\\*()+=]*"))
+            throw new FileFormatException("Illegal character (one of '!@#$%^&\\*()+=')",
+                    reader.getLineNumber());
 
         // eat '>'
         header = header.substring(1);
