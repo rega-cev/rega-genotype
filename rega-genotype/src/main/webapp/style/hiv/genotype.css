@@ -46,6 +46,12 @@ div.imgDiv, div.downloadContainer{
 	margin-right: auto;
 }
 
+.region-genome img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .form {
 	width: 85%;
 	margin: 0px auto;
