@@ -120,6 +120,38 @@
 			</div>
 		</div>
 	</message>
+
+	<message id="recombination-form">
+		<div class="header">
+			<img src="${app.context}/pics/hiv/header.gif" alg="Header image"></img>
+		</div>
+		
+		<h1>HIV Recombination Details</h1>
+		
+		<div class="region-genome">
+			${recombination-image}
+		</div>
+		<div class="div-row">
+			${recombination-table}
+		</div>
+		
+		<div class="div-row nav" style="height: 50px;">
+			<ul>
+				<li><a href="#/">Submit analysis</a></li>
+				<li><a href="#/how-to-cite">How to cite</a></li>
+				<li><a href="#/tutorial">Tutorial</a></li>
+				<li><a href="#/decision-trees">Decision trees</a></li>
+				<li><a href="#/subtyping-process">Subtyping process</a></li>
+				<li><a href="#/example-sequences">Example sequences</a></li>
+				<li><a href="#/contact-us">Contact us</a></li>
+			</ul>
+		</div>		
+		<div class="footer">
+			<div class="maintainers">
+				${tr:maintainers-text}	
+			</div>
+		</div>
+	</message>
 	
 	<message id="job-overview-downloads">
 		<span>Download results:</span> ${xls-file} ${csv-file} ${xml-file} ${fasta-file}

@@ -8,6 +8,7 @@ import java.util.List;
 import org.jdom.Element;
 
 import rega.genotype.data.GenotypeResultParser.SkipToSequenceParser;
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.Side;
@@ -17,6 +18,7 @@ import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
+import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
@@ -34,16 +36,9 @@ public class RecombinationForm extends AbstractForm{
 	public static final String URL = "recombination";
 
 	private SkipToSequenceParser p;
-	private WContainerWidget recombinationImage;
-	private WTable recombinationTable;
 	
 	public RecombinationForm(GenotypeWindow main) {
 		super(main);
-		setStyleClass("recombination-form");
-		
-		recombinationImage = new WContainerWidget(this);
-		recombinationImage.setMargin(20, Side.Top, Side.Bottom);
-		recombinationTable = new WTable(this);
 	}
 	
 	public static String recombinationPath(File jobDir, int sequenceIndex, String type){
@@ -51,8 +46,13 @@ public class RecombinationForm extends AbstractForm{
 	}
 	
 	WString init(final File jobDir, Integer selectedSequenceIndex, final String type) {
-		recombinationImage.clear();
-		recombinationTable.clear();
+		this.clear();
+
+		WTemplate t = new WTemplate(tr("recombination-form"), this);
+		t.addFunction("tr", WTemplate.Functions.tr);
+		
+		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
+		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		
 		p = new SkipToSequenceParser(selectedSequenceIndex);
 		p.parseFile(jobDir);
@@ -89,8 +89,9 @@ public class RecombinationForm extends AbstractForm{
 				}
 			}				
 		});
-		recombinationImage.addWidget(genome);
+		t.bindWidget("recombination-image", genome);
 		
+		WTable recombinationTable = new WTable();
 		if(recombination != null){
 			int perColumn = 2;
 			for (Region region : regions) {
@@ -99,6 +100,7 @@ public class RecombinationForm extends AbstractForm{
 					.addWidget(createRegionWidget(jobDir, regionIndex, region, start));
 			}
 		}
+		t.bindWidget("recombination-table", recombinationTable);
 		
 		return null;
 	}

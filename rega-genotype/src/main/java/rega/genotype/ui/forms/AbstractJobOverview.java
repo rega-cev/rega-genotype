@@ -359,7 +359,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public static String reportPath(File jobDir, int sequenceIndex) {
-		return jobPath(jobDir) + '/' + String.valueOf(sequenceIndex);
+		return jobPath(jobDir) + '/' + JobForm.SEQUENCE_PREFIX + String.valueOf(sequenceIndex);
 	}
 
 	public static String jobPath(File jobDir) {

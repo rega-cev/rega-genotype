@@ -59,14 +59,16 @@ public class JobForm extends AbstractForm {
 				else if (token.startsWith(FILTER_PREFIX))
 					filter = token.substring(FILTER_PREFIX.length());
 			}
-			
 
+			String detailed = null;
+			if (internalPathTokenizer.hasMoreElements())
+				detailed = internalPathTokenizer.nextToken();
+			
 			if (!jobOverview.existsJob(jobId)) {
 				error.setText(tr("monitorForm.nonExistingJobId").arg(jobId));
 				showWidget(error);
 				return;
 			}
-			
 
 			if (filter != null && filter.trim().equals(""))
 				filter = null;
@@ -76,12 +78,10 @@ public class JobForm extends AbstractForm {
 				jobIdChanged.trigger(jobId);
 				showWidget(jobOverview);
 			} else {
-				String detailed = GenotypeMain.getApp().getInternalPathNextPart("/" + JOB_URL + "/" + jobId + "/" + sequenceId +"/");
-				
 				WString errorMsg;
 				WWidget widget;
 			
-				if (detailed.startsWith(RecombinationForm.URL) 
+				if (detailed != null && detailed.startsWith(RecombinationForm.URL) 
 					&& detailed.length() > RecombinationForm.URL.length() + 1
 					&& recombination != null) {
 					String type = detailed.substring(RecombinationForm.URL.length() + 1);
