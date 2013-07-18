@@ -13,6 +13,7 @@
     <url-pattern>/hiv/typingtool/*</url-pattern>
   </servlet-mapping>
 
+  <!--  
   <servlet>
     <servlet-name>GenotypeNoV</servlet-name>
     <display-name>NoV Genotyping</display-name>
@@ -183,6 +184,6 @@
   <servlet-mapping>
     <servlet-name>GenotypeHPV</servlet-name>
     <url-pattern>/hpv/typingtool/*</url-pattern>
-  </servlet-mapping>
+  </servlet-mapping>-->
 </web-app>
 
