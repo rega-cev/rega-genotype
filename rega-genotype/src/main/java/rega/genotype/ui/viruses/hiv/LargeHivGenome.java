@@ -17,7 +17,7 @@ public class LargeHivGenome extends HivGenome{
 	}
 	
 	public int getGenomeImageEndY() {
-		return 265;
+		return 190;
 	}
 
 	public int getGenomeImageStartY() {
@@ -25,6 +25,6 @@ public class LargeHivGenome extends HivGenome{
 	}
 	
 	public int getFontSize() {
-		return 20;
+		return 18;
 	}
 }
