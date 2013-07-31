@@ -93,7 +93,7 @@ public class RecombinationForm extends AbstractForm{
 		
 		WTable recombinationTable = new WTable();
 		if(recombination != null){
-			int perColumn = 2;
+			final int perColumn = 2;
 			for (Region region : regions) {
 				int regionIndex = regions.indexOf(region);
 				recombinationTable.getElementAt(regionIndex / perColumn, regionIndex % perColumn)
