@@ -5,21 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-api-4.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/avalon-framework-impl-4.3.1.jar"/>
-	<classpathentry kind="lib" path="lib/batik-anim-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-awt-util-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-bridge-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-codec-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-css-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-dom-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-ext-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-gvt-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-parser-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-script-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-svg-dom-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-svggen-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-transcoder-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-util-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/batik-xml-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/bcmail-jdk14-138.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-1.1.jar"/>
@@ -48,6 +33,5 @@
 	<classpathentry kind="lib" path="lib/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jwt-3.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/PDFjet-3.07.jar"/>
-	<classpathentry kind="lib" path="lib/im4java-1.4.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

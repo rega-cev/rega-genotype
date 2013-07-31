@@ -37,14 +37,12 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.apache.commons.io.IOUtils;
-import org.im4java.core.ConvertCmd;
-import org.im4java.core.IM4JavaException;
-import org.im4java.core.IMOperation;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.utils.Settings;
+import rega.genotype.utils.StreamReaderThread;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Utils;
 import eu.webtoolkit.jwt.Utils.HtmlEncodingFlag;
@@ -108,27 +106,42 @@ public class GenotypeLib {
 		ImageIO.write(bufferedImage, "png", out);
 	}
 
+	private static void inkscapeConvert(File in, File out, String out_type) throws IOException, InterruptedException {
+		Process ps = new ProcessBuilder(Settings.getInstance().getInkscapeCmd(), "--export-" + out_type + "=" + out.getAbsolutePath(), in.getAbsolutePath()).start();
+		
+		StreamReaderThread stdout = new StreamReaderThread(ps.getInputStream(), System.out, "stdout: ");
+		stdout.start();
+		
+		StreamReaderThread stderr = new StreamReaderThread(ps.getErrorStream(), System.err, "stderr: ");
+		stderr.start();
+		
+		ps.waitFor();
+	}
+	
+	private static void epsToPng(File in, File out) throws IOException, InterruptedException {
+		inkscapeConvert(in, out, "png");
+	}
+	
+	private static void svgToPdf(File in, File out) throws IOException, InterruptedException {
+		inkscapeConvert(in, out, "pdf");
+	}
+	
+	private static void svgToPng(File in, File out) throws IOException, InterruptedException {
+		inkscapeConvert(in, out, "png");
+	}
+	
 	public static File getSignalPNG(File epsFile) {
 		try {
 			File pngFile = File.createTempFile("signal", ".png");
 			
-			ConvertCmd cmd = new ConvertCmd();
-			cmd.setSearchPath(Settings.getInstance().getImageMagickPath());
-			
-			IMOperation op = new IMOperation();
-			op.addImage(epsFile.getAbsolutePath());
-			op.addImage(pngFile.getAbsolutePath());
-			
-			cmd.run(op);
+			epsToPng(epsFile, pngFile);
 
 			return pngFile;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		} catch (IM4JavaException e) {
-			e.printStackTrace();
-		}
+		} 
 		
 		return null;
 	}
@@ -139,7 +152,7 @@ public class GenotypeLib {
 			try {
 				File svgFile = getTreeSVG(jobDir, treeFile);
 				
-				ImageConverter.svgToPng(svgFile, pngFile);
+				svgToPng(svgFile, pngFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -152,7 +165,8 @@ public class GenotypeLib {
 		if (!pdfFile.exists() && treeFile.exists()) {
 			try{
 				File svgFile = getTreeSVG(jobDir, treeFile);
-				ImageConverter.svgToPdf(svgFile, pdfFile);
+				
+				svgToPdf(svgFile, pdfFile);
 			}
 			catch(Exception e){
 				e.printStackTrace();

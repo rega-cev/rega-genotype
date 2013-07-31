@@ -49,11 +49,11 @@
   </property>
   
   <!-- 
-  	imageMagickPath
-  	Location of your imagemagick binaries
+  	inkscapeCmd
+  	Location of your inkscape binary
    -->
-  <property name="imageMagickPath">
-    /opt/soft/imagemagick/bin/
+  <property name="inkscapeCmd">
+   /opt/soft/inkscape/bin/inkscape
   </property>
   
 
