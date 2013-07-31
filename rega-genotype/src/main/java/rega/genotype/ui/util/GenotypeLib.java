@@ -109,10 +109,10 @@ public class GenotypeLib {
 	private static void inkscapeConvert(File in, File out, String out_type) throws IOException, InterruptedException {
 		Process ps = new ProcessBuilder(Settings.getInstance().getInkscapeCmd(), "--export-" + out_type + "=" + out.getAbsolutePath(), in.getAbsolutePath()).start();
 		
-		StreamReaderThread stdout = new StreamReaderThread(ps.getInputStream(), System.out, "stdout: ");
+		StreamReaderThread stdout = new StreamReaderThread(ps.getInputStream(), System.out, "inkscape stdout: ");
 		stdout.start();
 		
-		StreamReaderThread stderr = new StreamReaderThread(ps.getErrorStream(), System.err, "stderr: ");
+		StreamReaderThread stderr = new StreamReaderThread(ps.getErrorStream(), System.err, "inkscape stderr: ");
 		stderr.start();
 		
 		ps.waitFor();
