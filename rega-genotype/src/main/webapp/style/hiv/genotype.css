@@ -405,6 +405,11 @@ table.assignment-overview {
 	margin: 2px;
 	padding: 1em;
 }
+
+.region img {
+	width: 400px;
+}
+
 .recombination-form .region:first-line{
 	font-size: 120%;
 	font-weight: bold;
