@@ -43,13 +43,13 @@
 
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>		
 		
@@ -80,13 +80,13 @@
 		</div>
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>		
 		<div class="footer">
@@ -105,13 +105,13 @@
 		
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>		
 		<div class="footer">
@@ -137,13 +137,13 @@
 		
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>		
 		<div class="footer">
@@ -215,13 +215,13 @@
 		
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>	
 			
@@ -340,13 +340,13 @@
 				
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>	
 			
@@ -746,13 +746,13 @@
 		
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>	
 			
@@ -1048,13 +1048,13 @@
 				
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>	
 			
@@ -1859,13 +1859,13 @@
     				
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>	
 			
@@ -2023,13 +2023,13 @@
 		    				
 		<div class="div-row nav" style="height: 50px;">
 			<ul>
-				<li><a href="#/">Submit analysis</a></li>
-				<li><a href="#/how-to-cite">How to cite</a></li>
-				<li><a href="#/tutorial">Tutorial</a></li>
-				<li><a href="#/decision-trees">Decision trees</a></li>
-				<li><a href="#/subtyping-process">Subtyping process</a></li>
-				<li><a href="#/example-sequences">Example sequences</a></li>
-				<li><a href="#/contact-us">Contact us</a></li>
+				<li><a href="${app.base.url}/">Submit analysis</a></li>
+				<li><a href="${app.base.url}/how-to-cite">How to cite</a></li>
+				<li><a href="${app.base.url}/tutorial">Tutorial</a></li>
+				<li><a href="${app.base.url}/decision-trees">Decision trees</a></li>
+				<li><a href="${app.base.url}/subtyping-process">Subtyping process</a></li>
+				<li><a href="${app.base.url}/example-sequences">Example sequences</a></li>
+				<li><a href="${app.base.url}/contact-us">Contact us</a></li>
 			</ul>
 		</div>	
 			
