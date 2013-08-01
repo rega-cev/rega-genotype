@@ -85,8 +85,10 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		csv.setLink(new WLink(r));
 		csv.setTarget(AnchorTarget.TargetNewWindow);
 		addWidget(csv);
-		addWidget(new WText(", "));
+		
 		final int sequenceIndex = p.getSequenceIndex();
+		
+		addWidget(new WText(", "));
 		WAnchor pdf = new WAnchor();
 		pdf.setText("PDF");
 		r = new WResource() {
@@ -102,6 +104,24 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		pdf.setLink(new WLink(r));
 		pdf.setTarget(AnchorTarget.TargetNewWindow);
 		addWidget(pdf);
+		
+		addWidget(new WText(", "));
+		WAnchor png = new WAnchor();
+		png.setText("PNG");
+		r = new WResource() {
+			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				response.setContentType("image/png");
+				try {
+					plot.streamRecombinationPNG(jobDir, sequenceIndex, type, response.getOutputStream());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}};
+		r.setDispositionType(DispositionType.Attachment);
+		png.setLink(new WLink(r));
+		png.setTarget(AnchorTarget.TargetNewWindow);
+		addWidget(png);
+		
 		addWidget(new WBreak());
 		WString m = tr("defaultRecombinationAnalyses.bootscanAnalysis");
 		m.arg(p.getValue(path + "/window"));

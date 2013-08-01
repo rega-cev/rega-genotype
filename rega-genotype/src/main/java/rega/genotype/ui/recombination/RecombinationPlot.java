@@ -30,6 +30,7 @@ import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WPdfImage;
 import eu.webtoolkit.jwt.WPen;
 import eu.webtoolkit.jwt.WPointF;
+import eu.webtoolkit.jwt.WRasterPaintDevice;
 import eu.webtoolkit.jwt.chart.Axis;
 import eu.webtoolkit.jwt.chart.AxisValue;
 import eu.webtoolkit.jwt.chart.ChartType;
@@ -125,6 +126,17 @@ public class RecombinationPlot extends WCartesianChart {
 		this.paint(painter);
 		painter.end();
 		pdf.flush();
+		os.flush();
+	}
+	
+	public void streamRecombinationPNG(File jobDir, int sequenceIndex, String type, OutputStream os) throws Exception {
+		WRasterPaintDevice image = new WRasterPaintDevice("png", new WLength(720), new WLength(450));
+		
+		WPainter painter = new WPainter(image);
+		this.paint(painter);
+		painter.end();
+		
+		image.write(os);
 		os.flush();
 	}
 }
