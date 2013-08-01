@@ -79,11 +79,13 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		csv.setText("CSV");
 		WResource r = new WResource() {
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				response.setContentType("text/csv");
+				
 				plot.streamRecombinationCSV(jobDir, p.getSequenceIndex(), type, response.getOutputStream());
 			}};
 		r.setDispositionType(DispositionType.Attachment);
+		r.suggestFileName("bootscan.csv");
 		csv.setLink(new WLink(r));
-		csv.setTarget(AnchorTarget.TargetNewWindow);
 		addWidget(csv);
 		
 		final int sequenceIndex = p.getSequenceIndex();
@@ -100,9 +102,8 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 					e.printStackTrace();
 				}
 			}};
-		r.setDispositionType(DispositionType.Attachment);
+		r.suggestFileName("bootscan.pdf");
 		pdf.setLink(new WLink(r));
-		pdf.setTarget(AnchorTarget.TargetNewWindow);
 		addWidget(pdf);
 		
 		addWidget(new WText(", "));
@@ -117,9 +118,9 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 					e.printStackTrace();
 				}
 			}};
+		r.suggestFileName("bootscan.png");
 		r.setDispositionType(DispositionType.Attachment);
 		png.setLink(new WLink(r));
-		png.setTarget(AnchorTarget.TargetNewWindow);
 		addWidget(png);
 		
 		addWidget(new WBreak());
