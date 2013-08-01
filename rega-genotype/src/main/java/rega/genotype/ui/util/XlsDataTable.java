@@ -72,7 +72,11 @@ public class XlsDataTable implements DataTable {
 
 	public void flush() throws IOException {
 		workbook.write();
-		workbook.close(); 
+		try {
+			workbook.close();
+		} catch (WriteException e) {
+			e.printStackTrace();
+		} 
 	}
 
 	public void newRow() throws IOException {
