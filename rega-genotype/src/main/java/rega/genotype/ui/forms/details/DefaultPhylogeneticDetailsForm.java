@@ -66,12 +66,12 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		
 		li = ul.addItem(new WText("Download the alignment ("));
 		li.addWidget(GenotypeLib.getAnchor("NEXUS format",
-				"application/txt",
-				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/alignment")).getAbsolutePath()), null));
+				"text/plain",
+				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/alignment")).getAbsolutePath()), "alignment.nex"));
 		li.addWidget(w = new WText(", "));
 		w.setId("");
 		li.addWidget(GenotypeLib.getAnchor("FASTA format",
-				"application/txt",
+				"text/plain",
 				new AlignmentResource(GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/alignment")),
 						SequenceAlignment.SEQUENCE_ANY, SequenceAlignment.FILETYPE_FASTA), "alignment.fasta"));
 		li.addWidget(w= new WText(")"));
@@ -88,12 +88,12 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 				super.handleRequest(request, response);
 			}
 	
-		}, null);
+		}, "tree.pdf");
 
 		anchorTreePdf.setObjectName("pdf-tree");
 		WAnchor anchorTreeNexus = GenotypeLib.getAnchor("NEXUS Format",
-				"application/txt",
-				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/tree")).getAbsolutePath()), null);
+				"text/plain",
+				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/tree")).getAbsolutePath()), "tree.nexus");
 		anchorTreeNexus.setObjectName("nexus-tree");
 
 		if (!showTree) {
@@ -130,8 +130,8 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 
 		li = ul.addItem(new WText("View the "));
 		li.addWidget(GenotypeLib.getAnchor("PAUP* Log file",
-				"application/txt",
-				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/log")).getAbsolutePath()), "paup-log.doc"));
+				"text/plain",
+				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/log")).getAbsolutePath()), "paup-log.txt"));
 		li.addWidget(w = new WText(" (Contains bootstrap values)"));
 		w.setId("");
 	}

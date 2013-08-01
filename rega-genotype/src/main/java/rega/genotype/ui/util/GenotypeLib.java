@@ -317,14 +317,15 @@ public class GenotypeLib {
 	}
 	
 	public static WAnchor getAnchor(String text, String fileType, WResource resource, String suggestedName) {
+		resource.setDispositionType(DispositionType.Attachment);
+		if (suggestedName != null)
+			resource.suggestFileName(suggestedName);
+		
 		WAnchor anchor = new WAnchor("", text);
 		anchor.setObjectName("resource");
 		anchor.setStyleClass("link");
-		anchor.setTarget(AnchorTarget.TargetNewWindow);
-		if (suggestedName != null)
-			resource.suggestFileName(suggestedName);
 		anchor.setLink(new WLink(resource));
-		resource.setDispositionType(DispositionType.Attachment);
+		
 		return anchor;
 	}
 	

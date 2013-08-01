@@ -25,7 +25,7 @@ public class AlignmentResource extends WResource {
 	@Override
 	protected void handleRequest(WebRequest request, WebResponse response)
 			throws IOException {
-		response.setContentType("application/txt");
+		response.setContentType("text/plain");
 		
 
 		try {

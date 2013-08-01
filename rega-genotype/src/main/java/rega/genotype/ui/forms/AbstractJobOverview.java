@@ -43,6 +43,7 @@ import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTimer;
 import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
 
@@ -248,10 +249,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WAnchor createXmlDownload() {
 		WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"));
 		xmlFileDownload.setObjectName("xml-download");
-		xmlFileDownload.setTarget(AnchorTarget.TargetNewWindow);
 		xmlFileDownload.setStyleClass("link");
 		WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 		xmlResource.suggestFileName("result.xml");
+		xmlResource.setDispositionType(DispositionType.Attachment);
 		xmlFileDownload.setLink(new WLink(xmlResource));
 		return xmlFileDownload;
 	}
@@ -260,7 +261,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		WAnchor fastaDownload = new WAnchor("", tr("monitorForm.fasta"));
 		fastaDownload.setObjectName("fasta-download");
 		fastaDownload.setStyleClass("link");
-		fastaDownload.setTarget(AnchorTarget.TargetNewWindow);
 
 		WResource fastaResource;
 		if (filter != null) {
@@ -277,6 +277,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		}
 
 		fastaResource.suggestFileName("sequences.fasta");
+		fastaResource.setDispositionType(DispositionType.Attachment);
 		fastaDownload.setLink(new WLink(fastaResource));
 
 		return fastaDownload;
@@ -286,7 +287,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		WAnchor csvTableDownload = new WAnchor("", label);
 		csvTableDownload.setObjectName("csv-table-download");
 		csvTableDownload.setStyleClass("link");
-		csvTableDownload.setTarget(AnchorTarget.TargetNewWindow);
 
 		WResource csvResource = new WResource() {
 			@Override
@@ -300,6 +300,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			
 		};
 		csvResource.suggestFileName("results." + (csv ? "csv" : "xls"));
+		csvResource.setDispositionType(DispositionType.Attachment);
 		csvTableDownload.setLink(new WLink(csvResource));
 
 		return csvTableDownload;
