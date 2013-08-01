@@ -72,10 +72,6 @@ public class Settings {
 		return maxAllowedSeqs;
 	}
 	
-	public Integer getMaxJobDirLifeTime() {
-		return maxJobDirLifeTime;
-	}
-	
 	public List<File> getJobDirs() {
 		List<File> dirs = new ArrayList<File>();
 		dirs.addAll(jobDirs.values());
@@ -90,7 +86,6 @@ public class Settings {
 	private String treeGraphCmd;
 	private String inkscapeCmd;
 	private int maxAllowedSeqs;
-	private Integer maxJobDirLifeTime = null;
 	
 	private Map<String, File> jobDirs = new HashMap<String, File>();
 	public static String treeGraphCommand = "/usr/bin/tgf";
@@ -134,8 +129,6 @@ public class Settings {
             	jobDirs.put(organism, new File(e.getValue().trim()));
             } else if(name.equals("maxAllowedSequences")) {
             	maxAllowedSeqs = Integer.parseInt(e.getValue().trim());
-            } else if(name.equals("maxJobDirLifeTime")) {
-            	maxJobDirLifeTime = Integer.parseInt(e.getValue().trim());
             }
         }
     }
