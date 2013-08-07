@@ -5,6 +5,20 @@
   	<message id="sequenceInput.run">Analyse!</message>
   	<message id="sequenceInput.clear">Clear</message>
   	<message id="sequenceInput.example"></message>
+  	
+  	<message id="sequenceInput.capWarning.title">Warning</message>
+  	<message id="sequenceInput.capWarning.msg">
+	  	<p>
+	  		There is one or more sequence with a name with more than 30 characters in your FASTA file.
+	  	</p>
+	  	<p>
+	  		The software does not work properly with such sequence names,<br/>
+	  		so these names will be capped.
+	  	</p>
+	  	<p>
+	  		Do you still want to proceed?
+	  	</p>
+  	</message>
 
   	<message id="sequenceInput.inputSequenceInFastaFormat">
   		<p>You may can either:</p>

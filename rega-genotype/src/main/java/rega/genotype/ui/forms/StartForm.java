@@ -9,9 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.util.EnumSet;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
@@ -19,9 +21,13 @@ import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Settings;
 import rega.genotype.utils.Utils;
+import eu.webtoolkit.jwt.Icon;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTemplate;
@@ -82,12 +88,34 @@ public class StartForm extends AbstractForm {
 	
 		run.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				String fasta = sequenceTA.getText();
+				final String fasta = sequenceTA.getText();
 				
 				CharSequence error = verifyFasta(fasta);
 				validateInput(error);
-				if (error == null)
-					startJob(fasta);
+				
+				final Boolean submit = true;
+				if (capSequences(fasta)) {
+					final WMessageBox messageBox = new WMessageBox(
+		                    tr("sequenceInput.capWarning.title").toString(),
+		                    tr("sequenceInput.capWarning.msg"),
+		                    Icon.Information, 
+		                    EnumSet.of(StandardButton.Yes,StandardButton.No));
+		            messageBox.setModal(false);
+		            messageBox.buttonClicked().addListener(StartForm.this,
+		                    new Signal1.Listener<StandardButton>() {
+		                        public void trigger(StandardButton sb) {
+		                            if (messageBox.getButtonResult() == StandardButton.Yes) {
+		                            	startJob(fasta);
+		                            }
+		                            if (messageBox != null)
+		                                messageBox.remove();
+		                        }
+		                    });
+		            messageBox.show();
+				} else {
+					if (error == null)
+						startJob(fasta);
+				}
 			}
 		});
 
@@ -163,6 +191,28 @@ public class StartForm extends AbstractForm {
 		getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(thisJobDir) + "/");
 	}
 
+	private boolean capSequences(String fastaContent) {
+		LineNumberReader r = new LineNumberReader(new StringReader(fastaContent));
+
+		try {
+			while (true) {
+				Sequence s = SequenceAlignment.readFastaFileSequence(r, SequenceAlignment.SEQUENCE_DNA);
+				if (s == null)
+					break;
+				
+				if (s.isNameCapped()) 
+					return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (FileFormatException e) {
+			return false;
+		}
+		
+		return false;
+	}
+	
 	private CharSequence verifyFasta(String fastaContent) {
 		int sequenceCount = 0;
 
