@@ -20,6 +20,11 @@ public abstract class AbstractSequence {
     public abstract String getName();
     
     /**
+     * @return is the name capped
+     */
+    public abstract boolean isNameCapped();
+    
+    /**
      * @return the sequence description
      */
     public abstract String getDescription();
@@ -104,7 +109,7 @@ public abstract class AbstractSequence {
 			s.append(ch);
 		}
 		
-		Sequence result = new Sequence(getName(), getDescription(), s.toString());
+		Sequence result = new Sequence(getName(), isNameCapped(), getDescription(), s.toString());
 		result.setSourceSequence(this);
 		
 		return result;

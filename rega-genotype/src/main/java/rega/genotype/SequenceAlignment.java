@@ -176,12 +176,15 @@ public class SequenceAlignment
         // separate name from description
         int spacePos = header.indexOf(' ');
         String name;
+        boolean nameCapped;
         String description;
-        if (spacePos != -1) {   // only a name
+        if (spacePos != -1) {   // only a name	
            name = makeLegalName(header.substring(0, spacePos));
+           nameCapped = name.length() < header.substring(0, spacePos).length();
            description = header.substring(spacePos);
         } else {
            name = makeLegalName(header);
+           nameCapped = name.length() < header.length();
            description = "";
         }
 
@@ -204,7 +207,7 @@ public class SequenceAlignment
             }
         } while (s != null);
 
-        return new Sequence(name, description, sequence.toString());
+        return new Sequence(name, nameCapped, description, sequence.toString());
     }
 
     private static String checkLegal(String s, int line, int sequenceType) throws FileFormatException {
@@ -300,7 +303,7 @@ public class SequenceAlignment
 		if (a.length != 2)
 			throw new FileFormatException("Unexpected sequence line format", reader.getLineNumber());
 		
-		return new Sequence(a[0], "", checkLegal(a[1], reader.getLineNumber(), sequenceType));
+		return new Sequence(a[0], false, "", checkLegal(a[1], reader.getLineNumber(), sequenceType));
 	}
 
 	public List<AbstractSequence> getSequences() {

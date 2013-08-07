@@ -14,12 +14,14 @@ package rega.genotype;
 public class Sequence extends AbstractSequence
 {
     private String name;
-    private String description;
+    private boolean nameCapped;
+	private String description;
     private String sequence;
 	private AbstractSequence sourceSequence = this;
 
-    public Sequence(String name, String description, String sequence) {
+    public Sequence(String name, boolean nameCapped, String description, String sequence) {
         this.name = name;
+        this.nameCapped = nameCapped;
         this.description = description;
         this.sequence = sequence;
     }
@@ -27,6 +29,10 @@ public class Sequence extends AbstractSequence
     public String getName() {
         return name;
     }
+    
+    public boolean isNameCapped() {
+		return nameCapped;
+	}
 
     public String getDescription() {
         return description;

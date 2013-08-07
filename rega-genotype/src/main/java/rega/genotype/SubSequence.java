@@ -58,4 +58,9 @@ public class SubSequence extends AbstractSequence {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public boolean isNameCapped() {
+		return sequence.isNameCapped();
+	}
 }
