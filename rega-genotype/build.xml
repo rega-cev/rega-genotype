@@ -74,12 +74,18 @@
     <jar jarfile="${dist}/${proj.name}-test-${proj.version}.jar" 
 	 basedir="${build}/test/java" />
 
+    <copy flatten="true" todir="${dist}/deps/">
+    	<fileset dir="lib"/>
+    </copy>
+
     <war destfile="${dist}/${proj.name}-${proj.version}.war" 
 	 webxml="${src}/main/webapp/WEB-INF/web.xml">
 	 <fileset dir="${src}/main/webapp"/>
-	 <lib dir="${lib}"/>
+	 <lib dir="${dist}/deps/"/>
 	 <classes dir="${build}/main/java"/>
     </war>
+
+    <delete dir="${dist}/deps/"/>
   </target>
  
   <target name="test" depends="dist">
