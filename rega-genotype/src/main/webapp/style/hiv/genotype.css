@@ -234,7 +234,7 @@ h1 {
   	text-align: center;
 }
 
-.note, .footer {
+.genotype-div .note, .genotype-div .footer {
 	padding: 0.5em 3em 0.5em 0.5em;
 	background-color: rgb(204, 204, 255);
 	display: block;
@@ -242,7 +242,7 @@ h1 {
 	margin: 0px auto;
 }
 
-.footer{
+.genotype-div .footer{
 	text-align: center;
 	font-style: italic;
 }

@@ -20,6 +20,8 @@ public abstract class AbstractForm extends WContainerWidget {
 
 	public AbstractForm(GenotypeWindow main) {
 		this.main = main;
+		
+		setStyleClass("genotype-div");
 	}
 	
 	public GenotypeWindow getMain() {
