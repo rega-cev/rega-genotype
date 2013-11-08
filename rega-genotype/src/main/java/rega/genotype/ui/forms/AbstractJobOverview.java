@@ -12,6 +12,7 @@ import java.util.List;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.FastaGenerator;
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.CsvDataTable;
 import rega.genotype.ui.util.DataTable;
@@ -366,7 +367,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public File getJobDir(String jobId) {
-		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()+File.separatorChar+jobId);
+		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()
+				+ File.separatorChar + jobId);
 	}
 
 	public static String reportPath(File jobDir, int sequenceIndex) {

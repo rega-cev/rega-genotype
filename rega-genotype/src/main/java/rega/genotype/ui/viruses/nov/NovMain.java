@@ -24,7 +24,7 @@ public class NovMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new NovDefinition());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new NovDefinition(), settings);
 		app.setTitle(WString.tr("nrvTool.title"));
 		
 		app.useStyleSheet("../style/genotype-rivm.css");

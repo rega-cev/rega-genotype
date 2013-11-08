@@ -16,7 +16,7 @@ import eu.webtoolkit.jwt.WEnvironment;
 public class Hhv8Main extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new Hhv8Definition());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new Hhv8Definition(), settings);
 
 		app.useStyleSheet(Settings.defaultStyleSheet);
 		

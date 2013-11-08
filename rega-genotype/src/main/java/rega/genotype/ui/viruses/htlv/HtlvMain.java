@@ -11,7 +11,7 @@ public class HtlvMain extends GenotypeMain {
 
 
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new HtlvDefinition());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new HtlvDefinition(), settings);
 		
 		app.useStyleSheet(Settings.defaultStyleSheet);
 		

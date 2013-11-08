@@ -21,7 +21,7 @@ import eu.webtoolkit.jwt.WEnvironment;
 public class HivMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new HivDefinition());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new HivDefinition(), settings);
 
 		app.useStyleSheet(Settings.defaultStyleSheet);
 		

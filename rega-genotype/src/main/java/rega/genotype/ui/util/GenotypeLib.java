@@ -39,6 +39,7 @@ import org.apache.commons.io.IOUtils;
 import rega.genotype.ApplicationException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -316,28 +317,6 @@ public class GenotypeLib {
 		}
 	}
 
-	public static void main(String[] args) {
-		Settings s = Settings.getInstance();
-
-		Settings.initSettings(s);
-
-// try {
-// HIVTool hiv = new HIVTool(new File(
-// "/home/simbre1/tmp/genotype"));
-// hiv.analyze(
-// "/home/simbre1/tmp/genotype/seq.fasta",
-// "/home/simbre1/tmp/genotype/result.xml");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} catch (ParameterProblemException e) {
-//			e.printStackTrace();
-//		} catch (FileFormatException e) {
-//			e.printStackTrace();
-//		}
-		
-		getTreePDF(new File("/home/simbre1/tmp/genotype/"), new File("/home/simbre1/tmp/genotype/r7184492.tre"));
-	}
-	
 	public static String readFileToString(File f) throws IOException {
 	    StringBuilder contents = new StringBuilder();
 	    

@@ -21,6 +21,7 @@ import eu.webtoolkit.jwt.utils.StreamUtils;
 @SuppressWarnings("serial")
 public class GenotypeService extends HttpServlet {	
 	private Class<? extends GenotypeTool> tool;
+	private Settings settings;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -74,7 +75,7 @@ public class GenotypeService extends HttpServlet {
 		else
 			throw new ServletException("Need 'genotypeTool' parameter");
 
-		Settings.initSettings(Settings.getInstance());
+		Settings.initSettings(this.settings = Settings.getInstance(config));
 		
 		super.init(config);
 	}

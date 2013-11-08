@@ -31,6 +31,8 @@ import eu.webtoolkit.jwt.WtServlet;
 @SuppressWarnings("serial")
 public abstract class GenotypeMain extends WtServlet
 {
+	protected Settings settings;
+
 	public GenotypeMain() {
 		super();
 		
@@ -44,7 +46,7 @@ public abstract class GenotypeMain extends WtServlet
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		Settings.initSettings(Settings.getInstance());
+		Settings.initSettings(this.settings = Settings.getInstance(config));
 		
 		scheduleCleanJobDir();
 		
@@ -52,7 +54,7 @@ public abstract class GenotypeMain extends WtServlet
 	}
 	
 	private void scheduleCleanJobDir() {
-		if (Settings.getInstance().getMaxJobDirLifeTime() == null)
+		if (settings.getMaxJobDirLifeTime() == null)
 			return;
 		
 		Class<JobDirCleanTask> job = JobDirCleanTask.class;
