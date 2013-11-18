@@ -10,7 +10,7 @@ public class PhyloMain extends GenotypeMain {
 
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new PhyloDefinition());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new PhyloDefinition(), settings);
 		return app;
 	}
 

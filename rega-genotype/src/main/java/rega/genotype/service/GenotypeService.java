@@ -22,6 +22,7 @@ import eu.webtoolkit.jwt.utils.StreamUtils;
 public class GenotypeService extends HttpServlet {	
 	private Class<? extends GenotypeTool> tool;
 	private String organism;
+	private Settings settings;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -81,7 +82,7 @@ public class GenotypeService extends HttpServlet {
 
 		this.organism = config.getInitParameter("Organism");
 
-		Settings.initSettings(Settings.getInstance());
+		Settings.initSettings(this.settings = Settings.getInstance(config));
 		
 		super.init(config);
 	}

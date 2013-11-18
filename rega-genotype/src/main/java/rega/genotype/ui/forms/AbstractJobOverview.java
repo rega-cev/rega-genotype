@@ -21,7 +21,6 @@ import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.XlsDataTable;
 import rega.genotype.utils.Settings;
-import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
@@ -36,6 +35,7 @@ import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WResource;
+import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableCell;
@@ -43,7 +43,6 @@ import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTimer;
 import eu.webtoolkit.jwt.WWidget;
-import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
 
@@ -356,7 +355,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public File getJobDir(String jobId) {
-		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()+File.separatorChar+jobId);
+		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()
+				+ File.separatorChar + jobId);
 	}
 
 	public static String reportPath(File jobDir, int sequenceIndex) {

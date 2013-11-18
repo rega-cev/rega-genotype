@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
+import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
@@ -24,10 +26,13 @@ import eu.webtoolkit.jwt.WLink;
 public class GenotypeApplication extends WApplication
 {
 	private ServletContext servletContext_;
+	private GenotypeWindow window_;
+	private Settings settings;
 	
-	public GenotypeApplication(WEnvironment env, ServletContext servletContext)
+	public GenotypeApplication(WEnvironment env, ServletContext servletContext, OrganismDefinition od, Settings settings)
 	{
 		super(env);
+		this.settings = settings;
 
 		useStyleSheet(new WLink("../style/wt.css"));               // do not use Wt's inline stylesheet...
 		useStyleSheet(new WLink("../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
@@ -38,6 +43,11 @@ public class GenotypeApplication extends WApplication
 	public ServletContext getServletContext()
 	{
 		return servletContext_;
+	}
+	
+	public Settings getSettings()
+	{
+		return settings;
 	}
 	
 	/*
