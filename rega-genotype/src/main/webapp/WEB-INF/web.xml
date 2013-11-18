@@ -185,5 +185,22 @@
     <servlet-name>GenotypeHPV</servlet-name>
     <url-pattern>/hpv/typingtool/*</url-pattern>
   </servlet-mapping>-->
+  
+    <servlet>
+    <servlet-name>GenotypeSTREP</servlet-name>
+    <display-name>STREP Genotyping</display-name>
+    <description>Streptococcus pneumoniae Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>STREP</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeSTREP</servlet-name>
+    <url-pattern>/strep/typingtool/*</url-pattern>
+  </servlet-mapping>
+
 </web-app>
 
