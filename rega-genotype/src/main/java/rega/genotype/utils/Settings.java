@@ -69,7 +69,11 @@ public class Settings {
 	}
 	
 	public File getJobDir(OrganismDefinition od) {
-		return jobDirs.get(od.getOrganismName());
+		File f = jobDirs.get(od.getOrganismName());
+		if (f == null)
+			f = defaultJobDir;
+
+		return f;
 	}
 	
 	public int getMaxAllowedSeqs() {
@@ -90,7 +94,7 @@ public class Settings {
 	private String treeGraphCmd;
 	private String inkscapeCmd;
 	private int maxAllowedSeqs;
-	
+	private File defaultJobDir;	
 	private Map<String, File> jobDirs = new HashMap<String, File>();
 	public static String treeGraphCommand = "/usr/bin/tgf";
 
@@ -128,6 +132,8 @@ public class Settings {
             	treeGraphCmd = e.getValue().trim();
             } else if(name.equals("inkscapeCmd")) {
             	inkscapeCmd = e.getValue().trim();
+            } else if(name.equals("jobDir")) {
+            	defaultJobDir = new File(e.getValue().trim());
             } else if(name.startsWith("jobDir-")) {
             	String organism = name.split("-")[1];
             	jobDirs.put(organism, new File(e.getValue().trim()));

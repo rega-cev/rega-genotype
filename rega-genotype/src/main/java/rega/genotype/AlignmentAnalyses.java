@@ -257,10 +257,21 @@ public class AlignmentAnalyses {
                 this.trimAlignment = false;
 
             Element clustersE = root.getChild("clusters");
-            List clusterEs = clustersE.getChildren("cluster");
             
-            for (Iterator i = clusterEs.iterator(); i.hasNext();) {
-                clusters.add(readCluster((Element) i.next()));
+            Element sequenceIdsE = clustersE.getChild("sequence-ids");
+            if (sequenceIdsE != null) {
+            	for (int i = 0; i < alignment.getSequences().size(); ++i) {
+            		AbstractSequence seq = alignment.getSequences().get(i);
+            		Cluster c = new Cluster(seq.getName(), seq.getName(), seq.getDescription(), null);
+            		c.addTaxus(seq.getName());
+            		clusters.add(c);
+            	}
+            } else {
+            	List clusterEs = clustersE.getChildren("cluster");
+            
+            	for (Iterator i = clusterEs.iterator(); i.hasNext();) {
+            		clusters.add(readCluster((Element) i.next()));
+            	}
             }
 
             List analysisEs = root.getChildren("analysis");            
@@ -320,8 +331,13 @@ public class AlignmentAnalyses {
         Element optionsE = element.getChild("options");
         if (optionsE != null)
             blastOptions = optionsE.getTextTrim();
+        
+        String detailsOptions = null;
+        Element detailsE = element.getChild("details");
+        if (detailsE != null)
+            detailsOptions = detailsE.getTextTrim();
 
-        BlastAnalysis analysis = new BlastAnalysis(this, id, cs, cutoff, maxPValue, relativeCutoff, blastOptions, workingDir);
+        BlastAnalysis analysis = new BlastAnalysis(this, id, cs, cutoff, maxPValue, relativeCutoff, blastOptions, detailsOptions, workingDir);
 
         List regionsEs = element.getChildren("regions");
         
@@ -404,16 +420,20 @@ public class AlignmentAnalyses {
     private List<Cluster> parseCommaSeparatedClusterIds(String s) {
         List<Cluster> result = new ArrayList<Cluster>();
         
-        String[] ids = s.split(",");
-        for (int i = 0; i < ids.length; ++i) {
-            String id = ids[i].trim();
-            Cluster c = getCluster(id);
-            if (c == null) {
-                throw new RuntimeException("Undefined cluster: " + id);
+        if (s.equals("*")) {
+        	result.addAll(this.clusters);
+        } else {
+            String[] ids = s.split(",");
+            for (int i = 0; i < ids.length; ++i) {
+                String id = ids[i].trim();
+                Cluster c = getCluster(id);
+                if (c == null) {
+                    throw new RuntimeException("Undefined cluster: " + id);
+                }
+                result.add(c);
             }
-            result.add(c);
         }
-        
+
         return result;
     }
 

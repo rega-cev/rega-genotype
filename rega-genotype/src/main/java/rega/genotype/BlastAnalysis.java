@@ -5,12 +5,15 @@
  */
 package rega.genotype;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -125,6 +128,7 @@ public class BlastAnalysis extends AbstractAnalysis {
     private String blastOptions;
 	private String formatDbOptions;
 	private Map<String, ReferenceTaxus> referenceTaxa;
+	private String detailsOptions;
 
 	/**
 	 * A result from a blast analysis.
@@ -136,17 +140,23 @@ public class BlastAnalysis extends AbstractAnalysis {
 	 * respect to the reference sequences.
 	 */
     public class Result extends AbstractAnalysis.Result implements Concludable {
-        private Cluster cluster;
+        private Set<Cluster> clusters;
         private float score;
         private int start;
         private int end;
+        private int matchDiffs;
+        private int matchLength;
         private ReferenceTaxus refseq;
 		private boolean reverseCompliment;
+		private String detailsFile;
 
-        public Result(AbstractSequence sequence, Cluster cluster, float score, int start, int end, ReferenceTaxus refseq, boolean reverseCompliment) {
+        public Result(AbstractSequence sequence, Set<Cluster> bestClusters, float score,
+        		int length, int diffs, int start, int end, ReferenceTaxus refseq, boolean reverseCompliment) {
             super(sequence);
-            this.cluster = cluster;
+            this.clusters = bestClusters;
             this.score = score;
+            this.matchLength = length;
+            this.matchDiffs = diffs;
             this.start = start;
             this.end = end;
             this.refseq = refseq;
@@ -162,31 +172,76 @@ public class BlastAnalysis extends AbstractAnalysis {
         
         public void writeXML(ResultTracer tracer) {
             writeXMLBegin(tracer);
+            
             if (start > 0) {
             	tracer.add("start", String.valueOf(start));           
             	tracer.add("end", String.valueOf(end));
             }
-            tracer.printlnOpen("<cluster>");
-            tracer.add("id", cluster != null ? cluster.getId() : "none");
-            tracer.add("name", cluster != null ? cluster.getName() : "none");
-            tracer.add("score", score);
-            if (cluster != null && cluster.getDescription() != null) {
-                tracer.add("description", cluster.getDescription());
+
+            tracer.add("identity", String.valueOf((float)(matchLength - matchDiffs)/matchLength));
+
+            if (!supportsMultiple()) {
+                writeCluster(tracer, getCluster());
+            } else {
+                tracer.printlnOpen("<clusters>");
+                addMultiple(tracer);                
+                for (Cluster c : clusters)
+                	writeCluster(tracer, c);
+                if (detailsFile != null)
+                	tracer.add("details", detailsFile);
+                tracer.printlnClose("</clusters>");
             }
-            tracer.add("reverse-compliment", String.valueOf(reverseCompliment));
-            tracer.add("concluded-id", haveSupport() ? cluster.getId() : "Unassigned");
-            tracer.add("concluded-name", haveSupport() ? cluster.getName() : "Unassigned");
-            tracer.printlnClose("</cluster>");
+
             if (refseq != null)
             	tracer.add("refseq", refseq.getTaxus());
+            
             writeXMLEnd(tracer);
         }
+
+		private float calcSimilarity() {
+			return (float)(matchLength - matchDiffs)/matchLength * 100;
+		}
+
+		private void writeCluster(ResultTracer tracer, Cluster cluster) {
+			tracer.printlnOpen("<cluster>");
+			tracer.add("id", cluster != null ? cluster.getId() : "none");
+			tracer.add("name", cluster != null ? cluster.getName() : "none");
+			tracer.add("score", score);
+			if (cluster != null && cluster.getDescription() != null) {
+			    tracer.add("description", cluster.getDescription());
+			}
+			tracer.add("reverse-compliment", String.valueOf(reverseCompliment));
+			tracer.add("concluded-id", haveSupport() ? cluster.getId() : "Unassigned");
+			tracer.add("concluded-name", haveSupport() ? cluster.getName() : "Unassigned");
+			tracer.printlnClose("</cluster>");
+		}
+
+		private String getClusterIds() {
+			String result = "";
+			for (Cluster c : clusters) {
+				if (!result.isEmpty())
+					result += ", ";
+				result += c.getId();
+			}
+			return result;
+		}
+
+		private String getClusterNames() {
+			String result = "";
+			for (Cluster c : clusters) {
+				if (!result.isEmpty())
+					result += ", ";
+				result += c.getName();
+			}
+			return result;
+		}
+
 
         /**
          * @return Returns the cluster.
          */
         public Cluster getCluster() {
-            return cluster;
+            return clusters.isEmpty() ? null : clusters.iterator().next();
         }
 
         /**
@@ -212,17 +267,34 @@ public class BlastAnalysis extends AbstractAnalysis {
 
         public void writeConclusion(ResultTracer tracer) {
             tracer.printlnOpen("<assigned>");
-            tracer.add("id", cluster.getId());
-            tracer.add("name", cluster.getName());
-            tracer.add("score", String.valueOf(score));
-            if (cluster.getDescription() != null) {
-                tracer.add("description", cluster.getDescription());
+            if (!supportsMultiple()) {
+            	Cluster cluster = getCluster();
+                tracer.add("score", String.valueOf(score));
+                tracer.add("id", cluster.getId());
+                tracer.add("name", cluster.getName());
+                if (cluster.getDescription() != null) {
+                    tracer.add("description", cluster.getDescription());
+                }
+            } else {
+                addMultiple(tracer);
             }
             tracer.printlnClose("</assigned>");
         }
 
+		private void addMultiple(ResultTracer tracer) {
+			float similarity = calcSimilarity();
+			tracer.add("score", String.valueOf(similarity));
+			if (clusters.size() == 1 || similarity == 100) {
+				tracer.add("id", getClusterIds());
+				tracer.add("name", similarity == 100 ? getClusterNames() : ("Match with " + getCluster().getName()));
+			} else {
+				tracer.add("id", getClusterIds());
+				tracer.add("name", "Multiple matches");
+			}
+		}
+
 		public Cluster getConcludedCluster() {
-			return cluster;
+			return getCluster();
 		}
 
 		public float getConcludedSupport() {
@@ -236,6 +308,14 @@ public class BlastAnalysis extends AbstractAnalysis {
 		public ReferenceTaxus getReference() {
 			return refseq;
 		}
+
+		public void setDetailsFile(String detailsFile) {
+			this.detailsFile = detailsFile;
+		}
+    }
+
+    boolean supportsMultiple() {
+    	return detailsOptions != null;
     }
     
     @Override
@@ -246,7 +326,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 	public BlastAnalysis(AlignmentAnalyses owner, String id,
                          List<Cluster> clusters, Double cutoff, Double maxPValue,
                          boolean relativeCutoff, String blastOptions,
-                         File workingDir) {
+                         String detailsOptions, File workingDir) {
         super(owner, id);
         this.workingDir = workingDir;
         this.clusters = clusters;
@@ -254,11 +334,14 @@ public class BlastAnalysis extends AbstractAnalysis {
         this.maxPValue = maxPValue;
         this.relativeCutoff = relativeCutoff;
         this.blastOptions = blastOptions != null ? blastOptions : "";
+        this.detailsOptions = detailsOptions;
         if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
-        	this.blastOptions = "-p blastx";
+        	this.blastOptions = "-p blastx " + this.blastOptions;
+        	this.detailsOptions = "-p blastx " + this.detailsOptions;
         	this.formatDbOptions = "";
         } else {
         	this.blastOptions = "-p blastn " + this.blastOptions;
+        	this.detailsOptions = "-p blastn " + this.detailsOptions;
         	this.formatDbOptions = "-p F";
         }
         this.referenceTaxa = new HashMap<String, ReferenceTaxus>();
@@ -290,10 +373,10 @@ public class BlastAnalysis extends AbstractAnalysis {
                 System.err.println(cmd);
                 
                 formatdb = StreamReaderRuntime.exec(cmd, null, workingDir);
-                int result = formatdb.waitFor();
+                int exitResult = formatdb.waitFor();
 
-                if (result != 0) {
-                    throw new ApplicationException("formatdb exited with error: " + result);
+                if (exitResult != 0) {
+                    throw new ApplicationException("formatdb exited with error: " + exitResult);
                 }
                 
                 cmd = blastPath + blastCommand + " " + blastOptions
@@ -317,8 +400,11 @@ public class BlastAnalysis extends AbstractAnalysis {
                 boolean reverseCompliment = false;
 
                 ReferenceTaxus refseq = null;
-                Cluster bestCluster = null, secondBestCluster = null;
+                Set<Cluster> bestClusters = new HashSet<Cluster>(), secondBestClusters = new HashSet<Cluster>();
 
+                final int SCORE_IDX = 11;
+                final int REFID_IDX = 1;
+                
                 for (;;) {
                     String s = reader.readLine();
                     if (s == null)
@@ -329,12 +415,13 @@ public class BlastAnalysis extends AbstractAnalysis {
                     if (values.length != 12)
                     	throw new ApplicationException("blast result format error");
 
-                    if (best == null) {
+                    if (best == null)
                     	best = values;
-                    	bestCluster = findCluster(best[1]);
-                    }
 
-                    ReferenceTaxus referenceTaxus = referenceTaxa.get(values[1]);
+                    if (values[SCORE_IDX].equals(best[SCORE_IDX]))
+                    	bestClusters.add(findCluster(values[REFID_IDX]));
+
+                    ReferenceTaxus referenceTaxus = referenceTaxa.get(values[REFID_IDX]);
 
                     /*
                      * First condition: there are no explicit reference taxa configured -- use best match
@@ -346,7 +433,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                      */
                     if ((referenceTaxa.isEmpty() && values == best)
                     	|| (referenceTaxus != null
-                    		&& (findCluster(values[1]) == bestCluster)
+                    		&& (findCluster(values[REFID_IDX]) == bestClusters.iterator().next())
                     		&& (refseq == null || referenceTaxus.getPriority() < refseq.getPriority()))) {
                     	refseq = referenceTaxus;
                     	boolean queryReverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
@@ -374,23 +461,29 @@ public class BlastAnalysis extends AbstractAnalysis {
                     	}
                     }
 
-                    if (relativeCutoff && bestCluster != null && secondBestCluster == null) {
-                    	Cluster c = findCluster(values[1]);
-                    	if (c != bestCluster) {
-                    		secondBestCluster = c;
-                    		secondBest = values;
+                    if (relativeCutoff && !bestClusters.isEmpty()) {
+                    	Cluster c = findCluster(values[REFID_IDX]);
+                    	if (!bestClusters.contains(c)) {
+                    		if (secondBest == null)
+                    			secondBest = values;
+                    		if (secondBest[SCORE_IDX].equals(values[SCORE_IDX]))
+                    			secondBestClusters.add(c);
                     	}
                     }
                 }
-                result = blast.waitFor();
+                exitResult = blast.waitFor();
 
                 blast.getErrorStream().close();
                 blast.getInputStream().close();
                 blast.getOutputStream().close();
 
-                if (result != 0) {
-                    throw new ApplicationException("blast exited with error: " + result);
+                if (exitResult != 0) {
+                    throw new ApplicationException("blast exited with error: " + exitResult);
                 }
+
+                String detailsFile = null;
+                if (detailsOptions != null)
+                	detailsFile = collectDetails(query, db);                
 
                 db.delete();                
                 query.delete();
@@ -410,6 +503,8 @@ public class BlastAnalysis extends AbstractAnalysis {
                 }
 
                 if (best != null) {
+                	int length = Integer.valueOf(best[3]);
+                	int diffs = Integer.valueOf(best[4]);
                     float score = Float.valueOf(best[11]);
                 	float pValue = Float.valueOf(best[10]);
                     if (maxPValue != null && pValue > maxPValue)
@@ -422,12 +517,17 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                     if (start == Integer.MAX_VALUE)
                     	start = -1;
+
+                    Result result = createResult(sequence, bestClusters, refseq, score, length, diffs, start, end, reverseCompliment);
                     
-                    return createResult(sequence, bestCluster, refseq, score, start, end, reverseCompliment);
+                    if (detailsFile != null)
+                    	result.setDetailsFile(detailsFile);
+                    
+                    return result;
                 } else
-                	return createResult(sequence, null, null, 0, 0, 0, false);
+                	return createResult(sequence, null, null, 0, 0, 0, 0, 0, false);
             } else
-                return createResult(sequence, null, null, 0, 0, 0, false);
+                return createResult(sequence, null, null, 0, 0, 0, 0, 0, false);
         } catch (IOException e) {
             if (formatdb != null)
                 formatdb.destroy();
@@ -445,7 +545,44 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
     }
 
-    private Cluster findCluster(String taxus) {
+    private String collectDetails(File query, File db) throws IOException, InterruptedException, ApplicationException {
+        String cmd = blastPath + blastCommand + " " + detailsOptions
+            	+ " -i " + query.getAbsolutePath()
+                + " -T -d " + db.getAbsolutePath();
+        System.err.println(cmd);
+        Process blast = Runtime.getRuntime().exec(cmd, null, workingDir);
+
+        File outputFile = getTempFile("paup.html");
+        copyToFile(outputFile, blast.getInputStream());        
+        int result = blast.waitFor();
+
+        String detailsResource = makeResource(outputFile, "html");
+
+        blast.getErrorStream().close();
+        blast.getInputStream().close();
+        blast.getOutputStream().close();
+
+		if (result != 0) { 
+			throw new ApplicationException("Blast exited with error: " + result);
+		}
+		
+		return detailsResource;
+	}
+
+	private void copyToFile(File outputFile, InputStream stdout)
+			throws IOException {
+		InputStreamReader isr = new InputStreamReader(stdout);
+        BufferedReader br = new BufferedReader(isr);
+        FileWriter osw = new FileWriter(outputFile);
+        
+        String line = null;
+        while ( (line = br.readLine()) != null)
+        	osw.write(line + '\n');
+        br.close();
+        osw.close();
+	}
+
+	private Cluster findCluster(String taxus) {
         for (int i = 0; i < clusters.size(); ++i)
             if (clusters.get(i).containsTaxus(taxus))
             	return clusters.get(i);
@@ -453,12 +590,12 @@ public class BlastAnalysis extends AbstractAnalysis {
         return null;
     }
     
-    private Result createResult(AbstractSequence sequence, Cluster cluster, ReferenceTaxus refseq,
-                                float score, int start, int end, boolean reverseCompliment) {
-    	if (cluster != null)
-    		return new Result(sequence, cluster, score, start, end, refseq, reverseCompliment);
+    private Result createResult(AbstractSequence sequence, Set<Cluster> bestClusters, ReferenceTaxus refseq,
+                                float score, int length, int diffs, int start, int end, boolean reverseCompliment) {
+    	if (!bestClusters.isEmpty())
+    		return new Result(sequence, bestClusters, score, length, diffs, start, end, refseq, reverseCompliment);
     	else
-    		return new Result(sequence, null, 0, 0, 0, null, reverseCompliment);
+    		return new Result(sequence, bestClusters, 0, 0, 0, 0, 0, null, reverseCompliment);
     }
 
     Result run(SequenceAlignment alignment, AbstractSequence sequence) throws AnalysisException {

@@ -63,7 +63,11 @@ public class GenericResults {
 	}
 	
 	public static String getBlastConclusion(GenotypeResultParser p) {
-		return GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
+		if (p.elementExists("/genotype_result/sequence/result[@id='blast']/cluster")) {
+			return GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");			
+		} else {
+			return GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/result[@id='blast']/clusters/concluded-name");			
+		}
 	}
 
 	public static String getBlastMotivation(GenotypeResultParser p) {

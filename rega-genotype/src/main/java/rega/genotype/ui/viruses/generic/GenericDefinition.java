@@ -45,8 +45,12 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private String organism;
 	private String xmlFolder;
 
-	public class MenuItem {
+	public static class MenuItem {
 		String label, path, messageId;
+	}
+	
+	public static class ResultColumn {
+		String label, field;
 	}
 	
 	private List<MenuItem> menuItems = new ArrayList<MenuItem>();
@@ -58,14 +62,11 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private int genomeImageStartX;
 	private int genomeStart;
 	
+	private List<ResultColumn> resultColumns = null;
+	
 	public GenericDefinition(String organism) {
 		this.organism = organism;
-		try {
-			xmlFolder = new File(Settings.getInstance().getXmlPath() + File.separator + organism + File.separator).toURI().toURL().toString();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-		
+		xmlFolder = Settings.getInstance().getXmlPath() + File.separator + organism + File.separator;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));
 		fontSize = 8;
@@ -101,6 +102,19 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 				genomeImageStartX = Integer.parseInt(genomeE.getChildText("image-start"));
 				genomeImageEndX = Integer.parseInt(genomeE.getChildText("image-end"));
 			}
+			
+			Element resultListE = root.getChild("result-list");
+			if (resultListE != null) {
+				resultColumns = new ArrayList<ResultColumn>();
+				for (Object o : resultListE.getChildren("column")) {
+					Element columnE = (Element) o;
+					
+					ResultColumn column = new ResultColumn();
+					column.label = columnE.getChildText("label");
+					column.field = columnE.getChildText("field");
+					resultColumns.add(column);
+				}
+			}
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -115,7 +129,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public AbstractJobOverview getJobOverview(GenotypeWindow main) {
-		return new GenericJobOverview(main);
+		return new GenericJobOverview(main, resultColumns);
 	}
 	
 	public String getOrganismDirectory() {

@@ -29,7 +29,7 @@ public class GenotypeApplication extends WApplication
 	private GenotypeWindow window_;
 	private Settings settings;
 	
-	public GenotypeApplication(WEnvironment env, ServletContext servletContext, OrganismDefinition od, Settings settings)
+	public GenotypeApplication(WEnvironment env, ServletContext servletContext, Settings settings)
 	{
 		super(env);
 		this.settings = settings;

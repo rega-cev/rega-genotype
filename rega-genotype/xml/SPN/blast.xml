@@ -1,0 +1,25 @@
+<genotype-analyses>
+  <alignment file="blast.fasta" data="dna"/>
+
+  <clusters>
+    <sequence-ids/>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>*</identify>
+
+    <cutoff>
+      100
+    </cutoff>
+
+    <options>
+      -q -1 -r 1 -F F
+    </options>
+
+    <details>
+      -q -1 -r 1 -F F -b 10 -v 10 
+    </details>
+  </analysis>
+
+</genotype-analyses>
+

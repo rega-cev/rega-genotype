@@ -29,7 +29,7 @@ public class EtvMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new EtvDefinition(), settings);
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings);
 		app.setTitle(WString.tr("etvTool.title"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");

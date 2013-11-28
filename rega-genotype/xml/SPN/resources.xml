@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+	<message id="main">
+		<div class="azure">
+			<div class="rivm-header">
+				<div id="logo">
+					<a href="${app.url}">
+						<img src="${app.url}/../../pics/rivm/logo.png" alt="RIVM Logo" > </img>
+					</a>
+				</div>
+				<div id="application">
+					<span id="name">Streptococcus Pneumoniae Typing Tool</span>
+					<span id="info">Version 0.0</span>
+				</div>
+				<div class="nav_bar">
+					${navigation class="nav_main"}
+				</div>
+				<div id="navigation-bottom" >  </div>
+		</div>
+		${content class="content"}
+
+		<div class="footer">
+			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (...)
+				and <a href="http://www.emweb.be/">Emweb bvba</a>.</p>
+		    <p>Contact: TBD</p>
+		</div>
+
+		<div class="rivm-footer">
+			<div>
+				<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+			</div>
+		</div>
+	</div>
+	</message>
+
+  	<message id="start-form">
+  		<div class="start-form form">
+		    <h1>Streptococcus Pneumoniae Typing Tool Version 0.0</h1>
+		    <div class="note">
+ 				<div>
+					This tool uses sequence-based analysis to identify the ...
+				</div>
+      			<div>
+      				<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time. 
+				</div>
+	 	   </div>
+	 	   
+	 	   <div class="seqInput">
+				${tr:sequenceInput.inputSequenceInFastaFormat}
+				<div>
+					${fasta-field}
+				</div>
+				${analyze-button}
+				${clear-button}
+				${error-text class="error"}
+		
+				${tr:sequenceInput.uploadSequenceInFastaFormat}
+
+				${file-upload-button}
+
+				${tr:startForm.monitorJob}
+
+				${tr:startForm.labelJobId} ${job-id-field}	${search-button}
+			</div>
+		</div>
+	</message>
+	
+	<message id="sequenceInput.run">Start!</message>
+	<message id="startForm.monitor">Go!</message>
+	<message id="sequenceInput.example">&gt;14-01
+gatgtagatgacggtcccaagtcaagagaggaaagcaaggctctcttgatagaatcctacaggcagggggtgcgaaccattgtctctacctctcaccgtcgcaagggcatgtttgaaactccggaagagaagatagcagaaaactttcttcaggttcgggaaattgcaaaagaagtagcagatgatttagtcattgcttatggcgcagagatatactatactctggatgctctagaaaagctagaaaaaaaagaaattcctacccttaatgatagtcgttatgccttgattgagtttagcatgcatacttcctatcgtcagattcatacgggattgagcaatattttgatgttgggaatcacgccagtaattgctcatattgaacgttatgatgctttagagaataacgaaaaacatgttcgtgaactgattgatatggggtgctatactcagataaatagttatcatgtttcaaaacctaagttctttggtgaaaaatataaatt
+	</message>
+
+	<message id="job-overview-form">
+	  	<div class="monitor-form form">
+		    <h1>Streptococcus Pneumoniae Genotyping Tool Results</h1>
+
+		    <div class="info">
+				<p>You may bookmark this page to revisit results of this job (${job-id}) later.</p>
+				
+				<p>${analysis-cancelled}</p>
+
+				<div class="analysisProgress">
+					${analysis-in-progress}
+				</div>
+			</div>
+
+			<div>
+				${results class="jobTable"}
+			</div>
+
+			<div class="downloads">
+				${downloads}
+			</div>
+		</div>
+	</message>
+
+  	<message id="details-form">
+		<h1>Streptococcus Pneumoniae A Genotyping Details</h1>
+		${details-form}
+	</message>
+
+	<message id="generic-details">
+		<div>
+			<div>
+				<div>
+					<div class="dsa-text">
+						<span class="label">Name:</span> ${xpath "/genotype_result/sequence/@name"}
+						<span class="label">Length:</span> ${xpath "/genotype_result/sequence/@length"}
+					</div>
+				</div>
+				<div>
+					<h3>Assignment</h3>
+
+					<p>
+						<span class="label">Best matches with:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/id"}
+					</p>
+					<p>
+						<span class="label">Similarity:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/score"}
+					</p>
+					
+					<h3>BLAST analysis details</h3>
+					
+					<p>
+						${resource "/genotype_result/sequence/result/clusters/details"}
+					</p>
+				</div>
+			</div>
+		</div>
+	</message>
+  
+	<message id="job-overview-downloads">
+		<div class="downloadContainer">
+			<span>Download results:</span> ${xml-file} ${xls-file} ${csv-file} ${fasta-file}
+		</div>
+	</message>
+	
+	<message id="monitorForm.analysisCancelled"><p><b>This job was cancelled!</b></p></message>
+
+  	<message id="sequenceAssignment.blast">
+    	<h3>Assignment details</h3>
+    	<p>
+     		<span class="label"/><span class="nov-genotype">{1}</span>
+    	</p>
+    	<p>
+    		<span class="label"/> Based on relative blast score of {2}.
+		</p>
+	</message>
+  
+  	<message id="sequenceAssignment.phylo">
+    	<h3>{1} assignment</h3>
+    	<p>
+      		<span class="label"/>
+      		<span class="nov-genotype">{2}</span>
+    	</p>
+    	<p>
+    		<span class="label"/> {3}
+		</p>
+	</message>
+ 
+  	<message id="sequenceAssignment.phylo-variant">
+		<p>
+			<span class="label">Subgenogroup:</span> <span class="nov-subclustering">{1}</span>
+		</p>
+		<p>
+			<span class="label"></span> {2}
+		</p>
+	</message>
+  
+	<message id="tool.title">Streptococcus Pneumoniae Genotyping Tool</message>
+  	<message id="main.navigation.introduction">Introduction</message>
+  	<message id="main.navigation.subtypingProcess">(Sub)typing process</message>
+  	<message id="main.navigation.tutorial">How to use</message>
+
+	<message id="table.header.name">Name</message>
+	<message id="table.header.length">Length</message>
+	<message id="table.header.blast">Blast</message>
+	<message id="table.header.phylo">Phylo</message>
+	<message id="table.header.report">Report</message>
+	<message id="table.header.genome">Genome</message>
+
+	<message id="how-to-cite-doc">
+		<div class="form">
+			<h1>How to Cite the Streptococcus Pneumoniae Automated Genotyping Tool</h1>
+
+			<p>Please use the following citation:</p>
+			<p>...</p>
+		</div>
+	</message>
+	
+
+	<message id="introduction-doc">
+		<div class="form">
+			<h1>The Streptococcus Pneumoniae Automated Genotyping Tool: introduction.</h1>
+
+	        <p>...</p>
+      </div>
+	</message>
+      
+    <message id="tutorial-doc">
+		<div class="form">
+			<h1>Streptococcus Pneumoniae Genotyping Tutorial</h1>
+		</div>
+    </message>
+
+	<message id="method-doc">
+		<div class="form">
+			<h1>Streptococcus Pneumoniae Tool Methods</h1>
+	    </div>
+    </message>
+
+ 	<message id="examples-doc">
+		<div class="form">
+			<h1>Example Sequences for the Streptococcus Pneumoniae Genotyping Tool</h1>
+			
+			<div class="sequenceName">&gt;14-01</div>
+			<div class="sequence">
+gatgtagatgacggtcccaagtcaagagaggaaagcaaggctctcttgatagaatcctacaggcagggggtgcgaaccattgtctctacctctcaccgtcgcaagggcatgtttgaaactccggaagagaagatagcagaaaactttcttcaggttcgggaaattgcaaaagaagtagcagatgatttagtcattgcttatggcgcagagatatactatactctggatgctctagaaaagctagaaaaaaaagaaattcctacccttaatgatagtcgttatgccttgattgagtttagcatgcatacttcctatcgtcagattcatacgggattgagcaatattttgatgttgggaatcacgccagtaattgctcatattgaacgttatgatgctttagagaataacgaaaaacatgttcgtgaactgattgatatggggtgctatactcagataaatagttatcatgtttcaaaacctaagttctttggtgaaaaatataaatt
+	        </div>
+
+		<div class="sequenceName">&gt;04-01</div>
+		<div class="sequence">
+gatgtagatgacggtcccaagtcaagagaggaaagcaaggctctcttggcagaatcctacagacagggggtgcgaaccattgtttctacctctcaccgtcgcaagggcatgtttgaaactccggaagagaagatagcagaaaactttcttcaggttcgggaaatagctaaggaagtggcgagtgacttggtcattgcttacggggctgaaatttattacacaccagatgttctggataagctggaaaaaaagcggattccgaccctcaatgatagtcgttatgccttgatagagtttagtatgaacactccttatcgcgatattcatagcgccttgagcaagatcttgatgttgggaattactccagtcattgcccacattgagcgctatgatgctcttgaaaataatgaaaaacgcgttcgagaactgatcgatatgggctgttacacgcaagtaaatagttcacatgtcctcaaacccaaactttttggcgaacgttataaatt
+	        </div>
+    	</div>
+
+  	</message>
+</messages>

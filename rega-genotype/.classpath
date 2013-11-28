@@ -9,16 +9,16 @@
 	<classpathentry kind="lib" path="lib/jdom/deps/xerces.jar"/>
 	<classpathentry kind="lib" path="lib/jdom/deps/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/jdom/jdom-1.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jwt/deps/pdfjet/PDFjet-3.07.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/servlet-api-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/jwt/jwt-3.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/jexcelapi/jxl.jar"/>
 	<classpathentry kind="lib" path="lib/junit/deps/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/slf4j-api-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jargs/jargs.jar"/>
+	<classpathentry kind="lib" path="lib/jwt/deps/pdfjet/pdfjet-4.75.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jwt"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -45,6 +45,7 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.utils.Settings;
 import rega.genotype.utils.StreamReaderThread;
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.FileUtils;
 import eu.webtoolkit.jwt.Utils;
 import eu.webtoolkit.jwt.Utils.HtmlEncodingFlag;
 import eu.webtoolkit.jwt.WAnchor;
@@ -280,10 +281,7 @@ public class GenotypeLib {
 	}
 	
 	public static InputStream getResourceAsStream(String path) throws IOException {
-		URL url = GenotypeLib.class.getResource(path);
-		if (url == null)
-			url = new URL(path);
-		return url.openStream();
+		return FileUtils.getResourceAsStream(path);
 	}
 
 	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) throws IOException {
