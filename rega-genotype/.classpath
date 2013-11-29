@@ -19,6 +19,6 @@
 	<classpathentry kind="lib" path="lib/jwt/deps/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jargs/jargs.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/pdfjet/pdfjet-4.75.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jwt"/>
+	<classpathentry kind="lib" path="lib/jwt/jwt-3.3.2-snapshot-074d4cb90b6a2c1f8a7ebf6231a9f6c86d89e7d2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
