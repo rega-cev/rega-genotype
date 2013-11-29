@@ -34,7 +34,7 @@ import rega.genotype.utils.Settings;
  */
 public abstract class GenotypeTool {
     private static String xmlBasePath = ".";
-    private static String workingDir = ".";
+    protected static String workingDir = ".";
 
     private GenotypeTool parent;
     private ResultTracer tracer;

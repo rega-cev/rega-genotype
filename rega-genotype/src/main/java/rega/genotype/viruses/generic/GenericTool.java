@@ -16,6 +16,8 @@ import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AnalysisException;
 import rega.genotype.BlastAnalysis;
+import rega.genotype.BlastAnalysis.Region;
+import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
@@ -41,18 +43,12 @@ public class GenericTool extends GenotypeTool {
     private BlastAnalysis blastAnalysis;
     private Map<String, PhyloClusterAnalysis> phyloAnalyses = new HashMap<String, PhyloClusterAnalysis>();
 
+	private String xmlSubDir;
+
     public GenericTool(String xmlSubDir, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	this.xmlSubDir = xmlSubDir;
         blastXml = readAnalyses(xmlSubDir + "/blast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
-
-        for (Cluster c : blastXml.getAllClusters()) {
-        	String f = xmlSubDir + "/phylo-" + c.getId() + ".xml";
-        	
-        	if (new File(GenotypeTool.getXmlBasePath() + f).canRead()) {
-        		AlignmentAnalyses analyses = readAnalyses(f, workingDir);
-        		phyloAnalyses.put(c.getId(), (PhyloClusterAnalysis) analyses.getAnalysis("phylo-major"));
-        	}
-        }
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {
@@ -72,22 +68,37 @@ public class GenericTool extends GenotypeTool {
 
         	boolean haveConclusion = false;
 
-        	PhyloClusterAnalysis pca = phyloAnalyses.get(c.getId());
-        	if (pca != null && blastResult.getReference() != null) {
-        		for (BlastAnalysis.Region region : blastResult.getReference().getRegions()) {
-        			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), MINIMUM_REGION_OVERLAP)) {
-        				int rs = Math.max(0, region.getBegin() - blastResult.getStart());
-        				int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
-
-        				/*
-        				 * Cut the overlapping part to not confuse the alignment
-        				 */
-        				AbstractSequence s2 = re > rs ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
-        				if (phyloAnalysis(pca, s2, region.getName()))
-            				haveConclusion = true;
-        			}        			
-        		}
-        	}
+       		try {
+       			BlastAnalysis.Region region = null;
+				if (blastResult.getReference() != null) {
+					region = findOverlappingRegion(blastResult);
+					if (region != null) {
+			        	PhyloClusterAnalysis pca = getAnalysis(c.getId(), null, region);
+			        	if (pca != null) {
+			        		AbstractSequence s2 = cutRegion(s, blastResult,	region);
+			        		phyloAnalysis(pca, s2, blastResult, region, true);
+			        		haveConclusion = true;
+				        }
+					}
+				}
+					
+				if (!haveConclusion) {
+					/*
+					 * Perhaps we have a full-genome analysis?
+					 */
+					PhyloClusterAnalysis pca = getAnalysis(c.getId(), null, null);
+					if (pca != null) {
+						phyloAnalysis(pca, s, blastResult, region, false);
+						haveConclusion = true;
+					}
+				}
+			} catch (IOException e) {
+				throw new AnalysisException("", s, e);
+			} catch (ParameterProblemException e) {
+				throw new AnalysisException("", s, e);
+			} catch (FileFormatException e) {
+				throw new AnalysisException("", s, e);
+			}
         	
 			/*
 			 * If no conclusion: conclude the blast result
@@ -99,33 +110,79 @@ public class GenericTool extends GenotypeTool {
         }
     }
 
-	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s, String regionName) throws AnalysisException {
+	private AbstractSequence cutRegion(AbstractSequence s, BlastAnalysis.Result blastResult, BlastAnalysis.Region region) {
+		int rs = Math.max(0, region.getBegin() - blastResult.getStart());
+		int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
+		AbstractSequence s2 = re > rs ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
+		return s2;
+	}
+
+	private Region findOverlappingRegion(Result blastResult) {
+		for (BlastAnalysis.Region region : blastResult.getReference().getRegions())
+			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), MINIMUM_REGION_OVERLAP))
+				return region;
+
+		return null;
+	}
+
+	private PhyloClusterAnalysis getAnalysis(String genusId, String typeId, Region region) throws IOException, ParameterProblemException, FileFormatException {
+		String alignmentId = genusId;
+
+		if (region != null)
+			alignmentId += "-" + region.getName();	
+		
+		String analysisId;
+   		if (typeId == null)
+   			analysisId = "phylo-minor-" + typeId;		
+   		else
+   			analysisId = "phylo-major";
+		
+		PhyloClusterAnalysis result = phyloAnalyses.get(alignmentId + "-" + analysisId);
+
+		if (result == null) {
+           	String f = xmlSubDir + "/phylo-" + alignmentId + ".xml";
+           	
+           	if (new File(GenotypeTool.getXmlBasePath() + f).canRead()) {
+           		AlignmentAnalyses analyses = readAnalyses(f, new File(workingDir));
+           		result = (PhyloClusterAnalysis) analyses.getAnalysis(analysisId);
+           		if (result != null)
+           			phyloAnalyses.put(alignmentId + "-" + analysisId, result);
+           	}
+		}
+
+		return result;
+	}
+
+	private void phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s, Result blastResult, Region region, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
 		PhyloClusterAnalysis.Result r = pca.run(s);
 
 		if (r.haveSupport()) {
 			conclude(r, "Supported with phylogenetic analysis and bootstrap {1} (&gt;= 70)", "serotype");
 
-			subgenogroupPhyloAnalysis(s, pca.getOwner(), regionName, r.getConcludedCluster());
+			subgenogroupPhyloAnalysis(s, blastResult, region, r.getConcludedCluster(), cutToRegion);
 		} else
 			conclude("Could not assign", "Not supported by phylogenetic analysis", "serotype");
-
-		return true;
 	}
 
-    private boolean subgenogroupPhyloAnalysis(AbstractSequence s, AlignmentAnalyses phylo, String regionName, Cluster cluster) throws AnalysisException {
-    	String analysisName = "phylo-minor-" + cluster.getId();
+    private boolean subgenogroupPhyloAnalysis(AbstractSequence s, Result blastResult, Region region, Cluster typeCluster, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
+    	PhyloClusterAnalysis a = getAnalysis(blastResult.getConcludedCluster().getId(), typeCluster.getId(), region);
     	
-		/*
-		 * Only if that analysis is described in the XML file.
-		 */
-		if (!phylo.haveAnalysis(analysisName))
-			return false;
+    	if (a == null) {
+    		if (region != null) {
+    			region = null;
+    			a = getAnalysis(blastResult.getConcludedCluster().getId(), typeCluster.getId(), region);
+    		}
+    		
+    		if (a == null)
+    			return false;
+    	}
 
-		PhyloClusterAnalysis a = (PhyloClusterAnalysis) phylo.getAnalysis(analysisName);
-
+    	if (region != null && !cutToRegion)
+    		s = cutRegion(s, blastResult, region);
+    	
 		PhyloClusterAnalysis.Result r = a.run(s);
 		
-		String phyloName = "phylogenetic subgenogroup analysis within " + cluster.getId();
+		String phyloName = "phylogenetic subgenogroup analysis within " + typeCluster.getId();
 
 		/*
 		 * If we are clustering with the outgroup, then clearly we could not identify a variant.
@@ -137,7 +194,7 @@ public class GenericTool extends GenotypeTool {
 		 */
 		if (r == null
 			|| r.getConcludedCluster() == null
-			|| !r.getConcludedCluster().getId().startsWith(cluster.getId())
+			|| !r.getConcludedCluster().getId().startsWith(typeCluster.getId())
 			|| !r.haveSupport())
 			conclude("Could not assign", "Not supported by " + phyloName, "subgenogroup");
 		else

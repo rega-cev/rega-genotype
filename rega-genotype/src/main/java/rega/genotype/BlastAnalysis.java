@@ -337,11 +337,13 @@ public class BlastAnalysis extends AbstractAnalysis {
         this.detailsOptions = detailsOptions;
         if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
         	this.blastOptions = "-p blastx " + this.blastOptions;
-        	this.detailsOptions = "-p blastx " + this.detailsOptions;
+        	if (detailsOptions != null)
+        		this.detailsOptions = "-p blastx " + this.detailsOptions;
         	this.formatDbOptions = "";
         } else {
         	this.blastOptions = "-p blastn " + this.blastOptions;
-        	this.detailsOptions = "-p blastn " + this.detailsOptions;
+        	if (detailsOptions != null)
+        		this.detailsOptions = "-p blastn " + this.detailsOptions;
         	this.formatDbOptions = "-p F";
         }
         this.referenceTaxa = new HashMap<String, ReferenceTaxus>();

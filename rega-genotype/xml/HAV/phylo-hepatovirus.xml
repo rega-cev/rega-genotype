@@ -1,0 +1,69 @@
+<genotype-analyses>
+	<alignment file="phylo-hepatovirus.fasta" trim="true" />
+
+	<clusters>
+		<cluster id="IA" name="HaV I.A">
+			<taxus name="IA|EU1313" />
+			<taxus name="IA|AB0205" />
+			<taxus name="IA|X83302" />
+		</cluster>
+
+		<cluster id="IB" name="HaV I.B">
+			<taxus name="IB|DQ6464" />
+			<taxus name="IB|NC 001" />
+			<taxus name="IB|AF3142" />
+		</cluster>
+
+		<cluster id="IIA" name="HaV II.A">
+			<taxus name="IIA|AY644" />
+		</cluster>
+
+		<cluster id="IIB" name="HaV II.B">
+			<taxus name="IIB|AY644" />
+		</cluster>
+
+		<cluster id="IIIA" name="HaV III.A">
+			<taxus name="IIIA|AJ29" /> 
+			<taxus name="IIIA|DQ99" />
+			<taxus name="IIIA|AB27" />
+		</cluster>
+
+		<cluster id="IIIB" name="HaV III.B">
+			<taxus name="IIIB|AB25" />
+			<taxus name="IIIB|AB27" />
+			<taxus name="IIIB|AB42" />
+		</cluster>
+
+		<cluster id="IVB" name="HaV IV.B">
+			<taxus name="IV|D00926" /> 
+			<taxus name="IV|EU1408" /> 
+		</cluster>
+	</clusters>
+
+	<analysis id="phylo-major" type="paup">
+		<identify>*</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			export format=phylip file=paup.fasta replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup AEV|AJ225173.1;
+			set criterion=distance;
+			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
+			NJ;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree
+		</options>
+	</analysis>
+
+</genotype-analyses>
+

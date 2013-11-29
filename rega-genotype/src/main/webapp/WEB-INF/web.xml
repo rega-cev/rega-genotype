@@ -69,6 +69,7 @@
     <servlet-name>GenotypeEntero</servlet-name>
     <url-pattern>/enterovirus/typingtool/*</url-pattern>
   </servlet-mapping>
+  -->
 
   <servlet>
     <servlet-name>GenotypeHAV</servlet-name>
@@ -81,7 +82,7 @@
     </init-param>
     <init-param>
         <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
+        <param-value>etc/development-config.xml</param-value>
    </init-param>
   </servlet>
 
@@ -90,6 +91,7 @@
     <url-pattern>/hav/typingtool/*</url-pattern>
   </servlet-mapping>
 
+<!--
   <servlet>
     <servlet-name>GenotypeEntero-service</servlet-name>
     <display-name>Entero Genotyping service</display-name>
