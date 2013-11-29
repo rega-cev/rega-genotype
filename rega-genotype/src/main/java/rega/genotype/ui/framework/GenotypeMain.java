@@ -21,6 +21,8 @@ import eu.webtoolkit.jwt.WtServlet;
 @SuppressWarnings("serial")
 public abstract class GenotypeMain extends WtServlet
 {
+	protected Settings settings;
+
 	public GenotypeMain() {
 		super();
 		
@@ -34,8 +36,8 @@ public abstract class GenotypeMain extends WtServlet
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		Settings.initSettings(Settings.getInstance());
-
+		Settings.initSettings(this.settings = Settings.getInstance(config));
+		
 		super.init(config);
-	}
+	}	
 }

@@ -1,0 +1,33 @@
+<genotyping-tool>
+	<menu>
+		<menu-item>
+			<label>How to cite</label>
+			<path>how-to-cite</path>
+			<message-id>how-to-cite-doc</message-id>
+		</menu-item>
+	</menu>
+
+	<result-list>
+		<column>
+			<label>Name</label>
+			<field>/genotype_result/sequence/@name</field>
+		</column>
+		<column>
+			<label>Length</label>
+			<field>/genotype_result/sequence/@length</field>
+		</column>
+		<column>
+			<label>Capsular Sequence Type</label>
+			<field>/genotype_result/sequence/conclusion/assigned/name</field>
+		</column>
+		<column>
+			<label>Similarity</label>
+			<field>/genotype_result/sequence/conclusion/assigned/score</field>
+		</column>
+		<column>
+			<label>Report</label>
+			<field>report-link</field>
+		</column>
+	</result-list>
+
+</genotyping-tool>

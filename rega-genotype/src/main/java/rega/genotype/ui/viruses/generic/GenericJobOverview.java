@@ -14,6 +14,7 @@ import rega.genotype.ui.forms.DefaultJobOverviewSummary;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.viruses.generic.GenericDefinition.ResultColumn;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
@@ -24,40 +25,63 @@ import eu.webtoolkit.jwt.WWidget;
  */
 public class GenericJobOverview extends AbstractJobOverview {
 	private List<Header> headers = new ArrayList<Header>();
+	private List<ResultColumn> columns;
 
-	public GenericJobOverview(GenotypeWindow main) {
+	public GenericJobOverview(GenotypeWindow main, List<ResultColumn> resultColumns) {
 		super(main);
 		
-		headers.add(new Header(WString.tr("table.header.name")));
-		headers.add(new Header(WString.tr("table.header.length")));
-		headers.add(new Header(WString.tr("table.header.blast")));
-		headers.add(new Header(WString.tr("table.header.phylo"), 2));
-		headers.add(new Header(WString.tr("table.header.report")));
-		headers.add(new Header(WString.tr("table.header.genome")));
+		this.columns = resultColumns;
+		
+		if (this.columns == null) {
+			/* Standard columns */
+			headers.add(new Header(WString.tr("table.header.name")));
+			headers.add(new Header(WString.tr("table.header.length")));
+			headers.add(new Header(WString.tr("table.header.blast")));
+			headers.add(new Header(WString.tr("table.header.phylo"), 2));
+			headers.add(new Header(WString.tr("table.header.report")));
+			headers.add(new Header(WString.tr("table.header.genome")));
+		} else {
+			for (ResultColumn c : columns)
+				headers.add(new Header(new WString(c.label)));
+		}
 	}
 
 	@Override
 	public List<WWidget> getData(final GenotypeResultParser p) {
 		List<WWidget> data = new ArrayList<WWidget>();
 
-		data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name"))));
-		data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length"))));
+		if (this.columns == null) {
+			data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name"))));
+			data.add(new WText(new WString(GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@length"))));
 
-		String blastResult = GenericResults.getBlastConclusion(p);
-		data.add(new WText(new WString(notNull(blastResult))));
+			String blastResult = GenericResults.getBlastConclusion(p);
+			data.add(new WText(new WString(notNull(blastResult))));
 
-		GenericResults.Conclusion c = GenericResults.getConclusion(p);
+			GenericResults.Conclusion c = GenericResults.getConclusion(p);
 
-		data.add(new WText(new WString(notNull(c.majorAssignmentForOverview))));
-		data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
+			data.add(new WText(new WString(notNull(c.majorAssignmentForOverview))));
+			data.add(new WText(new WString(notNull(c.variantAssignmentForOverview))));
+			
+			WAnchor report = createReportLink(p);
+			data.add(report);
+
+			boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-major']/best/id") != null;
+			boolean haveBlastAssignment = havePhyloAnalysis || !"Unassigned".equals(p.getValue("/genotype_result/sequence/conclusion/assigned/id"));
+			data.add(createGenomeImage(p, "-", !haveBlastAssignment));
+		} else {
+			for (ResultColumn c : columns) {
+				if (c.field.equals("report-link"))
+					data.add(createReportLink(p));
+				else {
+					String v = GenotypeLib.getEscapedValue(p, c.field);
+					if (v != null)
+						data.add(new WText(new WString(v)));
+					else
+						data.add(null);
+				}
+			}
+		}
 		
-		WAnchor report = createReportLink(p);
-		data.add(report);
-
-		boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-major']/best/id") != null;
-		boolean haveBlastAssignment = havePhyloAnalysis || !"Unassigned".equals(p.getValue("/genotype_result/sequence/conclusion/assigned/id"));
-		data.add(createGenomeImage(p, "-", !haveBlastAssignment));
-	
 		return data;
 	}
 

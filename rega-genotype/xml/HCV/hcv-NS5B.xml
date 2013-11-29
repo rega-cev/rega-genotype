@@ -82,7 +82,12 @@
  	  	<cluster id="2c" name="Genotype 2 subtype c">
  		    <taxus name="2c.BEBE1" />
 		</cluster>
-	
+		
+		<cluster id="2d" name="Genotype 2 (subtype d)">
+ 		    <taxus name="P2d_L29634" />
+			<taxus name="P2d_AF037244" />
+		</cluster>
+
  	  	<cluster id="2k" name="Genotype 2 subtype k">
 		    <taxus name="2k.VAT96" />
 		</cluster>
@@ -145,7 +150,7 @@
 
   <analysis id="pure-puzzle" type="paup">
     <identify>
-		Geno_1,1a,1b,1c,1d,1e,1f,1g,1h,1i,1j,1k,1l,Geno_2,2a,2b,2c,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
+		Geno_1,1a,1b,1c,1d,1e,1f,1g,1h,1i,1j,1k,1l,Geno_2,2a,2b,2c,2d,2k,Geno_3,3a,3b,3k,4a,5a,Geno_6,6a,6b,6d,6g,6h,6k 
     </identify>
     <cutoff>
       70
@@ -157,7 +162,7 @@
       export format=nexus file=paup.nex replace=yes;
       outgroup 4a.ED43;
       set criterion=distance outroot=monophyl;
-      dset distance=HKY NegBrLen=Prohibit;
+      dset distance=HKY;
       NJ;
       savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;

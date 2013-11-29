@@ -727,9 +727,9 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             float total = 0;
             for (;;) {
                 String s = reader.readLine();
-                System.err.println(s);
                 if (s == null)
                     break;
+                System.err.println(s);
                 Matcher m = pattern.matcher(s);
                 
                 if (m.find()) {

@@ -7,7 +7,6 @@ package rega.genotype.ui.parasites.giardia;
 
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WString;
@@ -25,7 +24,7 @@ public class GiardiaMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new GiardiaDefinition());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new GiardiaDefinition(), settings);
 		app.setTitle(WString.tr("giardiaTool.title"));
 		
 		app.useStyleSheet("../style/genotype-rivm.css");

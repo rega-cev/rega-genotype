@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="rega/genotype/parasites/giardia/|rega/genotype/ui/parasites/giardia/|rega/genotype/ui/viruses/etv/|rega/genotype/ui/viruses/generic/|rega/genotype/ui/viruses/hbv/|rega/genotype/ui/viruses/hcv/|rega/genotype/ui/viruses/hhv8/|rega/genotype/ui/viruses/hpv/|rega/genotype/ui/viruses/htlv/|rega/genotype/ui/viruses/nov/|rega/genotype/ui/viruses/phylo|rega/genotype/ui/viruses/phylo/|rega/genotype/viruses/hbv/|rega/genotype/viruses/hcv/|rega/genotype/viruses/hhv8/|rega/genotype/viruses/hpv/|rega/genotype/viruses/htlv/|rega/genotype/viruses/nov/|rega/genotype/viruses/phylo/" kind="src" path="src/main/java"/>
+	<classpathentry excluding="rega/genotype/parasites/giardia/|rega/genotype/ui/parasites/giardia/|rega/genotype/ui/viruses/hbv/|rega/genotype/ui/viruses/hcv/|rega/genotype/ui/viruses/hhv8/|rega/genotype/ui/viruses/hpv/|rega/genotype/ui/viruses/htlv/|rega/genotype/ui/viruses/phylo|rega/genotype/ui/viruses/phylo/|rega/genotype/viruses/hbv/|rega/genotype/viruses/hcv/|rega/genotype/viruses/hhv8/|rega/genotype/viruses/hpv/|rega/genotype/viruses/htlv/|rega/genotype/viruses/phylo/" kind="src" path="src/main/java"/>
 	<classpathentry excluding="rega/genotype/ui/nov/" kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jdom/deps/ant.jar"/>
@@ -9,16 +9,16 @@
 	<classpathentry kind="lib" path="lib/jdom/deps/xerces.jar"/>
 	<classpathentry kind="lib" path="lib/jdom/deps/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/jdom/jdom-1.1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jwt/deps/pdfjet/PDFjet-3.07.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/commons-fileupload-1.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/servlet-api-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/jwt/jwt-3.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/jexcelapi/jxl.jar"/>
 	<classpathentry kind="lib" path="lib/junit/deps/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/junit/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/slf4j-api-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/deps/slf4j-simple-1.6.4.jar"/>
 	<classpathentry kind="lib" path="lib/jargs/jargs.jar"/>
+	<classpathentry kind="lib" path="lib/jwt/deps/pdfjet/pdfjet-4.75.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jwt"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

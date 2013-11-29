@@ -27,7 +27,7 @@ import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 public class HivMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings);
 		
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");

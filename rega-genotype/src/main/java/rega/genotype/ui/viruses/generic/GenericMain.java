@@ -39,8 +39,7 @@ public class GenericMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext());
-
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings);
 		GenericDefinition definition = new GenericDefinition(organism);
 
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
@@ -69,8 +68,6 @@ public class GenericMain extends GenotypeMain {
 		this.organism = config.getInitParameter("Organism");
 		if (organism == null)
 			throw new ServletException("Need 'Organism' parameter");
-
-		Settings.initSettings(Settings.getInstance());
 		
 		super.init(config);
 	}

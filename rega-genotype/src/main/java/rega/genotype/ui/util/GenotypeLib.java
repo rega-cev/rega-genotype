@@ -41,9 +41,11 @@ import org.apache.commons.io.IOUtils;
 import rega.genotype.ApplicationException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.utils.Settings;
 import rega.genotype.utils.StreamReaderThread;
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.FileUtils;
 import eu.webtoolkit.jwt.Utils;
 import eu.webtoolkit.jwt.Utils.HtmlEncodingFlag;
 import eu.webtoolkit.jwt.WAnchor;
@@ -279,10 +281,7 @@ public class GenotypeLib {
 	}
 	
 	public static InputStream getResourceAsStream(String path) throws IOException {
-		URL url = GenotypeLib.class.getResource(path);
-		if (url == null)
-			url = new URL(path);
-		return url.openStream();
+		return FileUtils.getResourceAsStream(path);
 	}
 
 	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) throws IOException {
@@ -365,14 +364,6 @@ public class GenotypeLib {
 		}
 	}
 
-	public static void main(String[] args) {
-		Settings s = Settings.getInstance();
-
-		Settings.initSettings(s);
-
-		getTreePDF(new File("/home/simbre1/tmp/genotype/"), new File("/home/simbre1/tmp/genotype/r7184492.tre"));
-	}
-	
 	public static String readFileToString(File f) throws IOException {
 	    StringBuilder contents = new StringBuilder();
 	    

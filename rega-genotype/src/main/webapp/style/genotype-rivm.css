@@ -138,6 +138,10 @@ table.jobTable td img, .detailsForm img {
 	text-align: left;
 }
 
+.detailsForm .details pre {
+	font-size: 120%;
+}
+
 .detailsForm h2 {
 	border: 1px inset gray;
 	margin: 2px;

@@ -16,7 +16,7 @@ import eu.webtoolkit.jwt.WEnvironment;
 public class HbvMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new HbvDefinition());
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), new HbvDefinition(), settings);
 
 		app.useStyleSheet(Settings.defaultStyleSheet);
 		

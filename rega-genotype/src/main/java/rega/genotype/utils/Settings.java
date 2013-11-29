@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -22,6 +24,8 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.framework.GenotypeApplication;
+import rega.genotype.ui.framework.GenotypeMain;
 
 /**
  * Singleton class which contains the application settings, parses them from the xml configuration file.
@@ -65,7 +69,11 @@ public class Settings {
 	}
 	
 	public File getJobDir(OrganismDefinition od) {
-		return jobDirs.get(od.getOrganismName());
+		File f = jobDirs.get(od.getOrganismName());
+		if (f == null)
+			f = defaultJobDir;
+
+		return f;
 	}
 	
 	public int getMaxAllowedSeqs() {
@@ -86,7 +94,7 @@ public class Settings {
 	private String treeGraphCmd;
 	private String inkscapeCmd;
 	private int maxAllowedSeqs;
-	
+	private File defaultJobDir;	
 	private Map<String, File> jobDirs = new HashMap<String, File>();
 	public static String treeGraphCommand = "/usr/bin/tgf";
 
@@ -124,6 +132,8 @@ public class Settings {
             	treeGraphCmd = e.getValue().trim();
             } else if(name.equals("inkscapeCmd")) {
             	inkscapeCmd = e.getValue().trim();
+            } else if(name.equals("jobDir")) {
+            	defaultJobDir = new File(e.getValue().trim());
             } else if(name.startsWith("jobDir-")) {
             	String organism = name.split("-")[1];
             	jobDirs.put(organism, new File(e.getValue().trim()));
@@ -143,18 +153,34 @@ public class Settings {
 	}
 
 	public static Settings getInstance() {
-        String configFile = System.getenv("REGA_GENOTYPE_CONF_DIR");
+		GenotypeApplication app = GenotypeMain.getApp();
+		if (app == null)
+			return getInstance(null);
+		else
+			return app.getSettings();
+	}
+
+	public static Settings getInstance(ServletConfig config) {
+        String configFile;
         
-        if(configFile==null) {
+        if (config != null) {
+        	configFile = config.getInitParameter("configFile");
+        	if (configFile != null)
+        		return new Settings(new File(configFile));
+        } else {
+        	configFile = System.getenv("REGA_GENOTYPE_CONF_DIR");
+        }
+        
+        if (configFile == null) {
             String osName = System.getProperty("os.name");
             osName = osName.toLowerCase();
-            if(osName.startsWith("windows"))
-                configFile = "C:\\Program files\\rega_genotype\\global-conf.xml";
+            if (osName.startsWith("windows"))
+                configFile = "C:\\Program files\\rega_genotype\\";
             else
-                configFile = "/etc/rega_genotype/global-conf.xml";
-        } else {
-            configFile += File.separatorChar + "global-conf.xml";
+                configFile = "/etc/rega_genotype/";
         }
+
+       	configFile += File.separatorChar + "global-conf.xml";
         
         return new Settings(new File(configFile));
 	}
