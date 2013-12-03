@@ -1,0 +1,253 @@
+<genotype-analyses>
+	<alignment file="phylo-hepatovirus-VP1_P2A.fasta" trim="false" />
+
+	<clusters>
+		<cluster id="IA_1" name="(1)">
+			<taxus name="IA_1|AB020567" />
+		</cluster>
+
+		<cluster id="IA_2" name="(2)">
+			<taxus name="IA_2|AF485328" />
+		</cluster>
+
+		<cluster id="IA_3" name="(3)">
+			<taxus name="IA_3|EF207320" />
+		</cluster>
+
+		<cluster id="IA_4" name="(4)">
+			<taxus name="IA_4|EU131373" />
+		</cluster>
+
+		<cluster id="IA_MSM00" name="(MSM00)">
+			<taxus name="IA_MSM00|RIVM-HAV012" />
+			<taxus name="IA_MSM00|RIVM-HAV026" />
+		</cluster>
+
+		<cluster id="IA_MSM12" name="(MSM12)">
+			<taxus name="IA_MSM12|RIVM-HAV11-287" />
+		</cluster>
+
+		<cluster id="IA_MSM08" name="(MSM08)">
+			<taxus name="IA_MSM08|RIVM-HAV251" />
+		</cluster>
+
+		<cluster id="IA_LV08" name="(LV08)">
+			<taxus name="IA_LV08|LET-HAV001" />
+		</cluster>
+
+		<cluster id="IA_CZ08" name="(CZ08)">
+			<taxus name="IA_CZ08|RIVM-HAV265" />
+		</cluster>
+
+		<cluster id="IA_Ba" name="(Ba)">
+			<taxus name="IA_Ba|RIVM-HAV420" />
+			<taxus name="IA_Ba|RIVM-HAV12-102" />
+			<taxus name="IA_Ba|RIVM-HAV10-228" />
+		</cluster>
+
+		<cluster id="IA_MA" name="(MA)">
+			<taxus name="IA_MA|RIVM-HAV11-200" />
+			<taxus name="IA_MA|RIVM-HAV421" />
+			<taxus name="IA_MA|RIVM-HAV10-231" />
+			<taxus name="IA_MA|RIVM-HAV12-082" />
+			<taxus name="IA_MA|RIVM-HAV13-003" />
+			<taxus name="IA_MA|RIVM-HAV12-104" />
+			<taxus name="IA_MA|RIVM-HAV09-016" />
+			<taxus name="IA_MA|RIVM-HAV156" />
+			<taxus name="IA_MA|RIVM-HAV327" />
+			<taxus name="IA_MA|RIVM-HAV347" />
+		</cluster>
+
+		<cluster id="IA_ID" name="(ID)">
+			<taxus name="IA_ID|RIVM-HAV415" />
+			<taxus name="IA_ID|RIVM-HAV11-145" />
+		</cluster>
+
+		<cluster id="IA_MX" name="(MX)">
+			<taxus name="IA_MX|RIVM-HAV10-036" />
+			<taxus name="IA_MX|RIVM-HAV11-289" />
+		</cluster>
+
+		<cluster id="IA_NWA" name="(NWA)">
+			<taxus name="IA_NWA|RIVM-HAV340" />
+			<taxus name="IA_NWA|RIVM-HAV12-101" />
+			<taxus name="IA_NWA|RIVM-HAV10-041" />
+			<taxus name="IA_NWA|RIVM-HAV11-208" />
+		</cluster>
+
+		<cluster id="IB_1" name="(1)">
+			<taxus name="IB_1|NC_001489" />
+		</cluster>
+
+		<cluster id="IB_2" name="(2)">
+			<taxus name="IB_2|M20273" />
+		</cluster>
+
+		<cluster id="IB_EG" name="(EG)">
+			<taxus name="IB_EG|RIVM-HAV360" />
+			<taxus name="IB_EG|RIVM-HAV002" />
+			<taxus name="IB_EG|RIVM-HAV11-283" /> 
+			<taxus name="IB_EG|RIVM-HAV004" />
+			<taxus name="IB_EG|RIVM-HAV10-124" />
+			<taxus name="IB_EG|RIVM-HAV10-054" />
+			<taxus name="IB_EG|RIVM-HAV13-025" />
+			<taxus name="IB_EG|RIVM-HAV10-245" />
+			<taxus name="IB_EG|RIVM-HAV12-075" />
+			<taxus name="IB_EG|RIVM-HAV10-238" />
+			<taxus name="IB_EG|RIVM-HAV338" />
+			<taxus name="IB_EG|RIVM-HAV10-198" />
+		</cluster>
+
+		<cluster id="IB_NEA" name="(NEA)">
+			<taxus name="IB_NEA|RIVM-HAV374" />
+			<taxus name="IB_NEA|RIVM-HAV12-058" />
+		</cluster>
+
+		<cluster id="IB_MA" name="(MA)">
+			<taxus name="IB_MA|RIVM-HAV13-020" />
+			<taxus name="IB_MA|RIVM-HAV11-230" />
+			<taxus name="IB_MA|RIVM-HAV12-141" />
+			<taxus name="IB_MA|RIVM-HAV354" />
+			<taxus name="IB_MA|RIVM-HAV294" />
+			<taxus name="IB_MA|RIVM-HAV425" />
+			<taxus name="IB_MA|RIVM-HAV346" />
+			<taxus name="IB_MA|RIVM-HAV10-209" />
+			<taxus name="IB_MA|RIVM-HAV09-029" />
+		</cluster>
+
+		<cluster id="IB_TR" name="(TR)">
+			<taxus name="IB_TR|RIVM-HAV140" />
+			<taxus name="IB_TR|RIVM-HAV260" />
+			<taxus name="IB_TR|RIVM-HAV142" />
+			<taxus name="IB_TR|RIVM-HAV275" />
+		</cluster>
+
+		<cluster id="IB_WA" name="(WA)">
+			<taxus name="IB_WA|RIVM-HAV322" />
+			<taxus name="IB_WA|RIVM-HAV10-116" />
+		</cluster>
+
+		<cluster id="IB_ZA" name="(ZA)">
+			<taxus name="IB_ZA|RIVM-HAV342" />
+			<taxus name="IB_ZA|RIVM-HAV11-195" />
+			<taxus name="IB_ZA|RIVM-HAV239" />
+		</cluster>
+
+		<cluster id="IIIA_1" name="(1)">
+			<taxus name="IIIA_1|AB279733" />
+		</cluster>
+
+		<cluster id="IIIA_2" name="(2)">
+			<taxus name="IIIA_2|AB279734" />
+		</cluster>
+
+		<cluster id="IIIA_AF" name="(AF)">
+			<taxus name="IIIA_AF|RIVM-HAV10-183" />
+			<taxus name="IIIA_AF|RIVM-HAV11-205" />
+			<taxus name="IIIA_AF|RIVM-HAV12-106" />
+			<taxus name="IIIA_AF|RIVM-HAV10-207" />
+			<taxus name="IIIA_AF|RIVM-HAV10-259" />
+		</cluster>
+
+		<cluster id="IIIA_IN" name="(IN)">
+			<taxus name="IIIA_IN|RIVM-HAV10-170" />
+			<taxus name="IIIA_IN|RIVM-HAV10-243" />
+			<taxus name="IIIA_IN|RIVM-HAV044" />
+			<taxus name="IIIA_IN|RIVM-HAV017" />
+			<taxus name="IIIA_IN|RIVM-HAV13-039" />
+			<taxus name="IIIA_IN|DQ991029" />
+			<taxus name="IIIA_IN|DQ991030" />
+		</cluster>
+	</clusters>
+
+	<analysis id="phylo-minor-IA" type="paup">
+		<identify>
+			IA_1,IA_2,IA_3,IA_4,IA_MSM00,IA_MSM12,IA_MSM08,IA_LV08,IA_CZ08,IA_Ba,IA_MA,IA_ID,IA_MX,IA_NWA,IB_1
+		</identify>
+
+		<cutoff>
+			70
+		</cutoff>
+		
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			export format=phylip file=paup.fasta replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup IB_1|NC_001489;
+			set criterion=distance;
+			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
+			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree
+		</options>
+	</analysis>
+
+	<analysis id="phylo-minor-IB" type="paup">
+		<identify>
+			IB_1,IB_2,IB_EG,IB_NEA,IB_MA,IB_TR,IB_WA,IB_ZA,IA_CZ08
+		</identify>
+
+		<cutoff>
+			70
+		</cutoff>
+		
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			export format=phylip file=paup.fasta replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup IA_CZ08|RIVM-HAV265;
+			set criterion=distance;
+			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
+			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree
+		</options>
+	</analysis>
+
+	<analysis id="phylo-minor-IIIA" type="paup">
+		<identify>
+			IIIA_1,IIIA_2,IIIA_AF,IIIA_IN,IB_1
+		</identify>
+
+		<cutoff>
+			70
+		</cutoff>
+		
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			export format=phylip file=paup.fasta replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup IB_1|NC_001489;
+			set criterion=distance;
+			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
+			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree
+		</options>
+	</analysis>
+</genotype-analyses>
+

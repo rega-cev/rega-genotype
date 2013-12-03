@@ -70,27 +70,27 @@ public class GenericTool extends GenotypeTool {
 
        		try {
        			BlastAnalysis.Region region = null;
-				if (blastResult.getReference() != null) {
-					region = findOverlappingRegion(blastResult);
-					if (region != null) {
-			        	PhyloClusterAnalysis pca = getAnalysis(c.getId(), null, region);
-			        	if (pca != null) {
-			        		AbstractSequence s2 = cutRegion(s, blastResult,	region);
-			        		phyloAnalysis(pca, s2, blastResult, region, true);
-			        		haveConclusion = true;
-				        }
-					}
-				}
-					
-				if (!haveConclusion) {
+
+				if (blastResult.getReference() != null)
 					/*
-					 * Perhaps we have a full-genome analysis?
+					 * Perhaps we have an analysis for the region covered by the input sequence ?
 					 */
-					PhyloClusterAnalysis pca = getAnalysis(c.getId(), null, null);
-					if (pca != null) {
-						phyloAnalysis(pca, s, blastResult, region, false);
-						haveConclusion = true;
-					}
+					region = findOverlappingRegion(blastResult);
+
+				/*
+				 * Perhaps we have a full-genome analysis?
+				 */
+				PhyloClusterAnalysis pca = getAnalysis(c.getId(), null, null);
+				if (pca != null) {
+					phyloAnalysis(pca, s, blastResult, region, false);
+					haveConclusion = true;
+				} else if (region != null) {
+		        	pca = getAnalysis(c.getId(), null, region);
+		        	if (pca != null) {
+		        		AbstractSequence s2 = cutRegion(s, blastResult,	region);
+		        		phyloAnalysis(pca, s2, blastResult, region, true);
+		        		haveConclusion = true;
+			        }
 				}
 			} catch (IOException e) {
 				throw new AnalysisException("", s, e);
@@ -132,7 +132,7 @@ public class GenericTool extends GenotypeTool {
 			alignmentId += "-" + region.getName();	
 		
 		String analysisId;
-   		if (typeId == null)
+   		if (typeId != null)
    			analysisId = "phylo-minor-" + typeId;		
    		else
    			analysisId = "phylo-major";
@@ -144,9 +144,10 @@ public class GenericTool extends GenotypeTool {
            	
            	if (new File(GenotypeTool.getXmlBasePath() + f).canRead()) {
            		AlignmentAnalyses analyses = readAnalyses(f, new File(workingDir));
-           		result = (PhyloClusterAnalysis) analyses.getAnalysis(analysisId);
-           		if (result != null)
+           		if (analyses.haveAnalysis(analysisId)) {
+           			result = (PhyloClusterAnalysis) analyses.getAnalysis(analysisId);
            			phyloAnalyses.put(alignmentId + "-" + analysisId, result);
+           		}
            	}
 		}
 

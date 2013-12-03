@@ -219,11 +219,7 @@ public abstract class AbstractAnalysis {
     }
     
     protected File getTempFile(String fileName) {
-        ResultTracer tracer = getTracer();
-        if (tracer != null)
-        	return new File(tracer.getOutputPath() + File.separator + fileName);
-        else
-        	return new File(workingDir + File.separator + fileName);
+        return new File(workingDir + File.separator + fileName);
     }
 
     /**
