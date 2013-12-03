@@ -331,7 +331,11 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					public void endSequence() {
 						SkipToSequenceParser p = null;
 						
-						final int start = Integer.parseInt(getValue("/genotype_result/sequence/result[@id='blast']/start"));
+						//no result
+						String startXPath = "/genotype_result/sequence/result[@id='blast']/start";
+						if (getValue(startXPath) == null)
+							return;
+						final int start = Integer.parseInt(getValue(startXPath));
 						
 						OrganismDefinition od = AbstractJobOverview.this.getMain().getOrganismDefinition();
 						if (od.getRecombinationResultXPaths() != null) {
