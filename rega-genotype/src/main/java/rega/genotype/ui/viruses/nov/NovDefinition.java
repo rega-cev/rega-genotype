@@ -104,4 +104,8 @@ public class NovDefinition implements OrganismDefinition {
 	public String getProfileScanType(GenotypeResultParser p) {
 		return null;
 	}
+
+	public List<String> getRecombinationResultXPaths() {
+		return null;
+	}
 }

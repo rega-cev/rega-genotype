@@ -235,4 +235,8 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	public List<MenuItem> getMenuItems() {
 		return menuItems;
 	}
+
+	public List<String> getRecombinationResultXPaths() {
+		return null;
+	}
 }

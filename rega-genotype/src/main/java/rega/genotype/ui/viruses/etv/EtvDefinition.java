@@ -101,4 +101,8 @@ public class EtvDefinition implements OrganismDefinition {
 	public Genome getLargeGenome() {
 		return getGenome();
 	}
+
+	public List<String> getRecombinationResultXPaths() {
+		return null;
+	}
 }

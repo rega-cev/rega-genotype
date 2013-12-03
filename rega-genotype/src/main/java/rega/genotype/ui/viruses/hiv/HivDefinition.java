@@ -72,6 +72,16 @@ public class HivDefinition implements OrganismDefinition {
 		else
 			return "pure";
 	}
+	
+	private String SCAN_PURE = "/genotype_result/sequence/result[@id='scan-pure']";
+	private String SCAN_CRF = "/genotype_result/sequence/result[@id='scan-crf']";
+	
+	public List<String> getRecombinationResultXPaths() {
+		List<String> paths = new ArrayList<String>();
+		paths.add(SCAN_PURE);
+		paths.add(SCAN_CRF);
+		return paths;
+	}
 
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
@@ -88,13 +98,11 @@ public class HivDefinition implements OrganismDefinition {
 		if (p.elementExists("/genotype_result/sequence/result[@id='crf']"))
 			forms.add(new DefaultPhylogeneticDetailsForm("/genotype_result/sequence/result[@id='crf']", m, m, false));
 		
-		String scan = "/genotype_result/sequence/result[@id='scan-pure']";
-		if (p.elementExists(scan))
-			forms.add(new DefaultRecombinationDetailsForm(scan, "pure", new WString("HIV-1 Subtype Recombination Analysis")));
+		if (p.elementExists(SCAN_PURE))
+			forms.add(new DefaultRecombinationDetailsForm(SCAN_PURE, "pure", new WString("HIV-1 Subtype Recombination Analysis")));
 		
-		String crfScan = "/genotype_result/sequence/result[@id='scan-crf']";
-		if (p.elementExists(crfScan))
-			forms.add(new DefaultRecombinationDetailsForm(crfScan, "crf", new WString("HIV-1 CRF/Subtype Recombination Analysis")));
+		if (p.elementExists(SCAN_CRF))
+			forms.add(new DefaultRecombinationDetailsForm(SCAN_CRF, "crf", new WString("HIV-1 CRF/Subtype Recombination Analysis")));
 
 		if(p.elementExists("/genotype_result/sequence/result[@id='pure-puzzle']")) {
 			forms.add(new DefaultSignalDetailsForm());
