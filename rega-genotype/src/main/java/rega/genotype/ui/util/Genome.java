@@ -20,8 +20,8 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import rega.genotype.ui.forms.RecombinationForm.Region;
 import rega.genotype.utils.Table;
+import rega.genotype.viruses.recombination.RegionUtils.Region;
 
 /**
  * Abstract class, provides basis for drawing genome map images.
