@@ -66,6 +66,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	
 	public GenericDefinition(String organism) {
 		this.organism = organism;
+		this.updateInterval = 5;
 		xmlFolder = Settings.getInstance().getXmlPath() + File.separator + organism + File.separator;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));

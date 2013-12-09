@@ -21,6 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.utils.StreamReaderRuntime;
@@ -236,6 +237,19 @@ public class BlastAnalysis extends AbstractAnalysis {
 			return result;
 		}
 
+		private String getDescription() {
+			TreeSet<String> d = new TreeSet<String>();
+			for (Cluster c : clusters)
+				if (c.getDescription() != null)
+					d.add(c.getDescription());
+			String result = "";
+			for (String s : d) {
+				if (!result.isEmpty())
+					result += ", ";
+				result += s;
+			}
+			return result;
+		}
 
         /**
          * @return Returns the cluster.
@@ -286,9 +300,11 @@ public class BlastAnalysis extends AbstractAnalysis {
 			tracer.add("score", String.valueOf(similarity));
 			if (clusters.size() == 1 || similarity == 100) {
 				tracer.add("id", getClusterIds());
+				tracer.add("description", getDescription());
 				tracer.add("name", similarity == 100 ? getClusterNames() : ("Match with " + getCluster().getName()));
 			} else {
 				tracer.add("id", getClusterIds());
+				tracer.add("description", getDescription());
 				tracer.add("name", "Multiple matches");
 			}
 		}

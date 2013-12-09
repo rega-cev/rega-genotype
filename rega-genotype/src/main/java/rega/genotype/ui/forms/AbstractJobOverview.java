@@ -311,22 +311,26 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			int numRows = AbstractJobOverview.this.jobTable.getRowCount()-1;
 			if(getSequenceIndex() - getFilteredSequences() >= numRows) {
 				jobTable.setHidden(false);
-				
+
 				List<WWidget> data = getData(this);
-				
+
 				int row = jobTable.getRowCount();
 				for (int i = 0; i < data.size(); i++) {
 					WTableCell cell = jobTable.getElementAt(row, i);
 					cell.setId("");
-					cell.addWidget(data.get(i));
-					if (data.get(i).getObjectName().length() == 0)
-						data.get(i).setId("");
-					
+					WWidget widget = data.get(i);
+					if (widget != null) {
+						cell.addWidget(widget);
+						if (widget.getObjectName().length() == 0)
+							widget.setId("");
+					}
+
 					if (WApplication.getInstance().getEnvironment().getUserAgent().indexOf("MSIE") != -1)
 						cell.setStyleClass(jobTable.getColumnAt(i).getStyleClass());
 				}
+
 				jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
-				
+
 				if (summary != null) 
 					summary.update(this, getMain().getOrganismDefinition());
 			}
