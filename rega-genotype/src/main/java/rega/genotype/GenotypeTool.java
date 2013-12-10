@@ -231,10 +231,10 @@ public abstract class GenotypeTool {
     /**
      * Conclude a plain conclusion.
      */
-    protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation, String id) {
+    protected void conclude(AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id) {
     	concludeRule(null,conclusion,motivation,id);
     }
-    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, String motivation, String id) {
+    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id) {
         getTracer().printlnOpen("<conclusion type=\"simple\""
         		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
         conclusion.writeConclusion(getTracer());

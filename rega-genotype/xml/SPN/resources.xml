@@ -15,22 +15,25 @@
 				<div class="nav_bar">
 					${navigation class="nav_main"}
 				</div>
-				<div id="navigation-bottom" >  </div>
-		</div>
-		${content class="content"}
+		
+				<div id="navigation-bottom" >
+				</div>
 
-		<div class="footer">
-			<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (...)
-				and <a href="http://www.emweb.be/">Emweb bvba</a>.</p>
-		    <p>Contact: TBD</p>
-		</div>
+			</div>
+			${content class="content"}
 
-		<div class="rivm-footer">
-			<div>
-				<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+			<div class="footer">
+				<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (...)
+					and <a href="http://www.emweb.be/">Emweb bvba</a>.</p>
+			    <p>Contact: TBD</p>
+			</div>
+		
+			<div class="rivm-footer">
+				<div>
+					<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+				</div>
 			</div>
 		</div>
-	</div>
 	</message>
 
   	<message id="start-form">
@@ -158,31 +161,8 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 		</p>
 	</message>
   
-  	<message id="sequenceAssignment.phylo">
-    	<h3>{1} assignment</h3>
-    	<p>
-      		<span class="label"/>
-      		<span class="nov-genotype">{2}</span>
-    	</p>
-    	<p>
-    		<span class="label"/> {3}
-		</p>
-	</message>
+ 	<message id="tool.title">Streptococcus Pneumoniae Genotyping Tool</message>
  
-  	<message id="sequenceAssignment.phylo-variant">
-		<p>
-			<span class="label">Subgenogroup:</span> <span class="nov-subclustering">{1}</span>
-		</p>
-		<p>
-			<span class="label"></span> {2}
-		</p>
-	</message>
-  
-	<message id="tool.title">Streptococcus Pneumoniae Genotyping Tool</message>
-  	<message id="main.navigation.introduction">Introduction</message>
-  	<message id="main.navigation.subtypingProcess">(Sub)typing process</message>
-  	<message id="main.navigation.tutorial">How to use</message>
-
 	<message id="table.header.name">Name</message>
 	<message id="table.header.length">Length</message>
 	<message id="table.header.blast">Blast</message>

@@ -17,7 +17,6 @@
     <url-pattern>/hiv/typingtool/*</url-pattern>
   </servlet-mapping>
 
-  <!--  
   <servlet>
     <servlet-name>GenotypeNoV</servlet-name>
     <display-name>NoV Genotyping</display-name>
@@ -25,7 +24,7 @@
     <servlet-class>rega.genotype.ui.viruses.nov.NovMain</servlet-class>
     <init-param>
         <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
+        <param-value>etc/development-config.xml</param-value>
    </init-param>
   </servlet>
 
@@ -45,7 +44,7 @@
    	</init-param>
     <init-param>
         <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
+        <param-value>etc/development-config.xml</param-value>
    </init-param>
    </servlet>
 
@@ -61,7 +60,7 @@
     <servlet-class>rega.genotype.ui.viruses.etv.EtvMain</servlet-class>
     <init-param>
         <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
+        <param-value>etc/development-config.xml</param-value>
    </init-param>
    </servlet>
 
@@ -69,7 +68,27 @@
     <servlet-name>GenotypeEntero</servlet-name>
     <url-pattern>/enterovirus/typingtool/*</url-pattern>
   </servlet-mapping>
-  -->
+
+
+  <servlet>
+    <servlet-name>GenotypeEntero-service</servlet-name>
+    <display-name>Entero Genotyping service</display-name>
+    <description>Entero Genotyping service</description>
+    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
+    <init-param>
+    	<param-name>genotypeTool</param-name>
+    	<param-value>rega.genotype.viruses.etv.EnteroTool</param-value>
+   	</init-param>
+     <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+   </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeEntero-service</servlet-name>
+    <url-pattern>/enterovirus/typingservice</url-pattern>
+  </servlet-mapping>
 
   <servlet>
     <servlet-name>GenotypeHAV</servlet-name>
@@ -92,26 +111,6 @@
   </servlet-mapping>
 
 <!--
-  <servlet>
-    <servlet-name>GenotypeEntero-service</servlet-name>
-    <display-name>Entero Genotyping service</display-name>
-    <description>Entero Genotyping service</description>
-    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
-    <init-param>
-    	<param-name>genotypeTool</param-name>
-    	<param-value>rega.genotype.viruses.etv.EnteroTool</param-value>
-   	</init-param>
-     <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeEntero-service</servlet-name>
-    <url-pattern>/enterovirus/typingservice</url-pattern>
-  </servlet-mapping>
-
   <servlet>
     <servlet-name>GenotypeHTLV</servlet-name>
     <display-name>HTLV Genotyping</display-name>

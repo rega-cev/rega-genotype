@@ -426,10 +426,13 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				int row = jobTable.getRowCount();
 				for (int i = 0; i < data.size(); i++) {
 					OrganismDefinition od = AbstractJobOverview.this.getMain().getOrganismDefinition();
-					for (String path : od.getRecombinationResultXPaths()) {
-						if (elementExists(path + "/recombination")) {
-							hasRecombinationResults = true;
-							break;
+
+					if (od.getRecombinationResultXPaths() != null) {
+						for (String path : od.getRecombinationResultXPaths()) {
+							if (elementExists(path + "/recombination")) {
+								hasRecombinationResults = true;
+								break;
+							}
 						}
 					}
 					

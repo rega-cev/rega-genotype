@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.webtoolkit.jwt.WString;
+
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
@@ -158,11 +160,11 @@ public class GenericTool extends GenotypeTool {
 		PhyloClusterAnalysis.Result r = pca.run(s);
 
 		if (r.haveSupport()) {
-			conclude(r, "Supported with phylogenetic analysis and bootstrap {1} (&gt;= 70)", "serotype");
+			conclude(r, new WString("Supported with phylogenetic analysis and bootstrap {1} (&gt;= {2})").arg(r.getConcludedSupport()).arg(pca.getCutoff()), "type");
 
 			subgenogroupPhyloAnalysis(s, blastResult, region, r.getConcludedCluster(), cutToRegion);
 		} else
-			conclude("Could not assign", "Not supported by phylogenetic analysis", "serotype");
+			conclude("Could not assign", "Not supported by phylogenetic analysis", "type");
 	}
 
     private boolean subgenogroupPhyloAnalysis(AbstractSequence s, Result blastResult, Region region, Cluster typeCluster, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
@@ -197,9 +199,9 @@ public class GenericTool extends GenotypeTool {
 			|| r.getConcludedCluster() == null
 			|| !r.getConcludedCluster().getId().startsWith(typeCluster.getId())
 			|| !r.haveSupport())
-			conclude("Could not assign", "Not supported by " + phyloName, "subgenogroup");
+			conclude("Could not assign", "Not supported by " + phyloName, "subtype");
 		else
-			conclude(r, "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", "subgenogroup");
+			conclude(r, new WString("Supported with " + phyloName + " and bootstrap {1} (&gt;= {2})").arg(r.getConcludedSupport()).arg(a.getCutoff()), "subtype");
 
 		return true;
 	}

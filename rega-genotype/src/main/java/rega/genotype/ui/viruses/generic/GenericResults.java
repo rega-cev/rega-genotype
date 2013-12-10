@@ -29,7 +29,7 @@ public class GenericResults {
 	public static Conclusion getConclusion(GenotypeResultParser p) {
 		Conclusion result = new Conclusion();
 
-		String conclusionP = "/genotype_result/sequence/conclusion[@id='serotype']";
+		String conclusionP = "/genotype_result/sequence/conclusion[@id='type']";
 
 		if (p.elementExists(conclusionP)) {
 			result.majorAssignmentForOverview = GenotypeLib.getEscapedValue(p, conclusionP + "/assigned/id");
@@ -37,11 +37,11 @@ public class GenericResults {
 			result.majorBootstrap = GenotypeLib.getEscapedValue(p, conclusionP + "/assigned/support");
 			result.majorMotivation = GenotypeLib.getEscapedValue(p, conclusionP + "/motivation");
 
-			String subgenogroupConclusionP = "/genotype_result/sequence/conclusion[@id='subgenogroup']";
+			String subgenogroupConclusionP = "/genotype_result/sequence/conclusion[@id='subtype']";
 			if (p.elementExists(subgenogroupConclusionP)) {
 				result.variantAssignment = GenotypeLib.getEscapedValue(p, subgenogroupConclusionP + "/assigned/name");
 
-				boolean showVariantNotAssigned = p.getValue(conclusionP + "/assigned/id").equals("EV-71");
+				boolean showVariantNotAssigned = false;
 				boolean variantNotAssigned = p.getValue(subgenogroupConclusionP + "/assigned/id").equals("Unassigned");
 
 				if (!variantNotAssigned || showVariantNotAssigned)

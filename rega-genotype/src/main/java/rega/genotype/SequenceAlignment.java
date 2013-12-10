@@ -552,7 +552,7 @@ public class SequenceAlignment
     }
 
     public AbstractSequence findSequence(String name) {
-    	name = name.replaceAll(":", "_"); // Apparently, clustal will do that!
+    	name = name.replaceAll(":", "_").replaceAll(",", "_"); // Apparently, clustal will do that!
         for (int i = 0; i < sequences.size(); ++i)
             if (sequences.get(i).getName().equals(name))
                 return sequences.get(i);

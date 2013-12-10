@@ -886,4 +886,8 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 	public Result run(AbstractSequence sequence) throws AnalysisException {
 		return (rega.genotype.PhyloClusterAnalysis.Result) super.run(sequence);
 	}
+
+	public double getCutoff() {
+		return cutoff;
+	}
 }

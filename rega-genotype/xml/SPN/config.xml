@@ -57,5 +57,36 @@
 			<field>genome</field>
 		</column>
 	</result-list>
+	
+	<result-download>
+		<column>
+			<label>name</label>
+			<field>/genotype_result/sequence/@name</field>
+		</column>
+		<column>
+			<label>length</label>
+			<field>/genotype_result/sequence/@length</field>
+		</column>
+		<column>
+			<label>wzh-start-pos</label>
+			<field>/genotype_result/sequence/result[@id='blast']/start</field>
+		</column>
+		<column>
+			<label>wzh-end-pos</label>
+			<field>/genotype_result/sequence/result[@id='blast']/end</field>
+		</column>
+		<column>
+			<label>capsular type(s)</label>
+			<field>/genotype_result/sequence/conclusion/assigned/name</field>
+		</column>
+		<column>
+			<label>corresponding serotype(s)</label>
+			<field>/genotype_result/sequence/conclusion/assigned/description</field>
+		</column>
+		<column>
+			<label>similarity</label>
+			<field>/genotype_result/sequence/conclusion/assigned/score</field>
+		</column>
+	</result-download>
 
 </genotyping-tool>
