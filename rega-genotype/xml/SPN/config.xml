@@ -27,6 +27,14 @@
 		</menu-item>
 	</menu>
 
+	<genome>
+		<color assignment="-">#53b808</color>
+		<start>1</start>
+		<end>506</end>
+		<image-start>10</image-start>
+		<image-end>595</image-end>
+	</genome>	
+
 	<result-list>
 		<column>
 			<label>Name</label>

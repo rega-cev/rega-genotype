@@ -18,8 +18,8 @@
 		
 				<div id="navigation-bottom" >
 				</div>
-
 			</div>
+
 			${content class="content"}
 
 			<div class="footer">
@@ -132,7 +132,19 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 					<p>
 						<span class="label">Similarity:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/score"}
 					</p>
-					
+
+					<div>
+	 					<h3>Genome region</h3>
+	 				</div>
+	 				
+	 				${genome-img}
+	
+	 				<div>
+						<p class="refseq">
+	   						Your sequence starts at position ${xpath "/genotype_result/sequence/result[@id='blast']/start"} and finishes at position ${xpath "/genotype_result/sequence/result[@id='blast']/end"} relative to the ${xpath "/genotype_result/sequence/result[@id='blast']/refseq"} reference sequence.
+						</p>
+					</div>					
+
 					<h3>BLAST analysis details</h3>
 					
 					<p>

@@ -72,7 +72,9 @@ public class GenericJobOverview extends AbstractJobOverview {
 			for (ResultColumn c : columns) {
 				if (c.field.equals("report-link"))
 					data.add(createReportLink(p));
-				else {
+				else if (c.field.equals("genome")) {
+					data.add(createGenomeImage(p, "-", false));
+				} else {					
 					String v = GenotypeLib.getEscapedValue(p, c.field);
 					if (v != null)
 						data.add(new WText(new WString(v)));
