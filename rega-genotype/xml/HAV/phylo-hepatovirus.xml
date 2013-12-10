@@ -3,40 +3,44 @@
 
 	<clusters>
 		<cluster id="IA" name="HaV I.A">
-			<taxus name="IA|EU1313" />
-			<taxus name="IA|AB0205" />
+			<taxus name="IA|EU131373" />
+			<taxus name="IA|AB020565" />
 			<taxus name="IA|X83302" />
 		</cluster>
 
 		<cluster id="IB" name="HaV I.B">
-			<taxus name="IB|DQ6464" />
-			<taxus name="IB|NC 001" />
-			<taxus name="IB|AF3142" />
+			<taxus name="IB|DQ646426" />
+			<taxus name="IB|NC_001489" />
+			<taxus name="IB|AF314208" />
 		</cluster>
 
 		<cluster id="IIA" name="HaV II.A">
-			<taxus name="IIA|AY644" />
+			<taxus name="IIA|AY644676" />
 		</cluster>
 
 		<cluster id="IIB" name="HaV II.B">
-			<taxus name="IIB|AY644" />
+			<taxus name="IIB|AY644670" />
 		</cluster>
 
 		<cluster id="IIIA" name="HaV III.A">
-			<taxus name="IIIA|AJ29" /> 
-			<taxus name="IIIA|DQ99" />
-			<taxus name="IIIA|AB27" />
+			<taxus name="IIIA|AJ299464" /> 
+			<taxus name="IIIA|DQ991030" />
+			<taxus name="IIIA|AB279733" />
 		</cluster>
 
 		<cluster id="IIIB" name="HaV III.B">
-			<taxus name="IIIB|AB25" />
-			<taxus name="IIIB|AB27" />
-			<taxus name="IIIB|AB42" />
+			<taxus name="IIIB|AB258387" />
+			<taxus name="IIIB|AB279735" />
+			<taxus name="IIIB|AB425339" />
 		</cluster>
 
 		<cluster id="IVB" name="HaV IV.B">
-			<taxus name="IV|D00926" /> 
-			<taxus name="IV|EU1408" /> 
+			<taxus name="IV|D00924" /> 
+			<taxus name="IV|EU140838" /> 
+		</cluster>
+
+		<cluster id="AEV" name="Avian Encephalomyelitis Virus">
+			<taxus name="AJ225173" /> 
 		</cluster>
 	</clusters>
 
@@ -51,10 +55,11 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup AEV|AJ225173.1;
+			outgroup AJ225173;
 			set criterion=distance;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
-			NJ;
+			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
 			end;

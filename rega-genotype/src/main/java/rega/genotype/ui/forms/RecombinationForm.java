@@ -2,7 +2,6 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom.Element;
@@ -11,7 +10,8 @@ import rega.genotype.data.GenotypeResultParser.SkipToSequenceParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
-import eu.webtoolkit.jwt.Side;
+import rega.genotype.viruses.recombination.RegionUtils;
+import rega.genotype.viruses.recombination.RegionUtils.Region;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
@@ -25,14 +25,6 @@ import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
 
 public class RecombinationForm extends AbstractForm{
-	public static class Region {
-		public int start;
-		public int end;
-		public String assignment;
-		public double support;
-		public String tree;
-	};
-	
 	public static final String URL = "recombination";
 
 	private SkipToSequenceParser p;
@@ -68,7 +60,7 @@ public class RecombinationForm extends AbstractForm{
 		final int end = Integer.parseInt(p.getValue("/genotype_result/sequence/result[@id='blast']/end"));
 		
 		Element recombination = p.getElement("/genotype_result/sequence/result[@id='scan-" + type + "']/recombination");
-		final List<Region> regions = getSupportedRegions(recombination, start);
+		final List<Region> regions = RegionUtils.getSupportedRegions(recombination, start);
 
 		final int sequenceIndex = p.getSequenceIndex();
 
@@ -103,30 +95,6 @@ public class RecombinationForm extends AbstractForm{
 		t.bindWidget("recombination-table", recombinationTable);
 		
 		return null;
-	}
-	
-	private List<Region> getSupportedRegions(Element recombination, int start) {
-		List<Region> regions = new ArrayList<Region>();
-		
-		for (Object o : recombination.getChildren("region")) {
-	    	Element region = (Element)o;
-			Element result = (Element)region.getChild("result");
-			Element best = (Element)result.getChild("best");
-		
-			double support = Double.valueOf(best.getChildText("support"));
-
-			if (support > 70) { // FIXME hardcoded !!
-				Region r = new Region();
-				r.start = start + Integer.parseInt(region.getChildTextTrim("start"));
-				r.end = start + Integer.parseInt(region.getChildTextTrim("end"));
-				r.assignment = best.getChildText("name");
-				r.support = support;
-				r.tree = result.getChildText("tree");
-				regions.add(r);
-			}
-		}
-		
-		return regions;
 	}
 
 	protected WWidget createRegionWidget(final File jobDir, int number, final Region region, int start){

@@ -619,7 +619,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 			break;
 		case PAUP_ANALYSIS:
 			if (!runPaup(alignment, workingDir, commandBlock.replace(PAUP_BACKBONE, backboneClusters)))
-				throw new ApplicationException("internal error: weirdness running mrbayes");
+				throw new ApplicationException("internal error: weirdness running paup");
 			bootstrapFile = getTempFile(PAUP_LOG);
 		}
 

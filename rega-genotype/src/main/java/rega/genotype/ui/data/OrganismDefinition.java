@@ -34,4 +34,5 @@ public interface OrganismDefinition {
 	public String getOrganismName();
 	public boolean haveDetailsNavigationForm();
 	public String getProfileScanType(GenotypeResultParser p);
+	public List<String> getRecombinationResultXPaths();
 }

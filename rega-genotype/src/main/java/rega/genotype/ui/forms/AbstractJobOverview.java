@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.jdom.Element;
+
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.data.FastaGenerator;
+import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.data.SequenceFilter;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
@@ -21,6 +24,8 @@ import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.util.XlsDataTable;
 import rega.genotype.utils.Settings;
+import rega.genotype.viruses.recombination.RegionUtils;
+import rega.genotype.viruses.recombination.RegionUtils.Region;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
@@ -80,6 +85,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WTemplate template;
 	private String jobId;
 	
+	private boolean hasRecombinationResults;
+	
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main);
 		
@@ -100,6 +107,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public void init(final String jobId, final String filter) {
 		this.jobId = jobId;
 		this.jobDir = getJobDir(jobId);
+		
+		this.hasRecombinationResults = false;
 
 		this.summary = getSummary(filter);
 		template.bindWidget("summary", this.summary);
@@ -124,7 +133,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					updateInfo();
 					if (jobDone()) {
 						resetTimer();
-						template.bindWidget("downloads", createDownloadsWidget(filter));
+						setDownloads(filter);
 					}
 				}
 			});
@@ -132,13 +141,23 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		fillTable(filter);
 		updateInfo();
-		if (jobDone())
-			template.bindWidget("downloads", createDownloadsWidget(filter));
-		else
-			template.bindWidget("downloads", null);
+		setDownloads(filter);
 		
 		if (updater != null)
 			updater.start();
+	}
+	
+	private void setDownloads(String filter) {
+		if (jobDone()) {
+			template.bindWidget("downloads", createDownloadsWidget(filter));
+			if (hasRecombinationResults)
+				template.bindWidget("recombination-fragment-downloads", createRecombinationFragmentDownloadsWidget(filter));
+			else
+				template.bindWidget("recombination-fragment-downloads", null);
+		} else {
+			template.bindWidget("downloads", null);
+			template.bindWidget("recombination-fragment-downloads", null);
+		}
 	}
 	
 	private void resetTimer() {
@@ -228,6 +247,15 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		new Parser().parseFile(jobDir);
 	}
 	
+	public WWidget createRecombinationFragmentDownloadsWidget(final String filter) {
+		WTemplate t = new WTemplate(tr("job-overview-recombination-fragment-downloads"));
+		
+		t.bindWidget("csv-file", createRecombinationFragmentTableDownload(tr("monitorForm.csvTable"), true));
+		t.bindWidget("xls-file", createRecombinationFragmentTableDownload(tr("monitorForm.xlsTable"), false));
+				
+		return t;
+	}
+	
 	private WWidget createDownloadsWidget(final String filter) {
 		WTemplate t = new WTemplate(tr("job-overview-downloads"));
 		
@@ -282,6 +310,87 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return fastaDownload;
 	}
 	
+	private WAnchor createRecombinationFragmentTableDownload(WString label, final boolean csv) {
+		WAnchor tableDownload = new WAnchor("", label);
+		tableDownload.setStyleClass("link");
+
+		WResource csvResource = new WResource() {
+			@Override
+			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
+				response.setContentType("application/excel");
+				final DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ';', '"') : new XlsDataTable(response.getOutputStream());
+				t.addLabel("sequence-name");
+				t.addLabel("recombination-scan-type");
+				t.addLabel("fragment-start");
+				t.addLabel("fragment-end");
+				t.addLabel("fragment-assignment");
+				t.addLabel("fragment-support");
+				t.newRow();
+				
+				GenotypeResultParser grp = new GenotypeResultParser() {
+					public void endSequence() {
+						SkipToSequenceParser p = null;
+						
+						//no result
+						String startXPath = "/genotype_result/sequence/result[@id='blast']/start";
+						if (getValue(startXPath) == null)
+							return;
+						final int start = Integer.parseInt(getValue(startXPath));
+						
+						OrganismDefinition od = AbstractJobOverview.this.getMain().getOrganismDefinition();
+						if (od.getRecombinationResultXPaths() != null) {
+							for (String path : od.getRecombinationResultXPaths()) {
+								String recombinationPath = path + "/recombination";
+								if (this.elementExists(recombinationPath)) {
+									if (p == null) {
+										p = new SkipToSequenceParser(this.getSequenceIndex());
+										p.parseFile(jobDir);
+									}
+									
+									Element recombination = p.getElement(recombinationPath);
+									
+									String name = GenotypeLib.getEscapedValue(p, "/genotype_result/sequence/@name");
+									String scanType = ((Element)recombination.getParent()).getAttributeValue("id");
+							
+									List<Region> regions = RegionUtils.getSupportedRegions(recombination, start);
+									for (Region r : regions) {
+										try {
+											t.addLabel(name);
+											t.addLabel(scanType);
+											t.addLabel(r.start + "");
+											t.addLabel(r.end + "");
+											t.addLabel(r.assignment);
+											t.addLabel(r.support + "");
+											t.newRow();
+										} catch (IOException ioe) {
+											ioe.printStackTrace();
+										}
+									}
+								}
+							}
+						}
+
+					}
+					public boolean skipSequence() {
+				    	return filter.excludeSequence(this);
+				    }
+				};
+				grp.parseFile(jobDir);
+
+				try {
+					t.flush();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		csvResource.suggestFileName("results." + (csv ? "csv" : "xls"));
+		csvResource.setDispositionType(DispositionType.Attachment);
+		tableDownload.setLink(new WLink(csvResource));
+
+		return tableDownload;
+	}
+	
 	private WAnchor createTableDownload(WString label, final boolean csv) {
 		WAnchor csvTableDownload = new WAnchor("", label);
 		csvTableDownload.setObjectName("csv-table-download");
@@ -316,6 +425,14 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 				int row = jobTable.getRowCount();
 				for (int i = 0; i < data.size(); i++) {
+					OrganismDefinition od = AbstractJobOverview.this.getMain().getOrganismDefinition();
+					for (String path : od.getRecombinationResultXPaths()) {
+						if (elementExists(path + "/recombination")) {
+							hasRecombinationResults = true;
+							break;
+						}
+					}
+					
 					WTableCell cell = jobTable.getElementAt(row, i);
 					cell.setId("");
 					WWidget widget = data.get(i);
