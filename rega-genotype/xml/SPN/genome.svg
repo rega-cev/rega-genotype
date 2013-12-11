@@ -17,7 +17,7 @@
    version="1.0"
    sodipodi:docname="genome.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   inkscape:export-filename="/home/koen/project/java/project/rega-genotype/rega-genotype/xml/HAV/genome_0.png"
+   inkscape:export-filename="/home/koen/project/java/project/rega-genotype/rega-genotype/xml/SPN/genome_0.png"
    inkscape:export-xdpi="62.569462"
    inkscape:export-ydpi="62.569462">
   <metadata
@@ -28,7 +28,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -51,7 +51,7 @@
   </defs>
   <sodipodi:namedview
      inkscape:window-height="758"
-     inkscape:window-width="1399"
+     inkscape:window-width="1398"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      guidetolerance="10.0"
