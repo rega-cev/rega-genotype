@@ -49,6 +49,7 @@ public class GenericTool extends GenotypeTool {
 
     public GenericTool(String xmlSubDir, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
     	this.xmlSubDir = xmlSubDir;
+    	this.workingDir = workingDir;
         blastXml = readAnalyses(xmlSubDir + "/blast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
     }
@@ -145,7 +146,7 @@ public class GenericTool extends GenotypeTool {
            	String f = xmlSubDir + "/phylo-" + alignmentId + ".xml";
            	
            	if (new File(GenotypeTool.getXmlBasePath() + f).canRead()) {
-           		AlignmentAnalyses analyses = readAnalyses(f, new File(workingDir));
+           		AlignmentAnalyses analyses = readAnalyses(f, workingDir);
            		if (analyses.haveAnalysis(analysisId)) {
            			result = (PhyloClusterAnalysis) analyses.getAnalysis(analysisId);
            			phyloAnalyses.put(alignmentId + "-" + analysisId, result);
