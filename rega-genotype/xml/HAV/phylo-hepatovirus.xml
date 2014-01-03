@@ -38,10 +38,6 @@
 			<taxus name="IV|D00924" /> 
 			<taxus name="IV|EU140838" /> 
 		</cluster>
-
-		<cluster id="AEV" name="Avian Encephalomyelitis Virus">
-			<taxus name="AJ225173" /> 
-		</cluster>
 	</clusters>
 
 	<analysis id="phylo-major" type="paup">
@@ -55,7 +51,6 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup AJ225173;
 			set criterion=distance;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
 			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};

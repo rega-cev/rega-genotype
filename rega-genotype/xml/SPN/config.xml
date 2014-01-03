@@ -29,8 +29,8 @@
 
 	<genome>
 		<color assignment="-">#53b808</color>
-		<start>1</start>
-		<end>506</end>
+		<start>-31</start>
+		<end>702</end>
 		<image-start>10</image-start>
 		<image-end>595</image-end>
 	</genome>	
@@ -77,11 +77,11 @@
 		</column>
 		<column>
 			<label>wzh-start-pos</label>
-			<field>/genotype_result/sequence/result[@id='blast']/start</field>
+			<field>31 + /genotype_result/sequence/result[@id='blast']/start</field>
 		</column>
 		<column>
 			<label>wzh-end-pos</label>
-			<field>/genotype_result/sequence/result[@id='blast']/end</field>
+			<field>31 + /genotype_result/sequence/result[@id='blast']/end</field>
 		</column>
 		<column>
 			<label>capsular type(s)</label>
