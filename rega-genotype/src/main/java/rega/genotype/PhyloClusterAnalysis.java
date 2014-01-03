@@ -370,7 +370,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 			 */
 			String cmd = paupCommand + " -n " + nexFile.getAbsolutePath();
 
-            System.err.println(cmd);
+            System.err.println(cmd + " (pwd=" + outputDir + ")");
 			paup = runtime.exec(cmd, null, outputDir);
 
             InputStream stderr = paup.getErrorStream();

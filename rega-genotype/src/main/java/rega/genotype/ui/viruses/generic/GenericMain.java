@@ -5,23 +5,19 @@
  */
 package rega.genotype.ui.viruses.generic;
 
-import java.io.File;
-import java.net.MalformedURLException;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-import rega.genotype.GenotypeTool;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
+import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 
 /**
  * Enterovirus implementation of the genotype application.
@@ -35,6 +31,7 @@ public class GenericMain extends GenotypeMain {
 		
 		getConfiguration().setInlineCss(false);
 		getConfiguration().setProgressiveBootstrap(true);
+		getConfiguration().setErrorReporting(ErrorReporting.NoErrors);
 	}
 	
 	@Override

@@ -64,19 +64,18 @@ table.jobTable {
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
-	border-spacing: 2px;
+	border-collapse: collapse;
 }
 
 table.reftable {
 	width: 70%;
 	margin-left: 0;
 	margin-right: auto;
-	border-spacing: 2px;
 }
 
 table.jobTable td, table.jobTable th {
-	border-top: 1px inset gray;
-	border-bottom: 1px inset gray;
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
 	padding: 0.5em;
 	text-align: left;
 	line-height: 60px;
@@ -91,19 +90,8 @@ table.reftable td, table.reftable th {
 
 table.jobTable col,
 table.reftable col {
-	border-left: 1px outset gray;
-	border-right: 1px outset gray;
-}
-
-table.jobTable td, table.jobTable th, 
-table.reftable td, table.reftable th {
-	border-left: 1px outset gray;
-	border-right: 1px outset gray;
-}
-
-table.jobTable tr > td {
-	border-left-width: inherit;
-	border-right-width: inherit;	
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
 }
 
 table.jobTable .nrb {
@@ -112,6 +100,22 @@ table.jobTable .nrb {
 
 table.jobTable .nlb {
 	border-left: 0px;
+}
+
+table.jobTable tr {
+	border-left-width: 0px;
+	border-right-width: 0px;
+}
+
+table.jobTable tr > td {
+	border-left-width: inherit;
+	border-right-width: inherit;	
+}
+
+table.jobTable td, table.jobTable th, 
+table.reftable td, table.reftable th {
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
 }
 
 table.jobTable .jobTableHeader {
@@ -140,6 +144,10 @@ table.jobTable td img, .detailsForm img {
 
 .detailsForm .details pre {
 	font-size: 120%;
+}
+
+.detailsForm .details .blast-details pre {
+	font-size: 100%;
 }
 
 .detailsForm h2 {

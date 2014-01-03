@@ -174,7 +174,7 @@ public class BlastAnalysis extends AbstractAnalysis {
         public void writeXML(ResultTracer tracer) {
             writeXMLBegin(tracer);
             
-            if (start >= 0) {
+            if (end >= 0) {
             	tracer.add("start", String.valueOf(start));           
             	tracer.add("end", String.valueOf(end));
             }
