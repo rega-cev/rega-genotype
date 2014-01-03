@@ -8,7 +8,6 @@ package rega.genotype.ui.data;
 import java.io.IOException;
 
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.util.DataTable;
 
 /**
@@ -22,16 +21,21 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 	}
 	
 	private DataTable table;
+
 	//TODO no ui components in this class!
 	private SequenceFilter filter;
 
 	public AbstractDataTableGenerator(SequenceFilter filter, DataTable table) {
+		super(-1);
+
 		this.filter = filter;
 		this.table = table;
 	}
 
 	@Override
 	public void endSequence() {
+		super.endSequence();
+
 		try {
 			table.newRow();
 		} catch (IOException e) {
@@ -95,6 +99,7 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 		}
 	}
 	
+	@Override
     public boolean skipSequence() {
     	return filter.excludeSequence(this);
     }

@@ -16,12 +16,16 @@ public class FastaGenerator extends GenotypeResultParser {
 	private OutputStreamWriter writer;
 	
 	public FastaGenerator(SequenceFilter filter, OutputStream outputStream) {
+		super(-1);
+
 		this.filter = filter;
 		this.writer = new OutputStreamWriter(outputStream);
 	}
 
 	@Override
 	public void endSequence() {
+		super.endSequence();
+
 		try {
 			writer.write(">");
 			writer.write(GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name"));

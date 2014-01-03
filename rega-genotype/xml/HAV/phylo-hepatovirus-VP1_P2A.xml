@@ -166,7 +166,7 @@
 		</identify>
 
 		<cutoff>
-			70
+			80
 		</cutoff>
 		
 		<block>
@@ -195,7 +195,7 @@
 		</identify>
 
 		<cutoff>
-			70
+			80
 		</cutoff>
 		
 		<block>
@@ -224,7 +224,7 @@
 		</identify>
 
 		<cutoff>
-			70
+			80
 		</cutoff>
 		
 		<block>
