@@ -522,7 +522,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                 if (best != null) {
                 	int length = Integer.valueOf(best[3]);
-                	int diffs = Integer.valueOf(best[4]);
+                	int diffs = Integer.valueOf(best[4]) + Integer.valueOf(best[5]); // #diffs + #gaps
                     float score = Float.valueOf(best[11]);
                 	float pValue = Float.valueOf(best[10]);
                     if (maxPValue != null && pValue > maxPValue)

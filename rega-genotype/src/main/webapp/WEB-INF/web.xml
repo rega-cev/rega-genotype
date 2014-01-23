@@ -260,7 +260,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeSPN</servlet-name>
-    <url-pattern>/spn/typingtool/*</url-pattern>
+    <url-pattern>/spn/cst/*</url-pattern>
   </servlet-mapping>
 
 </web-app>
