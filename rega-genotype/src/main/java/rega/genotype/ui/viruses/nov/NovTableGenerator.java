@@ -31,20 +31,12 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
 		table.addLabel("genogroup");
 		table.addLabel("ORF1_genotype");
 		table.addLabel("ORF1_genotype_support");
-		table.addLabel("ORF1_inner_support");
-		table.addLabel("ORF1_outer_support");
 		table.addLabel("ORF1_variant");
 		table.addLabel("ORF1_variant_support");
-		table.addLabel("ORF1_variant_inner_support");
-		table.addLabel("ORF1_variant_outer_support");
 		table.addLabel("ORF2_genotype");
 		table.addLabel("ORF2_genotype_support");
-		table.addLabel("ORF2_inner_support");
-		table.addLabel("ORF2_outer_support");
 		table.addLabel("ORF2_variant");
 		table.addLabel("ORF2_variant_support");
-		table.addLabel("ORF2_variant_inner_support");
-		table.addLabel("ORF2_variant_outer_support");
 		
 		table.newRow();
 	}
@@ -68,22 +60,22 @@ public class NovTableGenerator extends AbstractDataTableGenerator {
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/end", ValueFormat.Number);
     	addNamedValue("/genotype_result/sequence/result[@id='blast']/cluster/name", ValueFormat.Label);
     	
-    	addPhyloResults("phylo-ORF1", false);
+    	addPhyloResults("phylo-ORF1", false, false);
 
     	String id = getValue("/genotype_result/sequence/result[@id='phylo-ORF1']/best/id");
     	if (id != null)
-    		addPhyloResults("phylo-ORF1-" + id, true);
+    		addPhyloResults("phylo-ORF1-" + id, true, false);
     	else
-    		for (int i = 0; i < 4; ++i)
+    		for (int i = 0; i < 2; ++i)
     			addValue("");
 
-    	addPhyloResults("phylo-ORF2", false);
+    	addPhyloResults("phylo-ORF2", false, false);
 
     	id = getValue("/genotype_result/sequence/result[@id='phylo-ORF2']/best/id");
     	if (id != null)
-    		addPhyloResults("phylo-ORF2-" + id, true);
+    		addPhyloResults("phylo-ORF2-" + id, true, false);
     	else
-    		for (int i = 0; i < 4; ++i)
+    		for (int i = 0; i < 2; ++i)
     			addValue("");
     	
     	super.endSequence();

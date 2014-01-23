@@ -2,99 +2,137 @@
 	<alignment file="enterovirus-C-VP1.fasta" trim="true" />
 
 	<clusters>
-		<cluster id="CV-A11" name="Enterovirus C, serotype CV-A11">
-			<taxus name="CV-A11|AF499638" />
-			<taxus name="CV-A11|AF499636" />
-		</cluster>
-
-		<cluster id="CV-A13" name="Enterovirus C, serotype CV-A13">
-			<taxus name="CV-A13|DQ995639" />
-			<taxus name="CV-A13|AF499640" />
-			<taxus name="CV-A13|AF499637" />
-		</cluster>
-
-		<cluster id="CV-A17" name="Enterovirus C, serotype CV-A17">
-			<taxus name="CV-A17|AB207263" />
-			<taxus name="CV-A17|AF499639" />
-			<taxus name="CV-A17|DQ995645" />
-			<taxus name="CV-A17|FM955278" />
-		</cluster>
-
-		<cluster id="CV-A20" name="Enterovirus C, serotype CV-A20">
-			<taxus name="CV-A20|AF499642" />
-			<taxus name="CV-A20|EF015013" />
-			<taxus name="CV-A20|EF015015" />
-		</cluster>
-
-		<cluster id="CV-A21" name="Enterovirus C, serotype CV-A21">
-			<taxus name="CV-A21|D00538" />
-			<taxus name="CV-A21|AY919453" />
-			<taxus name="CV-A21|AF546702" />
-		</cluster>
-
-		<cluster id="CV-A22" name="Enterovirus C, serotype CV-A22">
-			<taxus name="CV-A22|DQ995647" />
-			<taxus name="CV-A22|AF499643" />
-		</cluster>
-
-		<cluster id="CV-A24" name="Enterovirus C, serotype CV-A24">
-			<taxus name="CV-A24|EF026081" />
-			<taxus name="CV-A24|D90457" />
-		</cluster>
-
-		<cluster id="EV-96" name="Enterovirus C, serotype EV-96">
-			<taxus name="EV-96|EF015886" />
-			<taxus name="EV-96|EF364404" />
-		</cluster>
-
-		<cluster id="EV-99" name="Enterovirus C, serotype EV-99">
-			<taxus name="EV-99|AY919447" />
-			<taxus name="EV-99|EF555644" />
-		</cluster>
-
-		<cluster id="PV-1" name="Poliovirus, serotype PV-1">
-			<taxus name="PV-1|AY560657" />
-			<taxus name="PV-1|V01148" />
-		</cluster>
-
-		<cluster id="PV-2" name="Poliovirus, serotype PV-2">
-			<taxus name="PV-2|D00625" />
-			<taxus name="PV-2|AY184220" />
-		</cluster>
-
-		<cluster id="PV-3" name="Poliovirus, serotype PV-3">
-			<taxus name="PV-3|K01392" />
-			<taxus name="PV-3|X04468" />
-		</cluster>
-
-		<!-- singletons in the end -->
-		<cluster id="CV-A1" name="Enterovirus C, serotype CV-A1">
-			<taxus name="CV-A1|AF499635" />
-		</cluster>
-
-		<cluster id="CV-A19" name="Enterovirus C, serotype CV-A19">
-			<taxus name="CV-A19|AF499641" />
-		</cluster>
-
-		<cluster id="EV-102" name="Enterovirus C, serotype EV-102">
-			<taxus name="EV-102|EF555645" />
-		</cluster>
-
-		<cluster id="EV-104" name="Enterovirus C, serotype EV-104">
-			<taxus name="EV-104|EU840733" />
-		</cluster>
-
-		<cluster id="enterovirus-B" name="Enterovirus B">
-		        <taxus name="Outgroup|AB426611" />
-		</cluster>
+		<cluster id="CV-A17" name="CV-A17">		
+			<taxus name="CV-A17|AB207263" />	
+			<taxus name="CV-A17|AF499639" />	
+			<taxus name="CV-A17|DQ995645" />	
+			<taxus name="CV-A17|FM955278" />	
+		</cluster>		
+				
+		<cluster id="CV-A20" name="CV-A20">		
+			<taxus name="CV-A20|AF499642" />	
+			<taxus name="CV-A20|EF015013" />	
+			<taxus name="CV-A20|EF015014" />	
+			<taxus name="CV-A20|EF015015" />	
+		</cluster>		
+				
+		<cluster id="CV-A21" name="CV-A21">		
+			<taxus name="CV-A21|AF546702" />	
+			<taxus name="CV-A21|D00538" />	
+			<taxus name="CV-A21|EF015031" />	
+		</cluster>		
+				
+		<cluster id="EV-C96" name="EV-C96">		
+			<taxus name="EV-C96|EF015886" />	
+			<taxus name="EV-C96|EF364404" />	
+			<taxus name="EV-C96|FJ751915" />	
+			<taxus name="EV-C96|HQ415758" />	
+		</cluster>		
+				
+		<cluster id="CV-A13" name="CV-A13">		
+			<taxus name="CV-A13|AF499637" />	
+			<taxus name="CV-A13|AF499640" />	
+			<taxus name="CV-A13|DQ995639" />	
+			<taxus name="CV-A13|JF260921" />	
+		</cluster>		
+				
+		<cluster id="CV-A22" name="CV-A22">		
+			<taxus name="CV-A22|AF499643" />	
+			<taxus name="CV-A22|DQ995647" />	
+			<taxus name="CV-A22|DQ995648" />	
+		</cluster>		
+				
+		<cluster id="CV-A1" name="CV-A1">		
+			<taxus name="CV-A1|AF499635" />	
+			<taxus name="CV-A1|JX174177" />	
+		</cluster>		
+				
+		<cluster id="CV-A11" name="CV-A11">		
+			<taxus name="CV-A11|AF499636" />	
+			<taxus name="CV-A11|AF499638" />	
+			<taxus name="CV-A11|DQ995633" />	
+			<taxus name="CV-A11|DQ995634" />	
+		</cluster>		
+				
+		<cluster id="CV-A24" name="CV-A24">		
+			<taxus name="CV-A24|D90457" />	
+			<taxus name="CV-A24|EF026081" />	
+		</cluster>		
+				
+		<cluster id="EV-C104" name="EV-C104">		
+			<taxus name="EV-C104|AB686524" />	
+			<taxus name="EV-C104|EU840733" />	
+		</cluster>		
+				
+		<cluster id="EV-C105" name="EV-C105">		
+			<taxus name="EV-C105|JX393302" />	
+			<taxus name="EV-C105|JX514943" />	
+		</cluster>		
+				
+		<cluster id="EV-C109" name="EV-C109">		
+			<taxus name="EV-C109|GQ865517" />	
+			<taxus name="EV-C109|JN900470" />	
+		</cluster>		
+				
+		<cluster id="EV-C118" name="EV-C118">		
+			<taxus name="EV-C118|JX961708" />	
+			<taxus name="EV-C118|JX393301" />	
+		</cluster>		
+				
+		<cluster id="EV-C99" name="EV-C99">		
+			<taxus name="EV-C99|AY919447" />	
+			<taxus name="EV-C99|EF555644" />	
+		</cluster>		
+				
+		<cluster id="PV-1" name="PV-1">		
+			<taxus name="PV-1|AY560657" />	
+			<taxus name="PV-1|V01148" />	
+		</cluster>		
+				
+		<cluster id="PV-2" name="PV-2">		
+			<taxus name="PV-2|AY184220" />	
+			<taxus name="PV-2|D00625" />	
+		</cluster>		
+				
+		<cluster id="PV-3" name="PV-3">		
+			<taxus name="PV-3|K01392" />	
+			<taxus name="PV-3|X04468" />	
+		</cluster>		
+				
+		<cluster id="CV-A19" name="CV-A19">		
+			<taxus name="CV-A19|AF499641" />	
+			<taxus name="CV-A19|KC785532" />	
+		</cluster>		
+				
+		<cluster id="EV-C102" name="EV-C102">		
+			<taxus name="EV-C102|EF555645" />	
+		</cluster>		
+				
+		<cluster id="EV-C113" name="EV-C113">		
+			<taxus name="EV-C113|KC344833" />	
+			<taxus name="EV-C113|KC344834" />	
+		</cluster>		
+				
+		<cluster id="EV-C116" name="EV-C116">		
+			<taxus name="EV-C116|JX514942" />	
+		</cluster>		
+				
+		<cluster id="EV-C117" name="EV-C117">		
+			<taxus name="EV-C117|JX560527" />	
+			<taxus name="EV-C117|JX262382" />	
+		</cluster>		
+				
+		<cluster id="Outgroup" name="Outgroup">		
+			<taxus name="Outgroup|AB426611" />	
+		</cluster>		
 	</clusters>
 
 	<analysis id="phylo-serotype" type="paup">
 		<identify>
-		  CV-A11, CV-A13, CV-A17, CV-A20, CV-A21, CV-A22, CV-A24, EV-96, EV-99,
-		  PV-1, PV-2, PV-3,
-		  CV-A1, CV-A19, EV-102, EV-104,
-		  enterovirus-B
+		  CV-A11, CV-A13, CV-A17, CV-A1, CV-A20, CV-A21, CV-A22, CV-A24, EV-C96, EV-C99, 
+		  EV-C104, EV-C105, EV-C109, EV-C118, PV-1, PV-2, PV-3,
+		  CV-A19, EV-C102, EV-C113, EV-C116, EV-C117,
+		  Outgroup
 		</identify>
 		<cutoff>
 			70
