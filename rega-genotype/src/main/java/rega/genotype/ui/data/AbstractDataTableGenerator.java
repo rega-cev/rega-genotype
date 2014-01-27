@@ -74,12 +74,14 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
     		addValue(value);
     }
 
-	protected void addPhyloResults(String analysisId, boolean useIdNotName) {
+	protected void addPhyloResults(String analysisId, boolean useIdNotName, boolean innerOuterSupport) {
 		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/"
 					+ (useIdNotName ? "id" : "name"), ValueFormat.Label);
 		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/support", ValueFormat.Number);
-		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/inner", ValueFormat.Number);
-		addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/outer", ValueFormat.Number);
+		if (innerOuterSupport) {
+			addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/inner", ValueFormat.Number);
+			addNamedValue("/genotype_result/sequence/result[@id='" + analysisId + "']/best/outer", ValueFormat.Number);
+		}
 	}
 
 	protected void addPhyloScanResults(String analysisId) {
