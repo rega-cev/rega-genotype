@@ -37,6 +37,9 @@ public class Settings {
 	public final static String defaultStyleSheet = "../style/genotype.css";
 	
 	private Settings(File f) {
+		System.err.println("Loading config file: " + f.getAbsolutePath());
+		if (!f.exists())
+			throw new RuntimeException("Config file could not be found!");
 		parseConfFile(f);
 	}
 	
