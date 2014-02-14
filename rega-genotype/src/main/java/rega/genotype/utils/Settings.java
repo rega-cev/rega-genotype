@@ -164,13 +164,16 @@ public class Settings {
 	}
 
 	public static Settings getInstance(ServletConfig config) {
-        String configFile;
+        String configFile = null;
         
         if (config != null) {
         	configFile = config.getInitParameter("configFile");
         	if (configFile != null)
         		return new Settings(new File(configFile));
-        } else {
+        } 
+        
+        if (configFile == null) {
+            System.err.println("REGA_GENOTYPE_CONF_DIR"+":"+System.getenv("REGA_GENOTYPE_CONF_DIR"));
         	configFile = System.getenv("REGA_GENOTYPE_CONF_DIR");
         }
         
