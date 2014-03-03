@@ -131,15 +131,24 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 					<p>
 						<span class="label">Capsular Type:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/id"}
 					</p>
+					<p>
+						<span class="label">Serotype:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/description"}
+					</p>
 					${</if-defined>}
 					${<if-not-defined>}
 					<p>
 						<span class="label">Capsular Type:</span>NT (non-typeable)
 					</p>
-					${</if-not-defined>}
 					<p>
-						<span class="label">Serotype:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/description"}
+						<span class="label">Best matching serotype:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/description"}
 					</p>
+					<p>
+						<span class="label">Best matching capsular type:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/id"}
+					</p>
+					<p>
+						<span class="label">Similarity:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/score"}
+					</p>
+					${</if-not-defined>}
 
 					<div>
 	 					<h3>Genome region</h3>
@@ -226,7 +235,7 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 		<div class="form">
 			<h1>Capsular Sequence Typing Protocol</h1>
 
-			<p>The protocol for performing CST can be <a href="protocol.pdf">downloaded here</a>.
+			<p>The protocol for performing CST can be <a href="/mpf/pics/spn/Protocol%20Spneumoniae%20CST-Spn-01-2014.pdf">downloaded here</a>.
 			These files may be updated if alterations in the protocol have been made.</p>
 			
 			<p>Questions about the protocol? Please contact Karin Elberse
