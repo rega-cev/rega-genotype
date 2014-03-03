@@ -110,7 +110,7 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 	</message>
 
   	<message id="details-form">
-		<h1>Capsular Sequence Typing - Typing Details</h1>
+		<h1><i>Streptococcus Pneumoniae</i> CST genotyping details</h1>
 		${details-form}
 	</message>
 
@@ -126,14 +126,19 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 				<div>
 					<h3>Assignment</h3>
 
+					${eval-xpath "/genotype_result/sequence/result[@id='blast']/clusters/score[text()='100.0']"}
+					${<if-defined>}
 					<p>
-						<span class="label">Best matches with:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/id"}
+						<span class="label">Capsular Type:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/id"}
 					</p>
+					${</if-defined>}
+					${<if-not-defined>}
 					<p>
-						<span class="label">Similarity:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/score"}
+						<span class="label">Capsular Type:</span>NT (non-typeable)
 					</p>
+					${</if-not-defined>}
 					<p>
-						<span class="label">Serotype(s):</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/description"}
+						<span class="label">Serotype:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/description"}
 					</p>
 
 					<div>
