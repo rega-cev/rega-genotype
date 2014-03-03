@@ -236,7 +236,7 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 			<p>One or more (up to 10.000 per run) CST sequences can be pasted (A) or uploaded (B) in Fasta format. It is also possible to submit shorter sequences. When pasting a single sequence the Identifier of the sequence (>Key) should be included (Fasta format). One example sequence is present as a default.
 			A set of three example sequences is also available.</p>
 		
-			<p>(insert Figuur startpagina)</p>
+			<p style="text-align: center; margin: 20px 0px"><img src="/mpf/pics/spn/doc-start.png"></img></p>
 
 			<p>The analysis takes up to a second per sequence. Thus, for large batches the run can be
 			viewed later, by typing the Job-Id at C. Here also runs by others can be viewed,
@@ -247,8 +247,8 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 			every 5 seconds...'. The Job Id number, which can be used to retrieve the results later
 			is displayed at the top of the page as soon as the job is started.</p>
 
-			<p>(insert Figuur results)</p>
-
+			<p style="text-align: center; margin: 20px 0px"><img src="/mpf/pics/spn/doc-results.png"></img></p>
+			
 			<p>For each sequence the length, CT and serotype associated with the CT is shown, including
 			the similarity of the sequence. After the complete analysis is finished the analysis
 			results can be downloaded as XML, CSV or Excel file. For each sequence more details can
@@ -256,6 +256,9 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 			report of the typing details per sequence contains a brief overview of the assignment,
 			followed by details such as an alignment of the best matches and a figure of the
 			targeted segment of the <i>wzh</i> gene.</p>
+			
+			<p style="text-align: center; margin: 20px 0px"><img src="/mpf/pics/spn/doc-details.png"></img></p>
+			
 		</div>
     </message>
 
