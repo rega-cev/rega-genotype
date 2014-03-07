@@ -301,11 +301,11 @@ public class BlastAnalysis extends AbstractAnalysis {
 			if (clusters.size() == 1 || similarity == 100) {
 				tracer.add("id", getClusterIds());
 				tracer.add("description", getDescription());
-				tracer.add("name", similarity == 100 ? getClusterNames() : ("Match with " + getCluster().getName()));
+				tracer.add("name", similarity == 100 ? getClusterNames() : "NT (non-typeable)");
 			} else {
 				tracer.add("id", getClusterIds());
 				tracer.add("description", getDescription());
-				tracer.add("name", "Multiple matches");
+				tracer.add("name", "NT (non-typeable)");
 			}
 		}
 
