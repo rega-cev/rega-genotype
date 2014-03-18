@@ -350,7 +350,7 @@ public class ScanAnalysis extends AbstractAnalysis {
             		}
 
             		if (handleFragment) {
-            			if (lastIndex >= firstIndex + window) {
+            			if (lastIndex >= firstIndex + (window * 3/4)) {
             				FragmentResult r = new FragmentResult();
             				r.start = firstIndex;
             				r.end = lastIndex;
