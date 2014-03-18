@@ -69,7 +69,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
     private ScanAnalysis crfScanAnalysis;
     private PhyloClusterAnalysis crfScanPhyloAnalysis;
     
-    private final int InsideCutoff = -10;
+    private final int InsideCutoff = -50;
 
     public HIV1SubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
         hiv1 = readAnalyses("HIV/hiv1.xml", workingDir);
