@@ -56,6 +56,16 @@
    /opt/soft/inkscape/bin/inkscape
   </property>
   
+  
+  
+   <!-- 
+  	imageMagickConvertCmd
+  	Location of your image-magick convert binary
+   -->
+  <property name="imageMagickConvertCmd">
+   /opt/soft/ImageMagick-6.8.8/bin/convert
+  </property>
+  
 
   <!-- jobDir-%organism%
      Location where the genotypetool can write job-related files for a 
