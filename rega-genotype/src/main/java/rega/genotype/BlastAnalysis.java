@@ -21,6 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.utils.StreamReaderRuntime;
@@ -173,7 +174,7 @@ public class BlastAnalysis extends AbstractAnalysis {
         public void writeXML(ResultTracer tracer) {
             writeXMLBegin(tracer);
             
-            if (start > 0) {
+            if (end >= 0) {
             	tracer.add("start", String.valueOf(start));           
             	tracer.add("end", String.valueOf(end));
             }
@@ -236,6 +237,19 @@ public class BlastAnalysis extends AbstractAnalysis {
 			return result;
 		}
 
+		private String getDescription() {
+			TreeSet<String> d = new TreeSet<String>();
+			for (Cluster c : clusters)
+				if (c.getDescription() != null)
+					d.add(c.getDescription());
+			String result = "";
+			for (String s : d) {
+				if (!result.isEmpty())
+					result += ", ";
+				result += s;
+			}
+			return result;
+		}
 
         /**
          * @return Returns the cluster.
@@ -286,10 +300,12 @@ public class BlastAnalysis extends AbstractAnalysis {
 			tracer.add("score", String.valueOf(similarity));
 			if (clusters.size() == 1 || similarity == 100) {
 				tracer.add("id", getClusterIds());
-				tracer.add("name", similarity == 100 ? getClusterNames() : ("Match with " + getCluster().getName()));
+				tracer.add("description", getDescription());
+				tracer.add("name", similarity == 100 ? getClusterNames() : "NT (non-typeable)");
 			} else {
 				tracer.add("id", getClusterIds());
-				tracer.add("name", "Multiple matches");
+				tracer.add("description", getDescription());
+				tracer.add("name", "NT (non-typeable)");
 			}
 		}
 
@@ -506,7 +522,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                 if (best != null) {
                 	int length = Integer.valueOf(best[3]);
-                	int diffs = Integer.valueOf(best[4]);
+                	int diffs = Integer.valueOf(best[4]) + Integer.valueOf(best[5]); // #diffs + #gaps
                     float score = Float.valueOf(best[11]);
                 	float pValue = Float.valueOf(best[10]);
                     if (maxPValue != null && pValue > maxPValue)

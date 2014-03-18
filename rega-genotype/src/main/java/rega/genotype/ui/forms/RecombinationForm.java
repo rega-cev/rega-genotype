@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
-import rega.genotype.data.GenotypeResultParser.SkipToSequenceParser;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
@@ -27,7 +27,7 @@ import eu.webtoolkit.jwt.servlet.WebResponse;
 public class RecombinationForm extends AbstractForm{
 	public static final String URL = "recombination";
 
-	private SkipToSequenceParser p;
+	private GenotypeResultParser p;
 	
 	public RecombinationForm(GenotypeWindow main) {
 		super(main);
@@ -46,7 +46,7 @@ public class RecombinationForm extends AbstractForm{
 		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		
-		p = new SkipToSequenceParser(selectedSequenceIndex);
+		p = new GenotypeResultParser(selectedSequenceIndex);
 		p.parseFile(jobDir);
 		
 		final String id;

@@ -138,7 +138,7 @@ public class ResultTracer {
         w.print(s);
     }
 
-    public void add(String tag, String inner) {
+    public void add(String tag, CharSequence inner) {
         println("<" + tag + ">" + inner + "</" + tag + ">");
     }
 

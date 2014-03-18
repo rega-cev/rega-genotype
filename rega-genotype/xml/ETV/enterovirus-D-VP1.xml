@@ -2,19 +2,19 @@
 	<alignment file="enterovirus-D-VP1.fasta" trim="false" />
 
 	<clusters>
-		<cluster id="EV-68" name="Enterovirus D, serotype EV-68">
-			<taxus name="EV-68|EF107098" />
-			<taxus name="EV-68|AY426531" />
+		<cluster id="EV-D68" name="EV-D68">
+			<taxus name="EV-D68|EF107098" />
+			<taxus name="EV-D68|AY426531" />
 		</cluster>
 
-		<cluster id="EV-70" name="Enterovirus D, serotype EV-70">
-			<taxus name="EV-70|D00820" />
-			<taxus name="EV-70|D17599" />
+		<cluster id="EV-D70" name="EV-D70">
+			<taxus name="EV-D70|D00820" />
+			<taxus name="EV-D70|D17599" />
 		</cluster>
 
-		<cluster id="EV-94" name="Enterovirus D, serotype EV-94">
-			<taxus name="EV-94|EF107097" />
-			<taxus name="EV-94|DQ916376" />
+		<cluster id="EV-D94" name="EV-D94">
+			<taxus name="EV-D94|EF107097" />
+			<taxus name="EV-D94|DQ916376" />
 		</cluster>
 
 		<!-- singletons in the end -->
@@ -25,7 +25,7 @@
 
 	<analysis id="phylo-serotype" type="paup">
 		<identify>
-		  EV-70, EV-94, EV-68, outgroup
+		  EV-D70, EV-D94, EV-D68, outgroup
 		</identify>
 		<cutoff>
 			80
@@ -60,7 +60,7 @@
 		</step>
 		<analysis type="paup">
 			<identify>
-				EV-70
+				EV-D70
 			</identify>
 			<block>
 				begin paup;

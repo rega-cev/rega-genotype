@@ -8,7 +8,6 @@ package rega.genotype.ui.viruses.generic;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,9 +62,11 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private int genomeStart;
 	
 	private List<ResultColumn> resultColumns = null;
+	private List<ResultColumn> downloadColumns = null;
 	
 	public GenericDefinition(String organism) {
 		this.organism = organism;
+		this.updateInterval = 5000;
 		xmlFolder = Settings.getInstance().getXmlPath() + File.separator + organism + File.separator;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));
@@ -102,24 +103,32 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 				genomeImageStartX = Integer.parseInt(genomeE.getChildText("image-start"));
 				genomeImageEndX = Integer.parseInt(genomeE.getChildText("image-end"));
 			}
-			
-			Element resultListE = root.getChild("result-list");
-			if (resultListE != null) {
-				resultColumns = new ArrayList<ResultColumn>();
-				for (Object o : resultListE.getChildren("column")) {
-					Element columnE = (Element) o;
-					
-					ResultColumn column = new ResultColumn();
-					column.label = columnE.getChildText("label");
-					column.field = columnE.getChildText("field");
-					resultColumns.add(column);
-				}
-			}
+
+			resultColumns = readColumnList(root, "result-list");
+			downloadColumns = readColumnList(root, "result-download");
+
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private List<ResultColumn> readColumnList(Element root, String tag) {
+		List<ResultColumn> columns = null;
+		Element resultListE = root.getChild(tag);
+		if (resultListE != null) {
+			columns = new ArrayList<ResultColumn>();
+			for (Object o : resultListE.getChildren("column")) {
+				Element columnE = (Element) o;
+				
+				ResultColumn column = new ResultColumn();
+				column.label = columnE.getChildText("label");
+				column.field = columnE.getChildText("field");
+				columns.add(column);
+			}
+		}
+		return columns;
 	}
 	
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
@@ -137,7 +146,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
-		return new GenericTableGenerator(jobOverview, table);
+		return new GenericTableGenerator(jobOverview, table, downloadColumns);
 	}
 
 	public Genome getGenome() {

@@ -65,14 +65,16 @@ public class GenericJobOverview extends AbstractJobOverview {
 			WAnchor report = createReportLink(p);
 			data.add(report);
 
-			boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='phylo-major']/best/id") != null;
+			boolean havePhyloAnalysis = p.getValue("/genotype_result/sequence/result[@id='type']/best/id") != null;
 			boolean haveBlastAssignment = havePhyloAnalysis || !"Unassigned".equals(p.getValue("/genotype_result/sequence/conclusion/assigned/id"));
 			data.add(createGenomeImage(p, "-", !haveBlastAssignment));
 		} else {
 			for (ResultColumn c : columns) {
 				if (c.field.equals("report-link"))
 					data.add(createReportLink(p));
-				else {
+				else if (c.field.equals("genome")) {
+					data.add(createGenomeImage(p, "-", false));
+				} else {					
 					String v = GenotypeLib.getEscapedValue(p, c.field);
 					if (v != null)
 						data.add(new WText(new WString(v)));

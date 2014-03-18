@@ -34,7 +34,7 @@ import rega.genotype.utils.Settings;
  */
 public abstract class GenotypeTool {
     private static String xmlBasePath = ".";
-    protected static String workingDir = ".";
+    protected File workingDir = new File(".");
 
     private GenotypeTool parent;
     private ResultTracer tracer;
@@ -43,7 +43,12 @@ public abstract class GenotypeTool {
     	this.parent = null;
     }
 
-    static private String[] parseArgs(String[] args) { 
+    private static class ArgsParseResult {
+    	String[] remainingArgs;
+    	String workingDir;
+    }
+    
+    private static ArgsParseResult parseArgs(String[] args) { 
         CmdLineParser parser = new CmdLineParser();
         CmdLineParser.Option paupPathOption = parser.addStringOption('p', "paup");
         CmdLineParser.Option clustalPathOption = parser.addStringOption('c', "clustal");
@@ -66,6 +71,8 @@ public abstract class GenotypeTool {
             printUsage();
             return null;
         }
+        
+        ArgsParseResult result = new ArgsParseResult();
         
         Settings.initSettings(Settings.getInstance());
         
@@ -91,13 +98,15 @@ public abstract class GenotypeTool {
         
         String workingDirTmp = (String) parser.getOptionValue(workingDirOption);        
         if (workingDirTmp != null)
-        	workingDir = workingDirTmp;
+        	result.workingDir = workingDirTmp;
         
         String treeGraphCmd = (String) parser.getOptionValue(treeGraphCmdOption);        
         if (treeGraphCmd != null)
         	Settings.treeGraphCommand = treeGraphCmd;
 
-        return parser.getRemainingArgs();
+        result.remainingArgs = parser.getRemainingArgs();
+        
+        return result;
 	}
 
     private static void printUsage() {
@@ -231,10 +240,10 @@ public abstract class GenotypeTool {
     /**
      * Conclude a plain conclusion.
      */
-    protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation, String id) {
+    protected void conclude(AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id) {
     	concludeRule(null,conclusion,motivation,id);
     }
-    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, String motivation, String id) {
+    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id) {
         getTracer().printlnOpen("<conclusion type=\"simple\""
         		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
         conclusion.writeConclusion(getTracer());
@@ -319,22 +328,22 @@ public abstract class GenotypeTool {
     	/*
     	 * Usage: GenotypeTool [-p,-c,-x] className [sequences.fasta] result.xml
     	 */	
-    	String[] args2 = parseArgs(args);
-    	if(args==null)
+    	ArgsParseResult parseArgsResult = parseArgs(args);
+    	if (parseArgsResult.remainingArgs == null)
     		return;
 
-    	if (args2.length < 2) {
+    	if (parseArgsResult.remainingArgs.length < 2) {
     		printUsage();
     		return;
     	}
     	
-    	Class analyzerClass = Class.forName(args2[0]);
-    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(workingDir));
+    	Class analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
+    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(parseArgsResult.workingDir));
 
-    	if (args2.length == 3) {
-    		genotypeTool.analyze(args2[1], args2[2]);
+    	if (parseArgsResult.remainingArgs.length == 3) {
+    		genotypeTool.analyze(parseArgsResult.remainingArgs[1], parseArgsResult.remainingArgs[2]);
     	} else
-    		genotypeTool.analyzeSelf(args2[1]);
+    		genotypeTool.analyzeSelf(parseArgsResult.remainingArgs[1]);
     }
 
 	public static String getXmlBasePath() {

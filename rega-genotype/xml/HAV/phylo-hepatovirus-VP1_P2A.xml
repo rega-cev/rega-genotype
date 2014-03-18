@@ -162,11 +162,11 @@
 
 	<analysis id="phylo-minor-IA" type="paup">
 		<identify>
-			IA_1,IA_2,IA_3,IA_4,IA_MSM00,IA_MSM12,IA_MSM08,IA_LV08,IA_CZ08,IA_Ba,IA_MA,IA_ID,IA_MX,IA_NWA,IB_1
+			IA_1,IA_2,IA_3,IA_4,IA_MSM00,IA_MSM12,IA_MSM08,IA_LV08,IA_CZ08,IA_Ba,IA_MA,IA_ID,IA_MX,IA_NWA
 		</identify>
 
 		<cutoff>
-			70
+			80
 		</cutoff>
 		
 		<block>
@@ -175,7 +175,6 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup IB_1|NC_001489;
 			set criterion=distance;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
 			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
@@ -192,11 +191,11 @@
 
 	<analysis id="phylo-minor-IB" type="paup">
 		<identify>
-			IB_1,IB_2,IB_EG,IB_NEA,IB_MA,IB_TR,IB_WA,IB_ZA,IA_CZ08
+			IB_1,IB_2,IB_EG,IB_NEA,IB_MA,IB_TR,IB_WA,IB_ZA
 		</identify>
 
 		<cutoff>
-			70
+			80
 		</cutoff>
 		
 		<block>
@@ -205,7 +204,6 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup IA_CZ08|RIVM-HAV265;
 			set criterion=distance;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
 			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
@@ -222,11 +220,11 @@
 
 	<analysis id="phylo-minor-IIIA" type="paup">
 		<identify>
-			IIIA_1,IIIA_2,IIIA_AF,IIIA_IN,IB_1
+			IIIA_1,IIIA_2,IIIA_AF,IIIA_IN
 		</identify>
 
 		<cutoff>
-			70
+			80
 		</cutoff>
 		
 		<block>
@@ -235,7 +233,6 @@
 			export format=phylip file=paup.fasta replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup IB_1|NC_001489;
 			set criterion=distance;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
 			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};

@@ -100,7 +100,7 @@ public class Genome {
 	    g2d.setColor(new Color(230, 230, 230));
 	    g2d.fillRect(0, 0, imgWidth, imgHeight);
 
-	    if (start > 0 && end > 0) {
+	    if (end >= 0) {
 	    	Map<String, Color> colorMap = attributes.getColors();
 	    
 		    Color bgcolor = colorMap.get("-");

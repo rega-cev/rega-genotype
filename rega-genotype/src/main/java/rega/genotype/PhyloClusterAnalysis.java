@@ -370,7 +370,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 			 */
 			String cmd = paupCommand + " -n " + nexFile.getAbsolutePath();
 
-            System.err.println(cmd);
+            System.err.println(cmd + " (pwd=" + outputDir + ")");
 			paup = runtime.exec(cmd, null, outputDir);
 
             InputStream stderr = paup.getErrorStream();
@@ -885,5 +885,9 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 	@Override
 	public Result run(AbstractSequence sequence) throws AnalysisException {
 		return (rega.genotype.PhyloClusterAnalysis.Result) super.run(sequence);
+	}
+
+	public double getCutoff() {
+		return cutoff;
 	}
 }

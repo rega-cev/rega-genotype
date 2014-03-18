@@ -95,6 +95,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		template.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
 		template.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
+		template.bindEmpty("analysis-cancelled");
 		
 		jobTable = new WTable(this);
 		template.bindWidget("results", jobTable);
@@ -107,11 +108,12 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public void init(final String jobId, final String filter) {
 		this.jobId = jobId;
 		this.jobDir = getJobDir(jobId);
-		
+
 		this.hasRecombinationResults = false;
 
 		this.summary = getSummary(filter);
 		template.bindWidget("summary", this.summary);
+		template.bindString("job-id", jobId);
 
 		this.filter = new SequenceFilter() {
 			public boolean excludeSequence(GenotypeResultParser p) {
@@ -123,7 +125,16 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		jobTable.clear();
 		
 		resetTimer();
+
+		template.bindWidget("downloads", createDownloadsWidget(filter));
 		
+		if (hasRecombinationResults)
+			template.bindWidget("recombination-fragment-downloads", createRecombinationFragmentDownloadsWidget(filter));
+		else
+			template.bindWidget("recombination-fragment-downloads", null);
+
+		template.bindWidget("analysis-in-progress", createInProgressWidget());
+
 		if (!jobDone()) {
 			updater = new WTimer();
 			updater.setInterval(getMain().getOrganismDefinition().getUpdateInterval());
@@ -133,7 +144,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					updateInfo();
 					if (jobDone()) {
 						resetTimer();
-						setDownloads(filter);
+						showDownloads();
 					}
 				}
 			});
@@ -141,23 +152,22 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		fillTable(filter);
 		updateInfo();
-		setDownloads(filter);
+		if (jobDone())
+			showDownloads();
 		
 		if (updater != null)
 			updater.start();
 	}
 	
-	private void setDownloads(String filter) {
-		if (jobDone()) {
-			template.bindWidget("downloads", createDownloadsWidget(filter));
-			if (hasRecombinationResults)
-				template.bindWidget("recombination-fragment-downloads", createRecombinationFragmentDownloadsWidget(filter));
-			else
-				template.bindWidget("recombination-fragment-downloads", null);
-		} else {
-			template.bindWidget("downloads", null);
-			template.bindWidget("recombination-fragment-downloads", null);
-		}
+	private void showDownloads() {
+		showWidget("downloads", true);
+		showWidget("recombination-fragment-downloads", true);
+	}
+
+	private void showWidget(String widgetName, boolean show) {
+		WWidget w = template.resolveWidget(widgetName);
+		if (w != null)
+			w.setHidden(!show);
 	}
 	
 	private void resetTimer() {
@@ -177,45 +187,45 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 	
 	private void updateInfo() {
-		WTemplate analysisInProgress = null;
-		if (!jobDone()) {
-			analysisInProgress = new WTemplate(tr("monitorForm.analysisInProgress"));
-			WPushButton cancelButton = new WPushButton(tr("monitorForm.cancelButton"));
-			analysisInProgress.bindWidget("cancel-button", cancelButton);
-			analysisInProgress.bindInt("update-time-seconds", getMain().getOrganismDefinition().getUpdateInterval()/1000);
-			cancelButton.clicked().addListener(analysisInProgress, new Signal1.Listener<WMouseEvent>(){
-				public void trigger(WMouseEvent arg) {
-					final WMessageBox messageBox = new WMessageBox(
-							tr("monitorForm.cancelling"),
-							tr("monitorForm.areYouSureToCancel"),
-		                    Icon.Information, EnumSet.of(StandardButton.Yes, StandardButton.No));
-		            messageBox.setModal(false);
-		            messageBox.buttonClicked().addListener(AbstractJobOverview.this, new Signal1.Listener<StandardButton>() {
-						public void trigger(StandardButton sb) {
-							if (messageBox.getButtonResult() == StandardButton.Yes) {
-								try {
-	        						new File(jobDir, ".CANCEL").createNewFile();
-	        					} catch (IOException e) {
-	        						e.printStackTrace();
-	        					}
-							}
-                        	
-                            if (messageBox != null)
-                                messageBox.remove();
-						}
-					});
-		            
-		            messageBox.show();
-				}
-			});
-		}
+		showWidget("analysis-in-progress", !jobDone());
 		
-		WString analysisCancelled = new WString();
 		if (jobDone() && jobCancelled())
-			analysisCancelled = tr("monitorForm.analysisCancelled");
-		template.bindString("analysis-cancelled", analysisCancelled);
-		template.bindWidget("analysis-in-progress", analysisInProgress);
-		template.bindString("job-id", jobId);
+			template.bindString("analysis-cancelled", tr("monitorForm.analysisCancelled"));
+	}
+
+	private WTemplate createInProgressWidget() {
+		WTemplate analysisInProgress;
+		analysisInProgress = new WTemplate(tr("monitorForm.analysisInProgress"));
+		WPushButton cancelButton = new WPushButton(tr("monitorForm.cancelButton"));
+		analysisInProgress.bindWidget("cancel-button", cancelButton);
+		analysisInProgress.bindInt("update-time-seconds", getMain().getOrganismDefinition().getUpdateInterval()/1000);
+		cancelButton.clicked().addListener(analysisInProgress, new Signal1.Listener<WMouseEvent>(){
+			public void trigger(WMouseEvent arg) {
+				final WMessageBox messageBox = new WMessageBox(
+						tr("monitorForm.cancelling"),
+						tr("monitorForm.areYouSureToCancel"),
+		                Icon.Information, EnumSet.of(StandardButton.Yes, StandardButton.No));
+		        messageBox.setModal(false);
+		        messageBox.buttonClicked().addListener(AbstractJobOverview.this, new Signal1.Listener<StandardButton>() {
+					public void trigger(StandardButton sb) {
+						if (messageBox.getButtonResult() == StandardButton.Yes) {
+							try {
+								new File(jobDir, ".CANCEL").createNewFile();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+		            	
+		                if (messageBox != null)
+		                    messageBox.remove();
+					}
+				});
+		        
+		        messageBox.show();
+			}
+		});
+		analysisInProgress.hide();
+		return analysisInProgress;
 	}
 	
 	private void fillTable(String filter) {
@@ -252,7 +262,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		
 		t.bindWidget("csv-file", createRecombinationFragmentTableDownload(tr("monitorForm.csvTable"), true));
 		t.bindWidget("xls-file", createRecombinationFragmentTableDownload(tr("monitorForm.xlsTable"), false));
-				
+
+		t.hide();
+		
 		return t;
 	}
 	
@@ -269,6 +281,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		WAnchor fastaAnchor = createFastaDownload();
 
 		t.bindWidget("fasta-file", fastaAnchor);
+
+		t.hide();
 		
 		return t;
 	}
@@ -329,7 +343,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				
 				GenotypeResultParser grp = new GenotypeResultParser() {
 					public void endSequence() {
-						SkipToSequenceParser p = null;
+						GenotypeResultParser p = null;
 						
 						//no result
 						String startXPath = "/genotype_result/sequence/result[@id='blast']/start";
@@ -343,7 +357,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 								String recombinationPath = path + "/recombination";
 								if (this.elementExists(recombinationPath)) {
 									if (p == null) {
-										p = new SkipToSequenceParser(this.getSequenceIndex());
+										p = new GenotypeResultParser(this.getSequenceIndex());
 										p.parseFile(jobDir);
 									}
 									
@@ -418,32 +432,39 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		@Override
 		public void endSequence() {
 			int numRows = AbstractJobOverview.this.jobTable.getRowCount()-1;
-			if(getSequenceIndex() - getFilteredSequences() >= numRows) {
+			if (getSequenceIndex() - getFilteredSequences() >= numRows) {
 				jobTable.setHidden(false);
-				
+
 				List<WWidget> data = getData(this);
-				
+
 				int row = jobTable.getRowCount();
 				for (int i = 0; i < data.size(); i++) {
 					OrganismDefinition od = AbstractJobOverview.this.getMain().getOrganismDefinition();
-					for (String path : od.getRecombinationResultXPaths()) {
-						if (elementExists(path + "/recombination")) {
-							hasRecombinationResults = true;
-							break;
+
+					if (od.getRecombinationResultXPaths() != null) {
+						for (String path : od.getRecombinationResultXPaths()) {
+							if (elementExists(path + "/recombination")) {
+								hasRecombinationResults = true;
+								break;
+							}
 						}
 					}
 					
 					WTableCell cell = jobTable.getElementAt(row, i);
 					cell.setId("");
-					cell.addWidget(data.get(i));
-					if (data.get(i).getObjectName().length() == 0)
-						data.get(i).setId("");
-					
+					WWidget widget = data.get(i);
+					if (widget != null) {
+						cell.addWidget(widget);
+						if (widget.getObjectName().length() == 0)
+							widget.setId("");
+					}
+
 					if (WApplication.getInstance().getEnvironment().getUserAgent().indexOf("MSIE") != -1)
 						cell.setStyleClass(jobTable.getColumnAt(i).getStyleClass());
 				}
+
 				jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
-				
+
 				if (summary != null) 
 					summary.update(this, getMain().getOrganismDefinition());
 			}
