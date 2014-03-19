@@ -60,14 +60,14 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		// FIXME: we should not show a link to a detailed recombination section if we concluded a pure or CRF
 		// this should be passed as an argument ?
 
-		if (p.elementExists(path + "/recombination")) {
+		/*if (p.elementExists(path + "/recombination")) {
 			WAnchor detailed = new WAnchor("", tr("defaultRecombinationAnalyses.detailedRecombination"));
 			detailed.setObjectName("report-" + p.getSequenceIndex());
 			detailed.setStyleClass("link");
 			detailed.setRefInternalPath(RecombinationForm.recombinationPath(jobDir, p.getSequenceIndex(), type));
 			addWidget(detailed);
 			addWidget(new WBreak());
-		}
+		}*/
 
 		final RecombinationPlot plot = new RecombinationPlot(p.getValue(path+"/data"), od);
 		addWidget(plot);

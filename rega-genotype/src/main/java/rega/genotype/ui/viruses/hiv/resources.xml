@@ -417,10 +417,7 @@
 						2) Assignment reports,
 					</li>
 					<li>
-						3) The Genotyping details report and,
-					</li>
-					<li>
-						4) The detailed recombination report.
+						3) The Genotyping details report
 					</li>
 				</ul>
 				<b>1) The Summary report:</b>
@@ -653,8 +650,7 @@
 				<br />
 				<br />
 				<b>3C) The HIV-1 subtype recombination analysis section</b>
-				(Figure 10), display in the top a link to the detailed recombination
-				analyses report. In addition, this section contains information on:
+				(Figure 10). This section contains information on:
 				<br />
 				<br />
 				- Graphical image of the bootscanning results,
@@ -680,72 +676,6 @@
 			<span>
 				Figure 10: Genotyping details HIV-1 Subtype Recombination
 				Analysis
-				<br />
-				<br />
-				<b>4) Detailed recombination report</b>
-				<br />
-				<br />
-				The detailed recombination report is a new feature of
-				Rega HIV-1 Subtyping Tool Version 3.0. This report was created in order
-				to
-				identify the recombinant fragments and construct a phylogenetic tree for
-				each of the fragments. The idea here was to replicate, in an automated
-				fashion, the manual steps needed to identify and confirm HIV
-				recombination
-				fragments. This report consists of two sections:
-			</span>
-			<ul style="text-align: left;">
-				<li>
-					4A) The graphical representation of HIV genome with recombinant
-					fragments and,
-				</li>
-				<li>
-					4B) Phylogenetics tree for each of the fragments.
-				</li>
-			</ul>
-			<br />
-			<br />
-			<b>4A) The graphical representation of the HIV-1
-				genome
-			</b>
-			(Figure 11) displays the genomic region of the query
-			sequence, the approximate position and number of each recombinant
-			fragment.
-			<br />
-			<br />
-			<div class="imgDiv">
-				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-9.png" />
-			</div>
-			<span>
-				Figure 11: Detailed recombination report graphical representation
-				of the HIV-1 genome
-				<br />
-				<br />
-				4B) Phylogenetic trees for each of
-				the recombinant fragments (Figure 12) contains the location of the
-				recombinant region and bootstrap support. Please notice that the
-				locations
-				of the breakpoints are only approximate values. The exact
-				identification
-				of breakpoint location is not possible using bootstrap techniques, due
-				to
-				bootsrapsâ method of re-sampling and replacement. The phylogenetic tree
-				is easy to interpret, as the query sequence is always the top sequence
-				in
-				the tree.
-				<br />
-				<br />
-			</span>
-			<div class="imgDiv">
-				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-10.png" />
-			</div>
-			<span>
-				Figure 12: Detailed recombination report phylogenetic tree for
-				each of the recombinant fragments
-				<br />
-				<br />
 			</span>
 		</div>
 		
