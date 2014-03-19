@@ -450,7 +450,7 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-1.png" />
+					src="${app.context}/pics/hiv/tutorial-1.png" width="700px"/>
 				<span class="caption">Figure 2: Summary table, Rega assignment</span>
 			</div>
 			<div>
@@ -468,7 +468,7 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-2.png" />
+					src="${app.context}/pics/hiv/tutorial-2.png" width="700px"/>
 				<span class="caption">Figure 3: Summary report</span>
 			</div>
 			<div>
@@ -486,7 +486,7 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-3.png" />
+					src="${app.context}/pics/hiv/tutorial-3.png" width="700px"/>
 				<span class="caption">Figure 4: Download results</span>
 			</div>
 			<span>
@@ -529,7 +529,7 @@
 			<br />
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-4.png" />
+					src="${app.context}/pics/hiv/tutorial-4.png" width="700px"/>
 				<span class="caption">Figure 5: Assignment report summary table</span>
 			</div>
 			<span>
@@ -552,7 +552,7 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-5.png" />
+					src="${app.context}/pics/hiv/tutorial-5.png" width="700px"/>
 				<span class="caption">Figure 6:Assignment report phylogenetic statistics</span>
 			</div>
 			<span>
@@ -601,7 +601,7 @@
 			<br />
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-6.png" />
+					src="${app.context}/pics/hiv/tutorial-6.png" width="700px"/>
 				<span class="caption">Figure 7: Genotyping details report sequence assignment</span>
 			</div>
 			<span>
@@ -631,7 +631,7 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-7.png" />
+					src="${app.context}/pics/hiv/tutorial-7.png" width="700px"/>
 				<span class="caption">Figure 8: Genotyping details report phylogenetic analysis</span>
 			</div>
 			<span>
