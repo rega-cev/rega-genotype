@@ -120,8 +120,20 @@ public class GenotypeLib {
 		ps.waitFor();
 	}
 	
+	private static void imageMagickConvert(File in, File out) throws IOException, InterruptedException {
+		Process ps = new ProcessBuilder(Settings.getInstance().getImageMagickConvertCmd(), in.getAbsolutePath(), out.getAbsolutePath()).start();
+		
+		StreamReaderThread stdout = new StreamReaderThread(ps.getInputStream(), System.out, "image magick stdout: ");
+		stdout.start();
+		
+		StreamReaderThread stderr = new StreamReaderThread(ps.getErrorStream(), System.err, "image magick stderr: ");
+		stderr.start();
+		
+		ps.waitFor();
+	}
+	
 	private static void epsToPng(File in, File out) throws IOException, InterruptedException {
-		inkscapeConvert(in, out, "png");
+		imageMagickConvert(in, out);
 	}
 	
 	private static void svgToPdf(File in, File out) throws IOException, InterruptedException {

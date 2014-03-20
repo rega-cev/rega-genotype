@@ -6,10 +6,6 @@
     <display-name>HIV Genotyping</display-name>
     <description>HIV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.hiv.HivMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>

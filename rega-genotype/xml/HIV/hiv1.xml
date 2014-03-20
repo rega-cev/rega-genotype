@@ -1,5 +1,5 @@
 <genotype-analyses>
-  <alignment file="hiv1trim.fasta" trim="true" />
+  <alignment file="hiv1trimNoLTR.fasta" trim="true" />
 
   <clusters>
     <cluster id="A" name="HIV-1 Subtype A">

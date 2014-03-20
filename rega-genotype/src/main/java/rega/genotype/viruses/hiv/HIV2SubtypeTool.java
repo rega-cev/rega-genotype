@@ -24,6 +24,8 @@ public class HIV2SubtypeTool extends GenotypeTool {
     private PhyloClusterAnalysis pureAnalysis;
     private ScanAnalysis scanAnalysis;
 
+    private final int InsideCutoff = -50;
+    
     public HIV2SubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
         hiv2 = readAnalyses("HIV/hiv2.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hiv2.getAnalysis("pure");
@@ -32,7 +34,7 @@ public class HIV2SubtypeTool extends GenotypeTool {
 
 
     public void analyze(AbstractSequence s) throws AnalysisException {
-        if (s.getLength() > 800) {
+        if (s.getLength() > 200) {
             PhyloClusterAnalysis.Result pureresult = pureAnalysis.run(s);
 
             ScanAnalysis.Result scanresult = scanAnalysis.run(s);

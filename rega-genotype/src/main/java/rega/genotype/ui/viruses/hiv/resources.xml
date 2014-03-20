@@ -256,14 +256,7 @@
 			</b>
 			<br />
 			<br />
-			<a href="http://www.kuleuven.be/aidslab/veme.htm">Performance of
-				the Subtyping Tools in the Surveillance of
-				HIV-1 Epidemic:
-				Comparison Between Rega Version 3 and Six Other
-				Automated Tools to
-				Identify Pure Subtypes and Circulating Recombinant
-				Forms.
-			</a>
+<a href="http://www.bioafrica.net/manuscripts/Pineda_SubtypingTools2013.pdf" TARGET="_blank">Automated subtyping of HIV-1 genetic sequences for clinical and surveillance purposes: Performance evaluation of the new REGA version 3 and seven other tools</a>
 			<br />
 			<br />
 			Pe&ntilde;a
@@ -273,10 +266,7 @@
 			A-M.
 			<br />
 			<br />
-			17th International BioInformatics Workshop on Virus Evolution and
-			Molecular Epidemiology University of Belgrade, Faculty of Medicine,
-			Belgrade, Serbia, 27 - 31 August 2012. Abstract presentation.
-			<br />
+			Infectious Genetics and Evolution 2013; 19:337-48. doi: 10.1016/j.meegid.2013.04.032<br/>
 			<br />
 			<br />
 			<br />
@@ -396,12 +386,10 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-0.png" />
+					src="${app.context}/pics/hiv/tutorial-0.png" width="700px"/>
+				<span class="caption">Figure 1: Input section of Rega HIV-1 Subtyping Tool V3</span>
 			</div>
 			<div>
-				Figure 1: Input section of Rega HIV-1 Subtyping Tool V3.
-				<br />
-				<br />
 				<b>The output:</b>
 				<br />
 				<br />
@@ -417,10 +405,7 @@
 						2) Assignment reports,
 					</li>
 					<li>
-						3) The Genotyping details report and,
-					</li>
-					<li>
-						4) The detailed recombination report.
+						3) The Genotyping details report
 					</li>
 				</ul>
 				<b>1) The Summary report:</b>
@@ -455,12 +440,10 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-1.png" />
+					src="${app.context}/pics/hiv/tutorial-1.png" width="700px"/>
+				<span class="caption">Figure 2: Summary table, Rega assignment</span>
 			</div>
 			<div>
-				Figure 2: Summary table, Rega assignment
-				<br />
-				<br />
 				<b>1B) The
 					second section of the summary report (Figure 3)
 				</b>
@@ -475,12 +458,10 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-2.png" />
+					src="${app.context}/pics/hiv/tutorial-2.png" width="700px"/>
+				<span class="caption">Figure 3: Summary report</span>
 			</div>
 			<div>
-				Figure 3: Summary report
-				<br />
-				<br />
 				<b>1C) The download results
 					links
 				</b>
@@ -495,12 +476,10 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-3.png" />
+					src="${app.context}/pics/hiv/tutorial-3.png" width="700px"/>
+				<span class="caption">Figure 4: Download results</span>
 			</div>
 			<span>
-				Figure 4: Download results
-				<br />
-				<br />
 				<b>2) The
 					assignment report:
 				</b>
@@ -532,7 +511,7 @@
 			<br />
 			<b>2B) The download results links</b>
 			allows the user to download
-			the batch results in a number of formats (CSV, XML, Excell) (Figure 6).
+			the batch results in a number of formats (CSV, XML, Excell) (Figure 5).
 			It
 			also allows users the opportunity to download all sequences for a given
 			assignment, in Fasta format.
@@ -540,15 +519,12 @@
 			<br />
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-4.png" />
+					src="${app.context}/pics/hiv/tutorial-4.png" width="700px"/>
+				<span class="caption">Figure 5: Assignment report summary table</span>
 			</div>
 			<span>
-				Figure 5 and 6: Assignment report summary table and download
-				results.
-				<br />
-				<br />
 				<b>2C) The Phylogenetic statistics section</b>
-				contains one to two graphics (Figure 7). The first graphic shows the
+				contains one to two graphics (Figure 6). The first graphic shows the
 				neighbor-joining tree statistics for the pure subtype reference
 				assignment, including the average bootstrap support of the query
 				sequence
@@ -566,12 +542,10 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-5.png" />
+					src="${app.context}/pics/hiv/tutorial-5.png" width="700px"/>
+				<span class="caption">Figure 6:Assignment report phylogenetic statistics</span>
 			</div>
 			<span>
-				Figure 7:Assignment report phylogenetic statistics
-				<br />
-				<br />
 				<b>3) Genotyping details report</b>
 				<br />
 				<br />
@@ -594,7 +568,7 @@
 			<br />
 			<br />
 			<b>3A) The sequence assignment section</b>
-			(Figure 8) contains information on:
+			(Figure 7) contains information on:
 			<br />
 			<br />
 			- The sequence
@@ -617,14 +591,15 @@
 			<br />
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-6.png" />
+					src="${app.context}/pics/hiv/tutorial-6.png" width="700px"/>
+				<span class="caption">Figure 7: Genotyping details report sequence assignment</span>
 			</div>
 			<span>
-				Figure 8: Genotyping details report sequence assignment
+				
 				<br />
 				<br />
 				<b>3B) The analysis details section</b>
-				(Figure 9) is divided in
+				(Figure 8) is divided in
 				two parts, named: phylogenetic analysis with pure subtypes and
 				phylogenetic analysis with pure subtypes and CRFs. It displays:
 				<br />
@@ -646,15 +621,12 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-7.png" />
+					src="${app.context}/pics/hiv/tutorial-7.png" width="700px"/>
+				<span class="caption">Figure 8: Genotyping details report phylogenetic analysis</span>
 			</div>
 			<span>
-				Figure 9: Genotyping details report phylogenetic analysis
-				<br />
-				<br />
 				<b>3C) The HIV-1 subtype recombination analysis section</b>
-				(Figure 10), display in the top a link to the detailed recombination
-				analyses report. In addition, this section contains information on:
+				(Figure 9). This section contains information on:
 				<br />
 				<br />
 				- Graphical image of the bootscanning results,
@@ -675,78 +647,9 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-8.png" />
+					src="${app.context}/pics/hiv/tutorial-8.png" width="700px"/>
+				<span class="caption">Figure 9: Genotyping details HIV-1 Subtype Recombination Analysis </span>
 			</div>
-			<span>
-				Figure 10: Genotyping details HIV-1 Subtype Recombination
-				Analysis
-				<br />
-				<br />
-				<b>4) Detailed recombination report</b>
-				<br />
-				<br />
-				The detailed recombination report is a new feature of
-				Rega HIV-1 Subtyping Tool Version 3.0. This report was created in order
-				to
-				identify the recombinant fragments and construct a phylogenetic tree for
-				each of the fragments. The idea here was to replicate, in an automated
-				fashion, the manual steps needed to identify and confirm HIV
-				recombination
-				fragments. This report consists of two sections:
-			</span>
-			<ul style="text-align: left;">
-				<li>
-					4A) The graphical representation of HIV genome with recombinant
-					fragments and,
-				</li>
-				<li>
-					4B) Phylogenetics tree for each of the fragments.
-				</li>
-			</ul>
-			<br />
-			<br />
-			<b>4A) The graphical representation of the HIV-1
-				genome
-			</b>
-			(Figure 11) displays the genomic region of the query
-			sequence, the approximate position and number of each recombinant
-			fragment.
-			<br />
-			<br />
-			<div class="imgDiv">
-				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-9.png" />
-			</div>
-			<span>
-				Figure 11: Detailed recombination report graphical representation
-				of the HIV-1 genome
-				<br />
-				<br />
-				4B) Phylogenetic trees for each of
-				the recombinant fragments (Figure 12) contains the location of the
-				recombinant region and bootstrap support. Please notice that the
-				locations
-				of the breakpoints are only approximate values. The exact
-				identification
-				of breakpoint location is not possible using bootstrap techniques, due
-				to
-				bootsrapsâ method of re-sampling and replacement. The phylogenetic tree
-				is easy to interpret, as the query sequence is always the top sequence
-				in
-				the tree.
-				<br />
-				<br />
-			</span>
-			<div class="imgDiv">
-				<img alt=""
-					src="${app.context}/pics/hiv/tutorial-10.png" />
-			</div>
-			<span>
-				Figure 12: Detailed recombination report phylogenetic tree for
-				each of the recombinant fragments
-				<br />
-				<br />
-			</span>
 		</div>
 		
 		<div class="div-row nav" style="height: 50px;">

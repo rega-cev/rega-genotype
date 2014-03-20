@@ -36,7 +36,10 @@ import rega.genotype.ui.framework.GenotypeMain;
 public class Settings {
 	public final static String defaultStyleSheet = "../style/genotype.css";
 	
-	private Settings(File f) {
+	public Settings(File f) {
+		System.err.println("Loading config file: " + f.getAbsolutePath());
+		if (!f.exists())
+			throw new RuntimeException("Config file could not be found!");
 		parseConfFile(f);
 	}
 	
@@ -68,6 +71,10 @@ public class Settings {
 		return inkscapeCmd;
 	}
 	
+	public String getImageMagickConvertCmd() {
+		return imageMagickConvertCmd;
+	}
+	
 	public File getJobDir(OrganismDefinition od) {
 		File f = jobDirs.get(od.getOrganismName());
 		if (f == null)
@@ -93,6 +100,7 @@ public class Settings {
 	private String treePuzzleCmd;
 	private String treeGraphCmd;
 	private String inkscapeCmd;
+	private String imageMagickConvertCmd;
 	private int maxAllowedSeqs;
 	private File defaultJobDir;	
 	private Map<String, File> jobDirs = new HashMap<String, File>();
@@ -132,6 +140,8 @@ public class Settings {
             	treeGraphCmd = e.getValue().trim();
             } else if(name.equals("inkscapeCmd")) {
             	inkscapeCmd = e.getValue().trim();
+            } else if(name.equals("imageMagickConvertCmd")) {
+            	imageMagickConvertCmd = e.getValue().trim();
             } else if(name.equals("jobDir")) {
             	defaultJobDir = new File(e.getValue().trim());
             } else if(name.startsWith("jobDir-")) {
@@ -161,13 +171,16 @@ public class Settings {
 	}
 
 	public static Settings getInstance(ServletConfig config) {
-        String configFile;
+        String configFile = null;
         
         if (config != null) {
         	configFile = config.getInitParameter("configFile");
         	if (configFile != null)
         		return new Settings(new File(configFile));
-        } else {
+        } 
+        
+        if (configFile == null) {
+            System.err.println("REGA_GENOTYPE_CONF_DIR"+":"+System.getenv("REGA_GENOTYPE_CONF_DIR"));
         	configFile = System.getenv("REGA_GENOTYPE_CONF_DIR");
         }
         
