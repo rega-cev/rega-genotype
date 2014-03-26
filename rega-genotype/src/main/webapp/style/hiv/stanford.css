@@ -156,3 +156,12 @@
 	border:0px;
 	background:#fff;
 }
+
+.stanford-footer {
+	border-top: #d4cfb4 1px solid; 
+	font-size: 0.8em; 
+	margin: 0px 0px 0px 10px; 
+	width: 670px; 
+	color: #999; 
+	text-align: center;
+}

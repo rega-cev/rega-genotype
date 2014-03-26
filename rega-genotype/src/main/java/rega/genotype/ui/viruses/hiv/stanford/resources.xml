@@ -59,20 +59,16 @@
 					recombination using bootscanning methods. 
 					
 					More information on the
-					<a target="_blank"
-						href="http://www.bioafrica.net/virus-genotype/html/subtypeprocess.html">subtyping process</a>.
+					<a href="${app.base.url}/subtyping-process">subtyping process</a>.
 					<br />
 					Note for batch analysis: The REGA subtype
 					tool accepts up to 1000 sequences at a time.
 					<br />
-					Choose a
-					<a target="_blank"
-						href="http://www.bioafrica.net/rega-genotype/html/subtypinghiv.html">mirror</a>
-					to subtype your sequences.
+
 				</p>
 				<p>
 					Enter here your input data as FASTA format. Or click
-					<a target="_blank" href="./html/subtypingsample.txt">here</a>
+					<a href="${app.base.url}/example-sequences">here</a>
 					for
 					importing a sample sequence.
 				</p>
@@ -198,9 +194,6 @@
 								<a target="_blank" href="http://hivdb.stanford.edu//pages/publications.html">Publications</a>
 							</li>
 							<li>
-								<a target="_blank" href="#">Collaborators</a>
-							</li>
-							<li>
 								<a target="_blank"
 									href="http://hivdb.stanford.edu//pages/acknowledgements.html">Acknowledgements</a>
 							</li>
@@ -236,6 +229,7 @@
 					</td>
 				</tr>
 			</table>
+			<div class="stanford-footer">© 1998-2014. All Rights Reserved. Questions? Contact <a href="mailto:rshafer@stanford.edu" title="">Robert Shafer</a>.</div>
 		</div>
 	</message>
 	
