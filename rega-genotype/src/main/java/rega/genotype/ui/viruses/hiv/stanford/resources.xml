@@ -237,4 +237,6 @@
 	<message id="sequenceInput.run.icon">http://dbpartners.stanford.edu/RegaSubtyping/images/btn_analyze.gif</message>
 	<message id="sequenceInput.clear"></message>
 	<message id="sequenceInput.clear.icon">http://dbpartners.stanford.edu/RegaSubtyping/images/btn_reset.gif</message>
+	<message id="startForm.monitor"></message>
+	<message id="startForm.monitor.icon">http://dbpartners.stanford.edu/RegaSubtyping/images/btn_retrieveResults.gif</message>
 </messages>

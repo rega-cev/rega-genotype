@@ -47,7 +47,6 @@ public class StartForm extends AbstractForm {
 	private FileUpload fileUpload;
 	
 	private WLineEdit jobIdTF;
-	private WPushButton monitorButton;
 	
 	private WText errorJobId, errorText;
 	
@@ -141,7 +140,7 @@ public class StartForm extends AbstractForm {
 
 		jobIdTF = new WLineEdit();
 		t.bindWidget("job-id-field", jobIdTF);
-		monitorButton = new WPushButton(tr("startForm.monitor"));
+		WInteractWidget monitorButton = createButton("startForm.monitor","startForm.monitor.icon");
 		t.bindWidget("search-button", monitorButton);
 		monitorButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
