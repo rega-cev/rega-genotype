@@ -165,3 +165,11 @@
 	color: #999; 
 	text-align: center;
 }
+
+.monitor img {
+    vertical-align: middle;
+}
+
+.monitor input {
+    vertical-align: middle;
+}

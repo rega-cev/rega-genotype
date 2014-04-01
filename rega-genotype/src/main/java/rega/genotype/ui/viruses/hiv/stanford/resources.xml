@@ -139,7 +139,9 @@
 												</h3>
 												Search for a previous analysis based on a job-id
 												<br />
+												<div class="monitor">
 												${job-id-field}	${search-button} 
+												</div>
 											</td>
 										</tr>
 										<tr style="height:30px;"></tr>
