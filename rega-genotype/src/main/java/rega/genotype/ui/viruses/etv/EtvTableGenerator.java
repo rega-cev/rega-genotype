@@ -7,7 +7,7 @@ package rega.genotype.ui.viruses.etv;
 
 import java.io.IOException;
 
-import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.util.DataTable;
 

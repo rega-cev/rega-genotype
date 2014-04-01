@@ -13,10 +13,10 @@ import java.util.List;
 import org.jdom.Element;
 
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.SequenceFilter;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;

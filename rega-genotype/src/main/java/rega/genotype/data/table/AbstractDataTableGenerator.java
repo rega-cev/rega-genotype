@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.data;
+package rega.genotype.data.table;
 
 import java.io.IOException;
 

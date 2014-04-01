@@ -8,7 +8,7 @@ package rega.genotype.ui.viruses.generic;
 import java.io.IOException;
 import java.util.List;
 
-import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.viruses.generic.GenericDefinition.ResultColumn;
 import rega.genotype.util.DataTable;
