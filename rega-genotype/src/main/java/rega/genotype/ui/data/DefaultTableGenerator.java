@@ -7,7 +7,7 @@ package rega.genotype.ui.data;
 
 import java.io.IOException;
 
-import rega.genotype.ui.util.DataTable;
+import rega.genotype.util.DataTable;
 
 /**
  * A default extension of AbstractCsvGenerator, used by different virus implementations.

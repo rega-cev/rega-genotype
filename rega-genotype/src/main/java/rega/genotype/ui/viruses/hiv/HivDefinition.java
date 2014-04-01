@@ -24,8 +24,8 @@ import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
+import rega.genotype.util.DataTable;
 import rega.genotype.viruses.hiv.HIVTool;
 import eu.webtoolkit.jwt.WString;
 

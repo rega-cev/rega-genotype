@@ -15,8 +15,8 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
+import rega.genotype.util.DataTable;
 
 /**
  * An interface describing all attributes and functions specific to an organism.

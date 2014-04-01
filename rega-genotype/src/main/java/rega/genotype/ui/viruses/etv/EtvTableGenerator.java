@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import rega.genotype.ui.data.AbstractDataTableGenerator;
 import rega.genotype.ui.forms.AbstractJobOverview;
-import rega.genotype.ui.util.DataTable;
+import rega.genotype.util.DataTable;
 
 /**
  * Create a csv file of Enterovirus job results 

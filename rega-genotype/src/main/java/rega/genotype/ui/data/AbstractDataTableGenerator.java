@@ -8,7 +8,7 @@ package rega.genotype.ui.data;
 import java.io.IOException;
 
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.util.DataTable;
+import rega.genotype.util.DataTable;
 
 /**
  * An abstract class extending SaxParser, which provides utility functions to 
