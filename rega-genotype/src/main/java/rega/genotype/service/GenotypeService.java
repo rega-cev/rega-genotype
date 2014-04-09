@@ -37,6 +37,15 @@ public class GenotypeService extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		performRequest(req, resp);
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		performRequest(req, resp);
+	}
+	
+	private void performRequest(HttpServletRequest req, HttpServletResponse resp)  throws ServletException, IOException {
 		File workingDir = File.createTempFile("gs-", "");
 		workingDir.delete();
 		workingDir.mkdir();
