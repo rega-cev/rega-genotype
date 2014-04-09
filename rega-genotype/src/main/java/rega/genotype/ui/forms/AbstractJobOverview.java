@@ -332,7 +332,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 				response.setContentType("application/excel");
-				final DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ';', '"') : new XlsDataTable(response.getOutputStream());
+				final DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ',', '"') : new XlsDataTable(response.getOutputStream());
 				t.addLabel("sequence-name");
 				t.addLabel("recombination-scan-type");
 				t.addLabel("fragment-start");
@@ -414,7 +414,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 				response.setContentType("application/excel");
-				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ';', '"') : new XlsDataTable(response.getOutputStream());
+				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ',', '"') : new XlsDataTable(response.getOutputStream());
 				AbstractDataTableGenerator acsvgen = 
 					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this, t);
 				acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
