@@ -22,14 +22,18 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Settings;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.Icon;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WImage;
+import eu.webtoolkit.jwt.WInteractWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
@@ -40,11 +44,9 @@ import eu.webtoolkit.jwt.WTextArea;
  */
 public class StartForm extends AbstractForm {
 	private WTextArea sequenceTA;
-	private WPushButton run, clear;
 	private FileUpload fileUpload;
 	
 	private WLineEdit jobIdTF;
-	private WPushButton monitorButton;
 	
 	private WText errorJobId, errorText;
 	
@@ -71,15 +73,14 @@ public class StartForm extends AbstractForm {
 		sequenceTA.setStyleClass("fasta-ta");
 		sequenceTA.setText(tr("sequenceInput.example").toString());
 
-		run = new WPushButton();
+		
+		WInteractWidget run = createButton("sequenceInput.run","sequenceInput.run.icon");
 		t.bindWidget("analyze-button", run);
 		run.setObjectName("button-run");
-		run.setText(tr("sequenceInput.run"));
 	
-		clear = new WPushButton();
+		WInteractWidget clear = createButton("sequenceInput.clear","sequenceInput.clear.icon");
 		t.bindWidget("clear-button", clear);
 		clear.setObjectName("button-clear");
-		clear.setText(tr("sequenceInput.clear"));
 		clear.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
 				sequenceTA.setText("");
@@ -139,7 +140,7 @@ public class StartForm extends AbstractForm {
 
 		jobIdTF = new WLineEdit();
 		t.bindWidget("job-id-field", jobIdTF);
-		monitorButton = new WPushButton(tr("startForm.monitor"));
+		WInteractWidget monitorButton = createButton("startForm.monitor","startForm.monitor.icon");
 		t.bindWidget("search-button", monitorButton);
 		monitorButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
@@ -153,6 +154,30 @@ public class StartForm extends AbstractForm {
 		errorJobId.hide();
 		
 		t.bindWidget("error-job", errorJobId);
+	}
+	
+	private WInteractWidget createButton(String textKey, String iconKey) {
+		WString text = tr(textKey);
+		if (hasKey(iconKey)) {
+			if (text.isEmpty()) {
+				return new WImage(tr(iconKey).toString());
+			}
+			else {
+				WPushButton b = new WPushButton();
+				b.setText(text);
+				b.setIcon(new WLink(tr(iconKey).toString()));
+				return b;
+			}
+		} else {
+			WPushButton b = new WPushButton();
+			b.setText(text);
+			return b;
+		}
+	}
+	
+	private boolean hasKey(String key) {
+		String value = WApplication.getInstance().getLocalizedStrings().resolveKey(key);
+		return value != null;
 	}
 	
 	private void validateInput(CharSequence error) {

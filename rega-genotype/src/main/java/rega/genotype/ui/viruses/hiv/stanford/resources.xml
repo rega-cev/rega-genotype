@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+	<!-- http://dbpartners.stanford.edu/RegaSubtyping/images/btn_analyze.gif -->
+	<message id="start-form">
+		<div class="bodydiv">
+			<a name="top" class="top"></a>
+			<div class="masthead">
+				<a target="_blank" href="http://hivdb.stanford.edu//index.html">
+					<img
+						alt="Stanford University HIV Drug Resistance Database - A curated public database designed to represent, store, and analyze the divergent forms of data underlying HIV drug resistance."
+						src="http://dbpartners.stanford.edu/RegaSubtyping/images/header.gif"
+						border="0" width="680" height="53" />
+				</a>
+				<h1>
+					A curated public database designed to represent, store, and analyze
+					the
+					divergent forms of data underlying HIV drug resistance.
+				</h1>
+			</div>
+			<div class="topnav">
+				<a target="_blank" href="http://hivdb.stanford.edu//index.html">
+					<img alt="Home"
+						src="http://dbpartners.stanford.edu/RegaSubtyping/images/home.gif"
+						border="0" height="19" width="42" />
+				</a>
+				<a target="_blank" href="http://hivdb.stanford.edu//pages/genotype-rx.html">
+					<img alt="Genotype-RX"
+						src="http://dbpartners.stanford.edu/RegaSubtyping/images/btn_genotype-rx.gif"
+						border="0" height="19" width="100" />
+				</a>
+				<a target="_blank"
+					href="http://hivdb.stanford.edu//pages/genotype-phenotype.html">
+					<img alt="Genotype-Pheno"
+						src="http://dbpartners.stanford.edu/RegaSubtyping/images/btn_genotype-ph.gif"
+						border="0" height="19" width="128" />
+				</a>
+				<a target="_blank" href="http://hivdb.stanford.edu//pages/genotype-clinical.html">
+					<img alt="Genotype-Clinical"
+						src="http://dbpartners.stanford.edu/RegaSubtyping/images/btn_genotype-cl.gif"
+						border="0" height="19" width="146" />
+				</a>
+				<a target="_blank" href=" http://hivdb.stanford.edu/sierra/servlet/JSierra">
+					<img alt="HIVdb Program"
+						src="http://dbpartners.stanford.edu/RegaSubtyping/images/hivdb_nav_button.gif"
+						border="0" height="19" width="116" />
+				</a>
+			</div>
+			<!-- page header -->
+			<h2 class="submain2">
+				REGA HIV-1 Subtyping Tool - Version 3.0
+			</h2>
+			<!-- input form -->
+			<div class="seqform">
+				<p>
+					This tool is designed to use phylogenetic methods in order to
+					identify
+					the subtype of a specific sequence.&nbsp;
+					The sequence is analysed for
+					recombination using bootscanning methods. 
+					
+					More information on the
+					<a href="${app.base.url}/subtyping-process">subtyping process</a>.
+					<br />
+					Note for batch analysis: The REGA subtype
+					tool accepts up to 1000 sequences at a time.
+					<br />
+
+				</p>
+				<p>
+					Enter here your input data as FASTA format. Or click
+					<a href="${app.base.url}/example-sequences">here</a>
+					for
+					importing a sample sequence.
+				</p>
+				<p>
+				</p>
+				<table border="0" cellspacing="0" cellpadding="0" class="seqform-table">
+					<thead class="header">
+						<tr>
+							<td>
+								<div>
+									<img
+										src="http://dbpartners.stanford.edu/RegaSubtyping/images/hdr_sequence.gif"
+										alt="Sequences" width="174" height="15" />
+								</div>
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div>
+									<table border="0" cellspacing="0" cellpadding="0">
+										<tr style="height:30px;"></tr>
+										<tr>
+											<td rowspan="3" class="gutter">
+	                     						&nbsp;
+											</td>
+											<td>
+												<img
+													class="label-img"
+													src="http://dbpartners.stanford.edu/RegaSubtyping/images/blt_a.gif"
+													width="39" height="39" border="0" alt="" />
+											</td>
+											<td>
+												<h3>
+													FASTA Input
+												</h3>
+												Paste your sequence(s) in the input field in FASTA format or upload a FASTA file.
+												<br />
+												<div class="textbox">
+												${fasta-field}
+												<div style="float:left">${file-upload-button}</div><div style="float:right">${clear-button} ${analyze-button}</div>
+												</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div>
+									<table border="0" cellspacing="0" cellpadding="0">
+										<tr style="height:30px;"></tr>
+										<tr>
+											<td rowspan="3" class="gutter">
+	                     						&nbsp;
+											</td>
+											<td>
+												<img
+													class="label-img"
+													src="http://sierra2.stanford.edu/sierra/html/images/blt_b.gif"
+													width="39" height="39" border="0" alt="" />
+											</td>
+											<td>
+												<h3>
+													Search for a previous analysis
+												</h3>
+												Search for a previous analysis based on a job-id
+												<br />
+												<div class="monitor">
+												${job-id-field}	${search-button} 
+												</div>
+											</td>
+										</tr>
+										<tr style="height:30px;"></tr>
+									</table>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p>
+				<font size="2">
+					Developed by: Tulio de Oliveira, Koen
+					Deforche, Sharon Cassol, Andrew Rambaut and Anne-Mieke Vandamme.
+					<br />
+					<br />
+					Developed in collaboration with the HIV-1 Pathogenesis and Immunotherapeutics
+					Program at University of Pretoria, South Africa, and the
+					<a target="_blank" href="http://www.kuleuven.ac.be/rega/cev/default.html">REGA
+						institute
+					</a>
+					at the Katholieke Universiteit Leuven, Leuven,
+					Belgium. Funded by the Flanders Bilateral Cooperation Program and the
+					Welcome Trust (grant # 061238 ).&nbsp;
+					<br />
+					<br />
+					Please report
+					problems and/or suggestions to 
+					<a target="_blank" href="http://www.bioafrica.net/people.php?peopleid=1">Prof. Dr. Tulio de
+						Oliveira
+					</a>
+					<br />
+					<br />
+					Revised 25th of March 2014
+					<br />
+				</font>
+				</p>
+			</div>
+			<!-- footer -->
+			<div class="dotted"></div>
+			<table class="botnav">
+				<tr>
+					<td class="botnav-cell">
+						<h4>
+							The Team
+						</h4>
+						<ul>
+							<li>
+								<a target="_blank" href="http://hivdb.stanford.edu//pages/contactUs.html">Who We Are
+									&amp; How to Contact Us</a>
+							</li>
+							<li>
+								<a target="_blank" href="http://hivdb.stanford.edu//pages/publications.html">Publications</a>
+							</li>
+							<li>
+								<a target="_blank"
+									href="http://hivdb.stanford.edu//pages/acknowledgements.html">Acknowledgements</a>
+							</li>
+						</ul>
+					</td>
+					<td class="spacer">
+					</td>
+					<td class="botnav-cell">
+						<h4>
+							The Data
+						</h4>
+						<ul>
+							<li>
+								<a target="_blank" href="http://hivdb.stanford.edu//pages/documents.html">User Guide
+									&amp; Database Documents</a>
+							</li>
+							<li>
+								<a target="_blank" href="http://hivdb.stanford.edu//cgi-bin/Summary.cgi">Database
+									Statistics
+								</a>
+							</li>
+							<li>
+								<a target="_blank" href="http://hivdb.stanford.edu//pages/links.html">HIV Related
+									Links
+								</a>
+							</li>
+							<li>
+								<a target="_blank" href="http://hivdb.stanford.edu//pages/resources.html">Additional
+									Resources
+								</a>
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+			<div class="stanford-footer">© 1998-2014. All Rights Reserved. Questions? Contact <a href="mailto:rshafer@stanford.edu" title="">Robert Shafer</a>.</div>
+		</div>
+	</message>
+	
+	<message id="sequenceInput.run"></message>
+	<message id="sequenceInput.run.icon">http://dbpartners.stanford.edu/RegaSubtyping/images/btn_analyze.gif</message>
+	<message id="sequenceInput.clear"></message>
+	<message id="sequenceInput.clear.icon">http://dbpartners.stanford.edu/RegaSubtyping/images/btn_reset.gif</message>
+	<message id="startForm.monitor"></message>
+	<message id="startForm.monitor.icon">http://dbpartners.stanford.edu/RegaSubtyping/images/btn_retrieveResults.gif</message>
+</messages>
