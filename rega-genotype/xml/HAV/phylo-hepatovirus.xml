@@ -2,41 +2,41 @@
 	<alignment file="phylo-hepatovirus.fasta" trim="true" />
 
 	<clusters>
-		<cluster id="IA" name="HaV I.A">
+		<cluster id="IA" name="HAV I.A">
 			<taxus name="IA|EU131373" />
 			<taxus name="IA|AB020565" />
 			<taxus name="IA|X83302" />
 		</cluster>
 
-		<cluster id="IB" name="HaV I.B">
+		<cluster id="IB" name="HAV I.B">
 			<taxus name="IB|DQ646426" />
 			<taxus name="IB|NC_001489" />
 			<taxus name="IB|AF314208" />
 		</cluster>
 
-		<cluster id="IIA" name="HaV II.A">
+		<cluster id="IIA" name="HAV II.A">
 			<taxus name="IIA|AY644676" />
 		</cluster>
 
-		<cluster id="IIB" name="HaV II.B">
+		<cluster id="IIB" name="HAV II.B">
 			<taxus name="IIB|AY644670" />
 		</cluster>
 
-		<cluster id="IIIA" name="HaV III.A">
+		<cluster id="IIIA" name="HAV III.A">
 			<taxus name="IIIA|AJ299464" /> 
 			<taxus name="IIIA|DQ991030" />
 			<taxus name="IIIA|AB279733" />
 		</cluster>
 
-		<cluster id="IIIB" name="HaV III.B">
+		<cluster id="IIIB" name="HAV III.B">
 			<taxus name="IIIB|AB258387" />
 			<taxus name="IIIB|AB279735" />
 			<taxus name="IIIB|AB425339" />
 		</cluster>
 
-		<cluster id="IVB" name="HaV IV.B">
-			<taxus name="IV|D00924" /> 
-			<taxus name="IV|EU140838" /> 
+		<cluster id="V" name="HAV V">
+			<taxus name="V|D00924" /> 
+			<taxus name="V|EU140838" /> 
 		</cluster>
 	</clusters>
 
