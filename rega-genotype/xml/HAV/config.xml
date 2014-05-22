@@ -7,6 +7,16 @@
 			<message-id>how-to-cite-doc</message-id>
 		</menu-item>
 		<menu-item>
+			<label>Introduction</label>
+			<path>introduction</path>
+			<message-id>introduction-doc</message-id>
+		</menu-item>
+		<menu-item>
+			<label>How to use</label>
+			<path>how-to-use</path>
+			<message-id>how-to-use-doc</message-id>
+		</menu-item>
+		<menu-item>
 			<label>Example sequences</label>
 			<path>examples</path>
 			<message-id>examples-doc</message-id>

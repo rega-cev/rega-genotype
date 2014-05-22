@@ -9,7 +9,7 @@
 					</a>
 				</div>
 				<div id="application">
-					<span id="name">Hepatitis A Genotyping Tool</span>
+					<span id="name">Hepatitis A Virus Genotyping Tool</span>
 					<span id="info">Version 0.0</span>
 				</div>
 				<div class="nav_bar">
@@ -37,10 +37,10 @@
 
   	<message id="start-form">
   		<div class="start-form form">
-		    <h1>Hepatitis A Genotyping Tool Version 0.1</h1>
+		    <h1>Hepatitis A Virus Genotyping Tool Version 0.1</h1>
 		    <div class="note">
  				<div>
-					This tool is designed to use phylogenetic methods in order to identify the Hepatitis A genotype of a nucleotide sequence.
+					This tool is designed to use phylogenetic methods in order to identify the Hepatitis A virus genotype of a nucleotide sequence.
 				</div>
       			<div>
       				<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time. 
@@ -85,7 +85,7 @@ ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
 
 	<message id="job-overview-form">
 	  	<div class="monitor-form form">
-		    <h1>Hepatitis A Genotyping Tool Results</h1>
+		    <h1>Hepatitis A Virus Genotyping Tool Results</h1>
 
 		    <div class="info">
 				<p>You may bookmark this page to revisit results of this job (${job-id}) later.</p>
@@ -108,7 +108,7 @@ ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
 	</message>
 
   	<message id="details-form">
-		<h1>Hepatitis A Genotyping Details</h1>
+		<h1>Hepatitis A Virus Genotyping Details</h1>
 		${details-form}
 	</message>
   
@@ -141,6 +141,7 @@ ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
   						<span>${xpath "/genotype_result/sequence/conclusion[@id='type']/motivation"}</span>
 					</p>
 
+<!--
 					${eval-xpath "/genotype_result/sequence/conclusion[@type='simple' and @id='type']"}
 					${<if-defined>}
 					    <p>
@@ -170,6 +171,7 @@ ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
    							${</if-not-defined>}
 						</p>
 	  				${</if-defined>}
+  -->
  				</div>
  				<div>
  					<h3>Genome region</h3>
@@ -202,7 +204,7 @@ ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
 	
 	<message id="monitorForm.analysisCancelled"><p><b>This job was cancelled!</b></p></message>
 
-	<message id="tool.title">Hepatitis A Genotyping Tool</message>
+	<message id="tool.title">Hepatitis A Virus Genotyping Tool</message>
 
 	<message id="table.header.name">Name</message>
 	<message id="table.header.length">Length</message>
@@ -213,32 +215,101 @@ ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
 
 	<message id="how-to-cite-doc">
 		<div class="form">
-			<h1>How to Cite the Hepatitis A Automated Genotyping Tool</h1>
+			<h1>How to Cite the Hepatitis A Virus Automated Genotyping Tool</h1>
 
-			<p>Please use the following citation:</p>
-			<p>...</p>
+			<p>Manuscript in preparation</p>
 		</div>
 	</message>
 	
 
 	<message id="introduction-doc">
 		<div class="form">
-			<h1>The Hepatitis A Automated Genotyping Tool: introduction.</h1>
+			<h1>The Hepatitis A Virus Automated Genotyping Tool: introduction.</h1>
 
-	        <p>...</p>
+	        <p>This typingtool offers quick and unequivocal typing of hepatitis A virus sequences.</p>
+	       	<p>
+	       		With this tool sequences of any part of the hepatitis A (HAV) genome can be assigned to
+	       	   	a HAV genotype. Sequences of other Picornaviridae are also recognized by the tool and are assigned to their genus.
+	       	</p>
+	       	<p>
+	       		The sequences used as references in this tool originate from:
+	       	   	The Hepatitis A network (<a href="http://www.rivm.nl/en/Topics/H/HAVNET">HAVnet</a>)
+	       	   	and <a href="http://www.ncbi.nlm.nih.gov/Genbank">Genbank</a>.
+	       	</p>
       </div>
 	</message>
       
-    <message id="tutorial-doc">
+    <message id="how-to-use-doc">
 		<div class="form">
-			<h1>Hepatitis A Genotyping Tutorial</h1>
-		</div>
-    </message>
+			<h1>Hepatitis A Virus Genotyping Tutorial</h1>
+			
+			<p>
+				One or more (up to 20.000 per run) HAV sequences can be pasted (A) or uploaded (B) in Fasta format (see Fig. 1).
+			 	Sequences of all regions of the HAV genome can be used.
+			</p>
+			<p>
+				When pasting a single sequence the Identifier of the sequence (>Sequencename) should be included (Fasta format).
+				One example sequence is present as a default. A set of <a href="#/examples">three example sequences</a> is also available.
+			</p> 
 
-	<message id="method-doc">
-		<div class="form">
-			<h1>Hepatitis A Genotyping Tool Methods</h1>
-	    </div>
+			<p style="text-align: center; margin: 20px 0px">
+				<img src="/mpf/pics/hav/FigEntry.png"></img> <br/>				
+				Fig. 1. The startingpage of the HAV typingtool
+			</p>
+
+			<p>
+				The analysis takes up to a few seconds per sequence. Thus, for large batches the run can be viewed later,
+				by typing the Job-Id at C. Here also runs by others can be viewed, if the Job-Id has been communicated.
+				Runs are kept on the server for 1 week.
+			</p> 
+
+			<p style="text-align: center; margin: 20px 0px">
+				<img src="/mpf/pics/hav/FigResults.png"></img> <br/>				
+				Fig. 2. Overview of the results
+			</p>
+
+			<p>
+				After the 'Start' button is pushed the analysis is started and after a few seconds the results overview is shown (Fig. 2).
+				While the analysis is still in progress the following message is displayed: 'Analysis in progress... (Showing partial results).
+				This page will be automatically updated every 5 seconds...'.
+			</p>
+
+			<p>
+				The Job Id number, which can be used to retrieve the results later is displayed at the top of the page as soon as the job is started.
+				<br/>
+				For each sequence the length, positioning on the HAV genome and assigned genotype are determined.<br/>
+				After the complete analysis is finished the analysis results can be downloaded as XML, CSV or Excel file.<br/>
+				For each sequence more details can be viewed in the individual reports by clicking on 'report' in the results table.<br/>
+			</p>
+			
+			<p>
+				The report of the genotyping details per sequence contains a brief overview of the assignment, followed by details of the phylogenetic
+				analysis including a phylogenetic tree.<br/>
+				The report contains information on:
+				<ul>
+					<li>The sequence submitted (name and length)</li>
+					<li>Blast result: The genus/species (HAV species or other picornavirus genus) of the submitted sequence</li>
+					<li>Phylo result: For HAV sequences, the genotype assignment</li>
+					<li>The robustness of the phylogenetic assignment using bootstrap values. Only with bootstrap > 70 a genotype
+						or variant is assigned.</li>
+					<li>A graphical representation of the HAV genome showing the genomic region of the query sequence with the start and
+						end positions related to the HAV reference sequence (NC_001489, complete genome, genotype IB).</li>
+					<li>A NJ tree is computed with the submitted sequence at the top.</li>
+					<li>The bootstrap tree can be viewed and downloaded in the PAUP* log file</li>
+					<li>The alignment can be downloaded in NEXUS or FASTA format</li>
+				</ul>
+			</p>
+
+			<p>
+				No genotype is assigned if:
+				<ul>
+					<li>The submitted sequence belongs to another Picornavirus genus. In this case the genus is indicated and the analysis stops.</li>
+					<li>The submitted sequence is shorter than 100 bp. In this case only assignment of the species (HAV) is possible.</li>
+					<li>The bootstrap value &lt; 70. In this case an alignment and a NJ tree are produced which can be used to get an indication of
+						the phylogeny.</li>
+				</ul>
+			</p> 
+		</div>
     </message>
 
  	<message id="examples-doc">
