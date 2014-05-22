@@ -10,7 +10,11 @@
 				</div>
 				<div id="application">
 					<span id="name">Hepatitis A Virus Genotyping Tool</span>
+<<<<<<< templates
 					<span id="info">Version 0.0</span>
+=======
+					<span id="info">Version 1.0</span>
+>>>>>>> local
 				</div>
 				<div class="nav_bar">
 					${navigation class="nav_main"}
@@ -37,7 +41,11 @@
 
   	<message id="start-form">
   		<div class="start-form form">
+<<<<<<< templates
 		    <h1>Hepatitis A Virus Genotyping Tool Version 0.1</h1>
+=======
+		    <h1>Hepatitis A Virus Genotyping Tool Version 1.0</h1>
+>>>>>>> local
 		    <div class="note">
  				<div>
 					This tool is designed to use phylogenetic methods in order to identify the Hepatitis A virus genotype of a nucleotide sequence.
