@@ -69,18 +69,13 @@
 	
 	<message id="sequenceInput.run">Start!</message>
 	<message id="startForm.monitor">Go!</message>
-	<message id="sequenceInput.example">&gt;54254-9110|PAPUA NEW GUINEA
-TTGTCTGGAGCACTGGATGGCTTGGGAGATAAGACAGATTCTACATTTGG
-ATTGGTTTCTATTCAGATTGCAAATTACAATCATTCTGATGAATATTTGT
-CCTTTAGTTGTTATCTGTCTGTTACAGAACAGTCGGAGTTCTATTTTCCT
-AGAGCTCCATTAAATTCAAATGCTATGTTGTCCACTGAGTCCATGATGAG
-CAGAATTGCAGCTGGAGACTTGGAGTCATCGGTGGATGATCCTAGATCAG
-AGGAGGACAGAAGATTTGAGAGTCATATAGAATGTAGGAAACCATACAAA
-GAATTGAGACTGGAGGTTGGTAAACAAAGACTTAAATATGCTCAGGAAGA
-GTTGTCAAATGAAGTGCTTCCACCTCCTAGGAAAATGAAGGGGCTGTTTT
-CACAAGCTAAAATTTCTCTTTTTTATACTGAGGAGCATGAAATAATGAAA
-TTTTCTTGGAGAGGAGTGACTGCTGATACTAGGGCTTTGAGAAGATTTGG
-ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
+	<message id="sequenceInput.example">&gt;EU416252
+aatcactctgatgaatatttgtcttttagttgttatttgtctgtcacagaacaatcagagttttatttt
+cccagagctccattgaattcaaatgccatgttatccactgaatcaatgataagcagaattgcagctgga
+gacttggagtcatcagtggatgatcccagatcagaggaggacagaagatttgagagtcacatagaatgc
+aggaagccatataaagaattgagattagaagttgggaaacaaagactcaagtatgctcaggaggaattg
+tcaaatgaagtacttccacctcctaggaaaatgaagggactgttttcacaagccaaaatttctcttttt
+tat 
 	</message>
 
 	<message id="job-overview-form">
@@ -316,20 +311,40 @@ ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
 		<div class="form">
 			<h1>Example Sequences for the Hepatitis A Genotyping Tool</h1>
 
-      <div class="sequenceName">&gt;54254-9110|PAPUA NEW GUINEA</div>
+	        <div class="sequenceName">&gt;EU416252</div>
 			<div class="sequence">
-TTGTCTGGAGCACTGGATGGCTTGGGAGATAAGACAGATTCTACATTTGG
-ATTGGTTTCTATTCAGATTGCAAATTACAATCATTCTGATGAATATTTGT
-CCTTTAGTTGTTATCTGTCTGTTACAGAACAGTCGGAGTTCTATTTTCCT
-AGAGCTCCATTAAATTCAAATGCTATGTTGTCCACTGAGTCCATGATGAG
-CAGAATTGCAGCTGGAGACTTGGAGTCATCGGTGGATGATCCTAGATCAG
-AGGAGGACAGAAGATTTGAGAGTCATATAGAATGTAGGAAACCATACAAA
-GAATTGAGACTGGAGGTTGGTAAACAAAGACTTAAATATGCTCAGGAAGA
-GTTGTCAAATGAAGTGCTTCCACCTCCTAGGAAAATGAAGGGGCTGTTTT
-CACAAGCTAAAATTTCTCTTTTTTATACTGAGGAGCATGAAATAATGAAA
-TTTTCTTGGAGAGGAGTGACTGCTGATACTAGGGCTTTGAGAAGATTTGG
-ATTCTCTATGGCCGCTGGTAGAAGTGTGTGGACTCTTGAAATGA
+aatcactctgatgaatatttgtcttttagttgttatttgtctgtcacagaacaatcagagttttatttt
+cccagagctccattgaattcaaatgccatgttatccactgaatcaatgataagcagaattgcagctgga
+gacttggagtcatcagtggatgatcccagatcagaggaggacagaagatttgagagtcacatagaatgc
+aggaagccatataaagaattgagattagaagttgggaaacaaagactcaagtatgctcaggaggaattg
+tcaaatgaagtacttccacctcctaggaaaatgaagggactgttttcacaagccaaaatttctcttttt<br/>
+tat
 	        </div>
+	        
+	        <div class="sequenceName">&gt;AJ437155</div>
+			<div class="sequence">
+gttggagacgattcaggaggtttttcaacaacagtttccacagagcagaatgttcccgatccccaagtt
+ggcataacaactatgagggacttaaaaggtaaagccaataggggaaagatggatgtttcaggagtgcaa
+gcacctgtgggagctattacaacaattgaggatccagttttagctaagaaagtacctgagacatttcct
+gaattgaagcctggagagtctagacatacatcagatcacatgtctatttataaattcatggggaggtct
+cattttctgtgtacttttacttttaattcaaataataaagagtatacattcccaataacgttgtcttcg
+acttctaatcctcctcatggtttaccatcaacattaaggtggtttttcaatttgtttcagttgtataga
+ggaccattggatttgacaattattatcacaggagccactgatgtggatgggatggcttggtttactcca
+gtaggccttgctgtcgacaccccttgggtagaaaaggagtcagctctgtctattgattataaaactgcc
+cttggagctgttagatttaatacaagaagaacggggaacattcagattagattgccatggtattcttac
+ttgtatgccgtgtctggagcactggatggcctgggagataaaacagattctacatttggattggtttct
+attcagattgcaaattacaaccattctgatgaatatttgtcttttagttgttatttgtctgttacagaa
+caatcagagttctattttcctagagctccattgaattcaaatgctatgttgtccactgagtccatgatg
+agtagaattgcagctggagacttggagtcatcagtggatgatcctagatcagaggaggatagaagattt<br/>
+gaa 
+	        </div>
+	        
+	        <div class="sequenceName">&gt;L20531</div>
+			<div class="sequence">
+gagtccatgatgagtagaattgcagctggagacttggagtcatcagtggatgatcctagatcagaggag
+gacagaagatttgagagtcatatagaatgtaggaaaccatacaaggaattgagattggaggttggcaaa
+caaagactcaaatatgctcaggaagagttg 
+			</div>
     	</div>
   	</message>
 </messages>
