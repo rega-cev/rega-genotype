@@ -149,10 +149,13 @@ public class SequenceAlign {
             
             return result;
         } catch (NumberFormatException e) {
+        	e.printStackTrace();
             throw new AlignmentException("Could not parse clustalw score!");
         } catch (FileNotFoundException e) {
+        	e.printStackTrace();
             throw new AlignmentException("Clustalw did not write file!");
         } catch (IOException e) {
+        	e.printStackTrace();
             throw new AlignmentException("I/O error while doing clustalw");
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -161,6 +164,7 @@ public class SequenceAlign {
             e.printStackTrace();
             throw new AlignmentException(e.getMessage());            
         } catch (FileFormatException e) {
+        	e.printStackTrace();
             throw new AlignmentException("Clustalw did not write a proper FASTA file!");
         }
     }
