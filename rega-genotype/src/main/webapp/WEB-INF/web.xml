@@ -138,6 +138,30 @@
     <url-pattern>/hav/typingtool/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>GenotypeHAV-service</servlet-name>
+    <display-name>HAV Genotyping service</display-name>
+    <description>HAV Genotyping service</description>
+    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
+    <init-param>
+    	<param-name>genotypeTool</param-name>
+    	<param-value>rega.genotype.viruses.generic.GenericTool</param-value>
+   	</init-param>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>HAV</param-value>
+    </init-param>
+    <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHAV-service</servlet-name>
+    <url-pattern>/hav/typingservice</url-pattern>
+  </servlet-mapping>
+
 <!--
   <servlet>
     <servlet-name>GenotypeHTLV</servlet-name>
