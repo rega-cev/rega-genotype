@@ -496,7 +496,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public File getJobDir(String jobId) {
-		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()
+		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition().getOrganismName()).getAbsolutePath()
 				+ File.separatorChar + jobId);
 	}
 

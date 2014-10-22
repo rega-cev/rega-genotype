@@ -75,8 +75,8 @@ public class Settings {
 		return imageMagickConvertCmd;
 	}
 	
-	public File getJobDir(OrganismDefinition od) {
-		File f = jobDirs.get(od.getOrganismName());
+	public File getJobDir(String organismName) {
+		File f = jobDirs.get(organismName);
 		if (f == null)
 			f = defaultJobDir;
 

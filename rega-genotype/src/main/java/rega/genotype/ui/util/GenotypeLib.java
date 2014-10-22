@@ -266,8 +266,8 @@ public class GenotypeLib {
 		return epsFile;
 	}
 	
-	public static File createJobDir(OrganismDefinition od) {
-		File jobDir = Settings.getInstance().getJobDir(od);
+	public static File createJobDir(String organismName) {
+		File jobDir = Settings.getInstance().getJobDir(organismName);
 		File d;
 		Random r = new Random(new Date().getTime());
 		do {
