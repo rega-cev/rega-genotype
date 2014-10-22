@@ -120,7 +120,7 @@ public class RecombinationPlot extends WCartesianChart {
 	
 	public void streamRecombinationPDF(File jobDir, int sequenceIndex, String type, OutputStream os) throws Exception {
 		PDF pdf = new PDF(os);
-		Page page = new Page(pdf, Letter.PORTRAIT);
+		Page page = new Page(pdf, Letter.LANDSCAPE);
 		WPdfImage image = new WPdfImage(pdf, page, 0, 0, new WLength(720), new WLength(450));
 		WPainter painter = new WPainter(image);
 		this.paint(painter);
