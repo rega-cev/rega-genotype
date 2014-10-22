@@ -134,6 +134,7 @@ public class RecombinationPlot extends WCartesianChart {
 		
 		WPainter painter = new WPainter(image);
 		this.paint(painter);
+		this.paintCutoff(painter);
 		painter.end();
 		
 		image.write(os);
