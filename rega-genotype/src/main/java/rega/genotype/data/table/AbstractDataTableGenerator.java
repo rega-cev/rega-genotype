@@ -3,12 +3,12 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.data;
+package rega.genotype.data.table;
 
 import java.io.IOException;
 
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.util.DataTable;
+import rega.genotype.util.DataTable;
 
 /**
  * An abstract class extending SaxParser, which provides utility functions to 

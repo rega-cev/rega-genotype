@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.util.GenotypeLib;
 

@@ -67,16 +67,16 @@ public class Settings {
 		return treeGraphCmd;
 	}
 	
-	public String getInkscapeCmd() {
-		return inkscapeCmd;
+	public String getEpsToPdfCmd() {
+		return epsToPdfCmd;
 	}
 	
 	public String getImageMagickConvertCmd() {
 		return imageMagickConvertCmd;
 	}
 	
-	public File getJobDir(OrganismDefinition od) {
-		File f = jobDirs.get(od.getOrganismName());
+	public File getJobDir(String organismName) {
+		File f = jobDirs.get(organismName);
 		if (f == null)
 			f = defaultJobDir;
 
@@ -99,7 +99,7 @@ public class Settings {
 	private File blastPath;
 	private String treePuzzleCmd;
 	private String treeGraphCmd;
-	private String inkscapeCmd;
+	private String epsToPdfCmd;
 	private String imageMagickConvertCmd;
 	private int maxAllowedSeqs;
 	private File defaultJobDir;	
@@ -138,8 +138,8 @@ public class Settings {
             	treePuzzleCmd = e.getValue().trim();
             } else if(name.equals("treeGraphCmd")) {
             	treeGraphCmd = e.getValue().trim();
-            } else if(name.equals("inkscapeCmd")) {
-            	inkscapeCmd = e.getValue().trim();
+            } else if(name.equals("epsToPdfCmd")) {
+            	epsToPdfCmd = e.getValue().trim();
             } else if(name.equals("imageMagickConvertCmd")) {
             	imageMagickConvertCmd = e.getValue().trim();
             } else if(name.equals("jobDir")) {

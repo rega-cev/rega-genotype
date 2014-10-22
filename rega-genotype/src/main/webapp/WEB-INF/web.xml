@@ -13,6 +13,26 @@
     <url-pattern>/hiv/typingtool/*</url-pattern>
   </servlet-mapping>
   
+  <servlet-mapping>
+    <servlet-name>GenotypeHIV-service</servlet-name>
+    <url-pattern>/hiv/typingservice</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>GenotypeHIV-service</servlet-name>
+    <display-name>HIV Genotyping service</display-name>
+    <description>HIV Genotyping service</description>
+    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
+    <init-param>
+    	<param-name>genotypeTool</param-name>
+    	<param-value>rega.genotype.viruses.hiv.HIVTool</param-value>
+   	</init-param>
+    <init-param>
+        <param-name>genotypeTool.table-generator</param-name>
+        <param-value>rega.genotype.data.table.DefaultTableGenerator</param-value>
+   </init-param>
+  </servlet>
+  
   <servlet>
     <servlet-name>StanfordGenotypeHIV</servlet-name>
     <display-name>Stanford HIV Genotyping</display-name>
