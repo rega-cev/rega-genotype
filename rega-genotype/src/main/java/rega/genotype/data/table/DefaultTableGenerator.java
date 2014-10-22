@@ -48,6 +48,9 @@ public class DefaultTableGenerator extends AbstractDataTableGenerator {
 	}
     
 	public void endSequence() {
+		if (skipSequence())
+			return;
+		
     	addNamedValue("/genotype_result/sequence/@name", ValueFormat.Label);
     	addNamedValue("/genotype_result/sequence/@length", ValueFormat.Number);
 

@@ -431,6 +431,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private class Parser extends GenotypeResultParser {		
 		@Override
 		public void endSequence() {
+			if (skipSequence())
+				return;
+			
 			int numRows = AbstractJobOverview.this.jobTable.getRowCount()-1;
 			if (getSequenceIndex() - getFilteredSequences() >= numRows) {
 				jobTable.setHidden(false);
