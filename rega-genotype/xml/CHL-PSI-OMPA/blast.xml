@@ -1,0 +1,73 @@
+<genotype-analyses>
+  <alignment file="blast.fasta" data="dna"/>
+
+  <clusters>
+    <cluster id="chlm1" name="Chlamydia_psittaci_ompA">
+      <taxus name="AB284064"/>
+      <taxus name="AB284065"/>
+      <taxus name="HQ845540"/>
+      <taxus name="AF269268"/>
+      <taxus name="AF269266"/>
+      <taxus name="AF269267"/>
+      <taxus name="AF269259"/>
+      <taxus name="AF269269"/>
+      <taxus name="M73035"/>
+      <taxus name="CP003791"/>
+    </cluster>
+
+    <cluster id="chlm2" name="Chlamydia_avium_ompA">
+      <taxus name="KF366261"/>
+    </cluster>
+
+    <cluster id="chlm3" name="Chlamydia_ibidis_ompA">
+      <taxus name="HQ662952"/>
+    </cluster>
+
+    <cluster id="chlm4" name="Chlamydia_muridarum_ompA">
+      <taxus name="M73044"/>
+    </cluster>
+
+    <cluster id="chlm5" name="Chlamydia_pecorum_ompA">
+      <taxus name="KF150132"/>
+    </cluster>
+
+    <cluster id="chlm6" name="Chlamydia_suis_ompA">
+      <taxus name="AY687630"/>
+    </cluster>
+
+    <cluster id="chlm7" name="Chlamydia_abortus_ompA">
+      <taxus name="L39020"/>
+    </cluster>
+
+    <cluster id="chlm8" name="Chlamydia_caviae _ompA">
+      <taxus name="AF269282"/>
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <!-- chlm1 -->
+    <regions taxus="AF269268">
+      <region name="typingregion" begin="918" end="1056"/>
+    </regions>
+
+    <identify>
+      chlm1,
+      chlm2,
+      chlm3,
+      chlm4,
+      chlm5,
+      chlm6,
+      chlm7,
+      chlm8,
+    </identify>
+
+    <cutoff>
+      50
+    </cutoff>
+
+    <options>
+      -q -1 -r 1
+    </options>
+  </analysis>
+
+</genotype-analyses>
