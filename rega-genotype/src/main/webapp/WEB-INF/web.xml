@@ -295,5 +295,23 @@
     <url-pattern>/spn/cst/*</url-pattern>
   </servlet-mapping>
 
+    <servlet>
+    <servlet-name>GenotypeCHL</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>CHL-PSI-OMPA</param-value>
+    </init-param>
+    <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+   </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeCHL</servlet-name>
+    <url-pattern>/chl-psi-ompa/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
 

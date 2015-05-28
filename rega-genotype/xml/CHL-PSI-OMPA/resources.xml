@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+	<message id="main">
+		<div class="azure">
+			<div class="rivm-header">
+				<div id="logo">
+					<a href="${app.url}">
+						<img src="${app.url}/../../pics/rivm/logo.png" alt="RIVM Logo" > </img>
+					</a>
+				</div>
+				<div id="application">
+					<span id="name"><i>Chlamydia psittaci</i> <i>omp</i>A Typing Tool</span>
+					<span id="info">Version 0.1</span>
+				</div>
+				<div class="nav_bar">
+					${navigation class="nav_main"}
+				</div>
+				
+				<div id="navigation-bottom" >
+				</div>
+			</div>
+			${content class="content"}
+	
+			<div class="footer">
+				<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman)
+					and <a href="http://www.emweb.be/">Emweb bvba</a>.</p>
+				<p>Contact: TBD</p>
+			</div>
+	
+			<div class="rivm-footer">
+				<div>
+					<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+				</div>
+			</div>
+		</div>
+	</message>
+
+	<message id="start-form">
+		<div class="start-form form">
+			<h1><i>Chlamydia psittaci</i> <i>omp</i>A Typing Tool Version 0.1</h1>
+			<div class="seqInput">
+				<div class="note">
+ 					<div>
+						This tool is designed for the automatic assignment of an <i>omp</i>A genotype to a nucleotide sequence.
+					</div>
+				</div>
+
+				<p>You may either:</p>
+				<ol style="list-style-type: upper-alpha">
+				<li>paste one or more sequences in FASTA format in the input field.</li>
+				<li>upload a FASTA file.</li>
+				<li>revisit results of a previous run</li>
+				</ol>
+
+				<div class="note">
+					<div>
+						<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time.
+					</div>
+		 		</div>
+
+				<h2>A) Paste nucleotide sequence(s) in FASTA format:</h2>
+
+				<div>
+					${fasta-field}
+				</div>
+				${analyze-button}
+				${clear-button}
+				${error-text class="error"}
+
+				<h2>B) Or, upload a FASTA with nucleotide sequences:</h2>
+
+				${file-upload-button}
+
+				<h2>C) Or, revisit results from a previous run:</h2>
+
+				${tr:startForm.labelJobId} ${job-id-field}	${search-button}
+			</div>
+		</div>
+	</message>
+	
+	<message id="sequenceInput.run">Start!</message>
+	<message id="startForm.monitor">Go!</message>
+	<message id="sequenceInput.example">&gt;CP003792_ompA
+atgaaaaaactcttgaaatcggcattattgtttgccgctacgggttccgctctctccttacaagccttgcctgtagggaacccagctgaaccaagtttattaatcgatggcactatgtgggaaggtgcttcaggagatccttgcgatccttgcgctacttggtgtgacgccattagcatccgcgcaggatactacggagattatgttttcgatcgtgtattaaaagttgatgtgaataaaacttttagcggcatggctgcaactcctacgcaggctacaggtaacgcaagtaatactaatcagccagaagcaaatggcagaccgaacatcgcttacggaaggcatatgcaagatgcagagtggttttcaaatgcagccttcctagccttaaacatttgggatcgcttcgacattttctgcaccttaggggcatccaatggatacttcaaatcaagttcggctgcattcaacttggttgggttaatagggttttcagctaccagctcaacctctaccgagcttccaatgcaacttcctaacgtaggcattacccaaggtgttgtggaattttatacagacacatcattttcttggagcgtaggtgcacgtggagctttatgggaatgtggttgtgcaactttaggagctgagttccaatacgctcaatctaatcctaagattgaagtgctcaacgtcacttcaagcccagcacaatttgtgattcacaaaccaagaggctataaaggagctagctcgaattttcctttacctataacggctggaacaacagaagctacagacaccaaatcagctacaattaaataccatgaatggcaagtaggcctcgccctgtcttacagattgaatatgcttgttccatatattggcgtaaactggtcaagagcaacttttgatgctgatactatccgcattgctcaacctaaattaaaatcggagattcttaacattactacatggaacccaagccttctaggatcaaccactactttgcccaataatggtggtaaggatgttctatctgatgtcttgcaaattgcttcgattcagatcaacaaaatgaagtctagaaaagcttgtggtgtagctgttggtgcaacgttaatcgacgctgacaaatggtcaatcactggtgaagcacgcttaatcaatgaaagagctgctcacatgaatgctcaattcagattctaa
+>84_55
+atgaaaaaactcttgaaatcggcattattgtttgccgctacgggttccgctctctccttacaagccttgcctgtagggaacccagctgaaccaagtttattaatcgatggcactatgtgggaaggtgcttcaggagatccttgcgatccttgcgctacttggtgtgacgccattagcatccgcgcaggatactacggagattatgttttcgatcgtgtattaaaagttgatgtgaataaaacttttagcggcatggctgcaactcctacgcaggctacaggtaacgcaagtaatactaatcagccagaagcaaatggcagaccgaacatcgcttacggaaggcatatggaagatgcagagtggttttcaaatgcagccttcctagccttaaacatttgggatcgcttcgacattttctgcaccttaggggcatccaatggatacttcaaagcaagttcggctgcattcaacttggttgggttaatagggttttcagctgcaagctcaatctctaccgatcttccaacgcaacttcctaacgtaggcattacccaaggtgttgtggaattttatacagacacatcattttcttggagcgtaggtgcacgtggagctttatgggaatgtggttgtgcaactttaggagctgagttccaatacgctcaatctaatcctaagattgaaatgctcaacgtcacttcaagcccagcacaatttgtgattcacaaaccaagaggctataaaggagctagctcgaattttcctttacctataacggctggaacaacagaagctacagacaccaaatcagctacaattaaataccatgaatggcaagtaggcctcgccctgtcttacagattgaatatgcttgttccatatattggcgtaaactggtcaagagcaacttttgatgctgatactatccgcattgctcaacctaaattaaaatcggagattcttaacattactacatggaacccaagccttataggatcaaccactgctttgcccaataatagtggtaaggatgttctatctgatgtcttgcaaattgcttcgattcagatcaacaaaatgaagtctagaaaagcttgtggtgtagctgttggtgcaacgttaatcgacgctgacaaatggtcaatcactggtgaagcacgcttaatcaatgaaagagctgctcacatgaatgctcaattcagattctaa
+>Mat116
+atgaaaaaactcttgaaatcggcattattgtttgccgctacgggttccgctctctccttacaagccttgcctgtagggaacccagctgaaccaagtttattaatcgatggcactatgtgggaaggtgcttcaggcgatccttgcgatccttgctctacttggtgtgatgctatcagcatccgcgcaggatactacggagattatgttttcgatcgtatattaaaagttgatgtgaataaaacttttaccggcatggctgcaactcctacggagcctacaggtaacgcaagtaatactggtacgccagaagcaaatggcagaccgaacatcgcttacggaaggcatatgcaagatgcagagtggttttcaaatgcagccttcctagccttaaacatttgggatcgcttcgacattttctgcaccttaggagcatccaatggatacttcaaagcaagttcggctgcattcaacttggttgggttaatagggttttcagctacaacctcaacctctaccgatcttccaacgcaacttcctaacgtaggcattacccaaggtgttgtggaattttatacagacacatcattttcttggagcgtaggtgcacgtggagctttatgggaatgtggttgtgcaactttaggagctgagttccaatacgctcaatctaatcctaagattgaaatgcttaacgtcatttcaagcccagcacaatttgtaatccacaaaccaagaggctataaaggagctagctcgaattttcctttacctataacggctggaacagcagaagctatagataccaaatcagctacaattaaataccatgaatggcaagtaggcctcgccctgtcttacagattgaatatgcttgttccatatattggtgtaaactggtcaagagcaacttttgatgctgatactatccgcattgctcaacctaaattaaaatcggagattctcaacattactacatggaacccaagccttataggatcaaccactgctttgcccaataatggtggtaaggatgttctatctgatgtcttgcaaattgcttcgattcagatcaacaaaatgaagtctagaaaagcttgtggtgtagctgttggtgcaacgttaatcgacgctgacaaatggtcaatcactggtgaagcacgcttaatcaacgaaagagctgctcacatgaatgctcaattcagattctaa
+>Example_D_NJ1
+tgacactatccgcattgctcagcctaaattagccactgctgttttagatttaaccacttggaacccaacacttttaggaaaggccacaactgtcgacggtaccaatacttactctgacttcttacaactt
+</message>
+
+	<message id="job-overview-form">
+		<div class="monitor-form form">
+			<h1><i>Chlamydia psittaci</i> <i>omp</i>A Typing Tool Results</h1>
+
+			<div class="info">
+				<p>You may bookmark this page to revisit results of this job (${job-id}) later.</p>
+				
+				<p>${analysis-cancelled}</p>
+
+				<div class="analysisProgress">
+					${analysis-in-progress}
+				</div>
+			</div>
+
+			<div>
+				${results class="jobTable"}
+			</div>
+
+			<div class="downloads">
+				${downloads}
+			</div>
+		</div>
+	</message>
+
+	<message id="details-form">
+		<h1><i>Chlamydia psittaci</i> <i>omp</i>A genotyping details</h1>
+		${details-form}
+	</message>
+
+	<message id="generic-details">
+		<div>
+			<div>
+				<div>
+					<div class="dsa-text">
+						<span class="label">Name:</span> ${xpath "/genotype_result/sequence/@name"}
+						<span class="label">Length:</span> ${xpath "/genotype_result/sequence/@length"}
+					</div>
+				</div>
+				<div>
+					<h3>Assignment</h3>
+					<!--${eval-xpath "/genotype_result/sequence/result[@id='blast']/clusters/score[text()='100.0']"}
+					${<if-defined>}
+					<p>
+						<span class="label">Genotype</span>
+						${xpath "/genotype_result/sequence/result[@id='blast']/clusters/id"}
+					</p>
+					<p>
+						<span class="label">Strain</span>
+						${xpath "/genotype_result/sequence/result[@id='blast']/clusters/description"}
+					</p>
+					${</if-defined>}
+					${<if-not-defined>}
+					<p>
+						<span class="label">Genotype</span>NT (non-typeable)
+					</p>
+					<p>
+						<span class="label">Best matching strain</span>
+						${xpath "/genotype_result/sequence/result[@id='blast']/clusters/description"}
+					</p>
+					<p>
+						<span class="label">Best matching genotype</span>
+						${xpath "/genotype_result/sequence/result[@id='blast']/clusters/id"}
+					</p>
+					<p>
+						<span class="label">Similarity:</span>${xpath "/genotype_result/sequence/result[@id='blast']/clusters/score"}
+					</p>
+					${</if-not-defined>}-->
+					<p>
+						<span class="label">Species, Locus:</span>
+						${xpath "/genotype_result/sequence/result[@id='blast']/cluster/concluded-name"}
+					</p>
+					<h3>Phylogenetic analysis result</h3>
+					${eval-xpath "/genotype_result/sequence/conclusion[@type='simple' and @id='type']"}
+					${<if-defined>}
+					<p>
+						<span class="label">Species, genotype:</span>
+						${xpath "/genotype_result/sequence/conclusion[@id='type']/assigned/name"}
+					</p>
+					<p>
+						<span class="label">Motivation:</span>
+						${xpath "/genotype_result/sequence/conclusion[@id='type']/motivation"}
+					</p>
+					${</if-defined>}
+					${<if-not-defined>}
+					<p>
+						<span class="label">Species, genotype:</span>
+						${xpath "/genotype_result/sequence/conclusion[@id='type']/assigned/name"}
+					</p>
+					<p>
+						<span class="label">Motivation:</span>
+						${xpath "/genotype_result/sequence/conclusion[@id='type']/motivation"}
+					</p>
+					${</if-not-defined>}
+					${eval-xpath "/genotype_result/sequence/conclusion[@type='unassigned' and @id='type']"}
+					${<if-defined>}
+					<p>
+						<span class="label">Best match:</span>
+						${xpath "/genotype_result/sequence/result[@id='phylo-major']/best/name"}
+					</p>
+					<p>
+						<span class="label">Bootstrap (1000 reps) Support:</span>
+						${xpath "/genotype_result/sequence/result[@id='phylo-major']/best/support"}
+					</p>
+					${</if-defined>}
+					<!--${eval-xpath "/genotype_result/sequence/conclusion[@type='simple' and @id='subtype']"}
+					${<if-defined>}
+					<p>
+						<span class="label">Sub-clustering:</span>
+						${eval-xpath "/genotype_result/sequence/conclusion[@id='subtype']"}
+						${<if-defined>}
+						<span class="genotype"></span>
+						${xpath "/genotype_result/sequence/conclusion[@id='subtype']/assigned/name"}
+						${</if-defined>}
+						${<if-not-defined>}
+						<span class="genotype">N/A</span>
+						${</if-not-defined>}
+					</p>
+					<p>
+						<span class="label">Motivation:</span>
+						${eval-xpath "/genotype_result/sequence/conclusion[@id='subtype']"}
+						${<if-defined>}
+						<span>${xpath "/genotype_result/sequence/conclusion[@id='subtype']/motivation"}</span>
+						${</if-defined>}
+						${<if-not-defined>}
+						<span>Sequence does not sufficiently overlap with region or subcluster is not available for the type</span>
+						${</if-not-defined>}
+					</p>
+					${</if-defined>}
+					${eval-xpath "/genotype_result/sequence/conclusion[@type='unassigned' and @id='subtype']"}
+					${<if-defined>}
+					<p>
+						<span class="label">Sub-clustering:</span>
+						${eval-xpath "/genotype_result/sequence/conclusion[@id='subtype']"}
+						${<if-defined>}
+						<span class="genotype"></span>
+						${xpath "/genotype_result/sequence/conclusion[@id='subtype']/assigned/name"}
+						${</if-defined>}
+						${<if-not-defined>}
+						<span class="genotype">N/A</span>
+						${</if-not-defined>}
+					</p>
+					<p>
+						<span class="label">Motivation:</span>
+						${eval-xpath "/genotype_result/sequence/conclusion[@id='subtype']"}
+						${<if-defined>}
+						<span>${xpath "/genotype_result/sequence/conclusion[@id='subtype']/motivation"}</span>
+						${</if-defined>}
+						${<if-not-defined>}
+						<span>Sequence does not sufficiently overlap with region or subcluster is not available for the type</span>
+						${</if-not-defined>}
+					</p>
+					${</if-defined>}-->
+				</div>
+				<div>
+					<h3>Genome region</h3>
+				</div>
+				<div>
+					<p class="refseq">
+						Your sequence starts at position ${xpath "/genotype_result/sequence/result[@id='blast']/start"} and ends at position ${xpath "/genotype_result/sequence/result[@id='blast']/end"} relative to ${xpath "/genotype_result/sequence/result[@id='blast']/refseq"} reference sequence.
+					</p>
+				</div>
+
+					${genome-img}
+
+				<!--<div>
+					<h3>BLAST analysis details</h3>
+				</div>
+				<div class="blast-details">
+					${resource "/genotype_result/sequence/result/clusters/details"}
+				</div>-->
+			</div>
+		</div>
+	</message>
+
+	<message id="details.phylo-major.title">
+		Pylogenetic Analysis Details
+	</message>
+
+	<message id="details.phylo-minor.title">
+		Pylogenetic Analysis Details (Sub-clustering)
+	</message>
+
+	<message id="job-overview-downloads">
+		<div class="downloadContainer">
+			<span>Download results:</span> ${xml-file} ${xls-file} ${csv-file} ${fasta-file}
+		</div>
+	</message>
+	
+	<message id="monitorForm.analysisCancelled"><p><b>This job was cancelled!</b></p></message>
+
+	<message id="tool.title"><i>Chlamydia psittaci</i> <i>omp</i>A Genotyping Tool</message>
+
+	<message id="table.header.name">Name</message>
+	<message id="table.header.length">Length</message>
+	<message id="table.header.blast">Blast</message>
+	<message id="table.header.phylo">Phylo</message>
+	<message id="table.header.support">Support</message>
+	<message id="table.header.report">Report</message>
+	<message id="table.header.genome">Genome</message>
+
+	<message id="how-to-cite-doc">
+		<div class="form">
+			<h1>How to Cite</h1>
+
+			<p>Manuscript in preparation</p>
+		</div>
+	</message>
+	
+	<message id="introduction-doc">
+		<div class="form">
+			<h1><i>Chlamydia psittaci</i> <i>omp</i>A Typing Tool Introduction</h1>
+
+			<p>The <i>omp</i>A typing is a molecular method to genotype the <i>omp</i>A locus in order to assess the genotype.
+			<i>Omp</i>A typing is based on a part of the sequence of the <i>omp</i>A gene. This gene was chosen for
+			sequencing because it varies sufficiently between genotypes, but is conserved enough to
+			amplify the same gene segment of the various genotypes using a single mix of primers.
+			The primers used in the <i>omp</i>A typing are based on the publicly available sequences of the
+			complete genomes of the 9 <i>Chlamydia psittaci</i> genotypes described by
+			Pannekoek et al. After sequencing of 130-139 base pairs of the
+			<i>omp</i>A gene, a genotype can be assigned.</p>
+		</div>
+	</message>
+
+	<message id="protocol-doc">
+		<div class="form">
+			<h1><i>omp</i>A Sequence Typing Protocol</h1>
+
+			<p>The protocol for performing <i>omp</i>A typing can be <a href="/mpf/pics/spn/Protocol%20">downloaded here</a>.
+			These files may be updated if alterations in the protocol have been made.</p>
+			
+			<p>Questions about the protocol? Please contact tbd</p>
+		</div>
+	</message>
+
+	<message id="how-to-use-doc">
+		<div class="form">
+			<h1><i>Chlamydia psittaci</i> <i>omp</i>A Typing Tool Tutorial</h1>
+
+			<p>One or more (up to 10.000 per run) sequences can be pasted (A) or uploaded (B) in Fasta format. When pasting a single sequence the Identifier of the sequence (>Key) should be included (Fasta format). One example sequence is present as a default.
+			A set of three example sequences is also available.</p>
+		
+			<p style="text-align: center; margin: 20px 0px"><img src="/mpf/pics//doc-start.png"></img></p>
+
+			<p>The analysis takes up to a second per sequence. Thus, for large batches the run can be
+			viewed later, by typing the Job-Id at C. Here also runs by others can be viewed,
+			if the Job-Id has been communicated. Runs are kept on the server for 1 week.
+			As soon as the 'Start' button is pushed the results overview is shown.
+			While the analysis is still in progress the following message is displayed:
+			'Analysis in progress... (Showing partial results). This page will be automatically updated
+			every 5 seconds...'. The Job Id number, which can be used to retrieve the results later
+			is displayed at the top of the page as soon as the job is started.</p>
+
+			<p style="text-align: center; margin: 20px 0px"><img src="/mpf/pics/spn/doc-results.png"></img></p>
+			
+			<p>For each sequence the length and genotype is shown, including
+			the similarity of the sequence. After the complete analysis is finished the analysis
+			results can be downloaded as XML, CSV or Excel file. For each sequence more details can
+			be viewed in the individual reports by clicking on 'report' in the results table. The
+			report of the typing details per sequence contains a brief overview of the assignment,
+			followed by details such as an alignment of the best matches and a figure of the
+			targeted segment of the <i>omp</i>A gene.</p>
+			
+			<p style="text-align: center; margin: 20px 0px"><img src="/mpf/pics/spn/doc-details.png"></img></p>
+			
+		</div>
+	</message>
+
+ 	<message id="examples-doc">
+		<div class="form">
+			<h1>Example Sequences for the <i>Chlamydia psittaci</i> <i>omp</i>A Typing Tool</h1>
+			
+			<div class="sequenceName">&gt;84_55</div>
+			<div class="sequence">
+				atgaaaaaactcttgaaatcggcattattgtttgccgctacgggttccgctctctcctta
+				caagccttgcctgtagggaacccagctgaaccaagtttattaatcgatggcactatgtgg
+				gaaggtgcttcaggagatccttgcgatccttgcgctacttggtgtgacgccattagcatc
+				cgcgcaggatactacggagattatgttttcgatcgtgtattaaaagttgatgtgaataaa
+				acttttagcggcatggctgcaactcctacgcaggctacaggtaacgcaagtaatactaat
+				cagccagaagcaaatggcagaccgaacatcgcttacggaaggcatatggaagatgcagag
+				tggttttcaaatgcagccttcctagccttaaacatttgggatcgcttcgacattttctgc
+				accttaggggcatccaatggatacttcaaagcaagttcggctgcattcaacttggttggg
+				ttaatagggttttcagctgcaagctcaatctctaccgatcttccaacgcaacttcctaac
+				gtaggcattacccaaggtgttgtggaattttatacagacacatcattttcttggagcgta
+				ggtgcacgtggagctttatgggaatgtggttgtgcaactttaggagctgagttccaatac
+				gctcaatctaatcctaagattgaaatgctcaacgtcacttcaagcccagcacaatttgtg
+				attcacaaaccaagaggctataaaggagctagctcgaattttcctttacctataacggct
+				ggaacaacagaagctacagacaccaaatcagctacaattaaataccatgaatggcaagta
+				ggcctcgccctgtcttacagattgaatatgcttgttccatatattggcgtaaactggtca
+				agagcaacttttgatgctgatactatccgcattgctcaacctaaattaaaatcggagatt
+				cttaacattactacatggaacccaagccttataggatcaaccactgctttgcccaataat
+				agtggtaaggatgttctatctgatgtcttgcaaattgcttcgattcagatcaacaaaatg
+				aagtctagaaaagcttgtggtgtagctgttggtgcaacgttaatcgacgctgacaaatgg
+				tcaatcactggtgaagcacgcttaatcaatgaaagagctgctcacatgaatgctcaattc
+				agattctaa
+			</div>
+
+			<div class="sequenceName">&gt;Mat116</div>
+			<div class="sequence">
+				atgaaaaaactcttgaaatcggcattattgtttgccgctacgggttccgctctctcctta
+				caagccttgcctgtagggaacccagctgaaccaagtttattaatcgatggcactatgtgg
+				gaaggtgcttcaggcgatccttgcgatccttgctctacttggtgtgatgctatcagcatc
+				cgcgcaggatactacggagattatgttttcgatcgtatattaaaagttgatgtgaataaa
+				acttttaccggcatggctgcaactcctacggagcctacaggtaacgcaagtaatactggt
+				acgccagaagcaaatggcagaccgaacatcgcttacggaaggcatatgcaagatgcagag
+				tggttttcaaatgcagccttcctagccttaaacatttgggatcgcttcgacattttctgc
+				accttaggagcatccaatggatacttcaaagcaagttcggctgcattcaacttggttggg
+				ttaatagggttttcagctacaacctcaacctctaccgatcttccaacgcaacttcctaac
+				gtaggcattacccaaggtgttgtggaattttatacagacacatcattttcttggagcgta
+				ggtgcacgtggagctttatgggaatgtggttgtgcaactttaggagctgagttccaatac
+				gctcaatctaatcctaagattgaaatgcttaacgtcatttcaagcccagcacaatttgta
+				atccacaaaccaagaggctataaaggagctagctcgaattttcctttacctataacggct
+				ggaacagcagaagctatagataccaaatcagctacaattaaataccatgaatggcaagta
+				ggcctcgccctgtcttacagattgaatatgcttgttccatatattggtgtaaactggtca
+				agagcaacttttgatgctgatactatccgcattgctcaacctaaattaaaatcggagatt
+				ctcaacattactacatggaacccaagccttataggatcaaccactgctttgcccaataat
+				ggtggtaaggatgttctatctgatgtcttgcaaattgcttcgattcagatcaacaaaatg
+				aagtctagaaaagcttgtggtgtagctgttggtgcaacgttaatcgacgctgacaaatgg
+				tcaatcactggtgaagcacgcttaatcaacgaaagagctgctcacatgaatgctcaattc
+				agattctaa
+			</div>
+
+			<div class="sequenceName">&gt;Example_D_NJ1</div>
+			<div class="sequence">
+				tgacactatccgcattgctcagcctaaattagccactgctgttttagatttaaccacttg
+				gaacccaacacttttaggaaaggccacaactgtcgacggtaccaatacttactctgactt
+				cttacaactt
+			</div>
+		</div>
+	</message>
+</messages>
