@@ -79,7 +79,12 @@ public class Genome {
 		    }
 		    
 		    scanWindowSize = w[0]*2;
-		    scanStepSize = w[1] - w[0];
+		    if(w.length > 1) {
+		    	scanStepSize = w[1] - w[0];
+		    } else {
+				scanWindowSize = w[0];
+				scanStepSize = 0;
+		    }
 		} else {
 			w = new int[0];
 			assign = new String[0];
