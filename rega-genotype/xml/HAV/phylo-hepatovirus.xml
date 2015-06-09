@@ -52,6 +52,7 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			set criterion=distance;
+			set rootmethod=midpoint;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
 			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE enforce=yes;
