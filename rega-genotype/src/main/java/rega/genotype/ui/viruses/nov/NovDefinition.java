@@ -13,15 +13,15 @@ import java.util.List;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.util.DataTable;
 import rega.genotype.viruses.nov.NoVTool;
 import eu.webtoolkit.jwt.WString;
 

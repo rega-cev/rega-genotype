@@ -39,11 +39,10 @@ Installation instructions for rega-genotype
 		* these binaries can be installed by extracting the archive to
 		  a desired location
 	
-	* inkscape 
-		* some unix based operating operating systems allow
-		  installation via the package manager
-		* for a manual installation follow the instructions on this website:
-		  http://www.inkscape.org/
+	* imagemagick
+	    * http://www.imagemagick.org
+	    
+	* epstopdf 
 	
 * Configuration
 	* create an XML file like the one in global-conf.xml and save it to a

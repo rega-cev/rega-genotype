@@ -13,16 +13,16 @@ import java.util.List;
 import org.jdom.Element;
 
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.data.AbstractDataTableGenerator;
+import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.data.SequenceFilter;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.CsvDataTable;
-import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.util.XlsDataTable;
+import rega.genotype.util.CsvDataTable;
+import rega.genotype.util.DataTable;
+import rega.genotype.util.XlsDataTable;
 import rega.genotype.utils.Settings;
 import rega.genotype.viruses.recombination.RegionUtils;
 import rega.genotype.viruses.recombination.RegionUtils.Region;
@@ -332,7 +332,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 				response.setContentType("application/excel");
-				final DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ';', '"') : new XlsDataTable(response.getOutputStream());
+				final DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ',', '"') : new XlsDataTable(response.getOutputStream());
 				t.addLabel("sequence-name");
 				t.addLabel("recombination-scan-type");
 				t.addLabel("fragment-start");
@@ -414,7 +414,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 				response.setContentType("application/excel");
-				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ';', '"') : new XlsDataTable(response.getOutputStream());
+				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ',', '"') : new XlsDataTable(response.getOutputStream());
 				AbstractDataTableGenerator acsvgen = 
 					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this, t);
 				acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
@@ -431,6 +431,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private class Parser extends GenotypeResultParser {		
 		@Override
 		public void endSequence() {
+			if (skipSequence())
+				return;
+			
 			int numRows = AbstractJobOverview.this.jobTable.getRowCount()-1;
 			if (getSequenceIndex() - getFilteredSequences() >= numRows) {
 				jobTable.setHidden(false);
@@ -493,7 +496,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public File getJobDir(String jobId) {
-		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition()).getAbsolutePath()
+		return new File(Settings.getInstance().getJobDir(getMain().getOrganismDefinition().getOrganismName()).getAbsolutePath()
 				+ File.separatorChar + jobId);
 	}
 

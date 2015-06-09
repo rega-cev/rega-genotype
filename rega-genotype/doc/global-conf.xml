@@ -49,11 +49,11 @@
   </property>
   
   <!-- 
-  	inkscapeCmd
-  	Location of your inkscape binary
+  	epsToPdfCmd
+  	Location of your epstopdf binary
    -->
-  <property name="inkscapeCmd">
-   /opt/soft/inkscape/bin/inkscape
+  <property name="epsToPdfCmd">
+   /opt/soft/pdf/epstopdf
   </property>
   
   

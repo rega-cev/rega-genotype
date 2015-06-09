@@ -3,11 +3,11 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.ui.data;
+package rega.genotype.data.table;
 
 import java.io.IOException;
 
-import rega.genotype.ui.util.DataTable;
+import rega.genotype.util.DataTable;
 
 /**
  * A default extension of AbstractCsvGenerator, used by different virus implementations.
@@ -48,6 +48,9 @@ public class DefaultTableGenerator extends AbstractDataTableGenerator {
 	}
     
 	public void endSequence() {
+		if (skipSequence())
+			return;
+		
     	addNamedValue("/genotype_result/sequence/@name", ValueFormat.Label);
     	addNamedValue("/genotype_result/sequence/@length", ValueFormat.Number);
 

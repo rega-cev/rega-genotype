@@ -1,7 +1,9 @@
-package rega.genotype.ui.util;
+package rega.genotype.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
+import rega.genotype.util.DataTable.Cell;
 
 import jxl.Workbook;
 import jxl.write.Label;

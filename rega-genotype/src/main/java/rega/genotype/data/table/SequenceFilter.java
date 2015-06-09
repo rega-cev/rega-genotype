@@ -1,4 +1,4 @@
-package rega.genotype.ui.data;
+package rega.genotype.data.table;
 
 import rega.genotype.data.GenotypeResultParser;
 

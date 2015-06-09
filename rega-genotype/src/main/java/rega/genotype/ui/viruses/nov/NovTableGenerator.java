@@ -7,10 +7,10 @@ package rega.genotype.ui.viruses.nov;
 
 import java.io.IOException;
 
-import rega.genotype.ui.data.AbstractDataTableGenerator;
-import rega.genotype.ui.data.AbstractDataTableGenerator.ValueFormat;
+import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.AbstractDataTableGenerator.ValueFormat;
 import rega.genotype.ui.forms.AbstractJobOverview;
-import rega.genotype.ui.util.DataTable;
+import rega.genotype.util.DataTable;
 
 /**
  * Create a csv file of NoV job results 

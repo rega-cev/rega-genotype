@@ -107,18 +107,6 @@ public class GenotypeLib {
 
 		ImageIO.write(bufferedImage, "png", out);
 	}
-
-	private static void inkscapeConvert(File in, File out, String out_type) throws IOException, InterruptedException {
-		Process ps = new ProcessBuilder(Settings.getInstance().getInkscapeCmd(), "--export-" + out_type + "=" + out.getAbsolutePath(), in.getAbsolutePath()).start();
-		
-		StreamReaderThread stdout = new StreamReaderThread(ps.getInputStream(), System.out, "inkscape stdout: ");
-		stdout.start();
-		
-		StreamReaderThread stderr = new StreamReaderThread(ps.getErrorStream(), System.err, "inkscape stderr: ");
-		stderr.start();
-		
-		ps.waitFor();
-	}
 	
 	private static void imageMagickConvert(File in, File out) throws IOException, InterruptedException {
 		Process ps = new ProcessBuilder(Settings.getInstance().getImageMagickConvertCmd(), in.getAbsolutePath(), out.getAbsolutePath()).start();
@@ -134,14 +122,6 @@ public class GenotypeLib {
 	
 	private static void epsToPng(File in, File out) throws IOException, InterruptedException {
 		imageMagickConvert(in, out);
-	}
-	
-	private static void svgToPdf(File in, File out) throws IOException, InterruptedException {
-		inkscapeConvert(in, out, "pdf");
-	}
-	
-	private static void svgToPng(File in, File out) throws IOException, InterruptedException {
-		inkscapeConvert(in, out, "png");
 	}
 	
 	public static File getSignalPNG(File epsFile) {
@@ -164,9 +144,9 @@ public class GenotypeLib {
 		File pngFile = new File(treeFile.getPath().replace(".tre", ".png"));
 		if (!pngFile.exists() && treeFile.exists()) {
 			try {
-				File svgFile = getTreeSVG(jobDir, treeFile);
+				File epsFile = getTreeEPS(jobDir, treeFile);
 				
-				svgToPng(svgFile, pngFile);
+				epsToPng(epsFile, pngFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -178,9 +158,9 @@ public class GenotypeLib {
 		File pdfFile = new File(treeFile.getPath().replace(".tre", ".pdf"));
 		if (!pdfFile.exists() && treeFile.exists()) {
 			try{
-				File svgFile = getTreeSVG(jobDir, treeFile);
+				File epsFile = getTreeEPS(jobDir, treeFile);
 				
-				svgToPdf(svgFile, pdfFile);
+				epsToPdf(epsFile, pdfFile);
 			}
 			catch(Exception e){
 				e.printStackTrace();
@@ -189,12 +169,24 @@ public class GenotypeLib {
 		return pdfFile;
 	}
 
-	private static File getTreeSVG(File jobDir, File treeFile)
+	private static void epsToPdf(File epsFile, File pdfFile) throws IOException, InterruptedException {
+		Process ps = new ProcessBuilder(Settings.getInstance().getEpsToPdfCmd(), epsFile.getAbsolutePath(), "--outfile=" + pdfFile.getAbsolutePath()).start();
+		
+		StreamReaderThread stdout = new StreamReaderThread(ps.getInputStream(), System.out, "epstopdf stdout: ");
+		stdout.start();
+		
+		StreamReaderThread stderr = new StreamReaderThread(ps.getErrorStream(), System.err, "epstopdf stderr: ");
+		stderr.start();
+		
+		ps.waitFor();
+	}
+
+	private static File getTreeEPS(File jobDir, File treeFile)
 			throws IOException, InterruptedException, ApplicationException,
 			FileNotFoundException {
-		File svgFile = new File(treeFile.getPath().replace(".tre", ".svg"));
-		if (svgFile.exists())
-			return svgFile;
+		File epsFile = new File(treeFile.getPath().replace(".tre", ".eps"));
+		if (epsFile.exists())
+			return epsFile;
 
 		Runtime runtime = Runtime.getRuntime();
 		Process proc;
@@ -261,7 +253,7 @@ public class GenotypeLib {
 		tgfFile.delete();
 		resizedTgfFile.renameTo(tgfFile);
 		
-		cmd = Settings.treeGraphCommand +" -v "+ tgfFile.getAbsolutePath();
+		cmd = Settings.treeGraphCommand +" -p "+ tgfFile.getAbsolutePath();
 		System.err.println(cmd);
 		proc = runtime.exec(cmd, null, jobDir);
 		if((result = proc.waitFor()) != 0)
@@ -271,11 +263,11 @@ public class GenotypeLib {
 		proc.getInputStream().close();
 		proc.getOutputStream().close();
 
-		return svgFile;
+		return epsFile;
 	}
 	
-	public static File createJobDir(OrganismDefinition od) {
-		File jobDir = Settings.getInstance().getJobDir(od);
+	public static File createJobDir(String organismName) {
+		File jobDir = Settings.getInstance().getJobDir(organismName);
 		File d;
 		Random r = new Random(new Date().getTime());
 		do {

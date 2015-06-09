@@ -192,7 +192,7 @@ public class StartForm extends AbstractForm {
 	}
 	
 	private void startJob(final String fastaContent) {
-		final File thisJobDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition());
+		final File thisJobDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getOrganismName());
 
 		Thread analysis = new Thread(new Runnable(){
 			public void run() {
