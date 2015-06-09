@@ -6,6 +6,7 @@
   <property name="blastPath">/opt/local/bin/</property>
   <property name="treePuzzleCmd">puzzle</property>
   <property name="treeGraphCmd">/home/koen/download/tgf10rc4/source/tgf</property>
+  <property name="imageMagickConvertCmd">convert</property>
   <property name="jobDir">jobs/</property>
   <property name="maxAllowedSequences">20000</property>
 </rega-genotype-settings>
