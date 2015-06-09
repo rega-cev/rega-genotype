@@ -1,5 +1,5 @@
 <genotype-analyses>
-  <alignment file="phylotypes1.fasta" trim="true" />
+  <alignment file="phylo-hiv1M.fasta" trim="true" />
 
   <clusters>
     <cluster id="A" name="Subtype A">
@@ -219,6 +219,8 @@
     </cluster>
     
         <cluster id="GES" name="G Spain">
+           <description>Subtype G from Spain</description>
+            
          <taxus name="G.ES.00.X558" />
          <taxus name="G.ES.99.X138" />
       <tags>CRF</tags>
@@ -242,7 +244,7 @@
     </cluster>
   </clusters>
 
-  <analysis id="pure" type="paup">
+  <analysis id="phylo-major" type="paup">
     <identify>
       A1,A2,B,F,F1,F2,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
     </identify>
@@ -258,7 +260,7 @@
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
  	  NJ;
- 	  savetree format=phylip brlens=yes file=paup.tre replace=yes;
+ 	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
       end;
       quit;
@@ -406,7 +408,7 @@
         set criterion=distance outroot=monophyl;
         dset distance=HKY NegBrLen=Prohibit;
         NJ;
-        savetree format=phylip brlens=yes file=paup.tre replace=yes;
+        savetree format=nexus brlens=yes file=paup.tre replace=yes;
         bootstrap nreps=100 search=nj;
         end;
         quit;

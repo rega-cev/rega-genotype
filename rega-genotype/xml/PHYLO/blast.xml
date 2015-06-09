@@ -1,20 +1,20 @@
 <genotype-analyses>
-  <alignment file="hiv.fasta" />
+  <alignment file="blast.fasta" />
 
   <clusters>
-    <cluster id="1" name="HIV 1">
+    <cluster id="hiv1M" name="HIV 1">
       <description>blabla</description>
       <taxus name="H1M_B.FR.83.HXB2_K03455" />
     </cluster>
-    <cluster id="2" name="HIV 1 N group">
+    <cluster id="hiv1N" name="HIV 1 N group">
       <taxus name="H1N.CM.95.YBF30_AJ006022" />
     </cluster>
-    <cluster id="3" name="HIV 1 O group">    
+    <cluster id="hiv1O" name="HIV 1 O group">    
       <taxus name="H1O.BE.87.ANT70_L20587" />
       <taxus name="H1O.CM.91.MVP5180_L20571" />
     </cluster>
    
-    <cluster id="4" name="HIV 2">
+    <cluster id="hiv2" name="HIV 2">
       <taxus name="H2A.GW.-.ALI_AF082339" />
       <taxus name="H2A.DE.-.BEN_M30502" />
       <taxus name="H2A.SN.-.ST_M31113" />
@@ -27,13 +27,13 @@
 
   <analysis id="blast" type="blast">
     <identify>
-      1,2,3,4
+      hiv1M,hiv1N,hiv1O,hiv2
     </identify>
     <cutoff>
       50
     </cutoff>
     <options>
-      -q -1 -r 2
+      -q -1 -r 1
     </options>
   </analysis>
 

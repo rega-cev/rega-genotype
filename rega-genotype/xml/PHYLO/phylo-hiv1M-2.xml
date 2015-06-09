@@ -1,5 +1,5 @@
 <genotype-analyses>
-  <alignment file="phylotypes1.fasta" trim="true" />
+  <alignment file="phylo-hiv1M.fasta" trim="true" />
 
   <clusters>
     <cluster id="38" name="Subtype A">

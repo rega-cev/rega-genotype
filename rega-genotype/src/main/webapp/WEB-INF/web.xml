@@ -179,22 +179,6 @@
     <url-pattern>/htlv/typingtool/*</url-pattern>
   </servlet-mapping>
   
-    <servlet>
-    <servlet-name>GenotypePHYLO</servlet-name>
-    <display-name>PHYLO Genotyping</display-name>
-    <description>PHYLO Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.phylo.PhyloMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypePHYLO</servlet-name>
-    <url-pattern>/GenotypePHYLO/*</url-pattern>
-  </servlet-mapping>
-  
   <servlet>
     <servlet-name>GenotypeHCV</servlet-name>
     <display-name>HCV Genotyping</display-name>
@@ -332,5 +316,22 @@
     <servlet-name>GenotypeCHL</servlet-name>
     <url-pattern>/chl-psi-ompa/typingtool/*</url-pattern>
   </servlet-mapping>
-  
+
+  <servlet>
+    <servlet-name>GenotypePHYLO</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>PHYLO</param-value>
+    </init-param>
+    <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+   </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypePHYLO</servlet-name>
+    <url-pattern>/phylo/typingtool/*</url-pattern>
+  </servlet-mapping>
 </web-app>
