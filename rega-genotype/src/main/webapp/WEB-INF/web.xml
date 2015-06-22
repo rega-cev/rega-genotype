@@ -1,18 +1,35 @@
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN
-" "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd" >
 <web-app>
+  
+  <servlet>
+    <servlet-name>GenotypeDENGUE</servlet-name>
+    <display-name>DENGUE Genotyping</display-name>
+    <description>DENGUE Genotyping</description>
+    <servlet-class>rega.genotype.ui.viruses.dengue.DengueMain</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>GenotypeDENGUE-service</servlet-name>
+    <display-name>DENGUE Genotyping service</display-name>
+    <description>HTLV Genotyping service</description>
+    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
+    <init-param>
+    	<param-name>genotypeTool</param-name>
+    	<param-value>rega.genotype.viruses.dengue.DENGUETool</param-value>
+   	</init-param>
+    <init-param>
+        <param-name>genotypeTool.table-generator</param-name>
+        <param-value>rega.genotype.data.table.DefaultTableGenerator</param-value>
+   </init-param>
+  </servlet>
+  
   <servlet>
     <servlet-name>GenotypeHIV</servlet-name>
     <display-name>HIV Genotyping</display-name>
     <description>HIV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.hiv.HivMain</servlet-class>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHIV</servlet-name>
-    <url-pattern>/hiv/typingtool/*</url-pattern>
-  </servlet-mapping>
-
+  
   <servlet>
     <servlet-name>GenotypeHIV-service</servlet-name>
     <display-name>HIV Genotyping service</display-name>
@@ -27,11 +44,6 @@
         <param-value>rega.genotype.data.table.DefaultTableGenerator</param-value>
    </init-param>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHIV-service</servlet-name>
-    <url-pattern>/hiv/typingservice</url-pattern>
-  </servlet-mapping>
   
   <servlet>
     <servlet-name>StanfordGenotypeHIV</servlet-name>
@@ -39,11 +51,6 @@
     <description>Stanford HIV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.hiv.stanford.HivMain</servlet-class>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>StanfordGenotypeHIV</servlet-name>
-    <url-pattern>/stanford-hiv/typingtool/*</url-pattern>
-  </servlet-mapping>
 
   <servlet>
     <servlet-name>GenotypeNoV</servlet-name>
@@ -55,11 +62,6 @@
         <param-value>etc/development-config.xml</param-value>
    </init-param>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeNoV</servlet-name>
-    <url-pattern>/norovirus/typingtool/*</url-pattern>
-  </servlet-mapping>
 
   <servlet>
     <servlet-name>GenotypeNoV-service</servlet-name>
@@ -75,12 +77,7 @@
         <param-value>etc/development-config.xml</param-value>
    </init-param>
    </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeNoV-service</servlet-name>
-    <url-pattern>/norovirus/typingservice</url-pattern>
-  </servlet-mapping>
-
+  
   <servlet>
     <servlet-name>GenotypeEntero</servlet-name>
     <display-name>Enterovirus Genotyping</display-name>
@@ -91,12 +88,6 @@
         <param-value>etc/development-config.xml</param-value>
    </init-param>
    </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeEntero</servlet-name>
-    <url-pattern>/enterovirus/typingtool/*</url-pattern>
-  </servlet-mapping>
-
 
   <servlet>
     <servlet-name>GenotypeEntero-service</servlet-name>
@@ -113,11 +104,6 @@
    </init-param>
   </servlet>
 
-  <servlet-mapping>
-    <servlet-name>GenotypeEntero-service</servlet-name>
-    <url-pattern>/enterovirus/typingservice</url-pattern>
-  </servlet-mapping>
-
   <servlet>
     <servlet-name>GenotypeHAV</servlet-name>
     <display-name>HAV Genotyping</display-name>
@@ -132,12 +118,7 @@
         <param-value>etc/development-config.xml</param-value>
    </init-param>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHAV</servlet-name>
-    <url-pattern>/hav/typingtool/*</url-pattern>
-  </servlet-mapping>
-
+  
   <servlet>
     <servlet-name>GenotypeHAV-service</servlet-name>
     <display-name>HAV Genotyping service</display-name>
@@ -156,129 +137,37 @@
         <param-value>etc/development-config.xml</param-value>
     </init-param>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHAV-service</servlet-name>
-    <url-pattern>/hav/typingservice</url-pattern>
-  </servlet-mapping>
-
-<!--
+  
   <servlet>
     <servlet-name>GenotypeHTLV</servlet-name>
     <display-name>HTLV Genotyping</display-name>
     <description>HTLV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.htlv.HtlvMain</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>GenotypeHTLV-service</servlet-name>
+    <display-name>HTLV Genotyping service</display-name>
+    <description>HTLV Genotyping service</description>
+    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
     <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
+    	<param-name>genotypeTool</param-name>
+    	<param-value>rega.genotype.viruses.htlv.HTLVTool</param-value>
+   	</init-param>
+    <init-param>
+        <param-name>genotypeTool.table-generator</param-name>
+        <param-value>rega.genotype.data.table.DefaultTableGenerator</param-value>
    </init-param>
   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHTLV</servlet-name>
-    <url-pattern>/htlv/typingtool/*</url-pattern>
-  </servlet-mapping>
   
+
   <servlet>
     <servlet-name>GenotypeHCV</servlet-name>
     <display-name>HCV Genotyping</display-name>
     <description>HCV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.hcv.HcvMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
    </servlet>
 
-  <servlet-mapping>
-    <servlet-name>GenotypeHCV</servlet-name>
-    <url-pattern>/hcv/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>GenotypeHBV</servlet-name>
-    <display-name>HBV Genotyping</display-name>
-    <description>HBV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.hbv.HbvMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHBV</servlet-name>
-    <url-pattern>/hbv/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>Giardia</servlet-name>
-    <display-name>Giardia Genotyping</display-name>
-    <description>Giardia Genotyping</description>
-    <servlet-class>rega.genotype.ui.parasites.giardia.GiardiaMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Giardia</servlet-name>
-    <url-pattern>/giardia/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>Giardia-service</servlet-name>
-    <display-name>Giardia Genotyping service</display-name>
-    <description>Giardia Genotyping service</description>
-    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
-    <init-param>
-    	<param-name>genotypeTool</param-name>
-    	<param-value>rega.genotype.parasites.giardia.GiardiaTool</param-value>
-   	</init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Giardia-service</servlet-name>
-    <url-pattern>/giardia/typingservice</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>HHV8</servlet-name>
-    <display-name>HHV8 Genotyping</display-name>
-    <description>HHV8 Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.hhv8.Hhv8Main</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>HHV8</servlet-name>
-    <url-pattern>/hhv8/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>GenotypeHPV</servlet-name>
-    <display-name>HPV Genotyping</display-name>
-    <description>HPV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.hpv.HpvMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHPV</servlet-name>
-    <url-pattern>/hpv/typingtool/*</url-pattern>
-  </servlet-mapping>-->
-  
   <servlet>
     <servlet-name>GenotypeSPN</servlet-name>
     <display-name>Spn Genotyping</display-name>
@@ -293,45 +182,81 @@
         <param-value>etc/development-config.xml</param-value>
    </init-param>
   </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeDENGUE</servlet-name>
+    <url-pattern>/dengue/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeDENGUE-service</servlet-name>
+    <url-pattern>/dengue/typingservice</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeHIV</servlet-name>
+    <url-pattern>/hiv/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeHIV-service</servlet-name>
+    <url-pattern>/hiv/typingservice</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>StanfordGenotypeHIV</servlet-name>
+    <url-pattern>/stanford-hiv/typingtool/*</url-pattern>
+  </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>GenotypeNoV</servlet-name>
+    <url-pattern>/norovirus/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeNoV-service</servlet-name>
+    <url-pattern>/norovirus/typingservice</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeEntero</servlet-name>
+    <url-pattern>/enterovirus/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeEntero-service</servlet-name>
+    <url-pattern>/enterovirus/typingservice</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeHAV</servlet-name>
+    <url-pattern>/hav/typingtool/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHAV-service</servlet-name>
+    <url-pattern>/hav/typingservice</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHTLV</servlet-name>
+    <url-pattern>/htlv/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>GenotypeHTLV-service</servlet-name>
+    <url-pattern>/htlv/typingservice</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHCV</servlet-name>
+    <url-pattern>/hcv/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
   <servlet-mapping>
     <servlet-name>GenotypeSPN</servlet-name>
     <url-pattern>/spn/cst/*</url-pattern>
   </servlet-mapping>
 
-    <servlet>
-    <servlet-name>GenotypeCHL</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>CHL-PSI-OMPA</param-value>
-    </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeCHL</servlet-name>
-    <url-pattern>/chl-psi-ompa/typingtool/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>GenotypePHYLO</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>PHYLO</param-value>
-    </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypePHYLO</servlet-name>
-    <url-pattern>/phylo/typingtool/*</url-pattern>
-  </servlet-mapping>
 </web-app>
+

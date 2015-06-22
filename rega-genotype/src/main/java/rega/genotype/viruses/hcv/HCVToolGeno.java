@@ -49,5 +49,17 @@ public class HCVToolGeno extends GenotypeTool {
 
 	public void analyzeSelf() throws AnalysisException {
 	}
+
+	@Override
+	protected String currentJob() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
 

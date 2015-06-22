@@ -1,16 +1,20 @@
 <genotype-analyses>
-  <alignment file="htlv1blast.fasta" />
+  <alignment file="htlvblast.fasta" />
 
   <clusters>
     <cluster id="1" name="HTLV1">
       <description>blablabla</description>
       <taxus name="ATK1" />
     </cluster>
+	<cluster id="2" name="HTLV2">
+      <description>HTLV-2</description>
+      <taxus name="pygmy2" />
+    </cluster>
   </clusters>
 
   <analysis id="blast" type="blast">
     <identify>
-      1
+      1, 2
     </identify>
     <options>
       -q -1 -r 2

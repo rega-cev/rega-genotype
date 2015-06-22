@@ -18,8 +18,8 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 
 public class HIVTool extends GenotypeTool {
-	private File workingDir;
 	
+	private File workingDir;
     private AlignmentAnalyses hiv;
     private BlastAnalysis blastAnalysis;
     private HIV1SubtypeTool hiv1subtypetool;

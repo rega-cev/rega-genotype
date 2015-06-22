@@ -24,7 +24,7 @@ public class HTLV1SubtypeTool extends GenotypeTool {
 
 
     public HTLV1SubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
-        htlv1 = readAnalyses("HTLV/htlv.xml", workingDir);
+        htlv1 = readAnalyses("HTLV/htlv1.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) htlv1.getAnalysis("pure");
 
     }
@@ -50,4 +50,16 @@ public class HTLV1SubtypeTool extends GenotypeTool {
             = (ScanAnalysis) htlv1.getAnalysis("scan-pure-self");
         scanPureSelfAnalysis.run(null);
     }
+
+	@Override
+	protected String currentJob() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		// TODO Auto-generated method stub
+		return false;
+	}
  }

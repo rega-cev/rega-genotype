@@ -8,160 +8,278 @@ package rega.genotype.viruses.hcv;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import rega.genotype.AbstractAnalysis.Concludable;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
+import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AnalysisException;
-import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
+import rega.genotype.PhyloClusterAnalysis.Result;
+import rega.genotype.ResultTracer;
 import rega.genotype.ScanAnalysis;
-import rega.genotype.SubSequence;
 
 public class HCVSubtypeTool extends GenotypeTool {
-    private AlignmentAnalyses hcv;
+    private final class ClusterLike implements Concludable {
+		private final Result pureResult;
+		private String id;
+		private String name;
+
+		private ClusterLike(Result result, String id, String name) {
+			this.pureResult = result;
+			this.id = id;
+			this.name = name;
+		}
+
+		public Cluster getConcludedCluster() {
+			return pureResult.getConcludedCluster();
+		}
+
+		public float getConcludedSupport() {
+			return pureResult.getConcludedSupport();
+		}
+
+		public void writeConclusion(ResultTracer tracer) {
+			tracer.printlnOpen("<assigned>");
+		    tracer.add("id", id);
+		    tracer.add("name", name);
+		    tracer.add("support", getConcludedSupport());
+		    if (getConcludedCluster().getDescription() != null) {
+		       tracer.add("description", getConcludedCluster().getDescription());
+		    }
+		    tracer.printlnClose("</assigned>");
+		}
+	}
+
+	private AlignmentAnalyses hcv;
     private PhyloClusterAnalysis pureAnalysis;
     private ScanAnalysis scanAnalysis;
+    private PhyloClusterAnalysis crfAnalysis;
     private PhyloClusterAnalysis purePuzzleAnalysis;
+
     
-    private Map<String, PhyloClusterAnalysis> provisionalAnalyses = new HashMap<String, PhyloClusterAnalysis>();
-	private File workingDir;    
+    private final int InsideCutoff = -50;
 
     public HCVSubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-    	this.workingDir = workingDir;
-
-    	hcv = readAnalyses("HCV/hcv.xml", workingDir);
+        hcv = readAnalyses("HCV/hcv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure");
-        purePuzzleAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure-puzzle");
-        scanAnalysis = (ScanAnalysis) hcv.getAnalysis("scan-pure");
+        //purePuzzleAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure-puzzle");
+        //scanAnalysis = (ScanAnalysis) hcv.getAnalysis("scan-pure");
+        
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {
-    	analyze(s, null);
-    }
 
-    public void analyze(AbstractSequence s, BlastAnalysis.Result blastResult) throws AnalysisException {
-    	if (s.getLength() > 800) {
-            PhyloClusterAnalysis.Result pureResult = pureAnalysis.run(s);
-            ScanAnalysis.Result scanResult = scanAnalysis.run(s);
+        PhyloClusterAnalysis.Result pureresult = pureAnalysis.run(s);
 
-            if (scanResult.haveSupport()) {
-                if (pureResult.haveSupport()) {
-                        // Rule 1
-                        conclude(pureResult,
-                            "Subtype assigned based on sequence > 800 bps " +
-                            "clustering with a pure subtype with bootstrap > 70% " +
-                            "without recombination in the bootscan.");  
-                 } else {
-                	// Rule 3
-                    conclude("Check the Report",
-                       "Subtype unassigned based on sequence > 800 bps " +
-                       "failure to classify as pure subtype (Bootstrap Support)" +
-                       "without recombination in the bootscan.");
-                }
-            } else {                
-            	// Rule 2 & 4
-                conclude ("Check the Bootscan",
-                        "Subtype unassigned based on sequence > 800 bps " +
-                        "with recombination in the bootscan.");
-
-            } 
-        } else {
-    		PhyloClusterAnalysis sPureAnalysis = purePuzzleAnalysis;
+             if (pureresult.haveSupport()) {
+                 conclude (pureresult, 
+                         "Subtype assigned based on sequence located in the LTR "
+                         + "clustering with a HCV subtype and/or subgroup with bootstrap > 75% ");
+                 return;
+             } else {
+                 conclude ("check the report", "Subtype unassigned based on sequence located in the LTR do not clustering with HCV subtype with bootstrap > 75%.");
+                 return;
+             }
  
-    		if (blastResult != null && blastResult.getReference() != null) {
-        		for (BlastAnalysis.Region region:blastResult.getReference().getRegions()) {
-        			int a = region.getBegin();
-        			int b = region.getEnd();
-        			int c = blastResult.getStart();
-        			int d = blastResult.getEnd();
-        			
-        			int nonOverlap = Math.max(0, a - c) - Math.max(0, a - d)
-        				+ Math.max(0, d - b) - Math.max(0, c - b);
-        			
-        			if (nonOverlap < 200) {
-        				if (findAnalyses(region.getName())) {
-        					sPureAnalysis = provisionalAnalyses.get(region.getName());
+ }
+    
+    /*
+    public void analyze(AbstractSequence s) throws AnalysisException {
+        if (s.getLength() > 800) {
+            final PhyloClusterAnalysis.Result pureResult = pureAnalysis.run(s);
+            ScanAnalysis.Result scanResult = scanAnalysis.run(s);
+            PhyloClusterAnalysis.Result crfResult = crfAnalysis.run(s);
+            ScanAnalysis.Result scanCRFResult = null;
+            PhyloClusterAnalysis.Result crfPhyloResult = null;
+            //double scanCRFSupport = 0;
+            /**
+            if (crfResult.haveSupport() && crfResult.getBestCluster().hasTag("CRF")) {
+                crfScanPhyloAnalysis.getClusters().add(crfResult.getBestCluster());
 
-        					int rs = Math.max(0, region.getBegin() - blastResult.getStart());
-        					int re = Math.min(s.getLength(), s.getLength() - (blastResult.getEnd() - region.getEnd()));
+                scanCRFResult = crfScanAnalysis.run(s);
+                Integer i = scanCRFResult.getSupportedTypes().get(crfResult.getBestCluster().getId());
+                scanCRFSupport = i == null ? 0 : i;
+                
+                pureAnalysis.getClusters().add(crfResult.getBestCluster());
+                crfPhyloResult = pureAnalysis.run(s);
 
-        					// Cut the overlapping part to not confuse the alignment
-        					if (re > rs)
-        						s = new SubSequence(s.getName(), s.getDescription(), s, rs, re);
-        				}
-        			}    			
-        		}
-    		}
-
-        	PhyloClusterAnalysis.Result pure = sPureAnalysis.run(s);
+                crfScanPhyloAnalysis.getClusters().remove(crfResult.getBestCluster());
+                pureAnalysis.getClusters().remove(crfResult.getBestCluster());
+            }
+			/*
+            if (scanResult.haveSupport()) {
+            	// No recombination in bootscan
+                rule1(pureResult, crfResult);
+            } else {                
+                if (!crfResult.haveSupport() || !crfResult.getBestCluster().hasTag("CRF")) {
+                	// those that span >0.1 of windows
+                	Map<String,Integer> supported = scanResult.getSupportedTypes();
+                	
+                	if (supported.size() >= 2) {
+                		//Rule 2a: recombinant of pure types
+                		concludeRule("2a", "Recombinant of " + toRecombinantString(scanResult.getWindowCount(), supported), "Rule 2a");
+                	} else if (scanResult.getBootscanSupport() >= 0.7) {
+                		//Rule 2b=5 like rule 1
+                		rule2b(pureResult, crfResult);
+                	} else if (scanResult.getBootscanSupport() >= 0.5) {
+                		//Rule 2c
+                		Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
+                				pureResult.getConcludedCluster().getName() + ", potential recombinant");
+                		concludeRule("2c", concluded, "Rule 2c");
+                	} else {
+                		//Rule 2d
+                		concludeRule("2d", "Recombinant", "Rule 2d");
+                	}
+                } else {
+                	Map<String,Integer> supported = scanCRFResult.getSupportedTypes();
+                	
+                    if (!scanCRFResult.haveSupport()) {
+                    	if (supported.size() >= 2) {
+                    		//Rule 3a: recombinant of CRF and pure types
+                    		concludeRule("3a", "Recombinant of " + toRecombinantString(scanCRFResult.getWindowCount(), supported), "Rule 3a");
+                    	} else if (scanCRFResult.getBootscanSupport() > 0.7) {
+                    		//Rule 3b=5 like rule 1 but for the CRF now
+                    		rule3b(crfPhyloResult);
+                    	} else if (scanCRFResult.getBootscanSupport() > 0.5) {
+                    		//Rule 3c
+                    		Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
+                    				pureResult.getConcludedCluster().getName() + ", potential recombinant");
+                    		concludeRule("3c", concluded, "Rule 3c");
+                    	} else {
+                    		//Rule 3d
+                            concludeRule("3d", "Recombinant", "Rule 3d");
+                    	}
+                    } else {
+                        // Rule 4
+                        concludeRule("4", crfResult,
+                                "Subtype assigned based on sequence > 800bp, " +
+                                "clustering with a CRF or subtype with bootstrap > 70%, " +
+                                "with detection of recombination in the pure subtype bootscan, " +
+                                "and further confirmed as a CRF or sub-subtype by bootscan analysis.");
+                    }
+               }
+            }
+        } else {
+            PhyloClusterAnalysis.Result pure = purePuzzleAnalysis.run(s);
             
             if (!pure.haveSupport()) {
-                // Rule 7
-                conclude("Check the report",
+                // Rule 9
+                concludeRule("9","Check the report",
                         "Subtype unassigned based on sequence &lt; 800bp, " +
                         "and not clustering with a pure subtype with bootstrap >70 %.");
             } else {
-            	if (sPureAnalysis == purePuzzleAnalysis) {
-                    if ((pure.getSupportInner() - pure.getSupportOuter()) > -50) {
-                        // Rule 5
-                        conclude(pure,
-                                "Subtype assigned based on sequence &lt; 800bp, " +
-                                "clustering with a pure subtype with bootstrap > 70%, " +
-                                "and clustering inside the pure subtype cluster.");
-                    } else {
-                        // Rule 6
-                        conclude("Check the report",
-                                "Subtype assigned based on sequence &lt; 800bp, " +
-                                "clustering with a pure subtype with bootstrap > 70%, " +
-                                "however not clustering inside the pure subtype cluster.");
-                    }
-            	} else {
-            		// Rule 5
-                    conclude(pure,
+                if ((pure.getSupportInner() - pure.getSupportOuter()) >= InsideCutoff) {
+                    // Rule 11
+                    concludeRule("11",pure,
                             "Subtype assigned based on sequence &lt; 800bp, " +
-                            "clustering with a pure subtype with bootstrap > 70%.");
-            	}
+                            "clustering with a pure subtype with bootstrap > 70%, " +
+                            "and clustering inside the pure subtype cluster.");
+                } else {
+                    // Rule 10
+                    concludeRule("10","Check the report",
+                            "Subtype assigned based on sequence &lt; 800bp, " +
+                            "clustering with a pure subtype with bootstrap > 70%, " +
+                            "however not clustering inside the pure subtype cluster.");
+                }
             }
         }
     }
+    */
+    private void rule1(Result pureResult, Result crfResult){
+    	pureRules("1", pureResult, crfResult, true, false);
+    }
+
+    private void rule3b(Result crfPhyloResult){
+    	pureRules("5", crfPhyloResult, null, true, true);
+    }
+
+    private void rule2b(Result pureResult, Result crfResult){
+    	pureRules("6", pureResult, crfResult, false, true);
+    }
+
+    private void pureRules(String rule, Result pureResult, Result crfResult, boolean clearlyNoRecombination, boolean detectPureLike) {
+    	String recombinationConclusion = clearlyNoRecombination ? 
+    			"without recombination in the bootscan." : "without significant recombination in the bootscan.";
+    	
+    	if (pureResult.haveSupport()) {
+            if (crfResult != null && crfResult.haveSupport() && (crfResult.getSupportInner() - crfResult.getSupportOuter() >= InsideCutoff)) {
+                // Rule 1a pure (crf)
+                concludeRule(rule + "a", pureResult, crfResult,
+                    "Subtype assigned based on sequence > 800 bps " +
+                    "clustering with a pure subtype and CRF or sub-subtype with bootstrap > 70% " +
+                    recombinationConclusion);  
+            } else if (!detectPureLike || pureResult.getSupportInner() - pureResult.getSupportOuter() >= InsideCutoff) {
+            	// rule 1b 
+                concludeRule(rule + "b", pureResult,
+                        "Subtype assigned based on sequence > 800 bps "
+                        + "clustering with a pure subtype with bootstrap > 70% "
+                        + recombinationConclusion);
+            } else {
+                // Rule 1c
+            	Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
+        				pureResult.getConcludedCluster().getName() + "-like");
+                concludeRule(rule + "c", concluded,
+                        "Subtype unassigned based on sequence > 800 bps " +
+                        "failure to classify as pure subtype (Bootstrap Support)" +
+                        recombinationConclusion);
+            }
+        } else {
+        	// Rule 1d
+            concludeRule(rule + "d", "Check the report",
+               "Subtype unassigned based on sequence > 800 bps " +
+               "failure to classify as pure subtype (insufficient bootstrap support)" +
+               recombinationConclusion);
+        }
+    }
     
-    private boolean findAnalyses(String name) {
-    	if (provisionalAnalyses.get(name) == null) {
-    		String file = "HCV/hcv-" + name + ".xml";
-    		try {
- 				AlignmentAnalyses analyses = readAnalyses(file, workingDir);
-
-        		PhyloClusterAnalysis pure = (PhyloClusterAnalysis) analyses.getAnalysis("pure-puzzle");
-    			if (pure == null)
-    				return false;
-    		
-    			provisionalAnalyses.put(name, pure);
-			
-    			return true;
-    		} catch (IOException e) {
-    			return false;
-    		} catch (ParameterProblemException e) {
-    			System.err.println("Error loading analyses from: " + file);
-    			e.printStackTrace();
-    			return false;
-			} catch (FileFormatException e) {
-    			System.err.println("Error loading analyses from: " + file);
-    			e.printStackTrace();
-    			return false;
+    private String toRecombinantString(int totalWindows, Map<String, Integer> m) {
+    	
+    	// Order by prevalence
+    	List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String,Integer>>(m.entrySet());
+    	Collections.sort(entries, new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Entry<String, Integer> o1, Entry<String, Integer> o2) {
+				return -o1.getValue().compareTo(o2.getValue());
 			}
-    	} else
-    		return true;
-	}
+		});
+   
+    	StringBuilder sb = new StringBuilder();
 
-	public void analyzeSelf() throws AnalysisException {
+    	boolean first = true;
+    	for(Map.Entry<String, Integer> me : entries){
+    		if(!first)
+    			sb.append(", ");
+    		else
+    			first = false;
+    		sb.append(me.getKey() /* +" ("+ me.getValue() +"/"+ totalWindows +")" */);
+    	}
+    	
+    	return sb.toString();
+    }
+
+    public void analyzeSelf() throws AnalysisException {
         ScanAnalysis scanPureSelfAnalysis
             = (ScanAnalysis) hcv.getAnalysis("scan-pure-self");
         scanPureSelfAnalysis.run(null);
     }
+
+	@Override
+	protected String currentJob() {
+		return null;
+	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		return false;
+	}
 }
 
