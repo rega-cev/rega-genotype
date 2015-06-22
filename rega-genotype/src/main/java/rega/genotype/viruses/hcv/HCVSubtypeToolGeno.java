@@ -100,5 +100,17 @@ public class HCVSubtypeToolGeno extends GenotypeTool {
         scanPureSelfAnalysis.run(null);
     }
 
+	@Override
+	protected String currentJob() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
 

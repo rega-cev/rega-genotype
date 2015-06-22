@@ -1,0 +1,20 @@
+#NEXUS 
+
+Begin data;
+	Dimensions ntax=12 nchar=0;
+	Format datatype=dna gap=-;
+	Matrix
+H2U.FR.96.12034_AY53 
+H2A.GW.ALI           
+H2A.DE.BEN           
+H2A.SN.ST            
+H2B.GH.86.D205       
+H2B.CI.EHO           
+MAC.US.239           
+SMM.US.H9            
+STM.US.STM           
+SMM.US.PGM53         
+MNE.US.MNE027        
+RCM.GA.GAB1          
+	;
+End;

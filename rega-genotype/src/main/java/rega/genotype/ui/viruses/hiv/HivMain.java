@@ -10,7 +10,6 @@ import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import eu.webtoolkit.jwt.WApplication;
-import eu.webtoolkit.jwt.WCombinedLocalizedStrings;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;

@@ -18,18 +18,22 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 
 public class HCVTool extends GenotypeTool {
-
+	private File workingDir;
+	
     private AlignmentAnalyses hcv;
     private BlastAnalysis blastAnalysis;
     private HCVSubtypeTool hcvsubtypetool;
-
+	
+    
     public HCVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hcv = readAnalyses("HCV/hcvblast.xml", workingDir);
+        this.workingDir = workingDir;
+    	
+    	hcv = readAnalyses("HCV/hcvblast.xml", workingDir);
         blastAnalysis = (BlastAnalysis) hcv.getAnalysis("blast");
         
         hcvsubtypetool = new HCVSubtypeTool(workingDir);
         hcvsubtypetool.setParent(this);
-
+        
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {
@@ -37,15 +41,26 @@ public class HCVTool extends GenotypeTool {
         
         if (result.haveSupport()) {
             if (result.getCluster().getId().equals("1"))
-                hcvsubtypetool.analyze(s, result);
+                hcvsubtypetool.analyze(s);
             else
                 conclude(result, "Identified with BLAST score > 200");
         } else {
+
             conclude("Unassigned", "Unassigned because of BLAST score &lt; 200.");
         }
     }
 
 	public void analyzeSelf() throws AnalysisException {
+	}
+
+	@Override
+	protected String currentJob() {
+		return workingDir.getName();
+	}
+
+	@Override
+	protected boolean cancelAnalysis() {
+		return new File(workingDir, ".CANCEL").exists();
 	}
 }
 

@@ -8,8 +8,8 @@ import java.util.List;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.data.AbstractDataTableGenerator;
-import rega.genotype.ui.data.DefaultTableGenerator;
+import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.DefaultTableGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
@@ -19,8 +19,8 @@ import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.DataTable;
 import rega.genotype.ui.util.Genome;
+import rega.genotype.util.DataTable;
 import rega.genotype.viruses.htlv.HTLVTool;
 import eu.webtoolkit.jwt.WString;
 
@@ -29,7 +29,7 @@ public class HtlvDefinition implements OrganismDefinition {
 	private Genome genome = new Genome(new HtlvGenome(this));
 
 	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException {
-		return new DefaultTableGenerator(jobOverview, t);	
+		return new DefaultTableGenerator(jobOverview.getFilter(), t);
 	}
 
 	public Genome getGenome() {
@@ -90,6 +90,7 @@ public class HtlvDefinition implements OrganismDefinition {
 		return 5000;
 	}
 
+	
 	public void startAnalysis(File jobDir) throws IOException,
 			ParameterProblemException, FileFormatException {
 		HTLVTool htlv = new HTLVTool(jobDir);
@@ -97,6 +98,12 @@ public class HtlvDefinition implements OrganismDefinition {
 				jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 
 	}
+	/*
+	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
+		HIVTool hiv = new HIVTool(jobDir);
+		hiv.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
+				jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+	}*/
 
 	public boolean haveDetailsNavigationForm() {
 		return true;
@@ -104,5 +111,10 @@ public class HtlvDefinition implements OrganismDefinition {
 
 	public Genome getLargeGenome() {
 		return getGenome();
+	}
+
+	public List<String> getRecombinationResultXPaths() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

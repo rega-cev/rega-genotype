@@ -9,6 +9,11 @@ public class HtlvGenome extends DefaultGenomeAttributes {
 	
 	public HtlvGenome(OrganismDefinition od) {
 		super(od);
+		getColors().put("d", new Color(0x6b, 0xc7, 0x72));
+		//getColors().put("a", new Color(0xd0, 0xff, 0x00));
+		getColors().put("a(subtype_a)", new Color(0xff, 0xd4, 0x00));
+		getColors().put("a(subtype_c)", new Color(0x00, 0xfa, 0xff));
+		getColors().put("b", new Color(0, 0x5a, 0x7f));
 		getColors().put("subtype_e", new Color(0xff, 0, 0));
 		getColors().put("subtype_f", new Color(0, 0xaa, 0xff));
 		getColors().put("subtype_b", new Color(0xb0, 0x81, 0x55));

@@ -53,8 +53,7 @@
 			<div class="seqform">
 				<p>
 					This tool is designed to use phylogenetic methods in order to
-					identify
-					the subtype of a specific sequence.&nbsp;
+					identify the subtype of a specific sequence.
 					The sequence is analysed for
 					recombination using bootscanning methods. 
 					
@@ -94,7 +93,7 @@
 										<tr style="height:30px;"></tr>
 										<tr>
 											<td rowspan="3" class="gutter">
-	                     						&nbsp;
+	                     						
 											</td>
 											<td>
 												<img
@@ -125,7 +124,7 @@
 										<tr style="height:30px;"></tr>
 										<tr>
 											<td rowspan="3" class="gutter">
-	                     						&nbsp;
+	                     						
 											</td>
 											<td>
 												<img
@@ -164,7 +163,7 @@
 					</a>
 					at the Katholieke Universiteit Leuven, Leuven,
 					Belgium. Funded by the Flanders Bilateral Cooperation Program and the
-					Welcome Trust (grant # 061238 ).&nbsp;
+					Welcome Trust (grant # 061238 ).
 					<br />
 					<br />
 					Please report

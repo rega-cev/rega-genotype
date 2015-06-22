@@ -7,4 +7,5 @@
             <Set name="usingCookies" type="boolean">false</Set>
         </Get>
     </Get>
+    <Set name="maxFormContentSize" type="int">600000</Set>
 </Configure>

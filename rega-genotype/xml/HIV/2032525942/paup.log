@@ -1,0 +1,29 @@
+
+P A U P *
+Portable version 4.0b10 for Microsoft Windows 95/NT
+Wed Jan 21 17:30:33 2015
+
+      -----------------------------NOTICE-----------------------------
+        This is a beta-test version.  Please report any crashes,
+        apparent calculation errors, or other anomalous results.
+        There are no restrictions on publication of results obtained
+        with this version, but you should check the WWW site
+        frequently for bug announcements and/or updated versions.  
+        See the README file on the distribution media for details.
+      ----------------------------------------------------------------
+
+Character-exclusion status changed:
+  500 characters excluded
+  Total number of characters now excluded = 500
+  Number of included characters = 0
+
+Data matrix exported to file "paup.nex" in Nexus (non-interleaved) format.
+
+Optimality criterion set to distance.
+
+Error(#719): In this context, PAUP* requires presence of either all 4 bases, or
+             a recoding into purines (A,G) versus pyrimidines (C,T).
+Error occurred at line 95 of file C:\Users\Murilo\Desktop\rega-genotype\rega-
+genotype\xml\HIV\2032525942\tmp.nex
+
+Execution terminated due to errors.

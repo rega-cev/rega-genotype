@@ -1,0 +1,36 @@
+<genotype-analyses>
+  <alignment file="dengueblast.fasta" />
+
+  <clusters>
+    <cluster id="1" name="DENGUE1">
+      <description>DENGUE 1</description>
+      <taxus name="" />
+    </cluster>
+	<cluster id="2" name="DENGUE2">
+      <description>DENGUE-2</description>
+      <taxus name="" />
+    </cluster>
+	<cluster id="3" name="DENGUE3">
+      <description>DENGUE-3</description>
+      <taxus name="" />
+    </cluster>
+	<cluster id="4" name="DENGUE4">
+      <description>DENGUE-4</description>
+      <taxus name="" />
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>
+      1, 2, 3, 4
+    </identify>
+    <options>
+      -q -1 -r 2
+    </options>
+    <cutoff>
+      50
+    </cutoff>
+  </analysis>
+
+</genotype-analyses>
+

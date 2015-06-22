@@ -28,7 +28,7 @@
     	target="1.5" debug="on" 
 	   	srcdir="${src}/main/java" 
 	   	destdir="${build}/main/java"
-    	excludes="rega/genotype/ui/parasites/giardia/**,rega/genotype/parasites/giardia/**,rega/genotype/ui/viruses/hbv/**,rega/genotype/viruses/hbv/**,rega/genotype/ui/viruses/hcv/**,rega/genotype/viruses/hcv/**,rega/genotype/ui/viruses/hhv8/**,rega/genotype/viruses/hhv8/**,rega/genotype/ui/viruses/hpv/**,rega/genotype/viruses/hpv/**,rega/genotype/ui/viruses/htlv/**,rega/genotype/viruses/htlv/**,rega/genotype/ui/viruses/phylo/**,rega/genotype/viruses/phylo/**" >
+    	excludes="rega/genotype/ui/parasites/giardia/**,rega/genotype/parasites/giardia/**,rega/genotype/ui/viruses/hbv/**,rega/genotype/viruses/hbv/**,rega/genotype/ui/viruses/hhv8/**,rega/genotype/viruses/hhv8/**,rega/genotype/ui/viruses/hpv/**,rega/genotype/viruses/hpv/**,rega/genotype/ui/viruses/phylo/**,rega/genotype/viruses/phylo/**" >
       <classpath refid="project.classpath"/>
     </javac>
     
@@ -64,7 +64,7 @@
     	debug="on" 
 	   	srcdir="${src}/test/java" 
 	   	destdir="${build}/test/java"
-    	excludes="rega/genotype/ui/parasites/giardia/**,rega/genotype/parasites/giardia/**,rega/genotype/ui/viruses/hbv/**,rega/genotype/viruses/hbv/**,rega/genotype/ui/viruses/hcv/**,rega/genotype/viruses/hcv/**,rega/genotype/ui/viruses/hhv8/**,rega/genotype/viruses/hhv8/**,rega/genotype/ui/viruses/hpv/**,rega/genotype/viruses/hpv/**,rega/genotype/ui/viruses/htlv/**,rega/genotype/viruses/htlv/**,rega/genotype/ui/viruses/phylo/**,rega/genotype/viruses/phylo/**" >
+    	excludes="rega/genotype/ui/parasites/giardia/**,rega/genotype/parasites/giardia/**,rega/genotype/ui/viruses/hbv/**,rega/genotype/viruses/hbv/**,rega/genotype/ui/viruses/hhv8/**,rega/genotype/viruses/hhv8/**,rega/genotype/ui/viruses/hpv/**,rega/genotype/viruses/hpv/**,rega/genotype/ui/viruses/phylo/**,rega/genotype/viruses/phylo/**" >
       <classpath >
         <path refid="project.classpath" />
         <pathelement location="${dist}/${proj.name}-${proj.version}.jar"/> 
@@ -99,7 +99,7 @@
       <formatter type="brief" usefile="false" />
       
       <test name="rega.genotype.SequencesTest" />
-      <test name="rega.genotype.ui.hiv.HIVGenotypeAnalysisTest" />
+      <!--test name="rega.genotype.ui.hiv.HIVGenotypeAnalysisTest" /-->
       <!--<test name="rega.genotype.ui.nov.NovGenotypeAnalysisTest" />-->
     </junit>
 

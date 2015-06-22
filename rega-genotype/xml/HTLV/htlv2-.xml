@@ -1,0 +1,111 @@
+<genotype-analyses>
+	<alignment file="htlv2.fasta" trim="true" />
+		<clusters>
+			<cluster id="d" name="HTLV-2 - Subtype d">
+				<taxus name="pygmy2" />
+			</cluster>
+			
+			<cluster id="a" name="HTLV-2 - Subtype a">
+				<cluster id="a(subtype_a)" name="HTLV-2 - Subtype a">
+					<taxus name="ghkt" />
+					<taxus name="kay139" />
+					<taxus name="RP329" />
+					<taxus name="k96" />
+					<taxus name="GuyII" />
+					<taxus name="BAIDU25" />
+					<taxus name="BAIDU70" />
+					<taxus name="Dub496" />
+					<taxus name="Dub991" />
+					<taxus name="Mo" />
+					<taxus name="HIVAR16" />
+					<taxus name="Tyrio80" />
+					<taxus name="Belem02" />
+					<taxus name="Dub805" />
+					<taxus name="H2C1" />
+					<taxus name="BCIH2" />
+					<taxus name="PH230PCAM" />
+				</cluster>
+				<cluster id="a(subtype_c)" name="HTLV-2 - Subtype c (Brazilian Group)">
+					<description>HTLV-2 subtype c Brazilian Group</description>
+					<taxus name="BEL3948" />
+					<taxus name="BEL4076" />
+					<taxus name="GTY9272" />
+					<taxus name="TYR8668" />
+					<taxus name="BBD4410" />
+				</cluster>
+			</cluster>
+			
+			<cluster id="b" name="HTLV-2 - Subtype b">
+				<taxus name="RC" />
+				<taxus name="DP" />
+				<taxus name="IIb" />
+				<taxus name="Gab1080FC" />
+				<taxus name="IOG" />
+				<taxus name="IOV" />
+				<taxus name="GAB" />
+				<taxus name="Pyl36" />
+				<taxus name="Pyl115" />
+				<taxus name="Pygmy230102" />
+				<taxus name="Pygmy330110" />
+				<taxus name="BDAR2" />
+				<taxus name="BDAR3" />
+				<taxus name="SP1" />
+				<taxus name="SP2" />
+				<taxus name="NRA" />
+				<taxus name="G2" />
+				<taxus name="PortNn" />
+				<taxus name="wyu1" />
+				<taxus name="wyu2" />
+				<taxus name="PYGCAM1" />
+				<taxus name="RJ" />
+			</cluster>
+		</clusters>
+		
+		<analysis id="pure" type="paup">
+			<identify>d,a(subtype_a),a(subtype_c),b</identify>
+			<cutoff>
+				75
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				outgroup pygmy2;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY rates=gamma shape=0.2727 NegBrLen=SetAbsVal;
+				constraints CONSTRE(BACKBONE)=((2,(3,(4,(5,(6,7,8,9,10,11,12,13))))),(14,15),(16,17),(18,19,20),(21,22),(23,24,25,26,27,28,29),(30,31,32,33,34,35,36,37,38,39,40,41,42,43)); 
+				NJ constraints=CONSTRE enforce=yes;
+				savetree format=nexus brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+			<options>log,alignment,tree</options>
+		</analysis>
+		
+		<analysis id="scan-pure-self" type="scan">
+			<window>300</window>
+			<step>5</step>
+			<analysis type="paup">
+				<identify>d,a(subtype_a),a(subtype_c),b</identify>
+				<block>
+					begin paup;
+					log file=paup.log replace=yes;
+					exclude gapped;
+					export format=nexus file=paup.nex replace=yes;
+					outgroup pygmy2;
+					set criterion=distance outroot=monophyl;
+					dset distance=HKY NegBrLen=SetAbsVal;
+					NJ;
+					savetree format=phylip brlens=yes file=paup.tre replace=yes;
+					bootstrap nreps=100 search=nj;
+					end;
+					quit;
+				</block>
+			</analysis>
+		</analysis>
+    
+</genotype-analyses>
+
