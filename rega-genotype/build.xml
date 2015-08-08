@@ -100,7 +100,7 @@
       
       <test name="rega.genotype.SequencesTest" />
       <test name="rega.genotype.ui.hiv.HIVGenotypeAnalysisTest" />
-      <!--<test name="rega.genotype.ui.nov.NovGenotypeAnalysisTest" />-->
+      <test name="rega.genotype.ui.nov.NovGenotypeAnalysisTest" />
     </junit>
 
     <fail message="test failed" if="test.failure" />

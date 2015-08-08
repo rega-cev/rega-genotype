@@ -1,0 +1,203 @@
+
+P A U P *
+Portable version 4.0b10 for Unix
+Thu Jun 11 10:42:24 2015
+
+      -----------------------------NOTICE-----------------------------
+        This is a beta-test version.  Please report any crashes,
+        apparent calculation errors, or other anomalous results.
+        There are no restrictions on publication of results obtained
+        with this version, but you should check the WWW site
+        frequently for bug announcements and/or updated versions.  
+        See the README file on the distribution media for details.
+      ----------------------------------------------------------------
+
+Character-exclusion status changed:
+  1 character excluded
+  Total number of characters now excluded = 1
+  Number of included characters = 799
+
+Data matrix exported to file "paup.nex" in Nexus (non-interleaved) format.
+
+Outgroup status changed:
+  1 taxon transferred to outgroup
+  Total number of taxa now in outgroup = 1
+  Number of ingroup taxa = 23
+
+Optimality criterion set to distance.
+   Forcing NJ tree to be compatible with constraint-tree "CONSTRE"
+
+Neighbor-joining search settings:
+  Ties (if encountered) will be broken systematically
+  Distance measure = HKY85
+  1 character is excluded
+  (Tree is unrooted)
+
+   Tree found by neighbor-joining method stored in tree buffer
+   Time used = <1 sec (CPU time = 0.00 sec)
+
+Neighbor-joining tree:
+
+                                            /----------- test
+                                          /-+
+                                          | \--------- GFI93HH8793121
+                                   /------+
+                                   |      \--------------- GNG9292NG083
+                                   |
+                                   |           /----------- BUS83RF
+                                   |      /----+
+                                   |      |    \------- BUS90WEAU160
+                                   | /----+
+                                   | |    |    /---------- D.UG.99.99UGA074
+                                   | |    \----+
+                                   | |         \------- D.UG.99.99UGE083
+                                  /+ |
+                                  || |         /------------- F1BE93VI850
+                                  ||/+      /--+
+                                  ||||      |  \----------- F1FR96MP411
+                                  ||||/-----+
+                                  |||||     |     /---- F2CM195MP255
+                                  |||||     \-----+
+                                  |||\+           \-------- F2CM95MP257
+                                  ||| |
+                                  |\+ |      /---------- KCD97EQTB11C
+                                  | | \------+
+                                  | |        \------ KCM96MP535
+                              /---+ |
+                              |   | |            /------------ CBR9292BR025
+                              |   | |  /---------+
+                              |   | |  |         \---------- CBW9696BW0502
+                              |   | \--+
+                              |   |    |        /------- HBE93VI997
+                              |   |    \--------+
+                              |   |             \-------- HCF9090CF056
+                              |   |
+/-----------------------------+   |       /--------------- A1UG85U455
+|                             |   |    /--+
+|                             |   |    |  \----------------- A1UG9292UG037
+|                             |   \----+
+|                             |        |        /------------ A2CD9797CDKTB48
+|                             |        \--------+
+|                             |                 \---------- A2CY9494CY01741
+|                             |
+|                             |               /-- JSE93SE7887
+|                             \---------------+
+|                                             \--- JSE94SE7022
+|
+\------------------------------------------------------------- OCM91MVP5180
+
+1 tree saved to file "~/rega-genotype/jobDir/2100485125/paup.tre"
+   Forcing NJ tree to be compatible with constraint-tree "CONSTRE"
+
+Bootstrap method with neighbor-joining search:
+  Number of bootstrap replicates = 100
+  Starting seed = 810862685
+  Ties (if encountered) will be broken randomly
+  Distance measure = HKY85
+  1 character is excluded
+  (Tree is unrooted)
+
+   Note: Ties were encountered in one or more replicates
+
+   Time used for neighbor-joining bootstrap = <1 sec (CPU time = 0.14 sec)
+
+Bootstrap 50% majority-rule consensus tree
+
+                                              /----------- test(1)
+                                  /----65-----+
+                                  |           \----------- GFI93HH8793121(16)
+                       /---100----+
+                       |          \----------------------- GNG9292NG083(17)
+                       |
+                       |                      /----------- A1UG85U455(2)
+                       |          /----99-----+
+                       |          |           \----------- A1UG9292UG037(3)
+                       +----85----+
+                       |          |           /----------- A2CD9797CDKTB48(4)
+                       |          \----100----+
+                       |                      \----------- A2CY9494CY01741(5)
+                       |
+                       |                      /----------- BUS83RF(6)
+                       |          /----100----+
+                       |          |           \----------- BUS90WEAU160(7)
+                       +---100----+
+                       |          |           /----------- D.UG.99.99UGA074(10)
+                       |          \----100----+
+                       |                      \----------- D.UG.99.99UGE083(11)
+           /----77-----+
+           |           |                      /----------- CBR9292BR025(8)
+           |           |          /----100----+
+           |           |          |           \----------- CBW9696BW0502(9)
+           |           +----74----+
+           |           |          |           /----------- HBE93VI997(18)
+           |           |          \----100----+
+           |           |                      \----------- HCF9090CF056(19)
+           |           |
+           |           |                      /----------- F1BE93VI850(12)
+           |           |          /----100----+
+/----------+           |          |           \----------- F1FR96MP411(13)
+|          |           +---100----+
+|          |           |          |           /----------- F2CM195MP255(14)
+|          |           |          \----100----+
+|          |           |                      \----------- F2CM95MP257(15)
+|          |           |
+|          |           |                      /----------- KCD97EQTB11C(22)
+|          |           \---------100----------+
+|          |                                  \----------- KCM96MP535(23)
+|          |
+|          |                                  /----------- JSE93SE7887(20)
+|          \---------------100----------------+
+|                                             \----------- JSE94SE7022(21)
+|
+\--------------------------------------------------------- OCM91MVP5180(24)
+
+Bipartitions found in one or more trees and frequency of occurrence (bootstrap
+support values):
+
+         1         2   2
+123456789012345678901234      Freq
+----------------------------------
+...................**...       100
+.......**...............       100
+.....................**.       100
+.................**.....       100
+...........**...........       100
+...........****.........       100
+.**************..*******       100
+.............**.........       100
+.....**..**.............       100
+.........**.............       100
+.....**.................       100
+...**...................       100
+.**.....................        99
+.****...................        85
+...................**..*        77
+.......**........**.....        74
+.**************.********        65
+.....**********..**..**.        47
+.....**..******.........        41
+...........****......**.        40
+.****..............**..*        37
+.***************.*******        32
+.......**........**..**.        21
+.......**..****..**..**.        20
+.**************..**..**.        19
+.....**..******......**.        18
+.****..................*        15
+.................**..**.        13
+.....**********..*******        11
+.....******......**.....        11
+...**..............**..*        10
+.....**..**........**..*         9
+.****..**........****..*         8
+.****..**........*******         7
+.****..**..........**..*         7
+.....**********..**.....         7
+.....**..******..**..**.         6
+.****..**..****..*******         6
+...************..*******         6
+...................****.         6
+...........****..**..**.         5
+.****..**........**.....         5
+
+55 groups at (relative) frequency less than 5% not shown

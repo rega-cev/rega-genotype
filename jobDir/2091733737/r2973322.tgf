@@ -1,0 +1,124 @@
+%
+%
+% NOTE: This tree has been imported from NEXUS.
+%       You should use 'save' (command s) to make the
+%       tree part more readable.
+%
+
+\begindef
+\paper{a2}
+\width{170}
+\height{610.6}
+\margin{10}{10}{10}{10}
+\style{default}{plain}{13}
+\style{r}{plain}{13}
+
+    \name{PAUP 1} % imported from NEXUS file
+    \version{1.0} % version of treegraph file format
+
+%
+% tree geometry
+%
+    %\width{150}  % width in mm
+    %\height{250}  % height in mm
+%     \autolength  % ignore len{} in nodes
+%     \variable
+
+%
+% layout
+%
+    \roundness{0.2}  % between 0.0 and 1.0
+    \thickness{0.3}  % in mm
+    %\margin{0}{0}{0}{0} % left top right bottom, in mm
+    %\style{default}{plain}{7.98492}  
+    %\style{r}{plain}{9.98115}  
+
+%     \style{u1}{plain}{7.98492}
+%     \style{d1}{italic}{7.98492}
+%     \style{u2}{bold}{6.9868}
+%     \style{br}{plain}{11.9774}
+%     \rulepos{5}{20}
+ % position of rule
+%     \separator{:}
+%     \proof
+
+%
+% brackets
+%
+%     \bracket{0}{n1}{n2}{example text}
+%     \brace*{1.5}{root}{root}{example text}
+
+\enddef
+
+(((((((((((("test"
+\len{0},"G.ES.00.X558"
+\len{0})\len{0.002034},"G.ES.99.X138"
+\len{0.005598})\len{0.005522},("14 BGE1S00X477"
+\len{0.002454},"14 BGES99X397"
+\len{0.011607})\len{0.005682})\len{0.021912},("G.NG.x.01NGPL0669"
+\len{0.022408},"G.NG.x.01NGPL0760"
+\len{0.015668})\len{0.007794})\len{0.007076},("02 AGCM9797CMP807"
+\len{0.019626},"02 AGFR91DJ264"
+\len{0.0239})\len{0.012375})\len{0.004018},("GKU.SE.x.SE8646"
+\len{0.013584},"GKU.SE.x.SE9010"
+\len{0.036476})\len{0.02038})\len{0.004919},("06 CPXAU96BFP90"
+\len{0.021437},"06 CPXML9595ML84"
+\len{0.017919})\len{0.02466})\len{0.005526},(((((("BUS83RF"
+\len{0.029653},"BUS90WEAU160"
+\len{0.019049})\len{0.005542},("03 ABRU97KAL153"
+\len{0.005679},"03 ABRU98RU98001"
+\len{0.007097})\len{0.023386})\len{0.002662},("12 BFAR97A32989"
+\len{0.019089},"12 BFU1Y99URTR23"
+\len{0.018832})\len{0.017673})\len{0.007266},(((("10 CDTZ19696TZBF071"
+\len{0.022409},"10 CDTZ9696TZBF110"
+\len{0.019691})\len{0.003868},(("D.UG.99.99UGA07412"
+\len{0.020099},"D.UG.99.99UGB21875"
+\len{0.017931})\len{0.004253},"D.UG.99.99UGE08364"
+\len{0.019425})\len{0.005337})\len{0.008659},(("19 cpx.CU.99.CU29"
+\len{0.027628},"19 cpx.CU.99.CU7"
+\len{0.019731})\len{0.014733},("D.ZA.85.R214"
+\len{0.048389},"D.ZA.85.R286"
+\len{0.057632})\len{0.016766})\len{0.000179})\len{0.002253},("D.CM.01.01CM 0009BBY"
+\len{0.015217},"D.CM.01.01CM 4412HAL"
+\len{0.023965})\len{0.028746})\len{0.00405})\len{0.005405},(((("F1BE93VI850"
+\len{0.032488},"F1FR96MP411"
+\len{0.030315})\len{0.004852},("05 DFBEVI1310"
+\len{0.026534},"05 DFBE93VI961"
+\len{0.022488})\len{0.008817})\len{0.003732},("F2CM195MP255"
+\len{0.012215},"F2CM95MP257"
+\len{0.021603})\len{0.016145})\len{0.009016},(("04 CPXG1R9197PVCH"
+\len{0.016111},"04 CPXGR9797PVMY"
+\len{0.032476})\len{0.027155},("18 cpx.CM.97.CM53379"
+\len{0.025002},"18 cpx.CU.99.CU76"
+\len{0.01421})\len{0.012641})\len{0.004762})\len{0.00463})\len{0.001995},((("07 BCC1N9797CN001"
+\len{0.005232},"07 BCCN9898CN009"
+\len{0.006275})\len{0.014415},("08 BCCN19797CNGX7F"
+\len{0.008816},"08 BCCN9898CN006"
+\len{0.01044})\len{0.015482})\len{0.005945},(("C.AR.01.ARG4006"
+\len{0.022348},"C.BR.x.04BR013"
+\len{0.031811})\len{0.003016},("C.IN.93.93IN904"
+\len{0.016387},"C.IN.98.98IN022"
+\len{0.010721})\len{0.012054})\len{0.008554})\len{0.023605})\len{0.005233})\len{0.001687},(((("A1UG85U455"
+\len{0.039297},"A1UG9292UG037"
+\len{0.043221})\len{0.004357},("A1.KE.00.KNH1199"
+\len{0.020321},("A1.KE.97.ML752"
+\len{0.025225},"A1.TZ.01.A341"
+\len{0.018068})\len{0.002733})\len{0.008511})\len{0.003263},((("01 AECF19090CF11697"
+\len{0.019914},"01 AETH90CM240"
+\len{0.016481})\len{0.010788},(("A.SN.01.DDI579"
+\len{0.009772},"A.SN.96.DDJ360"
+\len{0.006923})\len{0.005224},"A.SN.01.DDJ369"
+\len{0.015583})\len{0.017909})\len{0.007294},("A1.UZ.02.02UZ0659"
+\len{0.017561},"A1.UZ.02.02UZ0663"
+\len{0.009622})\len{0.021948})\len{0.000395})\len{0.008028},("A2CD9797CDKTB48"
+\len{0.030552},"A2CY9494CY01741"
+\len{0.026513})\len{0.027654})\len{0.008599})\len{0.000295},(("09 cpx.GH.96.96GH291"
+\len{0.019058},"09 cpx.US.99.99DE405"
+\len{0.024311})\len{0.010382},("AHJU.CM.01.01CM 1278"
+\len{0.008413},"AHJU.CM.01.01CM 1296"
+\len{0.00566})\len{0.039786})\len{0.012971})\len{0.006546},(("11 CPXF1R99MP1298"
+\len{0.024681},"11 CPXGRGR17"
+\len{0.035365})\len{0.005482},("13 CPXC1M961849"
+\len{0.014737},"13 CPXCM964164"
+\len{0.015121})\len{0.018046})\len{0.017462})\len{0.232258},"OCM91MVP5180"
+\len{0})

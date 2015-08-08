@@ -1,0 +1,70 @@
+%
+%
+% NOTE: This tree has been imported from NEXUS.
+%       You should use 'save' (command s) to make the
+%       tree part more readable.
+%
+
+\begindef
+\paper{a2}
+\width{170}
+\height{146.2}
+\margin{10}{10}{10}{10}
+\style{default}{plain}{13}
+\style{r}{plain}{13}
+
+    \name{PAUP 1} % imported from NEXUS file
+    \version{1.0} % version of treegraph file format
+
+%
+% tree geometry
+%
+    %\width{150}  % width in mm
+    %\height{250}  % height in mm
+%     \autolength  % ignore len{} in nodes
+%     \variable
+
+%
+% layout
+%
+    \roundness{0.2}  % between 0.0 and 1.0
+    \thickness{0.3}  % in mm
+    %\margin{0}{0}{0}{0} % left top right bottom, in mm
+    %\style{default}{plain}{14.4}  
+    %\style{r}{plain}{18}  
+
+%     \style{u1}{plain}{14.4}
+%     \style{d1}{italic}{14.4}
+%     \style{u2}{bold}{12.6}
+%     \style{br}{plain}{21.6}
+%     \rulepos{5}{20}
+ % position of rule
+%     \separator{:}
+%     \proof
+
+%
+% brackets
+%
+%     \bracket{0}{n1}{n2}{example text}
+%     \brace*{1.5}{root}{root}{example text}
+
+\enddef
+
+(((((("EU416252"
+\len{0.009109},("IB|DQ646426"
+\len{0.004098},"IB|NC 001489"
+\len{0.001191})\len{0.030717})\len{0.018406},"IB|AF314208"
+\len{0.02091})\len{0.027251},(("IA|EU131373"
+\len{0.041619},"IA|AB020565"
+\len{0.021337})\len{0.016184},"IA|X83302"
+\len{0.013282})\len{0.01383})\len{0.115876},((("IIIA|AJ299464"
+\len{0.015774},"IIIA|DQ991030"
+\len{0.032181})\len{0.046625},"IIIA|AB279733"
+\len{0.015686})\len{0.031798},(("IIIB|AB258387"
+\len{0.005076},"IIIB|AB279735"
+\len{0.001019})\len{0.004846},"IIIB|AB425339"
+\len{0.004562})\len{0.07541})\len{0.178515})\len{0.048026},"IIB|AY644670"
+\len{0.065509})\len{0},("IIA|AY644676"
+\len{0.06142},("V|D00924"
+\len{0.005577},"V|EU140838"
+\len{0.008485})\len{0.336497})\len{0.047276})

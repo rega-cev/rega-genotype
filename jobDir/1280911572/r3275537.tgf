@@ -1,0 +1,96 @@
+%
+%
+% NOTE: This tree has been imported from NEXUS.
+%       You should use 'save' (command s) to make the
+%       tree part more readable.
+%
+
+\begindef
+\paper{a2}
+\width{170}
+\height{369.8}
+\margin{10}{10}{10}{10}
+\style{default}{plain}{13}
+\style{r}{plain}{13}
+
+    \name{PAUP 1} % imported from NEXUS file
+    \version{1.0} % version of treegraph file format
+
+%
+% tree geometry
+%
+    %\width{150}  % width in mm
+    %\height{250}  % height in mm
+%     \autolength  % ignore len{} in nodes
+%     \variable
+
+%
+% layout
+%
+    \roundness{0.2}  % between 0.0 and 1.0
+    \thickness{0.3}  % in mm
+    %\margin{0}{0}{0}{0} % left top right bottom, in mm
+    %\style{default}{plain}{13.1844}  
+    %\style{r}{plain}{16.4805}  
+
+%     \style{u1}{plain}{13.1844}
+%     \style{d1}{italic}{13.1844}
+%     \style{u2}{bold}{11.5363}
+%     \style{br}{plain}{19.7766}
+%     \rulepos{5}{20}
+ % position of rule
+%     \separator{:}
+%     \proof
+
+%
+% brackets
+%
+%     \bracket{0}{n1}{n2}{example text}
+%     \brace*{1.5}{root}{root}{example text}
+
+\enddef
+
+(((((((((((((("HTLV24 DQ005565"
+\len{0.002508},"KUW1"
+\len{0.006761})\len{0.000476},("Cam"
+\len{0.0013},(("TBH2"
+\len{0.006692},("CR1"
+\len{0.000191},"Boi"
+\len{0.00475})\len{0.001162})\len{0.001071},("Bl2"
+\len{0.00025},("HTLV04"
+\len{0.003641},("Qu1"
+\len{0.00219},"FNN100"
+\len{0.008726})\len{0.000976})\len{0.000919})\len{0.003102})\len{0.000465})\len{0.00046})\len{0.000218},"CMC"
+\len{0.000216})\len{0.000369},"73RM"
+\len{0.012378})\len{0.000198},("TBH4"
+\len{0.005117},"AINU"
+\len{0.002623})\len{0.000986})\len{0.002478},"AMA"
+\len{6.671e-05})\len{0.002887},("ATM"
+\len{0.003038},("MT4"
+\len{0.000326},((("ATK1"
+\len{0.00299},("H5"
+\len{0.003366},"BCI2"
+\len{0.001217})\len{0.001632})\len{8.233e-05},"Ni1"
+\len{0.00144})\len{0.000141},"ATLYS"
+\len{0.000208})\len{0.001736})\len{0.001444})\len{0.003133})\len{0.002773},("Bl1"
+\len{0.001611},"RKI4"
+\len{7.413e-05})\len{0.000195})\len{0.001062},("OD"
+\len{0.000101},("BO"
+\len{0.003263},"Pr52"
+\len{0.001298})\len{0.003189})\len{0.002517})\len{0.001759},("HS35"
+\len{0.010471},"GH78"
+\len{0.025481})\len{0.004661})\len{0.01334},("H23"
+\len{0.020159},"pyg19"
+\len{0.024358})\len{0.012811})\len{0.004099},"Mel5"
+\len{0.068925})\len{0.004808},("Efe1"
+\len{0.021883},("Lib2"
+\len{0.028346},((("MOMJ"
+\len{0.004195},"ITIS"
+\len{0.005098})\len{0.000257},"MWMG"
+\len{0.00124})\len{0.003617},("GB233"
+\len{0.003564},((("PH236"
+\len{0.001185},"T49"
+\len{0.004949})\len{0.006107},"H24"
+\len{0.011428})\len{0.00033},"GAB7"
+\len{0.014123})\len{0.000981})\len{0.000291})\len{0.006058})\len{0.005913})\len{0.003048})\len{0},"TE4"
+\len{0.117887})

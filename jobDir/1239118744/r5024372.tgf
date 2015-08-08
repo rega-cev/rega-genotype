@@ -1,0 +1,100 @@
+%
+%
+% NOTE: This tree has been imported from NEXUS.
+%       You should use 'save' (command s) to make the
+%       tree part more readable.
+%
+
+\begindef
+\paper{a2}
+\width{170}
+\height{404.2}
+\margin{10}{10}{10}{10}
+\style{default}{plain}{13}
+\style{r}{plain}{13}
+
+    \name{PAUP 1} % imported from NEXUS file
+    \version{1.0} % version of treegraph file format
+
+%
+% tree geometry
+%
+    %\width{150}  % width in mm
+    %\height{250}  % height in mm
+%     \autolength  % ignore len{} in nodes
+%     \variable
+
+%
+% layout
+%
+    \roundness{0.2}  % between 0.0 and 1.0
+    \thickness{0.3}  % in mm
+    %\margin{0}{0}{0}{0} % left top right bottom, in mm
+    %\style{default}{plain}{12.0623}  
+    %\style{r}{plain}{15.0779}  
+
+%     \style{u1}{plain}{12.0623}
+%     \style{d1}{italic}{12.0623}
+%     \style{u2}{bold}{10.5545}
+%     \style{br}{plain}{18.0935}
+%     \rulepos{5}{20}
+ % position of rule
+%     \separator{:}
+%     \proof
+
+%
+% brackets
+%
+%     \bracket{0}{n1}{n2}{example text}
+%     \brace*{1.5}{root}{root}{example text}
+
+\enddef
+
+(((((((((((("AB112331"
+\len{0.002955},("II.5|AF397156"
+\len{0.000361},"II.5|AJ277607"
+\len{0.011657})\len{0.010958})\len{0.110272},("II.10|AY237415"
+\len{0.001665},"II.10|AF427118"
+\len{0.005365})\len{0.103631})\len{0.013462},("II.2|AY134748"
+\len{0.013341},"II.2|X81879"
+\len{0.018357})\len{0.12905})\len{0.062515},((((("II.1|AJ277606"
+\len{0.040212},"II.1|U07611"
+\len{0.030009})\len{0.073267},("II.12|AJ277618"
+\len{0.024759},"II.12|AB032758"
+\len{0.011962})\len{0.106786})\len{0.043719},("II.16|AY502010"
+\len{0.01774},"II.16|GQ856476"
+\len{0.014408})\len{0.06668})\len{0.080737},(("II.13|AB078334"
+\len{0.007971},"II.13|AY113106"
+\len{0.003377})\len{0.154504},("II.21|AB542915"
+\len{0.046411},"II.21|AY675554"
+\len{0.045116})\len{0.131875})\len{0.007923})\len{0.007244},(("II.17|DQ438972"
+\len{0.079622},"II.17|AY502009"
+\len{0.077324})\len{0.091785},("II.22|AB083780"
+\len{0.086402},"II.22|GQ856469"
+\len{0.123607})\len{0.08323})\len{0.034171})\len{0.024114})\len{0.024308},(("II.3|U02030"
+\len{0.063518},"II.3|EU187437"
+\len{0.026454})\len{0.144222},(("II.15|AY130762"
+\len{0.011972},"II.15|GQ856474"
+\len{0.015708})\len{0.452498},"II.NA4|AJ844470"
+\len{0.352952})\len{0.113202})\len{0.025249})\len{0.025498},(((("II.4|Brist|X76716"
+\len{0.035227},"II.4|2007JP|OB200615"
+\len{0.043515})\len{0.297866},("II.20|AB542917"
+\len{0.047131},"II.20|EU373815"
+\len{0.035131})\len{0.164527})\len{0.075154},("II.14|AY130761"
+\len{0.010672},"II.14|GQ856465"
+\len{0.029649})\len{0.097669})\len{0.017887},(("II.7|AF414409"
+\len{0.017105},"II.7|AJ277608"
+\len{0.007109})\len{0.14802},(("II.8|AB039780"
+\len{0.023237},"II.8|AF195848"
+\len{0.01335})\len{0.102659},("II.9|AY038599"
+\len{0.021556},"II.9|DQ379715"
+\len{0.030384})\len{0.108577})\len{0.039752})\len{0.038387})\len{0.048141})\len{0.023958},("II.6|AB039778"
+\len{0.027401},"II.6|AJ277620"
+\len{0.068722})\len{0.202029})\len{0.08879},("II.18|AY823304"
+\len{0},"II.18|AY823305"
+\len{0})\len{0.209843})\len{0.043614},("II.11|AB126320"
+\len{0.047541},"II.11|AB074893"
+\len{0.04908})\len{0.148158})\len{0.192455},"II.19|AY823307"
+\len{0.034106})\len{0.034106},"II.19|AY823306"
+\len{0.066696})\len{1.92128},"III.1|EU360814"
+\len{0})

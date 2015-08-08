@@ -5,12 +5,12 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${app.url}/../../pics/rivm/logo.png" alt="RIVM Logo" > </img>
+						<img src="${app.url}/../../pics/hiv/header.gif" alt="HPV tool Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
-					<span id="name">Hepatitis A Virus Genotyping Tool</span>
-					<span id="info">Version 1.0</span>
+					<span id="name">HIV Phylotyping v1 Tool</span>
+					<span id="info">Version 0.1</span>
 				</div>
 				<div class="nav_bar">
 					${navigation class="nav_main"}
@@ -22,7 +22,7 @@
 			${content class="content"}
 	
 			<div class="footer">
-				<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
+				<p>Developed by: <a href="http://www.bioafrica.net">BioAfrica</a> (Rob Gifford, Tulio and Josh)
 					and <a href="http://www.emweb.be/">Emweb bvba</a>.</p>
 			    <p>Contact: TBD</p>
 			</div>
@@ -37,10 +37,10 @@
 
   	<message id="start-form">
   		<div class="start-form form">
-		    <h1>Hepatitis A Virus Genotyping Tool Version 1.0</h1>
+		    <h1>Phylotyping HIV Tool Version 1.0</h1>
 		    <div class="note">
  				<div>
-					This tool is designed to use phylogenetic methods in order to identify the Hepatitis A virus genotype of a nucleotide sequence.
+					This tool is designed to use phylogenetic methods in order to identify the HIV-1 genotype of a nucleotide sequence.
 				</div>
       			<div>
       				<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time. 
@@ -91,7 +91,7 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 
 	<message id="job-overview-form">
 	  	<div class="monitor-form form">
-		    <h1>Hepatitis A Virus Genotyping Tool Results</h1>
+		    <h1>Phylotyping HIV Tool Results</h1>
 
 		    <div class="info">
 				<p>You may bookmark this page to revisit results of this job (${job-id}) later.</p>
@@ -114,7 +114,7 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 	</message>
 
   	<message id="details-form">
-		<h1>Hepatitis A Virus Genotyping Details</h1>
+		<h1>HIV-1 Genotyping Details</h1>
 		${details-form}
 	</message>
   
@@ -211,7 +211,7 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 	
 	<message id="monitorForm.analysisCancelled"><p><b>This job was cancelled!</b></p></message>
 
-	<message id="tool.title">Hepatitis A Virus Genotyping Tool</message>
+	<message id="tool.title">Phylotyping HIV Tool</message>
 
 	<message id="table.header.name">Name</message>
 	<message id="table.header.length">Length</message>
@@ -231,9 +231,9 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 
 	<message id="introduction-doc">
 		<div class="form">
-			<h1>The Hepatitis A Virus Automated Genotyping Tool: introduction.</h1>
+			<h1>The HIV-1 Automated Genotyping Tool: introduction.</h1>
 
-	        <p>This typingtool offers quick and unequivocal typing of hepatitis A virus sequences.</p>
+	        <p>This typingtool offers quick and unequivocal typing of HIV-1 sequences.</p>
 	       	<p>
 	       		With this tool sequences of any part of the hepatitis A (HAV) genome can be assigned to
 	       	   	a HAV genotype. Sequences of other Picornaviridae are also recognized by the tool and are assigned to their genus.
@@ -248,7 +248,7 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
       
     <message id="how-to-use-doc">
 		<div class="form">
-			<h1>Hepatitis A Virus Genotyping Tutorial</h1>
+			<h1>HIV-1 Genotyping Tutorial</h1>
 			
 			<p>
 				One or more (up to 20.000 per run) HAV sequences can be pasted (A) or uploaded (B) in Fasta format (see Fig. 1).
@@ -311,7 +311,7 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 				No genotype is assigned if:
 				<ul>
 					<li>The submitted sequence belongs to another Picornavirus genus. In this case the genus is indicated and the analysis stops.</li>
-					<li>The submitted sequence is shorter than 100 bp. In this case only assignment of the species (HAV) is possible.</li>
+					<li>The submitted sequence is shorter than 100 bp. In this case only assignment of the species is possible.</li>
 					<li>The bootstrap value &lt; 70. In this case an alignment and a NJ tree are produced which can be used to get an indication of
 						the phylogeny.</li>
 				</ul>

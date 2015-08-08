@@ -63,7 +63,7 @@
       <taxus name="KCM96MP535" />
     </cluster>
 
-    <cluster id="01_AE" name="CRF 01_AE">
+    <cluster id="01AE" name="CRF 01_AE">
       <taxus name="01_AECF19090CF11697" />
 	  <taxus name="01_AETH90CM240" />
       <tags>CRF</tags>
@@ -246,7 +246,7 @@
 
   <analysis id="phylo-major" type="paup">
     <identify>
-      A1,A2,B,F,F1,F2,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
+      A1,A2,B,F1,F2,01AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
     </identify>
     <cutoff>
       70
@@ -259,7 +259,35 @@
       outgroup OCM91MVP5180;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  NJ;
+ 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+	  NJ constraints=CONSTRE enforce=yes;
+ 	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree,inner,outer
+    </options>
+  </analysis>
+
+	<analysis id="phylo-minor-GES" type="paup">
+		<identify>
+   GES,GNG,GKU,Group_O
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup OCM91MVP5180;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=SetAbsVal;
+ 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
       end;
@@ -298,7 +326,7 @@
 
   <analysis id="crf" type="paup">
     <identify>
-      A1,A2,B,F,F1,F2,01_AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
+      A1,A2,B,F,F1,F2,01AE,02_AG,03_AB,04_CPX,05_DF,06_CPX,07_BC,08_BC,10_CD,11_CPX,12_BF,13_CPX,14_BG,09_cpx,18_cpx,19_cpx,A1SN,A1KE,01UZ,AHJU,CBR,CIN,DCM,DUG,DZA,GES,GNG,GKU,Group_O
     </identify>
     <cutoff>
       70

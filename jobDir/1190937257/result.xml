@@ -1,0 +1,45 @@
+<genotype_result>
+  <sequence name="EU416252" length="348">
+    <nucleotides>
+      aatcactctgatgaatatttgtcttttagttgttatttgtctgtcacagaacaatcagagttttattttcccagagctccattgaattcaaatgccatgttatccactgaatcaatgataagcagaattgcagctggagacttggagtcatcagtggatgatcccagatcagaggaggacagaagatttgagagtcacatagaatgcaggaagccatataaagaattgagattagaagttgggaaacaaagactcaagtatgctcaggaggaattgtcaaatgaagtacttccacctcctaggaaaatgaagggactgttttcacaagccaaaatttctcttttttat
+    </nucleotides>
+    <result id="blast">
+      <start>2915</start>
+      <end>3263</end>
+      <identity>0.9655172</identity>
+      <cluster>
+        <id>hepatovirus</id>
+        <name>Hepatitis A virus</name>
+        <score>14.11</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>hepatovirus</concluded-id>
+        <concluded-name>Hepatitis A virus</concluded-name>
+      </cluster>
+      <refseq>NC_001489</refseq>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>IB</id>
+        <name>HAV I.B</name>
+        <support>100.0</support>
+      </best>
+      <specific>
+        <id>IB</id>
+        <name>HAV I.B</name>
+        <support>100.0</support>
+      </specific>
+      <alignment>r6017318.nex</alignment>
+      <log>r2143426.log</log>
+      <tree>r7192392.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>IB</id>
+        <name>HAV I.B</name>
+        <support>100.0</support>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 100.0 (&gt;= 70.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  </genotype_result>

@@ -1,0 +1,24 @@
+<genotype-analyses>
+  <alignment file="blast.fasta" />
+
+  <clusters>
+    <cluster id="HPV" name="HPV">
+      <description>blablabla</description>
+      <taxus name="HPV_1a_CG" />
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>
+      HPV
+    </identify>
+    <cutoff>
+      50
+    </cutoff>
+    <options>
+     -q -1 -r 1
+    </options>
+  </analysis>
+
+</genotype-analyses>
+

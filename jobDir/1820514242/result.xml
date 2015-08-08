@@ -1,0 +1,48 @@
+<genotype_result>
+  <sequence name="test" length="719">
+    <nucleotides>
+      CGGGGGCTTAGAGCCTCCCAGTGAAAAACATTTCCGCGAAACAGAAGTCTGAAAAGGTCAGGGCCCAGACTAAGGCTCTGACGTCTCCCCCCCGGAGGGACAGCTCAGCACCGGCTCAGGCTAGGCCCTGACGTGTCCCCCTGAAGACAAATCATAAGCTCAGACCTCCGGGAAGCCACCGGAACCACCCATTTCCTCCCCATGTTTGTCAAGCCGCCCTCAGGCGTTGACGACAACCCCTCACCTCAAAAAACTTTTCATGGCACGCATATGGCTGAATAAACTAACAGGAGTCTATAAAAGCGTGGAGACAGTTCAGGAGGGGGCTCGCATCTTTCCTTCACGCGCCCGCCGCCCTACCTGAGGCCGCCATCCACGCCGGTTGAGTCGCGTTCTGCCGCCTCCCGCCTGTGGTGCCTCCTGAACTGCGTCCGCCGTCTAGGTAAGTTTAGAGCTCAGGTCGAGACCGGGCCTTTGTCCGGCGCTCCCTTGGAGCCTACCTAGACTCAGCCGGCTCTCCACGCTTTGCCTGACCCTGCTTGCCCAACTCTGCGTCTTTGTTTCGTTTTCTGTTCTGCGCCGCTACAGATCGAAAGTTCCACCCCTTTCCCTTTCATTCACGACTGACTGCCGGCTTGGCCCACGGCCAAGTACCGGCGACTCCGTTGGCTCGGAGCCAGCGACAGCCCATTCTATAGCACTCTCCAGGAGAGAAATTT
+    </nucleotides>
+    <result id="blast">
+      <start>52</start>
+      <end>769</end>
+      <identity>0.9777778</identity>
+      <cluster>
+        <id>HTLV1</id>
+        <name>HTLV1</name>
+        <score>1034.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HTLV1</concluded-id>
+        <concluded-name>HTLV1</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subtype_a(subgroup_A)</id>
+        <name>subtype_a(subgroup_A)(Transcontinental)</name>
+        <support>100.0</support>
+        <description>HTLV-1 subtype a subgroup A Cosmopolitan</description>
+      </best>
+      <specific>
+        <id>subtype_a(subgroup_A)</id>
+        <name>subtype_a(subgroup_A)(Transcontinental)</name>
+        <support>100.0</support>
+        <description>HTLV-1 subtype a subgroup A Cosmopolitan</description>
+      </specific>
+      <alignment>r5001939.nex</alignment>
+      <log>r1632980.log</log>
+      <tree>r685356.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subtype_a(subgroup_A)</id>
+        <name>subtype_a(subgroup_A)(Transcontinental)</name>
+        <support>100.0</support>
+        <description>HTLV-1 subtype a subgroup A Cosmopolitan</description>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 100.0 (&gt;= 75.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  </genotype_result>

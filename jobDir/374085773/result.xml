@@ -1,0 +1,51 @@
+<genotype_result>
+  <sequence name="test" length="1092">
+    <nucleotides>
+      TACTAATTTTGAAAGGCGGGGTTCTGCCAGGCATAGTCTTTTTTTGTGGCGGCCCTTGTGTAAACCTGTCTTTCAGACCTTGTTGGACATCCCGTACAATCAAGATGTTCCTGTATGTTGTTTGCAGTCTGGCGGTTTGCTTTCGAGGACTATTAAGCCTTTCTCTGCAATCGTCTCCAAATCTCTGCCCTGGAGTGATTTCAACGCCTTACACGTTGACCTGTCCGTCTAATACATCCTTGCCAACATCCTGGTATTGCAACGATACTCGGCTTTTACGAGTGACGCAGGGAACATTGACTGTTGACACCCTTATCTGCAATTTTAGTTGTGTGGGACAATCTGGGCATCGATACAGCCTTTGGATTACATGGTATGCACAACCTGTCTTACAAACCTTCTGTGGACAACCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACAAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTCATGAACCAAACTGAGGGGTGTTATGCTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTCTATGTTTTTCGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACATTTGCAACCGCACCTACTCTATTTGTAATGAAAGAAGTAAAATCTACATATCTATATATTCAAGAGCATTTGCTTGTATTTATGACACTCGTAGCTCTGATAGGAACCATGTGTGGTATCTTAGGAACTATTATCTTTGCCCATTGTCAAAAACAACGTGACTCAAACAAAACAGTGCCACAACAATTGCAGGATTATTATTCCCTACACGATTTGTGCACGGAAGACTATACGCAACCAGTGGATTGGTACTGACATTCAGGTAAGATAATCTAAATATTCTCTATAACATAATTGTAATGTGTTTTATGTTTATAGCTACAAATGTTTTATGCAAAATACATTTTATGAGGTCGGATACTTATTAAAAGCATTGTCTTAAGTACATTAAAAGGACATTGTA
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1092</end>
+      <identity>1.0</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>1710.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>98.0</support>
+        <inner>94.0</inner>
+        <outer>27.0</outer>
+      </best>
+      <specific>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>98.0</support>
+        <inner>94.0</inner>
+        <outer>27.0</outer>
+      </specific>
+      <alignment>r1235918.nex</alignment>
+      <log>r102091.log</log>
+      <tree>r9857861.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>98.0</support>
+        <inner>94.0</inner>
+        <outer>27.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 98.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  </genotype_result>

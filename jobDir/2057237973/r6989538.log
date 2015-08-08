@@ -1,0 +1,196 @@
+
+P A U P *
+Portable version 4.0b10 for Unix
+Sat Aug  8 11:03:18 2015
+
+      -----------------------------NOTICE-----------------------------
+        This is a beta-test version.  Please report any crashes,
+        apparent calculation errors, or other anomalous results.
+        There are no restrictions on publication of results obtained
+        with this version, but you should check the WWW site
+        frequently for bug announcements and/or updated versions.  
+        See the README file on the distribution media for details.
+      ----------------------------------------------------------------
+
+Character-exclusion status changed:
+  412 characters excluded
+  Total number of characters now excluded = 412
+  Number of included characters = 727
+
+Data matrix exported to file "paup.nex" in Nexus (non-interleaved) format.
+
+Optimality criterion set to distance.
+
+Outgroup status changed:
+  4 taxa transferred to outgroup
+  Total number of taxa now in outgroup = 4
+  Number of ingroup taxa = 20
+
+Neighbor-joining search settings:
+  Ties (if encountered) will be broken systematically
+  Distance measure = HKY85
+  412 characters are excluded
+  (Tree is unrooted)
+
+   Tree found by neighbor-joining method stored in tree buffer
+   Time used = <1 sec (CPU time = 0.00 sec)
+
+Neighbor-joining tree:
+
+                                    /------------------ test
+                                    |
+                                    |      /------- C3BC2US
+                                 /--+  /---+
+                                 |  |  |   \-------- C48RU
+                                 |  \--+
+                          /------+     \----- CK110BidFR
+                          |      |
+                          |      |        /---- C1ASM72US
+                          |      \--------+
+                          |               \------- CGK17GR
+                          |
+  /-----------------------+                   /-- A1BCBLRUS
+  |                       |              /----+
+  |                       |              |    \-- A4BCBLBUS
+  |                       |   /----------+
+  |                       |   |          \--------- A2K140Bc1US
+  |                       |   |
+  |                       \---+     /--- A5IFe5IT
+  |                           |    /+
+  |                           |    |\----- A5TBF6ZA
+/-+                           \----+
+| |                                \----- A5IFe1IT
+| |
+| |                                                /------------- B2MP5ZA
+| |                                              /-+
+| |                                              | \--------------- B2K137E44TG
+| |                                              |
+| |                                              +----------- B2K123KokCF
+| \----------------------------------------------+
+|                                                |  /------------- B1K122YanCF
+|                                                \--+
+|                                                   \-------- BUg52UG
+|
+|                 /----------------------------- D1TKS10TW
+|           /-----+
+|           |     \------------------------------------------------ D2ZKS3PF
+|   /-------+
+|   |       \--------------------- D3AU1ASL1AU
+|   |
+\---+                     /------------- EHua1EC
+    |         /-----------+
+    |         |           \---------- EHua3EC
+    \---------+
+              |                 /--------- E1Tupi1BR
+              \-----------------+
+                                \---------- E2Tupi2BR
+
+1 tree saved to file "~/rega-genotype/jobDir/2057237973/paup.tre" in PHYLIP
+format
+
+Bootstrap method with neighbor-joining search:
+  Number of bootstrap replicates = 100
+  Starting seed = 127909336
+  Ties (if encountered) will be broken randomly
+  Distance measure = HKY85
+  412 characters are excluded
+  (Tree is unrooted)
+
+   Time used for neighbor-joining bootstrap = 1 sec (CPU time = 0.12 sec)
+
+Bootstrap 50% majority-rule consensus tree
+
+                                       /----------------------- test(1)
+                                       |
+                                       |              /-------- C3BC2US(13)
+                               /------64      /------88
+                               |       |      |       \-------- C48RU(16)
+                               |       \-----52
+                       /------99              \---------------- CK110BidFR(15)
+                       |       |
+                       |       |                      /-------- C1ASM72US(14)
+                       |       \--------------------100
+                       |                              \-------- CGK17GR(17)
+                       |
+               /-----100                              /-------- A1BCBLRUS(2)
+               |       |                      /------99
+               |       |                      |       \-------- A4BCBLBUS(3)
+               |       |               /----100
+               |       |               |      \---------------- A2K140Bc1US(4)
+               |       |               |
+               |       \--------------98              /-------- A5IFe5IT(5)
+               |                       |      /------64
+        /-----85                       |      |       \-------- A5TBF6ZA(6)
+        |      |                       \----100
+        |      |                              \---------------- A5IFe1IT(7)
+        |      |
+        |      |                                      /-------- B2MP5ZA(8)
+        |      |                              /------57
+        |      |                              |       \-------- B2K137E44TG(12)
+        |      |                              |
+        |      \----------------------------100---------------- B2K123KokCF(9)
+/-----100                                     |
+|       |                                     |       /-------- B1K122YanCF(10)
+|       |                                     \------70
+|       |                                             \-------- BUg52UG(11)
+|       |
+|       |                                             /-------- D1TKS10TW(18)
+|       |                                     /------93
+|       |                                     |       \-------- D2ZKS3PF(19)
+|       \------------------------------------98
+|                                             \---------------- D3AU1ASL1AU(20)
+|
+|                                                     /-------- EHua1EC(21)
+|                                             /-----100
+|                                             |       \-------- EHua3EC(22)
+\---------------------------------------------0
+                                              |       /-------- E1Tupi1BR(23)
+                                              \-----100
+                                                      \-------- E2Tupi2BR(24)
+
+Bipartitions found in one or more trees and frequency of occurrence (bootstrap
+support values):
+
+         1         2   2
+123456789012345678901234      Freq
+----------------------------------
+.......*****.....*******       100
+....................****       100
+.............*..*.......       100
+......................**       100
+....................**..       100
+.***....................       100
+.......*****............       100
+....***.................       100
+.***********.....*******        99
+.**.....................        99
+.******.................        98
+.................***....        98
+.................**.....        93
+............*..*........        88
+.................*******        85
+.........**.............        70
+.***********.*..********        64
+....**..................        64
+.......*...*............        57
+............*.**........        52
+.***********.**.********        47
+.......****.............        29
+.......**...............        26
+.......**..*............        26
+.....**.................        23
+........**..............        20
+.............**.*.......        19
+.......***.*............        18
+........***.............        16
+.......*****.....***....        15
+............*****.......        14
+....*.*.................        13
+.......*.**.............        12
+.......*.***............        11
+..................**....         7
+.......*..*.............         7
+..............**........         6
+.***********.***********         5
+
+13 groups at (relative) frequency less than 5% not shown

@@ -1,0 +1,153 @@
+
+P A U P *
+Portable version 4.0b10 for Unix
+Tue Jun  9 14:17:59 2015
+
+      -----------------------------NOTICE-----------------------------
+        This is a beta-test version.  Please report any crashes,
+        apparent calculation errors, or other anomalous results.
+        There are no restrictions on publication of results obtained
+        with this version, but you should check the WWW site
+        frequently for bug announcements and/or updated versions.  
+        See the README file on the distribution media for details.
+      ----------------------------------------------------------------
+
+Data matrix exported to file "paup.fasta" in Phylip format.
+
+Character-exclusion status changed:
+  1 character excluded
+  Total number of characters now excluded = 1
+  Number of included characters = 347
+
+Data matrix exported to file "paup.nex" in Nexus (non-interleaved) format.
+
+Optimality criterion set to distance.
+   Forcing NJ tree to be compatible with constraint-tree "CONSTRE"
+
+Neighbor-joining search settings:
+  Ties (if encountered) will be broken systematically
+  Distance measure = Tamura-Nei
+  Rates assumed to follow gamma distribution with shape parameter = 0.333794
+  1 character is excluded
+  (Tree is unrooted)
+
+   Tree found by neighbor-joining method stored in tree buffer
+   Time used = <1 sec (CPU time = 0.00 sec)
+
+Neighbor-joining tree:
+
+                                        /-- EU416252
+                                        |
+                                     /--+   / IB|DQ646426
+                                     |  \---+
+                                 /---+      \ IB|NC 001489
+                                 |   |
+                                 |   \----- IB|AF314208
+                                 |
+             /-------------------+     /------- IA|EU131373
+             |                   |   /-+
+             |                   |   | \----- IA|AB020565
+             |                   \---+
+             |                       \--- IA|X83302
+             |
+    /--------+                                            /-- IIIA|AJ299464
+    |        |                                   /--------+
+    |        |                                   |        \------ IIIA|DQ991030
+    |        |                             /-----+
+    |        |                             |     \--- IIIA|AB279733
+    |        |                             |
+/---+        \-----------------------------+             /- IIIB|AB258387
+|   |                                      |             |
+|   |                                      |             +- IIIB|AB279735
+|   |                                      \-------------+
+|   |                                                    \- IIIB|AB425339
+|   |
+|   \---------- IIB|AY644670
+|
+|  /--------- IIA|AY644676
+|  |
+\--+                                                           / V|D00924
+   \-----------------------------------------------------------+
+                                                               \- V|EU140838
+
+1 tree saved to file "~/rega-genotype/jobDir/1954644429/paup.tre"
+   Forcing NJ tree to be compatible with constraint-tree "CONSTRE"
+
+Bootstrap method with neighbor-joining search:
+  Number of bootstrap replicates = 100
+  Starting seed = 547880573
+  Ties (if encountered) will be broken randomly
+  Distance measure = Tamura-Nei
+  Rates assumed to follow gamma distribution with shape parameter = 0.333794
+  1 character is excluded
+  (Tree is unrooted)
+
+   Note: Ties were encountered in one or more replicates
+
+   Time used for neighbor-joining bootstrap = <1 sec (CPU time = 0.03 sec)
+
+Bootstrap 50% majority-rule consensus tree
+
+/------------------------------------------------------------ EU416252(1)
+|
+|                                                  /--------- IA|EU131373(2)
+|                                          /------64
+|                                          |       \--------- IA|AB020565(3)
+|                /-----------------------100
+|                |                         \----------------- IA|X83302(4)
+|                |
+|                |                                 /--------- IIA|AY644676(8)
+|                |                         /------85
+|                |                         |       \--------- IIB|AY644670(9)
+|        /-----100        /---------------67
+|        |       |        |                |       /--------- V|D00924(16)
+|        |       |        |                \-----100
+|        |       |        |                        \--------- V|EU140838(17)
+|        |       |        |
+|        |       |        |                        /--------- IIIA|AJ299464(10)
+|        |       \------100                /------95
+|        |                |                |       \--------- IIIA|DQ991030(11)
+|        |                |       /------100
++-------83                |       |        \----------------- IIIA|AB279733(12)
+|        |                |       |
+|        |                \-----100                /--------- IIIB|AB258387(13)
+|        |                        |        /------58
+|        |                        |        |       \--------- IIIB|AB279735(14)
+|        |                        \------100
+|        |                                 \----------------- IIIB|AB425339(15)
+|        |
+|        \--------------------------------------------------- IB|AF314208(7)
+|
+|                                                  /--------- IB|DQ646426(5)
+\------------------------------------------------100
+                                                   \--------- IB|NC 001489(6)
+
+Bipartitions found in one or more trees and frequency of occurrence (bootstrap
+support values):
+
+         1      1
+12345678901234567      Freq
+---------------------------
+....**...........       100
+.........******..       100
+............***..       100
+.***.............       100
+.........***.....       100
+.......**********       100
+...............**       100
+.***...**********       100
+.........**......        95
+.......**........        85
+.***..***********        83
+.......**......**        67
+.**..............        64
+............**...        58
+.............**..        42
+.........********        29
+..**.............        26
+....***..........        17
+.......*.......**        14
+.*.*.............        10
+..........**.....         5
+
+3 groups at (relative) frequency less than 5% not shown

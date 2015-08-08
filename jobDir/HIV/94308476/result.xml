@@ -1,0 +1,456 @@
+<genotype_result>
+  <sequence name="48040" length="1182">
+    <nucleotides>
+      CCTCAGATCACTCTTTGGCAACGACCCCTCGTCACAATAAAGATAGGGGGGCAACTAAAGGAAGCTCTCTTAGATACAGGAGCAGATGATACAGTATTAGAAGAAATGAATTTGCCAGGGAAATGGAAACCAAAAATGATAGGGGGAATTGGAGGTTTTATCAAAGTAAGACAGTATGATCAGATAACCATAGAAATCTGTGGACATAAAGCTATAGGTACAGTATTAGTAGGACCTACACCTGTCAACATAATTGGAAGAAATCTGTTGACTMAGATTGGCTGCACTTTAAATTTTATGGAAAAGGAAGGAAAAATTTCAAAAATTGGGCCTGAAAATCCATACAATACTCCAGTATTTGCCATAAAGAAGAAAGATGGTACTAAATGGAGAAAATTAGTAGATTTCAGAGAACTTAATAAGAGAACTCAAGACTTCTGGGAAGTTCAATTAGGAATACCACATCCTGCAGGGTTAAAAAAGAAAAAATCAGTAACAGTATTGGATGTGGGTGATGCATATTTTTCAGTTCCTTTAGATCCAGACTTCAGGAAGTATACTGCATTTACCATACCTAGTATAAACAATGAGACACCAGGGATTAGATATCAGTACAATGTGCTTCCTCAGGGATGGAAAGGATCACCAGCAATATTCCAAAGTAGCATGACAAGAATCTTAGAGCCTTTTAGAAAACAAAATCCAGAAATAGTTATCTACCAATACATGGATGATTTGTATGTAGGATCAGACTTAGAAATAGGGCAGCATAGAACAAAAATAGAGGAACTAAGACAACATCTGTTGAGGTGGGGATTTACCACACCAGACAAAAAACATCAGAAAGAACCTCCATTCCTTTGGATGGGTTATGAACTCCATCCTGATAAATGGACAGTACAACCTATAATGCTGCCAGAAAAGGACAGCTGGACTGTCAATGACATACAAAAGTTAGTGGGAAAATTAAATTGGGCAAGTCAGATTTATCCAGGGATTAAGGTAAGGCAATTATGTAGACTCCTTAGGGGAACCAAAGCACTAACAGAAATAGTGCCACTAACAAAAGAAGCAGAGATAGAACTGGCAGAAAACAGGGAGATTCTGAAAGAACCAGTACATGGAGTGTATTATGACCCATCAAAAGATTTAATAGCAGAAATACAGAAGCAGGAGCAGGGC
+    </nucleotides>
+    <result id="blast">
+      <start>2372</start>
+      <end>3554</end>
+      <identity>0.9581921</identity>
+      <cluster>
+        <id>1</id>
+        <name>HIV 1</name>
+        <score>1246.0</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>1</concluded-id>
+        <concluded-name>HIV 1</concluded-name>
+      </cluster>
+    </result>
+    <result id="pure">
+      <best>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>100.0</support>
+        <inner>22.0</inner>
+        <outer>78.0</outer>
+      </best>
+      <specific>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>100.0</support>
+        <inner>22.0</inner>
+        <outer>78.0</outer>
+      </specific>
+      <alignment>r7427732.nex</alignment>
+      <log>r6345176.log</log>
+      <tree>r4678996.tre</tree>
+    </result>
+    <result id="scan-pure">
+      <window>400</window>
+      <step>50</step>
+      <data>
+window	A1	B	C	D	F1	G	H	J	K	best	assigned
+200	0.0	86.0	0.0	14.0	0.0	0.0	0.0	0.0	0.0	B	B
+250	0.0	84.0	0.0	13.0	0.0	0.0	0.0	0.0	0.0	B	B
+300	0.0	70.0	0.0	19.0	0.0	0.0	0.0	0.0	0.0	B	B
+350	0.0	74.0	0.0	17.0	7.0	0.0	0.0	0.0	0.0	B	B
+400	0.0	69.0	0.0	27.0	0.0	0.0	0.0	0.0	0.0	B	-
+450	0.0	75.0	0.0	19.0	0.0	0.0	0.0	0.0	0.0	B	B
+500	0.0	76.0	0.0	9.0	0.0	0.0	0.0	0.0	0.0	B	B
+550	0.0	81.0	0.0	6.0	0.0	0.0	0.0	0.0	0.0	B	B
+600	0.0	81.0	0.0	10.0	0.0	0.0	0.0	0.0	0.0	B	B
+650	0.0	68.0	0.0	17.0	0.0	0.0	0.0	0.0	0.0	B	-
+700	0.0	70.0	0.0	18.0	0.0	0.0	0.0	0.0	0.0	B	B
+750	0.0	90.0	0.0	6.0	0.0	0.0	0.0	0.0	0.0	B	B
+800	0.0	99.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+850	0.0	96.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+900	0.0	97.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+950	0.0	99.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+1000	0.0	92.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+1050	0.0	99.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+1100	0.0	98.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+1150	0.0	96.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+      </data>
+      <support id="best">
+        1.0
+      </support>
+      <nosupport id="best">
+        0.0
+      </nosupport>
+      <support id="assigned">
+        0.9
+      </support>
+      <nosupport id="assigned">
+        0.1
+      </nosupport>
+      <profile id="best">
+B B B B B B B B B B B B B B B B B B B B         
+      </profile>
+      <profile id="assigned">
+B B B B - B B B B - B B B B B B B B B B         
+      </profile>
+    </result>
+    <result id="crf">
+      <best>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>34.0</support>
+        <inner>21.0</inner>
+        <outer>55.0</outer>
+      </best>
+      <alignment>r1710047.nex</alignment>
+      <log>r1368466.log</log>
+      <tree>r1218388.tre</tree>
+    </result>
+    <conclusion type="simple">
+      <assigned>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>100.0</support>
+        <inner>22.0</inner>
+        <outer>78.0</outer>
+      </assigned>
+      <motivation>Subtype assigned based on sequence > 800 bps clustering with a pure subtype with bootstrap > 70% without recombination in the bootscan.</motivation>
+      <rule>1b</rule>
+    </conclusion>
+  </sequence>
+  <sequence name="48050" length="1182">
+    <nucleotides>
+      CCTCARATCACTCTTTGGCAACGACCCCTCGTCACAATAARGRTAGGGGGGCAACTAAAGGAAGCYCTATTAGACACAGGAGCAGATGATACAGTATTAGAAGAAATGAATTTGCCAGGAAGATGGAAACCAAAAATGATAGGGGGAATTGGAGGTTTTATCAAGGTAAGACARTATGATCAGATACTCATAGAAATCTGTGGACATAAAGCTATAGGTACAGTATTAGTAGGACCTACACCTGTCAACATAATTGGAAGAAATTTGTTGACTCAGATTGGTTGCACTTTAAATTTTATGGAAAAGGAAGGGAAAATTTCAAAAATTGGGCCTGAAAATCCATACAATACTCCAGTATTTGCCATAAAGAAAAAAGACAGTACTAAATGGAGAAAATTAGTAGATTTCAGAGARCTTAATAAGAAGACTCAAGACTTCTGGGAAGTTCAATTAGGAATACCACATCCTGCAGGGTTAAAAAAGAAAAAATCAGTAACAGTACTGGATGTGGGCGATGCATACTTTTCAGTTCCCTTAGACAAGGACTTCAGGAAGTATACTGCATTTACCATACCTAGTATAAACAATGAGACACCAGGGATTAGATATCAGTACAATGTGCTTCCACAGGGATGGAAAGGATCACCAGCAATATTCCAAAGTAGCATGACCAAAATCTTAGAGCCTTTTAGAAAACAAAATCCAGACATAGTTATCTATCARTACATGGATGATTTRTATGTRGGATCTGAYTTAGAAATAGGGCAGCATAGAACAAAAATAGAGGAACTGAGACAGCATCTGTTGAGATGGGGATTTACYACACCAGACAAAAAACATCAGAAAGAGCCCCCATTCCTTTGGATGGGTTATGAACTCCATCCTGATAAATGGACAGTACAGCCTATAGTGCTGCCAGAAAAGGACAGCTGGACTGTCAATGACATACAGAAGTTAGTRGGAAAATTGAATTGGGCAAGTCAGATTTACGCAGGGATTAAAGTAAGRCARTTATGTAAACTCCTTAGGGGAACCAAAGCACTAACAGAAATAGTACCACTAACAAAAGAAGCAGAGCTAGAACTAGCAGAAAACAGGGAAATTCTAAAAGAACCAGTACATGGAGTGTATTATGACCCATCAARAGACTTAATAGCAGAGATACAGAAGCAGGGGCAAGGC
+    </nucleotides>
+    <result id="blast">
+      <start>2372</start>
+      <end>3554</end>
+      <identity>0.95932204</identity>
+      <cluster>
+        <id>1</id>
+        <name>HIV 1</name>
+        <score>1274.0</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>1</concluded-id>
+        <concluded-name>HIV 1</concluded-name>
+      </cluster>
+    </result>
+    <result id="pure">
+      <best>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>100.0</support>
+        <inner>144.0</inner>
+        <outer>0.0</outer>
+      </best>
+      <specific>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>100.0</support>
+        <inner>144.0</inner>
+        <outer>0.0</outer>
+      </specific>
+      <alignment>r3446059.nex</alignment>
+      <log>r6823282.log</log>
+      <tree>r5733326.tre</tree>
+    </result>
+    <result id="scan-pure">
+      <window>400</window>
+      <step>50</step>
+      <data>
+window	A1	B	C	D	F1	G	H	J	K	best	assigned
+200	0.0	97.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+250	0.0	91.0	0.0	9.0	0.0	0.0	0.0	0.0	0.0	B	B
+300	0.0	79.0	0.0	19.0	0.0	0.0	0.0	0.0	0.0	B	B
+350	0.0	72.0	0.0	25.0	0.0	0.0	0.0	0.0	0.0	B	B
+400	0.0	64.0	0.0	35.0	0.0	0.0	0.0	0.0	0.0	B	-
+450	0.0	70.0	0.0	28.0	0.0	0.0	0.0	0.0	0.0	B	B
+500	0.0	82.0	0.0	0.0	14.0	0.0	0.0	0.0	0.0	B	B
+550	0.0	91.0	0.0	0.0	8.0	0.0	0.0	0.0	0.0	B	B
+600	0.0	97.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+650	0.0	96.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+700	0.0	93.0	0.0	0.0	5.0	0.0	0.0	0.0	0.0	B	B
+750	0.0	100.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+800	0.0	100.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+850	0.0	100.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+900	0.0	99.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+950	0.0	99.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+1000	0.0	100.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+1050	0.0	99.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+1100	0.0	99.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+1150	0.0	100.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+      </data>
+      <support id="best">
+        1.0
+      </support>
+      <nosupport id="best">
+        0.0
+      </nosupport>
+      <support id="assigned">
+        0.95
+      </support>
+      <nosupport id="assigned">
+        0.05
+      </nosupport>
+      <profile id="best">
+B B B B B B B B B B B B B B B B B B B B         
+      </profile>
+      <profile id="assigned">
+B B B B - B B B B B B B B B B B B B B B         
+      </profile>
+    </result>
+    <result id="crf">
+      <best>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>86.0</support>
+        <inner>98.0</inner>
+        <outer>10.0</outer>
+      </best>
+      <specific>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>86.0</support>
+        <inner>98.0</inner>
+        <outer>10.0</outer>
+      </specific>
+      <alignment>r5833217.nex</alignment>
+      <log>r3736309.log</log>
+      <tree>r5200511.tre</tree>
+    </result>
+    <conclusion type="composed">
+      <assigned>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>100.0</support>
+        <major>
+          <assigned>
+            <id>B</id>
+            <name>HIV-1 Subtype B</name>
+            <support>100.0</support>
+            <inner>144.0</inner>
+            <outer>0.0</outer>
+          </assigned>
+        </major>
+        <minor>
+          <assigned>
+            <id>B</id>
+            <name>HIV-1 Subtype B</name>
+            <support>86.0</support>
+            <inner>98.0</inner>
+            <outer>10.0</outer>
+          </assigned>
+        </minor>
+      </assigned>
+      <motivation>Subtype assigned based on sequence > 800 bps clustering with a pure subtype and CRF or sub-subtype with bootstrap > 70% without recombination in the bootscan.</motivation>
+      <rule>1a</rule>
+    </conclusion>
+  </sequence>
+  <sequence name="72083" length="909">
+    <nucleotides>
+      ACTCTTTGGCAACGACCCCTCGTCACAATAAAGATAGGGGGGCAACTAAAGGAGGCTCTATTAGATACAGGAGCAGATGACACAGTATTAGAAGAAATAAATTTGCCAGGAAGATGGAAACCAAAAATGATAGGGGGAATTGGAGGTTTTATCAAAGTAAGACAGTATGATCAGATACCTATAGAAATTGAGGGACATAAAGCTAYRGGTACAGTGTTAATAGGACCTACACCTGTCAACATAATTGGAAGAAATTTGTTGACTCAGATTGGTTGCACTTTAAATTTTATGGAAAAGGAAGGGAAAATTACAAAAATTGGGCCTGAAAATCCATATAATACTCCAGTATTTGCCATAAAGAAAAAAGACAGTACTAAATGGAGAAAATTAGTAGATTTCAGAGAACTTAATAAGAGAACTCAAGACTTCTGGGAAGTTCAATTAGGAATACCACATCCCGCAGGGTTAAAAAAGAAAAAATCAGTAACAGTACTGGATGTGGGTGATGCATATTTCTCAGTTCCCTTAGATGAAAACTTCAGGAAGTATACTGCATTCACCATACCTAGTATAAACAATGAGACACCAGGGATTAGATATCAGTACAATGTGCTTCCACAGGGATGGAAAGGCTCACCAGCAATATTCCAATGTAGCATGACAAAAATCTTAGAGCCTTTTAGAAAACAAAAYCCAGACATAGTTATATATCAATACATGGATGATTTATATGTAGGATCYGATTTAGAAATAGGACAGCATAGAGCAAAAATAGAAGAGCTGAGAGAACATCTGCTGAGGTGGGGATTTACCACACCAGAYAAAAAGCATCAGAAAGAACCCCCATTCCTCTGGATGGGTTATGAACTCCATCCTGATAAATGGACAGTACAACCTATAATGTTGCCA
+    </nucleotides>
+    <result id="blast">
+      <start>2381</start>
+      <end>3290</end>
+      <identity>0.95974237</identity>
+      <cluster>
+        <id>1</id>
+        <name>HIV 1</name>
+        <score>873.0</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>1</concluded-id>
+        <concluded-name>HIV 1</concluded-name>
+      </cluster>
+    </result>
+    <result id="pure">
+      <best>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>98.0</support>
+        <inner>16.0</inner>
+        <outer>82.0</outer>
+      </best>
+      <specific>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>98.0</support>
+        <inner>16.0</inner>
+        <outer>82.0</outer>
+      </specific>
+      <alignment>r8175100.nex</alignment>
+      <log>r7749693.log</log>
+      <tree>r596663.tre</tree>
+    </result>
+    <result id="scan-pure">
+      <window>400</window>
+      <step>50</step>
+      <data>
+window	A1	B	C	D	F1	G	H	J	K	best	assigned
+200	0.0	90.0	0.0	6.0	0.0	0.0	0.0	0.0	0.0	B	B
+250	0.0	55.0	0.0	21.0	0.0	0.0	0.0	19.0	0.0	B	-
+300	0.0	77.0	0.0	13.0	0.0	0.0	0.0	9.0	0.0	B	B
+350	0.0	67.0	0.0	26.0	0.0	0.0	0.0	7.0	0.0	B	-
+400	0.0	68.0	0.0	31.0	0.0	0.0	0.0	0.0	0.0	B	-
+450	0.0	84.0	0.0	13.0	0.0	0.0	0.0	0.0	0.0	B	B
+500	0.0	84.0	0.0	10.0	0.0	0.0	0.0	0.0	0.0	B	B
+550	0.0	94.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+600	0.0	75.0	5.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+650	0.0	92.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	B	B
+700	0.0	75.0	0.0	0.0	0.0	5.0	0.0	0.0	0.0	B	B
+750	0.0	71.0	0.0	0.0	0.0	8.0	0.0	0.0	0.0	B	B
+800	0.0	68.0	0.0	0.0	0.0	17.0	0.0	0.0	0.0	B	-
+850	0.0	57.0	0.0	0.0	0.0	11.0	0.0	0.0	0.0	B	-
+      </data>
+      <support id="best">
+        1.0
+      </support>
+      <nosupport id="best">
+        0.0
+      </nosupport>
+      <support id="assigned">
+        0.643
+      </support>
+      <nosupport id="assigned">
+        0.357
+      </nosupport>
+      <profile id="best">
+B B B B B B B B B B B B B B         
+      </profile>
+      <profile id="assigned">
+B - B - - B B B B B B B - -         
+      </profile>
+    </result>
+    <result id="crf">
+      <best>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>75.0</support>
+        <inner>70.0</inner>
+        <outer>44.0</outer>
+      </best>
+      <specific>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>75.0</support>
+        <inner>70.0</inner>
+        <outer>44.0</outer>
+      </specific>
+      <alignment>r914506.nex</alignment>
+      <log>r7405265.log</log>
+      <tree>r9126376.tre</tree>
+    </result>
+    <conclusion type="composed">
+      <assigned>
+        <id>B</id>
+        <name>HIV-1 Subtype B</name>
+        <support>98.0</support>
+        <major>
+          <assigned>
+            <id>B</id>
+            <name>HIV-1 Subtype B</name>
+            <support>98.0</support>
+            <inner>16.0</inner>
+            <outer>82.0</outer>
+          </assigned>
+        </major>
+        <minor>
+          <assigned>
+            <id>B</id>
+            <name>HIV-1 Subtype B</name>
+            <support>75.0</support>
+            <inner>70.0</inner>
+            <outer>44.0</outer>
+          </assigned>
+        </minor>
+      </assigned>
+      <motivation>Subtype assigned based on sequence > 800 bps clustering with a pure subtype and CRF or sub-subtype with bootstrap > 70% without recombination in the bootscan.</motivation>
+      <rule>1a</rule>
+    </conclusion>
+  </sequence>
+  <sequence name="72085" length="903">
+    <nucleotides>
+      TGGCAGCGACCCCTTGTCTCAATAAAAGTAGAGGGCCARATAAGGGAGGCTCTCTTAGATACAGGAGCAGATGACACAGTATTAGAAGAAATAAATTTGCCAGGAAAATGGAAACCAAAAATGATAGGAGGAATTGGAGGTTTTATCAAAGTAAGACAATATGATCAAATAGCCATAGAAATCTGTGGGAAAAAGGCTATAGGTGCAGTGTTAGTAGGACCTACACCTGTCAACATAATTGGAAGAAACATGTTGACTCAGCTTGGCTGTACTCTAAATTTTATGGAAAAGGAAGGGAAAATTACAAAAATTGGGCCTGAAAACCCATACAATACTCCAGTATTTGCCATAAAAAAGAAGGACAGTACTAARTGGAGAAAATTGGTAGATTTTAGAGAACTTAATAAAAGAACTCAAGATTTCTGGGAAGTTCAATTAGGAATTCCACACCCAGCAGGATTAAAAAAGAAAAAATCAGTAACAGTACTGGATGTGGGGGATGCATATTTTTCAGTTCCTTTAGATAAAGACTTTAGGAAGTATACTGCATTCACCATACCCAGTATAAACAATGAGACACCAGGAATTAGATATCAATACAATGTGCTTCCACAAGGATGGAAAGGATCACCAGCAATATTCCAGTGTAGTATGACAAAAATCTTAGAGCCCTTTAGAGCAAAAAACCCAGAAATAGTTATCTATCAATACATGGATGACTTGTATGTAGGATCTGATTTAGAAATAGGGCAACATAGGGCAAAAATAGACGAGTTAAGAGAGCATCTATTAAAGTGGGGATTTACCACACCAGACAAGAAGCATCAGAAAGAACCCCCATTTCTTTGGATGGGGTATGAACTCCATCCGGACAAATGGACAGTACAGCCTATACAGCTGCCA
+    </nucleotides>
+    <result id="blast">
+      <start>2387</start>
+      <end>3290</end>
+      <identity>0.91143316</identity>
+      <cluster>
+        <id>1</id>
+        <name>HIV 1</name>
+        <score>772.0</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>1</concluded-id>
+        <concluded-name>HIV 1</concluded-name>
+      </cluster>
+    </result>
+    <result id="pure">
+      <best>
+        <id>C</id>
+        <name>HIV-1 Subtype C</name>
+        <support>99.0</support>
+        <inner>0.0</inner>
+        <outer>99.0</outer>
+      </best>
+      <specific>
+        <id>C</id>
+        <name>HIV-1 Subtype C</name>
+        <support>99.0</support>
+        <inner>0.0</inner>
+        <outer>99.0</outer>
+      </specific>
+      <alignment>r7331467.nex</alignment>
+      <log>r9978675.log</log>
+      <tree>r2522400.tre</tree>
+    </result>
+    <result id="scan-pure">
+      <window>400</window>
+      <step>50</step>
+      <data>
+window	A1	B	C	D	F1	G	H	J	K	best	assigned
+200	0.0	0.0	87.0	0.0	0.0	0.0	0.0	0.0	8.0	C	C
+250	5.0	0.0	42.0	0.0	0.0	6.0	0.0	0.0	30.0	C	-
+300	6.0	0.0	64.0	0.0	0.0	5.0	5.0	0.0	9.0	C	-
+350	0.0	0.0	40.0	5.0	12.0	8.0	13.0	0.0	10.0	C	-
+400	8.0	0.0	53.0	8.0	17.0	0.0	0.0	8.0	0.0	C	-
+450	0.0	0.0	79.0	0.0	0.0	0.0	0.0	0.0	0.0	C	C
+500	0.0	9.0	50.0	0.0	7.0	0.0	6.0	0.0	0.0	C	-
+550	5.0	0.0	36.0	0.0	19.0	0.0	0.0	0.0	0.0	C	-
+600	0.0	0.0	26.0	0.0	12.0	0.0	0.0	0.0	0.0	C	-
+650	0.0	0.0	35.0	0.0	11.0	0.0	0.0	0.0	0.0	C	-
+700	9.0	0.0	21.0	0.0	9.0	0.0	0.0	13.0	0.0	C	-
+750	11.0	0.0	67.0	0.0	0.0	0.0	0.0	7.0	0.0	C	-
+800	19.0	0.0	59.0	0.0	6.0	0.0	0.0	6.0	0.0	C	-
+850	7.0	0.0	71.0	0.0	0.0	0.0	0.0	10.0	0.0	C	C
+      </data>
+      <support id="best">
+        1.0
+      </support>
+      <nosupport id="best">
+        0.0
+      </nosupport>
+      <support id="assigned">
+        0.214
+      </support>
+      <nosupport id="assigned">
+        0.786
+      </nosupport>
+      <profile id="best">
+C C C C C C C C C C C C C C         
+      </profile>
+      <profile id="assigned">
+C - - - - C - - - - - - - C         
+      </profile>
+    </result>
+    <result id="crf">
+      <best>
+        <id>C</id>
+        <name>HIV-1 Subtype C</name>
+        <support>11.0</support>
+        <inner>5.0</inner>
+        <outer>58.0</outer>
+      </best>
+      <alignment>r5494134.nex</alignment>
+      <log>r3846410.log</log>
+      <tree>r3892911.tre</tree>
+    </result>
+    <conclusion type="simple">
+      <assigned>
+        <id>C</id>
+        <name>HIV-1 Subtype C</name>
+        <support>99.0</support>
+        <inner>0.0</inner>
+        <outer>99.0</outer>
+      </assigned>
+      <motivation>Subtype assigned based on sequence > 800 bps clustering with a pure subtype with bootstrap > 70% without recombination in the bootscan.</motivation>
+      <rule>1b</rule>
+    </conclusion>
+  </sequence>
+  </genotype_result>

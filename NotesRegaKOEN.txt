@@ -1,0 +1,88 @@
+Notes Rega V3:
+
+Git fetch github
+
+Three examples of tools that can be constructed directly in the XML files (HAV and Nov).
+
+Tulio-MacBook-Pro-Retina:~ tulio$ cd rega-genotype/
+Tulio-MacBook-Pro-Retina:rega-genotype tulio$ git pull
+remote: Counting objects: 48, done.
+
+Install Imagemagick
+brew install imagemagick
+
+brew install ghostscript
+
+----
+To setup a new tool. (PHYLO)
+Use HAV as an example.
+Start with the config.xml
+copy config.xml and resources.xml to PHYLO
+
+--- config xml --- link to resource HTML, which you edit to get the text wright- to set the pages:
+<genotyping-tool>
+
+	<menu>
+		<menu-item>
+			<label>How to cite</label>
+			<path>how-to-cite</path>
+			<message-id>how-to-cite-doc</message-id>
+		</menu-item>
+		<menu-item>
+			<label>Introduction</label>
+			<path>introduction</path>
+			<message-id>introduction-doc</message-id>
+		</menu-item>
+		<menu-item>
+			<label>How to use</label>
+			<path>how-to-use</path>
+			<message-id>how-to-use-doc</message-id>
+		</menu-item>
+		<menu-item>
+			<label>Example sequences</label>
+			<path>examples</path>
+			<message-id>examples-doc</message-id>
+		</menu-item>
+	</menu>
+
+---- web.xml - have to added a servlet ---
+
+
+--- blast.xml --- continues if identify the organism (HIV1M)
+Need phylos 
+
+---- genome_0.png
+Need to be added to folder
+
+
+
+---- Summary:
+WEB.XML SAY HOW THE tool should be seen in the html
+
+
+in EACH FOLDER
+XML files (config.xml and resources.xml)
+CHL-PSO-OMPA (show what should be shown in the results table)
+
+ANALYSIS PART: BLAST.XML
+STARTS WITH blast.xml - based on the cluster ID id goes on to look for the phylo.xml file (for clamidia - chim1 - look for phylo-chim1.xml)
+
+Can use to define region (for example influenza of HAV) so it goes by phylo organimsm - region (e.g. HAV phylo-hepatovirus-VP1).
+
+IF PHYLO XML file does not exist it stops there.
+
+PHYLO.XML (e.g. phylo-hiv1M.xml) - phylo major and phylo-minor
+Put everything in the XML file that can align that.
+
+-----
+Comments: Done HPV. things to do location of the header in the same xml file.
+Small sequence (3) is not subtyping.
+
+-----
+Comments: Done HHV8 but tree figure is not working in PNG
+
+-----
+Comments: Done HTLV-1 - need for all of the new tools to get the size of the genome and the picture...
+
+
+

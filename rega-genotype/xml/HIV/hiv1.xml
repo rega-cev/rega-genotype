@@ -370,7 +370,7 @@
       400
     </window>
     <step>
-      20
+      50
     </step>
     <cutoff>
       0.9
@@ -384,7 +384,7 @@
       400
     </window>
     <step>
-      40
+      50
     </step>
     <cutoff>
       0.9

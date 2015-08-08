@@ -1,0 +1,24 @@
+<genotype-analyses>
+  <alignment file="blast.fasta" />
+
+  <clusters>
+    <cluster id="HHV8" name="HHV8">
+      <description>blablabla</description>
+      <taxus name="GK18" />
+    </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>
+      HHV8
+    </identify>
+    <cutoff>
+      50
+    </cutoff>
+    <options>
+      -q -1 -r 1
+    </options>
+  </analysis>
+
+</genotype-analyses>
+

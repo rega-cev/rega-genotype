@@ -1,0 +1,149 @@
+<genotype_result>
+  <sequence name="gi61743574gbAY953903.1" length="612">
+    <nucleotides>
+      ACACGTTGACCTGTCTGTCTGATGCATCCTTGCCAATATCCTGGTATTGCAACGATACTCGGCTTTTGCGACTTTCGGACCCATCATTCACTGTTGCCACCATTACCTGCAATTTTACTTGTGTGGAACAATCTGGGCATCGACAGAGCATTTGGATTACATGGAATGCACAACCTGTCTTACAAACCTTGTGTGCACAGCCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACGAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTGATGAACCAAACTGAGGGGTGTTATACTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTATATGTTTTTGGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACAGTCAGTACTCATAGCTTAGTGAACATAATCCATGCAACCACACATGATGTAGTTGTAGTGAAAGAAGCAAAATCTACAAATCCACATATTGAAGTGCCTTTTCTTGTATTTATGACACTCGTAGCTCTGATAG
+    </nucleotides>
+    <result id="blast">
+      <start>210</start>
+      <end>822</end>
+      <identity>0.9352818</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>662.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subA5</id>
+        <name>Subtype_A5</name>
+        <support>100.0</support>
+        <inner>101.0</inner>
+        <outer>21.0</outer>
+      </best>
+      <specific>
+        <id>subA5</id>
+        <name>Subtype_A5</name>
+        <support>100.0</support>
+        <inner>101.0</inner>
+        <outer>21.0</outer>
+      </specific>
+      <alignment>r4116689.nex</alignment>
+      <log>r2474311.log</log>
+      <tree>r9028013.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subA5</id>
+        <name>Subtype_A5</name>
+        <support>100.0</support>
+        <inner>101.0</inner>
+        <outer>21.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 100.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="gi61743572gbAY953902.1" length="612">
+    <nucleotides>
+      ACACGTTGACCTGTCCGTCTAACAGATCCTTGCCAATATCCTGGTATTGCAACGGGACTCGGCTTCACCGAATAACGGCGTCTAACCTAACTGTTTCTTCGCTCACCTGCAATTTTACTTGTATGACAACATCTGGGCCTACACACAGCATTTGGATTGAATGGTATACACAACCTGTCTTACAAACCTTGTGTGCACAGCCATCAAACACAGTGTCTTGTGGTCAGCCTGTTACTTTGTATTGTGATACCTCTTCAAATAATGTTACCATTTGGCGTCTACAAAACGGACACAATCAAACCGTGTCACAAACTAAATACTATAATTTTACGATGATGAACCAAACTCAGGGGTGTTATACTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTATATGTTTTTGGGCGTCTTGTATCAATATAACTCCAGAAACTCCTACTGTCTCCGCCAGCAGTACTATGGCCGTTAAAGTATTAAGAACTAATGGATTACTGAAAATAATCCCTGCAACCACACATGCTGCAGTTGCAGTGGAAGAAGTAAAATCTACAAATACACATATTCAAGTGCCTTTTCTTGTATTTATGACGCTCGTAGCTCTGATAG
+    </nucleotides>
+    <result id="blast">
+      <start>210</start>
+      <end>822</end>
+      <identity>0.84199584</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>523.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subB</id>
+        <name>Subtype_B</name>
+        <support>100.0</support>
+        <inner>312.0</inner>
+        <outer>0.0</outer>
+      </best>
+      <specific>
+        <id>subB</id>
+        <name>Subtype_B</name>
+        <support>100.0</support>
+        <inner>312.0</inner>
+        <outer>0.0</outer>
+      </specific>
+      <alignment>r5763245.nex</alignment>
+      <log>r3144559.log</log>
+      <tree>r1298032.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subB</id>
+        <name>Subtype_B</name>
+        <support>100.0</support>
+        <inner>312.0</inner>
+        <outer>0.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 100.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="gi61743570gbAY953901.1" length="612">
+    <nucleotides>
+      ACACGTTGACCTGTCTGTCCGATGCATCCTTGCCAATATCCTGGTATTGCAACGATACTCGGCTTCGGCGACTGACGAACCAATCATTCACTGTTGCCACCATTACCTGCAATTTTACTTGTGTGGAACAATCTGGGCATCGACAGAGCATTTGGATTACATGGAATGCACAACCTGTCTTACAAACCTTGTGTGCACAGCCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACGAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTGATGAACCAAACTGAGGGGTGTTATACTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTATATGTTTTTGGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACATTCAGTACTAATAGCTTAGTGAACATAATCCATGCAACCACACATGATGTAGTTGTAGTGAAAGAAGCAAAATCTACAAATCCACATATTGAAGTGCCTTTTCTTGTATTTATGACACTCGTAGCTCTGATAG
+    </nucleotides>
+    <result id="blast">
+      <start>210</start>
+      <end>822</end>
+      <identity>0.9334719</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>662.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subA5</id>
+        <name>Subtype_A5</name>
+        <support>98.0</support>
+        <inner>154.0</inner>
+        <outer>0.0</outer>
+      </best>
+      <specific>
+        <id>subA5</id>
+        <name>Subtype_A5</name>
+        <support>98.0</support>
+        <inner>154.0</inner>
+        <outer>0.0</outer>
+      </specific>
+      <alignment>r7395132.nex</alignment>
+      <log>r8015544.log</log>
+      <tree>r3312153.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subA5</id>
+        <name>Subtype_A5</name>
+        <support>98.0</support>
+        <inner>154.0</inner>
+        <outer>0.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 98.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  </genotype_result>

@@ -1,0 +1,84 @@
+%
+%
+% NOTE: This tree has been imported from NEXUS.
+%       You should use 'save' (command s) to make the
+%       tree part more readable.
+%
+
+\begindef
+\paper{a2}
+\width{170}
+\height{266.59999999999997}
+\margin{10}{10}{10}{10}
+\style{default}{plain}{13}
+\style{r}{plain}{13}
+
+    \name{PAUP 1} % imported from NEXUS file
+    \version{1.0} % version of treegraph file format
+
+%
+% tree geometry
+%
+    %\width{150}  % width in mm
+    %\height{250}  % height in mm
+%     \autolength  % ignore len{} in nodes
+%     \variable
+
+%
+% layout
+%
+    \roundness{0.2}  % between 0.0 and 1.0
+    \thickness{0.3}  % in mm
+    %\margin{0}{0}{0}{0} % left top right bottom, in mm
+    %\style{default}{plain}{14.4}  
+    %\style{r}{plain}{18}  
+
+%     \style{u1}{plain}{14.4}
+%     \style{d1}{italic}{14.4}
+%     \style{u2}{bold}{12.6}
+%     \style{br}{plain}{21.6}
+%     \rulepos{5}{20}
+ % position of rule
+%     \separator{:}
+%     \proof
+
+%
+% brackets
+%
+%     \bracket{0}{n1}{n2}{example text}
+%     \brace*{1.5}{root}{root}{example text}
+
+\enddef
+
+(((((((((((("AB287451"
+\len{0.006407},"II.4|2004|DQ078814"
+\len{0.000442})\len{0.005211},"II.4|2004|AY883096"
+\len{0.000802})\len{0.001391},(("II.4|2002CN|DQ364459"
+\len{0.019036},"II.4|2002CN|EU310927"
+\len{0.000848})\len{0.004168},("II.4|2005|AB220921"
+\len{0.009686},"II.4|2005|DQ369797"
+\len{0.014831})\len{0.005435})\len{0.003499})\len{0.004065},("II.4|1995|AJ004864"
+\len{0.007769},"II.4|1995|AF080558"
+\len{0.004324})\len{0.002062})\len{0.000311},(("II.4|2002|AY485642"
+\len{0},"II.4|2002|AY502023"
+\len{0})\len{4.478e-05},(("II.4|2006a|GQ849126"
+\len{0.006101},"II.4|2006a|EF126964"
+\len{0.00012})\len{6.237e-05},"II.4|2006a|EF126963"
+\len{6.237e-05})\len{2.399e-05})\len{0.000473})\len{0.002866},(("II.4|2006b|EF126965"
+\len{0.005253},"II.4|2006b|EF684915"
+\len{0.000728})\len{0.008195},("II.4|2007JP|AB434770"
+\len{0.001525},"II.4|2007JP|OB200615"
+\len{0.010569})\len{0.004191})\len{0.007044})\len{0.001587},(("II.4|2007EU|GU270580"
+\len{0.005105},"II.4|2007EU|HQ009513"
+\len{0.00086})\len{0.001945},("II.4|2009|JN595867"
+\len{0.008075},"II.4|2009|GU445325"
+\len{0.004019})\len{0.004168})\len{0.002522})\len{0.010627},("II.4|Camb|AF145896"
+\len{0.00598},"II.4|Camb|AY030098"
+\len{0.012362})\len{0.000925})\len{0.002672},("II.4|2012|JX459907"
+\len{0.009443},"II.4|2012|JX459908"
+\len{0.002651})\len{0.001404})\len{0.003193},("II.4|2003|AB294779"
+\len{0.013152},"II.4|2003|AB303929"
+\len{0.001057})\len{0.009923})\len{0.020937},"II.4|Brist|X86557"
+\len{0.00365})\len{0.00365},"II.4|Brist|X76716"
+\len{0.007048},"II.20|AB542917"
+\len{0.252806})

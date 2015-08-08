@@ -1,0 +1,23 @@
+#NEXUS 
+
+Begin trees;  [Treefile saved Thu Jun 11 10:42:25 2015]
+[!
+>Data file = /Users/tulio/rega-genotype/jobDir/2100485125/tmp.nex
+>Neighbor-joining search settings:
+>  Ties (if encountered) will be broken systematically
+>  Distance measure = HKY85
+>  1 character is excluded
+>  (Tree is unrooted)
+]
+	Translate
+		1 test,
+		2 G.ES.00.X558,
+		3 G.ES.99.X138,
+		4 G.NG.x.01NGPL0669,
+		5 G.NG.x.01NGPL0760,
+		6 GKU.SE.x.SE8646,
+		7 GKU.SE.x.SE9010,
+		8 OCM91MVP5180
+		;
+tree PAUP_1 = [&U] (((((1:0,2:0):0.002475,3:0.005080):0.026395,(4:0.022227,5:0.015451):0.005604):0.013999,(6:0.013737,7:0.035799):0.017148):0.253118,8:0);
+End;

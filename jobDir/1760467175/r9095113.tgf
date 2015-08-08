@@ -1,0 +1,85 @@
+%
+%
+% NOTE: This tree has been imported from NEXUS.
+%       You should use 'save' (command s) to make the
+%       tree part more readable.
+%
+
+\begindef
+\paper{a2}
+\width{170}
+\height{275.2}
+\margin{10}{10}{10}{10}
+\style{default}{plain}{13}
+\style{r}{plain}{13}
+
+    \name{PAUP 1} % imported from NEXUS file
+    \version{1.0} % version of treegraph file format
+
+%
+% tree geometry
+%
+    %\width{150}  % width in mm
+    %\height{250}  % height in mm
+%     \autolength  % ignore len{} in nodes
+%     \variable
+
+%
+% layout
+%
+    \roundness{0.2}  % between 0.0 and 1.0
+    \thickness{0.3}  % in mm
+    %\margin{0}{0}{0}{0} % left top right bottom, in mm
+    %\style{default}{plain}{14.4}  
+    %\style{r}{plain}{18}  
+
+%     \style{u1}{plain}{14.4}
+%     \style{d1}{italic}{14.4}
+%     \style{u2}{bold}{12.6}
+%     \style{br}{plain}{21.6}
+%     \rulepos{5}{20}
+ % position of rule
+%     \separator{:}
+%     \proof
+
+%
+% brackets
+%
+%     \bracket{0}{n1}{n2}{example text}
+%     \brace*{1.5}{root}{root}{example text}
+
+\enddef
+
+(((((((((((("CP003792 ompA"
+\len{0},"E|CPMN"
+\len{0})\len{0},"E|01DC12"
+\len{0})\len{0.944444},("EB|EB"
+\len{0},"EB|98AV2129"
+\len{0})\len{1.05556})\len{0.295111},("B|CP3"
+\len{0},"B|Pi22"
+\len{0})\len{0.716})\len{0.446609},("A|Orni"
+\len{0},"A|84 55"
+\len{0})\len{0.860248})\len{0.466805},("M56|M56"
+\len{0.724138},("3A|EU682087"
+\len{0},"3A|60194"
+\len{0})\len{0.275862})\len{0.919157})\len{0.577778},("Mat116|AB284058"
+\len{0},"Mat116|CP002744"
+\len{0})\len{1.25})\len{1.5},("50 55|50338"
+\len{0},"50 55|55435"
+\len{0})\len{4.39286})\len{2.20298},"Pi21|KM609421"
+\len{8.46667})\len{22.1991},("WC|AF269269"
+\len{15.1},"1192|JQ679392"
+\len{12.9})\len{6.27149})\len{0.167242},((((("C|CR9"
+\len{0},"C|GD"
+\len{0})\len{0.517857},("CB3|EU009488"
+\len{0},"CB3|HB1043"
+\len{0})\len{0.482143})\len{5.00926},"CPC1020106013|HE6872"
+\len{3.49074})\len{3.63095},(((("F|VS225"
+\len{0},"F|7778B15"
+\len{0})\len{1.32759},"21|JQ679391"
+\len{0.672414})\len{5.07908},("Daruma|AB284065"
+\len{7.08333},"R54|AJ243525"
+\len{4.91667})\len{3.31173})\len{1.1085},"UT118 AGP|HQ845540"
+\len{7.05385})\len{0.499389})\len{4.88059},"D NJ1|AF269266"
+\len{13.7136})\len{3.02452})\len{21.4868},"CPX0308|AB284064"
+\len{0})

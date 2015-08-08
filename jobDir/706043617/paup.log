@@ -1,0 +1,34 @@
+
+P A U P *
+Portable version 4.0b10 for Unix
+Wed Jun 10 09:46:14 2015
+
+      -----------------------------NOTICE-----------------------------
+        This is a beta-test version.  Please report any crashes,
+        apparent calculation errors, or other anomalous results.
+        There are no restrictions on publication of results obtained
+        with this version, but you should check the WWW site
+        frequently for bug announcements and/or updated versions.  
+        See the README file on the distribution media for details.
+      ----------------------------------------------------------------
+
+Character-exclusion status changed:
+  32 characters excluded
+  Total number of characters now excluded = 32
+  Number of included characters = 1581
+
+Data matrix exported to file "paup.nex" in Nexus (non-interleaved) format.
+
+Outgroup status changed:
+  1 taxon transferred to outgroup
+  Total number of taxa now in outgroup = 1
+  Number of ingroup taxa = 76
+
+Optimality criterion set to distance.
+
+Error(#640): Taxon "D.ZA.85.R214" (#69) appears more than once in tree
+             description
+Error occurred at line 1422 of file /Users/tulio/rega-
+genotype/jobDir/706043617/tmp.nex
+
+Execution terminated due to errors.

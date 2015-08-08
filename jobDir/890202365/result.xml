@@ -1,0 +1,72 @@
+<genotype_result>
+  <sequence name="AB287451" length="169">
+    <nucleotides>
+      GGCGTCGATGACGCCNCCCCATCTGATGGGTCCACAGCCAACCTCGTCCCAGAGGTCAACAATGAGGTTATGGCTTTGGAGCCCGTTGTTGGTGCCGCGATTGCGGCACCTGTAGCGGGCCAACAAAATGTAATTGACCCCTGGATTAGAAATAATTTTGTACAAGCCA
+    </nucleotides>
+    <result id="blast">
+      <start>5093</start>
+      <end>5262</end>
+      <identity>0.99378884</identity>
+      <cluster>
+        <id>II</id>
+        <name>NoV II</name>
+        <score>2.364</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>II</concluded-id>
+        <concluded-name>NoV II</concluded-name>
+      </cluster>
+      <refseq>U07611</refseq>
+    </result>
+    <result id="phylo-ORF2">
+      <best>
+        <id>II.4</id>
+        <name>GII.4</name>
+        <support>99.0</support>
+      </best>
+      <specific>
+        <id>II.4</id>
+        <name>GII.4</name>
+        <support>99.0</support>
+      </specific>
+      <alignment>r9408316.nex</alignment>
+      <log>r4511676.log</log>
+      <tree>r8821191.tre</tree>
+    </result>
+    <conclusion type="simple" id="ORF2">
+      <assigned>
+        <id>II.4</id>
+        <name>GII.4</name>
+        <support>99.0</support>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis (ORF2) and bootstrap {1} (&gt;= 70)</motivation>
+      <rule></rule>
+    </conclusion>
+    <result id="phylo-ORF2-II.4">
+      <best>
+        <id>II.4|2004</id>
+        <name>Hunter_2004</name>
+        <support>87.0</support>
+        <description>Variant Hunter 2004</description>
+      </best>
+      <specific>
+        <id>II.4|2004</id>
+        <name>Hunter_2004</name>
+        <support>87.0</support>
+        <description>Variant Hunter 2004</description>
+      </specific>
+      <alignment>r8852872.nex</alignment>
+      <log>r5497665.log</log>
+      <tree>r4411882.tre</tree>
+    </result>
+    <conclusion type="simple" id="ORF2-variant">
+      <assigned>
+        <id>II.4|2004</id>
+        <name>Hunter_2004</name>
+        <support>87.0</support>
+        <description>Variant Hunter 2004</description>
+      </assigned>
+      <motivation>Supported with phylogenetic sub clustering analysis (ORF2) and bootstrap {1} (&gt;= 70)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  </genotype_result>

@@ -1,0 +1,296 @@
+<genotype_result>
+  <sequence name="test" length="1092">
+    <nucleotides>
+      TACTAATTTTGAAAGGCGGGGTTCTGCCAGGCATAGTCTTTTTTTGTGGCGGCCCTTGTGTAAACCTGTCTTTCAGACCTTGTTGGACATCCCGTACAATCAAGATGTTCCTGTATGTTGTTTGCAGTCTGGCGGTTTGCTTTCGAGGACTATTAAGCCTTTCTCTGCAATCGTCTCCAAATCTCTGCCCTGGAGTGATTTCAACGCCTTACACGTTGACCTGTCCGTCTAATACATCCTTGCCAACATCCTGGTATTGCAACGATACTCGGCTTTTACGAGTGACGCAGGGAACATTGACTGTTGACACCCTTATCTGCAATTTTAGTTGTGTGGGACAATCTGGGCATCGATACAGCCTTTGGATTACATGGTATGCACAACCTGTCTTACAAACCTTCTGTGGACAACCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACAAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTCATGAACCAAACTGAGGGGTGTTATGCTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTCTATGTTTTTCGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACATTTGCAACCGCACCTACTCTATTTGTAATGAAAGAAGTAAAATCTACATATCTATATATTCAAGAGCATTTGCTTGTATTTATGACACTCGTAGCTCTGATAGGAACCATGTGTGGTATCTTAGGAACTATTATCTTTGCCCATTGTCAAAAACAACGTGACTCAAACAAAACAGTGCCACAACAATTGCAGGATTATTATTCCCTACACGATTTGTGCACGGAAGACTATACGCAACCAGTGGATTGGTACTGACATTCAGGTAAGATAATCTAAATATTCTCTATAACATAATTGTAATGTGTTTTATGTTTATAGCTACAAATGTTTTATGCAAAATACATTTTATGAGGTCGGATACTTATTAAAAGCATTGTCTTAAGTACATTAAAAGGACATTGTA
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1092</end>
+      <identity>1.0</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>1710.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>116.0</inner>
+        <outer>14.0</outer>
+      </best>
+      <specific>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>116.0</inner>
+        <outer>14.0</outer>
+      </specific>
+      <alignment>r945024.nex</alignment>
+      <log>r6989538.log</log>
+      <tree>r6897835.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>116.0</inner>
+        <outer>14.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 99.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="test" length="1092">
+    <nucleotides>
+      TACTAATTTTGAAAGGCGGGGTTCTGCCAGGCATAGTCTTTTTTTGTGGCGGCCCTTGTGTAAACCTGTCTTTCAGACCTTGTTGGACATCCCGTACAATCAAGATGTTCCTGTATGTTGTTTGCAGTCTGGCGGTTTGCTTTCGAGGACTATTAAGCCTTTCTCTGCAATCGTCTCCAAATCTCTGCCCTGGAGTGATTTCAACGCCTTACACGTTGACCTGTCCGTCTAATACATCCTTGCCAACATCCTGGTATTGCAACGATACTCGGCTTTTACGAGTGACGCAGGGAACATTGACTGTTGACACCCTTATCTGCAATTTTAGTTGTGTGGGACAATCTGGGCATCGATACAGCCTTTGGATTACATGGTATGCACAACCTGTCTTACAAACCTTCTGTGGACAACCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACAAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTCATGAACCAAACTGAGGGGTGTTATGCTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTCTATGTTTTTCGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACATTTGCAACCGCACCTACTCTATTTGTAATGAAAGAAGTAAAATCTACATATCTATATATTCAAGAGCATTTGCTTGTATTTATGACACTCGTAGCTCTGATAGGAACCATGTGTGGTATCTTAGGAACTATTATCTTTGCCCATTGTCAAAAACAACGTGACTCAAACAAAACAGTGCCACAACAATTGCAGGATTATTATTCCCTACACGATTTGTGCACGGAAGACTATACGCAACCAGTGGATTGGTACTGACATTCAGGTAAGATAATCTAAATATTCTCTATAACATAATTGTAATGTGTTTTATGTTTATAGCTACAAATGTTTTATGCAAAATACATTTTATGAGGTCGGATACTTATTAAAAGCATTGTCTTAAGTACATTAAAAGGACATTGTA
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1092</end>
+      <identity>1.0</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>1710.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>98.0</support>
+        <inner>108.0</inner>
+        <outer>22.0</outer>
+      </best>
+      <specific>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>98.0</support>
+        <inner>108.0</inner>
+        <outer>22.0</outer>
+      </specific>
+      <alignment>r5454928.nex</alignment>
+      <log>r7120769.log</log>
+      <tree>r1707802.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>98.0</support>
+        <inner>108.0</inner>
+        <outer>22.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 98.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="test" length="1092">
+    <nucleotides>
+      TACTAATTTTGAAAGGCGGGGTTCTGCCAGGCATAGTCTTTTTTTGTGGCGGCCCTTGTGTAAACCTGTCTTTCAGACCTTGTTGGACATCCCGTACAATCAAGATGTTCCTGTATGTTGTTTGCAGTCTGGCGGTTTGCTTTCGAGGACTATTAAGCCTTTCTCTGCAATCGTCTCCAAATCTCTGCCCTGGAGTGATTTCAACGCCTTACACGTTGACCTGTCCGTCTAATACATCCTTGCCAACATCCTGGTATTGCAACGATACTCGGCTTTTACGAGTGACGCAGGGAACATTGACTGTTGACACCCTTATCTGCAATTTTAGTTGTGTGGGACAATCTGGGCATCGATACAGCCTTTGGATTACATGGTATGCACAACCTGTCTTACAAACCTTCTGTGGACAACCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACAAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTCATGAACCAAACTGAGGGGTGTTATGCTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTCTATGTTTTTCGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACATTTGCAACCGCACCTACTCTATTTGTAATGAAAGAAGTAAAATCTACATATCTATATATTCAAGAGCATTTGCTTGTATTTATGACACTCGTAGCTCTGATAGGAACCATGTGTGGTATCTTAGGAACTATTATCTTTGCCCATTGTCAAAAACAACGTGACTCAAACAAAACAGTGCCACAACAATTGCAGGATTATTATTCCCTACACGATTTGTGCACGGAAGACTATACGCAACCAGTGGATTGGTACTGACATTCAGGTAAGATAATCTAAATATTCTCTATAACATAATTGTAATGTGTTTTATGTTTATAGCTACAAATGTTTTATGCAAAATACATTTTATGAGGTCGGATACTTATTAAAAGCATTGTCTTAAGTACATTAAAAGGACATTGTA
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1092</end>
+      <identity>1.0</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>1710.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>100.0</support>
+        <inner>100.0</inner>
+        <outer>24.0</outer>
+      </best>
+      <specific>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>100.0</support>
+        <inner>100.0</inner>
+        <outer>24.0</outer>
+      </specific>
+      <alignment>r2620432.nex</alignment>
+      <log>r474861.log</log>
+      <tree>r5270082.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>100.0</support>
+        <inner>100.0</inner>
+        <outer>24.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 100.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="test" length="1092">
+    <nucleotides>
+      TACTAATTTTGAAAGGCGGGGTTCTGCCAGGCATAGTCTTTTTTTGTGGCGGCCCTTGTGTAAACCTGTCTTTCAGACCTTGTTGGACATCCCGTACAATCAAGATGTTCCTGTATGTTGTTTGCAGTCTGGCGGTTTGCTTTCGAGGACTATTAAGCCTTTCTCTGCAATCGTCTCCAAATCTCTGCCCTGGAGTGATTTCAACGCCTTACACGTTGACCTGTCCGTCTAATACATCCTTGCCAACATCCTGGTATTGCAACGATACTCGGCTTTTACGAGTGACGCAGGGAACATTGACTGTTGACACCCTTATCTGCAATTTTAGTTGTGTGGGACAATCTGGGCATCGATACAGCCTTTGGATTACATGGTATGCACAACCTGTCTTACAAACCTTCTGTGGACAACCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACAAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTCATGAACCAAACTGAGGGGTGTTATGCTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTCTATGTTTTTCGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACATTTGCAACCGCACCTACTCTATTTGTAATGAAAGAAGTAAAATCTACATATCTATATATTCAAGAGCATTTGCTTGTATTTATGACACTCGTAGCTCTGATAGGAACCATGTGTGGTATCTTAGGAACTATTATCTTTGCCCATTGTCAAAAACAACGTGACTCAAACAAAACAGTGCCACAACAATTGCAGGATTATTATTCCCTACACGATTTGTGCACGGAAGACTATACGCAACCAGTGGATTGGTACTGACATTCAGGTAAGATAATCTAAATATTCTCTATAACATAATTGTAATGTGTTTTATGTTTATAGCTACAAATGTTTTATGCAAAATACATTTTATGAGGTCGGATACTTATTAAAAGCATTGTCTTAAGTACATTAAAAGGACATTGTA
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1092</end>
+      <identity>1.0</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>1710.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>101.0</inner>
+        <outer>14.0</outer>
+      </best>
+      <specific>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>101.0</inner>
+        <outer>14.0</outer>
+      </specific>
+      <alignment>r9791518.nex</alignment>
+      <log>r9869733.log</log>
+      <tree>r9549495.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>101.0</inner>
+        <outer>14.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 99.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="test" length="1092">
+    <nucleotides>
+      TACTAATTTTGAAAGGCGGGGTTCTGCCAGGCATAGTCTTTTTTTGTGGCGGCCCTTGTGTAAACCTGTCTTTCAGACCTTGTTGGACATCCCGTACAATCAAGATGTTCCTGTATGTTGTTTGCAGTCTGGCGGTTTGCTTTCGAGGACTATTAAGCCTTTCTCTGCAATCGTCTCCAAATCTCTGCCCTGGAGTGATTTCAACGCCTTACACGTTGACCTGTCCGTCTAATACATCCTTGCCAACATCCTGGTATTGCAACGATACTCGGCTTTTACGAGTGACGCAGGGAACATTGACTGTTGACACCCTTATCTGCAATTTTAGTTGTGTGGGACAATCTGGGCATCGATACAGCCTTTGGATTACATGGTATGCACAACCTGTCTTACAAACCTTCTGTGGACAACCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACAAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTCATGAACCAAACTGAGGGGTGTTATGCTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTCTATGTTTTTCGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACATTTGCAACCGCACCTACTCTATTTGTAATGAAAGAAGTAAAATCTACATATCTATATATTCAAGAGCATTTGCTTGTATTTATGACACTCGTAGCTCTGATAGGAACCATGTGTGGTATCTTAGGAACTATTATCTTTGCCCATTGTCAAAAACAACGTGACTCAAACAAAACAGTGCCACAACAATTGCAGGATTATTATTCCCTACACGATTTGTGCACGGAAGACTATACGCAACCAGTGGATTGGTACTGACATTCAGGTAAGATAATCTAAATATTCTCTATAACATAATTGTAATGTGTTTTATGTTTATAGCTACAAATGTTTTATGCAAAATACATTTTATGAGGTCGGATACTTATTAAAAGCATTGTCTTAAGTACATTAAAAGGACATTGTA
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1092</end>
+      <identity>1.0</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>1710.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>97.0</support>
+        <inner>110.0</inner>
+        <outer>12.0</outer>
+      </best>
+      <specific>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>97.0</support>
+        <inner>110.0</inner>
+        <outer>12.0</outer>
+      </specific>
+      <alignment>r6020274.nex</alignment>
+      <log>r9964623.log</log>
+      <tree>r8407046.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>97.0</support>
+        <inner>110.0</inner>
+        <outer>12.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 97.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="test" length="1092">
+    <nucleotides>
+      TACTAATTTTGAAAGGCGGGGTTCTGCCAGGCATAGTCTTTTTTTGTGGCGGCCCTTGTGTAAACCTGTCTTTCAGACCTTGTTGGACATCCCGTACAATCAAGATGTTCCTGTATGTTGTTTGCAGTCTGGCGGTTTGCTTTCGAGGACTATTAAGCCTTTCTCTGCAATCGTCTCCAAATCTCTGCCCTGGAGTGATTTCAACGCCTTACACGTTGACCTGTCCGTCTAATACATCCTTGCCAACATCCTGGTATTGCAACGATACTCGGCTTTTACGAGTGACGCAGGGAACATTGACTGTTGACACCCTTATCTGCAATTTTAGTTGTGTGGGACAATCTGGGCATCGATACAGCCTTTGGATTACATGGTATGCACAACCTGTCTTACAAACCTTCTGTGGACAACCATCAAACACAGTCACTTGTGGTCAGCATGTTACTTTGTATTGTTCTACCTCTGGAAATAATGTTACCGTTTGGCATCTACCAAACGGACAAAATGAAACCGTGTCACAAACTAAATACTATAATTTTACGCTCATGAACCAAACTGAGGGGTGTTATGCTTGTTCTAACGGGCTGTCGTCTCGCCTGTCAAATCGTCTATGTTTTTCGGCGCGTTGTGCCAATATAACTCCAGAAACTCATACTGTATCTGTCAGCAGTACTACAGGCTTTAGAACATTTGCAACCGCACCTACTCTATTTGTAATGAAAGAAGTAAAATCTACATATCTATATATTCAAGAGCATTTGCTTGTATTTATGACACTCGTAGCTCTGATAGGAACCATGTGTGGTATCTTAGGAACTATTATCTTTGCCCATTGTCAAAAACAACGTGACTCAAACAAAACAGTGCCACAACAATTGCAGGATTATTATTCCCTACACGATTTGTGCACGGAAGACTATACGCAACCAGTGGATTGGTACTGACATTCAGGTAAGATAATCTAAATATTCTCTATAACATAATTGTAATGTGTTTTATGTTTATAGCTACAAATGTTTTATGCAAAATACATTTTATGAGGTCGGATACTTATTAAAAGCATTGTCTTAAGTACATTAAAAGGACATTGTA
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1092</end>
+      <identity>1.0</identity>
+      <cluster>
+        <id>HHV8</id>
+        <name>HHV8</name>
+        <score>1710.0</score>
+        <description>blablabla</description>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>HHV8</concluded-id>
+        <concluded-name>HHV8</concluded-name>
+      </cluster>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>108.0</inner>
+        <outer>17.0</outer>
+      </best>
+      <specific>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>108.0</inner>
+        <outer>17.0</outer>
+      </specific>
+      <alignment>r2714729.nex</alignment>
+      <log>r7064979.log</log>
+      <tree>r4818936.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>subC</id>
+        <name>Subtype_C</name>
+        <support>99.0</support>
+        <inner>108.0</inner>
+        <outer>17.0</outer>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 99.0 (&gt;= 60.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  </genotype_result>

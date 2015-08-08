@@ -1,0 +1,168 @@
+<genotype_result>
+  <sequence name="CP003792_ompA" length="1209">
+    <nucleotides>
+      atgaaaaaactcttgaaatcggcattattgtttgccgctacgggttccgctctctccttacaagccttgcctgtagggaacccagctgaaccaagtttattaatcgatggcactatgtgggaaggtgcttcaggagatccttgcgatccttgcgctacttggtgtgacgccattagcatccgcgcaggatactacggagattatgttttcgatcgtgtattaaaagttgatgtgaataaaacttttagcggcatggctgcaactcctacgcaggctacaggtaacgcaagtaatactaatcagccagaagcaaatggcagaccgaacatcgcttacggaaggcatatgcaagatgcagagtggttttcaaatgcagccttcctagccttaaacatttgggatcgcttcgacattttctgcaccttaggggcatccaatggatacttcaaatcaagttcggctgcattcaacttggttgggttaatagggttttcagctaccagctcaacctctaccgagcttccaatgcaacttcctaacgtaggcattacccaaggtgttgtggaattttatacagacacatcattttcttggagcgtaggtgcacgtggagctttatgggaatgtggttgtgcaactttaggagctgagttccaatacgctcaatctaatcctaagattgaagtgctcaacgtcacttcaagcccagcacaatttgtgattcacaaaccaagaggctataaaggagctagctcgaattttcctttacctataacggctggaacaacagaagctacagacaccaaatcagctacaattaaataccatgaatggcaagtaggcctcgccctgtcttacagattgaatatgcttgttccatatattggcgtaaactggtcaagagcaacttttgatgctgatactatccgcattgctcaacctaaattaaaatcggagattcttaacattactacatggaacccaagccttctaggatcaaccactactttgcccaataatggtggtaaggatgttctatctgatgtcttgcaaattgcttcgattcagatcaacaaaatgaagtctagaaaagcttgtggtgtagctgttggtgcaacgttaatcgacgctgacaaatggtcaatcactggtgaagcacgcttaatcaatgaaagagctgctcacatgaatgctcaattcagattctaa
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1209</end>
+      <identity>0.99255586</identity>
+      <cluster>
+        <id>chlm1</id>
+        <name>Chlamydia_psittaci_ompA</name>
+        <score>1889.0</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>chlm1</concluded-id>
+        <concluded-name>Chlamydia_psittaci_ompA</concluded-name>
+      </cluster>
+      <refseq>AF269268</refseq>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>1_C</id>
+        <name>E</name>
+        <support>864.0</support>
+      </best>
+      <specific>
+        <id>1_C</id>
+        <name>E</name>
+        <support>864.0</support>
+      </specific>
+      <alignment>r4715074.nex</alignment>
+      <log>r5272291.log</log>
+      <tree>r259659.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>1_C</id>
+        <name>E</name>
+        <support>864.0</support>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 864.0 (&gt;= 600.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="84_55" length="1209">
+    <nucleotides>
+      atgaaaaaactcttgaaatcggcattattgtttgccgctacgggttccgctctctccttacaagccttgcctgtagggaacccagctgaaccaagtttattaatcgatggcactatgtgggaaggtgcttcaggagatccttgcgatccttgcgctacttggtgtgacgccattagcatccgcgcaggatactacggagattatgttttcgatcgtgtattaaaagttgatgtgaataaaacttttagcggcatggctgcaactcctacgcaggctacaggtaacgcaagtaatactaatcagccagaagcaaatggcagaccgaacatcgcttacggaaggcatatggaagatgcagagtggttttcaaatgcagccttcctagccttaaacatttgggatcgcttcgacattttctgcaccttaggggcatccaatggatacttcaaagcaagttcggctgcattcaacttggttgggttaatagggttttcagctgcaagctcaatctctaccgatcttccaacgcaacttcctaacgtaggcattacccaaggtgttgtggaattttatacagacacatcattttcttggagcgtaggtgcacgtggagctttatgggaatgtggttgtgcaactttaggagctgagttccaatacgctcaatctaatcctaagattgaaatgctcaacgtcacttcaagcccagcacaatttgtgattcacaaaccaagaggctataaaggagctagctcgaattttcctttacctataacggctggaacaacagaagctacagacaccaaatcagctacaattaaataccatgaatggcaagtaggcctcgccctgtcttacagattgaatatgcttgttccatatattggcgtaaactggtcaagagcaacttttgatgctgatactatccgcattgctcaacctaaattaaaatcggagattcttaacattactacatggaacccaagccttataggatcaaccactgctttgcccaataatagtggtaaggatgttctatctgatgtcttgcaaattgcttcgattcagatcaacaaaatgaagtctagaaaagcttgtggtgtagctgttggtgcaacgttaatcgacgctgacaaatggtcaatcactggtgaagcacgcttaatcaatgaaagagctgctcacatgaatgctcaattcagattctaa
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1209</end>
+      <identity>0.99834573</identity>
+      <cluster>
+        <id>chlm1</id>
+        <name>Chlamydia_psittaci_ompA</name>
+        <score>1911.0</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>chlm1</concluded-id>
+        <concluded-name>Chlamydia_psittaci_ompA</concluded-name>
+      </cluster>
+      <refseq>AF269268</refseq>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>1_A</id>
+        <name>A</name>
+        <support>553.0</support>
+      </best>
+      <alignment>r3110894.nex</alignment>
+      <log>r8390089.log</log>
+      <tree>r5128738.tre</tree>
+    </result>
+    <conclusion type="unassigned" id="type">
+      <assigned>
+        <id>Unassigned</id>
+        <name>Could not assign</name>
+      </assigned>
+      <motivation>Not supported by phylogenetic analysis</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="Mat116" length="1209">
+    <nucleotides>
+      atgaaaaaactcttgaaatcggcattattgtttgccgctacgggttccgctctctccttacaagccttgcctgtagggaacccagctgaaccaagtttattaatcgatggcactatgtgggaaggtgcttcaggcgatccttgcgatccttgctctacttggtgtgatgctatcagcatccgcgcaggatactacggagattatgttttcgatcgtatattaaaagttgatgtgaataaaacttttaccggcatggctgcaactcctacggagcctacaggtaacgcaagtaatactggtacgccagaagcaaatggcagaccgaacatcgcttacggaaggcatatgcaagatgcagagtggttttcaaatgcagccttcctagccttaaacatttgggatcgcttcgacattttctgcaccttaggagcatccaatggatacttcaaagcaagttcggctgcattcaacttggttgggttaatagggttttcagctacaacctcaacctctaccgatcttccaacgcaacttcctaacgtaggcattacccaaggtgttgtggaattttatacagacacatcattttcttggagcgtaggtgcacgtggagctttatgggaatgtggttgtgcaactttaggagctgagttccaatacgctcaatctaatcctaagattgaaatgcttaacgtcatttcaagcccagcacaatttgtaatccacaaaccaagaggctataaaggagctagctcgaattttcctttacctataacggctggaacagcagaagctatagataccaaatcagctacaattaaataccatgaatggcaagtaggcctcgccctgtcttacagattgaatatgcttgttccatatattggtgtaaactggtcaagagcaacttttgatgctgatactatccgcattgctcaacctaaattaaaatcggagattctcaacattactacatggaacccaagccttataggatcaaccactgctttgcccaataatggtggtaaggatgttctatctgatgtcttgcaaattgcttcgattcagatcaacaaaatgaagtctagaaaagcttgtggtgtagctgttggtgcaacgttaatcgacgctgacaaatggtcaatcactggtgaagcacgcttaatcaacgaaagagctgctcacatgaatgctcaattcagattctaa
+    </nucleotides>
+    <result id="blast">
+      <start>0</start>
+      <end>1209</end>
+      <identity>0.97601324</identity>
+      <cluster>
+        <id>chlm1</id>
+        <name>Chlamydia_psittaci_ompA</name>
+        <score>1825.0</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>chlm1</concluded-id>
+        <concluded-name>Chlamydia_psittaci_ompA</concluded-name>
+      </cluster>
+      <refseq>AF269268</refseq>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>1_H</id>
+        <name>Mat116</name>
+        <support>698.0</support>
+      </best>
+      <specific>
+        <id>1_H</id>
+        <name>Mat116</name>
+        <support>698.0</support>
+      </specific>
+      <alignment>r7122083.nex</alignment>
+      <log>r8872520.log</log>
+      <tree>r643466.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>1_H</id>
+        <name>Mat116</name>
+        <support>698.0</support>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 698.0 (&gt;= 600.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  <sequence name="Example_D_NJ1" length="130">
+    <nucleotides>
+      tgacactatccgcattgctcagcctaaattagccactgctgttttagatttaaccacttggaacccaacacttttaggaaaggccacaactgtcgacggtaccaatacttactctgacttcttacaactt
+    </nucleotides>
+    <result id="blast">
+      <start>917</start>
+      <end>1047</end>
+      <identity>1.0</identity>
+      <cluster>
+        <id>chlm1</id>
+        <name>Chlamydia_psittaci_ompA</name>
+        <score>207.0</score>
+        <reverse-compliment>false</reverse-compliment>
+        <concluded-id>chlm1</concluded-id>
+        <concluded-name>Chlamydia_psittaci_ompA</concluded-name>
+      </cluster>
+      <refseq>AF269268</refseq>
+    </result>
+    <result id="phylo-major">
+      <best>
+        <id>4</id>
+        <name>D</name>
+        <support>1000.0</support>
+      </best>
+      <specific>
+        <id>4</id>
+        <name>D</name>
+        <support>1000.0</support>
+      </specific>
+      <alignment>r1170396.nex</alignment>
+      <log>r4201377.log</log>
+      <tree>r7341068.tre</tree>
+    </result>
+    <conclusion type="simple" id="type">
+      <assigned>
+        <id>4</id>
+        <name>D</name>
+        <support>1000.0</support>
+      </assigned>
+      <motivation>Supported with phylogenetic analysis and bootstrap 1000.0 (&gt;= 600.0)</motivation>
+      <rule></rule>
+    </conclusion>
+  </sequence>
+  </genotype_result>

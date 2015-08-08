@@ -1,0 +1,26 @@
+
+P A U P *
+Version 4.0a144 for Macintosh OS X (built on May 18 2015 at 15:25:24)
+Mon Jun  8 15:57:59 2015
+
+      -----------------------------NOTICE-----------------------------
+        This is an alpha-test version prepared for the exclusive
+        use of course and workshop participants, as well as other
+        authorized testers.  It will expire on 1 Sep 2015.
+
+        Please report bugs to david.swofford@duke.edu
+      ----------------------------------------------------------------
+
+
+Data matrix exported to file "~/rega-genotype/jobDir/HIV/2066894782/paup.nex" in Nexus (non-
+interleaved) format.
+
+Optimality criterion set to distance.
+
+Error(#122): Invalid character in name: (
+
+Error occurred while processing line 341 of file tmp.nex
+
+Processing of input file "tmp.nex" terminated due to errors.
+
+Execution terminated due to errors.

@@ -334,4 +334,76 @@
     <servlet-name>GenotypePHYLO</servlet-name>
     <url-pattern>/phylo/typingtool/*</url-pattern>
   </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>GenotypeHPV2</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>HPV2</param-value>
+    </init-param>
+    <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+   </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHPV2</servlet-name>
+    <url-pattern>/hpv2/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+      <servlet>
+    <servlet-name>GenotypeHHV82</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>HHV82</param-value>
+    </init-param>
+    <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+   </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeHHV82</servlet-name>
+    <url-pattern>/hhv82/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+        <servlet>
+    <servlet-name>Genotypehtlv12</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>htlv12</param-value>
+    </init-param>
+    <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+   </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Genotypehtlv12</servlet-name>
+    <url-pattern>/htlv12/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+          <servlet>
+    <servlet-name>Genotypehcv2</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>hcv2</param-value>
+    </init-param>
+    <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+   </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Genotypehcv2</servlet-name>
+    <url-pattern>/hcv2/typingtool/*</url-pattern>
+  </servlet-mapping>
 </web-app>
