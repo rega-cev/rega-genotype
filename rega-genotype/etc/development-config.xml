@@ -7,8 +7,8 @@
   <property name="treePuzzleCmd">/Applications/biotools/tree-puzzle-5.2/src/puzzle</property>
   <property name="treeGraphCmd">/Applications/biotools/tgf10rc4/source/tgf</property>
   <property name="jobDir">/Users/tulio/rega-genotype/jobDir</property>
-  <property name="maxAllowedSequences">20000</property>
+  <property name="maxAllowedSequences">2000000</property>
   <property name="imageMagickConvertCmd">/usr/local/bin/wrapConvert.sh</property> 
-  <property name="maxAllowedSequences">20000</property>
+  <property name="maxAllowedSequences">2000000</property>
   
 </rega-genotype-settings>

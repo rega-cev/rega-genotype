@@ -148,7 +148,7 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
   						<span>${xpath "/genotype_result/sequence/conclusion[@id='type']/motivation"}</span>
 					</p>
 
-<!--
+
 					${eval-xpath "/genotype_result/sequence/conclusion[@type='simple' and @id='type']"}
 					${<if-defined>}
 					    <p>
@@ -178,7 +178,7 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
    							${</if-not-defined>}
 						</p>
 	  				${</if-defined>}
-  -->
+ 
  				</div>
  				<div>
  					<h3>Genome region</h3>

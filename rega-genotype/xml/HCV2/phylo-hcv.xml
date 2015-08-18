@@ -1,7 +1,7 @@
 <genotype-analyses>
     <alignment file="phylo-hcv.fasta" trim="true"/>
      <clusters>
-        <cluster id="Geno1" name="Genotype 1">
+        <cluster id="1" name="Genotype 1">
                 <taxus name="1a_AF009606"/>
                 <taxus name="1b_D90208"/>
                 <taxus name="1c_D14853"/>
@@ -17,7 +17,7 @@
                 <taxus name="1n_KJ439781"/>
         </cluster>
         
-         <cluster id="Geno_2" name="Genotype 2">
+         <cluster id="2" name="Genotype 2">
                 <taxus name="2q_FN666428"/>
                 <taxus name="2a_D00944"/>
                 <taxus name="2r_JF735115"/>
@@ -33,7 +33,7 @@
                 <taxus name="2m_JF735111"/>
         </cluster>
 
-         <cluster id="Geno_3" name="Genotype 3">
+         <cluster id="3" name="Genotype 3">
                 <taxus name="3a_D17763"/>
                 <taxus name="3b_D49374"/>
                 <taxus name="3d_KJ470619"/>
@@ -44,7 +44,7 @@
                 <taxus name="3k_JF735122"/>
         </cluster>
 
-         <cluster id="Geno_4" name="Genotype 4">
+         <cluster id="4" name="Genotype 4">
                 <taxus name="4a_Y11604"/>
                 <taxus name="4b_FJ462435"/>
                 <taxus name="4c_FJ462436"/>
@@ -64,12 +64,12 @@
                 <taxus name="4w_FJ025855"/>
         </cluster>
 
-         <cluster id="Geno_5" name="Genotype 5">
+         <cluster id="5" name="Genotype 5">
             <taxus name="5a_AF064490"/>
             <taxus name="5a_Y13184"/>
         </cluster>
 
-         <cluster id="Geno_6" name="Genotype 6">
+         <cluster id="6" name="Genotype 6">
                 <taxus name="6a_Y12083"/>
                 <taxus name="6b_D84262"/>
                 <taxus name="6c_EF424629"/>
@@ -100,18 +100,21 @@
                 <taxus name="6w_DQ278892"/>
         </cluster>
 
-         <cluster id="Geno_7" name="Genotype 7">
+         <cluster id="7" name="Genotype 7">
             <taxus name="7a_EF108306"/>
         </cluster>
 
 
-            <cluster id="1a" name="Genotype 1 subtype a">
-                <taxus name="1a_AF009606"/>
-                <taxus name="1a_M62321"/>
-                <taxus name="1a_M67463"/>
-                <taxus name="1a_HQ850279"/>
-                <taxus name="1a_EF407457"/>
+            <cluster id="1a" name="Subtype a">
+               <description>Genotype 1 subtype a</description>
+                <taxus name="1a_AF009606" />
+                <taxus name="1a_M62321" />
+                <taxus name="1a_M67463" />
+                <taxus name="1a_HQ850279" />
+                <taxus name="1a_EF407457" />
+                <tags>CRF</tags>
             </cluster>
+            
             <cluster id="1b" name="Genotype 1 subtype b">
                 <taxus name="1b_D90208"/>
                 <taxus name="1b_M58335"/>
@@ -429,7 +432,7 @@
 
   <analysis id="phylo-major" type="paup">
     <identify>
-  Geno1,Geno_2,Geno_6,Geno_7
+1,2,3,4,5,6,7
       </identify>
     <cutoff>
       70
@@ -450,13 +453,13 @@
       quit;
     </block>
     <options>
-      log,alignment,tree,inner,outer
+      log,alignment,tree
     </options>
   </analysis>
     
-    	<analysis id="phylo-minor-Geno1" type="paup">
+ 	<analysis id="phylo-minor-1" type="paup">
 		<identify>
- 1a,1b,1c,1d,1e,1g,1h,1i,1j,1k,1l,1m,1n,7a
+1a,1b,1c,1d,1e,1g,1h,1i,1j,1k,1l,1m,1n,7a
     </identify>
     <cutoff>
       70
@@ -480,10 +483,10 @@
       log,alignment,tree,inner,outer
     </options>
   </analysis>
-    
   
   
-      <analysis id="phylo-minor-Geno_2" type="paup">
+  
+      <analysis id="phylo-minor-2" type="paup">
     <identify>
         2q,2a,2r,2b,2c,2t,2d,2e,2f,2i,2j,2k,2m,7a
     </identify>
@@ -510,7 +513,7 @@
     </options>
   </analysis>
   
-        <analysis id="phylo-minor-Geno_3" type="paup">
+        <analysis id="phylo-minor-3" type="paup">
     <identify>
         3a,3b,3d,3e,3g,3h,3i,3k,7a
     </identify>
@@ -537,7 +540,7 @@
     </options>
   </analysis>
   
-        <analysis id="phylo-minor-Geno_4" type="paup">
+        <analysis id="phylo-minor-4" type="paup">
     <identify>
         4a,4b,4c,4d,4f,4g,4k,4l,4m,4n,4o,4p,4q,4r,4t,4v,4w,7a
     </identify>
@@ -564,9 +567,9 @@
     </options>
   </analysis>
   
-        <analysis id="phylo-minor-Geno_6" type="paup">
+             <analysis id="phylo-minor-5" type="paup">
     <identify>
-        6a,6b,6c,6d,6e,6f,6g,6h,6xa,6i,6xb,6j,6xc,6k,6l,6xe,6m,6n,6o,6p,6q,6r,6s,6t,6u,6v,6w
+        4a,5a,7a
     </identify>
     <cutoff>
       70
@@ -590,7 +593,35 @@
       log,alignment,tree,inner,outer
     </options>
   </analysis>
-  
+     
+        <analysis id="phylo-minor-6" type="paup">
+    <identify>
+        6a,6b,6c,6d,6e,6f,6g,6h,6xa,6i,6xb,6j,6xc,6k,6l,6xe,6m,6n,6o,6p,6q,6r,6s,6t,6u,6v,6w,7a
+    </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup 7a_EF108306;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=SetAbsVal;
+ 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+	  NJ constraints=CONSTRE enforce=yes;
+ 	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree,inner,outer
+    </options>
+  </analysis>
+   
+ 
   
 </genotype-analyses>
 

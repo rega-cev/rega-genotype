@@ -406,4 +406,22 @@
     <servlet-name>Genotypehcv2</servlet-name>
     <url-pattern>/hcv2/typingtool/*</url-pattern>
   </servlet-mapping>
+  
+            <servlet>
+    <servlet-name>Genotypedengue</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>dengue</param-value>
+    </init-param>
+    <init-param>
+        <param-name>configFile</param-name>
+        <param-value>etc/development-config.xml</param-value>
+   </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>Genotypedengue</servlet-name>
+    <url-pattern>/dengue/typingtool/*</url-pattern>
+  </servlet-mapping>
 </web-app>

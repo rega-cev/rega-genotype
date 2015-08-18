@@ -103,9 +103,6 @@
     
    <cluster id="alpha14" name="alphapapillomavirus species 14: low risk mucosal HPV">
  	<taxus name="a14_HPV90" />
-    </cluster>
-    
-   <cluster id="alpha15" name="alphapapillomavirus species 15: low riks mucosal HPV">
  	<taxus name="a15_HPV71" />
     </cluster>
 	</cluster>
@@ -341,7 +338,7 @@
     </step>
     <analysis type="paup">
       <identify>
-		alpha1,alpha2,alpha3,alpha4,alpha5,alpha6,alpha7,alpha8,alpha9,alpha10,alpha11,alpha12,alpha13,alpha14,alpha15,alpha,beta1,beta2,beta3,beta4,beta5,beta,gamma1,gamma2,gamma3,gamma4,gamma,delta1,delta2,delta3,delta4,delta,epsilon1,epsilon,zeta1,zeta,eta1,eta,theta1,theta,iota1,iota,kappa1,kappa2,kappa,lambda1,lambda2,lambda3,lambda,mu1,mu2,mu,nu1,nu,xi1,xi,omikron1,omikron,pi1,pi,rho1,rho,sigma1,sigma,unclassified1,unclassified2
+		alpha1,alpha2,alpha3,alpha4,alpha5,alpha6,alpha7,alpha8,alpha9,alpha10,alpha11,alpha12,alpha13,alpha14,alpha,beta1,beta2,beta3,beta4,beta5,beta,gamma1,gamma2,gamma3,gamma4,gamma,delta1,delta2,delta3,delta4,delta,epsilon1,epsilon,zeta1,zeta,eta1,eta,theta1,theta,iota1,iota,kappa1,kappa2,kappa,lambda1,lambda2,lambda3,lambda,mu1,mu2,mu,nu1,nu,xi1,xi,omikron1,omikron,pi1,pi,rho1,rho,sigma1,sigma,unclassified1,unclassified2
       </identify>
       <block>
         begin paup;
