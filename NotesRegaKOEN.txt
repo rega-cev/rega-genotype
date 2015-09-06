@@ -83,6 +83,40 @@ Comments: Done HHV8 but tree figure is not working in PNG
 
 -----
 Comments: Done HTLV-1 - need for all of the new tools to get the size of the genome and the picture...
+Need also new alignments.
 
+-----
+Need to do HBV
+
+----
+HPV2 - failing - undefined cluster alpha15
+
+----
+HCV - need to add inside and outside. Difficult to get minor to work (only with few characters). Need to add recombination detection.
+Can recombination have a selection before the tool?
+
+----
+Dengue - batch results need to have name and not id (do not know how to put this).
+Reference sequences need to have genotype in front so tree is easy to interpret.
+
+---- GENERAL COMMENTS
+Number of sequences accept. It looks that the limitation is the size of the text file and not the number of sequences.
+
+----
+Need to make the fastaToRega to work
+
+----
+Need to get the self-bootscan to work
+
+----
+Need to be able to export war file so other people can test (maybe a Belgium testing site that I can access by tomcat administrator????)
+
+----
+Need to test to see the phylo major and phyo-minor. It was quite confusing on the length of the annotation.
+
+
+
+
+----
 
 
