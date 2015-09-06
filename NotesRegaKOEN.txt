@@ -2,9 +2,20 @@ Notes Rega V3:
 
 Git fetch github
 
+Basics:
+
+Fetch changes
+
+
+Add 
+
+
+
 Three examples of tools that can be constructed directly in the XML files (HAV and Nov).
 
 Tulio-MacBook-Pro-Retina:~ tulio$ cd rega-genotype/
+
+
 Tulio-MacBook-Pro-Retina:rega-genotype tulio$ git pull
 remote: Counting objects: 48, done.
 
@@ -114,9 +125,34 @@ Need to be able to export war file so other people can test (maybe a Belgium tes
 ----
 Need to test to see the phylo major and phyo-minor. It was quite confusing on the length of the annotation.
 
+----
+Need to code the coronavirus (started, it will be popular)
 
-
+----
+Need to understand how to setup decision trees that involve recombination.
 
 ----
 
+2) Phylominor - 
+- Prefix - of the minor (1 - 1a, etc).
 
+3)Batch output
+ID clusters, name, how to change
+
+4) Inside outside rule (?) - XML (?)
+
+5) Report - need to say the classification
+
+6) Recombination 
+
+7) Self-bootstcan\
+
+8) Fasta2REGA - new script
+
+9) War file - AINT - info on how to deploy
+
+10) Tomcat server
+
+11) Git for references
+
+	
