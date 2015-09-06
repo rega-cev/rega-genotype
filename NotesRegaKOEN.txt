@@ -1,6 +1,11 @@
 Notes Rega V3:
 
 Git fetch github
+git gui
+
+
+
+
 
 Basics:
 
@@ -134,18 +139,50 @@ Need to understand how to setup decision trees that involve recombination.
 ----
 
 2) Phylominor - 
-- Prefix - of the minor (1 - 1a, etc).
+- Prefix - of the minor (1 - 1a, etc). Need to have 
 
 3)Batch output
 ID clusters, name, how to change
+- RESULT LIST IN CONFIG.XML - Example DENGUE
+
+	<result-list>
+		<column>
+			<label>Name</label>
+			<field>/genotype_result/sequence/@name</field>
+		</column>
+		<column>
+			<label>Length</label>
+			<field>/genotype_result/sequence/@length</field>
+		</column>
+		<column>
+			<label>Virus</label>
+			<field>/genotype_result/sequence/result[@id='blast']/cluster/concluded-name</field>
+		</column>
+		<column>
+			<label>Phylotype</label>
+			<field>/genotype_result/sequence/conclusion/assigned/name</field>
+		</column>
+		<column>
+			<label>Report</label>
+			<field>report-link</field>
+		</column>
+		<column>
+			<label>Genome</label>
+			<field>genome</field>
+		</column>
+	</result-list>
+	
 
 4) Inside outside rule (?) - XML (?)
 
 5) Report - need to say the classification
 
+
+
+
 6) Recombination 
 
-7) Self-bootstcan\
+7) Self-bootstcan
 
 8) Fasta2REGA - new script
 

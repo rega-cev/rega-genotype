@@ -31,6 +31,35 @@
 		<image-end>605</image-end>
 	</genome>	
 
+
+	<result-list>
+		<column>
+			<label>Name</label>
+			<field>/genotype_result/sequence/@name</field>
+		</column>
+		<column>
+			<label>Length</label>
+			<field>/genotype_result/sequence/@length</field>
+		</column>
+		<column>
+			<label>Virus</label>
+			<field>/genotype_result/sequence/result[@id='blast']/cluster/concluded-name</field>
+		</column>
+		<column>
+			<label>Phylotype</label>
+			<field>/genotype_result/sequence/conclusion/assigned/name</field>
+		</column>
+		<column>
+			<label>Report</label>
+			<field>report-link</field>
+		</column>
+		<column>
+			<label>Genome</label>
+			<field>genome</field>
+		</column>
+	</result-list>
+	
+
 	<result-download>
 		<column>
 			<label>name</label>
