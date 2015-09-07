@@ -29,7 +29,7 @@ public abstract class GenotypeMain extends WtServlet
 		// progressive bootstrap is broken because Wt is not aware of image URLs in documentation forms 
 		// getConfiguration().setProgressiveBootstrap(true);
 	}
-	
+
 	public static GenotypeApplication getApp() {
 		return (GenotypeApplication)WApplication.getInstance();
 	}

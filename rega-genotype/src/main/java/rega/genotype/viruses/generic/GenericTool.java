@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import eu.webtoolkit.jwt.WString;
-
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
@@ -24,6 +23,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
+import rega.genotype.ScanAnalysis;
 import rega.genotype.SubSequence;
 
 /**
@@ -83,12 +83,12 @@ public class GenericTool extends GenotypeTool {
 				/*
 				 * Perhaps we have a full-genome analysis?
 				 */
-				PhyloClusterAnalysis pca = getAnalysis(c.getId(), null, null);
+				PhyloClusterAnalysis pca = getPhyloAnalysis(c.getId(), null, null);
 				if (pca != null) {
 					phyloAnalysis(pca, s, blastResult, region, false);
 					haveConclusion = true;
 				} else if (region != null) {
-		        	pca = getAnalysis(c.getId(), null, region);
+		        	pca = getPhyloAnalysis(c.getId(), null, region);
 		        	if (pca != null) {
 		        		AbstractSequence s2 = cutRegion(s, blastResult,	region);
 		        		phyloAnalysis(pca, s2, blastResult, region, true);
@@ -128,7 +128,7 @@ public class GenericTool extends GenotypeTool {
 		return null;
 	}
 
-	private PhyloClusterAnalysis getAnalysis(String genusId, String typeId, Region region) throws IOException, ParameterProblemException, FileFormatException {
+	private PhyloClusterAnalysis getPhyloAnalysis(String genusId, String typeId, Region region) throws IOException, ParameterProblemException, FileFormatException {
 		String alignmentId = genusId;
 
 		if (region != null)
@@ -156,11 +156,12 @@ public class GenericTool extends GenotypeTool {
 
 		return result;
 	}
-
+	
 	private void phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s, Result blastResult, Region region, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
 		PhyloClusterAnalysis.Result r = pca.run(s);
-
-		if (r.haveSupport()) {
+		ScanAnalysis.Result scanResult = checkBootScan(pca, s);
+		
+		if (r.haveSupport() && (scanResult == null || scanResult.haveSupport())) {
 			conclude(r, new WString("Supported with phylogenetic analysis and bootstrap {1} (&gt;= {2})").arg(r.getConcludedSupport()).arg(pca.getCutoff()), "type");
 
 			subgenogroupPhyloAnalysis(s, blastResult, region, r.getConcludedCluster(), cutToRegion);
@@ -168,13 +169,22 @@ public class GenericTool extends GenotypeTool {
 			conclude("Could not assign", "Not supported by phylogenetic analysis", "type");
 	}
 
-    private boolean subgenogroupPhyloAnalysis(AbstractSequence s, Result blastResult, Region region, Cluster typeCluster, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
-    	PhyloClusterAnalysis a = getAnalysis(blastResult.getConcludedCluster().getId(), typeCluster.getId(), region);
+    private ScanAnalysis.Result checkBootScan(PhyloClusterAnalysis pca, AbstractSequence s) throws AnalysisException {
+    	ScanAnalysis sa = (ScanAnalysis) pca.getOwner().getAnalysis(pca.getId() + "-scan");
+    	
+    	if (sa != null) {
+    		return sa.run(s);
+    	} else
+    		return null;
+	}
+
+	private boolean subgenogroupPhyloAnalysis(AbstractSequence s, Result blastResult, Region region, Cluster typeCluster, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
+    	PhyloClusterAnalysis a = getPhyloAnalysis(blastResult.getConcludedCluster().getId(), typeCluster.getId(), region);
     	
     	if (a == null) {
     		if (region != null) {
     			region = null;
-    			a = getAnalysis(blastResult.getConcludedCluster().getId(), typeCluster.getId(), region);
+    			a = getPhyloAnalysis(blastResult.getConcludedCluster().getId(), typeCluster.getId(), region);
     		}
     		
     		if (a == null)

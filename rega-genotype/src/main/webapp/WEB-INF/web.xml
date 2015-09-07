@@ -394,7 +394,7 @@
     <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
     <init-param>
     	<param-name>Organism</param-name>
-    	<param-value>hcv2</param-value>
+    	<param-value>HCV2</param-value>
     </init-param>
     <init-param>
         <param-name>configFile</param-name>
