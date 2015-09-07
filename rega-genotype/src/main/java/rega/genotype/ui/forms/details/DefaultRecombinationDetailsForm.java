@@ -131,6 +131,8 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		
 		addWidget(new WBreak());
 		addWidget(new WBreak());
+		
+		/*
 		WContainerWidget recombinationProfile = new WContainerWidget(this);
 		recombinationProfile.addWidget(new WText(tr("defaultRecombinationAnalyses.profile")));
 		WListContainerWidget profileList = new WListContainerWidget(recombinationProfile);
@@ -141,6 +143,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 		profileList.addItem(tr("defaultRecombinationAnalyses.profile.best")
 				.arg(p.getValue(path + "/profile[@id='best']")));
 		recombinationProfile.setContentAlignment(AlignmentFlag.AlignLeft);
+		*/
 		
 		this.setContentAlignment(AlignmentFlag.AlignCenter);
 	}

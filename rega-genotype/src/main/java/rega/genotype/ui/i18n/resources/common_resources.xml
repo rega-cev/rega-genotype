@@ -121,11 +121,13 @@
 	
 	<message id="details.analysisDetails"><h2>Analysis details</h2></message>
 	
+	<message id="details.phylo-major-scan.title">Recombination Analysis Details</message>
+	
 	<message id="defaultPhylogeneticAnalyses.title">Phylogenetic analyses</message>
 	<message id="defaultPhylogeneticAnalyses.comment">
 		This section contains the alignments, inferred phylogenetic trees, and detailed results of the evolutionary analysis.
 	</message>
-	
+
 	<message id="defaultRecombinationAnalyses.title">Recombination analyses</message>
 	<message id="defaultRecombinationAnalyses.detailedRecombination">Detailed recombination analyses</message>
 	<message id="defaultRecombinationAnalyses.comment">
