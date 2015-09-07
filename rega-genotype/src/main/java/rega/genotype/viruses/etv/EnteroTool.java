@@ -139,10 +139,6 @@ public class EnteroTool extends GenotypeTool {
 		return true;
 	}
 
-	public void analyzeSelf() throws AnalysisException {
-	}
-	
-
 	@Override
 	protected boolean cancelAnalysis() {
 		return false;

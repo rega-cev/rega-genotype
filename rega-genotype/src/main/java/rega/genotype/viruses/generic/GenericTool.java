@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import eu.webtoolkit.jwt.WString;
+import rega.genotype.AbstractAnalysis;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
@@ -46,6 +47,13 @@ public class GenericTool extends GenotypeTool {
     private Map<String, PhyloClusterAnalysis> phyloAnalyses = new HashMap<String, PhyloClusterAnalysis>();
 
 	private String xmlSubDir;
+
+    public GenericTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	this.xmlSubDir = "";
+    	this.workingDir = workingDir;
+        blastXml = readAnalyses(xmlSubDir + "/blast.xml", workingDir);
+        blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
+    }
 
     public GenericTool(String xmlSubDir, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
     	this.xmlSubDir = xmlSubDir;
@@ -221,9 +229,32 @@ public class GenericTool extends GenotypeTool {
 		return true;
 	}
 
-	public void analyzeSelf() throws AnalysisException {
+	@Override
+	public void analyzeSelf(String traceFile, String analysisFile, int windowSize, int stepSize, String analysisId)
+			throws AnalysisException {
+
+		try {
+			AlignmentAnalyses analyses = readAnalyses(analysisFile, workingDir);
+
+			if (analysisId == null) {
+				for (AbstractAnalysis a : analyses.analyses()) {
+					if (a instanceof ScanAnalysis && a.getId().endsWith("-self-scan")) {
+						ScanAnalysis sa = (ScanAnalysis) a;
+						sa.run(null);
+					}
+				}
+			} else {
+				ScanAnalysis sa = (ScanAnalysis) analyses.getAnalysis(analysisId);
+				sa.run(null);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} catch (ParameterProblemException e) {
+			throw new RuntimeException(e);
+		} catch (FileFormatException e) {
+			throw new RuntimeException(e);
+		}
 	}
-	
 
 	@Override
 	protected boolean cancelAnalysis() {

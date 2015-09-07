@@ -99,6 +99,8 @@ public abstract class GenotypeTool {
         String workingDirTmp = (String) parser.getOptionValue(workingDirOption);        
         if (workingDirTmp != null)
         	result.workingDir = workingDirTmp;
+        else
+        	result.workingDir = ".";
         
         String treeGraphCmd = (String) parser.getOptionValue(treeGraphCmdOption);        
         if (treeGraphCmd != null)
@@ -111,10 +113,11 @@ public abstract class GenotypeTool {
 
     private static void printUsage() {
 		System.err.println("GenotypeTool: error parsing command-line.");
-		System.err.println("usage: GenotypeTool[-p pauppath] [-c clustalpath] [-x xmlpath] analysis [sequences.fasta] result.xml");
+		System.err.println("usage: GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] analysis sequences.fasta result.xml");
+		System.err.println("       GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] analysis SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
 		System.err.println();
-		System.err.println("\tPerforms the given analysis and writes the result to the tracefile result.xml");
-		System.err.println("\tIf no sequences are given, an internal analysis is performed.");
+		System.err.println("\tThe first option analyzes one or more sequences and writes the result to the tracefile result.xml");
+		System.err.println("\tThe second option performs an internal analysis");
 		System.err.println();
 		System.err.println("options:");
 		System.err.println("\t-p,--paup      	specify path to paup");
@@ -126,18 +129,6 @@ public abstract class GenotypeTool {
         System.err.println("\t-w,--workingDir   specify path to the working directory (default .)");
 	}
 
-	private void analyzeSelf(String traceFile) throws FileNotFoundException {
-        startTracer(traceFile);
-
-        try {
-			analyzeSelf();
-		} catch (AnalysisException e) {
-			System.err.println(e.getMessage());
-		}
-        
-        stopTracer();
-	}
-	
 	/**
 	 * This function analyzes an input FASTA file, and writes results to a given
 	 * trace file.
@@ -279,7 +270,10 @@ public abstract class GenotypeTool {
     /**
      * Abstract function that provides a self-check analysis.
      */
-    abstract public void analyzeSelf() throws AnalysisException;
+    public void analyzeSelf(String traceFile, String analysisFile, int windowSize, int stepSize, String analysisId) throws AnalysisException
+    {
+    	throw new RuntimeException("analyzeSelf() is not implemented for this TypingTool");
+    }
 
     abstract protected String currentJob();
     
@@ -321,29 +315,43 @@ public abstract class GenotypeTool {
         this.parent = parent;
     }
     
-    @SuppressWarnings("unchecked")
 	public static void main(String[] args)
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
     	
-    	/*
-    	 * Usage: GenotypeTool [-p,-c,-x] className [sequences.fasta] result.xml
-    	 */	
     	ArgsParseResult parseArgsResult = parseArgs(args);
     	if (parseArgsResult.remainingArgs == null)
     		return;
 
-    	if (parseArgsResult.remainingArgs.length < 2) {
+    	if (parseArgsResult.remainingArgs.length < 3) {
     		printUsage();
     		return;
     	}
     	
-    	Class analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
+    	Class<?> analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
+    	String sequenceFile = parseArgsResult.remainingArgs[1];
+    	String traceFile = parseArgsResult.remainingArgs[2];
     	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(parseArgsResult.workingDir));
 
     	if (parseArgsResult.remainingArgs.length == 3) {
-    		genotypeTool.analyze(parseArgsResult.remainingArgs[1], parseArgsResult.remainingArgs[2]);
+    		// GenotypeTool [...] className sequences.fasta result.xml
+    		genotypeTool.analyze(sequenceFile, traceFile);
+    	} else if (parseArgsResult.remainingArgs.length == 6 || parseArgsResult.remainingArgs.length == 7) {
+    		// GenotypeTool [...] className SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
+    		String analysisFile = parseArgsResult.remainingArgs[3];
+    		int windowSize = Integer.parseInt(parseArgsResult.remainingArgs[4]);
+    		int stepSize = Integer.parseInt(parseArgsResult.remainingArgs[5]);
+    		String analysisId = null;
+   			if (parseArgsResult.remainingArgs.length == 7)
+   				analysisId = parseArgsResult.remainingArgs[6];
+   	        genotypeTool.startTracer(traceFile);
+   	        try {
+   	    		genotypeTool.analyzeSelf(traceFile, analysisFile, windowSize, stepSize, analysisId);
+   			} catch (AnalysisException e) {
+   				System.err.println(e.getMessage());
+   			}
+   	        genotypeTool.stopTracer();
     	} else
-    		genotypeTool.analyzeSelf(parseArgsResult.remainingArgs[1]);
+    		printUsage();
     }
 
 	public static String getXmlBasePath() {
