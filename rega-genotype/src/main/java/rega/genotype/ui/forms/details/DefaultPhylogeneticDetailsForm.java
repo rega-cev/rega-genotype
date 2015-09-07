@@ -57,6 +57,8 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 		
 		String inner = p.getValue(phyloPath + "/best/inner");
 		String outer = p.getValue(phyloPath + "/best/outer");
+
+		ul.addItem(new WText("Assignment: " + p.getValue(phyloPath + "/best/name")));
 		
 		if (inner != null && outer != null)
 			li = ul.addItem(new WText("Bootstrap support: " + p.getValue(phyloPath + "/best/support")
