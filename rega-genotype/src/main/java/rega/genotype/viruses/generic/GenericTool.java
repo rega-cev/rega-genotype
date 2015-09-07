@@ -170,12 +170,14 @@ public class GenericTool extends GenotypeTool {
 	}
 
     private ScanAnalysis.Result checkBootScan(PhyloClusterAnalysis pca, AbstractSequence s) throws AnalysisException {
-    	ScanAnalysis sa = (ScanAnalysis) pca.getOwner().getAnalysis(pca.getId() + "-scan");
-    	
-    	if (sa != null) {
-    		return sa.run(s);
-    	} else
+    	ScanAnalysis sa = null;
+    	try {
+    		sa = (ScanAnalysis) pca.getOwner().getAnalysis(pca.getId() + "-scan");
+    	} catch (Exception e) { /* If not available */
     		return null;
+    	}
+    	
+   		return sa.run(s);
 	}
 
 	private boolean subgenogroupPhyloAnalysis(AbstractSequence s, Result blastResult, Region region, Cluster typeCluster, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {

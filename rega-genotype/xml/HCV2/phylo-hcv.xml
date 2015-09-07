@@ -458,16 +458,19 @@
   </analysis>
 
 	<analysis id="phylo-major-scan" type="scan">
+		<minimum-length>
+			500
+		</minimum-length>
 		<window>
 			400
 		</window>
 		<step>
-			50
+			100
 		</step>
 		<cutoff>
 			0.9
 		</cutoff>
-		<analysis id="phylo-major" type="paup">
+		<analysis type="paup">
 			<identify>
 				1,2,3,4,5,6,7
 			</identify>
