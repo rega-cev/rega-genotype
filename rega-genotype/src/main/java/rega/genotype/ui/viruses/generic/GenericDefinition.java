@@ -50,6 +50,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	
 	public static class ResultColumn {
 		String label, field;
+		int colSpan;
 	}
 	
 	private List<MenuItem> menuItems = new ArrayList<MenuItem>();
@@ -125,6 +126,11 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 				ResultColumn column = new ResultColumn();
 				column.label = columnE.getChildText("label");
 				column.field = columnE.getChildText("field");
+				String colSpan = columnE.getChildText("colSpan");
+				if (colSpan != null)
+					column.colSpan = Integer.valueOf(2);
+				else
+					column.colSpan = 1;
 				columns.add(column);
 			}
 		}
