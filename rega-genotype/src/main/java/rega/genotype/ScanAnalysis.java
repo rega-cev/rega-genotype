@@ -402,4 +402,12 @@ public class ScanAnalysis extends AbstractAnalysis {
 	public Result run(AbstractSequence sequence) throws AnalysisException {
 		return (rega.genotype.ScanAnalysis.Result) super.run(sequence);
 	}
+
+	public void setWindowSize(int windowSize) {
+		this.window = windowSize;
+	}
+
+	public void setStepSize(int stepSize) {
+		this.step = stepSize;
+	}
 }

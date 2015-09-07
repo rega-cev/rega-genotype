@@ -240,6 +240,8 @@ public class GenericTool extends GenotypeTool {
 				for (AbstractAnalysis a : analyses.analyses()) {
 					if (a instanceof ScanAnalysis && a.getId().endsWith("-self-scan")) {
 						ScanAnalysis sa = (ScanAnalysis) a;
+						sa.setWindowSize(windowSize);
+						sa.setStepSize(stepSize);
 						sa.run(null);
 					}
 				}
