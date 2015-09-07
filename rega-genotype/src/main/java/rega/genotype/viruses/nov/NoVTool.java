@@ -197,15 +197,6 @@ public class NoVTool extends GenotypeTool {
 		return true;
 	}
 
-	public void analyzeSelf() throws AnalysisException {
-		for (int i = 0; i < 4; ++i) {
-			if (phyloAnalyses[i] != null) {
-				ScanAnalysis scan = (ScanAnalysis) phyloAnalyses[i].getAnalysis("scan-self");
-				scan.run(null);
-			}
-		}
-	}
-
 	@Override
 	protected boolean cancelAnalysis() {
 		return false;

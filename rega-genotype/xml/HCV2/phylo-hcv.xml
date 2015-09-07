@@ -659,8 +659,37 @@
       log,alignment,tree,inner,outer
     </options>
   </analysis>
+
+	<analysis id="phylo-minor-1-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				1a,1b,1c,1d,1e,1g,1h,1i,1j,1k,1l,1m,1n,7a
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
    
- 
-  
 </genotype-analyses>
 
