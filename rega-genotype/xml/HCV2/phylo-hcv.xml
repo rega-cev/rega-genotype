@@ -485,7 +485,7 @@
 				constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
 				NJ constraints=CONSTRE enforce=yes;
 				savetree format=nexus brlens=yes file=paup.tre replace=yes;
-				bootstrap nreps=100 search=nj;
+				bootstrap nreps=10 search=nj;
 				end;
 				quit;
 			</block>

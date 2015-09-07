@@ -195,6 +195,7 @@ public class GenericTool extends GenotypeTool {
     		s = cutRegion(s, blastResult, region);
     	
 		PhyloClusterAnalysis.Result r = a.run(s);
+		ScanAnalysis.Result scanResult = checkBootScan(a, s);
 		
 		String phyloName = "phylogenetic subgenogroup analysis within " + typeCluster.getId();
 
@@ -207,6 +208,7 @@ public class GenericTool extends GenotypeTool {
 		 * outgroup with some attribute ?
 		 */
 		if (r == null
+			|| (scanResult != null && !scanResult.haveSupport())
 			|| r.getConcludedCluster() == null
 			|| !r.getConcludedCluster().getId().startsWith(typeCluster.getId())
 			|| !r.haveSupport())

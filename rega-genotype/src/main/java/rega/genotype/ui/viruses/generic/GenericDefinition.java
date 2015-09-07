@@ -26,6 +26,7 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
+import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenomeAttributes;
@@ -181,6 +182,12 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 			if (p.elementExists(variantResult)) {
 				WString variantTitle = WString.tr("details.phylo-minor.title").arg(bestGenotype);
 				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle, true));
+			}
+			
+			String scanResult = result + "[@id='phylo-major-scan']";
+			if (p.elementExists(scanResult)) {
+				title = WString.tr("details.phylo-major-scan.title");
+				forms.add(new DefaultRecombinationDetailsForm(scanResult, "major", title));
 			}
 		}
 	}
