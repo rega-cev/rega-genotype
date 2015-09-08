@@ -1,0 +1,27 @@
+<genotype-analyses>
+  <alignment file="blast.fasta" />
+
+  <clusters>
+    <cluster id="corona" name="Corona">
+      <description>Corona</description>
+      <taxus name="b_BtCoVHKU31China2005" /> 
+      <taxus name="a_BM4828Rhifer2008" />
+      <taxus name="b_SARSCoVTor2Canada2003" />
+      <taxus name="a_EptfusARCoV2JX537913" />
+          </cluster>
+  </clusters>
+
+  <analysis id="blast" type="blast">
+    <identify>
+      corona
+    </identify>
+    <options>
+      -q -1 -r 1
+    </options>
+    <cutoff>
+      50
+    </cutoff>
+  </analysis>
+
+</genotype-analyses>
+
