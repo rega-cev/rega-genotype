@@ -223,7 +223,14 @@ public class FastaToRega {
 		analysisElem.setAttribute("type", "paup");
 
 		Element identifyElem = (Element) analysisElem.appendChild(doc.createElement("identify"));
-		identifyElem.appendChild(doc.createTextNode("\n            "+String.join(",", clusterIds.toArray(new String[]{}))+"\n        "));
+		
+		String identifyStr = "";
+		for (String s : clusterIds) {
+			if (!identifyStr.isEmpty())
+				identifyStr += ",";
+			identifyStr += s;
+		}
+		identifyElem.appendChild(doc.createTextNode("\n            "+identifyStr+"\n        "));
 
 		Element cutoffElem = (Element) analysisElem.appendChild(doc.createElement("cutoff"));
 		cutoffElem.appendChild(doc.createTextNode("\n          70\n        "));
