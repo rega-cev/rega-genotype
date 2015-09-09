@@ -9,7 +9,7 @@
   <property name="lib" location="lib"/>
   
   <property name="proj.name" value="rega-genotype"/>
-  <property name="proj.version" value="3.0.2"/>
+  <property name="proj.version" value="alpha"/>
 
   <path id="project.classpath">
     <fileset dir="lib">

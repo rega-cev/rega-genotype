@@ -110,6 +110,13 @@ HPV2 - failing - undefined cluster alpha15
 ----
 HCV - need to add inside and outside. Difficult to get minor to work (only with few characters). Need to add recombination detection.
 Can recombination have a selection before the tool?
+- 1c is failing in the cluster analysis, need to check:
+A) PAUP constrain analysis
+B) Self-bootscan
+
+Missing clusters:
+No 2o 
+
 
 ----
 Dengue - batch results need to have name and not id (do not know how to put this).
@@ -170,26 +177,52 @@ ID clusters, name, how to change
 			<label>Genome</label>
 			<field>genome</field>
 		</column>
+
 	</result-list>
 	
 
 4) Inside outside rule (?) - XML (?)
+- You have added as a task to the tool programmer (Mikael).
+
 
 5) Report - need to say the classification
-
+Done.
 
 
 
 6) Recombination 
+Generic tool does not current support.
 
-7) Self-bootstcan
+
+7) Self-bootscan
+- We before run from the command line.
+Open Genotype tool in eclipse and run command lines
+Programme argument - -x xml/dengue rega.genotype.viruses.generic.GenericTool SELF resultDengue2.xml phylo-dengue1.xml 1200 100
+
 
 8) Fasta2REGA - new script
 
-9) War file - AINT - info on how to deploy
+
+9) War file - ANT - info on how to deploy
+
 
 10) Tomcat server
+ant 
+to redo
+ant clean
+ant
+
 
 11) Git for references
 
 	
+12) I am not sure of the CONSTRAINS - need to test to make sure it is really implementing as I can see subtypes clustering outside when they should have been constrained. 
+
+13) Wrap paup needed
+
+14) When sequence submitted with same name, add query for the phylo but not for the bootscan
+
+15) need to see why 1c (third sequence) do cluster outside sometimes...
+If I delete the third sequence <taxus name="1c_AY651061"/>. I get good classification for E1.
+
+

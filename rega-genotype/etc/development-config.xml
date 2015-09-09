@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rega-genotype-settings>
   <property name="xmlPath">xml/</property>
-  <property name="paupCmd">/Applications/biotools/paup/paup4b10-x86-macosx</property>
+  <property name="paupCmd">/Applications/biotools/paup/wrappaup.sh /Applications/biotools/paup/paup4b10-x86-macosx</property>
   <property name="clustalWCmd">/Applications/biotools/clustalw2</property>
   <property name="blastPath">/Applications/biotools/blast-2.2.22/bin/</property>
   <property name="treePuzzleCmd">/Applications/biotools/tree-puzzle-5.2/src/puzzle</property>

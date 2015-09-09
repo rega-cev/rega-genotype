@@ -81,7 +81,7 @@
       outgroup II_AF180817;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -93,6 +93,37 @@
     </options>
   </analysis>
   
+  		<analysis id="phylo-major-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				  I,II,III,IV,V
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+   
     
 </genotype-analyses>
 

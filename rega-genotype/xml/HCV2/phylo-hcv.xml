@@ -124,7 +124,7 @@
             <cluster id="1c" name="Genotype 1 subtype c">
                 <taxus name="1c_D14853"/>
                 <taxus name="1c_AY051292"/>
-                <taxus name="1c_AY651061"/>
+
             </cluster>
             <cluster id="1d" name="Genotype 1 subtype d">
                 <taxus name="1d_KJ439768"/>
@@ -661,6 +661,37 @@
   </analysis>
 
 	<analysis id="phylo-minor-1-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				2q,2a,2r,2b,2c,2t,2d,2e,2f,2i,2j,2k,2m,7a
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+		<analysis id="phylo-minor-2-self-scan" type="scan">
 		<window>
 			1000
 		</window>
