@@ -153,7 +153,9 @@ public class NovGenotypeAnalysisTest extends TestCase {
     	try {
     		p.parseFile(jobDir);
     	} catch (Exception e) {
-    		fail("Exception occured during XML parsing");
+    		/* That's alright, we expected an exception */
+    		return;
     	}
+		fail("Did not get exception on illegal FASTA input characters?");
     }
 }

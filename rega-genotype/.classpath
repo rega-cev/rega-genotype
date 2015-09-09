@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="rega/genotype/parasites/giardia/|rega/genotype/ui/parasites/giardia/|rega/genotype/ui/viruses/hbv/|rega/genotype/ui/viruses/hcv/|rega/genotype/ui/viruses/hhv8/|rega/genotype/ui/viruses/hpv/|rega/genotype/ui/viruses/htlv/|rega/genotype/ui/viruses/phylo|rega/genotype/ui/viruses/phylo/|rega/genotype/viruses/hbv/|rega/genotype/viruses/hcv/|rega/genotype/viruses/hhv8/|rega/genotype/viruses/hpv/|rega/genotype/viruses/htlv/|rega/genotype/viruses/phylo/" kind="src" path="src/main/java"/>
-	<classpathentry excluding="rega/genotype/ui/nov/" kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jdom/deps/ant.jar"/>
 	<classpathentry kind="lib" path="lib/jdom/deps/jaxen.jar"/>
