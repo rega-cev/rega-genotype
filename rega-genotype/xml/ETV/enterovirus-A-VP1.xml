@@ -223,7 +223,7 @@
 			set criterion=distance outroot=monophyl;
 			dset distance=TamNei rates=gamma shape=0.393955 pinvar=0 NegBrLen=SetAbsVal;
 			constraints
-			CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
@@ -254,7 +254,7 @@
 			outgroup CV_A16|U05876;
 			set criterion=distance;
 			dset distance=HKY85 pinvar=0.44 NegBrLen=SetAbsVal;
-			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
