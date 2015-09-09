@@ -50,10 +50,6 @@
     <display-name>NoV Genotyping</display-name>
     <description>NoV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.nov.NovMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -70,11 +66,7 @@
     	<param-name>genotypeTool</param-name>
     	<param-value>rega.genotype.viruses.nov.NoVTool</param-value>
    	</init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
-   </servlet>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>GenotypeNoV-service</servlet-name>
@@ -86,17 +78,12 @@
     <display-name>Enterovirus Genotyping</display-name>
     <description>Enterovirus Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.etv.EtvMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
-   </servlet>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>GenotypeEntero</servlet-name>
     <url-pattern>/enterovirus/typingtool/*</url-pattern>
   </servlet-mapping>
-
 
   <servlet>
     <servlet-name>GenotypeEntero-service</servlet-name>
@@ -107,10 +94,6 @@
     	<param-name>genotypeTool</param-name>
     	<param-value>rega.genotype.viruses.etv.EnteroTool</param-value>
    	</init-param>
-     <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -127,10 +110,6 @@
     	<param-name>Organism</param-name>
     	<param-value>HAV</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -151,10 +130,6 @@
     	<param-name>Organism</param-name>
     	<param-value>HAV</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-    </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -168,10 +143,6 @@
     <display-name>HTLV Genotyping</display-name>
     <description>HTLV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.htlv.HtlvMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -184,10 +155,6 @@
     <display-name>HCV Genotyping</display-name>
     <description>HCV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.hcv.HcvMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
    </servlet>
 
   <servlet-mapping>
@@ -200,11 +167,7 @@
     <display-name>HBV Genotyping</display-name>
     <description>HBV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.hbv.HbvMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>GenotypeHBV</servlet-name>
@@ -216,11 +179,7 @@
     <display-name>Giardia Genotyping</display-name>
     <description>Giardia Genotyping</description>
     <servlet-class>rega.genotype.ui.parasites.giardia.GiardiaMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>Giardia</servlet-name>
@@ -236,11 +195,7 @@
     	<param-name>genotypeTool</param-name>
     	<param-value>rega.genotype.parasites.giardia.GiardiaTool</param-value>
    	</init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>Giardia-service</servlet-name>
@@ -252,11 +207,7 @@
     <display-name>HHV8 Genotyping</display-name>
     <description>HHV8 Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.hhv8.Hhv8Main</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>HHV8</servlet-name>
@@ -268,11 +219,7 @@
     <display-name>HPV Genotyping</display-name>
     <description>HPV Genotyping</description>
     <servlet-class>rega.genotype.ui.viruses.hpv.HpvMain</servlet-class>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>/etc/rega_genotype/global-conf.xml</param-value>
-   </init-param>
-   </servlet>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>GenotypeHPV</servlet-name>
@@ -288,10 +235,6 @@
     	<param-name>Organism</param-name>
     	<param-value>SPN</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -306,10 +249,6 @@
     	<param-name>Organism</param-name>
     	<param-value>CHL-PSI-OMPA</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -324,10 +263,6 @@
     	<param-name>Organism</param-name>
     	<param-value>PHYLO</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -342,10 +277,6 @@
     	<param-name>Organism</param-name>
     	<param-value>HPV2</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -353,17 +284,13 @@
     <url-pattern>/hpv2/typingtool/*</url-pattern>
   </servlet-mapping>
   
-      <servlet>
+  <servlet>
     <servlet-name>GenotypeHHV82</servlet-name>
     <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
     <init-param>
     	<param-name>Organism</param-name>
     	<param-value>HHV82</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -371,17 +298,13 @@
     <url-pattern>/hhv82/typingtool/*</url-pattern>
   </servlet-mapping>
   
-        <servlet>
+  <servlet>
     <servlet-name>Genotypehtlv12</servlet-name>
     <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
     <init-param>
     	<param-name>Organism</param-name>
     	<param-value>htlv12</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -389,17 +312,13 @@
     <url-pattern>/htlv12/typingtool/*</url-pattern>
   </servlet-mapping>
   
-          <servlet>
+  <servlet>
     <servlet-name>Genotypehcv2</servlet-name>
     <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
     <init-param>
     	<param-name>Organism</param-name>
     	<param-value>HCV2</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
@@ -407,21 +326,22 @@
     <url-pattern>/hcv2/typingtool/*</url-pattern>
   </servlet-mapping>
   
-            <servlet>
+  <servlet>
     <servlet-name>Genotypedengue</servlet-name>
     <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
     <init-param>
     	<param-name>Organism</param-name>
     	<param-value>dengue</param-value>
     </init-param>
-    <init-param>
-        <param-name>configFile</param-name>
-        <param-value>etc/development-config.xml</param-value>
-   </init-param>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>Genotypedengue</servlet-name>
     <url-pattern>/dengue/typingtool/*</url-pattern>
   </servlet-mapping>
+  
+  <context-param>
+    <param-name>configFile</param-name>
+    <param-value>etc/development-config.xml</param-value>
+  </context-param>
 </web-app>

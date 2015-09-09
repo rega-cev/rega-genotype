@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -23,7 +24,6 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.GenotypeTool;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
-import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 
@@ -170,11 +170,11 @@ public class Settings {
 			return app.getSettings();
 	}
 
-	public static Settings getInstance(ServletConfig config) {
+	public static Settings getInstance(ServletContext context) {
         String configFile = null;
         
-        if (config != null) {
-        	configFile = config.getInitParameter("configFile");
+        if (context != null) {
+        	configFile = context.getInitParameter("configFile");
         	if (configFile != null)
         		return new Settings(new File(configFile));
         } 

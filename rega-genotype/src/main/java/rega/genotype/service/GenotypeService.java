@@ -140,7 +140,7 @@ public class GenotypeService extends HttpServlet {
 			}
 		}
 		
-		Settings.initSettings(this.settings = Settings.getInstance(config));
+		Settings.initSettings(this.settings = Settings.getInstance(config.getServletContext()));
 		
 		super.init(config);
 	}
