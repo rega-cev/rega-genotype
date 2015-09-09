@@ -1,4 +1,4 @@
-package uk.ac.glasgow.cvr.glue.rega;
+package rega.genotype.tools;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +44,7 @@ public class FastaToRega {
 
 		String directory = ".";
 
-		String filename = "HCV_alignment.fasta";
+		String filename = "fastaToRega/HCV_alignment.fasta";
 
 		// may need to update pattern to extract genotype string from FASTA seq id
 		Pattern pattern = Pattern.compile("(\\d[a-z]*)\\??_.*");;
