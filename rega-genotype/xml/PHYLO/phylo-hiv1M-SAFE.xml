@@ -259,7 +259,7 @@
       outgroup OCM91MVP5180;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -286,7 +286,7 @@
       outgroup OCM91MVP5180;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -313,7 +313,7 @@
       outgroup OCM91MVP5180;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -339,7 +339,7 @@
       outgroup OCM91MVP5180;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
-      constraints CONSTRE(BACKBONE)=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
+      constraints CONSTRE=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
       NJ constraints=CONSTRE enforce=yes;
       savetree format=phylip brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -398,7 +398,7 @@
       export format=nexus file=paup.nex replace=yes;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
-      constraints CONSTRE(BACKBONE)=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
+      constraints CONSTRE=((2,3),((4,5),(8,9)),(6,7),(10,11),(12,13),(14,15),(16,17),(18,19));
       NJ constraints=CONSTRE enforce=yes;
       savetree format=phylip brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -430,7 +430,7 @@
       export format=nexus file=paup.nex replace=yes;
       set criterion=distance outroot=monophyl;       
 	  dset distance=HKY NegBrLen=SetAbsVal;
-      constraints CONSTRE(BACKBONE)=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19),(20,21));
+      constraints CONSTRE=((2,3),(4,5),(6,7),(8,9),(10,11),(12,13),(14,15),(16,17),(18,19),(20,21));
       NJ constraints=CONSTRE enforce=yes;
       savetree format=phylip brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;

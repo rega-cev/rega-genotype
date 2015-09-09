@@ -445,7 +445,7 @@
       outgroup 7a_EF108306;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -485,7 +485,7 @@
 				outgroup 7a_EF108306;
 				set criterion=distance outroot=monophyl;
 				dset distance=HKY NegBrLen=SetAbsVal;
-				constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+				constraints CONSTRE=${BACKBONE-CLUSTERS};
 				NJ constraints=CONSTRE enforce=yes;
 				savetree format=nexus brlens=yes file=paup.tre replace=yes;
 				bootstrap nreps=10 search=nj;
@@ -511,7 +511,7 @@
       outgroup 7a_EF108306;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -540,7 +540,7 @@
       outgroup 7a_EF108306;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -567,7 +567,7 @@
       outgroup 7a_EF108306;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -594,7 +594,7 @@
       outgroup 7a_EF108306;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -621,7 +621,7 @@
       outgroup 7a_EF108306;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;
@@ -648,7 +648,7 @@
       outgroup 7a_EF108306;
       set criterion=distance outroot=monophyl;
       dset distance=HKY NegBrLen=SetAbsVal;
- 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+ 	  constraints CONSTRE=${BACKBONE-CLUSTERS};
 	  NJ constraints=CONSTRE enforce=yes;
  	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
       bootstrap nreps=100 search=nj;

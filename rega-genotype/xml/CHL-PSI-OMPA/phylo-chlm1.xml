@@ -119,7 +119,7 @@
 			outgroup CPX0308|AB284064;
 			set criterion=distance outroot=monophyl;
 			dset distance=abs NegBrLen=SetAbsVal;
-			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=1000 search=nj;

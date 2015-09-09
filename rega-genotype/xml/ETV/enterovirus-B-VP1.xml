@@ -316,7 +316,7 @@
 			set criterion=distance outroot=monophyl;
 			dset distance=TamNei rates=gamma shape=0.393955 pinvar=0 NegBrLen=SetAbsVal;
 			constraints
-			CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;

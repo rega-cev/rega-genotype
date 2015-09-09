@@ -54,7 +54,7 @@
 			set criterion=distance;
 			set rootmethod=midpoint;
 			dset distance=TamNei rates=gamma shape=0.333794 NegBrLen=SetAbsVal;
-			constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE enforce=yes;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
