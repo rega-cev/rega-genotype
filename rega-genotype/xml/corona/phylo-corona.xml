@@ -1,0 +1,165 @@
+<genotype-analyses>
+  <alignment file="corona.fasta" trim="true" />
+
+  <clusters>
+    <cluster id="Alpha" name="Alpha">
+         	<taxus name="a_BtCoVHipspGhanaKwam192008" />
+         	<taxus name="a_Alpacarespiratorycoronavirus" />
+         	<taxus name="a_BtCoVHipspGhanaKwam82008" />
+         	<taxus name="a_BtCoVHipspGhanaBuo3442008" />
+         	<taxus name="a_HCoVNL63Amsterdam12003" />
+         	<taxus name="a_BB8915Rhibla2008" />
+         	<taxus name="a_BR8912Rhieur2008" />
+         	<taxus name="a_BM4828Rhifer2008" />
+         	<taxus name="a_RousettusbatcoronavirusHKU10NC018871" />
+         	<taxus name="a_HipposiderosbatcoronavirusHKU10JQ989273" />
+         	<taxus name="a_CardiodermabatcoronavirusKenyaKY432006" />
+         	<taxus name="a_KCR242010Anourageoffroyi" />
+         	<taxus name="a_KP2562010Artibeusjamaicensi" />
+         	<taxus name="a_BR8930Minschreib2008" />
+         	<taxus name="a_BtCoVHKU7China2005" />
+         	<taxus name="a_BTCoV1BMinpusEU4201372006" />
+         	<taxus name="a_BtCoV1AMinmagEU4201382005" />
+         	<taxus name="a_BR8955Minschreib2008" />
+         	<taxus name="a_BtKY27MinnatKenya2006HQ72" />
+         	<taxus name="a_BtKY33MininfKenya2006HQ72" />
+         	<taxus name="a_BR8953Minschreib2008" />
+         	<taxus name="a_BtCoVMpusHKU8China2008" />
+         	<taxus name="a_BNM8930Nyclei2008" />
+         	<taxus name="a_GQ259961NnocVM1762007" />
+         	<taxus name="a_NMS096Pippip2009" />
+         	<taxus name="a_N7813Myomyo2008" />
+         	<taxus name="a_BtCoVHKU6China2005" />
+         	<taxus name="a_BtCoV570Pippyg2007" />
+         	<taxus name="a_BtCoV573Pipnat2007" />
+         	<taxus name="a_BtCoV517Myodas2007" />
+         	<taxus name="a_BtCoVNM9862myodau2008" />
+         	<taxus name="a_NMS0936Myonat2009" />
+         	<taxus name="a_BtCoV512China2005" />
+         	<taxus name="a_PEDVCV777Belgium977" />
+         	<taxus name="a_BtKY22ChaspKenya2006HQ728" />
+         	<taxus name="a_KP5242010Artibeusjamaicensi" />
+         	<taxus name="a_Panama2011" />
+         	<taxus name="a_KCR2532010Carolliaperspicil" />
+         	<taxus name="a_BRA100" />
+         	<taxus name="a_BtCoVTrinidad1FY2BA2007" />
+         	<taxus name="a_Panama816Pdis" />
+         	<taxus name="a_BR8919Rhieur2008" />
+         	<taxus name="a_BtCoVHKU2GD4302006" />
+         	<taxus name="a_ChaerephonbatcoronavirusKenyaKY412006HQ728481" />
+         	<taxus name="a_PRCVISU1US1990" />
+         	<taxus name="a_TGEVPurdueUS1946" />
+         	<taxus name="a_FelineCoV791146USA980" />
+         	<taxus name="a_CanineCoV341Italy2005" />
+         	<taxus name="a_MinkCoVWD1127HM245925998" />
+         	<taxus name="a_MinkCoVWD1133HM245926998" />
+         	<taxus name="a_FerretBart" />
+         	<taxus name="a_PersubARCoV1JX537914" />
+         	<taxus name="a_EptfusARCoV2JX537913" />
+         </cluster>
+      
+      <cluster id="Beta" name="Beta" >
+         	<taxus name="b_BtCoVHKU31China2005" />
+         	<taxus name="b_BtCoVRm1China2004" />
+         	<taxus name="b_BtCoVRf1China2004" />
+         	<taxus name="b_BtCoVRp3China2004" />
+         	<taxus name="b_SARSCoVTor2Canada2003" />
+         	<taxus name="b_SARScivet007AY572034" />
+         	<taxus name="b_BG312008Rblas2008" />
+         	<taxus name="b_BM4812Reur2008" />
+         	<taxus name="b_BtCoVHipspGhanaKwam202008" />
+         	<taxus name="b_ZariaBtCoVHQ166910Hipcom2" />
+         	<taxus name="b_BtCoVHKU91China2007" />
+         	<taxus name="b_BtCoVBtKY06Rouaeg2006" />
+         	<taxus name="b_BtCoVHKU92China2007" />
+         	<taxus name="b_EidolonbatcoronavirusKenyaKY242006" />
+         	<taxus name="b_KCR2302010Pteronotusparnell" />
+         	<taxus name="b_KCR260Carper" />
+         	<taxus name="b_BtCoVHKU41China2007" />
+         	<taxus name="b_BtCoVHKU51China2007" />
+         	<taxus name="b_GQ259977PpipiVM3142008" />
+         	<taxus name="b_BtCoV/8724/Pippyg/ROU/2009" />
+         	<taxus name="b_BtCoV/8691/Pipnat/ROU/2009" />
+         	<taxus name="b_EMC2012" />
+         	<taxus name="b_Insecti201251" />
+         	<taxus name="b_KW2EF93Nycterissp" />
+         	<taxus name="b_AntelopeCoVOH1USA2003" />
+         	<taxus name="b_GiraffeCoVOH3USA2003" />
+         	<taxus name="b_WtbkCoVOHWD358USA994" />
+         	<taxus name="b_BovineCoVMebus1972" />
+         	<taxus name="b_EquineCoVNC99US999" />
+         	<taxus name="b_HCoVOC43VR759UK967" />
+         	<taxus name="b_PHEVNC007732" />
+         	<taxus name="b_HKU141JN874559" />
+         	<taxus name="b_MHVNC006852" />
+         	<taxus name="b_RatcoronavirusParker" />
+         	<taxus name="b_HCoVHKU1AChina2004" />
+	</cluster>
+    
+   
+    <cluster id="Out" name="Outgroup">
+         <taxus name="o_WhaleCoVSW1EU1117422006" />
+    </cluster>
+ </clusters>
+ 
+ <analysis id="phylo-major" type="paup">
+    <identify>
+ Alpha,Beta, Out
+      </identify>
+    <cutoff>
+      70
+    </cutoff>
+    <block>
+      begin paup;
+      log file=paup.log replace=yes;
+      exclude gapped;
+      export format=nexus file=paup.nex replace=yes;
+      outgroup OutgroupWhaleCoVSW1EU1117422006;
+      set criterion=distance outroot=monophyl;
+      dset distance=HKY NegBrLen=SetAbsVal;
+ 	  constraints CONSTRE(BACKBONE)=${BACKBONE-CLUSTERS};
+	  NJ constraints=CONSTRE enforce=yes;
+ 	  savetree format=nexus brlens=yes file=paup.tre replace=yes;
+      bootstrap nreps=100 search=nj;
+      end;
+      quit;
+    </block>
+    <options>
+      log,alignment,tree,inner,outer
+    </options>
+  </analysis>
+  
+  		<analysis id="phylo-major-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				  Alpha,Beta, Out
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+   
+    
+</genotype-analyses>
+
