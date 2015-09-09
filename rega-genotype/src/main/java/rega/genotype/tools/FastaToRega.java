@@ -6,12 +6,13 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,6 +29,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import rega.genotype.AbstractSequence;
 import rega.genotype.SequenceAlignment;
 
 public class FastaToRega {
@@ -42,19 +44,23 @@ public class FastaToRega {
 
 	public static void main(String[] args) throws Exception {
 
-		String directory = ".";
+		if (args.length < 2) {
+			System.err.println("Usage: fastaToRega input.fasta output-dir");
+			return;
+		}
 
-		String filename = "fastaToRega/HCV_alignment.fasta";
+		String filename = args[0];
+		String directory = args[1];
 
 		// may need to update pattern to extract genotype string from FASTA seq id
 		Pattern pattern = Pattern.compile("(\\d[a-z]*)\\??_.*");;
 
 		List<Sequence> sequences = new ArrayList<Sequence>();
 
-		SequenceAlignment seqAlign = new SequenceAlignment(new FileInputStream(new File(directory, filename)), 
+		SequenceAlignment seqAlign = new SequenceAlignment(new FileInputStream(new File(filename)), 
 				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
-		seqAlign.getSequences().stream().forEach(seq -> {
+		for (AbstractSequence seq : seqAlign.getSequences()) {
 			Matcher matcher = pattern.matcher(seq.getName());
 			if(matcher.find()) {
 				Sequence sequence = new Sequence();
@@ -66,35 +72,59 @@ public class FastaToRega {
 				sequences.add(sequence);
 			}
 
-		});
+		}
 
-
-		try(PrintWriter writer = new PrintWriter(new File(directory, filename))) {
-			sequences.forEach(seq -> {
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(new File(filename));
+			for (Sequence seq : sequences) {
 				writer.println(">"+seq.id);
 				writer.println(seq.data);
 				writer.flush();
-			});
+			}
+		} finally {
+			if (writer != null)
+				writer.close();
 		}
 
-		Map<String, List<Sequence>> genotypeToSequences = sequences.stream().collect(Collectors.groupingBy(seq -> seq.genotype));
+		Map<String, List<Sequence>> genotypeToSequences = new HashMap<String, List<Sequence>>();		
+		for (Sequence seq : sequences) {
+			if (genotypeToSequences.get(seq.genotype) == null)
+				genotypeToSequences.put(seq.genotype, new ArrayList<Sequence>());
+			genotypeToSequences.get(seq.genotype).add(seq);
+		}
+
 		Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences = new LinkedHashMap<String, Map<String, List<Sequence>>>();
-		genotypeToSequences.forEach( (genotype, genotypeSeqs) -> {
-			genotypeToSubtypeToSequences.put(genotype, genotypeSeqs.stream().collect(Collectors.groupingBy(seq -> seq.subtype)));
-		});
+		for (Entry<String, List<Sequence>> a : genotypeToSequences.entrySet()) {
+			Map<String, List<Sequence>> subtypeMap = new HashMap<String, List<Sequence>>();
+			
+			for (Sequence seq : a.getValue()) {
+				if (subtypeMap.get(seq.subtype) == null)
+					subtypeMap.put(seq.subtype, new ArrayList<Sequence>());
+				subtypeMap.get(seq.subtype).add(seq);
+			}
+			genotypeToSubtypeToSequences.put(a.getKey(), subtypeMap);
+		}
 
 		Document clustalDoc = clustersDoc(filename, genotypeToSubtypeToSequences);
-		try(FileOutputStream fos = new FileOutputStream(new File(directory, "hcv.xml"))) {
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(new File(directory, "hcv.xml"));
 			prettyPrint(clustalDoc, fos, 4);
+		} finally {
+			if (fos != null)
+				fos.close();
 		}
 
 		Document blastDoc = blastDocument(filename, genotypeToSubtypeToSequences);
-		try(FileOutputStream fos = new FileOutputStream(new File(directory, "hcvblast.xml"))) {
+		fos = null;
+		try {
+			fos = new FileOutputStream(new File(directory, "hcvblast.xml"));
 			prettyPrint(blastDoc, fos, 4);
+		} finally {
+			if (fos != null)
+				fos.close();
 		}
-
-
-
 	}
 
 
@@ -110,11 +140,11 @@ public class FastaToRega {
 		Element descriptionElem = (Element) hcvClusterElem.appendChild(doc.createElement("description"));
 		descriptionElem.appendChild(doc.createTextNode("HCV"));
 
-		genotypeToSubtypeToSequences.forEach( (genotype, subtypeToSequences) -> {
+		for (Map<String, List<Sequence>> subtypeToSequences : genotypeToSubtypeToSequences.values()) {
 			Sequence firstSeq = subtypeToSequences.values().iterator().next().get(0);
 			Element taxusElem = (Element) hcvClusterElem.appendChild(doc.createElement("taxus"));
 			taxusElem.setAttribute("name", firstSeq.id);
-		});
+		}
 
 		Element analysisElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("analysis"));
 		analysisElem.setAttribute("id", "blast");
@@ -150,7 +180,9 @@ public class FastaToRega {
 		List<String> clusterIds = new ArrayList<String>();
 		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, filename);
 		Element clustersElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
-		genotypeToSubtypeToSequences.forEach( (genotype, subtypeToSequences) -> {
+		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
+			String genotype = i.getKey();
+			Map<String, List<Sequence>> subtypeToSequences = i.getValue();
 			Element parentElem = clustersElem;
 			if(subtypeToSequences.size() > 1) {
 				Element genotypeClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
@@ -161,7 +193,10 @@ public class FastaToRega {
 				parentElem = genotypeClusterElem;
 			}
 			final Element subtypeParentElem = parentElem;
-			subtypeToSequences.forEach( (subtype, subtypeSeqs) -> {
+
+			for (Entry<String, List<Sequence>> j : subtypeToSequences.entrySet()) {
+				String subtype = j.getKey();
+				List<Sequence> subtypeSeqs = j.getValue();
 				Element subtypeClusterElem = (Element) subtypeParentElem.appendChild(doc.createElement("cluster"));
 				String subtypeClusterId;
 				String subtypeDesc;
@@ -175,12 +210,13 @@ public class FastaToRega {
 				clusterIds.add(subtypeClusterId);
 				subtypeClusterElem.setAttribute("id", subtypeClusterId);
 				subtypeClusterElem.setAttribute("name", subtypeDesc);
-				subtypeSeqs.forEach(seq -> {
+				
+				for (Sequence seq : subtypeSeqs) {
 					Element taxusElem = (Element) subtypeClusterElem.appendChild(doc.createElement("taxus"));
 					taxusElem.setAttribute("name", seq.id);
-				});
-			});
-		});
+				};
+			};
+		};
 
 		Element analysisElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("analysis"));
 		analysisElem.setAttribute("id", "pure");
