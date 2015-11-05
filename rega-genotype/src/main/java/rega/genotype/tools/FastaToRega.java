@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,6 +34,10 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.SequenceAlignment;
 
 public class FastaToRega {
+	
+	private static String filename;
+	private static String directory;
+	private static String outgroup;
 
 	private static class Sequence {
 		String genotype = null;
@@ -43,21 +48,30 @@ public class FastaToRega {
 	}
 
 	public static void main(String[] args) throws Exception {
-
+		
+				
 		if (args.length < 2) {
 			System.err.println("Usage: fastaToRega input.fasta output-dir");
 			return;
 		}
 
-		String filename = args[0];
-		String directory = args[1];
-
+		filename = args[0];
+		directory = args[1];
+		outgroup = args[2];
+		
+		File diretorio = new File("xml/" + directory); // ajfilho é uma pasta!  
+		if (!diretorio.exists()) {  
+		   diretorio.mkdirs(); //mkdir() cria somente um diretório, mkdirs() cria diretórios e subdiretórios.  
+		}
+		
+		//System.out.println(filename + " - " + directory);
+		//System.exit(0);
 		// may need to update pattern to extract genotype string from FASTA seq id
 		Pattern pattern = Pattern.compile("(\\d[a-z]*)\\??_.*");;
 
 		List<Sequence> sequences = new ArrayList<Sequence>();
 
-		SequenceAlignment seqAlign = new SequenceAlignment(new FileInputStream(new File(filename)), 
+		SequenceAlignment seqAlign = new SequenceAlignment(new FileInputStream(new File("fastaToRega/" + filename)), 
 				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
 		for (AbstractSequence seq : seqAlign.getSequences()) {
@@ -76,7 +90,7 @@ public class FastaToRega {
 
 		PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(new File(filename));
+			writer = new PrintWriter(new File("fastaToRega/" + filename));
 			for (Sequence seq : sequences) {
 				writer.println(">"+seq.id);
 				writer.println(seq.data);
@@ -106,20 +120,20 @@ public class FastaToRega {
 			genotypeToSubtypeToSequences.put(a.getKey(), subtypeMap);
 		}
 
-		Document clustalDoc = clustersDoc(filename, genotypeToSubtypeToSequences);
+		Document clustalDoc = clustersDoc("fastaToRega/" + filename, genotypeToSubtypeToSequences);
 		FileOutputStream fos = null;
 		try {
-			fos = new FileOutputStream(new File(directory, "hcv.xml"));
+			fos = new FileOutputStream(new File("xml/" + directory, directory + ".xml"));
 			prettyPrint(clustalDoc, fos, 4);
 		} finally {
 			if (fos != null)
 				fos.close();
 		}
 
-		Document blastDoc = blastDocument(filename, genotypeToSubtypeToSequences);
+		Document blastDoc = blastDocument("fastaToRega/" + filename, genotypeToSubtypeToSequences);
 		fos = null;
 		try {
-			fos = new FileOutputStream(new File(directory, "hcvblast.xml"));
+			fos = new FileOutputStream(new File("xml/" + directory, directory + "blast.xml"));
 			prettyPrint(blastDoc, fos, 4);
 		} finally {
 			if (fos != null)
@@ -136,9 +150,9 @@ public class FastaToRega {
 		Node clustersElem = genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
 		Element hcvClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
 		hcvClusterElem.setAttribute("id", "1");
-		hcvClusterElem.setAttribute("name", "HCV");
+		hcvClusterElem.setAttribute("name", directory);
 		Element descriptionElem = (Element) hcvClusterElem.appendChild(doc.createElement("description"));
-		descriptionElem.appendChild(doc.createTextNode("HCV"));
+		descriptionElem.appendChild(doc.createTextNode(directory));
 
 		for (Map<String, List<Sequence>> subtypeToSequences : genotypeToSubtypeToSequences.values()) {
 			Sequence firstSeq = subtypeToSequences.values().iterator().next().get(0);
@@ -241,7 +255,7 @@ public class FastaToRega {
 				"              log file=paup.log replace=yes;\n"+
 				"              exclude gapped;\n"+
 				"              export format=nexus file=paup.nex replace=yes;\n"+
-				//				"              outgroup 4a.ED43;\n"+ // need a different outgroup?
+				"              outgroup "+ outgroup +";\n"+ // need a different outgroup?
 				"              set criterion=distance outroot=monophyl;\n"+
 				"              dset distance=HKY NegBrLen=Prohibit;\n"+
 				"              NJ;\n"+

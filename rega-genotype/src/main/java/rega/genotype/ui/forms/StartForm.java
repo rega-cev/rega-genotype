@@ -49,6 +49,8 @@ public class StartForm extends AbstractForm {
 	private WLineEdit jobIdTF;
 	
 	private WText errorJobId, errorText;
+	private String fileUploadFasta;
+	private String msgUploadFile = "Successfully uploaded file! Click Start to process the file.";
 	
 	public StartForm(GenotypeWindow main) {
 		super(main);
@@ -89,8 +91,13 @@ public class StartForm extends AbstractForm {
 	
 		run.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				final String fasta = sequenceTA.getText();
-				
+				final String fasta;
+				if (((sequenceTA.getText().equalsIgnoreCase("")) || (sequenceTA.getText().equalsIgnoreCase(msgUploadFile))) && (!(getFastaTextArea().equalsIgnoreCase("")))){
+					fasta = getFastaTextArea();
+				}else{
+					fasta = sequenceTA.getText();
+				}
+								
 				CharSequence error = verifyFasta(fasta);
 				validateInput(error);
 				
@@ -128,7 +135,8 @@ public class StartForm extends AbstractForm {
 				try {
 					if (f.exists()) {
 						String fasta = GenotypeLib.readFileToString(f);
-						sequenceTA.setText(fasta);
+						sequenceTA.setText(msgUploadFile);
+						setFastaTextArea(fasta);
 						CharSequence error = verifyFasta(fasta);
 						validateInput(error);
 					}
@@ -264,6 +272,14 @@ public class StartForm extends AbstractForm {
 		}
 		
 		return null;
+	}
+	
+	private void setFastaTextArea(String fileUploadFasta){
+		this.fileUploadFasta = fileUploadFasta;
+	}
+	
+	private String getFastaTextArea(){
+		return this.fileUploadFasta;
 	}
 	
 	public void resize(WLength width, WLength height) {

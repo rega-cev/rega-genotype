@@ -187,10 +187,13 @@ public class Settings {
         if (configFile == null) {
             String osName = System.getProperty("os.name");
             osName = osName.toLowerCase();
+            configFile = "etc/development-config.xml";
+            /**
             if (osName.startsWith("windows"))
                 configFile = "C:\\Program files\\rega_genotype\\";
             else
                 configFile = "etc/development-config.xml";
+            /**/
         } else
            	configFile += File.separatorChar + "global-conf.xml";
         

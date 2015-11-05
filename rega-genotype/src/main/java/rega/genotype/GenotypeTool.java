@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import rega.genotype.utils.Settings;
 
@@ -60,7 +61,7 @@ public abstract class GenotypeTool {
         CmdLineParser.Option treeGraphCmdOption = parser.addStringOption('g', "treegraph");
         
         try {
-            parser.parse(args);
+        	parser.parse(args);
         } catch (CmdLineParser.OptionException e) {
             System.err.println(e.getMessage());
             printUsage();
@@ -317,11 +318,12 @@ public abstract class GenotypeTool {
     
 	public static void main(String[] args)
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
-    	
+		
     	ArgsParseResult parseArgsResult = parseArgs(args);
+    	//System.out.println(parseArgsResult);
     	if (parseArgsResult.remainingArgs == null)
     		return;
-
+    	
     	if (parseArgsResult.remainingArgs.length < 3) {
     		printUsage();
     		return;

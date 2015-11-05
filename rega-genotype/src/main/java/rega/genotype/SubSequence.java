@@ -38,6 +38,7 @@ public class SubSequence extends AbstractSequence {
     }
 
     public String getSequence() {
+    	//System.out.println(sequence.getSequence().substring(beginIndex, endIndex));
         return sequence.getSequence().substring(beginIndex, endIndex);
     }
 

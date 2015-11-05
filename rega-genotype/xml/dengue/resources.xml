@@ -5,49 +5,51 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${app.url}/../../pics/dengue/Denguetool.png" alt="RIVM Logo" > </img>
+						<img src="${app.url}/../../pics/dengue/Denguetool.png" alt="RIVM Logo"></img>
 					</a>
 				</div>
-				<div id="application">
+				<div id="application" align="center">
 					<span id="name">Dengue Virus Genotyping Tool</span>
 					<span id="info">Version 1.0</span>
 				</div>
 				<div class="nav_bar">
 					${navigation class="nav_main"}
 				</div>
-				
-				<div id="navigation-bottom" >
-				</div>
+				<div id="navigation-bottom"></div>
 			</div>
 			${content class="content"}
-	
+
 			<div class="footer">
-				<p>Developed by: <a href="http://www.rivm.nl">RIVM</a> (Harry Vennema, Annelies Kroneman, Marion Koopmans)
-					and <a href="http://www.emweb.be/">Emweb bvba</a>.</p>
-			    <p>Contact: TBD</p>
+				<p>
+					Developed by:
+					<a href="http://www.rivm.nl">RIVM</a>
+					(Harry Vennema, Annelies Kroneman, Marion Koopmans) and <a href="http://www.emweb.be/">Emweb bvba</a>.
+				</p>
+				<p>Contact: TBD</p>
 			</div>
-	
+
 			<div class="rivm-footer">
 				<div>
-					<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+					<img src="${app.url}/../../pics/rivm/footer.png">
+					</img>
 				</div>
 			</div>
 		</div>
 	</message>
 
-  	<message id="start-form">
-  		<div class="start-form form">
-		    <h1>Dengue Virus Genotyping Tool Version 1.0</h1>
-		    <div class="note">
- 				<div>
+	<message id="start-form">
+		<div class="start-form form">
+			<h1>Dengue Virus Genotyping Tool Version 1.0</h1>
+			<div class="note">
+				<div>
 					This tool is designed to use phylogenetic methods in order to identify the Dengue virus genotype of a nucleotide sequence.
 				</div>
-      			<div>
-      				<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time. 
+				<div>
+					<b>Note for batch analysis:</b> The genotypetool accepts up to ${maxAllowedSeqs} sequences at a time.
 				</div>
-	 	   </div>
-	 	   
-	 	   <div class="seqInput">
+			</div>
+
+			<div class="seqInput">
 				${tr:sequenceInput.inputSequenceInFastaFormat}
 				<div>
 					${fasta-field}
@@ -55,18 +57,14 @@
 				${analyze-button}
 				${clear-button}
 				${error-text class="error"}
-		
 				${tr:sequenceInput.uploadSequenceInFastaFormat}
-
 				${file-upload-button}
-
 				${tr:startForm.monitorJob}
-
-				${tr:startForm.labelJobId} ${job-id-field}	${search-button}
+				${tr:startForm.labelJobId} ${job-id-field} ${search-button}
 			</div>
 		</div>
 	</message>
-	
+
 	<message id="sequenceInput.run">Start!</message>
 	<message id="startForm.monitor">Go!</message>
 	<message id="sequenceInput.example">&gt;test
@@ -89,15 +87,13 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 	</message>
 
 	<message id="job-overview-form">
-	  	<div class="monitor-form form">
-		    <h1>Dengue Virus Genotyping Tool Results</h1>
+		<div class="monitor-form form">
+			<h1>Dengue Virus Genotyping Tool Results</h1>
 
-		    <div class="info">
+			<div class="info">
 				<p>You may bookmark this page to revisit results of this job (${job-id}) later.</p>
 				<p>A whole genome typing will take approximately 60 seconds, please be patient.</p>
-				
 				<p>${analysis-cancelled}</p>
-
 				<div class="analysisProgress">
 					${analysis-in-progress}
 				</div>
@@ -113,12 +109,12 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 		</div>
 	</message>
 
-  	<message id="details-form">
+	<message id="details-form">
 		<h1>Dengue Virus Genotyping Details</h1>
 		${details-form}
 	</message>
-  
-  	<message id="generic-details">
+
+	<message id="generic-details">
   		<div>
   			<div>
   				<div>
@@ -147,7 +143,6 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
   						<span>${xpath "/genotype_result/sequence/conclusion[@id='type']/motivation"}</span>
 					</p>
 
-<!--
 					${eval-xpath "/genotype_result/sequence/conclusion[@type='simple' and @id='type']"}
 					${<if-defined>}
 					    <p>
@@ -177,7 +172,7 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
    							${</if-not-defined>}
 						</p>
 	  				${</if-defined>}
-  -->
+
  				</div>
  				<div>
  					<h3>Genome region</h3>
@@ -193,29 +188,35 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 			</div>
 		</div>
 	</message>
-  
-  	<message id="details.phylo-major.title">
-  		Pylogenetic Analysis Details
-  	</message>
 
-  	<message id="details.phylo-minor.title">
-  		Pylogenetic Analysis Details (Sub-clustering)
-  	</message>
-  
+	<message id="details.phylo-major.title">
+		Pylogenetic Analysis Details
+	</message>
+
+	<message id="details.phylo-minor.title">
+		Pylogenetic Analysis Details (Sub-clustering)
+	</message>
+
 	<message id="job-overview-downloads">
 		<div class="downloadContainer">
-			<span>Download results:</span> ${xml-file} ${xls-file} ${csv-file} ${fasta-file}
+			<span>Download results:</span>
+			${xml-file} ${xls-file} ${csv-file} ${fasta-file}
 		</div>
 	</message>
-	
-	<message id="monitorForm.analysisCancelled"><p><b>This job was cancelled!</b></p></message>
+
+	<message id="monitorForm.analysisCancelled">
+		<p>
+			<b>This job was cancelled!</b>
+		</p>
+	</message>
 
 	<message id="tool.title">Dengue Virus Genotyping Tool</message>
 
 	<message id="table.header.name">Name</message>
 	<message id="table.header.length">Length</message>
-	<message id="table.header.blast">Virus</message>
-	<message id="table.header.phylo">Phylo</message>
+	<message id="table.header.blast">Blast</message>
+	<message id="table.header.phyloType">Genotype</message>
+	<message id="table.header.phyloSubtype">Subtyping</message>
 	<message id="table.header.report">Report</message>
 	<message id="table.header.genome">Genome</message>
 
@@ -226,82 +227,123 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 			<p>Manuscript in preparation</p>
 		</div>
 	</message>
-	
+
 
 	<message id="introduction-doc">
 		<div class="form">
 			<h1>The Dengue Virus Automated Genotyping Tool: introduction.</h1>
 
-	        <p>This typingtool offers quick and unequivocal typing of Dengue virus sequences.</p>
-	       	<p>
-	       		With this tool sequences of any part of the Dengue (Dengue) genome can be assigned to
-	       	   	a Dengue genotype. Sequences of other Picornaviridae are also recognized by the tool and are assigned to their genus.
-	       	</p>
-	       	<p>
-	       		The sequences used as references in this tool originate from:
-	       	   	The Dengue network (<a href="http://www.rivm.nl/en/Topics/H/DengueNET">Denguenet</a>)
-	       	   	and <a href="http://www.ncbi.nlm.nih.gov/Genbank">Genbank</a>.
-	       	</p>
-      </div>
-	</message>
-      
-    <message id="how-to-use-doc">
-		<div class="form">
-			<h1>Dengue Virus Genotyping Tutorial</h1>
-			
+			<p>This typingtool offers quick and unequivocal typing of Dengue
+				virus sequences.</p>
 			<p>
-				One or more (up to 20.000 per run) Dengue sequences can be pasted (A) or uploaded (B) in Fasta format (see Fig. 1).
-			 	Sequences of all regions of the Dengue genome can be used.
+				With this tool sequences of any part of the Dengue (Dengue) genome can
+				be assigned to
+				a Dengue genotype. Sequences of other Picornaviridae are also
+				recognized by the tool and are assigned to their genus.
 			</p>
 			<p>
-				When pasting a single sequence the Identifier of the sequence (>Sequencename) should be included (Fasta format).
-				One example sequence is present as a default. A set of <a href="#/examples">three example sequences</a> is also available.
-			</p> 
+				The sequences used as references in this tool originate from:
+				The Dengue network (
+				<a href="http://www.rivm.nl/en/Topics/H/DengueNET">Denguenet</a>
+				)
+				and
+				<a href="http://www.ncbi.nlm.nih.gov/Genbank">Genbank</a>
+				.
+			</p>
+		</div>
+	</message>
+
+	<message id="how-to-use-doc">
+		<div class="form">
+			<h1>Dengue Virus Genotyping Tutorial</h1>
+
+			<p>
+				One or more (up to 20.000 per run) Dengue sequences can be pasted
+				(A) or uploaded (B) in Fasta format (see Fig. 1).
+				Sequences of all regions of the Dengue genome can be used.
+			</p>
+			<p>
+				When pasting a single sequence the Identifier of the sequence
+				(>Sequencename) should be included (Fasta format).
+				One example
+				sequence is present as a default. A set of
+				<a href="#/examples">three example sequences</a>
+				is also available.
+			</p>
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${app.url}/../../pics/hav/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>	
+				<img src="${app.url}/../../pics/hav/FigEntry.png" alt="The startingpage of the typing tools">
+				</img>
+				<br />
 				Fig. 1. The startingpage of the Dengue typingtool
 			</p>
 
 			<p>
-				The analysis takes up to a few seconds per sequence. Thus, for large batches the run can be viewed later,
-				by typing the Job-Id at C. Here also runs by others can be viewed, if the Job-Id has been communicated.
+				The analysis takes up to a few seconds per sequence. Thus, for
+				large batches the run can be viewed later,
+				by typing the Job-Id at C.
+				Here also runs by others can be viewed, if the Job-Id has been
+				communicated.
 				Runs are kept on the server for 1 week.
-			</p> 
+			</p>
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${app.url}/../../pics/hcv/HCVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>	
+				<img src="${app.url}/../../pics/hcv/HCVFigResults.png" alt="The startingpage of the typing tools">
+				</img>
+				<br />
 				Fig. 2. Overview of the results
 			</p>
 
 			<p>
-				After the 'Start' button is pushed the analysis is started and after a few seconds the results overview is shown (Fig. 2).
-				While the analysis is still in progress the following message is displayed: 'Analysis in progress... (Showing partial results).
-				This page will be automatically updated every 5 seconds...'.
+				After the 'Start' button is pushed the analysis is started and
+				after a few seconds the results overview is shown (Fig. 2).
+				While the
+				analysis is still in progress the following message is displayed:
+				'Analysis in progress... (Showing partial results).
+				This page will be
+				automatically updated every 5 seconds...'.
 			</p>
 
 			<p>
-				The Job Id number, which can be used to retrieve the results later is displayed at the top of the page as soon as the job is started.
-				<br/>
-				For each sequence the length, positioning on the Dengue genome and assigned genotype are determined.<br/>
-				After the complete analysis is finished the analysis results can be downloaded as XML, CSV or Excel file.<br/>
-				For each sequence more details can be viewed in the individual reports by clicking on 'report' in the results table.<br/>
+				The Job Id number, which can be used to retrieve the results later
+				is displayed at the top of the page as soon as the job is started.
+				<br />
+				For each sequence the length, positioning on the Dengue genome and
+				assigned genotype are determined.
+				<br />
+				After the complete analysis is finished the analysis results can be
+				downloaded as XML, CSV or Excel file.
+				<br />
+				For each sequence more details can be viewed in the individual
+				reports by clicking on 'report' in the results table.
+				<br />
 			</p>
-			
+
 			<p>
-				The report of the genotyping details per sequence contains a brief overview of the assignment, followed by details of the phylogenetic
-				analysis including a phylogenetic tree.<br/>
+				The report of the genotyping details per sequence contains a brief
+				overview of the assignment, followed by details of the phylogenetic
+				analysis including a phylogenetic tree.
+				<br />
 				The report contains information on:
 				<ul>
 					<li>The sequence submitted (name and length)</li>
-					<li>Blast result: The genus/species (Dengue species) of the submitted sequence</li>
-					<li>Phylo result: For Dengue sequences, the genotype assignment</li>
-					<li>The robustness of the phylogenetic assignment using bootstrap values. Only with bootstrap > 70 a genotype
-						or variant is assigned.</li>
-					<li>A graphical representation of the Dengue genome showing the genomic region of the query sequence with the start and
-						end positions related to the Dengue reference sequence.</li>
-					<li>A NJ tree is computed with the submitted sequence at the top.</li>
-					<li>The bootstrap tree can be viewed and downloaded in the PAUP* log file</li>
+					<li>Blast result: The genus/species (Dengue species) of the
+						submitted sequence</li>
+					<li>Phylo result: For Dengue sequences, the genotype assignment
+					</li>
+					<li>The robustness of the phylogenetic assignment using bootstrap
+						values. Only with bootstrap > 70 a genotype
+						or variant is assigned.
+					</li>
+					<li>A graphical representation of the Dengue genome showing the
+						genomic region of the query sequence with the start and
+						end
+						positions related to the Dengue reference sequence.
+					</li>
+					<li>A NJ tree is computed with the submitted sequence at the top.
+					</li>
+					<li>The bootstrap tree can be viewed and downloaded in the PAUP*
+						log file</li>
 					<li>The alignment can be downloaded in NEXUS or FASTA format</li>
 				</ul>
 			</p>
@@ -309,53 +351,60 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 			<p>
 				No genotype is assigned if:
 				<ul>
-					<li>The submitted sequence belongs to another Flavivirus genus. In this case the genus is indicated and the analysis stops.</li>
-					<li>The submitted sequence is shorter than 100 bp. In this case only assignment of the species (Dengue) is possible.</li>
-					<li>The bootstrap value &lt; 70. In this case an alignment and a NJ tree are produced which can be used to get an indication of
-						the phylogeny.</li>
+					<li>The submitted sequence belongs to another Flavivirus genus. In
+						this case the genus is indicated and the analysis stops.</li>
+					<li>The submitted sequence is shorter than 100 bp. In this case
+						only assignment of the species (Dengue) is possible.</li>
+					<li>The bootstrap value &lt; 70. In this case an alignment and a NJ
+						tree are produced which can be used to get an indication of
+						the
+						phylogeny.
+					</li>
 				</ul>
-			</p> 
+			</p>
 		</div>
-    </message>
+	</message>
 
- 	<message id="examples-doc">
+	<message id="examples-doc">
 		<div class="form">
 			<h1>Example Sequences for the Dengue Genotyping Tool</h1>
 
-	        <div class="sequenceName">&gt;EU416252</div>
+			<div class="sequenceName">&gt;EU416252</div>
 			<div class="sequence">
-aatcactctgatgaatatttgtcttttagttgttatttgtctgtcacagaacaatcagagttttatttt
-cccagagctccattgaattcaaatgccatgttatccactgaatcaatgataagcagaattgcagctgga
-gacttggagtcatcagtggatgatcccagatcagaggaggacagaagatttgagagtcacatagaatgc
-aggaagccatataaagaattgagattagaagttgggaaacaaagactcaagtatgctcaggaggaattg
-tcaaatgaagtacttccacctcctaggaaaatgaagggactgttttcacaagccaaaatttctcttttt<br/>
-tat
-	        </div>
-	        
-	        <div class="sequenceName">&gt;AJ437155</div>
-			<div class="sequence">
-gttggagacgattcaggaggtttttcaacaacagtttccacagagcagaatgttcccgatccccaagtt
-ggcataacaactatgagggacttaaaaggtaaagccaataggggaaagatggatgtttcaggagtgcaa
-gcacctgtgggagctattacaacaattgaggatccagttttagctaagaaagtacctgagacatttcct
-gaattgaagcctggagagtctagacatacatcagatcacatgtctatttataaattcatggggaggtct
-cattttctgtgtacttttacttttaattcaaataataaagagtatacattcccaataacgttgtcttcg
-acttctaatcctcctcatggtttaccatcaacattaaggtggtttttcaatttgtttcagttgtataga
-ggaccattggatttgacaattattatcacaggagccactgatgtggatgggatggcttggtttactcca
-gtaggccttgctgtcgacaccccttgggtagaaaaggagtcagctctgtctattgattataaaactgcc
-cttggagctgttagatttaatacaagaagaacggggaacattcagattagattgccatggtattcttac
-ttgtatgccgtgtctggagcactggatggcctgggagataaaacagattctacatttggattggtttct
-attcagattgcaaattacaaccattctgatgaatatttgtcttttagttgttatttgtctgttacagaa
-caatcagagttctattttcctagagctccattgaattcaaatgctatgttgtccactgagtccatgatg
-agtagaattgcagctggagacttggagtcatcagtggatgatcctagatcagaggaggatagaagattt<br/>
-gaa 
-	        </div>
-	        
-	        <div class="sequenceName">&gt;L20531</div>
-			<div class="sequence">
-gagtccatgatgagtagaattgcagctggagacttggagtcatcagtggatgatcctagatcagaggag
-gacagaagatttgagagtcatatagaatgtaggaaaccatacaaggaattgagattggaggttggcaaa
-caaagactcaaatatgctcaggaagagttg 
+				aatcactctgatgaatatttgtcttttagttgttatttgtctgtcacagaacaatcagagttttatttt
+				cccagagctccattgaattcaaatgccatgttatccactgaatcaatgataagcagaattgcagctgga
+				gacttggagtcatcagtggatgatcccagatcagaggaggacagaagatttgagagtcacatagaatgc
+				aggaagccatataaagaattgagattagaagttgggaaacaaagactcaagtatgctcaggaggaattg
+				tcaaatgaagtacttccacctcctaggaaaatgaagggactgttttcacaagccaaaatttctcttttt
+				<br />
+				tat
 			</div>
-    	</div>
-  	</message>
+
+			<div class="sequenceName">&gt;AJ437155</div>
+			<div class="sequence">
+				gttggagacgattcaggaggtttttcaacaacagtttccacagagcagaatgttcccgatccccaagtt
+				ggcataacaactatgagggacttaaaaggtaaagccaataggggaaagatggatgtttcaggagtgcaa
+				gcacctgtgggagctattacaacaattgaggatccagttttagctaagaaagtacctgagacatttcct
+				gaattgaagcctggagagtctagacatacatcagatcacatgtctatttataaattcatggggaggtct
+				cattttctgtgtacttttacttttaattcaaataataaagagtatacattcccaataacgttgtcttcg
+				acttctaatcctcctcatggtttaccatcaacattaaggtggtttttcaatttgtttcagttgtataga
+				ggaccattggatttgacaattattatcacaggagccactgatgtggatgggatggcttggtttactcca
+				gtaggccttgctgtcgacaccccttgggtagaaaaggagtcagctctgtctattgattataaaactgcc
+				cttggagctgttagatttaatacaagaagaacggggaacattcagattagattgccatggtattcttac
+				ttgtatgccgtgtctggagcactggatggcctgggagataaaacagattctacatttggattggtttct
+				attcagattgcaaattacaaccattctgatgaatatttgtcttttagttgttatttgtctgttacagaa
+				caatcagagttctattttcctagagctccattgaattcaaatgctatgttgtccactgagtccatgatg
+				agtagaattgcagctggagacttggagtcatcagtggatgatcctagatcagaggaggatagaagattt
+				<br />
+				gaa
+			</div>
+
+			<div class="sequenceName">&gt;L20531</div>
+			<div class="sequence">
+				gagtccatgatgagtagaattgcagctggagacttggagtcatcagtggatgatcctagatcagaggag
+				gacagaagatttgagagtcatatagaatgtaggaaaccatacaaggaattgagattggaggttggcaaa
+				caaagactcaaatatgctcaggaagagttg
+			</div>
+		</div>
+	</message>
 </messages>
