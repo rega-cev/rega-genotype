@@ -1,0 +1,526 @@
+<genotype-analyses>
+	<alignment file="dengue.fasta" trim="true" />
+	
+	<clusters>
+		<cluster id="1" name="1">
+			<taxus name="1I_AY726552" />
+			<taxus name="1II_AF180817" />
+			<taxus name="1III_AY722803" />
+			<taxus name="1IV_FJ196842" />
+			<taxus name="1V_FJ205875" />			
+		</cluster>
+	
+		<cluster id="2" name="2">
+			<taxus name="2I_EU056811" />
+			<taxus name="2II_EU179859" />
+			<taxus name="2III_AF489932" />
+			<taxus name="2IV_AF204177" />
+			<taxus name="2V_KC964095" />
+			<taxus name="2VI_EF105387" />
+		</cluster>
+	
+		<cluster id="3" name="3">
+			<taxus name="3I_KC762687" />
+			<taxus name="3II_AY496871" />
+			<taxus name="3III_DQ675533" />
+			<taxus name="3V_EF629370" />
+		</cluster>
+	
+		<cluster id="4" name="4">
+			<taxus name="4I_KF041260" />
+			<taxus name="4II_AY762085" />
+			<taxus name="4III_AY618988" />
+			<taxus name="4IV_EF457906" />
+		</cluster>
+		
+		<cluster id="1I" name="Genotype I">
+			<taxus name="1I_AY726552" />
+			<taxus name="1I_AF350498" />
+			<taxus name="1I_AF298808" />
+			<taxus name="1I_AY732478" />
+			<taxus name="1I_GQ199835" />
+			<taxus name="1I_AY732480" />
+			<taxus name="1I_GQ868637" />
+			<taxus name="1I_AB608786" />
+			<taxus name="1I_GU131895" />
+			<taxus name="1I_FJ469907" />
+			<taxus name="1I_AY732482" />
+			<taxus name="1I_FJ176779" />
+			<taxus name="1I_HQ891316" />
+		</cluster>
+		
+		<cluster id="1II" name="Genotype II">
+			<description>DENV-1 Genotype Sylvatic</description>
+			<taxus name="1II_AF180817" />
+		</cluster>
+		
+		<cluster id="1III" name="Genotype III">
+			<taxus name="1III_AY722803" />
+			<taxus name="1III_AY722802" />
+			<taxus name="1III_AY713473" />
+			<taxus name="1III_AY722801" />
+		</cluster>
+		
+		<cluster id="1IV" name="Genotype IV">
+			<taxus name="1IV_FJ196842" />
+			<taxus name="1IV_AB189121" />
+			<taxus name="1IV_U88535" />
+			<taxus name="1IV_GQ868602" />
+			<taxus name="1IV_DQ672564" />
+			<taxus name="1IV_AB204803" />
+			<taxus name="1IV_AB074761" />
+			<taxus name="1IV_JN697056" />
+			<taxus name="1IV_EF032590" />
+			<taxus name="1IV_AB189120" />
+			<taxus name="1IV_DQ672561" />
+		</cluster>
+		
+		<cluster id="1V" name="Genotype V">
+			<taxus name="1V_FJ205875" />
+			<taxus name="1V_EU482567" />
+			<taxus name="1V_AY277666" />
+			<taxus name="1V_AY206457" />
+			<taxus name="1V_KJ189351" />
+			<taxus name="1V_HQ166037" />
+			<taxus name="1V_AB519681" />
+			<taxus name="1V_AF311956" />
+			<taxus name="1V_AY277665" />
+			<taxus name="1V_DQ285559" />
+		</cluster>
+		
+		<cluster id="2I" name="Genotype I">
+			<description>DENV-2 Genotype American</description>
+			<taxus name="2I_EU056811" />
+			<taxus name="2I_EU056812" />
+			<taxus name="2I_AF100469" />
+		</cluster>
+		
+		<cluster id="2II" name="Genotype II">
+			<description>DENV-2 Genotype Cosmopolitan</description>
+			<taxus name="2II_EU179859" />
+			<taxus name="2II_KC762680" />
+			<taxus name="2II_KM279597" />
+			<taxus name="2II_KC762660" />
+			<taxus name="2II_EU081180" />
+			<taxus name="2II_EU081179" />
+			<taxus name="2II_EU081177" />
+			<taxus name="2II_KC762669" />
+		</cluster>
+		
+		<cluster id="2III" name="Genotype III">
+			<description>DENV-2 Genotype Southern Asian-American</description>
+			<taxus name="2III_AF489932" />
+			<taxus name="2III_GQ868540" />
+			<taxus name="2III_M20558" />
+			<taxus name="2III_EU482582" />
+			<taxus name="2III_GQ398290" />
+			<taxus name="2III_HQ999999" />
+			<taxus name="2III_FJ898461" />
+			<taxus name="2III_GQ199868" />
+			<taxus name="2III_EU482726" />
+			<taxus name="2III_AY702036" />
+			<taxus name="2III_EU687216" />
+			<taxus name="2III_AB122020" />
+		</cluster>
+		
+		<cluster id="2IV" name="Genotype IV">
+			<description>DENV-2 Genotype Asian II</description>
+			<taxus name="2IV_AF204177" />
+			<taxus name="2IV_AF038403" />
+			<taxus name="2IV_HQ891023" />
+		</cluster>
+		
+		<cluster id="2V" name="Genotype V">
+			<description>DENV-2 Genotype Asian I</description>
+			<taxus name="2V_KC964095" />
+			<taxus name="2V_GU131896" />
+			<taxus name="2V_FM210211" />
+			<taxus name="2V_DQ181797" />
+			<taxus name="2V_DQ181798" />
+			<taxus name="2V_DQ181806" />
+			<taxus name="2V_DQ181802" />
+			<taxus name="2V_DQ181805" />
+			<taxus name="2V_DQ181804" />
+		</cluster>
+		
+		<cluster id="2VI" name="Genotype VI">
+			<description>DENV-2 Genotype Sylvatic</description>
+			<taxus name="2VI_EF105387" />
+			<taxus name="2VI_EF105382" />
+			<taxus name="2VI_EF105389" />
+			<taxus name="2VI_EF105379" />
+			<taxus name="2VI_FJ467493" />
+		</cluster>
+		
+		<cluster id="3I" name="Genotype I">
+			<taxus name="3I_KC762687" />
+			<taxus name="3I_KC762689" />
+			<taxus name="3I_KC762682" />
+			<taxus name="3I_KC762681" />
+			<taxus name="3I_KC762688" />
+			<taxus name="3I_KC762686" />
+			<taxus name="3I_KC762690" />
+			<taxus name="3I_KC762685" />
+			<taxus name="3I_KC762684" />
+			<taxus name="3I_AY858037" />
+			<taxus name="3I_KC762691" />
+			<taxus name="3I_AY858039" />
+		</cluster>
+		
+		<cluster id="3II" name="Genotype II">
+			<taxus name="3II_AY496871" />
+			<taxus name="3II_AY496877" />
+			<taxus name="3II_AY496874" />
+			<taxus name="3II_AY496873" />
+			<taxus name="3II_AY766104" />
+			<taxus name="3II_AY876494" />
+			<taxus name="3II_AY923865" />
+			<taxus name="3II_DQ675528" />
+			<taxus name="3II_DQ675525" />
+			<taxus name="3II_DQ675532" />
+		</cluster>
+		
+		<cluster id="3III" name="Genotype III">
+			<taxus name="3III_DQ675533" />
+			<taxus name="3III_AY099336" />
+			<taxus name="3III_AY770511" />
+			<taxus name="3III_JQ411814" />
+			<taxus name="3III_FJ898442" />
+			<taxus name="3III_FJ898458" />
+			<taxus name="3III_AY679147" />
+			<taxus name="3III_AY099337" />
+			<taxus name="3III_GQ868578" />
+			<taxus name="3III_EU529702" />
+			<taxus name="3III_FJ639747" />
+			<taxus name="3III_FJ547071" />
+		</cluster>
+		
+		<cluster id="3V" name="Genotype V">
+			<taxus name="3V_EF629370" />
+			<taxus name="3V_AF317645" />
+		</cluster>
+		
+		<cluster id="4I" name="Genotype I">
+			<taxus name="4I_KF041260" />
+			<taxus name="4I_GQ868594" />
+			<taxus name="4I_FJ196850" />
+			<taxus name="4I_AY618991" />
+			<taxus name="4I_JQ513345" />
+			<taxus name="4I_AY618992" />
+		</cluster>
+		
+		<cluster id="4II" name="Genotype II">
+			<taxus name="4II_AY762085" />
+			<taxus name="4II_JN983813" />
+			<taxus name="4II_FJ882581" />
+			<taxus name="4II_FJ024476" />
+			<taxus name="4II_JF262781" />
+			<taxus name="4II_JF262782" />
+			<taxus name="4II_AF326573" />
+			<taxus name="4II_GU289913" />
+			<taxus name="4II_GQ252675" />			
+		</cluster>
+		
+		<cluster id="4III" name="Genotype III">
+			<taxus name="4III_AY618988" />
+			<taxus name="4III_AY618989" />
+		</cluster>
+		
+		<cluster id="4IV" name="Genotype IV">
+			<description>DENV-4 Genotype Sylvatic</description>
+			<taxus name="4IV_EF457906" />
+			<taxus name="4IV_JF262780" />
+		</cluster>
+	</clusters>
+	
+	<analysis id="phylo-major" type="paup">
+		<identify>
+			1,2,3,4
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup 4IV_EF457906;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes
+			file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-1" type="paup">
+		<identify>
+			1I,1II,1III,1IV,1V
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup 1II_AF180817;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes
+			file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-1" type="paup">
+		<identify>
+			1I,1II,1III,1IV,1V
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup 1II_AF180817;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes
+			file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-2" type="paup">
+		<identify>
+			2I,2II,2III,2IV,2V,2VI
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup 2VI_EF105379;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes
+			file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="phylo-minor-3" type="paup">
+		<identify>
+			3I,3II,3III,3V
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup 3V_EF629370;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-4" type="paup">
+		<identify>
+			4I,4II,4III,4IV
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup 4IV_EF457906;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-major-1-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				1I,1II,1III,1IV,1V
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ; savetree format=phylip brlens=yes
+				file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-major-2-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				2I,2II,2III,2IV,2V,2VI
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ; savetree format=phylip brlens=yes
+				file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-major-3-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				3I,3II,3III,3V
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ; savetree format=phylip brlens=yes
+				file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-major-4-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				4I,4II,4III,4IV
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ; savetree format=phylip brlens=yes
+				file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+</genotype-analyses>
+
