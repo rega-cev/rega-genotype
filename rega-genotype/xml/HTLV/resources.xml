@@ -220,8 +220,8 @@ CTTCCTGAACCTCTCCGGGAGAGGTC
 	<message id="table.header.name">Name</message>
 	<message id="table.header.length">Length</message>
 	<message id="table.header.blast">Blast</message>
-	<message id="table.header.phyloType">Type</message>
-	<message id="table.header.phyloSubtype">Subtyping</message>
+	<message id="table.header.phylo">Type</message>
+	<message id="table.header.phylo">Subtyping</message>
 	<message id="table.header.report">Report</message>
 	<message id="table.header.genome">Genome</message>
 

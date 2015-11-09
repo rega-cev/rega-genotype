@@ -75,8 +75,6 @@ public class PerformanceAnalyse {
 		List<String> mySubtyping = subtyping(directory);
 		
 		String[] arrayCelName = new String[10];
-		String[] arrayCelType = new String[10];
-		String[] arrayCelSubtype = new String[10];
 		
 		FileWriter myWriter = new FileWriter("performanceAnalyse/" + directory + "/result/" + directory + "_resultPerformance.csv");
 		FileWriter resultSensSpec = new FileWriter("performanceAnalyse/" + directory + "/result/" + directory + "_resultSensSpec.csv");
@@ -86,10 +84,8 @@ public class PerformanceAnalyse {
 		
 		File f = null;
 	    File[] paths;
-	    ArrayList<String> allGenotypes = new ArrayList<String>();
 		ArrayList<String> allSubtyping = new ArrayList<String>();
 		ArrayList<String> files = new ArrayList<String>();
-		Set<String> uniqueGenotypes = new LinkedHashSet<String>();
 		Set<String> uniqueSubtyping = new LinkedHashSet<String>();
 		ArrayList<String[]> sensSpecFinal = new ArrayList<String[]>();
 		ArrayList<String[]> sensSpecFinalUnico = new ArrayList<String[]>();
@@ -109,30 +105,22 @@ public class PerformanceAnalyse {
 		        for(int i = 0; i < linhas; i++){
 		        	if (i > 0){
 		        		Cell celulaName = sheet.getCell(0, i);
-		        		Cell celulaType = sheet.getCell(6, i);
-		        		Cell celulaSubtype = sheet.getCell(8, i);
+		        		Cell celulaTypeSubtype = sheet.getCell(1, i);
 		        		String originalGenotypo = "";
 		        		String originalSubtype = "";
 			        	arrayCelName = celulaName.getContents().toLowerCase().split("\\.");
-			        	arrayCelType = celulaType.getContents().toLowerCase().split(" ");
-			        	arrayCelSubtype = celulaSubtype.getContents().toLowerCase().split(" ");
 			        	originalGenotypo = arrayCelName[0].replaceAll("[^0-9]", "");
 			        	originalSubtype = arrayCelName[0].replaceAll("\\d", "");
 			        	if (mySubtyping.contains(originalGenotypo + originalSubtype)){
-			        		lineGenotypes.add(originalGenotypo + originalSubtype);
 			        		allSubtyping.add(originalGenotypo + originalSubtype);
 			        	}
 		        	}
 		        }
 		        Collections.sort(lineGenotypes);
-		        allGenotypes.addAll(lineGenotypes);
 			}
         }
-		Collections.sort(allGenotypes);
+		
 		Collections.sort(allSubtyping);
-		for (String valor: allGenotypes) {  
-    		uniqueGenotypes.add(valor);  
-    	}
 		for (String valor: allSubtyping) {  
 			uniqueSubtyping.add(valor);  
     	}
@@ -143,12 +131,12 @@ public class PerformanceAnalyse {
         for (String valor: copyUnique) {  
         	uniqueSubtyping.add(valor);
     	}
-                
+       
 		myWriter.append("File;");
         myWriter.append("Total CDS;");
         myWriter.append("Correct;");
         myWriter.append("Error");
-        for (String valor: uniqueGenotypes) {  
+        for (String valor: uniqueSubtyping) {  
         	myWriter.append(";" + valor);
     	}
         myWriter.append("\n");
@@ -181,17 +169,12 @@ public class PerformanceAnalyse {
 		        for(int i = 0; i < linhas; i++){
 		        	if (i > 0){
 		        		Cell celulaName = sheet.getCell(0, i);
-		        		Cell celulaLength = sheet.getCell(1, i);
-		        		Cell celulaType = sheet.getCell(6, i);
-		        		Cell celulaSubtype = sheet.getCell(8, i);
+		        		Cell celulaTypeSubtype = sheet.getCell(1, i);
+		        		Cell celulaLength = sheet.getCell(2, i);
 		        		String originalGenotypo = "";
 		        		String originalSubtype = "";
 			        	arrayCelName = celulaName.getContents().toLowerCase().split("\\.");
-			        	arrayCelType = celulaType.getContents().toLowerCase().split(" ");
-			        	arrayCelSubtype = celulaSubtype.getContents().toLowerCase().split(" ");
-			        	int tamanhoSubtype = Arrays.asList(arrayCelSubtype).size() - 1;
-			        	int tamanhoType = Arrays.asList(arrayCelType).size() - 1;
-			        	
+			        	String arrayCelTypeSubtype = celulaTypeSubtype.getContents().toLowerCase();
 			        	countSeq += Integer.parseInt(celulaLength.getContents());
 			        	
 			        	originalGenotypo = arrayCelName[0].replaceAll("[^0-9]", "");
@@ -199,13 +182,13 @@ public class PerformanceAnalyse {
 			        	
 			        	if (mySubtyping.contains(originalGenotypo + originalSubtype)){
 			        		fileLineGenotypes.add(originalGenotypo + originalSubtype);
-			        		if (arrayCelName[0].equalsIgnoreCase(arrayCelType[tamanhoType] + arrayCelSubtype[tamanhoSubtype])){
+			        		if (arrayCelName[0].equalsIgnoreCase(arrayCelTypeSubtype)){
 		        				countCorrect++;
-		        				foundLineGenotypes.add(arrayCelType[tamanhoType] + arrayCelSubtype[tamanhoSubtype]);
-		        				sensSpecProv.add(new String[] {path.getName(), arrayCelName[0], "1", "0"});
+		        				foundLineGenotypes.add(arrayCelTypeSubtype);
+		        				sensSpecProv.add(new String[] {path.getName(), arrayCelTypeSubtype, "1", "0"});
 			        		}else{
-			        			if (mySubtyping.contains(originalGenotypo + originalSubtype)){
-			        				otherClass.add(originalGenotypo + originalSubtype);
+			        			if (mySubtyping.contains(arrayCelTypeSubtype)){
+			        				otherClass.add(arrayCelTypeSubtype);
 			        			}
 			        			sensSpecProv.add(new String[] {path.getName(), arrayCelName[0], "0", "1"});
 		        				countError++;
@@ -311,6 +294,7 @@ public class PerformanceAnalyse {
 		        
 		        se = 0;
 		        sp = 0;
+		        
 		        for(int aux=0; aux<sensSpec.size(); aux++){
 		        	String[] valor = sensSpec.get(aux);
 		        	String[] valor1 = fileCellOC.get(aux);
@@ -320,7 +304,7 @@ public class PerformanceAnalyse {
 	        		}else{
 	        			dataSet = "NO";
 	        		}
-		        	if (!(valor[2].equalsIgnoreCase("NA"))){
+		        	if (!(valor[4].equalsIgnoreCase("NA"))){
 		        		String ppvS;
 		        		String npvS;
 		        		tp = Integer.parseInt(valor[2]);
@@ -367,8 +351,8 @@ public class PerformanceAnalyse {
 		        	fileCellFUnique.add(valor);  
 		    	}
 		        
-		        copyUniqueP.addAll(uniqueGenotypes);
-		        copyUniqueF.addAll(uniqueGenotypes);
+		        copyUniqueP.addAll(uniqueSubtyping);
+		        copyUniqueF.addAll(uniqueSubtyping);
 		        
 		        copyUniqueP.removeAll(fileCellPUnique);
 		        copyUniqueF.removeAll(fileCellFUnique);
@@ -551,7 +535,11 @@ public class PerformanceAnalyse {
 	        }else{
 	        	npvS = Float.toString(npv1).replace('.', ',');
 	        }
-        	sensSpecFinalUnico.add(new String[] {tipo, Integer.toString(total), Integer.toString(tp1), Integer.toString(tn1), Integer.toString(fp1), Integer.toString(fn1), Float.toString(se1).replace('.', ','), Float.toString(sp1).replace('.', ','), ppvS, npvS, dataSet});
+	        if (total > 0){
+	        	sensSpecFinalUnico.add(new String[] {tipo, Integer.toString(total), Integer.toString(tp1), Integer.toString(tn1), Integer.toString(fp1), Integer.toString(fn1), Float.toString(se1).replace('.', ','), Float.toString(sp1).replace('.', ','), ppvS, npvS, dataSet});
+	        }else{
+	        	sensSpecFinalUnico.add(new String[] {tipo, "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA", "NA", dataSet});
+	        }
         	arquivoFinal += "\n";
         	//System.out.println("");
         }

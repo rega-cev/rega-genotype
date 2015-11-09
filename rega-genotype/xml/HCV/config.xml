@@ -30,11 +30,46 @@
 		<image-start>1</image-start>
 		<image-end>605</image-end>
 	</genome>	
+	
+	<result-list>
+		<column>
+			<label>Name</label>
+			<field>/genotype_result/sequence/@name</field>
+		</column>
+		<column>
+			<label>Length</label>
+			<field>/genotype_result/sequence/@length</field>
+		</column>
+		<column>
+			<label>Blast</label>
+			<field>/genotype_result/sequence/result[@id='blast']/cluster/concluded-name</field>
+		</column>
+		<column>
+			<label>Genotype</label>
+			<field>/genotype_result/sequence/conclusion/assigned/name</field>
+		</column>
+		<column>
+			<label>Subtyping</label>
+			<field>/genotype_result/sequence/conclusion[@id='subtype']/assigned/name</field>
+		</column>
+		<column>
+			<label>Report</label>
+			<field>report-link</field>
+		</column>
+		<column>
+			<label>Genome</label>
+			<field>genome</field>
+		</column>
+	</result-list>
 
 	<result-download>
 		<column>
 			<label>name</label>
 			<field>/genotype_result/sequence/@name</field>
+		</column>
+		<column>
+			<label>assignment</label>
+			<field>/genotype_result/sequence/conclusion[@id='subtype']/assigned/id</field>
 		</column>
 		<column>
 			<label>length</label>

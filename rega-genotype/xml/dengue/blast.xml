@@ -2,7 +2,7 @@
 	<alignment file="blast.fasta" />
 
 	<clusters>
-		<cluster id="Dengue" name="Dengue">
+		<cluster id="dengue" name="Dengue">
 			<description>Dengue</description>
 			<taxus name="GU131737" />
 			<taxus name="DQ181803" />
@@ -13,7 +13,7 @@
 
 	<analysis id="blast" type="blast">
 		<identify>
-			Dengue
+			dengue
 		</identify>
 		<options>
 			-q -1 -r 1

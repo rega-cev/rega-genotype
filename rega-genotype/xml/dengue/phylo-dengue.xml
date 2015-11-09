@@ -2,7 +2,7 @@
 	<alignment file="dengue.fasta" trim="true" />
 	
 	<clusters>
-		<cluster id="1" name="1">
+		<cluster id="1" name="DENV-1">
 			<taxus name="1I_AY726552" />
 			<taxus name="1II_AF180817" />
 			<taxus name="1III_AY722803" />
@@ -10,7 +10,7 @@
 			<taxus name="1V_FJ205875" />			
 		</cluster>
 	
-		<cluster id="2" name="2">
+		<cluster id="2" name="DENV-2">
 			<taxus name="2I_EU056811" />
 			<taxus name="2II_EU179859" />
 			<taxus name="2III_AF489932" />
@@ -19,14 +19,14 @@
 			<taxus name="2VI_EF105387" />
 		</cluster>
 	
-		<cluster id="3" name="3">
+		<cluster id="3" name="DENV-3">
 			<taxus name="3I_KC762687" />
 			<taxus name="3II_AY496871" />
 			<taxus name="3III_DQ675533" />
 			<taxus name="3V_EF629370" />
 		</cluster>
 	
-		<cluster id="4" name="4">
+		<cluster id="4" name="DENV-4">
 			<taxus name="4I_KF041260" />
 			<taxus name="4II_AY762085" />
 			<taxus name="4III_AY618988" />
@@ -88,14 +88,14 @@
 			<taxus name="1V_DQ285559" />
 		</cluster>
 		
-		<cluster id="2I" name="Genotype I">
+		<cluster id="2I" name="Genotype I - American">
 			<description>DENV-2 Genotype American</description>
 			<taxus name="2I_EU056811" />
 			<taxus name="2I_EU056812" />
 			<taxus name="2I_AF100469" />
 		</cluster>
 		
-		<cluster id="2II" name="Genotype II">
+		<cluster id="2II" name="Genotype II - Cosmopolitan">
 			<description>DENV-2 Genotype Cosmopolitan</description>
 			<taxus name="2II_EU179859" />
 			<taxus name="2II_KC762680" />
@@ -107,7 +107,7 @@
 			<taxus name="2II_KC762669" />
 		</cluster>
 		
-		<cluster id="2III" name="Genotype III">
+		<cluster id="2III" name="Genotype III - Southern Asian-American">
 			<description>DENV-2 Genotype Southern Asian-American</description>
 			<taxus name="2III_AF489932" />
 			<taxus name="2III_GQ868540" />
@@ -123,14 +123,14 @@
 			<taxus name="2III_AB122020" />
 		</cluster>
 		
-		<cluster id="2IV" name="Genotype IV">
+		<cluster id="2IV" name="Genotype IV - Asian II">
 			<description>DENV-2 Genotype Asian II</description>
 			<taxus name="2IV_AF204177" />
 			<taxus name="2IV_AF038403" />
 			<taxus name="2IV_HQ891023" />
 		</cluster>
 		
-		<cluster id="2V" name="Genotype V">
+		<cluster id="2V" name="Genotype V - Asian I">
 			<description>DENV-2 Genotype Asian I</description>
 			<taxus name="2V_KC964095" />
 			<taxus name="2V_GU131896" />
@@ -143,7 +143,7 @@
 			<taxus name="2V_DQ181804" />
 		</cluster>
 		
-		<cluster id="2VI" name="Genotype VI">
+		<cluster id="2VI" name="Genotype VI - Sylvatic">
 			<description>DENV-2 Genotype Sylvatic</description>
 			<taxus name="2VI_EF105387" />
 			<taxus name="2VI_EF105382" />
@@ -226,7 +226,7 @@
 			<taxus name="4III_AY618989" />
 		</cluster>
 		
-		<cluster id="4IV" name="Genotype IV">
+		<cluster id="4IV" name="Genotype IV - Sylvatic">
 			<description>DENV-4 Genotype Sylvatic</description>
 			<taxus name="4IV_EF457906" />
 			<taxus name="4IV_JF262780" />
@@ -246,10 +246,10 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 4IV_EF457906;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
-			NJ constraints=CONSTRE enforce=yes;
+			NJ constraints=CONSTRE;
 			savetree format=nexus brlens=yes
 			file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
@@ -274,10 +274,10 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 1II_AF180817;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
-			NJ constraints=CONSTRE enforce=yes;
+			NJ constraints=CONSTRE;
 			savetree format=nexus brlens=yes
 			file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
@@ -302,10 +302,10 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 1II_AF180817;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
-			NJ constraints=CONSTRE enforce=yes;
+			NJ constraints=CONSTRE;
 			savetree format=nexus brlens=yes
 			file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
@@ -330,10 +330,10 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 2VI_EF105379;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
-			NJ constraints=CONSTRE enforce=yes;
+			NJ constraints=CONSTRE;
 			savetree format=nexus brlens=yes
 			file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
@@ -358,10 +358,10 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 3V_EF629370;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
-			NJ constraints=CONSTRE enforce=yes;
+			NJ constraints=CONSTRE;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
 			end;
@@ -385,10 +385,10 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 4IV_EF457906;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
-			NJ constraints=CONSTRE enforce=yes;
+			NJ constraints=CONSTRE;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
 			end;
@@ -419,7 +419,7 @@
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
 				set rootmethod=midpoint;
-				set criterion=distance outroot=monophyl;
+				set criterion=distance rootmethod=midpoint;
 				dset distance=HKY NegBrLen=SetAbsVal;
 				NJ; savetree format=phylip brlens=yes
 				file=paup.tre replace=yes;
@@ -450,7 +450,7 @@
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
 				set rootmethod=midpoint;
-				set criterion=distance outroot=monophyl;
+				set criterion=distance rootmethod=midpoint;
 				dset distance=HKY NegBrLen=SetAbsVal;
 				NJ; savetree format=phylip brlens=yes
 				file=paup.tre replace=yes;
@@ -481,7 +481,7 @@
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
 				set rootmethod=midpoint;
-				set criterion=distance outroot=monophyl;
+				set criterion=distance rootmethod=midpoint;
 				dset distance=HKY NegBrLen=SetAbsVal;
 				NJ; savetree format=phylip brlens=yes
 				file=paup.tre replace=yes;
@@ -512,7 +512,7 @@
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
 				set rootmethod=midpoint;
-				set criterion=distance outroot=monophyl;
+				set criterion=distance rootmethod=midpoint;
 				dset distance=HKY NegBrLen=SetAbsVal;
 				NJ; savetree format=phylip brlens=yes
 				file=paup.tre replace=yes;
