@@ -65,11 +65,12 @@ public class GiardiaTool extends GenotypeTool {
     }
 
 	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s) throws AnalysisException {
+		
 		if (pca == null)
 			return false;
 		
 		PhyloClusterAnalysis.Result r = pca.run(s);
-
+		
 		if (r.haveSupport())
 			conclude(r.concludeForCluster(r.getConcludedCluster()), "Supported with phylogenetic analysis and bootstrap {1} (&gt;= 70)");
 		else

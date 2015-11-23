@@ -175,6 +175,7 @@ public class PerformanceAnalyse {
 		        		String originalSubtype = "";
 			        	arrayCelName = celulaName.getContents().toLowerCase().split("\\.");
 			        	String arrayCelTypeSubtype = celulaTypeSubtype.getContents().toLowerCase();
+			        	//System.out.println(path.getName() + "-" + celulaLength.getContents() + "-" + arrayCelName[0]);
 			        	countSeq += Integer.parseInt(celulaLength.getContents());
 			        	
 			        	originalGenotypo = arrayCelName[0].replaceAll("[^0-9]", "");

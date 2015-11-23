@@ -2,162 +2,155 @@
 	<alignment file="phylo-HTLV.fasta" trim="true"/>
 	<clusters>
 		<cluster id="1" name="Genotype 1">
-			<taxus name="Mel5" />
-			<taxus name="Efe1" />
-			<taxus name="Lib2" />
-			<taxus name="MOMJ" />
-			<taxus name="H23" />
-			<taxus name="HS35" />
-	    	<taxus name="OD" />
-	    	<taxus name="Bl1" />
-	       	<taxus name="ATK1" />
-	       	<taxus name="AMA" />
+			<taxus name="1c_Mel5" />
+			<taxus name="1e_Efe1" />
+			<taxus name="1f_Lib2" />
+			<taxus name="1b_MOMJ" />
+			<taxus name="1d_H23" />
+			<taxus name="1aC_HS35" />
+	    	<taxus name="1aD_OD" />
+	    	<taxus name="1aE_Bl1" />
+	       	<taxus name="1aB_ATK1" />
+	       	<taxus name="1aA_AMA" />
        	</cluster>
        	
        	<cluster id="HTLV3" name="HTLV3"> 
        		<description>HTLV-3</description>
     		<taxus name="HTLV3" />
        	</cluster>
-       
-       <cluster id="STLV1" name="STLV1"> 
-       	<description>STLV simian virus</description>
-    		<taxus name="TE4" />
-       	</cluster>
        	
 		<cluster id="2" name="Genotype 2">
-			<taxus name="pygmy2"/>
-			<taxus name="G2" />
-			<taxus name="Mo" />
-			<taxus name="SPWV" />
+			<taxus name="2d_pygmy2"/>
+			<taxus name="2b_G2" />
+			<taxus name="2a_Mo" />
+			<taxus name="2c_SPWV" />
 		</cluster>
 
 		<cluster id="1c" name="Subtype c"> 
 			<description>HTLV-1 subtype C found in Japan</description>
-			<taxus name="Mel5" />
-			<taxus name="SW44" />
-			<taxus name="ESH18" />
-			<taxus name="VAN54" />
-			<taxus name="VAN136" />
-			<taxus name="AUSNA" />
-			<taxus name="PE376" />
+			<taxus name="1c_Mel5" />
+			<taxus name="1c_SW44" />
+			<taxus name="1c_ESH18" />
+			<taxus name="1c_VAN54" />
+			<taxus name="1c_VAN136" />
+			<taxus name="1c_AUSNA" />
+			<taxus name="1c_PE376" />
 		</cluster>
       
       	<cluster id="1e" name="Subtype e">   
         	<description>HTLV-1 subtype e found in Africa</description>
-    		<taxus name="Efe1" />
+    		<taxus name="1e_Efe1" />
        	</cluster>    
       	
       	<cluster id="1f" name="Subtype f">        	       	
-   			<taxus name="Lib2" />
+   			<taxus name="1f_Lib2" />
        	</cluster> 
        	
       	<cluster id="1b" name="Subtype b">        	       	
-    		<taxus name="MOMJ" />
-    		<taxus name="ITIS" />
-    		<taxus name="MWMG" />    
-    		<taxus name="GB233" />
-    		<taxus name="PH236" />
-    		<taxus name="T49" />
-    		<taxus name="H24" />
-    		<taxus name="GAB7" />
-    		<taxus name="979MO" />
-    		<taxus name="1443MV" />
-    		<taxus name="SF26" />
+    		<taxus name="1b_MOMJ" />
+    		<taxus name="1b_ITIS" />
+    		<taxus name="1b_MWMG" />    
+    		<taxus name="1b_GB233" />
+    		<taxus name="1b_PH236" />
+    		<taxus name="1b_T49" />
+    		<taxus name="1b_H24" />
+    		<taxus name="1b_GAB7" />
+    		<taxus name="1b_979MO" />
+    		<taxus name="1b_1443MV" />
+    		<taxus name="1b_SF26" />
        	</cluster>    		
 
       	<cluster id="1d" name="Subtype d">           		
-    		<taxus name="H23" />
-    		<taxus name="pyg19" />
+    		<taxus name="1d_H23" />
+    		<taxus name="1d_pyg19" />
        	</cluster>    	    		
 
 		<cluster id="1a" name="Subtype a">
 	      	<cluster id="1aC" name="Subtype aC">           		    		
-	    		<taxus name="HS35" />
-	    		<taxus name="GH78" />
+	    		<taxus name="1aC_HS35" />
+	    		<taxus name="1aC_GH78" />
 	       	</cluster>    
       	
 	      	<cluster id="1aD" name="Subtype aD">           		    		    		
-	    		<taxus name="OD" />
-	    		<taxus name="BO" />
-	    		<taxus name="Pr52" />
-	    		<taxus name="Caio6622" />
+	    		<taxus name="1aD_OD" />
+	    		<taxus name="1aD_BO" />
+	    		<taxus name="1aD_Pr52" />
+	    		<taxus name="1aD_Caio6622" />
 	       	</cluster>  
       	
 	      	<cluster id="1aE" name="Subtype aE">           		    		    				
-	    		<taxus name="Bl1" />
-	    		<taxus name="RKI4" />
+	    		<taxus name="1aE_Bl1" />
+	    		<taxus name="1aE_RKI4" />
 	       	</cluster> 
       	
 		    <cluster id="1aB" name="Subtype aB">       	
-				<taxus name="ATM" />
-	    		<taxus name="MT4" />
-	    		<taxus name="ATK1" />
-	    		<taxus name="ATLYS" />
-	    		<taxus name="Ni1" />
-	    		<taxus name="H5" />
-	    		<taxus name="BCI2" />
+				<taxus name="1aB_ATM" />
+	    		<taxus name="1aB_MT4" />
+	    		<taxus name="1aB_ATK1" />
+	    		<taxus name="1aB_ATLYS" />
+	    		<taxus name="1aB_Ni1" />
+	    		<taxus name="1aB_H5" />
+	    		<taxus name="1aB_BCI2" />
        		</cluster>     		
 
 		    <cluster id="1aA" name="Subtype aA"> 
 		    	<description>HTLV-1 subtype a subgroup A Cosmopolitan</description>
- 				<taxus name="AMA" />
-	    		<taxus name="TBH4" />
-	    		<taxus name="AINU" />
-	    		<taxus name="73RM" />
-	    		<taxus name="CMC" />
-	    		<taxus name="KUW1" />
-	    		<taxus name="Cam" />
-	    		<taxus name="TBH2" />
-	    		<taxus name="CR1" />
-	    		<taxus name="Boi" />
-	    		<taxus name="Bl2" />
-	    		<taxus name="HTLV04" />
-	    		<taxus name="Qu1" />
-	    		<taxus name="FNN100" />
-	    		<taxus name="HB3194" />
+ 				<taxus name="1aA_AMA" />
+	    		<taxus name="1aA_TBH4" />
+	    		<taxus name="1aA_AINU" />
+	    		<taxus name="1aA_73RM" />
+	    		<taxus name="1aA_CMC" />
+	    		<taxus name="1aA_KUW1" />
+	    		<taxus name="1aA_Cam" />
+	    		<taxus name="1aA_TBH2" />
+	    		<taxus name="1aA_CR1" />
+	    		<taxus name="1aA_Boi" />
+	    		<taxus name="1aA_Bl2" />
+	    		<taxus name="1aA_HTLV04" />
+	    		<taxus name="1aA_Qu1" />
+	    		<taxus name="1aA_FNN100" />
+	    		<taxus name="1aA_HB3194" />
     		</cluster>
    		</cluster>
        
 		<cluster id="2d" name="Subtype d">
 			<description>HTLV-2 subtype d</description>
-     		<taxus name="pygmy2" />
+     		<taxus name="2d_pygmy2" />
      	</cluster>
       
       	<cluster id="2b" name="Subtype b">   
         	<description>HTLV-2 subtype b</description>
-    		<taxus name="G2" />
-			<taxus name="RJ" />
-			<taxus name="L11456" />
-			<taxus name="GAB" />
-			<taxus name="PYGCAM1" />
-			<taxus name="NRA" />
-			<taxus name="EA" />
-			<taxus name="EC" />
-			<taxus name="IOV" />
-			<taxus name="IIb" />
-			<taxus name="IT" />
-			<taxus name="IOG" />
-			
+    		<taxus name="2b_G2" />
+			<taxus name="2b_RJ" />
+			<taxus name="2b_L11456" />
+			<taxus name="2b_GAB" />
+			<taxus name="2b_PYGCAM1" />
+			<taxus name="2b_NRA" />
+			<taxus name="2b_EA" />
+			<taxus name="2b_EC" />
+			<taxus name="2b_IOV" />
+			<taxus name="2b_IIb" />
+			<taxus name="2b_IT" />
+			<taxus name="2b_IOG" />
        	</cluster>
 		
 		<cluster id="2c" name="Subtype c">
 			<description>HTLV-2 subtype c Brazilian</description>
-			<taxus name="RP329" />
-			<taxus name="TYR8668" />
-			<taxus name="GTY9272" />
-			<taxus name="BEL9083" />
-			<taxus name="SPWV" />
+			<taxus name="2c_RP329" />
+			<taxus name="2c_TYR8668" />
+			<taxus name="2c_GTY9272" />
+			<taxus name="2c_BEL9083" />
+			<taxus name="2c_SPWV" />
 	    </cluster>    
        	
 	    <cluster id="2a" name="Subtype a">
-	    	<description>HTLV-2 subtype a</description>          		    		    		
-    		
-			<taxus name="k96" />
-			<taxus name="SMH2" />
-			<taxus name="M12524" />
-			<taxus name="M19203" />	
-			<taxus name="K01670" />
-			<taxus name="Mo" />
+	    	<description>HTLV-2 subtype a</description>
+			<taxus name="2a_k96" />
+			<taxus name="2a_SMH2" />
+			<taxus name="2a_M12524" />
+			<taxus name="2a_M19203" />	
+			<taxus name="2a_K01670" />
+			<taxus name="2a_Mo" />
        	</cluster>
 	</clusters>
 	
@@ -190,7 +183,7 @@
 
 	<analysis id="phylo-minor-1" type="paup">
 		<identify>
-			1c,STLV1,1e,1f,1b,1d,1aC,1aD,1aE,1aB,1aA
+			1c,HTLV3,1e,1f,1b,1d,1aC,1aD,1aE,1aB,1aA
 		</identify>
 		<cutoff>
 			70
@@ -200,7 +193,7 @@
 			log file=paup.log replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup TE4;
+			outgroup HTLV3;
 			set criterion=distance outroot=monophyl;
 			dset distance=TamNei NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
@@ -227,7 +220,7 @@
 			log file=paup.log replace=yes;
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
-			outgroup pygmy2;
+			outgroup 2d_pygmy2;
 			set criterion=distance outroot=monophyl;
 			dset distance=HKY rates=gamma NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
@@ -282,7 +275,7 @@
 		</step>
 		<analysis type="paup">
 			<identify>
-				1c,STLV1,1e,1f,1b,1d,1aC,1aD,1aE,1aB,1aA
+				1c,HTLV3,1e,1f,1b,1d,1aC,1aD,1aE,1aB,1aA
 			</identify>
 			<cutoff>
 				70

@@ -1,0 +1,909 @@
+<genotype-analyses>
+	<alignment file="phylo-hiv1MV3.fasta" trim="true" />
+
+	<clusters>
+		<cluster id="A" name="Subtype A">
+			<cluster id="A1" name="Subtype A1">
+				<description>http://bioafrica.mrc.ac.za/phylotype/phylotypes.php?phylotype=38</description>
+				<taxus name="A1_DQ823357" />
+				<taxus name="A1_EF545108" />
+				<taxus name="A1_AB098330" />
+			</cluster>
+			
+			<cluster id="A2" name="Subtype A2">
+				<taxus name="A2_CD9797CDKTB48" />
+				<taxus name="A2_CY9494CY01741" />
+				<tags>CRF</tags>
+			</cluster>
+		</cluster>
+
+		<cluster id="B" name="Subtype B">
+			<taxus name="B_AY835780" />
+			<taxus name="B_AY173953" />
+			<taxus name="B_EF637053" />
+		</cluster>
+
+		<cluster id="C" name="Subtype C">
+			<taxus name="C_AY162223" />
+			<taxus name="C_EF694033" />
+			<taxus name="C_AY255823" />
+		</cluster>
+
+		<cluster id="D" name="Subtype D">
+			<taxus name="D_AF484495" />
+			<taxus name="D_AF484514" />
+			<taxus name="D_AY773338" />
+		</cluster>
+
+		<cluster id="F" name="Subtype F">
+			<cluster id="F1" name="Subtype F1">
+				<taxus name="F1_DQ979024" />
+				<taxus name="F1_AY173957" />
+			</cluster>
+			<cluster id="F2" name="Subtype F2">
+				<taxus name="F2_AJ249236" />
+				<taxus name="F2_AF377956" />
+				<tags>CRF</tags>
+			</cluster>
+		</cluster>
+
+		<cluster id="G" name="Subtype G">
+			<taxus name="G_DQ168576" />
+			<taxus name="G_EU786670" />
+			<taxus name="G_AB231893" />
+		</cluster>
+
+		<cluster id="H" name="Subtype H">
+			<taxus name="H_AF005496" />
+			<taxus name="H_AF190128" />
+			<taxus name="H_AF190127" />
+		</cluster>
+
+		<cluster id="J" name="Subtype J">
+			<taxus name="J_AF082394" />
+			<taxus name="J_AF082395_1" />
+			<taxus name="J_EF614151" />
+		</cluster>
+
+		<cluster id="K" name="Subtype K">
+			<taxus name="K_AJ249235" />
+			<taxus name="K_AJ249239" />
+		</cluster>
+
+		<cluster id="01_AE" name="CRF 01_AE">
+			<taxus name="01_AE_CF19090CF11697" />
+			<taxus name="01_AE_TH90CM240" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="02_AG" name="CRF 02_AG">
+			<taxus name="02_AG_CM9797CMP807" />
+			<taxus name="02_AG_FR91DJ264" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="03_AB" name="CRF 03_AB">
+			<taxus name="03_AB_RU97KAL153" />
+			<taxus name="03_AB_RU98RU98001" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="04_AGHKU" name="CRF 04_CPX">
+			<taxus name="04_CPX_G1R9197PVCH" />
+			<taxus name="04_CPX_GR9797PVMY" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="05_DF" name="CRF 05_DF">
+			<taxus name="05_DF_BEVI1310" />
+			<taxus name="05_DF_BE93VI961" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="06_AGJK" name="CRF 06_CPX">
+			<taxus name="06_CPX_AU96BFP90" />
+			<taxus name="06_CPX_ML9595ML84" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="07_BC" name="CRF 07_BC">
+			<taxus name="07_BC_C1N9797CN001" />
+			<taxus name="07_BC_CN9898CN009" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="08_BC" name="CRF 08_BC">
+			<taxus name="08_BC_CN19797CNGX7F" />
+			<taxus name="08_BC_CN9898CN006" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="09_AGU" name="CRF 09_cpx">
+			<taxus name="09_cpx_AJ866553" />
+			<taxus name="09_cpx_AY093605" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="10_CD" name="CRF 10_CD">
+			<taxus name="10_CD_TZ19696TZBF071" />
+			<taxus name="10_CD_TZ9696TZBF110" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="11_AEGJU" name="CRF 11_CPX">
+			<taxus name="11_CPX_F1R99MP1298" />
+			<taxus name="11_CPX_GRGR17" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="12_BF" name="CRF 12_BF">
+			<taxus name="12_BF_AR97A32989" />
+			<taxus name="12_BF_U1Y99URTR23" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="13_AEGJU" name="CRF 13_CPX">
+			<taxus name="13_CPX_C1M961849" />
+			<taxus name="13_CPX_CM964164" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="14_BG" name="CRF 14_BG">
+			<taxus name="14_BG_E1S00X477" />
+			<taxus name="14_BG_ES99X397" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="15_AEB" name="CRF 15_01B">
+			<taxus name="15_01B_DQ354120" />
+			<taxus name="15_01B_AF530576" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="18_A1FGHKU" name="CRF 18_cpx">
+			<taxus name="18_cpx_AF377959" />
+			<taxus name="18_cpx_AY586541" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="19_A1DG" name="CRF 19_cpx">
+			<taxus name="19_cpx_AY588971" />
+			<taxus name="19_cpx_AY894994" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="20_BG" name="CRF 20_BG">
+			<taxus name="20_BG_AY586545" />
+			<taxus name="20_BG_AY586544" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="21_A2D" name="CRF 21_A2D">
+			<taxus name="21_A2D_AY945737" />
+			<taxus name="21_A2D_AF457051" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="23_BG" name="CRF 23_BG">
+			<taxus name="23_BG_AY900571" />
+			<taxus name="23_BG_AY900572" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="24_BG" name="CRF 24_BG">
+			<taxus name="24_BG_AY900574" />
+			<taxus name="24_BG_AY900575" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="25_AGU" name="CRF 25_cpx">
+			<taxus name="25_cpx_EU693240" />
+			<taxus name="25_cpx_EU697908" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="27_AEGHJKU" name="CRF 27_cpx">
+			<taxus name="27_cpx_AJ404325" />
+			<taxus name="27_cpx_AM851091" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="29_BF" name="CRF 29_BF">
+			<taxus name="29_BF_DQ085876" />
+			<taxus name="29_BF_DQ085871" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="31_BC" name="CRF 31_BC">
+			<taxus name="31_BC_EF091932" />
+			<taxus name="31_BC_AY727527" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="33_AEB" name="CRF 33_01A1">
+			<taxus name="33_01B_DQ366659" />
+			<taxus name="33_01B_AB547463" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="35_AD" name="CRF 35_AD">
+			<taxus name="35_AD_EF158043" />
+			<taxus name="35_AD_EF158040" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="36_AEG" name="CRF 36_cpx ">
+			<taxus name="36_cpx_EF087995" />
+			<taxus name="36_cpx_EF087994" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="37_AEGU" name="CRF 37_cpx">
+			<taxus name="37_cpx_EF116594" />
+			<taxus name="37_cpx_AF377957" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="39_BF" name="CRF 39_BF">
+			<taxus name="39_BF_EU735534" />
+			<taxus name="39_BF_EU735536" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="40_BF" name="CRF 40_BF">
+			<taxus name="40_BF_EU735538" />
+			<taxus name="40_BF_EU735540" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="42_BF" name="CRF 42_BF">
+			<taxus name="42_BF_EU170142" />
+			<taxus name="42_BF_EU170151" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="43_AG" name="CRF 43_02G">
+			<taxus name="43_02G_EU697904" />
+			<taxus name="43_02G_EU697907" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="47_BF" name="CRF 47_BF">
+			<taxus name="47_BF_GQ372987" />
+			<taxus name="47_BF_FJ670529" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="A1SN" name="A1 Senegal">
+			<taxus name="A1_SN_DDI579" />
+			<taxus name="A1_SN_DDJ369" />
+			<taxus name="A1_SN_DDJ360" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="A1KE" name="A1 Kenya">
+			<taxus name="A1_KE_KNH1199" />
+			<taxus name="A1_KE_ML752" />
+			<taxus name="A1_TZ_A341" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="01UZA1" name="A1 UZ">
+			<taxus name="A1_UZ_02UZ0659" />
+			<taxus name="A1_UZ_02UZ0663" />
+
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="AHJU" name="AHJU CM">
+			<taxus name="AHJU_CM_1278NG" />
+			<taxus name="AHJU_CM_1296NG" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="CBR" name="C Brazil">
+			<taxus name="C_AR_ARG4006" />
+			<taxus name="C_BR_04BR013" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="CIN" name="C India">
+			<taxus name="C_IN_93IN904" />
+			<taxus name="C_IN_98IN022" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="DCM" name="D Cameroon">
+			<taxus name="D_CM_0009BBY" />
+			<taxus name="D_CM_4412HAL" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="DUG" name="D Uganda">
+			<taxus name="D_UG_99UGA07412" />
+			<taxus name="D_UG_99UGB21875" />
+			<taxus name="D_UG_99UGE08364" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="DZA" name="D South Africa">
+			<taxus name="D_ZA_R214" />
+			<taxus name="D_ZA_R286" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="GES" name="G Spain">
+			<description>Subtype G from Spain</description>
+			<taxus name="G_ES_X558" />
+			<taxus name="G_ES_X138" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="GNG" name="G Nigeria">
+			<taxus name="G_NG_01NGPL0669" />
+			<taxus name="G_NG_01NGPL0760" />
+			<tags>CRF</tags>
+		</cluster>
+		
+		<cluster id="GKU" name="GKU Senegal">
+			<taxus name="GKU_SE_SE8646" />
+			<taxus name="GKU_SE_SE9010" />
+			<tags>CRF</tags>
+		</cluster>
+
+		<cluster id="Group_O" name="Group O">
+			<taxus name="OCM91MVP5180" />
+		</cluster>
+
+	</clusters>
+
+	<analysis id="phylo-major" type="paup">
+		<identify>
+			A, B, C, D, F, G, H, J, K, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="phylo-minor-A" type="paup">
+		<identify>
+			A1, A2, 01_AE, 02_AG, 03_AB, 04_AGHKU, 06_AGJK, 09_AGU, 11_AEGJU, 13_AEGJU, 15_AEB, 18_A1FGHKU, 19_A1DG, 21_A2D, 25_AGU, 27_AEGHJKU, 33_AEB, 35_AD, 36_AEG, 37_AEGU, 43_AG, A1SN, A1KE, AHJU, 01UZA1, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-B" type="paup">
+		<identify>
+			B, 03_AB, 07_BC, 08_BC, 12_BF, 14_BG, 15_AEB, 20_BG, 23_BG, 24_BG, 29_BF, 31_BC, 33_AEB, 39_BF, 40_BF, 42_BF, 47_BF, CBR, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-C" type="paup">
+		<identify>
+			C, 07_BC, 08_BC, 10_CD, 31_BC, CBR, CIN, DCM, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-D" type="paup">
+		<identify>
+			D, 05_DF, 10_CD, 19_A1DG, 21_A2D, 35_AD, DCM, DUG, DZA, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-F" type="paup">
+		<identify>
+			F1, F2, 05_DF, 12_BF, 29_BF, 39_BF, 40_BF, 42_BF, 47_BF, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-G" type="paup">
+		<identify>
+			G, 02_AG, 04_AGHKU, 06_AGJK, 09_AGU, 11_AEGJU, 13_AEGJU, 14_BG, 18_A1FGHKU, 19_A1DG, 20_BG, 23_BG, 24_BG, 25_AGU, 27_AEGHJKU, 36_AEG, 37_AEGU, 43_AG, DUG, GES, GNG, GKU, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="phylo-minor-H" type="paup">
+		<identify>
+			H, 04_AGHKU, 18_A1FGHKU, 27_AEGHJKU, AHJU, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-J" type="paup">
+		<identify>
+			J, 06_AGJK, 11_AEGJU, 13_AEGJU, 27_AEGHJKU, AHJU, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-K" type="paup">
+		<identify>
+			K, 04_AGHKU, 06_AGJK, 18_A1FGHKU, 27_AEGHJKU, A1KE, GKU, Group_O
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup OCM91MVP5180;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-A-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				A1, A2, 01_AE, 02_AG, 03_AB, 04_AGHKU, 06_AGJK, 09_AGU, 11_AEGJU, 13_AEGJU, 15_AEB, 18_A1FGHKU, 19_A1DG, 21_A2D, 25_AGU, 27_AEGHJKU, 33_AEB, 35_AD, 36_AEG, 37_AEGU, 43_AG, A1SN, A1KE, AHJU, 01UZA1, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-B-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				B, 03_AB, 07_BC, 08_BC, 12_BF, 14_BG, 15_AEB, 20_BG, 23_BG, 24_BG, 29_BF, 31_BC, 33_AEB, 39_BF, 40_BF, 42_BF, 47_BF, CBR, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				egin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-C-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				C, 07_BC, 08_BC, 10_CD, 31_BC, CBR, CIN, DCM, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				egin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-D-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				D, 05_DF, 10_CD, 19_A1DG, 21_A2D, 35_AD, DCM, DUG, DZA, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				egin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-F-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				F1, F2, 05_DF, 12_BF, 29_BF, 39_BF, 40_BF, 42_BF, 47_BF, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				egin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-G-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				G, 02_AG, 04_AGHKU, 06_AGJK, 09_AGU, 11_AEGJU, 13_AEGJU, 14_BG, 18_A1FGHKU, 19_A1DG, 20_BG, 23_BG, 24_BG, 25_AGU, 27_AEGHJKU, 36_AEG, 37_AEGU, 43_AG, DUG, GES, GNG, GKU, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				egin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-H-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				H, 04_AGHKU, 18_A1FGHKU, 27_AEGHJKU, AHJU, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				egin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-J-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				J, 06_AGJK, 11_AEGJU, 13_AEGJU, 27_AEGHJKU, AHJU, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				egin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-K-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				K, 04_AGHKU, 06_AGJK, 18_A1FGHKU, 27_AEGHJKU, A1KE, GKU, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				egin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+</genotype-analyses>
+

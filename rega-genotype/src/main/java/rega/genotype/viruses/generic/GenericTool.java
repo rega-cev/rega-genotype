@@ -207,6 +207,9 @@ public class GenericTool extends GenotypeTool {
 		PhyloClusterAnalysis.Result r = a.run(s);
 		ScanAnalysis.Result scanResult = checkBootScan(a, s);
 		
+		//System.out.println("r:"+r+"s:"+s+"-blastResult:"+blastResult+"-region:"+region+"-cutToRegion:"+cutToRegion+"-scanResult:"+scanResult);
+		
+		
 		String phyloName = "phylogenetic subgenogroup analysis within " + typeCluster.getId();
 
 		/*
@@ -217,10 +220,11 @@ public class GenericTool extends GenotypeTool {
 		 * This is to differentiate with the outgroup. It would be better to mark the
 		 * outgroup with some attribute ?
 		 */
+		
 		if (r == null
 			|| (scanResult != null && !scanResult.haveSupport())
 			|| r.getConcludedCluster() == null
-			|| !r.getConcludedCluster().getId().startsWith(typeCluster.getId())
+			|| !r.getConcludedCluster().getId().contains(typeCluster.getId())
 			|| !r.haveSupport())
 			conclude("Could not assign", "Not supported by " + phyloName, "subtype");
 		else

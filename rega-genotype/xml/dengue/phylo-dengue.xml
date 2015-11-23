@@ -250,8 +250,7 @@
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
-			savetree format=nexus brlens=yes
-			file=paup.tre replace=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
 			end;
 			quit;

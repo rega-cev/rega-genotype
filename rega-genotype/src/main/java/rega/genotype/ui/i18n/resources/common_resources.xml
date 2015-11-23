@@ -49,7 +49,7 @@
   			Analysis in progress... (Showing partial results).<br/>
   			This page will be automatically updated every ${update-time-seconds} seconds... ${cancel-button}
   			<br/>
-  			<img src="../../../../pics/ajax-loader.gif" width="16" heigth="16"></img>
+  			<img src="/rega-genotype/pics/ajax-loader.gif" width="16" heigth="16"></img>
   		</p>
   	</message>
   	<message id="monitorForm.report">Report</message>

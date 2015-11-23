@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+
 import rega.genotype.AlignmentAnalyses.Cluster;
 
 /**
@@ -215,8 +217,15 @@ public abstract class AbstractAnalysis {
     }
 
     protected String makeResource(File file, String suffix) throws IOException {
-        File resource = getTracer().getResourceFile(suffix);
-        file.renameTo(resource);
+    	String osName = System.getProperty("os.name");
+        osName = osName.toLowerCase();
+    	File resource = getTracer().getResourceFile(suffix);
+    	file.renameTo(resource);
+    	if (osName.startsWith("windows")){
+	    	if (suffix.equalsIgnoreCase("log")){
+	    		FileUtils.copyFile(file, resource);
+	        }
+        }
         return resource.getName();
     }
     

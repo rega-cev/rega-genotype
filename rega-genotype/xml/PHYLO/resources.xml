@@ -130,7 +130,8 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 				<div>
 					<h3>Genogroup assignment</h3>
 					<p>
-						<span class="label">Genogroup assignment:</span> ${xpath "/genotype_result/sequence/result[@id='blast']/cluster/concluded-name"}
+						<span class="label">Genogroup assignment:</span> 
+						<span class="nov-genotype">${xpath "/genotype_result/sequence/result[@id='blast']/cluster/concluded-name"}</span>
 					</p>
 					<p>
 						<span class="label"></span>
@@ -141,8 +142,7 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 					<p>
 						<span class="label">Genotype assignment:</span>
 						<span class="nov-genotype">${xpath "/genotype_result/sequence/conclusion[@id='type']/assigned/name"}</span>
-						<span>${xpath "/genotype_result/sequence/conclusion[@id='type']/assigned/description"}</span>
-											</p>
+					</p>
   					<p>
   						<span class="label"></span>
   						<span>${xpath "/genotype_result/sequence/conclusion[@id='type']/motivation"}</span>
@@ -153,9 +153,9 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 					${<if-defined>}
 					    <p>
    							<span class="label">Sub-clustering:</span>
-							${eval-xpath "/genotype_result/sequence/conclusion[@id='subtype']"}
+							${eval-xpath "/genotype_result/sequence/conclusion[@id='subtype']/assigned/name"}
 							${<if-defined>}
-								${eval-xpath "/genotype_result/sequence/conclusion[@type='simple' and @id='subtype']"}
+								${eval-xpath "/genotype_result/sequence/conclusion[@type='simple' and @id='subtype']/assigned/name"}
 	   							<span class="nov-genotype">
 									${<if-defined>}
 		   								${xpath "/genotype_result/sequence/conclusion[@id='type']/assigned/name"}
