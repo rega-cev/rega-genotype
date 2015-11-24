@@ -3,69 +3,70 @@
 
 	<clusters>
 		<cluster id="A" name="Subtype A">
-			<cluster id="A1" name="Subtype A1">
+			<cluster id="A1" name="Subtype A1" type="pure">
 				<description>http://bioafrica.mrc.ac.za/phylotype/phylotypes.php?phylotype=38</description>
 				<taxus name="A1_DQ823357" />
 				<taxus name="A1_EF545108" />
 				<taxus name="A1_AB098330" />
 			</cluster>
 			
-			<cluster id="A2" name="Subtype A2">
+			<cluster id="A2" name="Subtype A2" type="pure">
 				<taxus name="A2_CD9797CDKTB48" />
 				<taxus name="A2_CY9494CY01741" />
 				<tags>CRF</tags>
 			</cluster>
 		</cluster>
 
-		<cluster id="B" name="Subtype B">
+		<cluster id="B" name="Subtype B" type="pure">
+			<description>pure</description>
 			<taxus name="B_AY835780" />
 			<taxus name="B_AY173953" />
 			<taxus name="B_EF637053" />
 		</cluster>
 
-		<cluster id="C" name="Subtype C">
+		<cluster id="C" name="Subtype C" type="pure">
 			<taxus name="C_AY162223" />
 			<taxus name="C_EF694033" />
 			<taxus name="C_AY255823" />
 		</cluster>
 
-		<cluster id="D" name="Subtype D">
+		<cluster id="D" name="Subtype D" type="pure">
 			<taxus name="D_AF484495" />
 			<taxus name="D_AF484514" />
 			<taxus name="D_AY773338" />
 		</cluster>
 
 		<cluster id="F" name="Subtype F">
-			<cluster id="F1" name="Subtype F1">
+			<cluster id="F1" name="Subtype F1" type="pure">
 				<taxus name="F1_DQ979024" />
 				<taxus name="F1_AY173957" />
 			</cluster>
-			<cluster id="F2" name="Subtype F2">
+			<cluster id="F2" name="Subtype F2" type="pure">
 				<taxus name="F2_AJ249236" />
 				<taxus name="F2_AF377956" />
 				<tags>CRF</tags>
 			</cluster>
 		</cluster>
 
-		<cluster id="G" name="Subtype G">
+		<cluster id="G" name="Subtype G" type="pure">
 			<taxus name="G_DQ168576" />
 			<taxus name="G_EU786670" />
 			<taxus name="G_AB231893" />
 		</cluster>
 
-		<cluster id="H" name="Subtype H">
+		<cluster id="H" name="Subtype H" type="pure">
 			<taxus name="H_AF005496" />
 			<taxus name="H_AF190128" />
 			<taxus name="H_AF190127" />
 		</cluster>
 
-		<cluster id="J" name="Subtype J">
+		<cluster id="J" name="Subtype J" type="pure">
 			<taxus name="J_AF082394" />
 			<taxus name="J_AF082395_1" />
 			<taxus name="J_EF614151" />
 		</cluster>
 
-		<cluster id="K" name="Subtype K">
+		<cluster id="K" name="Subtype K" type="pure">
 			<taxus name="K_AJ249235" />
 			<taxus name="K_AJ249239" />
 		</cluster>
@@ -627,6 +628,37 @@
 		</options>
 	</analysis>
 	
+	<analysis id="phylo-major-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				A1, A2, B, C, D, F1, F2, G, H, J, K, Group_O
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
 	<analysis id="phylo-minor-A-self-scan" type="scan">
 		<window>
 			1000
@@ -673,7 +705,7 @@
 				70
 			</cutoff>
 			<block>
-				egin paup;
+				begin paup;
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
@@ -704,7 +736,7 @@
 				70
 			</cutoff>
 			<block>
-				egin paup;
+				begin paup;
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
@@ -735,7 +767,7 @@
 				70
 			</cutoff>
 			<block>
-				egin paup;
+				begin paup;
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
@@ -766,7 +798,7 @@
 				70
 			</cutoff>
 			<block>
-				egin paup;
+				begin paup;
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
@@ -797,7 +829,7 @@
 				70
 			</cutoff>
 			<block>
-				egin paup;
+				begin paup;
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
@@ -828,7 +860,7 @@
 				70
 			</cutoff>
 			<block>
-				egin paup;
+				begin paup;
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
@@ -859,7 +891,7 @@
 				70
 			</cutoff>
 			<block>
-				egin paup;
+				begin paup;
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
@@ -890,7 +922,7 @@
 				70
 			</cutoff>
 			<block>
-				egin paup;
+				begin paup;
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
