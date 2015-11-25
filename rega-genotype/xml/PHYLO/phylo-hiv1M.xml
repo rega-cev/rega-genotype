@@ -3,279 +3,323 @@
 
 	<clusters>
 		<cluster id="A" name="Subtype A">
-			<cluster id="A1" name="Subtype A1" type="pure">
-				<description>http://bioafrica.mrc.ac.za/phylotype/phylotypes.php?phylotype=38</description>
+			<cluster id="A1" name="Subtype A1">
+				<description>A1</description>
 				<taxus name="A1_DQ823357" />
 				<taxus name="A1_EF545108" />
 				<taxus name="A1_AB098330" />
 			</cluster>
 			
-			<cluster id="A2" name="Subtype A2" type="pure">
+			<cluster id="A2" name="Subtype A2">
+				<description>A2</description>
 				<taxus name="A2_CD9797CDKTB48" />
 				<taxus name="A2_CY9494CY01741" />
 				<tags>CRF</tags>
 			</cluster>
 		</cluster>
 
-		<cluster id="B" name="Subtype B" type="pure">
-			<description>pure</description>
+		<cluster id="B" name="Subtype B">
+			<description>B</description>
 			<taxus name="B_AY835780" />
 			<taxus name="B_AY173953" />
 			<taxus name="B_EF637053" />
 		</cluster>
 
-		<cluster id="C" name="Subtype C" type="pure">
+		<cluster id="C" name="Subtype C">
+			<description>C</description>
 			<taxus name="C_AY162223" />
 			<taxus name="C_EF694033" />
 			<taxus name="C_AY255823" />
 		</cluster>
 
-		<cluster id="D" name="Subtype D" type="pure">
+		<cluster id="D" name="Subtype D">
+			<description>D</description>
 			<taxus name="D_AF484495" />
 			<taxus name="D_AF484514" />
 			<taxus name="D_AY773338" />
 		</cluster>
 
 		<cluster id="F" name="Subtype F">
-			<cluster id="F1" name="Subtype F1" type="pure">
+			<cluster id="F1" name="Subtype F1">
+				<description>F1</description>
 				<taxus name="F1_DQ979024" />
 				<taxus name="F1_AY173957" />
 			</cluster>
-			<cluster id="F2" name="Subtype F2" type="pure">
+			<cluster id="F2" name="Subtype F2">
+				<description>F2</description>
 				<taxus name="F2_AJ249236" />
 				<taxus name="F2_AF377956" />
 				<tags>CRF</tags>
 			</cluster>
 		</cluster>
 
-		<cluster id="G" name="Subtype G" type="pure">
+		<cluster id="G" name="Subtype G">
+			<description>G</description>
 			<taxus name="G_DQ168576" />
 			<taxus name="G_EU786670" />
 			<taxus name="G_AB231893" />
 		</cluster>
 
-		<cluster id="H" name="Subtype H" type="pure">
+		<cluster id="H" name="Subtype H">
+			<description>H</description>
 			<taxus name="H_AF005496" />
 			<taxus name="H_AF190128" />
 			<taxus name="H_AF190127" />
 		</cluster>
 
-		<cluster id="J" name="Subtype J" type="pure">
+		<cluster id="J" name="Subtype J">
+			<description>J</description>
 			<taxus name="J_AF082394" />
 			<taxus name="J_AF082395_1" />
 			<taxus name="J_EF614151" />
 		</cluster>
 
-		<cluster id="K" name="Subtype K" type="pure">
+		<cluster id="K" name="Subtype K">
+			<description>K</description>
 			<taxus name="K_AJ249235" />
 			<taxus name="K_AJ249239" />
 		</cluster>
 
 		<cluster id="01_AE" name="CRF 01_AE">
+			<description>CRF01_AE</description>
 			<taxus name="01_AE_CF19090CF11697" />
 			<taxus name="01_AE_TH90CM240" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="02_AG" name="CRF 02_AG">
+			<description>CRF02_AG</description>
 			<taxus name="02_AG_CM9797CMP807" />
 			<taxus name="02_AG_FR91DJ264" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="03_AB" name="CRF 03_AB">
+			<description>CRF03_AB</description>
 			<taxus name="03_AB_RU97KAL153" />
 			<taxus name="03_AB_RU98RU98001" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="04_AGHKU" name="CRF 04_CPX">
+			<description>CRF04_cpx</description>
 			<taxus name="04_CPX_G1R9197PVCH" />
 			<taxus name="04_CPX_GR9797PVMY" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="05_DF" name="CRF 05_DF">
+			<description>CRF05_DF</description>
 			<taxus name="05_DF_BEVI1310" />
 			<taxus name="05_DF_BE93VI961" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="06_AGJK" name="CRF 06_CPX">
+			<description>CRF06_cpx</description>
 			<taxus name="06_CPX_AU96BFP90" />
 			<taxus name="06_CPX_ML9595ML84" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="07_BC" name="CRF 07_BC">
+			<description>CRF07_BC</description>
 			<taxus name="07_BC_C1N9797CN001" />
 			<taxus name="07_BC_CN9898CN009" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="08_BC" name="CRF 08_BC">
+			<description>CRF08_BC</description>
 			<taxus name="08_BC_CN19797CNGX7F" />
 			<taxus name="08_BC_CN9898CN006" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="09_AGU" name="CRF 09_cpx">
+			<description>CRF09_cpx</description>
 			<taxus name="09_cpx_AJ866553" />
 			<taxus name="09_cpx_AY093605" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="10_CD" name="CRF 10_CD">
+			<description>CRF10_CD</description>
 			<taxus name="10_CD_TZ19696TZBF071" />
 			<taxus name="10_CD_TZ9696TZBF110" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="11_AEGJU" name="CRF 11_CPX">
+			<description>CRF11_cpx</description>
 			<taxus name="11_CPX_F1R99MP1298" />
 			<taxus name="11_CPX_GRGR17" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="12_BF" name="CRF 12_BF">
+			<description>CRF12_BF</description>
 			<taxus name="12_BF_AR97A32989" />
 			<taxus name="12_BF_U1Y99URTR23" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="13_AEGJU" name="CRF 13_CPX">
+			<description>CRF13_cpx</description>
 			<taxus name="13_CPX_C1M961849" />
 			<taxus name="13_CPX_CM964164" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="14_BG" name="CRF 14_BG">
+			<description>CRF14_BG</description>
 			<taxus name="14_BG_E1S00X477" />
 			<taxus name="14_BG_ES99X397" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="15_AEB" name="CRF 15_01B">
+			<description>CRF15_01B</description>
 			<taxus name="15_01B_DQ354120" />
 			<taxus name="15_01B_AF530576" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="18_A1FGHKU" name="CRF 18_cpx">
+			<description>CRF18_cpx</description>
 			<taxus name="18_cpx_AF377959" />
 			<taxus name="18_cpx_AY586541" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="19_A1DG" name="CRF 19_cpx">
+			<description>CRF19_cpx</description>
 			<taxus name="19_cpx_AY588971" />
 			<taxus name="19_cpx_AY894994" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="20_BG" name="CRF 20_BG">
+			<description>CRF20_BG</description>
 			<taxus name="20_BG_AY586545" />
 			<taxus name="20_BG_AY586544" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="21_A2D" name="CRF 21_A2D">
+			<description>CRF21_A2D</description>
 			<taxus name="21_A2D_AY945737" />
 			<taxus name="21_A2D_AF457051" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="23_BG" name="CRF 23_BG">
+			<description>CRF23_BG</description>
 			<taxus name="23_BG_AY900571" />
 			<taxus name="23_BG_AY900572" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="24_BG" name="CRF 24_BG">
+			<description>CRF24_BG</description>
 			<taxus name="24_BG_AY900574" />
 			<taxus name="24_BG_AY900575" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="25_AGU" name="CRF 25_cpx">
+			<description>CRF25_cpx</description>
 			<taxus name="25_cpx_EU693240" />
 			<taxus name="25_cpx_EU697908" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="27_AEGHJKU" name="CRF 27_cpx">
+			<description>CRF27_cpx</description>
 			<taxus name="27_cpx_AJ404325" />
 			<taxus name="27_cpx_AM851091" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="29_BF" name="CRF 29_BF">
+			<description>CRF29_BF</description>
 			<taxus name="29_BF_DQ085876" />
 			<taxus name="29_BF_DQ085871" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="31_BC" name="CRF 31_BC">
+			<description>CRF31_BC</description>
 			<taxus name="31_BC_EF091932" />
 			<taxus name="31_BC_AY727527" />
 			<tags>CRF</tags>
 		</cluster>
 		
-		<cluster id="33_AEB" name="CRF 33_01A1">
+		<cluster id="33_AEB" name="CRF 33_01B">
+			<description>CRF33_01B</description>
 			<taxus name="33_01B_DQ366659" />
 			<taxus name="33_01B_AB547463" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="35_AD" name="CRF 35_AD">
+			<description>CRF35_AD</description>
 			<taxus name="35_AD_EF158043" />
 			<taxus name="35_AD_EF158040" />
 			<tags>CRF</tags>
 		</cluster>
 		
-		<cluster id="36_AEG" name="CRF 36_cpx ">
+		<cluster id="36_AEG" name="CRF 36_cpx">
+			<description>CRF36_cpx</description>
 			<taxus name="36_cpx_EF087995" />
 			<taxus name="36_cpx_EF087994" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="37_AEGU" name="CRF 37_cpx">
+			<description>CRF37_cpx</description>
 			<taxus name="37_cpx_EF116594" />
 			<taxus name="37_cpx_AF377957" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="39_BF" name="CRF 39_BF">
+			<description>CRF39_BF</description>
 			<taxus name="39_BF_EU735534" />
 			<taxus name="39_BF_EU735536" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="40_BF" name="CRF 40_BF">
+			<description>CRF40_BF</description>
 			<taxus name="40_BF_EU735538" />
 			<taxus name="40_BF_EU735540" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="42_BF" name="CRF 42_BF">
+			<description>CRF42_BF</description>
 			<taxus name="42_BF_EU170142" />
 			<taxus name="42_BF_EU170151" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="43_AG" name="CRF 43_02G">
+			<description>CRF43_02G</description>
 			<taxus name="43_02G_EU697904" />
 			<taxus name="43_02G_EU697907" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="47_BF" name="CRF 47_BF">
+			<description>CRF47_BF</description>
 			<taxus name="47_BF_GQ372987" />
 			<taxus name="47_BF_FJ670529" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="A1SN" name="A1 Senegal">
+			<description>A1</description>
 			<taxus name="A1_SN_DDI579" />
 			<taxus name="A1_SN_DDJ369" />
 			<taxus name="A1_SN_DDJ360" />
@@ -283,6 +327,7 @@
 		</cluster>
 
 		<cluster id="A1KE" name="A1 Kenya">
+			<description>A1</description>
 			<taxus name="A1_KE_KNH1199" />
 			<taxus name="A1_KE_ML752" />
 			<taxus name="A1_TZ_A341" />
@@ -290,37 +335,42 @@
 		</cluster>
 
 		<cluster id="01UZA1" name="A1 UZ">
+			<description>A1</description>
 			<taxus name="A1_UZ_02UZ0659" />
 			<taxus name="A1_UZ_02UZ0663" />
-
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="AHJU" name="AHJU CM">
+			<description>AHJU</description>
 			<taxus name="AHJU_CM_1278NG" />
 			<taxus name="AHJU_CM_1296NG" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="CBR" name="C Brazil">
+			<description>C</description>
 			<taxus name="C_AR_ARG4006" />
 			<taxus name="C_BR_04BR013" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="CIN" name="C India">
+			<description>C</description>
 			<taxus name="C_IN_93IN904" />
 			<taxus name="C_IN_98IN022" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="DCM" name="D Cameroon">
+			<description>D</description>
 			<taxus name="D_CM_0009BBY" />
 			<taxus name="D_CM_4412HAL" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="DUG" name="D Uganda">
+			<description>D</description>
 			<taxus name="D_UG_99UGA07412" />
 			<taxus name="D_UG_99UGB21875" />
 			<taxus name="D_UG_99UGE08364" />
@@ -328,25 +378,28 @@
 		</cluster>
 
 		<cluster id="DZA" name="D South Africa">
+			<description>D</description>
 			<taxus name="D_ZA_R214" />
 			<taxus name="D_ZA_R286" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="GES" name="G Spain">
-			<description>Subtype G from Spain</description>
+			<description>G</description>
 			<taxus name="G_ES_X558" />
 			<taxus name="G_ES_X138" />
 			<tags>CRF</tags>
 		</cluster>
 
 		<cluster id="GNG" name="G Nigeria">
+			<description>G</description>
 			<taxus name="G_NG_01NGPL0669" />
 			<taxus name="G_NG_01NGPL0760" />
 			<tags>CRF</tags>
 		</cluster>
 		
 		<cluster id="GKU" name="GKU Senegal">
+			<description>G</description>
 			<taxus name="GKU_SE_SE8646" />
 			<taxus name="GKU_SE_SE9010" />
 			<tags>CRF</tags>

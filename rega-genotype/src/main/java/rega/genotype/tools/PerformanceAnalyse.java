@@ -43,6 +43,12 @@ public class PerformanceAnalyse {
 			return subtyping;
 		}
 		
+		if (virus.equalsIgnoreCase("hiv")){
+			String[] HIVtypes = {"a1", "a2", "b", "c", "d", "f1", "f2", "g", "h", "j", "k", "crf01_ae", "crf02_ag", "crf03_ab", "crf04_cpx", "crf05_df", "crf06_cpx", "crf07_bc", "crf08_bc", "crf09_cpx", "crf10_cd", "crf11_cpx", "crf12_bf", "crf13_cpx", "crf14_bg", "crf15_01b", "crf18_cpx", "crf19_cpx", "crf20_bg", "crf21_a2d", "crf23_bg", "crf24_bg", "crf25_cpx", "crf27_cpx", "crf29_bf", "crf31_bc", "crf33_01b", "crf35_ad", "crf36_cpx", "crf37_cpx", "crf39_bf", "crf40_bf", "crf42_bf", "crf43_02g", "crf47_bf", "ahju"};
+			subtyping = Arrays.asList(HIVtypes);
+			return subtyping;
+		}
+		
 		return subtyping;
 	}
 
@@ -106,13 +112,13 @@ public class PerformanceAnalyse {
 		        	if (i > 0){
 		        		Cell celulaName = sheet.getCell(0, i);
 		        		Cell celulaTypeSubtype = sheet.getCell(1, i);
-		        		String originalGenotypo = "";
-		        		String originalSubtype = "";
+		        		String nameTypeSubtype = "";
+		        		String assignmentTypeSubtype = "";
 			        	arrayCelName = celulaName.getContents().toLowerCase().split("\\.");
-			        	originalGenotypo = arrayCelName[0].replaceAll("[^0-9]", "");
-			        	originalSubtype = arrayCelName[0].replaceAll("\\d", "");
-			        	if (mySubtyping.contains(originalGenotypo + originalSubtype)){
-			        		allSubtyping.add(originalGenotypo + originalSubtype);
+			        	nameTypeSubtype = arrayCelName[0];
+			        	assignmentTypeSubtype = celulaTypeSubtype.getContents().toLowerCase();
+			        	if (mySubtyping.contains(nameTypeSubtype)){
+			        		allSubtyping.add(nameTypeSubtype);
 			        	}
 		        	}
 		        }
@@ -171,25 +177,25 @@ public class PerformanceAnalyse {
 		        		Cell celulaName = sheet.getCell(0, i);
 		        		Cell celulaTypeSubtype = sheet.getCell(1, i);
 		        		Cell celulaLength = sheet.getCell(2, i);
-		        		String originalGenotypo = "";
-		        		String originalSubtype = "";
-			        	arrayCelName = celulaName.getContents().toLowerCase().split("\\.");
-			        	String arrayCelTypeSubtype = celulaTypeSubtype.getContents().toLowerCase();
+		        		String nameTypeSubtype = "";
+		        		String assignmentTypeSubtype = "";
+		        		
 			        	//System.out.println(path.getName() + "-" + celulaLength.getContents() + "-" + arrayCelName[0]);
 			        	countSeq += Integer.parseInt(celulaLength.getContents());
 			        	
-			        	originalGenotypo = arrayCelName[0].replaceAll("[^0-9]", "");
-			        	originalSubtype = arrayCelName[0].replaceAll("\\d", "");
+			        	arrayCelName = celulaName.getContents().toLowerCase().split("\\.");
+			        	nameTypeSubtype = arrayCelName[0];
+			        	assignmentTypeSubtype = celulaTypeSubtype.getContents().toLowerCase();
 			        	
-			        	if (mySubtyping.contains(originalGenotypo + originalSubtype)){
-			        		fileLineGenotypes.add(originalGenotypo + originalSubtype);
-			        		if (arrayCelName[0].equalsIgnoreCase(arrayCelTypeSubtype)){
+			        	if (mySubtyping.contains(nameTypeSubtype)){
+			        		fileLineGenotypes.add(nameTypeSubtype);
+			        		if (arrayCelName[0].equalsIgnoreCase(assignmentTypeSubtype)){
 		        				countCorrect++;
-		        				foundLineGenotypes.add(arrayCelTypeSubtype);
-		        				sensSpecProv.add(new String[] {path.getName(), arrayCelTypeSubtype, "1", "0"});
+		        				foundLineGenotypes.add(assignmentTypeSubtype);
+		        				sensSpecProv.add(new String[] {path.getName(), assignmentTypeSubtype, "1", "0"});
 			        		}else{
-			        			if (mySubtyping.contains(arrayCelTypeSubtype)){
-			        				otherClass.add(arrayCelTypeSubtype);
+			        			if (mySubtyping.contains(assignmentTypeSubtype)){
+			        				otherClass.add(assignmentTypeSubtype);
 			        			}
 			        			sensSpecProv.add(new String[] {path.getName(), arrayCelName[0], "0", "1"});
 		        				countError++;

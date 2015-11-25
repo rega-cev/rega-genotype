@@ -68,6 +68,10 @@
 			<field>/genotype_result/sequence/@name</field>
 		</column>
 		<column>
+			<label>assignment</label>
+			<field>/genotype_result/sequence/conclusion[@id='subtype']/assigned/description</field>
+		</column>
+		<column>
 			<label>length</label>
 			<field>/genotype_result/sequence/@length</field>
 		</column>
