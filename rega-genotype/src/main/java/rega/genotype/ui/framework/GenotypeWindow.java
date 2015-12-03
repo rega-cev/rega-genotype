@@ -12,17 +12,14 @@ import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
-import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.framework.widgets.Template;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.Signal1.Listener;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WImage;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WMenu;
 import eu.webtoolkit.jwt.WMenuItem;
 import eu.webtoolkit.jwt.WStackedWidget;
-import eu.webtoolkit.jwt.WTemplate;
-import eu.webtoolkit.jwt.Signal1.Listener;
 
 /**
  * The frame of the application.
@@ -62,7 +59,7 @@ public class GenotypeWindow extends WContainerWidget
 		this.od = od;
 
 		WApplication app = WApplication.getInstance();
-		WTemplate main = new WTemplate(tr("main"), this);
+		Template main = new Template(tr("main"), this);
 		
 		main.bindString("app.url", app.resolveRelativeUrl(app.getBookmarkUrl("/")));
 

@@ -40,4 +40,8 @@ public abstract class GenotypeMain extends WtServlet
 		
 		super.init(config);
 	}	
+
+	public Settings getSettings() {
+		return settings;
+	}
 }

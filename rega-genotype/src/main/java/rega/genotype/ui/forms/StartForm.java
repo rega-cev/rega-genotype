@@ -17,6 +17,7 @@ import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Settings;
@@ -52,9 +53,8 @@ public class StartForm extends AbstractForm {
 	
 	public StartForm(GenotypeWindow main) {
 		super(main);
-		
-		WTemplate t = new WTemplate(tr("start-form"), this);
-		t.addFunction("tr", WTemplate.Functions.tr);
+
+		Template t = new Template(tr("start-form"), this);
 		t.setInternalPathEncoding(true);
 		
 		t.bindInt("maxAllowedSeqs", Settings.getInstance().getMaxAllowedSeqs());

@@ -9,6 +9,7 @@ import org.jdom.Element;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.viruses.recombination.RegionUtils;
 import rega.genotype.viruses.recombination.RegionUtils.Region;
@@ -18,7 +19,6 @@ import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
-import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
@@ -40,8 +40,7 @@ public class RecombinationForm extends AbstractForm{
 	WString init(final File jobDir, Integer selectedSequenceIndex, final String type) {
 		this.clear();
 
-		WTemplate t = new WTemplate(tr("recombination-form"), this);
-		t.addFunction("tr", WTemplate.Functions.tr);
+		Template t = new Template(tr("recombination-form"), this);
 		
 		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());

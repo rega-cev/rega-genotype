@@ -19,6 +19,7 @@ import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.util.CsvDataTable;
 import rega.genotype.util.DataTable;
@@ -82,7 +83,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 	private WTimer updater;
 	
-	private WTemplate template;
+	private Template template;
 	private String jobId;
 	
 	private boolean hasRecombinationResults;
@@ -90,8 +91,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main);
 		
-		template = new WTemplate(tr("job-overview-form"), this);
-		template.addFunction("tr", WTemplate.Functions.tr);
+		template = new Template(tr("job-overview-form"), this);
 
 		template.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
 		template.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());

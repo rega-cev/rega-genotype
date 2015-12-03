@@ -7,8 +7,8 @@ package rega.genotype.ui.forms;
 
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.Template;
 import eu.webtoolkit.jwt.WApplication;
-import eu.webtoolkit.jwt.WTemplate;
 
 /**
  * A documentation form that visualizes the content of the template text passed to the constructor.
@@ -19,9 +19,8 @@ public class DocumentationForm extends AbstractForm {
 		
 		WApplication app = WApplication.getInstance();
 		
-		WTemplate t = new WTemplate(content, this);
+		Template t = new Template(content, this);
 		t.setInternalPathEncoding(true);
-		t.addFunction("tr", WTemplate.Functions.tr);
 		t.bindString("app.url", app.resolveRelativeUrl(app.getBookmarkUrl("/")));
 		t.bindString("app.base.url", app.getEnvironment().getDeploymentPath());
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());

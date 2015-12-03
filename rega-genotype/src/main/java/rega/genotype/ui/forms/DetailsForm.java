@@ -10,6 +10,7 @@ import java.io.File;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.TextFormat;
@@ -32,8 +33,7 @@ public class DetailsForm extends AbstractForm {
 	public DetailsForm(GenotypeWindow main) {
 		super(main);
 		
-		WTemplate t = new WTemplate(tr("details-form"), this);
-		t.addFunction("tr", WTemplate.Functions.tr);
+		Template t = new Template(tr("details-form"), this);
 		
 		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
