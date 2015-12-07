@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${app.url}/../../pics/dengue/Denguetool.png" alt="RIVM Logo" > </img>
+						<img src="${resource-file}/dengue/Denguetool.png" alt="RIVM Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -29,7 +29,7 @@
 	
 			<div class="rivm-footer">
 				<div>
-					<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+					<img src="${resource-file}/dengue/footer.png" > </img>
 				</div>
 			</div>
 		</div>
@@ -259,7 +259,7 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${app.url}/../../pics/hav/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>	
+		<img src="${resource-file}/dengue/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>	
 				Fig. 1. The startingpage of the Dengue typingtool
 			</p>
 
@@ -270,7 +270,7 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${app.url}/../../pics/hcv/HCVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>	
+		<img src="${resource-file}/dengue/HCVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>	
 				Fig. 2. Overview of the results
 			</p>
 

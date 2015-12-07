@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${app.url}/../../pics/hpv/header.gif" alt="HPV Logo" > </img>
+						<img src="${resource-file}/HPV2/header.gif" alt="HPV Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -28,7 +28,7 @@
 	
 			<div class="rivm-footer">
 				<div>
-					<img src="${app.url}/../../pics/rivm/footer.png" > </img>
+					<img src="${resource-file}/HPV2/footer.png" > </img>
 				</div>
 			</div>
 		</div>
@@ -212,6 +212,7 @@ GTTAACTACCATCATTCATTATTCTAGTTACAACAAGAACCTAGGAGTTATATGCCAGAAGTAAGCCTATAAAATACACA
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
+				<!-- TODO: The image is missing in xml folder -->
 				<img src="/mpf/pics/Papilloma/FigEntry.png"></img> <br/>				
 				Fig. 1. The startingpage of the Papilloma typingtool
 			</p>
@@ -223,6 +224,7 @@ GTTAACTACCATCATTCATTATTCTAGTTACAACAAGAACCTAGGAGTTATATGCCAGAAGTAAGCCTATAAAATACACA
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
+				<!-- TODO: The image is missing in xml folder -->
 				<img src="/mpf/pics/Papilloma/FigResults.png"></img> <br/>				
 				Fig. 2. Overview of the results
 			</p>
