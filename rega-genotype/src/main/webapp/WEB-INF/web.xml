@@ -329,8 +329,49 @@
     <servlet-name>Genotypedengue</servlet-name>
     <url-pattern>/dengue/typingtool/*</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Genotypechikungunya</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>chikungunya</param-value>
+    </init-param>
+  </servlet>
 
+  <servlet-mapping>
+    <servlet-name>Genotypechikungunya</servlet-name>
+    <url-pattern>/chikungunya/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>Genotypezika</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>zika</param-value>
+    </init-param>
+  </servlet>
 
+  <servlet-mapping>
+    <servlet-name>Genotypezika</servlet-name>
+    <url-pattern>/zika/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>GenotypeAedesviruses</servlet-name>
+    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
+    <init-param>
+    	<param-name>Organism</param-name>
+    	<param-value>Aedesviruses</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GenotypeAedesviruses</servlet-name>
+    <url-pattern>/aedesviruses/typingtool/*</url-pattern>
+  </servlet-mapping>
+  
   <servlet>
     <servlet-name>Genotypecorona</servlet-name>
     <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>

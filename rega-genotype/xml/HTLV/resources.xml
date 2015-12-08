@@ -22,8 +22,14 @@
 			${content class="content"}
 	
 			<div class="footer">
-				<p>Developed by:Luiz Carlos Alcantara,  Tulio de Oliveira, Koen Deforche, Sharon Cassol, Andrew Rambaut and Anne-Mieke Vandamme.</p>
-			    <p>Contact: TBD</p>
+				<br/><p>Developed by: <a href="http://www.bahia.fiocruz.br/">FIOCRUZ/Bahia, Brazil</a> (Vagner Fonseca, Murilo Freire, Maria Inés Restovic, Thessika Araújo, Luiz Alcantara), <a href="http://rega.kuleuven.be/cev/avd/cev_main"> KU Leuven, Belgium</a> (Kristof Theys, Pieter Libin, Lize Cuypers, Ana Abecasis, Anne-Mieke Vandamme), <a href="http://www.emweb.be/">Emweb bvba, Belgium</a> (Koen Deforche) and <a href="http://www.bioafrica.net">Africa Centre/UKZN, South Africa</a> (Tulio de Oliveira).</p>
+			    <p>Contact: <a href="http://www.bioafrica.net/people.php?peopleid=1">Prof. Tulio de Oliveira</a> and/or <a href="http://rega.kuleuven.be/cev/avd/cev_main">Dr. Kristof Theys</a></p><br/>
+			    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+					</script>
+					<script type="text/javascript">
+						_uacct = "' . $googleAnalyticsTrackerID . '";
+						urchinTracker();
+					</script>
 			</div>
 	
 			<div class="rivm-footer">
@@ -200,11 +206,11 @@ CTTCCTGAACCTCTCCGGGAGAGGTC
 	</message>
   
   	<message id="details.phylo-major.title">
-  		Pylogenetic Analysis Details
+  		Phylogenetic Analysis Details
   	</message>
 
   	<message id="details.phylo-minor.title">
-  		Pylogenetic Analysis Details (Sub-clustering)
+  		Phylogenetic Analysis Details (Sub-clustering)
   	</message>
   
 	<message id="job-overview-downloads">
@@ -227,9 +233,37 @@ CTTCCTGAACCTCTCCGGGAGAGGTC
 
 	<message id="how-to-cite-doc">
 		<div class="form">
-			<h1>How to Cite the HTLV-1 and 2 Automated Genotyping Tool</h1>
-
-			<p>Manuscript in preparation</p>
+			<h1>How to Cite the HTLV-1 Automated Genotyping Tool</h1>
+			<p>Manuscript in preparation.</p>
+			<p>
+				For the mean time, please cite:
+				<br />
+				<ul>
+					<li>
+						Fonseca VS, Freire M, Restovic MI, Araujo T, Theys K, Libin P, Cuypers L, Abecasis A, Faria N, Deforche K, Vandamme A-M, Alcantara LCJ, de Oliveira T. HTLV 1 &amp; 2 Typing Tool (2015) Available at http://bioafrica.net/software.php
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<a href="http://bioafrica.net/publications.php?pubid=7">Previous publication: Alcantara LC, Cassol S, Libin P,
+							Deforche K, Pybus OG, Van Ranst M, Galvao-Castro B, Vandamme AM, de
+							Oliveira T . A standardized framework for accurate, high-throughput
+							genotyping of recombinant and non-recombinant viral
+							sequences.Nucleic Acids Res (2009), 37(Web Server issue):W634-42.
+						</a>
+					</li>
+		
+				</ul>
+			</p>
+			<p>
+				Funded by:
+				<br />
+				<ul>
+					<li>VIROGENESIS: Virus discovery and epidemic tracing from high throughput metagenomic sequencing. HORIZON 2020, European Commission.</li>
+					<li>Ciencias Sem Fronteiras, CNPQ, Brazil.</li>
+					<li>SA MRC Flagship Program, South Africa.</li>
+				</ul>
+			</p>
 		</div>
 	</message>
 	

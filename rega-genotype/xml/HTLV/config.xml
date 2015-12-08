@@ -24,9 +24,9 @@
 	</menu>
 
 	<genome>
-		<color assignment="-">#53b808</color>
+		<color assignment="-">#3399cc</color>
 		<start>1</start>
-		<end>9600</end>
+		<end>9100</end>
 		<image-start>1</image-start>
 		<image-end>605</image-end>
 	</genome>	

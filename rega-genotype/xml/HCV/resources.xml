@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${app.url}/../../pics/hcv/HCVtool.png" alt="HCV Logo"></img>
+						<img src="${app.url}/../../pics/hcv/header.gif" alt="HCV Logo"></img>
 					</a>
 				</div>
 				<div id="application" align="center">
@@ -203,11 +203,11 @@ GACGTGTCTGTCATCCCGGCCAGCGGCGATGTTGTCGTCGTGTCGACCGATGCT
 	</message>
 
 	<message id="details.phylo-major.title">
-		Pylogenetic Analysis Details
+		Phylogenetic Analysis Details
 	</message>
 
 	<message id="details.phylo-minor.title">
-		Pylogenetic Analysis Details (Sub-clustering)
+		Phylogenetic Analysis Details (Sub-clustering)
 	</message>
 
 	<message id="job-overview-downloads">

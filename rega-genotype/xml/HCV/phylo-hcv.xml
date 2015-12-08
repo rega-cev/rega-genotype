@@ -26,10 +26,8 @@
 			<taxus name="2t_KC197238" />
 			<taxus name="2d_JF735114" />
 			<taxus name="2e_JF735120" />
-			<taxus name="2f_KC844042" />
 			<taxus name="2i_DQ155561" />
 			<taxus name="2j_JF735113" />
-			<taxus name="2k_AB031663" />
 			<taxus name="2m_JF735111" />
 		</cluster>
 
@@ -51,16 +49,10 @@
 			<taxus name="4d_DQ418786" />
 			<taxus name="4f_EF589161" />
 			<taxus name="4g_FJ462432" />
-			<taxus name="4k_EU392173" />
-			<taxus name="4l_FJ839870" />
 			<taxus name="4m_FJ462433" />
 			<taxus name="4n_FJ462441" />
 			<taxus name="4o_FJ462440" />
-			<taxus name="4p_FJ462431" />
-			<taxus name="4q_FJ462434" />
 			<taxus name="4r_FJ462439" />
-			<taxus name="4t_FJ839869" />
-			<taxus name="4v_JX227959" />
 			<taxus name="4w_FJ025855" />
 		</cluster>
 
@@ -75,27 +67,16 @@
 			<taxus name="6c_EF424629" />
 			<taxus name="6d_D84263" />
 			<taxus name="6e_EU246932" />
-			<taxus name="6f_DQ835760" />
 			<taxus name="6g_D63822" />
 			<taxus name="6h_D84265" />
-			<taxus name="6xa_EU408330" />
-			<taxus name="6i_DQ835770" />
-			<taxus name="6xb_JX183552" />
 			<taxus name="6j_DQ835769" />
-			<taxus name="6xc_KJ567651" />
 			<taxus name="6k_D84264" />
 			<taxus name="6l_EF424628" />
-			<taxus name="6xe_JX183557" />
-			<taxus name="6m_DQ835766" />
-			<taxus name="6n_DQ278894" />
-			<taxus name="6o_EF424627" />
-			<taxus name="6o_EU246934" />
 			<taxus name="6p_EF424626" />
 			<taxus name="6q_EF424625" />
 			<taxus name="6r_EU408328" />
 			<taxus name="6s_EU408329" />
 			<taxus name="6t_EF632071" />
-			<taxus name="6u_EU246940" />
 			<taxus name="6v_EU158186" />
 			<taxus name="6w_DQ278892" />
 		</cluster>
@@ -457,8 +438,7 @@
 			outgroup 7a_EF108306;
 			set criterion=distance outroot=monophyl;
 			dset distance=HKY NegBrLen=SetAbsVal;
-			constraints CONSTRE=${BACKBONE-CLUSTERS};
-			NJ constraints=CONSTRE;
+			NJ;
 			savetree format=nexus brlens=yes file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
 			end;
@@ -468,7 +448,9 @@
 			log,alignment,tree
 		</options>
 	</analysis>
-	
+
+
+
 	<analysis id="phylo-minor-1" type="paup">
 		<identify>
 			1a,1b,1c,1d,1e,1g,1h,1i,1j,1k,1l,1m,1n,7a
@@ -482,7 +464,7 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 7a_EF108306;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
@@ -495,6 +477,8 @@
 			log,alignment,tree
 		</options>
 	</analysis>
+
+
 
 	<analysis id="phylo-minor-2" type="paup">
 		<identify>
@@ -509,7 +493,7 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 7a_EF108306;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
@@ -536,7 +520,7 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 7a_EF108306;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
@@ -563,7 +547,7 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 7a_EF108306;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
@@ -590,7 +574,7 @@
 			exclude gapped;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 7a_EF108306;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
@@ -616,7 +600,7 @@
 			log file=paup.log replace=yes;
 			export format=nexus file=paup.nex replace=yes;
 			outgroup 7a_EF108306;
-			set criterion=distance outroot=monophyl;
+			set criterion=distance rootmethod=midpoint;
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
@@ -639,7 +623,7 @@
 		</step>
 		<analysis type="paup">
 			<identify>
-				2q,2a,2r,2b,2c,2t,2d,2e,2f,2i,2j,2k,2m,7a
+				1a,1b,1c,1g,1l,1m,1n,2q,2a,2b,2c,2f,2j,2k,2m,3a,3b,3g,3h,3i,3k,4a,4d,4f,4g,4k,4l,4m,4n,4o,4r,4v,4w,5a,6a,6e,6f,6g,6xa,6i,6xb,6j,6xd,6k,6l,6m,6n,6o,6p,6t,6v,6w
 			</identify>
 			<cutoff>
 				70
@@ -649,14 +633,11 @@
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
-				set
-				rootmethod=midpoint;
+				set rootmethod=midpoint;
 				set criterion=distance outroot=monophyl;
-				dset
-				distance=HKY NegBrLen=SetAbsVal;
+				dset distance=HKY NegBrLen=SetAbsVal;
 				NJ;
-				savetree format=phylip brlens=yes
-				file=paup.tre replace=yes;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
 				bootstrap nreps=100 search=nj;
 				end;
 				quit;
@@ -683,14 +664,11 @@
 				log file=paup.log replace=yes;
 				exclude gapped;
 				export format=nexus file=paup.nex replace=yes;
-				set
-				rootmethod=midpoint;
+				set rootmethod=midpoint;
 				set criterion=distance outroot=monophyl;
-				dset
-				distance=HKY NegBrLen=SetAbsVal;
+				dset distance=HKY NegBrLen=SetAbsVal;
 				NJ;
-				savetree format=phylip brlens=yes
-				file=paup.tre replace=yes;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
 				bootstrap nreps=100 search=nj;
 				end;
 				quit;

@@ -2,7 +2,7 @@
 	<alignment file="dengue.fasta" trim="true" />
 	
 	<clusters>
-		<cluster id="1" name="DENV-1">
+		<cluster id="1" name="Dengue type 1">
 			<taxus name="1I_AY726552" />
 			<taxus name="1II_AF180817" />
 			<taxus name="1III_AY722803" />
@@ -10,7 +10,7 @@
 			<taxus name="1V_FJ205875" />			
 		</cluster>
 	
-		<cluster id="2" name="DENV-2">
+		<cluster id="2" name="Dengue type 2">
 			<taxus name="2I_EU056811" />
 			<taxus name="2II_EU179859" />
 			<taxus name="2III_AF489932" />
@@ -19,14 +19,14 @@
 			<taxus name="2VI_EF105387" />
 		</cluster>
 	
-		<cluster id="3" name="DENV-3">
+		<cluster id="3" name="Dengue type 3">
 			<taxus name="3I_KC762687" />
 			<taxus name="3II_AY496871" />
 			<taxus name="3III_DQ675533" />
 			<taxus name="3V_EF629370" />
 		</cluster>
 	
-		<cluster id="4" name="DENV-4">
+		<cluster id="4" name="Dengue type 4">
 			<taxus name="4I_KF041260" />
 			<taxus name="4II_AY762085" />
 			<taxus name="4III_AY618988" />
@@ -250,7 +250,8 @@
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
-			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			savetree format=nexus brlens=yes
+			file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
 			end;
 			quit;
@@ -333,7 +334,8 @@
 			dset distance=HKY NegBrLen=SetAbsVal;
 			constraints CONSTRE=${BACKBONE-CLUSTERS};
 			NJ constraints=CONSTRE;
-			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			savetree format=nexus brlens=yes
+			file=paup.tre replace=yes;
 			bootstrap nreps=100 search=nj;
 			end;
 			quit;

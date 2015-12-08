@@ -1,7 +1,7 @@
 <genotype-analyses>
 	<alignment file="phylo-HTLV.fasta" trim="true"/>
 	<clusters>
-		<cluster id="1" name="Genotype 1">
+		<cluster id="1" name="HTLV-1">
 			<taxus name="1c_Mel5" />
 			<taxus name="1e_Efe1" />
 			<taxus name="1f_Lib2" />
@@ -14,12 +14,12 @@
 	       	<taxus name="1aA_AMA" />
        	</cluster>
        	
-       	<cluster id="HTLV3" name="HTLV3"> 
+       	<cluster id="HTLV3" name="HTLV-3"> 
        		<description>HTLV-3</description>
     		<taxus name="HTLV3" />
        	</cluster>
        	
-		<cluster id="2" name="Genotype 2">
+		<cluster id="2" name="HTLV-2">
 			<taxus name="2d_pygmy2"/>
 			<taxus name="2b_G2" />
 			<taxus name="2a_Mo" />
@@ -66,24 +66,24 @@
        	</cluster>    	    		
 
 		<cluster id="1a" name="Subtype a">
-	      	<cluster id="1aC" name="Subtype aC">           		    		
+	      	<cluster id="1aC" name="Subtype a Subgroup C (West African)">           		    		
 	    		<taxus name="1aC_HS35" />
 	    		<taxus name="1aC_GH78" />
 	       	</cluster>    
       	
-	      	<cluster id="1aD" name="Subtype aD">           		    		    		
+	      	<cluster id="1aD" name="Subtype a Subgroup D (North African)">           		    		    		
 	    		<taxus name="1aD_OD" />
 	    		<taxus name="1aD_BO" />
 	    		<taxus name="1aD_Pr52" />
 	    		<taxus name="1aD_Caio6622" />
 	       	</cluster>  
       	
-	      	<cluster id="1aE" name="Subtype aE">           		    		    				
+	      	<cluster id="1aE" name="Subtype a Subgroup E (Black Peruvian)">           		    		    				
 	    		<taxus name="1aE_Bl1" />
 	    		<taxus name="1aE_RKI4" />
 	       	</cluster> 
       	
-		    <cluster id="1aB" name="Subtype aB">       	
+		    <cluster id="1aB" name="Subtype a Subgroup B (Japanese)">       	
 				<taxus name="1aB_ATM" />
 	    		<taxus name="1aB_MT4" />
 	    		<taxus name="1aB_ATK1" />
@@ -93,7 +93,7 @@
 	    		<taxus name="1aB_BCI2" />
        		</cluster>     		
 
-		    <cluster id="1aA" name="Subtype aA"> 
+		    <cluster id="1aA" name="Subtype a Subgroup A Cosmopolitan (Transcontinental)"> 
 		    	<description>HTLV-1 subtype a subgroup A Cosmopolitan</description>
  				<taxus name="1aA_AMA" />
 	    		<taxus name="1aA_TBH4" />
@@ -134,7 +134,7 @@
 			<taxus name="2b_IOG" />
        	</cluster>
 		
-		<cluster id="2c" name="Subtype c">
+		<cluster id="2c" name="Subtype c (variant Subtype a)">
 			<description>HTLV-2 subtype c Brazilian</description>
 			<taxus name="2c_RP329" />
 			<taxus name="2c_TYR8668" />

@@ -25,12 +25,13 @@
 
 	<genome>
 		<color assignment="-">#3399cc</color>
-		<start>1</start>
-		<end>9600</end>
-		<image-start>1</image-start>
-		<image-end>605</image-end>
+		<start>75</start>
+		<end>12000</end>
+		<image-start>15</image-start>
+		<image-end>584</image-end>
 	</genome>	
-	
+
+
 	<result-list>
 		<column>
 			<label>Name</label>
@@ -41,15 +42,15 @@
 			<field>/genotype_result/sequence/@length</field>
 		</column>
 		<column>
-			<label>Blast</label>
+			<label>Virus</label>
 			<field>/genotype_result/sequence/result[@id='blast']/cluster/concluded-name</field>
 		</column>
 		<column>
-			<label>Genotype</label>
+			<label>Serotype/Clade</label>
 			<field>/genotype_result/sequence/conclusion/assigned/name</field>
 		</column>
 		<column>
-			<label>Subtyping</label>
+			<label>Genotype</label>
 			<field>/genotype_result/sequence/conclusion[@id='subtype']/assigned/name</field>
 		</column>
 		<column>
@@ -61,6 +62,7 @@
 			<field>genome</field>
 		</column>
 	</result-list>
+	
 
 	<result-download>
 		<column>

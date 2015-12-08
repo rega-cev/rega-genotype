@@ -196,11 +196,11 @@ CAACCTATACAGCTGCCAGACAAAGAAAGCTGGACTGTCAACGATATACA
 	</message>
   
   	<message id="details.phylo-major.title">
-  		Pylogenetic Analysis Details
+  		Phylogenetic Analysis Details
   	</message>
 
   	<message id="details.phylo-minor.title">
-  		Pylogenetic Analysis Details (Sub-clustering)
+  		Phylogenetic Analysis Details (Sub-clustering)
   	</message>
   
 	<message id="job-overview-downloads">

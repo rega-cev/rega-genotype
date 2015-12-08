@@ -221,11 +221,13 @@ public abstract class AbstractAnalysis {
         osName = osName.toLowerCase();
     	File resource = getTracer().getResourceFile(suffix);
     	file.renameTo(resource);
+    	/**
     	if (osName.startsWith("windows")){
 	    	if (suffix.equalsIgnoreCase("log")){
 	    		FileUtils.copyFile(file, resource);
 	        }
         }
+        /**/
         return resource.getName();
     }
     
