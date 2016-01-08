@@ -37,9 +37,7 @@ public class GenericJobOverview extends AbstractJobOverview {
 			headers.add(new Header(WString.tr("table.header.name")));
 			headers.add(new Header(WString.tr("table.header.length")));
 			headers.add(new Header(WString.tr("table.header.blast")));
-			headers.add(new Header(WString.tr("table.header.phylo"),2));
-			//headers.add(new Header(WString.tr("table.header.phyloType")));
-			//headers.add(new Header(WString.tr("table.header.phyloSubtype")));
+			headers.add(new Header(WString.tr("table.header.phylo"), 2));
 			headers.add(new Header(WString.tr("table.header.report")));
 			headers.add(new Header(WString.tr("table.header.genome")));
 		} else {

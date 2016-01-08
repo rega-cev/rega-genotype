@@ -624,8 +624,6 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 		}
 
         patterns = retrieveClusterSupports(analysisMethod, bootstrapFile);        
-        
-        //System.out.println(bootstrapFile);
 
         List<Double> results
             = retrieveClustersValues(alignment, queryTaxa);

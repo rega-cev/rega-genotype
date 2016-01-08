@@ -207,9 +207,6 @@ public class GenericTool extends GenotypeTool {
 		PhyloClusterAnalysis.Result r = a.run(s);
 		ScanAnalysis.Result scanResult = checkBootScan(a, s);
 		
-		//System.out.println("r:"+r+"s:"+s+"-blastResult:"+blastResult+"-region:"+region+"-cutToRegion:"+cutToRegion+"-scanResult:"+scanResult);
-		
-		
 		String phyloName = "phylogenetic subgenogroup analysis within " + typeCluster.getId();
 
 		/*

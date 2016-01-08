@@ -49,7 +49,6 @@ public class FastaToRega {
 
 	public static void main(String[] args) throws Exception {
 		
-				
 		if (args.length < 2) {
 			System.err.println("Usage: fastaToRega input.fasta output-dir");
 			return;
@@ -59,13 +58,11 @@ public class FastaToRega {
 		directory = args[1];
 		outgroup = args[2];
 		
-		File diretorio = new File("xml/" + directory); // ajfilho é uma pasta!  
-		if (!diretorio.exists()) {  
-		   diretorio.mkdirs(); //mkdir() cria somente um diretório, mkdirs() cria diretórios e subdiretórios.  
+		File direc = new File("xml/" + directory);  
+		if (!direc.exists()) {  
+			direc.mkdirs();  
 		}
 		
-		//System.out.println(filename + " - " + directory);
-		//System.exit(0);
 		// may need to update pattern to extract genotype string from FASTA seq id
 		Pattern pattern = Pattern.compile("(\\d[a-z]*)\\??_.*");;
 
