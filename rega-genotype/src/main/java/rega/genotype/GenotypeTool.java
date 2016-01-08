@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import rega.genotype.utils.Settings;
+import rega.genotype.viruses.generic.GenericTool;
 
 /**
  * Main class for the genotype tool.
@@ -60,7 +62,7 @@ public abstract class GenotypeTool {
         CmdLineParser.Option treeGraphCmdOption = parser.addStringOption('g', "treegraph");
         
         try {
-            parser.parse(args);
+        	parser.parse(args);
         } catch (CmdLineParser.OptionException e) {
             System.err.println(e.getMessage());
             printUsage();
@@ -74,7 +76,7 @@ public abstract class GenotypeTool {
         
         ArgsParseResult result = new ArgsParseResult();
         
-        Settings.initSettings(Settings.getInstance());
+        Settings.initSettings(Settings.getInstance(null));
         
         String paupPath = (String) parser.getOptionValue(paupPathOption);        
         if (paupPath != null)
@@ -113,11 +115,12 @@ public abstract class GenotypeTool {
 
     private static void printUsage() {
 		System.err.println("GenotypeTool: error parsing command-line.");
-		System.err.println("usage: GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] analysis sequences.fasta result.xml");
-		System.err.println("       GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] analysis SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
+		System.err.println("usage: GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] organism sequences.fasta result.xml");
+		System.err.println("       GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] organism SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
 		System.err.println();
 		System.err.println("\tThe first option analyzes one or more sequences and writes the result to the tracefile result.xml");
 		System.err.println("\tThe second option performs an internal analysis");
+		System.err.println("\tOrganism must be the same as the name of its according xml folder on the file system");
 		System.err.println();
 		System.err.println("options:");
 		System.err.println("\t-p,--paup      	specify path to paup");
@@ -317,21 +320,24 @@ public abstract class GenotypeTool {
     
 	public static void main(String[] args)
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
-    	
+		
     	ArgsParseResult parseArgsResult = parseArgs(args);
+    	//System.out.println(parseArgsResult);
     	if (parseArgsResult.remainingArgs == null)
     		return;
-
+    	
     	if (parseArgsResult.remainingArgs.length < 3) {
     		printUsage();
     		return;
     	}
     	
-    	Class<?> analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
+//    	Class<?> analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
+    	String organism = parseArgsResult.remainingArgs[0];
     	String sequenceFile = parseArgsResult.remainingArgs[1];
     	String traceFile = parseArgsResult.remainingArgs[2];
-    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(parseArgsResult.workingDir));
-
+//    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(parseArgsResult.workingDir), "dengue");
+    	GenotypeTool genotypeTool = new GenericTool(organism, new File(parseArgsResult.workingDir));
+    	
     	if (parseArgsResult.remainingArgs.length == 3) {
     		// GenotypeTool [...] className sequences.fasta result.xml
     		genotypeTool.analyze(sequenceFile, traceFile);

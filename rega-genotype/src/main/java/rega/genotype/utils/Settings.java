@@ -190,9 +190,9 @@ public class Settings {
             if (osName.startsWith("windows"))
                 configFile = "C:\\Program files\\rega_genotype\\";
             else
-                configFile = "etc/development-config.xml";
-        } else
-           	configFile += File.separatorChar + "global-conf.xml";
+                configFile = "/etc/rega_genotype/";
+        }
+        configFile += File.separatorChar + "global-conf.xml";
         
         return new Settings(new File(configFile));
 	}
