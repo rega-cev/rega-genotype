@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
+
 import rega.genotype.utils.Settings;
 
 /**
@@ -316,9 +317,11 @@ public abstract class GenotypeTool {
     
 	public static void main(String[] args)
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
-    	ArgsParseResult parseArgsResult = parseArgs(args);
+
+		ArgsParseResult parseArgsResult = parseArgs(args);
     	if (parseArgsResult.remainingArgs == null)
     		return;
+
     	if (parseArgsResult.remainingArgs.length < 3) {
     		printUsage();
     		return;

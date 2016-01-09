@@ -400,6 +400,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 cmd = blastPath + blastCommand + " " + blastOptions
                 	+ " -i " + query.getAbsolutePath()
                     + " -m 8 -d " + db.getAbsolutePath();
+                
                 System.err.println(cmd);
                 blast = Runtime.getRuntime().exec(cmd, null, workingDir);
                 InputStream inputStream = blast.getInputStream();
@@ -534,7 +535,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                     if (start == Integer.MAX_VALUE)
                     	start = -1;
-                    
+
                     Result result = createResult(sequence, bestClusters, refseq, score, length, diffs, start, end, reverseCompliment);
                     
                     if (detailsFile != null)
@@ -612,7 +613,6 @@ public class BlastAnalysis extends AbstractAnalysis {
     
     private Result createResult(AbstractSequence sequence, Set<Cluster> bestClusters, ReferenceTaxus refseq,
                                 float score, int length, int diffs, int start, int end, boolean reverseCompliment) {
-    	
     	if (!bestClusters.isEmpty())
     		return new Result(sequence, bestClusters, score, length, diffs, start, end, refseq, reverseCompliment);
     	else
