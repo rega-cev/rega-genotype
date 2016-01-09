@@ -401,7 +401,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 	+ " -i " + query.getAbsolutePath()
                     + " -m 8 -d " + db.getAbsolutePath();
                 System.err.println(cmd);
-                
+
                 blast = Runtime.getRuntime().exec(cmd, null, workingDir);
                 InputStream inputStream = blast.getInputStream();
 

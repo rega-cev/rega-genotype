@@ -60,7 +60,7 @@ public abstract class GenotypeTool {
         CmdLineParser.Option treeGraphCmdOption = parser.addStringOption('g', "treegraph");
         
         try {
-        	parser.parse(args);
+            parser.parse(args);
         } catch (CmdLineParser.OptionException e) {
             System.err.println(e.getMessage());
             printUsage();
