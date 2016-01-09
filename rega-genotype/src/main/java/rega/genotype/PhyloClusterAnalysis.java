@@ -762,7 +762,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
     }
 
     private String makeResource(File file, String suffix, boolean keep) throws IOException {
-    	if (keep) {
+        if (keep) {
             return makeResource(file, suffix);
         } else {
             file.delete();

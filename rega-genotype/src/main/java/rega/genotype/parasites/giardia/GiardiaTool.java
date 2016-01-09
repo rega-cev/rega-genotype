@@ -64,7 +64,7 @@ public class GiardiaTool extends GenotypeTool {
         }
     }
 
-	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s) throws AnalysisException {	
+	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s) throws AnalysisException {
 		if (pca == null)
 			return false;
 		

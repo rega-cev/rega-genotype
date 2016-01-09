@@ -317,8 +317,8 @@ public abstract class GenotypeTool {
     
 	public static void main(String[] args)
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
-
-		ArgsParseResult parseArgsResult = parseArgs(args);
+    	
+    	ArgsParseResult parseArgsResult = parseArgs(args);
     	if (parseArgsResult.remainingArgs == null)
     		return;
 

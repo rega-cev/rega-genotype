@@ -48,7 +48,7 @@ public class FastaToRega {
 	}
 
 	public static void main(String[] args) throws Exception {
-		
+
 		if (args.length < 2) {
 			System.err.println("Usage: fastaToRega input.fasta output-dir");
 			return;
