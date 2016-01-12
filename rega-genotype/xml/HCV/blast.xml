@@ -2,7 +2,7 @@
   <alignment file="blast.fasta" />
 
   <clusters>
-    <cluster id="hcv" name="HCV">
+    <cluster id="HCV" name="HCV">
       <description>HCV</description>
       <taxus name="1a.COLONEL" />
       <taxus name="2a.G2AK3" />
@@ -25,7 +25,7 @@
     </regions>
 
     <identify>
-      hcv
+      HCV
     </identify>
     <cutoff>
       50
