@@ -1,0 +1,94 @@
+<genotype-analyses>
+	
+	<alignment file="zikv.fasta" trim="true" />
+
+	<clusters>
+		<cluster id="1" name="African">
+			<taxus name="KF383118_Senegal_2001" />
+			<taxus name="KF383117_Senegal_1997" />
+			<taxus name="HQ234501_Senegal_1984" />
+			<taxus name="KF383116_Senegal_1968" />
+			<taxus name="HQ234500_Nigeria_1968" />
+			<taxus name="AY632535_Uganda_1947" />
+			<taxus name="KF383119_Senegal_2001" />
+			<taxus name="KF383121_SENEGAL" />
+			<taxus name="KF268950_Cent_Afr_Rep" />
+			<taxus name="KF268949_Cent_Afr_Rep" />
+			<taxus name="KF383115_Cent_Afr_Rep_1968" />
+		</cluster>
+
+		<cluster id="2" name="Asian">
+			<taxus name="EU545988_Micronesia_2007" />
+			<taxus name="JN860885_Cambodia_2010" />
+			<taxus name="KF993678_Canada_2013" />
+			<taxus name="KJ776791_FrenchPolynesia_2013" />
+			<taxus name="HQ234499_Malaysia_1966" />
+		</cluster>
+
+		<cluster id="3" name="Divergent West African cluster">
+			<taxus name="KF383120_Senegal_Faye_PLoS_NTD" />
+		</cluster>
+
+		<cluster id="4" name="Spondweni_virus">
+			<taxus name="Spondweni_virus_SM6" />
+		</cluster>
+
+	</clusters>
+	<analysis id="phylo-major" type="paup">
+		<identify>
+			1,2,3,4
+		</identify>
+		<cutoff>
+			700
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			set criterion=distance rootmethod=midpoint;
+			outgroup Spondweni_virus_SM6;
+			dset distance=HKY NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=1000 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree,inner,outer
+		</options>
+	</analysis>
+
+	<analysis id="phylo-major-1-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				1,2,3
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance rootmethod=midpoint;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ; savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+
+</genotype-analyses>
