@@ -58,33 +58,32 @@ public class ParseBlastResults {
 		List<String> results = new ArrayList<String>();
 		for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 		    if (!name(line).equals(name)) {
-		    	if (results.size() != 0) {
-		    		//TODO aa should be configurable
-		    		boolean aa = false;
-		    		BlastAnalysis.Result r = processBlastResults(ba, aa, new BlastResultList(results));
-		    		String assignment = "Unassigned";
-		    		if (r.haveSupport())
-		    			assignment = r.getConcludedCluster().getName();
-		    		System.out.println(name + "," + assignment + "," + r.getScore());
-		    	}
+		    	processBlastResults(ba, name, results);
 		    	results.clear();
 		    	name = name(line);
-		    	results.add(line);
-		    } else {
-		    	results.add(line);
 		    }
+		    results.add(line);
 		}
+		processBlastResults(ba, name, results);
+	}
+	
+	private static void processBlastResults(BlastAnalysis ba, String name, List<String> results) throws ApplicationException {
+		if (results.size() == 0)
+			return;
+		
+		//TODO aa should be configurable
+		boolean aa = false;
+		//TODO provide a proper sequence, this would require to pass the FASTA as well, for now, we pass a bogus sequence
+		AbstractSequence sequence = new Sequence("", false, "", "");
+		BlastAnalysis.Result r = BlastAnalysis.parseBlastResults(new BlastResultList(results), ba, aa, sequence);
+		String assignment = "Unassigned";
+		if (r.haveSupport())
+			assignment = r.getConcludedCluster().getName();
+		System.out.println(name + "," + assignment + "," + r.getScore());
 	}
 	
 	private static String name(String line) {
 		return line.split("\t")[0];
-	}
-	
-	private static BlastAnalysis.Result processBlastResults(BlastAnalysis ba, boolean aa, BlastAnalysis.BlastResults results) throws ApplicationException {
-		//TODO provide a proper sequence, this would require to pass the FASTA as well, for now, we pass a bogus sequence
-		AbstractSequence sequence = new Sequence("", false, "", "");
-		
-		return BlastAnalysis.parseBlastResults(results, ba, aa, sequence);
 	}
 	
 	private static void fail() {
