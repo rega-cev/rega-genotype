@@ -1,0 +1,300 @@
+<genotype-analyses>
+	<alignment file="phylo-HTLV.fasta" trim="true"/>
+	<clusters>
+		<cluster id="1" name="HTLV-1">
+			<taxus name="1c_Mel5" />
+			<taxus name="1e_Efe1" />
+			<taxus name="1f_Lib2" />
+			<taxus name="1b_MOMJ" />
+			<taxus name="1d_H23" />
+			<taxus name="1aC_HS35" />
+	    	<taxus name="1aD_OD" />
+	    	<taxus name="1aE_Bl1" />
+	       	<taxus name="1aB_ATK1" />
+	       	<taxus name="1aA_AMA" />
+       	</cluster>
+       	
+       	<cluster id="HTLV3" name="HTLV-3"> 
+       		<description>HTLV-3</description>
+    		<taxus name="HTLV3" />
+       	</cluster>
+       	
+		<cluster id="2" name="HTLV-2">
+			<taxus name="2d_pygmy2"/>
+			<taxus name="2b_G2" />
+			<taxus name="2a_Mo" />
+			<taxus name="2c_SPWV" />
+		</cluster>
+
+		<cluster id="1c" name="Subtype c"> 
+			<description>HTLV-1 subtype C found in Japan</description>
+			<taxus name="1c_Mel5" />
+			<taxus name="1c_SW44" />
+			<taxus name="1c_ESH18" />
+			<taxus name="1c_VAN54" />
+			<taxus name="1c_VAN136" />
+			<taxus name="1c_AUSNA" />
+			<taxus name="1c_PE376" />
+		</cluster>
+      
+      	<cluster id="1e" name="Subtype e">   
+        	<description>HTLV-1 subtype e found in Africa</description>
+    		<taxus name="1e_Efe1" />
+       	</cluster>    
+      	
+      	<cluster id="1f" name="Subtype f">        	       	
+   			<taxus name="1f_Lib2" />
+       	</cluster> 
+       	
+      	<cluster id="1b" name="Subtype b">        	       	
+    		<taxus name="1b_MOMJ" />
+    		<taxus name="1b_ITIS" />
+    		<taxus name="1b_MWMG" />    
+    		<taxus name="1b_GB233" />
+    		<taxus name="1b_PH236" />
+    		<taxus name="1b_T49" />
+    		<taxus name="1b_H24" />
+    		<taxus name="1b_GAB7" />
+    		<taxus name="1b_979MO" />
+    		<taxus name="1b_1443MV" />
+    		<taxus name="1b_SF26" />
+       	</cluster>    		
+
+      	<cluster id="1d" name="Subtype d">           		
+    		<taxus name="1d_H23" />
+    		<taxus name="1d_pyg19" />
+       	</cluster>    	    		
+
+		<cluster id="1a" name="Subtype a">
+	      	<cluster id="1aC" name="Subtype a Subgroup C (West African)">           		    		
+	    		<taxus name="1aC_HS35" />
+	    		<taxus name="1aC_GH78" />
+	       	</cluster>    
+      	
+	      	<cluster id="1aD" name="Subtype a Subgroup D (North African)">           		    		    		
+	    		<taxus name="1aD_OD" />
+	    		<taxus name="1aD_BO" />
+	    		<taxus name="1aD_Pr52" />
+	    		<taxus name="1aD_Caio6622" />
+	       	</cluster>  
+      	
+	      	<cluster id="1aE" name="Subtype a Subgroup E (Black Peruvian)">           		    		    				
+	    		<taxus name="1aE_Bl1" />
+	    		<taxus name="1aE_RKI4" />
+	       	</cluster> 
+      	
+		    <cluster id="1aB" name="Subtype a Subgroup B (Japanese)">       	
+				<taxus name="1aB_ATM" />
+	    		<taxus name="1aB_MT4" />
+	    		<taxus name="1aB_ATK1" />
+	    		<taxus name="1aB_ATLYS" />
+	    		<taxus name="1aB_Ni1" />
+	    		<taxus name="1aB_H5" />
+	    		<taxus name="1aB_BCI2" />
+       		</cluster>     		
+
+		    <cluster id="1aA" name="Subtype a Subgroup A Cosmopolitan (Transcontinental)"> 
+		    	<description>HTLV-1 subtype a subgroup A Cosmopolitan</description>
+ 				<taxus name="1aA_AMA" />
+	    		<taxus name="1aA_TBH4" />
+	    		<taxus name="1aA_AINU" />
+	    		<taxus name="1aA_73RM" />
+	    		<taxus name="1aA_CMC" />
+	    		<taxus name="1aA_KUW1" />
+	    		<taxus name="1aA_Cam" />
+	    		<taxus name="1aA_TBH2" />
+	    		<taxus name="1aA_CR1" />
+	    		<taxus name="1aA_Boi" />
+	    		<taxus name="1aA_Bl2" />
+	    		<taxus name="1aA_HTLV04" />
+	    		<taxus name="1aA_Qu1" />
+	    		<taxus name="1aA_FNN100" />
+	    		<taxus name="1aA_HB3194" />
+    		</cluster>
+   		</cluster>
+       
+		<cluster id="2d" name="Subtype d">
+			<description>HTLV-2 subtype d</description>
+     		<taxus name="2d_pygmy2" />
+     	</cluster>
+      
+      	<cluster id="2b" name="Subtype b">   
+        	<description>HTLV-2 subtype b</description>
+    		<taxus name="2b_G2" />
+			<taxus name="2b_RJ" />
+			<taxus name="2b_L11456" />
+			<taxus name="2b_GAB" />
+			<taxus name="2b_PYGCAM1" />
+			<taxus name="2b_NRA" />
+			<taxus name="2b_EA" />
+			<taxus name="2b_EC" />
+			<taxus name="2b_IOV" />
+			<taxus name="2b_IIb" />
+			<taxus name="2b_IT" />
+			<taxus name="2b_IOG" />
+       	</cluster>
+		
+		<cluster id="2c" name="Subtype c (variant Subtype a)">
+			<description>HTLV-2 subtype c Brazilian</description>
+			<taxus name="2c_RP329" />
+			<taxus name="2c_TYR8668" />
+			<taxus name="2c_GTY9272" />
+			<taxus name="2c_BEL9083" />
+			<taxus name="2c_SPWV" />
+	    </cluster>    
+       	
+	    <cluster id="2a" name="Subtype a">
+	    	<description>HTLV-2 subtype a</description>
+			<taxus name="2a_k96" />
+			<taxus name="2a_SMH2" />
+			<taxus name="2a_M12524" />
+			<taxus name="2a_M19203" />	
+			<taxus name="2a_K01670" />
+			<taxus name="2a_Mo" />
+       	</cluster>
+	</clusters>
+	
+	<analysis id="phylo-major" type="paup">
+		<identify>
+    		1,2,HTLV3
+		</identify>
+		<cutoff>
+			70
+	    </cutoff>
+    	<block>
+    		begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup HTLV3;
+			set criterion=distance outroot=monophyl;
+			dset distance=TamNei NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree
+		</options>
+	</analysis>
+
+	<analysis id="phylo-minor-1" type="paup">
+		<identify>
+			1c,HTLV3,1e,1f,1b,1d,1aC,1aD,1aE,1aB,1aA
+		</identify>
+		<cutoff>
+			70
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup HTLV3;
+			set criterion=distance outroot=monophyl;
+			dset distance=TamNei NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+    	</block>
+		<options>
+			log,alignment,tree
+		</options>
+	</analysis>
+	
+	<analysis id="phylo-minor-2" type="paup">
+		<identify>
+			2d,2b,2c,2a
+		</identify>
+		<cutoff>
+			60
+		</cutoff>
+		<block>
+			begin paup;
+			log file=paup.log replace=yes;
+			exclude gapped;
+			export format=nexus file=paup.nex replace=yes;
+			outgroup 2d_pygmy2;
+			set criterion=distance outroot=monophyl;
+			dset distance=HKY rates=gamma NegBrLen=SetAbsVal;
+			constraints CONSTRE=${BACKBONE-CLUSTERS};
+			NJ constraints=CONSTRE enforce=yes;
+			savetree format=nexus brlens=yes file=paup.tre replace=yes;
+			bootstrap nreps=100 search=nj;
+			end;
+			quit;
+		</block>
+		<options>
+			log,alignment,tree
+		</options>
+	</analysis>
+
+	<analysis id="phylo-minor-2-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				2d,2b,2c,2a
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+	
+	<analysis id="phylo-minor-1-self-scan" type="scan">
+		<window>
+			1000
+		</window>
+		<step>
+			500
+		</step>
+		<analysis type="paup">
+			<identify>
+				1c,HTLV3,1e,1f,1b,1d,1aC,1aD,1aE,1aB,1aA
+			</identify>
+			<cutoff>
+				70
+			</cutoff>
+			<block>
+				begin paup;
+				log file=paup.log replace=yes;
+				exclude gapped;
+				export format=nexus file=paup.nex replace=yes;
+				set rootmethod=midpoint;
+				set criterion=distance outroot=monophyl;
+				dset distance=HKY NegBrLen=SetAbsVal;
+				NJ;
+				savetree format=phylip brlens=yes file=paup.tre replace=yes;
+				bootstrap nreps=100 search=nj;
+				end;
+				quit;
+			</block>
+		</analysis>
+	</analysis>
+</genotype-analyses>
+
