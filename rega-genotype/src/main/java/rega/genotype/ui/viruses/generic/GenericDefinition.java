@@ -22,6 +22,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -69,7 +70,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	public GenericDefinition(String organism) {
 		this.organism = organism;
 		this.updateInterval = 5000;
-		xmlFolder = Settings.getInstance().getXmlPath() + File.separator + organism + File.separator;
+		xmlFolder = Settings.getInstance(null).getXmlPath() + File.separator + organism + File.separator;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));
 		fontSize = 8;
@@ -152,8 +153,8 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		return getXmlFolder();
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
-		return new GenericTableGenerator(jobOverview, table, downloadColumns);
+	public AbstractDataTableGenerator getDataTableGenerator(SequenceFilter sequenceFilter, DataTable table) throws IOException {
+		return new GenericTableGenerator(sequenceFilter, table, downloadColumns);
 	}
 
 	public Genome getGenome() {

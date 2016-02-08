@@ -201,7 +201,7 @@ public class GenotypeResultParser extends DefaultHandler
 
 	public void endFile() { }
 
-    private void parse(InputSource source)  throws SAXException, IOException {
+    public void parse(InputSource source)  throws SAXException, IOException {
     	reset();
     	XMLReader xmlReader = XMLReaderFactory.createXMLReader();
         xmlReader.setContentHandler(this);

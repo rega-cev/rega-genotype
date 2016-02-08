@@ -416,7 +416,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				response.setContentType("application/excel");
 				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ',', '"') : new XlsDataTable(response.getOutputStream());
 				AbstractDataTableGenerator acsvgen = 
-					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this, t);
+					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this.getFilter(), t);
 				acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
 			}
 			

@@ -14,6 +14,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -45,8 +46,8 @@ public class EtvDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/etv/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
-		return new EtvTableGenerator(jobOverview, table);
+	public AbstractDataTableGenerator getDataTableGenerator(SequenceFilter sequenceFilter, DataTable table) throws IOException {
+		return new EtvTableGenerator(sequenceFilter, table);
 	}
 
 	public Genome getGenome() {
