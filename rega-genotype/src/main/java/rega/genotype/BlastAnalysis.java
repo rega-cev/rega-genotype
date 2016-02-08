@@ -487,10 +487,10 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
     }
     
-    private interface BlastResults {
+    public interface BlastResults {
     	String [] next() throws ApplicationException;
     }
-	private static Result parseBlastResults(BlastResults results, BlastAnalysis ba, boolean aa, AbstractSequence sequence) throws ApplicationException {
+	public static Result parseBlastResults(BlastResults results, BlastAnalysis ba, boolean aa, AbstractSequence sequence) throws ApplicationException {
 		int seqLength = sequence.getLength();
 		int queryFactor = aa ? 3 : 1;
 
