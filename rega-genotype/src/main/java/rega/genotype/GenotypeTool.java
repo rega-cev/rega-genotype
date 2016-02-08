@@ -10,12 +10,21 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.SequenceFilter;
+import rega.genotype.ui.viruses.generic.GenericDefinition;
+import rega.genotype.util.CsvDataTable;
+import rega.genotype.util.DataTable;
 import rega.genotype.utils.Settings;
 import rega.genotype.viruses.generic.GenericTool;
 
@@ -115,8 +124,8 @@ public abstract class GenotypeTool {
 
     private static void printUsage() {
 		System.err.println("GenotypeTool: error parsing command-line.");
-		System.err.println("usage: GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] organism sequences.fasta result.xml");
-		System.err.println("       GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] organism SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
+		System.err.println("usage: GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] organism [xml|csv] sequences.fasta result.xml");
+		System.err.println("       GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] organism [xml|csv] SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
 		System.err.println();
 		System.err.println("\tThe first option analyzes one or more sequences and writes the result to the tracefile result.xml");
 		System.err.println("\tThe second option performs an internal analysis");
@@ -326,29 +335,30 @@ public abstract class GenotypeTool {
     	if (parseArgsResult.remainingArgs == null)
     		return;
     	
-    	if (parseArgsResult.remainingArgs.length < 3) {
+    	if (parseArgsResult.remainingArgs.length < 4) {
     		printUsage();
     		return;
     	}
     	
 //    	Class<?> analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
     	String organism = parseArgsResult.remainingArgs[0];
-    	String sequenceFile = parseArgsResult.remainingArgs[1];
-    	String traceFile = parseArgsResult.remainingArgs[2];
+    	String csv = parseArgsResult.remainingArgs[1];
+    	String sequenceFile = parseArgsResult.remainingArgs[2];
+    	String traceFile = parseArgsResult.remainingArgs[3];
 //    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(parseArgsResult.workingDir), "dengue");
     	GenotypeTool genotypeTool = new GenericTool(organism, new File(parseArgsResult.workingDir));
     	
-    	if (parseArgsResult.remainingArgs.length == 3) {
+    	if (parseArgsResult.remainingArgs.length == 4) {
     		// GenotypeTool [...] className sequences.fasta result.xml
     		genotypeTool.analyze(sequenceFile, traceFile);
-    	} else if (parseArgsResult.remainingArgs.length == 6 || parseArgsResult.remainingArgs.length == 7) {
+    	} else if (parseArgsResult.remainingArgs.length == 7 || parseArgsResult.remainingArgs.length == 8) {
     		// GenotypeTool [...] className SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
-    		String analysisFile = parseArgsResult.remainingArgs[3];
-    		int windowSize = Integer.parseInt(parseArgsResult.remainingArgs[4]);
-    		int stepSize = Integer.parseInt(parseArgsResult.remainingArgs[5]);
+    		String analysisFile = parseArgsResult.remainingArgs[4];
+    		int windowSize = Integer.parseInt(parseArgsResult.remainingArgs[5]);
+    		int stepSize = Integer.parseInt(parseArgsResult.remainingArgs[6]);
     		String analysisId = null;
-   			if (parseArgsResult.remainingArgs.length == 7)
-   				analysisId = parseArgsResult.remainingArgs[6];
+   			if (parseArgsResult.remainingArgs.length == 8)
+   				analysisId = parseArgsResult.remainingArgs[7];
    	        genotypeTool.startTracer(traceFile);
    	        try {
    	    		genotypeTool.analyzeSelf(traceFile, analysisFile, windowSize, stepSize, analysisId);
@@ -358,6 +368,24 @@ public abstract class GenotypeTool {
    	        genotypeTool.stopTracer();
     	} else
     		printUsage();
+    	
+    	if(csv.equalsIgnoreCase("csv") && (parseArgsResult.remainingArgs.length == 4 ||
+    		parseArgsResult.remainingArgs.length == 7 ||
+    		parseArgsResult.remainingArgs.length == 8)) {
+    		DataTable t = new CsvDataTable(System.out, ',', '"');
+    		GenericDefinition genericDefinition = new GenericDefinition(organism);
+    		SequenceFilter sequenceFilter = new SequenceFilter() {
+    			public boolean excludeSequence(GenotypeResultParser parser) {
+    				return false;
+    			}
+    		};
+    		AbstractDataTableGenerator acsvgen = genericDefinition.getDataTableGenerator(sequenceFilter , t);
+    		try {
+				acsvgen.parse(new InputSource(new FileReader(traceFile)));
+			} catch (SAXException e) {
+				System.err.println(e.getMessage());
+			}
+    	}
     }
 
 	public static String getXmlBasePath() {
