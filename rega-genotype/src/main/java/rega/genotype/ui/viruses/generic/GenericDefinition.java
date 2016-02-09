@@ -18,6 +18,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import eu.webtoolkit.jwt.WColor;
+import eu.webtoolkit.jwt.WString;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
@@ -32,18 +34,15 @@ import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenomeAttributes;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.util.DataTable;
-import rega.genotype.utils.Settings;
 import rega.genotype.viruses.generic.GenericTool;
-import eu.webtoolkit.jwt.WColor;
-import eu.webtoolkit.jwt.WString;
 
 /**
  * Generic OrganismDefinition implementation.
  */
 public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private Genome genome = new Genome(this);
-	private String organism;
-	private String xmlFolder;
+	private String xmlFolder; // json-config: configuration 
+	private String jobDir;
 
 	public static class MenuItem {
 		String label, path, messageId;
@@ -66,10 +65,10 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private List<ResultColumn> resultColumns = null;
 	private List<ResultColumn> downloadColumns = null;
 	
-	public GenericDefinition(String organism) {
-		this.organism = organism;
+	public GenericDefinition(String xmlFolder, String jobDir) throws JDOMException, IOException {
 		this.updateInterval = 5000;
-		xmlFolder = Settings.getInstance().getXmlPath() + File.separator + organism + File.separator;
+		this.xmlFolder = xmlFolder;
+		this.jobDir = jobDir;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));
 		fontSize = 8;
@@ -77,43 +76,36 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		/*
 		 * Read settings.
 		 */
-		try {
-			SAXBuilder builder = new SAXBuilder();
-			Document document = builder.build(xmlFolder + File.separator + "config.xml");
-			Element root = document.getRootElement();
-			Element menuE = root.getChild("menu");
-			for (Object o : menuE.getChildren()) {
-				Element itemE = (Element) o;
-				MenuItem item = new MenuItem();
-				item.label = itemE.getChildText("label");
-				item.messageId = itemE.getChildText("message-id");
-				item.path = itemE.getChildText("path");
-				menuItems.add(item);
-			}
-			
-			Element genomeE = root.getChild("genome");
-			if (genomeE != null) {
-				for (Object o : genomeE.getChildren("color")) {
-					Element colorE = (Element) o;
-					WColor c = new WColor(colorE.getText());
-					String a = colorE.getAttributeValue("assignment");
-					colors.put(a, new Color(c.getRed(), c.getGreen(), c.getBlue()));
-				}
-				
-				genomeStart = Integer.parseInt(genomeE.getChildText("start"));
-				genomeEnd = Integer.parseInt(genomeE.getChildText("end"));
-				genomeImageStartX = Integer.parseInt(genomeE.getChildText("image-start"));
-				genomeImageEndX = Integer.parseInt(genomeE.getChildText("image-end"));
-			}
-
-			resultColumns = readColumnList(root, "result-list");
-			downloadColumns = readColumnList(root, "result-download");
-
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(xmlFolder + File.separator + "config.xml");
+		Element root = document.getRootElement();
+		Element menuE = root.getChild("menu");
+		for (Object o : menuE.getChildren()) {
+			Element itemE = (Element) o;
+			MenuItem item = new MenuItem();
+			item.label = itemE.getChildText("label");
+			item.messageId = itemE.getChildText("message-id");
+			item.path = itemE.getChildText("path");
+			menuItems.add(item);
 		}
+
+		Element genomeE = root.getChild("genome");
+		if (genomeE != null) {
+			for (Object o : genomeE.getChildren("color")) {
+				Element colorE = (Element) o;
+				WColor c = new WColor(colorE.getText());
+				String a = colorE.getAttributeValue("assignment");
+				colors.put(a, new Color(c.getRed(), c.getGreen(), c.getBlue()));
+			}
+
+			genomeStart = Integer.parseInt(genomeE.getChildText("start"));
+			genomeEnd = Integer.parseInt(genomeE.getChildText("end"));
+			genomeImageStartX = Integer.parseInt(genomeE.getChildText("image-start"));
+			genomeImageEndX = Integer.parseInt(genomeE.getChildText("image-end"));
+		}
+
+		resultColumns = readColumnList(root, "result-list");
+		downloadColumns = readColumnList(root, "result-download");
 	}
 
 	private List<ResultColumn> readColumnList(Element root, String tag) {
@@ -137,9 +129,9 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		}
 		return columns;
 	}
-	
+
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
-		GenericTool tool = new GenericTool(organism, jobDir);
+		GenericTool tool = new GenericTool(xmlFolder, jobDir);
 		tool.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 					 jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
@@ -202,10 +194,6 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		return updateInterval;
 	}
 
-	public String getOrganismName() {
-		return organism;
-	}
-
 	public boolean haveDetailsNavigationForm() {
 		return false;
 	}
@@ -260,5 +248,9 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 
 	public List<String> getRecombinationResultXPaths() {
 		return null;
+	}
+
+	public String getJobDir() {
+		return jobDir;
 	}
 }

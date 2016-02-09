@@ -42,23 +42,16 @@ import rega.genotype.SubSequence;
 public class GenericTool extends GenotypeTool {
     private static final int MINIMUM_REGION_OVERLAP = 100;
 
-	private AlignmentAnalyses blastXml;
+    private AlignmentAnalyses blastXml;
     private BlastAnalysis blastAnalysis;
     private Map<String, PhyloClusterAnalysis> phyloAnalyses = new HashMap<String, PhyloClusterAnalysis>();
+    private String xmlFolder;
 
-	private String xmlSubDir;
-
-    public GenericTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-    	this.xmlSubDir = "";
+    public GenericTool(String xmlFolder, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
     	this.workingDir = workingDir;
-        blastXml = readAnalyses(xmlSubDir + "/blast.xml", workingDir);
-        blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
-    }
-
-    public GenericTool(String xmlSubDir, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-    	this.xmlSubDir = xmlSubDir;
-    	this.workingDir = workingDir;
-        blastXml = readAnalyses(xmlSubDir + "/blast.xml", workingDir);
+    	this.xmlFolder = xmlFolder;
+    	setXmlBasePath("");
+        blastXml = readAnalyses(xmlFolder + "blast.xml", workingDir, false);
         blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
     }
 
@@ -104,10 +97,13 @@ public class GenericTool extends GenotypeTool {
 			        }
 				}
 			} catch (IOException e) {
+				e.printStackTrace();
 				throw new AnalysisException("", s, e);
 			} catch (ParameterProblemException e) {
+				e.printStackTrace();
 				throw new AnalysisException("", s, e);
 			} catch (FileFormatException e) {
+				e.printStackTrace();
 				throw new AnalysisException("", s, e);
 			}
         	
@@ -151,10 +147,12 @@ public class GenericTool extends GenotypeTool {
 		PhyloClusterAnalysis result = phyloAnalyses.get(alignmentId + "-" + analysisId);
 
 		if (result == null) {
-           	String f = xmlSubDir + "/phylo-" + alignmentId + ".xml";
+           	String f = "phylo-" + alignmentId + ".xml";
            	
-           	if (new File(GenotypeTool.getXmlBasePath() + f).canRead()) {
-           		AlignmentAnalyses analyses = readAnalyses(f, workingDir);
+           	if (new File(xmlFolder + f).canRead()) {
+           		AlignmentAnalyses analyses = readAnalyses(xmlFolder + f, workingDir, false);
+           		//AlignmentAnalyses analyses = readAnalyses(f, new File(xmlFolder), false);
+
            		if (analyses.haveAnalysis(analysisId)) {
            			result = (PhyloClusterAnalysis) analyses.getAnalysis(analysisId);
            			phyloAnalyses.put(alignmentId + "-" + analysisId, result);
@@ -234,7 +232,7 @@ public class GenericTool extends GenotypeTool {
 			throws AnalysisException {
 
 		try {
-			AlignmentAnalyses analyses = readAnalyses(analysisFile, workingDir);
+			AlignmentAnalyses analyses = readAnalyses(analysisFile, workingDir, false);
 
 			if (analysisId == null) {
 				for (AbstractAnalysis a : analyses.analyses()) {

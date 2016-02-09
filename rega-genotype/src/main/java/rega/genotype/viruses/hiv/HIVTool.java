@@ -29,7 +29,7 @@ public class HIVTool extends GenotypeTool {
     public HIVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
         this.workingDir = workingDir;
     	
-    	hiv = readAnalyses("HIV/hiv.xml", workingDir);
+    	hiv = readAnalyses("HIV/hiv.xml", workingDir, true);
         blastAnalysis = (BlastAnalysis) hiv.getAnalysis("blast");
         
         hiv1subtypetool = new HIV1SubtypeTool(workingDir);

@@ -35,14 +35,14 @@ public class EnteroTool extends GenotypeTool {
     private Map<String, PhyloClusterAnalysis> serotypeAnalyses = new HashMap<String, PhyloClusterAnalysis>();
 
     public EnteroTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        picorna = readAnalyses("ETV/humanpicornagenusblast.xml", workingDir);
+        picorna = readAnalyses("ETV/humanpicornagenusblast.xml", workingDir, true);
         blastAnalysis = (BlastAnalysis) picorna.getAnalysis("blast");
 
         for (Cluster c : picorna.getAllClusters()) {
         	String f = "ETV/" + c.getId() + "-VP1.xml";
         	
         	if (new File(GenotypeTool.getXmlBasePath() + f).canRead()) {
-        		AlignmentAnalyses serotypingAnalyses = readAnalyses(f, workingDir);
+        		AlignmentAnalyses serotypingAnalyses = readAnalyses(f, workingDir, true);
         		serotypeAnalyses.put(c.getId(), (PhyloClusterAnalysis) serotypingAnalyses.getAnalysis("phylo-serotype"));
         	}
         }

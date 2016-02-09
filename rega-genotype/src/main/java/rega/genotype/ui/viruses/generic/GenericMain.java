@@ -5,19 +5,25 @@
  */
 package rega.genotype.ui.viruses.generic;
 
+import java.io.IOException;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-import rega.genotype.ui.forms.DocumentationForm;
-import rega.genotype.ui.framework.GenotypeApplication;
-import rega.genotype.ui.framework.GenotypeMain;
-import rega.genotype.ui.framework.GenotypeWindow;
+import org.jdom.JDOMException;
+
+import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
-import eu.webtoolkit.jwt.Configuration.ErrorReporting;
+import rega.genotype.ui.forms.DocumentationForm;
+import rega.genotype.ui.framework.GenotypeApplication;
+import rega.genotype.ui.framework.GenotypeMain;
+import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.util.FileUtil;
 
 /**
  * Enterovirus implementation of the genotype application.
@@ -28,6 +34,7 @@ public class GenericMain extends GenotypeMain {
 
 	public GenericMain() {
 		super();
+		getConfiguration().setInternalDeploymentSize(1);
 		
 		getConfiguration().setInlineCss(false);
 		getConfiguration().setProgressiveBootstrap(true);
@@ -37,7 +44,37 @@ public class GenericMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
 		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings);
-		GenericDefinition definition = new GenericDefinition(organism);
+		
+		String configurationFile = "config";
+		String json = FileUtil.readFile(configurationFile);
+		GenericDefinitionJsonConfig[] configs = GenericDefinitionJsonConfig.parseJson(json);
+		
+		String[] deploymentPath = app.getEnvironment().getDeploymentPath().split("/");
+		organism = deploymentPath[deploymentPath.length - 1];
+		
+		GenericDefinitionJsonConfig config = null;
+		// find organism config
+		for (GenericDefinitionJsonConfig c: configs)
+			if (c.getPath().equals(organism))
+				config = c;
+		
+		if (config == null) {
+			app.getRoot().addWidget(new WText("Typing tool for organism " + organism + " was not found."));
+			return app;
+		}
+
+		GenericDefinition definition;
+		try {
+			definition = new GenericDefinition(config.getConfiguration(), config.getJobDir());
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			showErrorMsg(app);
+			return app;
+		} catch (IOException e) {
+			e.printStackTrace();
+			showErrorMsg(app);
+			return app;
+		}
 
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
@@ -45,8 +82,11 @@ public class GenericMain extends GenotypeMain {
 		app.setLocalizedStrings(resources);
 		
 		app.setTitle(WString.tr("tool.title"));
-		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
-		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
+//		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
+//		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
+		
+		app.useStyleSheet(new WLink("../../style/genotype-rivm.css"));
+		app.useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"), "IE lte 7");
 
 		GenotypeWindow window = new GenotypeWindow(definition);
 
@@ -60,12 +100,13 @@ public class GenericMain extends GenotypeMain {
 		return app;
 	}
 	
+	private void showErrorMsg(GenotypeApplication app) {
+		app.getRoot().addWidget(new WText("Typing tool for given url does not exist."));
+	}
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		this.organism = config.getInitParameter("Organism");
-		if (organism == null)
-			throw new ServletException("Need 'Organism' parameter");
-		
+		//this.organism = config.getInitParameter("Organism");
 		super.init(config);
 	}
 }

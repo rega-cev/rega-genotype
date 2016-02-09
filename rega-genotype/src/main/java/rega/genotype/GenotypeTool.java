@@ -283,9 +283,10 @@ public abstract class GenotypeTool {
      * Read analyses from a given XML file.
      * Each analysis is configured to use the workingDir to store intermediate results.
      */
-    protected AlignmentAnalyses readAnalyses(String file, File workingDir)
+    protected AlignmentAnalyses readAnalyses(String file, File workingDir, boolean addBasePath)
             throws IOException, ParameterProblemException, FileFormatException {
-        return new AlignmentAnalyses(new File(xmlBasePath + File.separator + file),
+    	String prfix = addBasePath ? xmlBasePath + File.separator : "";
+        return new AlignmentAnalyses(new File(prfix + file),
                                      this,
                                      workingDir);
     }

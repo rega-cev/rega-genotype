@@ -72,7 +72,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
     private final int InsideCutoff = -50;
 
     public HIV1SubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hiv1 = readAnalyses("HIV/hiv1.xml", workingDir);
+        hiv1 = readAnalyses("HIV/hiv1.xml", workingDir, true);
         pureAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure-puzzle");
         scanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan-pure");

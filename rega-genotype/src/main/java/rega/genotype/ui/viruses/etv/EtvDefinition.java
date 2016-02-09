@@ -22,6 +22,7 @@ import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.util.DataTable;
+import rega.genotype.utils.Settings;
 import rega.genotype.viruses.etv.EnteroTool;
 import eu.webtoolkit.jwt.WString;
 
@@ -104,5 +105,9 @@ public class EtvDefinition implements OrganismDefinition {
 
 	public List<String> getRecombinationResultXPaths() {
 		return null;
+	}
+
+	public String getJobDir() {
+		return Settings.getInstance().getJobDir(getOrganismName()).getAbsolutePath();
 	}
 }

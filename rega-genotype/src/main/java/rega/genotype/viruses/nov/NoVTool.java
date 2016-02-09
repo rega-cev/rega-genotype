@@ -39,13 +39,13 @@ public class NoVTool extends GenotypeTool {
     private BlastAnalysis blastAnalysis;
     
     public NoVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        nov = readAnalyses("NoV/novblastaa.xml", workingDir);
+        nov = readAnalyses("NoV/novblastaa.xml", workingDir, true);
         blastAnalysis = (BlastAnalysis) nov.getAnalysis("blast");
 
-        phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()] = readAnalyses("NoV/nov-ORF1.xml", workingDir);
+        phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()] = readAnalyses("NoV/nov-ORF1.xml", workingDir, true);
         phyloAnalyses[GroupRegion.GroupII_ORF1.ordinal()] = phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()];
-        phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("NoV/novI-ORF2.xml", workingDir);
-        phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("NoV/novII-ORF2.xml", workingDir);        
+        phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()] = readAnalyses("NoV/novI-ORF2.xml", workingDir, true);
+        phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()] = readAnalyses("NoV/novII-ORF2.xml", workingDir, true);        
     }
 
     public void analyze(AbstractSequence s) throws AnalysisException {

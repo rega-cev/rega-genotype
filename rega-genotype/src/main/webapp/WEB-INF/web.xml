@@ -112,40 +112,30 @@
     <url-pattern>/enterovirus/typingservice</url-pattern>
   </servlet-mapping>
 
+  <!--  Generic Tools -->
+
   <servlet>
-    <servlet-name>GenotypeHAV</servlet-name>
-    <display-name>HAV Genotyping</display-name>
-    <description>HAV Genotyping</description>
+    <servlet-name>TypingTool</servlet-name>
     <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>HAV</param-value>
-    </init-param>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>GenotypeHAV</servlet-name>
-    <url-pattern>/hav/typingtool/*</url-pattern>
+    <servlet-name>TypingTool</servlet-name>
+    <url-pattern>/typingtool/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>GenotypeHAV-service</servlet-name>
-    <display-name>HAV Genotyping service</display-name>
-    <description>HAV Genotyping service</description>
+    <servlet-name>TypingTool-service</servlet-name>
     <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
     <init-param>
     	<param-name>genotypeTool</param-name>
     	<param-value>rega.genotype.viruses.generic.GenericTool</param-value>
    	</init-param>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>HAV</param-value>
-    </init-param>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>GenotypeHAV-service</servlet-name>
-    <url-pattern>/hav/typingservice</url-pattern>
+    <servlet-name>TypingTool-service</servlet-name>
+    <url-pattern>/typingservice/*</url-pattern>
   </servlet-mapping>
 
 <!--
@@ -236,136 +226,6 @@
     <servlet-name>GenotypeHPV</servlet-name>
     <url-pattern>/hpv/typingtool/*</url-pattern>
   </servlet-mapping>-->
-  
-  <servlet>
-    <servlet-name>GenotypeSPN</servlet-name>
-    <display-name>Spn Genotyping</display-name>
-    <description>Streptococcus pneumoniae Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>SPN</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeSPN</servlet-name>
-    <url-pattern>/spn/cst/*</url-pattern>
-  </servlet-mapping>
-
-    <servlet>
-    <servlet-name>GenotypeCHL</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>CHL-PSI-OMPA</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeCHL</servlet-name>
-    <url-pattern>/chl-psi-ompa/typingtool/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>GenotypePHYLO</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>PHYLO</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypePHYLO</servlet-name>
-    <url-pattern>/phylo/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-    <servlet>
-    <servlet-name>GenotypeHPV2</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>HPV2</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHPV2</servlet-name>
-    <url-pattern>/hpv2/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>GenotypeHHV82</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>HHV82</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeHHV82</servlet-name>
-    <url-pattern>/hhv82/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>Genotypehtlv12</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>htlv12</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Genotypehtlv12</servlet-name>
-    <url-pattern>/htlv12/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>Genotypehcv2</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>HCV2</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Genotypehcv2</servlet-name>
-    <url-pattern>/hcv2/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>Genotypedengue</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>dengue</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Genotypedengue</servlet-name>
-    <url-pattern>/dengue/typingtool/*</url-pattern>
-  </servlet-mapping>
-
-
-  <servlet>
-    <servlet-name>Genotypecorona</servlet-name>
-    <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
-    <init-param>
-    	<param-name>Organism</param-name>
-    	<param-value>corona</param-value>
-    </init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>Genotypecorona</servlet-name>
-    <url-pattern>/corona/typingtool/*</url-pattern>
-  </servlet-mapping>
-  
   <context-param>
     <param-name>configFile</param-name>
     <param-value>etc/development-config.xml</param-value>

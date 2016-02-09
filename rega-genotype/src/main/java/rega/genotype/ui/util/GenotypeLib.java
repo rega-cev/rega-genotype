@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.URL;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Random;
@@ -38,13 +37,6 @@ import javax.swing.ImageIcon;
 
 import org.apache.commons.io.IOUtils;
 
-import rega.genotype.ApplicationException;
-import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.framework.GenotypeMain;
-import rega.genotype.utils.Settings;
-import rega.genotype.utils.StreamReaderThread;
-import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.FileUtils;
 import eu.webtoolkit.jwt.Utils;
 import eu.webtoolkit.jwt.Utils.HtmlEncodingFlag;
@@ -57,6 +49,11 @@ import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
+import rega.genotype.ApplicationException;
+import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.utils.Settings;
+import rega.genotype.utils.StreamReaderThread;
 
 /**
  * General utility class for creating supporting data and images for a genotype job.
@@ -268,12 +265,11 @@ public class GenotypeLib {
 		return epsFile;
 	}
 	
-	public static File createJobDir(String organismName) {
-		File jobDir = Settings.getInstance().getJobDir(organismName);
+	public static File createJobDir(String jobDir) {
 		File d;
 		Random r = new Random(new Date().getTime());
 		do {
-			d = new File(jobDir.getAbsolutePath() + File.separator + r.nextInt(Integer.MAX_VALUE));
+			d = new File(jobDir + File.separator + r.nextInt(Integer.MAX_VALUE));
 		} while(d.exists());
 		
 		d.mkdir();

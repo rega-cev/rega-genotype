@@ -36,7 +36,7 @@ public class Template extends WTemplate{
 	public void resolveString(String varName, List<WString> args, Writer result)
 			throws IOException {
 		if (varName.equals("resource-file"))
-			bindString(varName, FileServlet.getFileUrl());
+			bindString(varName, FileServlet.getFileUrl() + "");
 
 		super.resolveString(varName, args, result);
 	}

@@ -27,12 +27,12 @@ public interface OrganismDefinition {
 	public AbstractJobOverview getJobOverview(GenotypeWindow main);
 	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException;
 	public String getOrganismDirectory();
+	public String getJobDir();
 	public Genome getGenome();
 	public Genome getLargeGenome();
 	public IDetailsForm getMainDetailsForm();
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p);
 	public int getUpdateInterval();
-	public String getOrganismName();
 	public boolean haveDetailsNavigationForm();
 	public String getProfileScanType(GenotypeResultParser p);
 	public List<String> getRecombinationResultXPaths();

@@ -25,7 +25,9 @@ import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.util.DataTable;
+import rega.genotype.utils.Settings;
 import rega.genotype.viruses.hiv.HIVTool;
 import eu.webtoolkit.jwt.WString;
 
@@ -125,5 +127,9 @@ public class HivDefinition implements OrganismDefinition {
 
 	public Genome getLargeGenome() {
 		return largeGenome;
+	}
+
+	public String getJobDir() {
+		return Settings.getInstance().getJobDir(getOrganismName()).getAbsolutePath();
 	}
 }
