@@ -215,10 +215,11 @@ public class GenericTool extends GenotypeTool {
 		 * This is to differentiate with the outgroup. It would be better to mark the
 		 * outgroup with some attribute ?
 		 */
+		
 		if (r == null
 			|| (scanResult != null && !scanResult.haveSupport())
 			|| r.getConcludedCluster() == null
-			|| !r.getConcludedCluster().getId().startsWith(typeCluster.getId())
+			|| !r.getConcludedCluster().getId().contains(typeCluster.getId())
 			|| !r.haveSupport())
 			conclude("Could not assign", "Not supported by " + phyloName, "subtype");
 		else

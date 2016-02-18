@@ -43,8 +43,7 @@
          excludes="rega/genotype/ui/**" />
 
     <jar jarfile="${dist}/${proj.name}-cli-tool-${proj.version}.jar" 
-	 basedir="${build}/main/java"
-	 excludes="rega/genotype/ui/**">
+    	basedir="${build}/main/java">
       <restrict>
 	<name name="**/*.class"/>
 	<archives>

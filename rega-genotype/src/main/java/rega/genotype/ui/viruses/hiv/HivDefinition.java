@@ -15,6 +15,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.DefaultTableGenerator;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
@@ -55,8 +56,8 @@ public class HivDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/hiv/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException {
-		return new DefaultTableGenerator(jobOverview.getFilter(), t);
+	public AbstractDataTableGenerator getDataTableGenerator(SequenceFilter sequenceFilter, DataTable t) throws IOException {
+		return new DefaultTableGenerator(sequenceFilter, t);
 	}
 
 	public Genome getGenome() {

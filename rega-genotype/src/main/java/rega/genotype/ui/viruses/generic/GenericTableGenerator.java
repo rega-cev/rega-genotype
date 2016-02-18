@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 import rega.genotype.data.table.AbstractDataTableGenerator;
-import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.viruses.generic.GenericDefinition.ResultColumn;
 import rega.genotype.util.DataTable;
 
@@ -19,8 +19,8 @@ import rega.genotype.util.DataTable;
 public class GenericTableGenerator extends AbstractDataTableGenerator {
 	private List<ResultColumn> columns;
 	
-	public GenericTableGenerator(AbstractJobOverview jobOverview, DataTable table, List<ResultColumn> columns) throws IOException {
-		super(jobOverview.getFilter(), table);
+	public GenericTableGenerator(SequenceFilter sequenceFilter, DataTable table, List<ResultColumn> columns) throws IOException {
+		super(sequenceFilter, table);
 		this.columns = columns;
 
 		if (columns == null) {

@@ -14,6 +14,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -46,8 +47,8 @@ public class NovDefinition implements OrganismDefinition {
 		return "/rega/genotype/ui/viruses/nov/";
 	}
 
-	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
-		return new NovTableGenerator(jobOverview, table);
+	public AbstractDataTableGenerator getDataTableGenerator(SequenceFilter sequenceFilter, DataTable t) throws IOException {
+		return new NovTableGenerator(sequenceFilter, t);
 	}
 
 	public Genome getGenome() {

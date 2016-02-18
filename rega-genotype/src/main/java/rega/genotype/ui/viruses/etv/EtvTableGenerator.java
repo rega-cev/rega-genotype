@@ -8,15 +8,15 @@ package rega.genotype.ui.viruses.etv;
 import java.io.IOException;
 
 import rega.genotype.data.table.AbstractDataTableGenerator;
-import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.util.DataTable;
 
 /**
  * Create a csv file of Enterovirus job results 
  */
 public class EtvTableGenerator extends AbstractDataTableGenerator {
-	public EtvTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
-		super(jobOverview.getFilter(), table);
+	public EtvTableGenerator(SequenceFilter sequenceFilter, DataTable table) throws IOException {
+		super(sequenceFilter, table);
 
 		table.addLabel("name");
 		table.addLabel("length");

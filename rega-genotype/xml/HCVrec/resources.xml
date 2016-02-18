@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${resource-file}/HCVrec/HCVtool.png" alt="HCV Logo" > </img>
+						<img src="${resource-file}/HCVrec/header.gif" alt="HCV Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -197,11 +197,11 @@ GACGTGTCTGTCATCCCGGCCAGCGGCGATGTTGTCGTCGTGTCGACCGATGCT
 	</message>
   
   	<message id="details.phylo-major.title">
-  		Pylogenetic Analysis Details
+  		Phylogenetic Analysis Details
   	</message>
 
   	<message id="details.phylo-minor.title">
-  		Pylogenetic Analysis Details (Sub-clustering)
+  		Phylogenetic Analysis Details (Sub-clustering)
   	</message>
   
 	<message id="job-overview-downloads">
@@ -324,39 +324,38 @@ GACGTGTCTGTCATCCCGGCCAGCGGCGATGTTGTCGTCGTGTCGACCGATGCT
 		<div class="form">
 			<h1>Example Sequences for the Hepatitis C Virus Phylogenetic Typing  Tool</h1>
 
-	        <div class="sequenceName">&gt;EU416252</div>
+	        <div class="sequenceName">&gt;AB677528</div>
 			<div class="sequence">
-aatcactctgatgaatatttgtcttttagttgttatttgtctgtcacagaacaatcagagttttatttt
-cccagagctccattgaattcaaatgccatgttatccactgaatcaatgataagcagaattgcagctgga
-gacttggagtcatcagtggatgatcccagatcagaggaggacagaagatttgagagtcacatagaatgc
-aggaagccatataaagaattgagattagaagttgggaaacaaagactcaagtatgctcaggaggaattg
-tcaaatgaagtacttccacctcctaggaaaatgaagggactgttttcacaagccaaaatttctcttttt<br/>
-tat
+TTGTAGCGGGAGTGGATGCAYSCACCTACACCACCGGCGGACAAGCGGGTCGTGTCACTGGTGGCTTTAC
+TAGCCTCTTCTCCCCCGGTCCCAGTCAGAAAATCCAATTGATTAACACCAATGGCAGTTGGCACATAAAC
+CGGACCGCCCTCAATTGCAATGACAGCCTGCAGACGGGGTTCATCGCTTCCCTTTTTTATGCCGGAAATG
+TTAACAGTTCTGGCTGCCCCGAGCGTTTGTCTTCCTGCCGCGCGCTGGACGATTTCCGCATCGGGTGGGG
+AACCTTGGAGTACGAGACTAATGTCACCAACGATGAGGACATGAGGCCGTATTGCTGGCATTACCCCCCG
+AAGCCTTGTGGTATCGTCTCGGCTAGGACGGTTTGCGGGCCGGTCTACTGTTTTACTCCCAGCCCTGTTG
+TCGTGGGTACCACTGACAAGGAGGGCGTGCCCACCTATACCTGGGGGGAAAATGAGACCGATGTCTTTCT
 	        </div>
 	        
-	        <div class="sequenceName">&gt;AJ437155</div>
+	        <div class="sequenceName">&gt;FJ518799</div>
 			<div class="sequence">
-gttggagacgattcaggaggtttttcaacaacagtttccacagagcagaatgttcccgatccccaagtt
-ggcataacaactatgagggacttaaaaggtaaagccaataggggaaagatggatgtttcaggagtgcaa
-gcacctgtgggagctattacaacaattgaggatccagttttagctaagaaagtacctgagacatttcct
-gaattgaagcctggagagtctagacatacatcagatcacatgtctatttataaattcatggggaggtct
-cattttctgtgtacttttacttttaattcaaataataaagagtatacattcccaataacgttgtcttcg
-acttctaatcctcctcatggtttaccatcaacattaaggtggtttttcaatttgtttcagttgtataga
-ggaccattggatttgacaattattatcacaggagccactgatgtggatgggatggcttggtttactcca
-gtaggccttgctgtcgacaccccttgggtagaaaaggagtcagctctgtctattgattataaaactgcc
-cttggagctgttagatttaatacaagaagaacggggaacattcagattagattgccatggtattcttac
-ttgtatgccgtgtctggagcactggatggcctgggagataaaacagattctacatttggattggtttct
-attcagattgcaaattacaaccattctgatgaatatttgtcttttagttgttatttgtctgttacagaa
-caatcagagttctattttcctagagctccattgaattcaaatgctatgttgtccactgagtccatgatg
-agtagaattgcagctggagacttggagtcatcagtggatgatcctagatcagaggaggatagaagattt<br/>
-gaa 
+CAGCCTCACTGTCACCCAGCTCCTGAGAAGGCTGCACCAGTGGATAAGCTCGGAGAGTACCACTCCGTGC
+TCCGGTTCCTGGCTAAGGGACATCTGGGACTGGATATGCGAGGTGCTGACCGACTTTAAGGCCTGGCTAA
+AAGCCAAGCTCATGCCGCAGCTGCCTGGAATCCCCCTTGTGTCCTGCCAACGCGGGTATAGGGGGGTCTG
+GCGAGGGGACGGCGTCATGCACACCCGCTGCCATTGTGGAGCTGAGATTACTGGACATGTCAAGAACGGG
+ACGATGAGGATCGTCGGTCCCAAGACCTGCAGGAACATGTGGAGTGGGACCTTCCCCATCAATGCCTACA
+CCACGGGCCCCTGTACTCCCCTTCCCGCGCCGAACTATAAGTTCGCGCTGTGGAGGGTGTCGGCAGAGGA
+ATACGTGGAGATAAGGCAGGTGGGAGACTTCCACTACGTGACGGGTATGACCACTGACAATCTCAAATGC
+CCGTGCCAGGTCCCATCGCCCGAATTTTTCACAGAATTGGACGGGGTGCGCCTACATAGGTTTGCGCCCC
+CTTGCAAGCCCTTGTTGCGGGAGGAGGTATCATTCAGAGTAGGACTCCACGAGTACCCGGTGGGCTCGCA
+ATTGCCTTGCGAGCCCGAACCGGAC
 	        </div>
 	        
-	        <div class="sequenceName">&gt;L20531</div>
+	        <div class="sequenceName">&gt;HM363398</div>
 			<div class="sequence">
-gagtccatgatgagtagaattgcagctggagacttggagtcatcagtggatgatcctagatcagaggag
-gacagaagatttgagagtcatatagaatgtaggaaaccatacaaggaattgagattggaggttggcaaa
-caaagactcaaatatgctcaggaagagttg 
+GCATGGGATATGATGATGAACTGGAGTCCAACAACCACCTTACTCCTCGCCCAGGTTATGAGGATCCCAG
+GTACTCTGGTAGATTTACTCGCTGGAGGTCACTGGGGTGTCCTCGTGGGAGTGGCCTACTTCAGCATGCA
+AGCTAATTGGGCCAAAGTCATCTTAGTCCTATTCCTCTTCGCAGGAGTTGACGCCAGGGCCCACACAACA
+ACTGGGGCTGTGGCGGCCAGGGGGGCCAAGCACATCGCTGGGCTCTTTGACAGCGGGTCTAGGCAAAACC
+TGCAGCTCATTAACACCAACGGGAGCTGGCACATCAACAGGAC
 			</div>
     	</div>
   	</message>
