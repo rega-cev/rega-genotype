@@ -92,10 +92,6 @@ public class EtvDefinition implements OrganismDefinition {
 		return 5000;
 	}
 
-	public String getOrganismName() {
-		return "Entero";
-	}
-
 	public boolean haveDetailsNavigationForm() {
 		return false;
 	}
@@ -109,6 +105,6 @@ public class EtvDefinition implements OrganismDefinition {
 	}
 
 	public String getJobDir() {
-		return Settings.getInstance().getJobDir(getOrganismName()).getAbsolutePath();
+		return Settings.getInstance().getJobDir(EtvMain.ETV_URL).getAbsolutePath();
 	}
 }

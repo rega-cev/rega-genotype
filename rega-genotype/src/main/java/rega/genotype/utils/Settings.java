@@ -6,26 +6,15 @@
 package rega.genotype.utils;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 
 import rega.genotype.BlastAnalysis;
 import rega.genotype.GenotypeTool;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
-import rega.genotype.ui.framework.GenotypeApplication;
-import rega.genotype.ui.framework.GenotypeMain;
+import rega.genotype.ui.data.Config;
+import rega.genotype.ui.util.FileUtil;
 
 /**
  * Singleton class which contains the application settings, parses them from the xml configuration file.
@@ -35,142 +24,89 @@ import rega.genotype.ui.framework.GenotypeMain;
  */
 public class Settings {
 	public final static String defaultStyleSheet = "../style/genotype.css";
+	public static String treeGraphCommand = "/usr/bin/tgf";
+
+	private static Settings instance = null;
+	
+	private Config config;
 	
 	public Settings(File f) {
 		System.err.println("Loading config file: " + f.getAbsolutePath());
 		if (!f.exists())
 			throw new RuntimeException("Config file could not be found!");
-		parseConfFile(f);
+
+		String json = FileUtil.readFile(f.getAbsolutePath());
+		config = Config.parseJson(json);
 	}
-	
-	public File getXmlPath() {
-		return xmlPath;
+
+	public File getXmlPath(String url) {
+		return new File(config.getToolConfig(url).getConfiguration());
 	}
-	
+
+	public File getJobDir(String url) {
+		return new File(config.getToolConfig(url).getJobDir());
+	}
+
+
 	public String getPaupCmd() {
-		return paupCmd;
+		return config.getGeneralConfig().getPaupCmd();
 	}
-	
+
 	public String getClustalWCmd() {
-		return clustalWCmd;
+		return config.getGeneralConfig().getClustalWCmd();
 	}
-	
+
 	public File getBlastPath() {
-		return blastPath;
+		return new File(config.getGeneralConfig().getBlastPath());
 	}
-	
+
 	public String getTreePuzzleCmd() {
-		return treePuzzleCmd;
+		return config.getGeneralConfig().getTreePuzzleCmd();
 	}
-	
+
 	public String getTreeGraphCmd() {
-		return treeGraphCmd;
+		return config.getGeneralConfig().getTreeGraphCmd();
 	}
-	
+
 	public String getEpsToPdfCmd() {
-		return epsToPdfCmd;
+		return config.getGeneralConfig().getEpsToPdfCmd();
 	}
-	
+
 	public String getImageMagickConvertCmd() {
-		return imageMagickConvertCmd;
+		return config.getGeneralConfig().getImageMagickConvertCmd();
 	}
-	
-	public File getJobDir(String organismName) {
-		File f = jobDirs.get(organismName);
-		if (f == null)
-			f = defaultJobDir;
 
-		return f;
-	}
-	
 	public int getMaxAllowedSeqs() {
-		return maxAllowedSeqs;
+		return config.getGeneralConfig().getMaxAllowedSeqs();
 	}
-	
-	public List<File> getJobDirs() {
-		List<File> dirs = new ArrayList<File>();
-		dirs.addAll(jobDirs.values());
-		return dirs;
+
+	public File getXmlBasePath(){
+		return new File(config.getGeneralConfig().getXmlBasePath());
 	}
-	
-	private File xmlPath;
-	private String paupCmd;
-	private String clustalWCmd;
-	private File blastPath;
-	private String treePuzzleCmd;
-	private String treeGraphCmd;
-	private String epsToPdfCmd;
-	private String imageMagickConvertCmd;
-	private int maxAllowedSeqs;
-	private File defaultJobDir;	
-	private Map<String, File> jobDirs = new HashMap<String, File>();
-	public static String treeGraphCommand = "/usr/bin/tgf";
 
-    @SuppressWarnings("unchecked")
-	private void parseConfFile(File confFile) {
-        SAXBuilder builder = new SAXBuilder();
-        Document doc = null;
-        try {
-            doc = builder.build(confFile);
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+	public Config getConfig() {
+		return config;
+	}
 
-        Element root = doc.getRootElement();
-
-        List children = root.getChildren("property");
-        Element e;
-        String name;
-        for (Object o : children) {
-            e = ((Element) o);
-            name = e.getAttributeValue("name");
-            if (name.equals("xmlPath")) {
-            	xmlPath = new File(e.getValue().trim());
-            } else if(name.equals("paupCmd")) {
-            	paupCmd = e.getValue().trim();
-            } else if(name.equals("clustalWCmd")) {
-            	clustalWCmd = e.getValue().trim();
-            } else if(name.equals("blastPath")) {
-            	blastPath = new File(e.getValue().trim());
-            } else if(name.equals("treePuzzleCmd")) {
-            	treePuzzleCmd = e.getValue().trim();
-            } else if(name.equals("treeGraphCmd")) {
-            	treeGraphCmd = e.getValue().trim();
-            } else if(name.equals("epsToPdfCmd")) {
-            	epsToPdfCmd = e.getValue().trim();
-            } else if(name.equals("imageMagickConvertCmd")) {
-            	imageMagickConvertCmd = e.getValue().trim();
-            } else if(name.equals("jobDir")) {
-            	defaultJobDir = new File(e.getValue().trim());
-            } else if(name.startsWith("jobDir-")) {
-            	String organism = name.split("-")[1];
-            	jobDirs.put(organism, new File(e.getValue().trim()));
-            } else if(name.equals("maxAllowedSequences")) {
-            	maxAllowedSeqs = Integer.parseInt(e.getValue().trim());
-            }
-        }
-    }
-    
 	public static void initSettings(Settings s) {
 		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
 		SequenceAlign.clustalWPath = s.getClustalWCmd();
-		GenotypeTool.setXmlBasePath(s.getXmlPath().getAbsolutePath() + File.separatorChar);
+		GenotypeTool.setXmlBasePath(s.getXmlBasePath().getAbsolutePath() + File.separatorChar);
 		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
 		PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
 		treeGraphCommand = s.getTreeGraphCmd();
 	}
 
+	
+	
 	public static Settings getInstance() {
-		GenotypeApplication app = GenotypeMain.getApp();
-		if (app == null)
-			return getInstance(null);
-		else
-			return app.getSettings();
+		return instance;
 	}
 
 	public static Settings getInstance(ServletContext context) {
+		if (instance != null)
+			return instance;
+		
         String configFile = null;
         
         /*
@@ -184,8 +120,10 @@ public class Settings {
 
         if (context != null) {
         	configFile = context.getInitParameter("configFile");
-        	if (configFile != null)
-        		return new Settings(new File(configFile));
+        	if (configFile != null){
+        		instance =  new Settings(new File(configFile));
+        		return instance;
+        	}
         } 
         
         if (configFile == null) {
@@ -201,8 +139,10 @@ public class Settings {
             else
                 configFile = "etc/";
         }
-        configFile += File.separatorChar + "global-conf.xml";
+        configFile += File.separatorChar + "config";
         
-        return new Settings(new File(configFile));
+        instance = new Settings(new File(configFile));
+        
+        return instance;
 	}
 }

@@ -326,6 +326,6 @@
   
   <context-param>
     <param-name>configFile</param-name>
-    <param-value>etc/global-conf.xml</param-value>
+    <param-value>etc/config</param-value>
   </context-param>
 </web-app>

@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
@@ -26,10 +25,13 @@ import eu.webtoolkit.jwt.WLink;
 public class GenotypeApplication extends WApplication
 {
 	private ServletContext servletContext_;
-	private GenotypeWindow window_;
 	private Settings settings;
 	
-	public GenotypeApplication(WEnvironment env, ServletContext servletContext, Settings settings)
+	protected String url;// url Path Component
+	
+	public GenotypeApplication(WEnvironment env,
+			ServletContext servletContext, Settings settings 
+			,String url)
 	{
 		super(env);
 		this.settings = settings;
@@ -38,6 +40,7 @@ public class GenotypeApplication extends WApplication
 		useStyleSheet(new WLink("../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 
 		servletContext_ = servletContext;
+		this.url = url;
 	}
 
 	public ServletContext getServletContext()
@@ -49,7 +52,18 @@ public class GenotypeApplication extends WApplication
 	{
 		return settings;
 	}
-	
+
+	public String getUrlPathComponent() {
+		return url;
+	}
+
+	public static GenotypeApplication getGenotypeApplication() {
+		WApplication app = WApplication.getInstance();
+		if (app != null && app instanceof GenotypeApplication)
+			return (GenotypeApplication) getInstance();
+		else
+			return null;
+	}
 	/*
 	 * This function creates a temporary file
 	 * If something goes wrong during this process

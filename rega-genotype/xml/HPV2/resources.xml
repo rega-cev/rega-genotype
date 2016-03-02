@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${resource-file}/HPV2/header.gif" alt="HPV Logo" > </img>
+            <img src="${resource-file}/header.gif" alt="HPV Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -28,7 +28,7 @@
 	
 			<div class="rivm-footer">
 				<div>
-					<img src="${resource-file}/HPV2/footer.png" > </img>
+          <img src="${resource-file}/footer.png" > </img>
 				</div>
 			</div>
 		</div>

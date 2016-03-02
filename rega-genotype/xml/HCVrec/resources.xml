@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${resource-file}/HCVrec/header.gif" alt="HCV Logo" > </img>
+            <img src="${resource-file}/header.gif" alt="HCV Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -28,7 +28,7 @@
 	
 			<div class="rivm-footer">
 				<div>
-					<img src="${resource-file}/HCVrec/footer.png" > </img>
+          <img src="${resource-file}/footer.png" > </img>
 				</div>
 			</div>
 		</div>
@@ -260,7 +260,7 @@ GACGTGTCTGTCATCCCGGCCAGCGGCGATGTTGTCGTCGTGTCGACCGATGCT
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${resource-file}/HCVrec/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>	
+    <img src="${resource-file}/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>
 				Fig. 1. The startingpage of the HCV typing tool
 			</p>
 
@@ -271,7 +271,7 @@ GACGTGTCTGTCATCCCGGCCAGCGGCGATGTTGTCGTCGTGTCGACCGATGCT
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${resource-file}/HCVrec/HCVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>	
+    <img src="${resource-file}/HCVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>
 
 				Fig. 2. Overview of the results
 			</p>

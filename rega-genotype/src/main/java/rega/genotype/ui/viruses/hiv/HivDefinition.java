@@ -118,10 +118,6 @@ public class HivDefinition implements OrganismDefinition {
 		return 5000;
 	}
 
-	public String getOrganismName() {
-		return "HIV";
-	}
-
 	public boolean haveDetailsNavigationForm() {
 		return true;
 	}
@@ -131,6 +127,6 @@ public class HivDefinition implements OrganismDefinition {
 	}
 
 	public String getJobDir() {
-		return Settings.getInstance().getJobDir(getOrganismName()).getAbsolutePath();
+		return Settings.getInstance().getJobDir(HivMain.HIV_URL).getAbsolutePath();
 	}
 }

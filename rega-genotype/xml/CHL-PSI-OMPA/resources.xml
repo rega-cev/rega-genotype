@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${resource-file}/CHL-PSI-OMPA/logo.png" alt="RIVM Logo" > </img>
+            <img src="${resource-file}/logo.png" alt="RIVM Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -29,7 +29,7 @@
 	
 			<div class="rivm-footer">
 				<div>
-					<img src="${resource-file}/CHL-PSI-OMPA/footer.png" > </img>
+          <img src="${resource-file}/footer.png" > </img>
 				</div>
 			</div>
 		</div>

@@ -14,7 +14,7 @@
 
 	<message id="start-form">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 		<div class="note div-row">
 			This tool was developed to provide a free HIV subtyping service to researchers and clinicians anywhere in the world. 
@@ -62,7 +62,7 @@
 	
 	<message id="job-overview-form">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 		<div class="summary div-row">
 			${summary}
@@ -99,7 +99,7 @@
 	
 	<message id="details-form">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 		
 		${details-form}
@@ -124,7 +124,7 @@
 
 	<message id="recombination-form">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 		
 		<h1>HIV Recombination Details</h1>
@@ -180,7 +180,7 @@
 
 	<message id="contact-us-doc">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 		<h1>Contact the developers of the REGA HIV-1 &amp; 2 subtyping tool</h1>
 		<div class="div-row">
@@ -239,7 +239,7 @@
 
 	<message id="how-to-cite-doc">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 		<h1>How to Cite the REGA HIV-1 Automated Subtyping Tool</h1>
 		<div class="div-row">
@@ -354,7 +354,7 @@
 	
 	<message id="tutorial-doc">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 
 		<h1>Rega HIV-1 Subtyping Tool Version 3.0 Tutorial</h1>
@@ -386,7 +386,7 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-0.png" width="700px"/>
+					src="${resource-file}/tutorial-0.png" width="700px"/>
 				<span class="caption">Figure 1: Input section of Rega HIV-1 Subtyping Tool V3</span>
 			</div>
 			<div>
@@ -440,7 +440,7 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-1.png" width="700px"/>
+					src="${resource-file}/tutorial-1.png" width="700px"/>
 				<span class="caption">Figure 2: Summary table, Rega assignment</span>
 			</div>
 			<div>
@@ -458,7 +458,7 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-2.png" width="700px"/>
+					src="${resource-file}/tutorial-2.png" width="700px"/>
 				<span class="caption">Figure 3: Summary report</span>
 			</div>
 			<div>
@@ -476,7 +476,7 @@
 			</div>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-3.png" width="700px"/>
+					src="${resource-file}/tutorial-3.png" width="700px"/>
 				<span class="caption">Figure 4: Download results</span>
 			</div>
 			<span>
@@ -519,7 +519,7 @@
 			<br />
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-4.png" width="700px"/>
+					src="${resource-file}/tutorial-4.png" width="700px"/>
 				<span class="caption">Figure 5: Assignment report summary table</span>
 			</div>
 			<span>
@@ -542,7 +542,7 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-5.png" width="700px"/>
+					src="${resource-file}/tutorial-5.png" width="700px"/>
 				<span class="caption">Figure 6:Assignment report phylogenetic statistics</span>
 			</div>
 			<span>
@@ -591,7 +591,7 @@
 			<br />
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-6.png" width="700px"/>
+					src="${resource-file}/tutorial-6.png" width="700px"/>
 				<span class="caption">Figure 7: Genotyping details report sequence assignment</span>
 			</div>
 			<span>
@@ -621,7 +621,7 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-7.png" width="700px"/>
+					src="${resource-file}/tutorial-7.png" width="700px"/>
 				<span class="caption">Figure 8: Genotyping details report phylogenetic analysis</span>
 			</div>
 			<span>
@@ -647,7 +647,7 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/tutorial-8.png" width="700px"/>
+					src="${resource-file}/tutorial-8.png" width="700px"/>
 				<span class="caption">Figure 9: Genotyping details HIV-1 Subtype Recombination Analysis </span>
 			</div>
 		</div>
@@ -673,7 +673,7 @@
 	
 	<message id="decision-trees-doc">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 	
 		<h1>REGA V3 HIV-1 Subtying Classification Rules</h1>
@@ -684,7 +684,7 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/decision-trees-0.png" />
+					src="${resource-file}/decision-trees-0.png" />
 			</div>
 			<span>
 				Rule 1: RULE 1 - PURE
@@ -894,7 +894,7 @@
 			</span>
 			<div class="imgDiv">
 				<img alt=""
-					src="${resource-file}/HIV/decision-trees-1.png" />
+					src="${resource-file}/decision-trees-1.png" />
 			</div>
 			<span>
 				Rule 11A: PURE
@@ -975,7 +975,7 @@
 	
 	<message id="subtyping-process-doc">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 		
 		<h1>Rega HIV-1 Subtying Tool V3 Methods, Reference Sequences and CRFs</h1>
@@ -1786,7 +1786,7 @@
 	
 	<message id="example-sequences-doc">
 		<div class="header">
-			<img src="${resource-file}/HIV/header.gif" alg="Header image"></img>
+			<img src="${resource-file}/header.gif" alg="Header image"></img>
 		</div>
 		
 		<h1>Example Sequences for the REGA HIV Subtyping Tool</h1>

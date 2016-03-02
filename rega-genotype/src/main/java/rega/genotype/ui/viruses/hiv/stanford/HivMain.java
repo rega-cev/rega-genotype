@@ -25,9 +25,11 @@ import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 
 @SuppressWarnings("serial")
 public class HivMain extends GenotypeMain {
+	public static final String HIV_STANFORD_URL = "stanford-hiv"; // TODO: Temporary till hiv becomes generic tool.
+
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings);
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings, HIV_STANFORD_URL);
 		
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");

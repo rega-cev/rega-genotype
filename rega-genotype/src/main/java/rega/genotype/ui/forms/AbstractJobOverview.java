@@ -195,7 +195,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	private WTemplate createInProgressWidget() {
 		WTemplate analysisInProgress;
-		analysisInProgress = new WTemplate(tr("monitorForm.analysisInProgress"));
+		analysisInProgress = new Template(tr("monitorForm.analysisInProgress"));
 		WPushButton cancelButton = new WPushButton(tr("monitorForm.cancelButton"));
 		analysisInProgress.bindWidget("cancel-button", cancelButton);
 		analysisInProgress.bindInt("update-time-seconds", getMain().getOrganismDefinition().getUpdateInterval()/1000);

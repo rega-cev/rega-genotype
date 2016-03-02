@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${resource-file}/SPN/logo.png" alt="RIVM Logo" > </img>
+            <img src="${resource-file}/logo.png" alt="RIVM Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -30,7 +30,7 @@
 		
 			<div class="rivm-footer">
 				<div>
-					<img src="${resource-file}/SPN/footer.png" > </img>
+          <img src="${resource-file}/footer.png" > </img>
 				</div>
 			</div>
 		</div>
@@ -250,7 +250,7 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 			<p>One or more (up to 10.000 per run) CST sequences can be pasted (A) or uploaded (B) in Fasta format. It is also possible to submit shorter sequences. When pasting a single sequence the Identifier of the sequence (>Key) should be included (Fasta format). One example sequence is present as a default.
 			A set of three example sequences is also available.</p>
 		
-			<p style="text-align: center; margin: 20px 0px"><img src="${resource-file}/SPN/doc-start.png"></img></p>
+      <p style="text-align: center; margin: 20px 0px"><img src="${resource-file}/doc-start.png"></img></p>
 
 			<p>The analysis takes up to a second per sequence. Thus, for large batches the run can be
 			viewed later, by typing the Job-Id at C. Here also runs by others can be viewed,
@@ -261,7 +261,7 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 			every 5 seconds...'. The Job Id number, which can be used to retrieve the results later
 			is displayed at the top of the page as soon as the job is started.</p>
 
-			<p style="text-align: center; margin: 20px 0px"><img src="${resource-file}/SPN/doc-results.png"></img></p>
+      <p style="text-align: center; margin: 20px 0px"><img src="${resource-file}/doc-results.png"></img></p>
 			
 			<p>For each sequence the length, CT and serotype associated with the CT is shown, including
 			the similarity of the sequence. After the complete analysis is finished the analysis
@@ -271,7 +271,7 @@ GATGTAGATGACGGTCCCAAGTCAAGAGAGGAAAGCAAGGCTCTCTTGATAGAATCCTACAGGCAGGGGGTGCGAACCAT
 			followed by details such as an alignment of the best matches and a figure of the
 			targeted segment of the <i>wzh</i> gene.</p>
 			
-			<p style="text-align: center; margin: 20px 0px"><img src="${resource-file}/SPN/doc-details.png"></img></p>
+      <p style="text-align: center; margin: 20px 0px"><img src="${resource-file}/doc-details.png"></img></p>
 			
 		</div>
     </message>

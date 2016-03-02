@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${resource-file}/dengue/Denguetool.png" alt="RIVM Logo" > </img>
+            <img src="${resource-file}/Denguetool.png" alt="RIVM Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -279,7 +279,7 @@ ACAGCCTGGGATTTTGGATCTCTGGGAGGAATGTTCACATCAATAGGAAAAGCTCTCCACCAGG
 
 	       	<p>Partial vs. whole genome. Whole genome sequences (WGS) are not commonly produced for epidemiological purpose or are available in the public domain. Most of the WGS came from the GRID consortium sponsored by the Broad Institute of Harvard and MIT a few years ago. As a result of this project, collaborating sites deposited hundreds of WGS in GenBank, however, redundancy still exists in these datasets, i. e. many samples from one region, same year. There is consensus that the envelope glycoprotein gene (E) is good for phylogenetic classification. This gene has been very effective since it contains sufficient phylogenetic signal (1,485bp) to identify dengue from other viruses and differentiate between serotypes and genotypes. Phylogenetic trees inferred with E gene sequence data generate topologies very similar to whole genome trees. Therefore, investigators working with dengue sequence can expect a similar accuracy for classification of WGS and E gene.</p>
       		      						<p style="text-align: center; margin: 20px 0px">
-		<img src="${app.url}/../../pics/dengue/DengueWGSdraft1.png" alt="Dengue virus phylogenetic tree" > </img><br/>	
+    <img src="${resource-file}/DengueWGSdraft1.png" alt="Dengue virus phylogenetic tree" > </img><br/>
 				Fig. 1. Dengue virus phylogenetic tree for WGS and E gene		
 	       	</p>
       </div>
@@ -299,7 +299,7 @@ ACAGCCTGGGATTTTGGATCTCTGGGAGGAATGTTCACATCAATAGGAAAAGCTCTCCACCAGG
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-				<img src="${resource-file}/dengue/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>	
+        <img src="${resource-file}/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>
 				Fig. 1. The startingpage of the Dengue typingtool
 			</p>
 
@@ -310,7 +310,7 @@ ACAGCCTGGGATTTTGGATCTCTGGGAGGAATGTTCACATCAATAGGAAAAGCTCTCCACCAGG
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${resource-file}/dengue/DENVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>	
+    <img src="${resource-file}/DENVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>
 				Fig. 2. Overview of the results
 			</p>
 

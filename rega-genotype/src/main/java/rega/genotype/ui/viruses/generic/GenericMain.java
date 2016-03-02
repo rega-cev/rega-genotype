@@ -12,6 +12,11 @@ import javax.servlet.ServletException;
 
 import org.jdom.JDOMException;
 
+import rega.genotype.ui.data.Config.ToolConfig;
+import rega.genotype.ui.forms.DocumentationForm;
+import rega.genotype.ui.framework.GenotypeApplication;
+import rega.genotype.ui.framework.GenotypeMain;
+import rega.genotype.ui.framework.GenotypeWindow;
 import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
@@ -19,19 +24,12 @@ import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
-import rega.genotype.ui.forms.DocumentationForm;
-import rega.genotype.ui.framework.GenotypeApplication;
-import rega.genotype.ui.framework.GenotypeMain;
-import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.util.FileUtil;
 
 /**
  * Enterovirus implementation of the genotype application.
  */
 @SuppressWarnings("serial")
 public class GenericMain extends GenotypeMain {
-	private String organism;
-
 	public GenericMain() {
 		super();
 		getConfiguration().setInternalDeploymentSize(1);
@@ -42,30 +40,24 @@ public class GenericMain extends GenotypeMain {
 	}
 	
 	@Override
-	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings);
+	public WApplication createApplication(WEnvironment env) {		
+		String[] deploymentPath = env.getDeploymentPath().split("/");
+		String urlComponent = deploymentPath[deploymentPath.length - 1];
 		
-		String configurationFile = "config";
-		String json = FileUtil.readFile(configurationFile);
-		GenericDefinitionJsonConfig[] configs = GenericDefinitionJsonConfig.parseJson(json);
+		GenotypeApplication app = new GenotypeApplication(env, 
+				this.getServletContext(), settings, urlComponent);
+
 		
-		String[] deploymentPath = app.getEnvironment().getDeploymentPath().split("/");
-		organism = deploymentPath[deploymentPath.length - 1];
-		
-		GenericDefinitionJsonConfig config = null;
-		// find organism config
-		for (GenericDefinitionJsonConfig c: configs)
-			if (c.getPath().equals(organism))
-				config = c;
-		
-		if (config == null) {
-			app.getRoot().addWidget(new WText("Typing tool for organism " + organism + " was not found."));
+		ToolConfig toolConfig = settings.getConfig().getToolConfig(urlComponent);
+
+		if (toolConfig == null) {
+			app.getRoot().addWidget(new WText("Typing tool for organism " + urlComponent + " was not found."));
 			return app;
 		}
 
 		GenericDefinition definition;
 		try {
-			definition = new GenericDefinition(config.getConfiguration(), config.getJobDir());
+			definition = new GenericDefinition(toolConfig.getConfiguration(), toolConfig.getJobDir());
 		} catch (JDOMException e) {
 			e.printStackTrace();
 			showErrorMsg(app);

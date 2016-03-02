@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
 
+import org.jdom.JDOMException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -73,6 +74,7 @@ public abstract class GenotypeTool {
         try {
         	parser.parse(args);
         } catch (CmdLineParser.OptionException e) {
+        	e.printStackTrace();
             System.err.println(e.getMessage());
             printUsage();
             return null;
@@ -347,7 +349,7 @@ public abstract class GenotypeTool {
     	String sequenceFile = parseArgsResult.remainingArgs[2];
     	String traceFile = parseArgsResult.remainingArgs[3];
 //    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(parseArgsResult.workingDir), "dengue");
-    	GenotypeTool genotypeTool = new GenericTool(organism, new File(parseArgsResult.workingDir));
+    	GenotypeTool genotypeTool = new GenericTool(xmlBasePath, new File(parseArgsResult.workingDir));
     	
     	if (parseArgsResult.remainingArgs.length == 4) {
     		// GenotypeTool [...] className sequences.fasta result.xml
@@ -374,7 +376,15 @@ public abstract class GenotypeTool {
     		parseArgsResult.remainingArgs.length == 7 ||
     		parseArgsResult.remainingArgs.length == 8)) {
     		DataTable t = new CsvDataTable(System.out, ',', '"');
-    		GenericDefinition genericDefinition = new GenericDefinition(organism);
+    		
+    		GenericDefinition genericDefinition;
+			try {
+				genericDefinition = new GenericDefinition(xmlBasePath, parseArgsResult.workingDir);
+			} catch (JDOMException e1) {
+				e1.printStackTrace();
+				return;
+			}
+    		
     		SequenceFilter sequenceFilter = new SequenceFilter() {
     			public boolean excludeSequence(GenotypeResultParser parser) {
     				return false;

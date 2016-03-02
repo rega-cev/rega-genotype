@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${app.url}/../../pics/hcv/header.gif" alt="HCV Logo"></img>
+            <img src="${resource-file}/header.gif" alt="HCV Logo"></img>
 					</a>
 				</div>
 				<div id="application" align="center">
@@ -29,7 +29,7 @@
 
 			<div class="rivm-footer">
 				<div>
-					<img src="${app.url}/../../pics/rivm/footer.png">
+          <img src="${resource-file}/rivm-footer.png">
 					</img>
 				</div>
 			</div>
@@ -287,7 +287,7 @@ GACGTGTCTGTCATCCCGGCCAGCGGCGATGTTGTCGTCGTGTCGACCGATGCT
 			</p>
 
 			<p style="text-align: center; margin: 20px 0px">
-				<img src="${app.url}/../../pics/hav/FigEntry.png" alt="The startingpage of the typing tools">
+        <img src="${resource-file}/FigEntry.png" alt="The startingpage of the typing tools">
 				</img>
 				<br />
 				Fig. 1. The startingpage of the HCV typing tool
@@ -303,7 +303,7 @@ GACGTGTCTGTCATCCCGGCCAGCGGCGATGTTGTCGTCGTGTCGACCGATGCT
 			</p>
 
 			<p style="text-align: center; margin: 20px 0px">
-				<img src="${app.url}/../../pics/hcv/HCVFigResults.png" alt="The startingpage of the typing tools">
+        <img src="${resource-file}/HCVFigResults.png" alt="The startingpage of the typing tools">
 				</img>
 				<br />
 

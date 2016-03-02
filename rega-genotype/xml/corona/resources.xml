@@ -6,7 +6,7 @@
 				<div id="logo">
 					<a href="${app.url}">
 						<!-- TODO: The image is missing in xml folder -->
-						<img src="${app.url}/../../pics/dengue/Coronatool.png" alt="RIVM Logo" > </img>
+            <img src="${resource-file}/Coronatool.png" alt="RIVM Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -31,7 +31,7 @@
 			<div class="rivm-footer">
 				<div>
 				    
-					<img src="${resource-file}/corona/footer.png" > </img>
+          <img src="${resource-file}/footer.png" > </img>
 				</div>
 			</div>
 		</div>
@@ -261,7 +261,7 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${resource-file}/corona/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>	
+    <img src="${resource-file}/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>
 				Fig. 1. The startingpage of the Corona typingtool
 			</p>
 
@@ -272,7 +272,7 @@ GTGGACGTGGTATTGGAGCATGGAAGCTGC
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${resource-file}/corona/HCVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>	
+    <img src="${resource-file}/HCVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>
 				Fig. 2. Overview of the results
 			</p>
 

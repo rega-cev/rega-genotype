@@ -91,10 +91,6 @@ public class NovDefinition implements OrganismDefinition {
 		return 5000;
 	}
 
-	public String getOrganismName() {
-		return "NoV";
-	}
-
 	public boolean haveDetailsNavigationForm() {
 		return false;
 	}
@@ -112,6 +108,6 @@ public class NovDefinition implements OrganismDefinition {
 	}
 
 	public String getJobDir() {
-		return Settings.getInstance().getJobDir(getOrganismName()).getAbsolutePath();
+		return Settings.getInstance().getJobDir(NovMain.NOV_URL).getAbsolutePath();
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
+import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.util.FileServlet;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
@@ -35,8 +36,11 @@ public class Template extends WTemplate{
 	@Override
 	public void resolveString(String varName, List<WString> args, Writer result)
 			throws IOException {
+		
+		
+		GenotypeApplication app = GenotypeApplication.getGenotypeApplication();
 		if (varName.equals("resource-file"))
-			bindString(varName, FileServlet.getFileUrl() + "");
+			bindString(varName, FileServlet.getFileUrl() + "{" + app.getUrlPathComponent() + "}");
 
 		super.resolveString(varName, args, result);
 	}

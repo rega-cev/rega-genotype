@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${resource-file}/NoV/logo.png" alt="RIVM Logo"> </img>
+						<img src="${resource-file}/logo.png" alt="RIVM Logo"> </img>
 					</a>
 				</div>
 				<div id="application">
@@ -26,7 +26,7 @@
 			</div>
 			<div class="rivm-footer">
 				<div>
-					<img src="${resource-file}/NoV/footer.png" > </img>
+					<img src="${resource-file}/footer.png" > </img>
 				</div>
 			</div>
 		</div>
@@ -199,7 +199,7 @@ CAACAAAATGTAATTGACCCCTGGATTAGAAATAATTTTGTACAAGCCA
         </p>
 
         <div class="centerimage">
-          <img src="${resource-file}/NoV/startingpage.jpg" />
+          <img src="${resource-file}/startingpage.jpg" />
           <div class="pic-label">The startingpage of the NoV typingtool</div>
         </div>
 
@@ -210,7 +210,7 @@ CAACAAAATGTAATTGACCCCTGGATTAGAAATAATTTTGTACAAGCCA
         Runs are kept on the server for 1 week. </p>
 
         <div>
-          <img src="${resource-file}/NoV/overview.jpg" />
+          <img src="${resource-file}/overview.jpg" />
           <div class="pic-label">Overview of the results</div>
         </div>
 
@@ -272,7 +272,7 @@ CAACAAAATGTAATTGACCCCTGGATTAGAAATAATTTTGTACAAGCCA
         The genotyping region supported by this tool includes all regions (A to
         E) which are used for genotyping by different groups. </p><br />
      
-        <div class="centerimage"><img src="${resource-file}/NoV/typingregions.png" height="233" width="605" />
+        <div class="centerimage"><img src="${resource-file}/typingregions.png" height="233" width="605" />
         </div>
 
         <span class="pic-label">Schematic representation of

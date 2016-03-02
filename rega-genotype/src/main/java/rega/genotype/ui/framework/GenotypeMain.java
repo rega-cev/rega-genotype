@@ -24,8 +24,7 @@ public abstract class GenotypeMain extends WtServlet
 	protected Settings settings;
 
 	public GenotypeMain() {
-		super();
-		
+		super();		
 		// progressive bootstrap is broken because Wt is not aware of image URLs in documentation forms 
 		// getConfiguration().setProgressiveBootstrap(true);
 	}

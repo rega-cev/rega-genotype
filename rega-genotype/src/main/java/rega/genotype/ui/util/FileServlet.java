@@ -3,6 +3,8 @@ package rega.genotype.ui.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -10,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import rega.genotype.ui.framework.GenotypeMain;
+import rega.genotype.utils.Settings;
 
 /**
  * Serve files on a url.
@@ -56,16 +58,28 @@ public class FileServlet extends HttpServlet {
 	}
 
 	public static String getFileUrl(String id) {
+		// TODO: this can be security problem. check that user can not get below the
+		// Organism dir.
 		return SERVLET_PATH + "?id=" + id;
 	}
 
 	/*
 	 * Return the file path of the given id. The id should contains the
-	 * extension of the file
+	 * extension of the file.
+	 * expected id = {url path component}/path in organism dir
+	 * return "" if id syntax is not correct.
 	 */
-	public static String getFilePath(String id) {
-		String xmlPath = ((GenotypeMain) GenotypeMain.
-				getInstance()).getSettings().getXmlPath().getAbsolutePath();
-		return xmlPath + id;
+	public String getFilePath(String id) {
+		Pattern p = Pattern.compile("\\{(?<url>[^\\}]+)\\}(?<interanl>.+)");
+		Matcher m = p.matcher(id);
+		if (!m.matches())
+			return "";
+
+		String url = m.group("url");
+		String internalPath = m.group("interanl");
+
+		File xmlPath = Settings.getInstance(getServletContext()).getXmlPath(url);
+		
+		return xmlPath + internalPath;
 	}
 }

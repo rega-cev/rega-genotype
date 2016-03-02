@@ -5,7 +5,7 @@
 			<div class="rivm-header">
 				<div id="logo">
 					<a href="${app.url}">
-						<img src="${app.url}/../../pics/aedesviruses/aedesviruses.png" alt="RIVM Logo" > </img>
+            <img src="${resource-file}/aedesviruses.png" alt="RIVM Logo" > </img>
 					</a>
 				</div>
 				<div id="application">
@@ -25,7 +25,7 @@
 				<br/><p>Developed by: <b>FIOCRUZ/Bahia, Brazil</b> (Maria Inés Restovic, Marta Giovanetti, Vagner Fonseca, Murilo Freire, Luiz Alcantara),  <b>KU Leuven, Belgium</b> (Kristof Theys, Pieter Libin, Lize Cuypers, Ana Abecasis, Anne-Mieke Vandamme), <b>Oxford, U.K.</b> (Nuno Faria and Oliver Pybus),  <b>Evandro Chagas Institute, Brazil</b> (Marcio Roberto Teixeira Nunes), <b>CDC/OID/NCEZID</b> (Gilberto A. Santiago), <b>Emweb bvba, Belgium</b> (Koen Deforche) and <b>Africa Centre/UKZN, South Africa</b> (Tulio de Oliveira).</p>
 			    <p><b>Contact:</b> <a href="http://www.bahia.fiocruz.br/?area=02X01X11">Dr. Luiz Carlos Junior Alcantara</a>, <a href="http://www.iec.pa.gov.br/index.php/gcPagina/index/56">Dr. Marcio Roberto Teixeira Nunes</a>,<a href="http://evolve.zoo.ox.ac.uk"> Dr. Nuno Faria</a>  and/or <a href="http://www.bioafrica.net/people.php?peopleid=1">Prof. Tulio de Oliveira</a></p> <br/>	
 			    <div style="background-color:#FFFFFF">
-			    <img src="${app.url}/../../pics/aedesviruses/logobottom.png" alt="Institutions Logo" ></img>
+          <img src="${resource-file}/logobottom.png" alt="Institutions Logo" ></img>
 			    </div>
 			    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
 					</script>
@@ -306,7 +306,7 @@ TCGCTGTTGCAGCACTGATTCTAATCGTGGTGCTATGCGTGTCGTTCAGCAGGCAC
 
 	       	<p>Partial vs. whole genome. Whole genome sequences (WGS) are not commonly produced for epidemiological purpose or are available in the public domain. Most of the WGS came from the GRID consortium sponsored by the Broad Institute of Harvard and MIT a few years ago. As a result of this project, collaborating sites deposited hundreds of WGS in GenBank, however, redundancy still exists in these datasets, i. e. many samples from one region, same year. There is consensus that the envelope glycoprotein gene (E) is good for phylogenetic classification. This gene has been very effective since it contains sufficient phylogenetic signal (1,485bp) to identify dengue from other viruses and differentiate between serotypes and genotypes. Phylogenetic trees inferred with E gene sequence data generate topologies very similar to whole genome trees. Therefore, investigators working with dengue sequence can expect a similar accuracy for classification of WGS and E gene.</p>
       		      						<p style="text-align: center; margin: 20px 0px">
-		<img src="${app.url}/../../pics/dengue/DengueWGSdraft1.png" alt="Dengue, Zika &amp; Chikungunya Viruses phylogenetic tree" > </img><br/>	
+		<img src="${resource-file}/DengueWGSdraft1.png" alt="Dengue, Zika &amp; Chikungunya Viruses phylogenetic tree" > </img><br/>	
 				Fig. 1. Dengue, Zika &amp; Chikungunya Viruses phylogenetic tree for WGS and E gene		
 	       	</p>
 	       				<h1>Chikungunya phylotypes</h1>
@@ -322,7 +322,7 @@ TCGCTGTTGCAGCACTGATTCTAATCGTGGTGCTATGCGTGTCGTTCAGCAGGCAC
 				</ul>
 		      	</p>
 		      		<p style="text-align: center; margin: 20px 0px">
-					<img src="${app.url}/../../pics/dengue/chikvWGSdraft1.png" alt="Dengue, Zika &amp; Chikungunya Viruses phylogenetic tree" > </img><br/>	
+					<img src="${resource-file}/chikvWGSdraft1.png" alt="Dengue, Zika &amp; Chikungunya Viruses phylogenetic tree" > </img><br/>	
 				Fig. 2. Chikungunya &amp; Viruses phylogenetic tree for WGS and E gene		
 	       	</p>
 		      
@@ -341,7 +341,7 @@ Negl Trop Dis 2014, 8(1): e2636)</li>
 				</ul>
 		      	</p>
 		      		<p style="text-align: center; margin: 20px 0px">
-					<img src="${app.url}/../../pics/dengue/chikvWGSdraft1.png" alt="Dengue, Zika &amp; Chikungunya Viruses phylogenetic tree" > </img><br/>	
+          <img src="${resource-file}/chikvWGSdraft1.png" alt="Dengue, Zika &amp; Chikungunya Viruses phylogenetic tree" > </img><br/>
 				Fig. 2. Chikungunya &amp; Viruses phylogenetic tree for WGS and E gene		
 	       	</p>
 		      		
@@ -364,7 +364,7 @@ Negl Trop Dis 2014, 8(1): e2636)</li>
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${app.url}/../../pics/dengue/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>	
+    <img src="${resource-file}/FigEntry.png" alt="The startingpage of the typing tools" > </img><br/>
 				Fig. 1. The startingpage of the Dengue typingtool
 			</p>
 
@@ -375,7 +375,7 @@ Negl Trop Dis 2014, 8(1): e2636)</li>
 			</p> 
 
 			<p style="text-align: center; margin: 20px 0px">
-		<img src="${app.url}/../../pics/dengue/DENVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>	
+    <img src="${resource-file}/DENVFigResults.png" alt="The startingpage of the typing tools" > </img><br/>
 				Fig. 2. Overview of the results
 			</p>
 
