@@ -173,6 +173,15 @@ public class Settings {
 	public static Settings getInstance(ServletContext context) {
         String configFile = null;
         
+        /*
+         * For a real deployment:
+         *  - use servlet-context init parameter for configuration of the configuration file
+         *  - or REGA_GENOTYPE_CONF_DIR env variable for the CLI tool
+         *  
+         * For development:
+         *  - we default to ./etc/
+         */
+
         if (context != null) {
         	configFile = context.getInitParameter("configFile");
         	if (configFile != null)
@@ -190,7 +199,7 @@ public class Settings {
             if (osName.startsWith("windows"))
                 configFile = "C:\\Program files\\rega_genotype\\";
             else
-                configFile = "/etc/rega_genotype/";
+                configFile = "etc/";
         }
         configFile += File.separatorChar + "global-conf.xml";
         
