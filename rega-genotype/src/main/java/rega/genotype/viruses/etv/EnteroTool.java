@@ -14,6 +14,7 @@ import java.util.Map;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.ui.viruses.etv.EtvMain;
 import rega.genotype.AnalysisException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
@@ -35,6 +36,10 @@ public class EnteroTool extends GenotypeTool {
     private Map<String, PhyloClusterAnalysis> serotypeAnalyses = new HashMap<String, PhyloClusterAnalysis>();
 
     public EnteroTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	this(null, workingDir);
+    }
+    public EnteroTool(String toolId, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	super(toolId == null ? EtvMain.ETV_TOOL_ID : toolId, workingDir);
         picorna = readAnalyses("ETV/humanpicornagenusblast.xml", workingDir, true);
         blastAnalysis = (BlastAnalysis) picorna.getAnalysis("blast");
 

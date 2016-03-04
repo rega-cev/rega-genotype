@@ -43,7 +43,7 @@ public class EtvDefinition implements OrganismDefinition {
 		return new EtvJobOverview(main);
 	}
 	
-	public String getOrganismDirectory() {
+	public String getXmlPath() {
 		return "/rega/genotype/ui/viruses/etv/";
 	}
 
@@ -105,6 +105,6 @@ public class EtvDefinition implements OrganismDefinition {
 	}
 
 	public String getJobDir() {
-		return Settings.getInstance().getJobDir(EtvMain.ETV_URL).getAbsolutePath();
+		return Settings.getInstance().getJobDir(EtvMain.ETV_TOOL_ID).getAbsolutePath();
 	}
 }

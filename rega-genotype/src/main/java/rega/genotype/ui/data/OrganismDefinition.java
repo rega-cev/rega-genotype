@@ -27,7 +27,7 @@ public interface OrganismDefinition {
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException;
 	public AbstractJobOverview getJobOverview(GenotypeWindow main);
 	public AbstractDataTableGenerator getDataTableGenerator(SequenceFilter sequenceFilter, DataTable t) throws IOException;
-	public String getOrganismDirectory();
+	public String getXmlPath();
 	public String getJobDir();
 	public Genome getGenome();
 	public Genome getLargeGenome();

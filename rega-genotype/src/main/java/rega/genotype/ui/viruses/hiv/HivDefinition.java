@@ -52,7 +52,7 @@ public class HivDefinition implements OrganismDefinition {
 		return new DefaultJobOverview(main);
 	}
 	
-	public String getOrganismDirectory() {
+	public String getXmlPath() {
 		return "/rega/genotype/ui/viruses/hiv/";
 	}
 
@@ -127,6 +127,6 @@ public class HivDefinition implements OrganismDefinition {
 	}
 
 	public String getJobDir() {
-		return Settings.getInstance().getJobDir(HivMain.HIV_URL).getAbsolutePath();
+		return Settings.getInstance().getJobDir(HivMain.HIV_TOOL_ID).getAbsolutePath();
 	}
 }

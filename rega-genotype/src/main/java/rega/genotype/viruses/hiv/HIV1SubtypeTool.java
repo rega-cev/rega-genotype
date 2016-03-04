@@ -25,6 +25,7 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.PhyloClusterAnalysis.Result;
+import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.ResultTracer;
 import rega.genotype.ScanAnalysis;
 
@@ -70,9 +71,14 @@ public class HIV1SubtypeTool extends GenotypeTool {
     private PhyloClusterAnalysis crfScanPhyloAnalysis;
     
     private final int InsideCutoff = -50;
-
+    
     public HIV1SubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hiv1 = readAnalyses("HIV/hiv1.xml", workingDir, true);
+    	this(null, workingDir);
+    }
+    public HIV1SubtypeTool(String toolId, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+		super(toolId == null ? HivMain.HIV_TOOL_ID : toolId, workingDir);
+
+    	hiv1 = readAnalyses("HIV/hiv1.xml", workingDir, true);
         pureAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("pure-puzzle");
         scanAnalysis = (ScanAnalysis) hiv1.getAnalysis("scan-pure");

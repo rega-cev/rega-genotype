@@ -36,11 +36,21 @@ public class Config {
 		this.generalConfig = generalConfig;
 	}
 
-	public ToolConfig getToolConfig(String organism) {
+	public ToolConfig getToolConfig(String toolId) {
 		ToolConfig toolConfig = null;
 		// find organism config
 		for (ToolConfig c: getTools())
-			if (c.getPath().equals(organism))
+			if (c.getToolId().equals(toolId))
+				toolConfig = c;
+
+		return toolConfig;
+	}
+
+	public ToolConfig getToolConfigByUrlPath(String url) {
+		ToolConfig toolConfig = null;
+		// find organism config
+		for (ToolConfig c: getTools())
+			if (c.getPath().equals(url))
 				toolConfig = c;
 
 		return toolConfig;
@@ -148,7 +158,8 @@ public class Config {
 	  	}
 		 */
 		private String name;
-		private String path; // organism
+		private String toolId;
+		private String path; // url path component
 		private String configuration; // xmlPath
 		private String jobDir;
 		private boolean autoUpdate;
@@ -159,8 +170,17 @@ public class Config {
 		public void setName(String name) {
 			this.name = name;
 		}
+		public String getToolId() {
+			return toolId;
+		}
+		public void setToolId(String toolId) {
+			this.toolId = toolId;
+		}
 		public String getPath() {
-			return path;
+			if (path != null)
+				return path;
+			else
+				return toolId;
 		}
 		public void setPath(String path) {
 			this.path = path;

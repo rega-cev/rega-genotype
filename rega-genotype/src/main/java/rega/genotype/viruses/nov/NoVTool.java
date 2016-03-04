@@ -12,6 +12,7 @@ import java.io.IOException;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.ui.viruses.nov.NovMain;
 import rega.genotype.AnalysisException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
@@ -39,6 +40,10 @@ public class NoVTool extends GenotypeTool {
     private BlastAnalysis blastAnalysis;
     
     public NoVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	this(null, workingDir);
+    }
+    public NoVTool(String toolid, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	super(toolid == null ? NovMain.NOV_TOOL_ID : toolid, workingDir);
         nov = readAnalyses("NoV/novblastaa.xml", workingDir, true);
         blastAnalysis = (BlastAnalysis) nov.getAnalysis("blast");
 

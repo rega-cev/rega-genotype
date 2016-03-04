@@ -92,7 +92,7 @@ public class Genome {
 			scanStepSize = 0;
 		}
 
-	    Image genomePng = ImageIO.read(GenotypeLib.getResourceAsStream(attributes.getOrganismDefinition().getOrganismDirectory()
+	    Image genomePng = ImageIO.read(GenotypeLib.getResourceAsStream(attributes.getOrganismDefinition().getXmlPath()
 	    				+ "/genome_" + (regions == null ? variant : "large") + ".png"));
 
 		int imgWidth = genomePng.getWidth(null);

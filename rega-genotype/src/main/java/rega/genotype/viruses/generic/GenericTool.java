@@ -26,6 +26,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.SubSequence;
+import rega.genotype.utils.Settings;
 
 /**
  * A generic typing tool.
@@ -45,13 +46,12 @@ public class GenericTool extends GenotypeTool {
     private AlignmentAnalyses blastXml;
     private BlastAnalysis blastAnalysis;
     private Map<String, PhyloClusterAnalysis> phyloAnalyses = new HashMap<String, PhyloClusterAnalysis>();
-    private String xmlFolder;
 
-    public GenericTool(String xmlFolder, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-    	this.workingDir = workingDir;
-    	this.xmlFolder = xmlFolder;
+    public GenericTool(String toolId, File workDir) throws IOException, ParameterProblemException, FileFormatException {
+    	super(toolId, workDir);
+  
     	setXmlBasePath("");
-        blastXml = readAnalyses(xmlFolder + "blast.xml", workingDir, false);
+        blastXml = readAnalyses(getXmlPathAsString() + "blast.xml", getWorkingDir(), false);
         blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
     }
 
@@ -148,10 +148,8 @@ public class GenericTool extends GenotypeTool {
 
 		if (result == null) {
            	String f = "phylo-" + alignmentId + ".xml";
-           	
-           	if (new File(xmlFolder + f).canRead()) {
-           		AlignmentAnalyses analyses = readAnalyses(xmlFolder + f, workingDir, false);
-           		//AlignmentAnalyses analyses = readAnalyses(f, new File(xmlFolder), false);
+           	if (new File(getXmlPathAsString() + f).canRead()) {
+           		AlignmentAnalyses analyses = readAnalyses(getXmlPathAsString() + f, getWorkingDir(), false);
 
            		if (analyses.haveAnalysis(analysisId)) {
            			result = (PhyloClusterAnalysis) analyses.getAnalysis(analysisId);
@@ -233,7 +231,7 @@ public class GenericTool extends GenotypeTool {
 			throws AnalysisException {
 
 		try {
-			AlignmentAnalyses analyses = readAnalyses(analysisFile, workingDir, false);
+			AlignmentAnalyses analyses = readAnalyses(analysisFile, getWorkingDir(), false);
 
 			if (analysisId == null) {
 				for (AbstractAnalysis a : analyses.analyses()) {

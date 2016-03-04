@@ -11,6 +11,7 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
+import rega.genotype.ui.viruses.hiv.HivMain;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,9 +25,14 @@ public class SIVSubtypeTool extends GenotypeTool{
     private PhyloClusterAnalysis purePuzzleAnalysis;
     private PhyloClusterAnalysis pureAnalysis;
     private ScanAnalysis scanAnalysis;
-
+ 
     public SIVSubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
-        siv = readAnalyses("hcv.xml", workingDir, true);
+    	this(null, workingDir);
+    }
+    public SIVSubtypeTool(String toolid, File workingDir) throws FileFormatException, IOException, ParameterProblemException {
+		super(toolid == null ? HivMain.HIV_TOOL_ID : toolid, workingDir);
+
+    	siv = readAnalyses("hcv.xml", workingDir, true);
         pureAnalysis = (PhyloClusterAnalysis) siv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis)  siv.getAnalysis("puzzle-pure");
         scanAnalysis = (ScanAnalysis) siv.getAnalysis("scan-pure");

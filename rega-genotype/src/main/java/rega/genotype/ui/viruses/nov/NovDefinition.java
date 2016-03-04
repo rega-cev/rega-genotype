@@ -43,7 +43,7 @@ public class NovDefinition implements OrganismDefinition {
 		return new NovJobOverview(main);
 	}
 	
-	public String getOrganismDirectory() {
+	public String getXmlPath() {
 		return "/rega/genotype/ui/viruses/nov/";
 	}
 
@@ -108,6 +108,6 @@ public class NovDefinition implements OrganismDefinition {
 	}
 
 	public String getJobDir() {
-		return Settings.getInstance().getJobDir(NovMain.NOV_URL).getAbsolutePath();
+		return Settings.getInstance().getJobDir(NovMain.NOV_TOOL_ID).getAbsolutePath();
 	}
 }

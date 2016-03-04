@@ -79,7 +79,7 @@ public class FileServlet extends HttpServlet {
 		String internalPath = m.group("interanl");
 
 		File xmlPath = Settings.getInstance(getServletContext()).getXmlPath(url);
-		
+
 		return xmlPath + internalPath;
 	}
 }

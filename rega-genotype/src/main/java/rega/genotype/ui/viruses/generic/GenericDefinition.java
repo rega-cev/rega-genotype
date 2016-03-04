@@ -35,6 +35,7 @@ import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenomeAttributes;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.util.DataTable;
+import rega.genotype.utils.Settings;
 import rega.genotype.viruses.generic.GenericTool;
 
 /**
@@ -42,8 +43,7 @@ import rega.genotype.viruses.generic.GenericTool;
  */
 public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private Genome genome = new Genome(this);
-	private String xmlFolder; // json-config: configuration 
-	private String jobDir;
+	private String toolId;
 
 	public static class MenuItem {
 		String label, path, messageId;
@@ -66,10 +66,9 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private List<ResultColumn> resultColumns = null;
 	private List<ResultColumn> downloadColumns = null;
 	
-	public GenericDefinition(String xmlFolder, String jobDir) throws JDOMException, IOException {
+	public GenericDefinition(String toolId) throws JDOMException, IOException {
 		this.updateInterval = 5000;
-		this.xmlFolder = xmlFolder;
-		this.jobDir = jobDir;
+		this.toolId = toolId;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));
 		fontSize = 8;
@@ -78,7 +77,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		 * Read settings.
 		 */
 		SAXBuilder builder = new SAXBuilder();
-		Document document = builder.build(xmlFolder + File.separator + "config.xml");
+		Document document = builder.build(getXmlPath() + File.separator + "config.xml");
 		Element root = document.getRootElement();
 		Element menuE = root.getChild("menu");
 		for (Object o : menuE.getChildren()) {
@@ -132,17 +131,13 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
-		GenericTool tool = new GenericTool(xmlFolder, jobDir);
+		GenericTool tool = new GenericTool(toolId, jobDir);
 		tool.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 					 jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
 
 	public AbstractJobOverview getJobOverview(GenotypeWindow main) {
 		return new GenericJobOverview(main, resultColumns);
-	}
-	
-	public String getOrganismDirectory() {
-		return getXmlFolder();
 	}
 
 	public AbstractDataTableGenerator getDataTableGenerator(SequenceFilter sequenceFilter, DataTable table) throws IOException {
@@ -203,10 +198,6 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		return getGenome();
 	}
 
-	public String getXmlFolder() {
-		return xmlFolder;
-	}
-
 	public Map<String, Color> getColors() {
 		return colors;
 	}
@@ -252,6 +243,10 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public String getJobDir() {
-		return jobDir;
+		return Settings.getInstance().getJobDir(toolId).getAbsolutePath();
+	}
+
+	public String getXmlPath() {
+		return Settings.getInstance().getXmlPath(toolId).getAbsolutePath();
 	}
 }

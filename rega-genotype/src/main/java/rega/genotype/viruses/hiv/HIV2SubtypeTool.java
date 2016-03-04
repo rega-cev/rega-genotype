@@ -11,6 +11,7 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
+import rega.genotype.ui.viruses.hiv.HivMain;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,9 +26,13 @@ public class HIV2SubtypeTool extends GenotypeTool {
     private ScanAnalysis scanAnalysis;
 
     private final int InsideCutoff = -50;
-    
     public HIV2SubtypeTool(File workingDir) throws FileFormatException, IOException, ParameterProblemException {
-        hiv2 = readAnalyses("HIV/hiv2.xml", workingDir, true);
+    	this(null, workingDir);
+    }
+    public HIV2SubtypeTool(String toolId, File workingDir) throws FileFormatException, IOException, ParameterProblemException {
+		super(toolId == null ? HivMain.HIV_TOOL_ID : toolId, workingDir);
+
+    	hiv2 = readAnalyses("HIV/hiv2.xml", workingDir, true);
         pureAnalysis = (PhyloClusterAnalysis) hiv2.getAnalysis("pure");
         scanAnalysis = (ScanAnalysis) hiv2.getAnalysis("scan-pure");
     }

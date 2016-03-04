@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -32,7 +34,7 @@ public class GenotypeService extends HttpServlet {
 	
 	private Class<? extends GenotypeTool> tool;
 	private Class<? extends AbstractDataTableGenerator> tableGenerator;
-	private String organism;
+	private String hivOrganism;
 	private Settings settings;
 
 	@Override
@@ -46,6 +48,23 @@ public class GenotypeService extends HttpServlet {
 	}
 	
 	private void performRequest(HttpServletRequest req, HttpServletResponse resp)  throws ServletException, IOException {
+
+		String toolId = null;
+		if (hivOrganism == null) {		
+		    if (req.getPathInfo() == null) {
+		    	// url component (organism) could not be determined.
+		    	resp.setStatus(404);
+		    	return;
+		    } else {
+				String path = req.getPathInfo().replace(File.separator, "");
+		    	toolId = Settings.getInstance().getConfig().
+		    			getToolConfigByUrlPath(path).getToolId();
+		    }
+		}
+
+		if (req.getParameter("fasta-sequence") == null) 
+			return; // no need to analize.
+		
 		File workingDir = File.createTempFile("gs-", "");
 		workingDir.delete();
 		workingDir.mkdir();
@@ -70,11 +89,7 @@ public class GenotypeService extends HttpServlet {
 			
 			File traceFile = new File(workingDir, "result.xml");
 
-			GenotypeTool genotypeTool;
-			if (organism == null)
-				genotypeTool = (GenotypeTool) tool.getConstructor(File.class).newInstance(workingDir);
-			else
-				genotypeTool = (GenotypeTool) tool.getConstructor(String.class, File.class).newInstance(organism, workingDir);
+			GenotypeTool genotypeTool = (GenotypeTool) tool.getConstructor(String.class, File.class).newInstance(toolId, workingDir);;
 
 			genotypeTool.analyze(sequenceFile.getAbsolutePath(), traceFile.getAbsolutePath());
 			
@@ -129,8 +144,8 @@ public class GenotypeService extends HttpServlet {
 		else
 			throw new ServletException("Need 'genotypeTool' parameter");
 
-		this.organism = config.getInitParameter("Organism");
-		
+		this.hivOrganism = config.getInitParameter("Organism");
+
 		String tableGeneratorName = config.getInitParameter("genotypeTool.table-generator");
 		if (tableGeneratorName != null) {
 			try {

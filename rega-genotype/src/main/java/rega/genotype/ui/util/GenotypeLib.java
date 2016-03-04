@@ -287,7 +287,7 @@ public class GenotypeLib {
 	}
 
 	public static WImage getWImageFromResource(final OrganismDefinition od, final String fileName, WContainerWidget parent) throws IOException {
-		final InputStream is = getResourceAsStream(od.getOrganismDirectory() + fileName);
+		final InputStream is = getResourceAsStream(od.getXmlPath() + File.separator + fileName);
 		
 		if (is == null)
 			return null;
@@ -299,7 +299,7 @@ public class GenotypeLib {
 			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 				response.setContentType("image/" + fileName.substring(fileName.lastIndexOf('.')+1));
 				
-            	InputStream is = getResourceAsStream(od.getOrganismDirectory() + fileName);
+            	InputStream is = getResourceAsStream(od.getXmlPath() + File.separator + fileName);
             	if (is == null)
             		return;
                 try {

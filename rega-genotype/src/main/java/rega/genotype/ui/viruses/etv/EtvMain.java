@@ -20,7 +20,7 @@ import eu.webtoolkit.jwt.WXmlLocalizedStrings;
  */
 @SuppressWarnings("serial")
 public class EtvMain extends GenotypeMain {
-	public static final String ETV_URL = "enterovirus"; // TODO: Temporary till ETV becomes generic tool.
+	public static final String ETV_TOOL_ID = "enterovirus"; // TODO: Temporary till ETV becomes generic tool.
 
 	public EtvMain() {
 		super();
@@ -31,7 +31,7 @@ public class EtvMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings, ETV_URL);
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings, ETV_TOOL_ID);
 		app.setTitle(WString.tr("etvTool.title"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");

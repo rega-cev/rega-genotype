@@ -16,20 +16,21 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.ui.viruses.hiv.HivMain;
 
-public class HIVTool extends GenotypeTool {
-	private File workingDir;
-	
+public class HIVTool extends GenotypeTool {	
     private AlignmentAnalyses hiv;
     private BlastAnalysis blastAnalysis;
     private HIV1SubtypeTool hiv1subtypetool;
 	private HIV2SubtypeTool hiv2subtypetool;
 
-    
-    public HIVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        this.workingDir = workingDir;
-    	
-    	hiv = readAnalyses("HIV/hiv.xml", workingDir, true);
+	public HIVTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+		this(null, workingDir);
+	}
+	public HIVTool(String toolId, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+		super(toolId == null ? HivMain.HIV_TOOL_ID : toolId, workingDir);
+
+		hiv = readAnalyses("HIV/hiv.xml", workingDir, true);
         blastAnalysis = (BlastAnalysis) hiv.getAnalysis("blast");
         
         hiv1subtypetool = new HIV1SubtypeTool(workingDir);

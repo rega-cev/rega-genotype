@@ -5,6 +5,7 @@
  */
 package rega.genotype.ui.viruses.generic;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
@@ -26,7 +27,7 @@ import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 
 /**
- * Enterovirus implementation of the genotype application.
+ * Generic implementation of the genotype application.
  */
 @SuppressWarnings("serial")
 public class GenericMain extends GenotypeMain {
@@ -42,22 +43,23 @@ public class GenericMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {		
 		String[] deploymentPath = env.getDeploymentPath().split("/");
-		String urlComponent = deploymentPath[deploymentPath.length - 1];
+		String url = deploymentPath[deploymentPath.length - 1];
 		
-		GenotypeApplication app = new GenotypeApplication(env, 
-				this.getServletContext(), settings, urlComponent);
-
-		
-		ToolConfig toolConfig = settings.getConfig().getToolConfig(urlComponent);
+		ToolConfig toolConfig = settings.getConfig().getToolConfig(url);
 
 		if (toolConfig == null) {
-			app.getRoot().addWidget(new WText("Typing tool for organism " + urlComponent + " was not found."));
+			WApplication app = new WApplication(env);
+			app.getRoot().addWidget(new WText("Typing tool for organism " + url + " was not found."));
 			return app;
 		}
 
+		String toolId = toolConfig.getToolId();
+		GenotypeApplication app = new GenotypeApplication(env, 
+				this.getServletContext(), settings, toolId);
+
 		GenericDefinition definition;
 		try {
-			definition = new GenericDefinition(toolConfig.getConfiguration(), toolConfig.getJobDir());
+			definition = new GenericDefinition(toolId);
 		} catch (JDOMException e) {
 			e.printStackTrace();
 			showErrorMsg(app);
@@ -67,10 +69,10 @@ public class GenericMain extends GenotypeMain {
 			showErrorMsg(app);
 			return app;
 		}
-
+		
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
-		resources.use(definition.getXmlFolder() + "resources");
+		resources.use(definition.getXmlPath() + File.separator + "resources");
 		app.setLocalizedStrings(resources);
 		
 		app.setTitle(WString.tr("tool.title"));

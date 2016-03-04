@@ -39,14 +39,17 @@ public class Settings {
 		config = Config.parseJson(json);
 	}
 
-	public File getXmlPath(String url) {
-		return new File(config.getToolConfig(url).getConfiguration());
+	public File getXmlPath(String toolId) {
+		return new File(config.getToolConfig(toolId).getConfiguration());
 	}
 
-	public File getJobDir(String url) {
-		return new File(config.getToolConfig(url).getJobDir());
+	public String getXmlPathAsString(String toolId) {
+		return config.getToolConfig(toolId).getConfiguration();
 	}
 
+	public File getJobDir(String toolId) {
+		return new File(config.getToolConfig(toolId).getJobDir());
+	}
 
 	public String getPaupCmd() {
 		return config.getGeneralConfig().getPaupCmd();
@@ -89,6 +92,7 @@ public class Settings {
 	}
 
 	public static void initSettings(Settings s) {
+		instance = s;
 		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
 		SequenceAlign.clustalWPath = s.getClustalWCmd();
 		GenotypeTool.setXmlBasePath(s.getXmlBasePath().getAbsolutePath() + File.separatorChar);
@@ -97,8 +101,6 @@ public class Settings {
 		treeGraphCommand = s.getTreeGraphCmd();
 	}
 
-	
-	
 	public static Settings getInstance() {
 		return instance;
 	}

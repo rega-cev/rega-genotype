@@ -46,13 +46,19 @@ import rega.genotype.viruses.generic.GenericTool;
  */
 public abstract class GenotypeTool {
     private static String xmlBasePath = ".";
-    protected File workingDir = new File(".");
+    protected String toolId;
+    protected File workingDir = new File("."); // work dir is a new dir inside the job dir that contains all the data for current analyze.
 
     private GenotypeTool parent;
     private ResultTracer tracer;
 
-    public GenotypeTool() {
+    /**
+     * @param toolId organism url path component
+     */
+    public GenotypeTool(String toolId, File workingDir) {
     	this.parent = null;
+    	this.toolId = toolId;
+    	this.workingDir = workingDir;
     }
 
     private static class ArgsParseResult {
@@ -62,14 +68,9 @@ public abstract class GenotypeTool {
     
     private static ArgsParseResult parseArgs(String[] args) { 
         CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option paupPathOption = parser.addStringOption('p', "paup");
-        CmdLineParser.Option clustalPathOption = parser.addStringOption('c', "clustal");
         CmdLineParser.Option helpOption = parser.addBooleanOption('h', "help");
-        CmdLineParser.Option xmlPathOption = parser.addStringOption('x', "xml");
-        CmdLineParser.Option blastPathOption = parser.addStringOption('b', "blast");
-        CmdLineParser.Option treePuzzleCmdOption = parser.addStringOption('t', "treepuzzle");
+        CmdLineParser.Option configPathOption = parser.addStringOption('c', "config");
         CmdLineParser.Option workingDirOption = parser.addStringOption('w', "workingDir");
-        CmdLineParser.Option treeGraphCmdOption = parser.addStringOption('g', "treegraph");
         
         try {
         	parser.parse(args);
@@ -86,38 +87,18 @@ public abstract class GenotypeTool {
         }
         
         ArgsParseResult result = new ArgsParseResult();
-        
-        Settings.initSettings(Settings.getInstance(null));
-        
-        String paupPath = (String) parser.getOptionValue(paupPathOption);        
-        if (paupPath != null)
-            PhyloClusterAnalysis.paupCommand = paupPath;
 
-        String clustalPath = (String) parser.getOptionValue(clustalPathOption);        
-        if (clustalPath != null)
-            SequenceAlign.clustalWPath = clustalPath;
+        String configPath = (String) parser.getOptionValue(configPathOption);
+        if (configPath == null)
+        	Settings.initSettings(Settings.getInstance(null));
+        else
+        	Settings.initSettings(new Settings(new File(configPath)));
 
-        String xmlPath = (String) parser.getOptionValue(xmlPathOption);        
-        if (xmlPath != null)
-            xmlBasePath = xmlPath;
-        
-        String blastPath = (String) parser.getOptionValue(blastPathOption);        
-        if (blastPath != null)
-        	BlastAnalysis.blastPath = blastPath;
-        
-        String treePuzzleCmd = (String) parser.getOptionValue(treePuzzleCmdOption);        
-        if (treePuzzleCmd != null)
-        	PhyloClusterAnalysis.puzzleCommand = treePuzzleCmd;
-        
         String workingDirTmp = (String) parser.getOptionValue(workingDirOption);        
         if (workingDirTmp != null)
         	result.workingDir = workingDirTmp;
         else
         	result.workingDir = ".";
-        
-        String treeGraphCmd = (String) parser.getOptionValue(treeGraphCmdOption);        
-        if (treeGraphCmd != null)
-        	Settings.treeGraphCommand = treeGraphCmd;
 
         result.remainingArgs = parser.getRemainingArgs();
         
@@ -126,20 +107,16 @@ public abstract class GenotypeTool {
 
     private static void printUsage() {
 		System.err.println("GenotypeTool: error parsing command-line.");
-		System.err.println("usage: GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] organism [xml|csv] sequences.fasta result.xml");
-		System.err.println("       GenotypeTool [-p pauppath] [-c clustalpath] [-x xmlpath] organism [xml|csv] SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
+		System.err.println("usage: GenotypeTool [-t toolId] [-c config] [-w workingDir] toolId [xml|csv] sequences.fasta result.xml");
+		System.err.println("       GenotypeTool [-t toolId] [-c config] [-w workingDir] toolId [xml|csv] SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
 		System.err.println();
 		System.err.println("\tThe first option analyzes one or more sequences and writes the result to the tracefile result.xml");
 		System.err.println("\tThe second option performs an internal analysis");
 		System.err.println("\tOrganism must be the same as the name of its according xml folder on the file system");
 		System.err.println();
 		System.err.println("options:");
-		System.err.println("\t-p,--paup      	specify path to paup");
-        System.err.println("\t-c,--clustal   	specify path to clustal");
-        System.err.println("\t-x,--xml       	specify path to xml files");
-        System.err.println("\t-b,--blast     	specify path to blast executables");
-        System.err.println("\t-t,--treepuzzle   specify path to treepuzzle executable");
-        System.err.println("\t-g,--treegraph    specify path to treegraph executable");
+		System.err.println("\t-c,--config      	specify path to config file");
+        System.err.println("\t-i,--toolId       specify config tool id ");
         System.err.println("\t-w,--workingDir   specify path to the working directory (default .)");
 	}
 
@@ -334,52 +311,59 @@ public abstract class GenotypeTool {
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
 		
     	ArgsParseResult parseArgsResult = parseArgs(args);
-    	//System.out.println(parseArgsResult);
-    	if (parseArgsResult.remainingArgs == null)
-    		return;
     	
-    	if (parseArgsResult.remainingArgs.length < 4) {
+    	if (parseArgsResult.remainingArgs == null ||
+    			parseArgsResult.remainingArgs.length < 5) {
     		printUsage();
     		return;
     	}
-    	
-//    	Class<?> analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
-    	String organism = parseArgsResult.remainingArgs[0];
-    	String csv = parseArgsResult.remainingArgs[1];
-    	String sequenceFile = parseArgsResult.remainingArgs[2];
-    	String traceFile = parseArgsResult.remainingArgs[3];
-//    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(File.class).newInstance(new File(parseArgsResult.workingDir), "dengue");
-    	GenotypeTool genotypeTool = new GenericTool(xmlBasePath, new File(parseArgsResult.workingDir));
-    	
-    	if (parseArgsResult.remainingArgs.length == 4) {
+ 
+    	Class<?> analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
+    	String toolId = parseArgsResult.remainingArgs[1];
+    	String csv = parseArgsResult.remainingArgs[2];
+    	String sequenceFile = Settings.getInstance().getXmlPathAsString(toolId) + parseArgsResult.remainingArgs[3];
+    	String traceFile = Settings.getInstance().getXmlPathAsString(toolId) + parseArgsResult.remainingArgs[4];
+    	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(String.class, File.class).
+    			newInstance(toolId, new File(parseArgsResult.workingDir));
+
+    	if (parseArgsResult.remainingArgs.length == 5) {
     		// GenotypeTool [...] className sequences.fasta result.xml
     		genotypeTool.analyze(sequenceFile, traceFile);
-    	} else if (parseArgsResult.remainingArgs.length == 7 || parseArgsResult.remainingArgs.length == 8) {
+    	} else if (parseArgsResult.remainingArgs.length == 8 || parseArgsResult.remainingArgs.length == 9) {
     		// GenotypeTool [...] className SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
-    		String analysisFile = parseArgsResult.remainingArgs[4];
-    		int windowSize = Integer.parseInt(parseArgsResult.remainingArgs[5]);
-    		int stepSize = Integer.parseInt(parseArgsResult.remainingArgs[6]);
+    		String analysisFile = Settings.getInstance().getXmlPathAsString(toolId) + parseArgsResult.remainingArgs[4];
+    		int windowSize = Integer.parseInt(parseArgsResult.remainingArgs[6]);
+    		int stepSize = Integer.parseInt(parseArgsResult.remainingArgs[7]);
     		String analysisId = null;
-   			if (parseArgsResult.remainingArgs.length == 8)
-   				analysisId = parseArgsResult.remainingArgs[7];
+   			if (parseArgsResult.remainingArgs.length == 9)
+   				analysisId = parseArgsResult.remainingArgs[8];
    	        genotypeTool.startTracer(traceFile);
    	        try {
    	    		genotypeTool.analyzeSelf(traceFile, analysisFile, windowSize, stepSize, analysisId);
    			} catch (AnalysisException e) {
+   				e.printStackTrace();
    				System.err.println(e.getMessage());
    			}
    	        genotypeTool.stopTracer();
     	} else
     		printUsage();
     	
-    	if(csv.equalsIgnoreCase("csv") && (parseArgsResult.remainingArgs.length == 4 ||
-    		parseArgsResult.remainingArgs.length == 7 ||
-    		parseArgsResult.remainingArgs.length == 8)) {
+    	if(csv.equalsIgnoreCase("csv") && (parseArgsResult.remainingArgs.length == 5 ||
+    		parseArgsResult.remainingArgs.length == 8 ||
+    		parseArgsResult.remainingArgs.length == 9)) {
+    		
+    		if (!(genotypeTool instanceof GenericTool)) {
+    			System.err.println("Not implemented: internal analysis is implemented only for generic tool.");
+    			printUsage();
+    			return;
+    		}
+    			
+    		
     		DataTable t = new CsvDataTable(System.out, ',', '"');
     		
     		GenericDefinition genericDefinition;
 			try {
-				genericDefinition = new GenericDefinition(xmlBasePath, parseArgsResult.workingDir);
+				genericDefinition = new GenericDefinition(toolId);
 			} catch (JDOMException e1) {
 				e1.printStackTrace();
 				return;
@@ -401,5 +385,17 @@ public abstract class GenotypeTool {
 
 	public static String getXmlBasePath() {
 		return xmlBasePath;
+	}
+
+	public File getXmlPath() {
+		return Settings.getInstance().getXmlPath(toolId);
+	}
+
+	public String getXmlPathAsString() {
+		return Settings.getInstance().getXmlPathAsString(toolId);
+	}
+
+	public File getWorkingDir() {
+		return workingDir;
 	}
 }

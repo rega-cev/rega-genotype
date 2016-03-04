@@ -27,11 +27,10 @@ public class GenotypeApplication extends WApplication
 	private ServletContext servletContext_;
 	private Settings settings;
 	
-	protected String url;// url Path Component
+	protected String toolId;// url Path Component
 	
 	public GenotypeApplication(WEnvironment env,
-			ServletContext servletContext, Settings settings 
-			,String url)
+			ServletContext servletContext, Settings settings ,String toolId)
 	{
 		super(env);
 		this.settings = settings;
@@ -40,7 +39,7 @@ public class GenotypeApplication extends WApplication
 		useStyleSheet(new WLink("../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 
 		servletContext_ = servletContext;
-		this.url = url;
+		this.toolId = toolId;
 	}
 
 	public ServletContext getServletContext()
@@ -53,8 +52,8 @@ public class GenotypeApplication extends WApplication
 		return settings;
 	}
 
-	public String getUrlPathComponent() {
-		return url;
+	public String getToolId() {
+		return toolId;
 	}
 
 	public static GenotypeApplication getGenotypeApplication() {

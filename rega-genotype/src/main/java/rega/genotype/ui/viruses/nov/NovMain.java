@@ -20,7 +20,7 @@ import eu.webtoolkit.jwt.WXmlLocalizedStrings;
  */
 @SuppressWarnings("serial")
 public class NovMain extends GenotypeMain {
-	public static final String NOV_URL = "norovirus"; // TODO: Temporary till hiv becomes generic tool.
+	public static final String NOV_TOOL_ID = "norovirus"; // TODO: Temporary till hiv becomes generic tool.
 	public NovMain() {
 		super();
 
@@ -30,7 +30,7 @@ public class NovMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings, NOV_URL);
+		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings, NOV_TOOL_ID);
 		app.setTitle(WString.tr("nrvTool.title"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
