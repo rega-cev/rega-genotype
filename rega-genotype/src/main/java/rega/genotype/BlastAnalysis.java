@@ -405,90 +405,31 @@ public class BlastAnalysis extends AbstractAnalysis {
                 blast = Runtime.getRuntime().exec(cmd, null, workingDir);
                 InputStream inputStream = blast.getInputStream();
 
-                LineNumberReader reader
+                final LineNumberReader reader
                     = new LineNumberReader(new InputStreamReader(inputStream));
 
-                int queryFactor = (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA)
-                	? 3 : 1;
-
-                String[] best = null, secondBest = null;
-                int start = Integer.MAX_VALUE;
-                int end = -1;
-
-                boolean reverseCompliment = false;
-
-                ReferenceTaxus refseq = null;
-                Set<Cluster> bestClusters = new HashSet<Cluster>(), secondBestClusters = new HashSet<Cluster>();
-
-                final int SCORE_IDX = 11;
-                final int REFID_IDX = 1;
+                BlastResults br = new BlastResults() {
+					public String[] next() throws ApplicationException {
+						String s = null;
+						try {
+							s = reader.readLine();
+						} catch (IOException ioe) {
+							throw new ApplicationException("Error: I/O Error while invoking blast: " + ioe.getMessage());
+						}
+		    			if (s == null)
+		    				return null;
+		    			System.err.println(s);
+		
+		    			String[] values = s.split("\t");
+		    			if (values.length != 12)
+		    				throw new ApplicationException("blast result format error");
+		    			return values;
+					}
+                };
                 
-                for (;;) {
-                    String s = reader.readLine();
-                    if (s == null)
-                        break;
-                    System.err.println(s);
-
-                    String[] values = s.split("\t");
-                    if (values.length != 12)
-                    	throw new ApplicationException("blast result format error");
-
-                    if (best == null)
-                    	best = values;
-
-                    if (values[SCORE_IDX].equals(best[SCORE_IDX]))
-                    	bestClusters.add(findCluster(values[REFID_IDX]));
-
-                    ReferenceTaxus referenceTaxus = referenceTaxa.get(values[REFID_IDX]);
-
-                    /*
-                     * First condition: there are no explicit reference taxa configured -- use best match
-                     * 
-                     * Second condition:
-                     *  - the referenceTaxus is the first
-                     *  - or has a higher priority than the current refseq and belongs to the same cluster 
-                     *   (note priority is smaller number means higher priority)
-                     */
-                    if ((referenceTaxa.isEmpty() && values == best)
-                    	|| (referenceTaxus != null
-                    		&& (findCluster(values[REFID_IDX]) == bestClusters.iterator().next())
-                    		&& (refseq == null || referenceTaxus.getPriority() < refseq.getPriority()))) {
-                    	refseq = referenceTaxus;
-                    	boolean queryReverseCompliment = Integer.parseInt(values[7]) - Integer.parseInt(values[6]) < 0;
-                    	boolean refReverseCompliment = Integer.parseInt(values[9]) - Integer.parseInt(values[8]) < 0;
-                    	int offsetBegin = Integer.parseInt(values[6]);
-                    	int offsetEnd = sequence.getLength() - Integer.parseInt(values[7]);
-                    	if (queryReverseCompliment) {
-                    		offsetBegin = sequence.getLength() - offsetBegin;
-                    		offsetEnd = sequence.getLength() - offsetEnd;
-                    		reverseCompliment = true;
-                    	}
-                    	if (refReverseCompliment) {
-                    		String tmp = values[8];
-                    		values[8] = values[9];
-                    		values[9] = tmp;
-                    		reverseCompliment = true;
-                    	}
-                    	start = Integer.parseInt(values[8])*queryFactor - offsetBegin;
-                    	end = Integer.parseInt(values[9])*queryFactor + offsetEnd;
-                    	
-                    	if (refseq != null && refseq.reportAsOther() != null) {
-                    		refseq = referenceTaxa.get(refseq.reportAsOther());
-                    		start += refseq.reportAsOtherOffset();
-                    		end += refseq.reportAsOtherOffset();
-                    	}
-                    }
-
-                    if (relativeCutoff && !bestClusters.isEmpty()) {
-                    	Cluster c = findCluster(values[REFID_IDX]);
-                    	if (!bestClusters.contains(c)) {
-                    		if (secondBest == null)
-                    			secondBest = values;
-                    		if (secondBest[SCORE_IDX].equals(values[SCORE_IDX]))
-                    			secondBestClusters.add(c);
-                    	}
-                    }
-                }
+                boolean aa = owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA;
+                Result result = parseBlastResults(br, this, aa, sequence);
+                
                 exitResult = blast.waitFor();
 
                 blast.getErrorStream().close();
@@ -520,30 +461,13 @@ public class BlastAnalysis extends AbstractAnalysis {
                     getTempFile("db.fasta.psq").delete();
                 }
 
-                if (best != null) {
-                	int length = Integer.valueOf(best[3]);
-                	int diffs = Integer.valueOf(best[4]) + Integer.valueOf(best[5]); // #diffs + #gaps
-                    float score = Float.valueOf(best[11]);
-                	float pValue = Float.valueOf(best[10]);
-                    if (maxPValue != null && pValue > maxPValue)
-                    	score = -1;
-
-                    if (relativeCutoff) {
-                   		if (secondBest != null)
-                   			score = score / Float.valueOf(secondBest[11]);
-                    }
-
-                    if (start == Integer.MAX_VALUE)
-                    	start = -1;
-
-                    Result result = createResult(sequence, bestClusters, refseq, score, length, diffs, start, end, reverseCompliment);
-                    
-                    if (detailsFile != null)
-                    	result.setDetailsFile(detailsFile);
-                    
-                    return result;
-                } else
-                	return createResult(sequence, null, null, 0, 0, 0, 0, 0, false);
+				if (result != null) {
+					if (detailsFile != null) {
+						result.setDetailsFile(detailsFile);
+					}
+					return result;
+				} else
+					return createResult(sequence, null, null, 0, 0, 0, 0, 0, false);
             } else
                 return createResult(sequence, null, null, 0, 0, 0, 0, 0, false);
         } catch (IOException e) {
@@ -562,6 +486,117 @@ public class BlastAnalysis extends AbstractAnalysis {
                 + e.getMessage());
         }
     }
+    
+    public interface BlastResults {
+    	String [] next() throws ApplicationException;
+    }
+	public static Result parseBlastResults(BlastResults results, BlastAnalysis ba, boolean aa, AbstractSequence sequence) throws ApplicationException {
+		int seqLength = sequence.getLength();
+		int queryFactor = aa ? 3 : 1;
+
+		String[] best = null, secondBest = null;
+		int start = Integer.MAX_VALUE;
+		int end = -1;
+
+		boolean reverseCompliment = false;
+
+		ReferenceTaxus refseq = null;
+		Set<Cluster> bestClusters = new HashSet<Cluster>(), secondBestClusters = new HashSet<Cluster>();
+
+		final int SCORE_IDX = 11;
+		final int REFID_IDX = 1;
+
+		for (;;) {
+			String [] values = results.next();
+			if (values == null)
+				break;
+
+			if (best == null)
+				best = values;
+
+			if (values[SCORE_IDX].equals(best[SCORE_IDX]))
+				bestClusters.add(ba.findCluster(values[REFID_IDX]));
+
+			ReferenceTaxus referenceTaxus = ba.referenceTaxa
+					.get(values[REFID_IDX]);
+
+			/*
+			 * First condition: there are no explicit reference taxa configured
+			 * -- use best match
+			 * 
+			 * Second condition: - the referenceTaxus is the first - or has a
+			 * higher priority than the current refseq and belongs to the same
+			 * cluster (note priority is smaller number means higher priority)
+			 */
+			if ((ba.referenceTaxa.isEmpty() && values == best)
+					|| (referenceTaxus != null
+							&& (ba.findCluster(values[REFID_IDX]) == bestClusters
+									.iterator().next()) && (refseq == null || referenceTaxus
+							.getPriority() < refseq.getPriority()))) {
+				refseq = referenceTaxus;
+				boolean queryReverseCompliment = Integer.parseInt(values[7])
+						- Integer.parseInt(values[6]) < 0;
+				boolean refReverseCompliment = Integer.parseInt(values[9])
+						- Integer.parseInt(values[8]) < 0;
+				int offsetBegin = Integer.parseInt(values[6]);
+				int offsetEnd = seqLength
+						- Integer.parseInt(values[7]);
+				if (queryReverseCompliment) {
+					offsetBegin = seqLength - offsetBegin;
+					offsetEnd = seqLength - offsetEnd;
+					reverseCompliment = true;
+				}
+				if (refReverseCompliment) {
+					String tmp = values[8];
+					values[8] = values[9];
+					values[9] = tmp;
+					reverseCompliment = true;
+				}
+				start = Integer.parseInt(values[8]) * queryFactor - offsetBegin;
+				end = Integer.parseInt(values[9]) * queryFactor + offsetEnd;
+
+				if (refseq != null && refseq.reportAsOther() != null) {
+					refseq = ba.referenceTaxa.get(refseq.reportAsOther());
+					start += refseq.reportAsOtherOffset();
+					end += refseq.reportAsOtherOffset();
+				}
+			}
+
+			if (ba.relativeCutoff && !bestClusters.isEmpty()) {
+				Cluster c = ba.findCluster(values[REFID_IDX]);
+				if (!bestClusters.contains(c)) {
+					if (secondBest == null)
+						secondBest = values;
+					if (secondBest[SCORE_IDX].equals(values[SCORE_IDX]))
+						secondBestClusters.add(c);
+				}
+			}
+		}
+
+		if (best != null) {
+			int length = Integer.valueOf(best[3]);
+			int diffs = Integer.valueOf(best[4]) + Integer.valueOf(best[5]); // #diffs + #gaps
+			float score = Float.valueOf(best[11]);
+			float pValue = Float.valueOf(best[10]);
+			if (ba.maxPValue != null && pValue > ba.maxPValue)
+				score = -1;
+
+			if (ba.relativeCutoff) {
+				if (secondBest != null)
+					score = score / Float.valueOf(secondBest[11]);
+			}
+
+			if (start == Integer.MAX_VALUE)
+				start = -1;
+
+			Result result = ba.createResult(sequence, bestClusters, refseq,
+					score, length, diffs, start, end, reverseCompliment);
+
+			return result;
+		} else {
+			return null;
+		}
+	}
 
     private String collectDetails(File query, File db) throws IOException, InterruptedException, ApplicationException {
         String cmd = blastPath + blastCommand + " " + detailsOptions

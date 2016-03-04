@@ -1,0 +1,25 @@
+<genotype-analyses>
+	<alignment file="blast.fasta" />
+
+	<clusters>
+		<cluster id="zikv" name="Zika Virus">
+			<description>Zikv</description>
+			<taxus name="AY632535" />
+			<taxus name="KJ776791" />
+			<taxus name="Spondweni_virus_SM6" />
+		</cluster>
+	</clusters>
+
+	<analysis id="blast" type="blast">
+		<identify>
+			zikv
+		</identify>
+		<options>
+			-q -1 -r 1
+		</options>
+		<cutoff>
+			50
+		</cutoff>
+	</analysis>
+</genotype-analyses>
+

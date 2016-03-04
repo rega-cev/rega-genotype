@@ -48,6 +48,8 @@
   		<p>
   			Analysis in progress... (Showing partial results).<br/>
   			This page will be automatically updated every ${update-time-seconds} seconds... ${cancel-button}
+  			<br/>
+  			<img src="/rega-genotype/pics/ajax-loader.gif" width="16" heigth="16"></img>
   		</p>
   	</message>
   	<message id="monitorForm.report">Report</message>
@@ -87,7 +89,9 @@
 	<message id="detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport">Average bootscan no support</message>
 	
 	<message id="main.navigation.start">Submit job</message>
+	
 	<message id="main.navigation.monitor">Monitor job [{1}]</message>
+	
 	<message id="main.navigation.details">Analysis details [{1}]</message>
 	<message id="main.navigation.howToCite">How to cite</message>
 	<message id="main.navigation.tutorial">Tutorial</message>

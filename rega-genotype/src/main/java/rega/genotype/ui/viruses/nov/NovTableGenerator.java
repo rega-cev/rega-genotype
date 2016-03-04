@@ -8,16 +8,15 @@ package rega.genotype.ui.viruses.nov;
 import java.io.IOException;
 
 import rega.genotype.data.table.AbstractDataTableGenerator;
-import rega.genotype.data.table.AbstractDataTableGenerator.ValueFormat;
-import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.util.DataTable;
 
 /**
  * Create a csv file of NoV job results 
  */
 public class NovTableGenerator extends AbstractDataTableGenerator {
-	public NovTableGenerator(AbstractJobOverview jobOverview, DataTable table) throws IOException {
-		super(jobOverview.getFilter(), table);
+	public NovTableGenerator(SequenceFilter sequenceFilter, DataTable table) throws IOException {
+		super(sequenceFilter, table);
 
 		table.addLabel("name");
 		table.addLabel("length");

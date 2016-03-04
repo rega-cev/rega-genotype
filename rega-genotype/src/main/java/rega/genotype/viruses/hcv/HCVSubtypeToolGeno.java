@@ -99,6 +99,16 @@ public class HCVSubtypeToolGeno extends GenotypeTool {
             = (ScanAnalysis) hcv.getAnalysis("scan-pure-self");
         scanPureSelfAnalysis.run(null);
     }
+    
+	@Override
+	protected boolean cancelAnalysis() {
+		return false;
+	}
+
+	@Override
+	protected String currentJob() {
+		return null;
+	}
 
 }
 

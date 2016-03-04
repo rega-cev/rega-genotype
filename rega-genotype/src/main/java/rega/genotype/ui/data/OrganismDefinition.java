@@ -13,6 +13,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
+import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
@@ -25,7 +26,7 @@ import rega.genotype.util.DataTable;
 public interface OrganismDefinition {
 	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException;
 	public AbstractJobOverview getJobOverview(GenotypeWindow main);
-	public AbstractDataTableGenerator getDataTableGenerator(AbstractJobOverview jobOverview, DataTable t) throws IOException;
+	public AbstractDataTableGenerator getDataTableGenerator(SequenceFilter sequenceFilter, DataTable t) throws IOException;
 	public String getOrganismDirectory();
 	public Genome getGenome();
 	public Genome getLargeGenome();
