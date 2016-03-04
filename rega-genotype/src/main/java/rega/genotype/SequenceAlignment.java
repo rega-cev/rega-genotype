@@ -571,8 +571,8 @@ public class SequenceAlignment
             if (seq == null) {
                 System.err.println("Could not find sequence: \""
                         + selection.get(i) + "\"");
-            }
-            selected.add(seq);
+            } else
+            	selected.add(seq);
         }
         
         return new SequenceAlignment(selected, sequenceType);
