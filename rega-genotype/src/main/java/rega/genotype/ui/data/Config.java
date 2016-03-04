@@ -163,6 +163,7 @@ public class Config {
 		private String configuration; // xmlPath
 		private String jobDir;
 		private boolean autoUpdate;
+		private boolean webService;
 
 		public String getName() {
 			return name;
@@ -202,6 +203,12 @@ public class Config {
 		}
 		public void setJobDir(String jobDir) {
 			this.jobDir = jobDir;
+		}
+		public boolean isWebService() {
+			return webService;
+		}
+		public void setWebService(boolean webService) {
+			this.webService = webService;
 		}
 	}
 }
