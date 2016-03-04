@@ -7,7 +7,7 @@
      These define the input to the various analyses for each organism.
    -->
   <property name="xmlPath">
-    /Users/tulio/rega-genotype/rega-genotype/xml
+    xml
   </property>
 
   <!-- paupCmd
@@ -16,21 +16,21 @@
      Note, you need to get a license for paup.
    -->
   <property name="paupCmd">
-    /Applications/biotools/paup/wrappaup.sh /Applications/biotools/paup/paup4b10-x86-macosx
+    /opt/software/rega-genotype/bin/paup4b10-x86-linux
   </property>
 
   <!-- clustalWCmd
      Location of your clustalw executable + name of the clustalw executable
    -->
   <property name="clustalWCmd">
-    /Applications/biotools/clustalw2
+    /opt/software/rega-genotype/bin/clustalw
   </property>
 
   <!-- blastPath
      Location of your blastall and formatdb executables (from ncbi-tools).     
    -->
   <property name="blastPath">
-    /Applications/biotools/blast-2.2.22/bin/
+    /usr/bin/
   </property>
 
   <!-- treePuzzleCmd
@@ -38,14 +38,14 @@
      http://www.tree-puzzle.de
    -->
   <property name="treePuzzleCmd">
-    /Applications/biotools/tree-puzzle-5.2/src/puzzle
+    puzzle
   </property>
 
   <!-- treeGraphCmd
      Location of your treegraph executable + name of the treegraph executable
    -->
   <property name="treeGraphCmd">
-    /Applications/biotools/tgf10rc4/source/tgf
+    /opt/software/rega-genotype/bin/tgf
   </property>
   
   <!-- 
@@ -55,15 +55,13 @@
   <property name="epsToPdfCmd">
    /Applications/biotools/pdf/epstopdf
   </property>
-  
-  
-  
+
    <!-- 
   	imageMagickConvertCmd
   	Location of your image-magick convert binary
    -->
   <property name="imageMagickConvertCmd">
-   /Applications/biotools/ImageMagick-6.8.8/bin/wrapConvert.sh
+  convert
   </property>
   
 
@@ -80,19 +78,19 @@
      organisms.
    -->
   <property name="jobDir-NoV">
-    /Users/tulio/rega-genotype/jobDir/Nov
+   /home/michael/projects/rega-genotype-extenal/job
   </property>
   <property name="jobDir-HIV">
-    /Users/tulio/rega-genotype/jobDir/HIV
+    /home/michael/projects/rega-genotype-extenal/job
   </property>
   <property name="jobDir-HTLV">
-    /Users/tulio/rega-genotype/jobDir/HTLV
+    /home/michael/projects/rega-genotype-extenal/job
   </property>
     <property name="jobDir-HCV">
-    /Users/tulio/rega-genotype/jobDir/HCV
+    /home/michael/projects/rega-genotype-extenal/job
   </property>	
       <property name="jobDir-HBV">
-    /Users/tulio/rega-genotype/jobDir/HBV
+    /home/michael/projects/rega-genotype-extenal/job
   </property>
   
   <!-- maxAllowedSequences
