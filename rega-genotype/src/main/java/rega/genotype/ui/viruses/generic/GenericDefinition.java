@@ -130,10 +130,10 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		return columns;
 	}
 
-	public void startAnalysis(File jobDir) throws IOException, ParameterProblemException, FileFormatException {
-		GenericTool tool = new GenericTool(toolId, jobDir);
-		tool.analyze(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
-					 jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+	public void startAnalysis(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+		GenericTool tool = new GenericTool(toolId, workingDir);
+		tool.analyze(workingDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
+					 workingDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
 
 	public AbstractJobOverview getJobOverview(GenotypeWindow main) {
