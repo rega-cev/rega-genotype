@@ -323,7 +323,7 @@ public abstract class GenotypeTool {
     		genotypeTool.analyze(sequenceFile, traceFile);
     	} else if (parseArgsResult.remainingArgs.length == 8 || parseArgsResult.remainingArgs.length == 9) {
     		// GenotypeTool [...] className SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
-    		String analysisFile = Settings.getInstance().getXmlPathAsString(toolId) + parseArgsResult.remainingArgs[4];
+    		String analysisFile = Settings.getInstance().getXmlPathAsString(toolId) + parseArgsResult.remainingArgs[5];
     		int windowSize = Integer.parseInt(parseArgsResult.remainingArgs[6]);
     		int stepSize = Integer.parseInt(parseArgsResult.remainingArgs[7]);
     		String analysisId = null;
