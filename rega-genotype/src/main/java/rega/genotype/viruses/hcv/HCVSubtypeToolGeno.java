@@ -24,10 +24,14 @@ public class HCVSubtypeToolGeno extends GenotypeTool {
     private ScanAnalysis scanAnalysis;
     private PhyloClusterAnalysis purePuzzleAnalysis;
 
-
-
     public HCVSubtypeToolGeno(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-        hcv = readAnalyses("HCV/hcvgeno.xml", workingDir);
+    	this(null, workingDir);
+    }
+    public HCVSubtypeToolGeno(String toolId, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	super(toolId == null ? HCVTool.HCV_TOOL_ID : toolId, workingDir);
+    	
+		String file = getXmlPathAsString() + File.separator + "hcvgeno.xml";
+    	hcv = readAnalyses(file, workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure-puzzle");
         scanAnalysis = (ScanAnalysis) hcv.getAnalysis("scan-pure");

@@ -45,7 +45,6 @@ import rega.genotype.viruses.generic.GenericTool;
  * @author koen
  */
 public abstract class GenotypeTool {
-    private static String xmlBasePath = ".";
     protected String toolId;
     protected File workingDir = new File("."); // work dir is a new dir inside the job dir that contains all the data for current analyze.
 
@@ -274,17 +273,10 @@ public abstract class GenotypeTool {
      * Read analyses from a given XML file.
      * Each analysis is configured to use the workingDir to store intermediate results.
      */
-    protected AlignmentAnalyses readAnalyses(String file, File workingDir, boolean addBasePath)
+    protected AlignmentAnalyses readAnalyses(String file, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
-    	String prfix = addBasePath ? xmlBasePath + File.separator : "";
-        return new AlignmentAnalyses(new File(prfix + file),
-                                     this,
-                                     workingDir);
+        return new AlignmentAnalyses(new File(file), this, workingDir);
     }
-
-    public static void setXmlBasePath(String xmlBasePath) {
-		GenotypeTool.xmlBasePath = xmlBasePath;
-	}
 
 	/**
      * @return Returns the tracer.
@@ -382,10 +374,6 @@ public abstract class GenotypeTool {
 			}
     	}
     }
-
-	public static String getXmlBasePath() {
-		return xmlBasePath;
-	}
 
 	public File getXmlPath() {
 		return Settings.getInstance().getXmlPath(toolId);

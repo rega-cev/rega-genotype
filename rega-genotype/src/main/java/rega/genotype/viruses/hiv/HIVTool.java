@@ -29,8 +29,9 @@ public class HIVTool extends GenotypeTool {
 	}
 	public HIVTool(String toolId, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
 		super(toolId == null ? HivMain.HIV_TOOL_ID : toolId, workingDir);
-
-		hiv = readAnalyses("HIV/hiv.xml", workingDir, true);
+		
+		String file = getXmlPathAsString() + File.separator + "hiv.xml";
+		hiv = readAnalyses(file, workingDir);
         blastAnalysis = (BlastAnalysis) hiv.getAnalysis("blast");
         
         hiv1subtypetool = new HIV1SubtypeTool(workingDir);

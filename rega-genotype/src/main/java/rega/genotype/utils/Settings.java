@@ -10,7 +10,6 @@ import java.io.File;
 import javax.servlet.ServletContext;
 
 import rega.genotype.BlastAnalysis;
-import rega.genotype.GenotypeTool;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.ui.data.Config;
@@ -95,7 +94,6 @@ public class Settings {
 		instance = s;
 		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
 		SequenceAlign.clustalWPath = s.getClustalWCmd();
-		GenotypeTool.setXmlBasePath(s.getXmlBasePath().getAbsolutePath() + File.separatorChar);
 		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
 		PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
 		treeGraphCommand = s.getTreeGraphCmd();

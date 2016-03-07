@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import eu.webtoolkit.jwt.WString;
 import rega.genotype.AbstractAnalysis;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
@@ -26,7 +25,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.SubSequence;
-import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.WString;
 
 /**
  * A generic typing tool.
@@ -50,8 +49,7 @@ public class GenericTool extends GenotypeTool {
     public GenericTool(String toolId, File workDir) throws IOException, ParameterProblemException, FileFormatException {
     	super(toolId, workDir);
   
-    	setXmlBasePath("");
-        blastXml = readAnalyses(getXmlPathAsString() + "blast.xml", getWorkingDir(), false);
+        blastXml = readAnalyses(getXmlPathAsString() + "blast.xml", getWorkingDir());
         blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
     }
 
@@ -149,7 +147,7 @@ public class GenericTool extends GenotypeTool {
 		if (result == null) {
            	String f = "phylo-" + alignmentId + ".xml";
            	if (new File(getXmlPathAsString() + f).canRead()) {
-           		AlignmentAnalyses analyses = readAnalyses(getXmlPathAsString() + f, getWorkingDir(), false);
+           		AlignmentAnalyses analyses = readAnalyses(getXmlPathAsString() + f, getWorkingDir());
 
            		if (analyses.haveAnalysis(analysisId)) {
            			result = (PhyloClusterAnalysis) analyses.getAnalysis(analysisId);
@@ -231,7 +229,7 @@ public class GenericTool extends GenotypeTool {
 			throws AnalysisException {
 
 		try {
-			AlignmentAnalyses analyses = readAnalyses(analysisFile, getWorkingDir(), false);
+			AlignmentAnalyses analyses = readAnalyses(analysisFile, getWorkingDir());
 
 			if (analysisId == null) {
 				for (AbstractAnalysis a : analyses.analyses()) {

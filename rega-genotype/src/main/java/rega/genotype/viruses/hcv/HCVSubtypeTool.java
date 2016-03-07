@@ -21,6 +21,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.SubSequence;
+import rega.genotype.utils.Settings;
 
 public class HCVSubtypeTool extends GenotypeTool {
     private AlignmentAnalyses hcv;
@@ -30,11 +31,15 @@ public class HCVSubtypeTool extends GenotypeTool {
     
     private Map<String, PhyloClusterAnalysis> provisionalAnalyses = new HashMap<String, PhyloClusterAnalysis>();
 	private File workingDir;    
-
     public HCVSubtypeTool(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	this(null, workingDir);
+    }
+    public HCVSubtypeTool(String toolId, File workingDir) throws IOException, ParameterProblemException, FileFormatException {
+    	super(toolId == null ? HCVTool.HCV_TOOL_ID : toolId, workingDir);
     	this.workingDir = workingDir;
-
-    	hcv = readAnalyses("HCV/hcv.xml", workingDir);
+    	
+		String xmlPath = getXmlPathAsString() + File.separator + "hcv.xml";
+    	hcv = readAnalyses(xmlPath, workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis) hcv.getAnalysis("pure-puzzle");
         scanAnalysis = (ScanAnalysis) hcv.getAnalysis("scan-pure");
@@ -132,7 +137,7 @@ public class HCVSubtypeTool extends GenotypeTool {
     
     private boolean findAnalyses(String name) {
     	if (provisionalAnalyses.get(name) == null) {
-    		String file = "HCV/hcv-" + name + ".xml";
+    		String file = getXmlPathAsString() + File.separator +  name + ".xml";
     		try {
  				AlignmentAnalyses analyses = readAnalyses(file, workingDir);
 

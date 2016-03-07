@@ -12,6 +12,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.ui.viruses.hiv.HivMain;
+import rega.genotype.utils.Settings;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,7 +33,8 @@ public class HIV2SubtypeTool extends GenotypeTool {
     public HIV2SubtypeTool(String toolId, File workingDir) throws FileFormatException, IOException, ParameterProblemException {
 		super(toolId == null ? HivMain.HIV_TOOL_ID : toolId, workingDir);
 
-    	hiv2 = readAnalyses("HIV/hiv2.xml", workingDir, true);
+		String file = getXmlPathAsString() + File.separator + "hiv2.xml";
+    	hiv2 = readAnalyses(file, workingDir);
         pureAnalysis = (PhyloClusterAnalysis) hiv2.getAnalysis("pure");
         scanAnalysis = (ScanAnalysis) hiv2.getAnalysis("scan-pure");
     }

@@ -32,7 +32,8 @@ public class SIVSubtypeTool extends GenotypeTool{
     public SIVSubtypeTool(String toolid, File workingDir) throws FileFormatException, IOException, ParameterProblemException {
 		super(toolid == null ? HivMain.HIV_TOOL_ID : toolid, workingDir);
 
-    	siv = readAnalyses("hcv.xml", workingDir, true);
+		// TODO "hcv.xml" does not make sense to me ?
+    	siv = readAnalyses("hcv.xml", workingDir);
         pureAnalysis = (PhyloClusterAnalysis) siv.getAnalysis("pure");
         purePuzzleAnalysis = (PhyloClusterAnalysis)  siv.getAnalysis("puzzle-pure");
         scanAnalysis = (ScanAnalysis) siv.getAnalysis("scan-pure");
