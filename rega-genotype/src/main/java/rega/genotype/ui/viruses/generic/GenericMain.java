@@ -13,7 +13,7 @@ import javax.servlet.ServletException;
 
 import org.jdom.JDOMException;
 
-import rega.genotype.ui.data.Config.ToolConfig;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -45,21 +45,21 @@ public class GenericMain extends GenotypeMain {
 		String[] deploymentPath = env.getDeploymentPath().split("/");
 		String url = deploymentPath[deploymentPath.length - 1];
 		
-		ToolConfig toolConfig = settings.getConfig().getToolConfig(url);
+		ToolConfig toolConfig = settings.getConfig().getToolConfigByUrlPath(url);
 
-		if (toolConfig == null) {
+		if (toolConfig == null || toolConfig.getToolId() == null) {
 			WApplication app = new WApplication(env);
 			app.getRoot().addWidget(new WText("Typing tool for organism " + url + " was not found."));
 			return app;
 		}
 
-		String toolId = toolConfig.getToolId();
+		String urlComponent = toolConfig.getPath();
 		GenotypeApplication app = new GenotypeApplication(env, 
-				this.getServletContext(), settings, toolId);
+				this.getServletContext(), settings, urlComponent);
 
 		GenericDefinition definition;
 		try {
-			definition = new GenericDefinition(toolId);
+			definition = new GenericDefinition(urlComponent);
 		} catch (JDOMException e) {
 			e.printStackTrace();
 			showErrorMsg(app);

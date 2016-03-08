@@ -43,7 +43,7 @@ import rega.genotype.viruses.generic.GenericTool;
  */
 public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private Genome genome = new Genome(this);
-	private String toolId;
+	private String url; // url path component that defines the tool.
 
 	public static class MenuItem {
 		String label, path, messageId;
@@ -68,7 +68,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	
 	public GenericDefinition(String toolId) throws JDOMException, IOException {
 		this.updateInterval = 5000;
-		this.toolId = toolId;
+		this.url = toolId;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));
 		fontSize = 8;
@@ -131,7 +131,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public void startAnalysis(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-		GenericTool tool = new GenericTool(toolId, workingDir);
+		GenericTool tool = new GenericTool(url, workingDir);
 		tool.analyze(workingDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 					 workingDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
@@ -243,10 +243,10 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public String getJobDir() {
-		return Settings.getInstance().getJobDir(toolId).getAbsolutePath();
+		return Settings.getInstance().getJobDir(url).getAbsolutePath();
 	}
 
 	public String getXmlPath() {
-		return Settings.getInstance().getXmlPath(toolId).getAbsolutePath();
+		return Settings.getInstance().getXmlPath(url).getAbsolutePath();
 	}
 }

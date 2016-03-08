@@ -12,7 +12,7 @@ import javax.servlet.ServletContext;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
-import rega.genotype.ui.data.Config;
+import rega.genotype.config.Config;
 import rega.genotype.ui.util.FileUtil;
 
 /**
@@ -34,20 +34,26 @@ public class Settings {
 		if (!f.exists())
 			throw new RuntimeException("Config file could not be found!");
 
-		String json = FileUtil.readFile(f.getAbsolutePath());
+		String json = FileUtil.readFile(f);
 		config = Config.parseJson(json);
 	}
 
-	public File getXmlPath(String toolId) {
-		return new File(config.getToolConfig(toolId).getConfiguration());
+	/**
+	 * @param url url path component that defines the tool 
+	 * @return the directory that contains all the tool files.
+	 */
+	public File getXmlPath(String url) {
+		return new File(config.getToolConfigByUrlPath(url).getConfiguration());
 	}
-
-	public String getXmlPathAsString(String toolId) {
-		return config.getToolConfig(toolId).getConfiguration();
+	/**
+	 * @param url url path component that defines the tool 
+	 * @return the directory that contains all the tool files.
+	 */
+	public String getXmlPathAsString(String url) {
+		return config.getToolConfigByUrlPath(url).getConfiguration();
 	}
-
-	public File getJobDir(String toolId) {
-		return new File(config.getToolConfig(toolId).getJobDir());
+	public File getJobDir(String url) {
+		return new File(config.getToolConfigByUrlPath(url).getJobDir());
 	}
 
 	public String getPaupCmd() {
@@ -80,10 +86,6 @@ public class Settings {
 
 	public int getMaxAllowedSeqs() {
 		return config.getGeneralConfig().getMaxAllowedSeqs();
-	}
-
-	public File getXmlBasePath(){
-		return new File(config.getGeneralConfig().getXmlBasePath());
 	}
 
 	public Config getConfig() {

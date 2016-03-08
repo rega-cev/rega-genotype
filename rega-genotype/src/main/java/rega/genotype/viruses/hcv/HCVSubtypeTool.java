@@ -21,7 +21,6 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.SubSequence;
-import rega.genotype.utils.Settings;
 
 public class HCVSubtypeTool extends GenotypeTool {
     private AlignmentAnalyses hcv;

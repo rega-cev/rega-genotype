@@ -20,6 +20,7 @@ import org.jdom.JDOMException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
@@ -45,7 +46,7 @@ import rega.genotype.viruses.generic.GenericTool;
  * @author koen
  */
 public abstract class GenotypeTool {
-    protected String toolId;
+    protected String url;
     protected File workingDir = new File("."); // work dir is a new dir inside the job dir that contains all the data for current analyze.
 
     private GenotypeTool parent;
@@ -56,7 +57,7 @@ public abstract class GenotypeTool {
      */
     public GenotypeTool(String toolId, File workingDir) {
     	this.parent = null;
-    	this.toolId = toolId;
+    	this.url = toolId;
     	this.workingDir = workingDir;
     }
 
@@ -106,17 +107,17 @@ public abstract class GenotypeTool {
 
     private static void printUsage() {
 		System.err.println("GenotypeTool: error parsing command-line.");
-		System.err.println("usage: GenotypeTool [-t toolId] [-c config] [-w workingDir] toolId [xml|csv] sequences.fasta result.xml");
-		System.err.println("       GenotypeTool [-t toolId] [-c config] [-w workingDir] toolId [xml|csv] SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
+		System.err.println("usage: GenotypeTool [-c config] [-w workingDir] url [xml|csv] sequences.fasta result.xml");
+		System.err.println("       GenotypeTool [-c config] [-w workingDir] url [xml|csv] SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
 		System.err.println();
 		System.err.println("\tThe first option analyzes one or more sequences and writes the result to the tracefile result.xml");
 		System.err.println("\tThe second option performs an internal analysis");
-		System.err.println("\tOrganism must be the same as the name of its according xml folder on the file system");
+		System.err.println("\tUrl - url path component that defines the tool (path from config.json)");
 		System.err.println();
 		System.err.println("options:");
-		System.err.println("\t-c,--config      	specify path to config file");
-        System.err.println("\t-i,--toolId       specify config tool id ");
-        System.err.println("\t-w,--workingDir   specify path to the working directory (default .)");
+		System.err.println("\t-h,--help       print this text.");
+		System.err.println("\t-c,--config     specify path to config file");
+        System.err.println("\t-w,--workingDir specify path to the working directory (default .)");
 	}
 
 	/**
@@ -309,21 +310,27 @@ public abstract class GenotypeTool {
     		printUsage();
     		return;
     	}
- 
+    	 
     	Class<?> analyzerClass = Class.forName(parseArgsResult.remainingArgs[0]);
-    	String toolId = parseArgsResult.remainingArgs[1];
+    	String url = parseArgsResult.remainingArgs[1];
     	String csv = parseArgsResult.remainingArgs[2];
-    	String sequenceFile = Settings.getInstance().getXmlPathAsString(toolId) + parseArgsResult.remainingArgs[3];
-    	String traceFile = Settings.getInstance().getXmlPathAsString(toolId) + parseArgsResult.remainingArgs[4];
+    	
+    	ToolConfig toolConfig = Settings.getInstance().getConfig().getToolConfigByUrlPath(url);
+    	if (toolConfig == null) {
+    		System.err.println("Tool with url path " + url + "could not be found.");
+    	}
+    	
+    	String sequenceFile = toolConfig.getConfiguration() + parseArgsResult.remainingArgs[3];
+    	String traceFile = toolConfig.getConfiguration() + parseArgsResult.remainingArgs[4];
     	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(String.class, File.class).
-    			newInstance(toolId, new File(parseArgsResult.workingDir));
+    			newInstance(url, new File(parseArgsResult.workingDir));
 
     	if (parseArgsResult.remainingArgs.length == 5) {
     		// GenotypeTool [...] className sequences.fasta result.xml
     		genotypeTool.analyze(sequenceFile, traceFile);
     	} else if (parseArgsResult.remainingArgs.length == 8 || parseArgsResult.remainingArgs.length == 9) {
     		// GenotypeTool [...] className SELF result.xml phylo-analysis.xml window-size step-size [analysis-id]");
-    		String analysisFile = Settings.getInstance().getXmlPathAsString(toolId) + parseArgsResult.remainingArgs[5];
+    		String analysisFile = toolConfig.getConfiguration() + parseArgsResult.remainingArgs[5];
     		int windowSize = Integer.parseInt(parseArgsResult.remainingArgs[6]);
     		int stepSize = Integer.parseInt(parseArgsResult.remainingArgs[7]);
     		String analysisId = null;
@@ -355,7 +362,7 @@ public abstract class GenotypeTool {
     		
     		GenericDefinition genericDefinition;
 			try {
-				genericDefinition = new GenericDefinition(toolId);
+				genericDefinition = new GenericDefinition(url);
 			} catch (JDOMException e1) {
 				e1.printStackTrace();
 				return;
@@ -376,11 +383,11 @@ public abstract class GenotypeTool {
     }
 
 	public File getXmlPath() {
-		return Settings.getInstance().getXmlPath(toolId);
+		return Settings.getInstance().getXmlPath(url);
 	}
 
 	public String getXmlPathAsString() {
-		return Settings.getInstance().getXmlPathAsString(toolId);
+		return Settings.getInstance().getXmlPathAsString(url);
 	}
 
 	public File getWorkingDir() {

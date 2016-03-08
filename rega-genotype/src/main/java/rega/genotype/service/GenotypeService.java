@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -49,6 +47,7 @@ public class GenotypeService extends HttpServlet {
 	
 	private void performRequest(HttpServletRequest req, HttpServletResponse resp)  throws ServletException, IOException {
 
+		String path = null;
 		String toolId = null;
 		if (hivOrganism == null) {		
 		    if (req.getPathInfo() == null) {
@@ -56,13 +55,16 @@ public class GenotypeService extends HttpServlet {
 		    	resp.setStatus(404);
 		    	return;
 		    } else {
-				String path = req.getPathInfo().replace(File.separator, "");
-		    	toolId = Settings.getInstance().getConfig().
-		    			getToolConfigByUrlPath(path).getToolId();
+				path = req.getPathInfo().replace(File.separator, "");
+		    	toolId = settings.getConfig().getToolConfigByUrlPath(path).getToolId();
+		    	if (toolId == null) {
+		    		resp.setStatus(404); // invalid tool config.
+			    	return;
+		    	}
 		    }
 		}
 
-		if (req.getParameter("fasta-sequence") == null) 
+		if (req.getParameter("fasta-sequence") == null || toolId == null) 
 			return; // no need to analize.
 		
 		File workingDir = File.createTempFile("gs-", "");
@@ -89,7 +91,7 @@ public class GenotypeService extends HttpServlet {
 			
 			File traceFile = new File(workingDir, "result.xml");
 
-			GenotypeTool genotypeTool = (GenotypeTool) tool.getConstructor(String.class, File.class).newInstance(toolId, workingDir);;
+			GenotypeTool genotypeTool = (GenotypeTool) tool.getConstructor(String.class, File.class).newInstance(path, workingDir);;
 
 			genotypeTool.analyze(sequenceFile.getAbsolutePath(), traceFile.getAbsolutePath());
 			

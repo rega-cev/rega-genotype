@@ -46,8 +46,8 @@ public class GenericTool extends GenotypeTool {
     private BlastAnalysis blastAnalysis;
     private Map<String, PhyloClusterAnalysis> phyloAnalyses = new HashMap<String, PhyloClusterAnalysis>();
 
-    public GenericTool(String toolId, File workDir) throws IOException, ParameterProblemException, FileFormatException {
-    	super(toolId, workDir);
+    public GenericTool(String url, File workDir) throws IOException, ParameterProblemException, FileFormatException {
+    	super(url, workDir);
   
         blastXml = readAnalyses(getXmlPathAsString() + "blast.xml", getWorkingDir());
         blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");

@@ -1,12 +1,13 @@
 package rega.genotype.ui.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class FileUtil {
 
-	public static String readFile(String path){
+	public static String readFile(File path){
 		BufferedReader buffReader = null;
 		String ans = "";
 		try{

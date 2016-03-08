@@ -1,13 +1,16 @@
-package rega.genotype.ui.data;
+package rega.genotype.config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import rega.genotype.ui.util.FileUtil;
+import rega.genotype.ui.util.GsonUtil;
 
 /**
- * Read json config (rega-genotype/rega-genotype/config)
+ * Read json config
+ * Contains general system (env) configuration and a list of specific tool 
+ * configurations for this server. 
  * 
  * @author michael
  *
@@ -17,15 +20,11 @@ public class Config {
 	private List<ToolConfig> tools = new ArrayList<Config.ToolConfig>();
 
 	public static Config parseJson(String json) {
-		GsonBuilder builder = new GsonBuilder();
-		Gson gson = builder.create();
-		return gson.fromJson(json, Config.class);
+		return GsonUtil.parseJson(json, Config.class);
 	}
 
 	public String toJson() {
-		GsonBuilder builder = new GsonBuilder();
-		Gson gson = builder.create();
-		return gson.toJson(this);
+		return GsonUtil.toJson(this);
 	}
 
 	public GeneralConfig getGeneralConfig() {
@@ -36,16 +35,20 @@ public class Config {
 		this.generalConfig = generalConfig;
 	}
 
-	public ToolConfig getToolConfig(String toolId) {
+	public ToolConfig getToolConfigByToolId(String toolId) {
 		ToolConfig toolConfig = null;
 		// find organism config
 		for (ToolConfig c: getTools())
-			if (c.getToolId().equals(toolId))
+			if (c.getToolId() != null && c.getToolId().equals(toolId))
 				toolConfig = c;
 
 		return toolConfig;
 	}
 
+	/**
+	 * @param url url path component that defines the tool 
+	 * @return
+	 */
 	public ToolConfig getToolConfigByUrlPath(String url) {
 		ToolConfig toolConfig = null;
 		// find organism config
@@ -66,14 +69,7 @@ public class Config {
 
 	// classes
 
-	/**
-	 * Con 
-	 */
-	public static class ToolsContainer {
-		
-	}
 	public static class GeneralConfig {
-		private String xmlBasePath; // used by not generic tool. will be removed. 
 		private String paupCmd;
 		private String clustalWCmd;
 		private String blastPath;
@@ -83,6 +79,8 @@ public class Config {
 		private String imageMagickConvertCmd;
 		private int maxAllowedSeqs;
 		private String inkscapeCmd;
+		private String adminPassword;
+		private String repositoryId;
 		
 		public String getPaupCmd() {
 			return paupCmd;
@@ -138,50 +136,47 @@ public class Config {
 		public void setBlastPath(String blastPath) {
 			this.blastPath = blastPath;
 		}
-		public String getXmlBasePath() {
-			return xmlBasePath;
+		public String getAdminPassword() {
+			return adminPassword;
 		}
-		public void setXmlBasePath(String xmlBasePath) {
-			this.xmlBasePath = xmlBasePath;
+		public void setAdminPassword(String adminPassword) {
+			this.adminPassword = adminPassword;
+		}
+		public String getRepositoryId() {
+			return repositoryId;
+		}
+		public void setRepositoryId(String repositoryId) {
+			this.repositoryId = repositoryId;
 		}
 	}
 
 	public static class ToolConfig {
-		/* json example.
-		{
-	    name: "HAV Typing Tool",
-	    path: "HAV",
-	    version: "1.1",
-	    configuration: "/home/michael/projects/rega-genotype-extenal/xml/HAV/",
-			jobDir: "/home/michael/projects/rega-genotype-extenal/job/",
-	    auto-update: "true"
-	  	}
-		 */
-		private String name;
-		private String toolId;
-		private String path; // url path component
-		private String configuration; // xmlPath
-		private String jobDir;
+		private String path; // url path component that defines the tool (default toolId)
+		private String configuration; // xmlPath - the directory that contains all the tool files.
+		private String jobDir; // will contain all the work dirs of the tool. (Generated analysis data)
 		private boolean autoUpdate;
 		private boolean webService;
+		private boolean ui;
+		// ToolMenifest read manifests from configuration dir.
+		// TODO: ui will have to update manifest if it was changed.
+		transient private ToolMenifest manifest = null;
 
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
+		public ToolMenifest getToolMenifest() {
+			File f = new File(configuration + File.separator + "manifest.json");
+			if (f.exists() && manifest == null) {
+				String json = FileUtil.readFile(f);
+				manifest = ToolMenifest.parseJson(json);
+			}
+			return manifest;
 		}
 		public String getToolId() {
-			return toolId;
-		}
-		public void setToolId(String toolId) {
-			this.toolId = toolId;
+			return getToolMenifest() == null ? null : getToolMenifest().getToolId();
 		}
 		public String getPath() {
 			if (path != null)
 				return path;
 			else
-				return toolId;
+				return getToolMenifest().getToolId();
 		}
 		public void setPath(String path) {
 			this.path = path;
@@ -209,6 +204,12 @@ public class Config {
 		}
 		public void setWebService(boolean webService) {
 			this.webService = webService;
+		}
+		public boolean isUi() {
+			return ui;
+		}
+		public void setUi(boolean ui) {
+			this.ui = ui;
 		}
 	}
 }
