@@ -326,6 +326,6 @@
   
   <context-param>
     <param-name>configFile</param-name>
-    <param-value>etc/config</param-value>
+    <param-value>../../rega-genotype-extenal/config.json</param-value>
   </context-param>
 </web-app>

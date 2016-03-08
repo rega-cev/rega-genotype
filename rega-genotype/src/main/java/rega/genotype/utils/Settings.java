@@ -139,9 +139,9 @@ public class Settings {
             if (osName.startsWith("windows"))
                 configFile = "C:\\Program files\\rega_genotype\\";
             else
-                configFile = "etc/";
+                configFile = "../../rega-genotype-extenal/";
         }
-        configFile += File.separatorChar + "config";
+        configFile += File.separatorChar + "config.json";
         
         instance = new Settings(new File(configFile));
         
