@@ -47,42 +47,44 @@ Installation instructions for rega-genotype
 * Configuration
 	* create an config file like the one in config.sample and save it to a
 	  location of your choice
-	* create an environment variable named "REGA_GENOTYPE_CONF_DIR" and
-	  store the location of the config file in this environment variable
+	* create an environment variable named "REGA_GENOTYPE_DATA_DIR",
+	  store the location of the config file in this environment variable.
+		This folder will be used to store information about new typing tools. 
 	* fill in the appropriate values
     Note: in future config file will be managed by a UI.
 
-		config file format (json):
+	config file format (json):
+	{
+		"generalConfig": 
 		{
-			"generalConfig": 
+			xmlBasePath:"/home/michael/projects/rega-genotype-extenal/xml/",
+			paupCmd: "/opt/software/rega-genotype/bin/paup4b10-x86-linux",
+			clustalWCmd: "/opt/software/rega-genotype/bin/clustalw",
+			blastPath: "/usr/bin/",
+			treePuzzleCmd: "puzzle",
+			treeGraphCmd: "/opt/software/rega-genotype/bin/tgf",
+			epsToPdfCmd: "?",
+			inkscapeCmd: "?",
+			imageMagickConvertCmd: "convert",
+	        maxAllowedSeqs: "20000",
+	        adminPassword: "", 
+	        repositoryPassword: "" // leave empty, will be filled by the software.
+		}
+		,
+		"tools":
+		[
 			{
-				xmlBasePath:"/home/michael/projects/rega-genotype-extenal/xml/",
-				paupCmd: "/opt/software/rega-genotype/bin/paup4b10-x86-linux",
-				clustalWCmd: "/opt/software/rega-genotype/bin/clustalw",
-				blastPath: "/usr/bin/",
-				treePuzzleCmd: "puzzle",
-				treeGraphCmd: "/opt/software/rega-genotype/bin/tgf",
-				epsToPdfCmd: "?",
-				inkscapeCmd: "?",
-				imageMagickConvertCmd: "convert",
-				maxAllowedSeqs: "20000"
-			}
-			,
-			"tools":
-			[
-				{
-					name: "zika Typing Tool",
-					toolId: "zika", // unique id for the typing tool
-					path: "zika", // url path component -> full url is {host}/rega-genotype/typingservice/zika
-					version: "1.1",
-					configuration: "/home/michael/projects/rega-genotype-extenal/xml/zika/", // xml dir path
-					jobDir: "/home/michael/projects/rega-genotype-extenal/job/", // job dir will contain working directories.
-					auto-update: "true"
-					
-				},
-		...
-		]
-		See etc/config.sample for more info on the config file
-		* Run typing tool on url
-		{host-name}/rega-genotype/typingtool/{path}
-		{path} = the path from the config file.
+				path: "zika",
+			    configuration: "../../rega-genotype-extenal/xml/zika/",
+			    jobDir: "../../rega-genotype-extenal/job/",
+			    autoUpdate: "true",
+			    webService: "true",
+			    ui:"true"
+				
+			},
+	...
+	]
+	See etc/config.sample for more info on the config file
+	* Run typing tool on url
+	{host-name}/rega-genotype/typingtool/{path}
+	{path} = the path from the config file.
