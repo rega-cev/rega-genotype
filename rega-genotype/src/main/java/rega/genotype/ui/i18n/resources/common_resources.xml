@@ -156,4 +156,34 @@
 	<message id="defaultSignalAnalysis.extraComment">
 		Recombination Analyses are only performed for sequences with more than 800 bp.
 	</message>	
+	
+	<!-- Admin config -->
+	<message id="admin.config.tool-config-table">
+		${table}
+		<div>${add}${edit}</div>
+	</message>
+
+	<message id="admin.config.tool-config-dialog">
+		<table style="width:100%">
+		  <tr><td>Name</td><td>${name}</td></tr>
+		  <tr><td>ID</td><td>${id}</td></tr>
+		  <tr><td>Version</td><td>${version}</td></tr>
+		  <tr><td>URL</td><td>${url}</td></tr>
+		  <tr><td>Blast</td><td>${blast}</td></tr>
+		  <tr><td>Auto update enabled</td><td>${update}</td></tr>
+		  <tr><td>Web service enabled</td><td>${service}</td></tr>
+		  <tr><td>UI enabled</td><td>${ui}</td></tr>
+		  <tr><td>Upload files</td><td>${upload}</td></tr>
+		</table>
+		${info}
+	</message>
+	
+	<!-- blocks -->
+
+	<message id="form-field">
+		<div>
+			<label for="${id:{2}}">{1}</label>
+			${{2}}
+		</div>
+	</message>
 </messages>

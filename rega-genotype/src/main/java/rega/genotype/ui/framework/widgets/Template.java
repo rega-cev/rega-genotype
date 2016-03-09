@@ -31,6 +31,8 @@ public class Template extends WTemplate{
 	public Template(CharSequence text, WContainerWidget parent) {
 		super(text, parent);
 		addFunction("tr", WTemplate.Functions.tr);
+		addFunction("id", WTemplate.Functions.id);
+		addFunction("block", WTemplate.Functions.block);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package rega.genotype.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,12 @@ import rega.genotype.ui.util.GsonUtil;
  *
  */
 public class Config {
+	public static final String CONFIG_FILE_NAME = "config.json";
+
 	private GeneralConfig generalConfig;
-	private List<ToolConfig> tools = new ArrayList<Config.ToolConfig>();
+	private List<ToolConfig> tools = new ArrayList<Config.ToolConfig>(); //TODO: use set 
+
+	public Config(){}
 
 	public static Config parseJson(String json) {
 		return GsonUtil.parseJson(json, Config.class);
@@ -25,6 +30,10 @@ public class Config {
 
 	public String toJson() {
 		return GsonUtil.toJson(this);
+	}
+
+	public void save(String externalDir) throws IOException {
+		FileUtil.writeStringToFile(new File(externalDir + CONFIG_FILE_NAME), toJson());
 	}
 
 	public GeneralConfig getGeneralConfig() {
@@ -39,7 +48,7 @@ public class Config {
 		ToolConfig toolConfig = null;
 		// find organism config
 		for (ToolConfig c: getTools())
-			if (c.getToolId() != null && c.getToolId().equals(toolId))
+			if (c.getUniqueToolId() != null && c.getUniqueToolId().equals(toolId))
 				toolConfig = c;
 
 		return toolConfig;
@@ -61,6 +70,13 @@ public class Config {
 
 	public List<ToolConfig> getTools() {
 		return tools;
+	}
+	
+	public boolean addTool(ToolConfig tool) {
+		if (tools.contains(tool))
+			return false;
+
+		return tools.add(tool);
 	}
 
 	public void setTools(List<ToolConfig> tools) {
@@ -151,7 +167,7 @@ public class Config {
 	}
 
 	public static class ToolConfig {
-		private String path; // url path component that defines the tool (default toolId)
+		private String path; // unique url path component that defines the tool (default toolId)
 		private String configuration; // xmlPath - the directory that contains all the tool files.
 		private String jobDir; // will contain all the work dirs of the tool. (Generated analysis data)
 		private boolean autoUpdate;
@@ -159,24 +175,39 @@ public class Config {
 		private boolean ui;
 		// ToolMenifest read manifests from configuration dir.
 		// TODO: ui will have to update manifest if it was changed.
-		transient private ToolMenifest manifest = null;
+		transient private ToolManifest manifest = null;
 
-		public ToolMenifest getToolMenifest() {
+		public ToolManifest getToolMenifest() {
 			File f = new File(configuration + File.separator + "manifest.json");
 			if (f.exists() && manifest == null) {
 				String json = FileUtil.readFile(f);
-				manifest = ToolMenifest.parseJson(json);
+				manifest = ToolManifest.parseJson(json);
 			}
 			return manifest;
 		}
-		public String getToolId() {
-			return getToolMenifest() == null ? null : getToolMenifest().getToolId();
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof ToolConfig)
+				return path.equals(((ToolConfig)obj).path);
+
+			return false;
+		}
+		
+		public String getUniqueToolId() {
+			return getToolMenifest() == null ? null : getToolMenifest().getUniqueToolId();
+		}
+		public String getId() {
+			return getToolMenifest() == null ? null : getToolMenifest().getId();
+		}
+		public String getVersion() {
+			return getToolMenifest() == null ? null : getToolMenifest().getVersion();
 		}
 		public String getPath() {
 			if (path != null)
 				return path;
 			else
-				return getToolMenifest().getToolId();
+				return getToolMenifest().getUniqueToolId();
 		}
 		public void setPath(String path) {
 			this.path = path;

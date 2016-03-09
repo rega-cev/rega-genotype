@@ -28,13 +28,14 @@ public class Settings {
 	private static Settings instance = null;
 	
 	private Config config;
+	private String baseDir; // contains config.json, xml folder, job folder 
 	
-	public Settings(File f) {
-		System.err.println("Loading config file: " + f.getAbsolutePath());
-		if (!f.exists())
+	public Settings(File file) {
+		System.err.println("Loading config file: " + file.getAbsolutePath());
+		if (!file.exists())
 			throw new RuntimeException("Config file could not be found!");
 
-		String json = FileUtil.readFile(f);
+		String json = FileUtil.readFile(file);
 		config = Config.parseJson(json);
 	}
 
@@ -92,6 +93,10 @@ public class Settings {
 		return config;
 	}
 
+	public String getBaseDir() {
+		return baseDir;
+	}
+
 	public static void initSettings(Settings s) {
 		instance = s;
 		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
@@ -105,46 +110,59 @@ public class Settings {
 		return instance;
 	}
 
+	/**
+	 * Will construct the instance if not yet constructed. 
+	 * Need to be called by every servlet because we dont know what servlet will run first. 
+	 * @param context
+	 * @return
+	 */
 	public static Settings getInstance(ServletContext context) {
 		if (instance != null)
 			return instance;
-		
-        String configFile = null;
-        
-        /*
-         * For a real deployment:
-         *  - use servlet-context init parameter for configuration of the configuration file
-         *  - or REGA_GENOTYPE_CONF_DIR env variable for the CLI tool
-         *  
-         * For development:
-         *  - we default to ./etc/
-         */
 
-        if (context != null) {
-        	configFile = context.getInitParameter("configFile");
-        	if (configFile != null){
-        		instance =  new Settings(new File(configFile));
-        		return instance;
-        	}
-        } 
-        
-        if (configFile == null) {
-            System.err.println("REGA_GENOTYPE_CONF_DIR"+":" + System.getenv("REGA_GENOTYPE_CONF_DIR"));
-        	configFile = System.getenv("REGA_GENOTYPE_CONF_DIR");
-        }
-        
-        if (configFile == null) {
-            String osName = System.getProperty("os.name");
-            osName = osName.toLowerCase();
-            if (osName.startsWith("windows"))
-                configFile = "C:\\Program files\\rega_genotype\\";
-            else
-                configFile = "../../rega-genotype-extenal/";
-        }
-        configFile += File.separatorChar + "config.json";
-        
-        instance = new Settings(new File(configFile));
-        
+		String baseDir = getBaseDir(context);
+		instance = new Settings(new File(baseDir + "config.json"));
+		instance.baseDir =  baseDir;
+
         return instance;
+	}
+
+	/**
+	 * @param context
+	 * @return A file that contains the config.
+	 */
+	private static String getBaseDir(ServletContext context) {
+		String baseDir = null;
+
+		/*
+		 * For a real deployment:
+		 *  - use servlet-context init parameter for configuration of the configuration file
+		 *  - or REGA_GENOTYPE_CONF_DIR env variable for the CLI tool
+		 *  
+		 * For development:
+		 *  - we default to ./base-work-dir/
+		 */
+
+		if (context != null) {
+			baseDir = context.getInitParameter("configFile");
+			if (baseDir != null)
+				return baseDir;
+		} 
+
+		if (baseDir == null) {
+			System.err.println("REGA_GENOTYPE_WORK_DIR"+":" + System.getenv("REGA_GENOTYPE_CONF_DIR"));
+			baseDir = System.getenv("REGA_GENOTYPE_WORK_DIR");
+		}
+
+		if (baseDir == null) {
+			String osName = System.getProperty("os.name");
+			osName = osName.toLowerCase();
+			if (osName.startsWith("windows"))
+				baseDir = "C:\\Program files\\rega_genotype\\";
+			else
+				baseDir = "./base-work-dir/";
+		}
+
+        return baseDir;
 	}
 }

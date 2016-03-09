@@ -34,6 +34,7 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
+import rega.genotype.ui.util.FileUtil;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Settings;
 import rega.genotype.utils.Utils;
@@ -198,10 +199,10 @@ public class StartForm extends AbstractForm {
 			public void run() {
 				try {
 					File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
-					Utils.writeStringToFile(seqFile, fastaContent);
+					FileUtil.writeStringToFile(seqFile, fastaContent);
 					getMain().getOrganismDefinition().startAnalysis(thisJobDir);
 					File done = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"DONE");
-					Utils.writeStringToFile(done, System.currentTimeMillis()+"");
+					FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (ParameterProblemException e) {

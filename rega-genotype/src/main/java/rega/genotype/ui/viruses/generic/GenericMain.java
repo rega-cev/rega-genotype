@@ -44,10 +44,10 @@ public class GenericMain extends GenotypeMain {
 	public WApplication createApplication(WEnvironment env) {		
 		String[] deploymentPath = env.getDeploymentPath().split("/");
 		String url = deploymentPath[deploymentPath.length - 1];
-		
+
 		ToolConfig toolConfig = settings.getConfig().getToolConfigByUrlPath(url);
 
-		if (toolConfig == null || toolConfig.getToolId() == null) {
+		if (toolConfig == null || toolConfig.getUniqueToolId() == null) {
 			WApplication app = new WApplication(env);
 			app.getRoot().addWidget(new WText("Typing tool for organism " + url + " was not found."));
 			return app;
@@ -76,8 +76,9 @@ public class GenericMain extends GenotypeMain {
 		app.setLocalizedStrings(resources);
 		
 		app.setTitle(WString.tr("tool.title"));
-//		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
-//		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
+
+		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
+		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
 		
 		app.useStyleSheet(new WLink("../../style/genotype-rivm.css"));
 		app.useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"), "IE lte 7");

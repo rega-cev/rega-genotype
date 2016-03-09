@@ -1,5 +1,9 @@
 package rega.genotype.config;
 
+import java.io.File;
+import java.io.IOException;
+
+import rega.genotype.ui.util.FileUtil;
 import rega.genotype.ui.util.GsonUtil;
 
 /**
@@ -8,24 +12,30 @@ import rega.genotype.ui.util.GsonUtil;
  *  
  * @author michael
  */
-public class ToolMenifest {
+public class ToolManifest {
+	public static final String MANIFEST_FILE_NAME = "manifest.json";
 	private String name;
 	private String id;
 	private String version;
 	private boolean blastTool;
 
-	public static ToolMenifest parseJson(String json) {
-		return GsonUtil.parseJson(json, ToolMenifest.class);
+	public ToolManifest() {}
+
+	public static ToolManifest parseJson(String json) {
+		return GsonUtil.parseJson(json, ToolManifest.class);
 	}
 
 	public String toJson() {
 		return GsonUtil.toJson(this);
 	}
 
+	public void save(String externalDir) throws IOException {
+		FileUtil.writeStringToFile(new File(externalDir + MANIFEST_FILE_NAME), toJson());
+	}
 	/**
 	 * @return unique tool id (used as the tool dir name) 
 	 */
-	public String getToolId() {
+	public String getUniqueToolId() {
 		return id + version;
 	}
 	public String getName() {
@@ -52,5 +62,4 @@ public class ToolMenifest {
 	public void setBlastTool(boolean blastTool) {
 		this.blastTool = blastTool;
 	}
-	
 }

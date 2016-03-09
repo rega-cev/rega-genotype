@@ -14,7 +14,7 @@ public class GsonUtil {
 	}
 
 	public static <C> String toJson(C c) {
-		GsonBuilder builder = new GsonBuilder();
+		GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
 		Gson gson = builder.create();
 		return gson.toJson(c);
 	}

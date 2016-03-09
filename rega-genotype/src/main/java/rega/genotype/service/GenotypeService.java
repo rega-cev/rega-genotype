@@ -56,7 +56,7 @@ public class GenotypeService extends HttpServlet {
 		    	return;
 		    } else {
 				path = req.getPathInfo().replace(File.separator, "");
-		    	toolId = settings.getConfig().getToolConfigByUrlPath(path).getToolId();
+		    	toolId = settings.getConfig().getToolConfigByUrlPath(path).getUniqueToolId();
 		    	if (toolId == null) {
 		    		resp.setStatus(404); // invalid tool config.
 			    	return;

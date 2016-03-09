@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
 
+import rega.genotype.ui.util.FileUtil;
 import rega.genotype.utils.Settings;
-import rega.genotype.utils.Utils;
 
 public class TestUtils {
 	public static File setup(String fastaContent) {
@@ -23,7 +23,7 @@ public class TestUtils {
 		File fasta = getFastaFile(jobDir);
 		
 		try {
-			Utils.writeStringToFile(fasta, fastaContent);
+			FileUtil.writeStringToFile(fasta, fastaContent);
 		} catch (IOException e) {
 			TestCase.fail("Could not write fasta String to fasta file: " + e.getMessage());
 		}

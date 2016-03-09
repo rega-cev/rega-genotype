@@ -7,8 +7,6 @@ package rega.genotype.ui.util;
 
 import java.io.File;
 
-import rega.genotype.ui.framework.GenotypeApplication;
-
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -58,5 +56,9 @@ public class FileUpload extends WContainerWidget {
 	
 	public Signal1<File> uploadedFile() {
 		return uploadedFile;
+	}
+
+	public void setMultiple(boolean multiple) {
+		uploadFile.setMultiple(multiple);
 	}
 }
