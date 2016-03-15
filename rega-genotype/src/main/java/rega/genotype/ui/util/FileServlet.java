@@ -3,8 +3,6 @@ package rega.genotype.ui.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -23,16 +21,18 @@ public class FileServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 71546732567L;
 	private static String SERVLET_PATH;
+	private static String TOOL_URL_PARAM = "toolUrl";
+	private static String IMAGE_NAME_PARAM = "id";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String id = req.getParameter("id");
-		String filename = getFilePath(id);
+		String id = req.getParameter(IMAGE_NAME_PARAM);
+		String toolUrl = req.getParameter(TOOL_URL_PARAM);
 
-		File file = new File(filename);
+		File file = getFilePath(toolUrl, id);
 
-		if (!file.exists()) {
+		if (file == null || !file.exists()) {
 			resp.setStatus(404);
 			return;
 		}
@@ -53,33 +53,36 @@ public class FileServlet extends HttpServlet {
 		SERVLET_PATH = config.getServletContext().getContextPath() + "/files";
 	}
 
-	public static String getFileUrl() {
-		return getFileUrl("");
-	}
-
-	public static String getFileUrl(String id) {
-		// TODO: this can be security problem. check that user can not get below the
+	public static String getFileUrl(String toolUrl) {
 		// Organism dir.
-		return SERVLET_PATH + "?id=" + id;
+		return SERVLET_PATH + "?" + TOOL_URL_PARAM + "=" + toolUrl + "&" + IMAGE_NAME_PARAM + "=";
 	}
 
+	private boolean isInDir(File file, File dir) {
+		File f = file;
+		while (f.getParent() != null) {
+			if (f.getParent().equals(dir.getAbsolutePath()))
+				return true;
+			else {
+				f = new File(f.getParent());
+			}
+		}
+		return false;
+	}
+	
 	/*
 	 * Return the file path of the given id. The id should contains the
 	 * extension of the file.
 	 * expected id = {url path component}/path in organism dir
 	 * return "" if id syntax is not correct.
 	 */
-	public String getFilePath(String id) {
-		Pattern p = Pattern.compile("\\{(?<url>[^\\}]+)\\}(?<interanl>.+)");
-		Matcher m = p.matcher(id);
-		if (!m.matches())
-			return "";
+	private File getFilePath(String toolUrl, String id) {
+		File xmlPath = Settings.getInstance(getServletContext()).getXmlPath(toolUrl);
+		File ans = new File(xmlPath.getAbsolutePath() + id);
 
-		String url = m.group("url");
-		String internalPath = m.group("interanl");
-
-		File xmlPath = Settings.getInstance(getServletContext()).getXmlPath(url);
-
-		return xmlPath + internalPath;
+		if (!isInDir(ans, xmlPath)) {
+			return null;
+		}
+		return ans;
 	}
 }
