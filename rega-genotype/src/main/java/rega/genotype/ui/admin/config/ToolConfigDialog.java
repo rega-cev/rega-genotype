@@ -3,9 +3,18 @@ package rega.genotype.ui.admin.config;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
+import rega.genotype.service.ToolRepoService;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUtil;
 import rega.genotype.utils.Settings;
@@ -155,6 +164,13 @@ public class ToolConfigDialog extends WDialog {
 				fileUpload.upload();
 			}
 		});
+		publishB.clicked().addListener(newVersionB, new Signal.Listener() {
+			public void trigger() {
+				// create zip file 
+				File zip = new File("TODO!!!!"); // TODO
+				publish(zip);
+			}
+		});
 	}
 
 	private boolean validate() {
@@ -166,5 +182,31 @@ public class ToolConfigDialog extends WDialog {
 			}
 		}
 		return true;
+	}
+
+	private String generatePasswiord() {
+		//TODO: Koen ??
+		return "TODO";
+	}
+	
+	private boolean publish(File zipFile) {
+		
+		HttpClient httpClient = HttpClientBuilder.create().build();
+		//String body = zipFile.
+		//DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpPost post = new HttpPost(ToolRepoService.gerRepoServiceUrl());
+		post.addHeader(ToolRepoService.REQ_TYPE_PARAM, ToolRepoService.REQ_TYPE_PUBLISH);
+		post.addHeader(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
+
+		try {
+			//post.setEntity(new ByteArrayEntity(zipFile));
+			post.setEntity(new FileEntity(zipFile, "zip"));
+			HttpResponse answer = httpClient.execute(post);
+
+			return (answer.getStatusLine().getStatusCode() != 200);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

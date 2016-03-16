@@ -7,6 +7,16 @@
    </servlet>
 
   <servlet-mapping>
+    <servlet-name>ToolRepoService</servlet-name>
+    <url-pattern>/repo-service/*</url-pattern>
+  </servlet-mapping>
+
+   <servlet>
+    <servlet-name>ToolRepoService</servlet-name>
+    <servlet-class>rega.genotype.service.ToolRepoService</servlet-class>
+   </servlet>
+
+  <servlet-mapping>
     <servlet-name>AdminMain</servlet-name>
     <url-pattern>/admin/*</url-pattern>
   </servlet-mapping>

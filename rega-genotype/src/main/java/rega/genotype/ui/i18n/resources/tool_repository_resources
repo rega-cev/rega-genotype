@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+	<!-- Admin config -->
+	<message id="admin.repository.repo-table">
+		${table}
+		<div>${download}</div>
+	</message>
+	
+</messages>
