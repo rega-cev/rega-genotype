@@ -2,7 +2,6 @@ package rega.genotype.ui.admin.config;
 
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
-import rega.genotype.ui.admin.AdminApplication;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Orientation;
