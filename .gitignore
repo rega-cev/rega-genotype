@@ -5,3 +5,4 @@ dist
 target
 jobs
 *~
+rega-genotype/base-work-dir/*
