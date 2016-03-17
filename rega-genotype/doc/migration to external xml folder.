@@ -12,4 +12,10 @@ This directory can be external and it will also include the xml dirs.
 
 3. Env variable REGA_GENOTYPE_CONF_DIR is renamed to REGA_GENOTYPE_WORK_DIR.
 
-4. See DeveloperGuide section resources.xml for new image syntax.
+4. Command line tool syntax changed to:
+
+ rega.genotype.viruses.generic.GenericTool hcv xml SELF result.xml phylo-hcv.xml 1000 200 -w base-work-dir/job
+ 
+ rega.genotype.viruses.generic.GenericTool hcv xml phylo-hcv.fasta result.xml -w base-work-dir/job
+
+5. See DeveloperGuide section resources.xml for new image syntax.
