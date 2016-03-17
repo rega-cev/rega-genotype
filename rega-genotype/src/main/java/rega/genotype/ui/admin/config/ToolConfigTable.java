@@ -26,7 +26,7 @@ public class ToolConfigTable extends Template{
 		super(tr("admin.config.tool-config-table"), parent);
 
 		model = new ToolConfigTableModel();
-		WTableView table = new WTableView();
+		final WTableView table = new WTableView();
 		table.setSelectionMode(SelectionMode.SingleSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
 		table.setModel(model);
@@ -49,6 +49,14 @@ public class ToolConfigTable extends Template{
 			}
 		});
 
+		editB.clicked().addListener(editB, new Signal.Listener() {
+			public void trigger() {
+				if (table.getSelectedIndexes().size() == 1) {
+				edit(model.getToolConfig(
+						table.getSelectedIndexes().first().getRow()));
+				}
+			}
+		});
 		bindWidget("table", table);
 		bindWidget("add", addB);
 		bindWidget("edit", editB);

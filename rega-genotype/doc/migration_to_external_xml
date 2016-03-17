@@ -18,4 +18,12 @@ This directory can be external and it will also include the xml dirs.
  
  rega.genotype.viruses.generic.GenericTool hcv xml phylo-hcv.fasta result.xml -w base-work-dir/job
 
-5. See DeveloperGuide section resources.xml for new image syntax.
+5. generic tool urls changed
+from
+http://localhost:8080/rega-genotype/zika/typingtool/
+to
+http://localhost:8080/rega-genotype/typingtool/zika/
+
+6. create/ edit tools should be done from http://localhost:8080/rega-genotype/admin
+
+7. See DeveloperGuide section resources.xml for new image syntax.
