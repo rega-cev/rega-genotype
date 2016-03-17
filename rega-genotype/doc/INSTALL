@@ -71,20 +71,19 @@ Installation instructions for rega-genotype
 	        repositoryPassword: "" // leave empty, will be filled by the software.
 		}
 		,
-		"tools":
+		"tools": // the tools will be filled by admin UI.
 		[
 			{
-				path: "zika",
-			    configuration: "../../rega-genotype-extenal/xml/zika/",
-			    jobDir: "../../rega-genotype-extenal/job/",
-			    autoUpdate: "true",
-			    webService: "true",
-			    ui:"true"
-				
+				"path": "etv",
+      	"configuration": "base-work-dir/xml/ETV-generic/",
+        "jobDir": "base-work-dir/job/",
+        "autoUpdate": true,
+        "webService": true,
+         "ui": true
 			},
 	...
 	]
-	See etc/config.sample for more info on the config file
+	See config.sample for more info on the config file
 	* Run typing tool on url
 	{host-name}/rega-genotype/typingtool/{path}
 	{path} = the path from the config file.

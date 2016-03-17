@@ -137,7 +137,7 @@ public class Settings {
 		/*
 		 * For a real deployment:
 		 *  - use servlet-context init parameter for configuration of the configuration file
-		 *  - or REGA_GENOTYPE_CONF_DIR env variable for the CLI tool
+		 *  - or REGA_GENOTYPE_WORK_DIR env variable for the CLI tool
 		 *  
 		 * For development:
 		 *  - we default to ./base-work-dir/
@@ -150,7 +150,7 @@ public class Settings {
 		} 
 
 		if (baseDir == null) {
-			System.err.println("REGA_GENOTYPE_WORK_DIR"+":" + System.getenv("REGA_GENOTYPE_CONF_DIR"));
+			System.err.println("REGA_GENOTYPE_WORK_DIR"+":" + System.getenv("REGA_GENOTYPE_WORK_DIR"));
 			baseDir = System.getenv("REGA_GENOTYPE_WORK_DIR");
 		}
 
