@@ -1,0 +1,29 @@
+XML folder was removed from git and now will be managed by the server admin.
+
+Changes:
+
+This is also documented in INSTALL
+
+1. Global_config.xml is replaced by config.json (that also contains more data) see 
+INSTALL and config.sample for more info.
+
+2. web.xml baseWorkDir param replaced conf_dir param
+This directory can be external and it will also include the xml dirs.
+
+3. Env variable REGA_GENOTYPE_CONF_DIR is renamed to REGA_GENOTYPE_WORK_DIR.
+
+4. Command line tool syntax changed to:
+
+ rega.genotype.viruses.generic.GenericTool hcv xml SELF result.xml phylo-hcv.xml 1000 200 -w base-work-dir/job
+ 
+ rega.genotype.viruses.generic.GenericTool hcv xml phylo-hcv.fasta result.xml -w base-work-dir/job
+
+5. generic tool urls changed
+from
+http://localhost:8080/rega-genotype/zika/typingtool/
+to
+http://localhost:8080/rega-genotype/typingtool/zika/
+
+6. create/ edit tools should be done from http://localhost:8080/rega-genotype/admin
+
+7. See DeveloperGuide section resources.xml for new image syntax.
