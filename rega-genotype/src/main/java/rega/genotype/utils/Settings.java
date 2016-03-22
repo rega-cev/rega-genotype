@@ -28,7 +28,14 @@ public class Settings {
 	private static Settings instance = null;
 	
 	private Config config;
-	private String baseDir; // contains config.json, xml folder, job folder 
+	/*
+	 * work dir structure:
+	 * base-work-dir:
+	 * 		- config.json
+	 * 		- xml: contains all tool related data.
+	 * 		- job: contains working dirs per job
+	 */
+	private String baseDir;
 	
 	public Settings(File file) {
 		System.err.println("Loading config file: " + file.getAbsolutePath());
@@ -57,12 +64,28 @@ public class Settings {
 		return new File(config.getToolConfigByUrlPath(url).getJobDir());
 	}
 
+	public String getXmlDir(String toolId, String toolVersion) {
+		return getBaseXmlDir() + File.separator + toolId + toolVersion + File.separator;
+	}
+	public String getJobDir(String toolId, String toolVersion) {
+		return getBaseJobDir() + File.separator + toolId + toolVersion + File.separator;
+	}
 	public String getPaupCmd() {
 		return config.getGeneralConfig().getPaupCmd();
 	}
 
 	public String getClustalWCmd() {
 		return config.getGeneralConfig().getClustalWCmd();
+	}
+
+	public String getBaseXmlDir() {
+		return baseDir  + File.separator + "xml";
+	}
+	public String getBaseJobDir() {
+		return baseDir  + File.separator + "job";
+	}
+	public String getBaseDir() {
+		return baseDir;
 	}
 
 	public File getBlastPath() {
@@ -91,10 +114,6 @@ public class Settings {
 
 	public Config getConfig() {
 		return config;
-	}
-
-	public String getBaseDir() {
-		return baseDir;
 	}
 
 	public static void initSettings(Settings s) {

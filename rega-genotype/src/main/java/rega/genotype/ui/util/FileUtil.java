@@ -10,12 +10,16 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 public class FileUtil {
 
@@ -25,6 +29,7 @@ public class FileUtil {
 				return;
 			Files.copy(file.toPath(), new File(dir).toPath());
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new RuntimeException("Could not copy uploaded file", e);
 		}
 	}
@@ -68,43 +73,76 @@ public class FileUtil {
 
 	// zip 
 	
-	public static boolean isValidZip(final File zipFile) {
-		ZipFile zipfile = null;
+	private static ZipFile toZipFile(final File zip) {
+		ZipFile zipFile = null;
 		try {
-			zipfile = new ZipFile(zipFile);
-			return true;
+			zipFile = new ZipFile(zip.getAbsolutePath());
 		} catch (IOException e) {
-			return false;
-		} finally {
-			try {
-				if (zipfile != null) {
-					zipfile.close();
-					zipfile = null;
-				}
-			} catch (IOException e) {
-			}
+			e.printStackTrace();
+			return null;
 		}
+		return zipFile;
+	}
+
+	private static void closeZipFile(final ZipFile zip) {
+		try {
+			if (zip != null) 
+				zip.close();
+		} catch (IOException e) {
+		}
+	}
+
+
+	public static String getFileContent(final File zip, String fileName) {
+	    ZipFile zipFile = toZipFile(zip);
+
+	    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+	    while(entries.hasMoreElements()){
+	    	ZipEntry entry = entries.nextElement();
+	    	if (fileName.equals(new File(entry.getName()).getName())){
+	    		try {
+	    			InputStream stream = zipFile.getInputStream(entry);
+	    			return IOUtils.toString(stream); 
+	    		} catch (IOException e) {
+	    			e.printStackTrace();
+	    			return null;
+	    		} finally {
+	    			closeZipFile(zipFile);
+	    		}
+	    	}
+	    }
+	    closeZipFile(zipFile);
+	    return null;
+	}
+
+	public static boolean isValidZip(final File zipFile) {
+		ZipFile zipFile2 = toZipFile(zipFile);
+		try {
+			if (zipFile2 != null) 
+				zipFile2.close();
+		} catch (IOException e) {
+		}
+		return zipFile2 != null;
 	}
 
 	private static final int BUFFER = 2048;
 	
-	public static boolean unzip(String data) {
+	public static boolean unzip(File zipedFile, File extructFolder) {
+		extructFolder.mkdirs();
 		try {
 			BufferedOutputStream dest = null;
-			FileInputStream fis = new FileInputStream(data);
+			FileInputStream fis = new FileInputStream(zipedFile);
 			ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
 			ZipEntry entry;
 			while((entry = zis.getNextEntry()) != null) {
-				System.out.println("Extracting: " +entry);
 				int count;
 				byte dataBytes[] = new byte[BUFFER];
 				// write the files to the disk
-				FileOutputStream fos = new 
-						FileOutputStream(entry.getName());
-				dest = new 
-						BufferedOutputStream(fos, BUFFER);
-				while ((count = zis.read(dataBytes, 0, BUFFER)) 
-						!= -1) {
+				FileOutputStream fos = new FileOutputStream(
+						extructFolder.getAbsolutePath() + File.separator + entry.getName());
+				dest = new BufferedOutputStream(fos, BUFFER);
+				while ((count = zis.read(dataBytes, 0, BUFFER)) != -1) {
 					dest.write(dataBytes, 0, count);
 				}
 				dest.flush();
@@ -119,7 +157,7 @@ public class FileUtil {
 		return false;
 	}
 
-	public static void zip(File srcDir, File destDir) {
+	public static boolean zip(File srcDir, File destDir) {
 		try {
 			BufferedInputStream origin = null;
 			FileOutputStream dest = new FileOutputStream(destDir);
@@ -130,8 +168,8 @@ public class FileUtil {
 			String files[] = srcDir.list();
 
 			for (int i=0; i<files.length; i++) {
-				System.out.println("Adding: "+files[i]);
-				FileInputStream fi = new FileInputStream(files[i]);
+				FileInputStream fi = new FileInputStream(
+						srcDir.getAbsolutePath() + File.separator + files[i]);
 				origin = new BufferedInputStream(fi, BUFFER);
 				ZipEntry entry = new ZipEntry(files[i]);
 				out.putNextEntry(entry);
@@ -144,6 +182,24 @@ public class FileUtil {
 			out.close();
 		} catch(Exception e) {
 			e.printStackTrace();
+			return false;
 		}
+		return true;
+	}
+
+	public static String toString(BufferedReader reader) {
+		StringBuilder builder = new StringBuilder();
+		String aux = "";
+
+		try {
+			while ((aux = reader.readLine()) != null) {
+			    builder.append(aux);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return builder.toString();
 	}
 }

@@ -160,15 +160,17 @@
 	<!-- Admin config -->
 	<message id="admin.config.tool-config-table">
 		${table}
-		<div>${add}${edit}</div>
+		<div>${add}${edit}${install}</div>
+		<div>${info}</div>
+		
 	</message>
 
 	<message id="admin.config.tool-config-dialog">
 		<table style="width:100%">
-		  <tr><td>Name</td><td>${name}</td></tr>
-		  <tr><td>ID</td><td>${id}</td></tr>
-		  <tr><td>Version</td><td>${version}</td></tr>
-		  <tr><td>URL</td><td>${url}</td></tr>
+		  <tr><td>Name</td><td>${name}</td><td>${name-info}</td></tr>
+		  <tr><td>ID</td><td>${id}</td><td>${id-info}</td></tr>
+		  <tr><td>Version</td><td>${version}</td><td>${version-info}</td></tr>
+		  <tr><td>URL</td><td>${url}</td><td>${url-info}</td></tr>
 		  <tr><td>Blast</td><td>${blast}</td></tr>
 		  <tr><td>Auto update enabled</td><td>${update}</td></tr>
 		  <tr><td>Web service enabled</td><td>${service}</td></tr>

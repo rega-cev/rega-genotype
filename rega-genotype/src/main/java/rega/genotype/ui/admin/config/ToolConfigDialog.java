@@ -3,31 +3,24 @@ package rega.genotype.ui.admin.config;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
-import rega.genotype.service.ToolRepoService;
+import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.framework.widgets.Template;
+import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WDialog;
-import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WFormWidget;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
-import eu.webtoolkit.jwt.WProgressBar;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WValidator;
+import eu.webtoolkit.jwt.WValidator.Result;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.UploadedFile;
 
@@ -41,26 +34,30 @@ public class ToolConfigDialog extends WDialog {
 	private Mode mode;
 	private final Template template = new Template(tr("admin.config.tool-config-dialog"));
 	private final WText infoT = new WText();
+	private final FileUpload fileUpload = new FileUpload();
+	private final WLineEdit nameLE = new WLineEdit();
+	private final WLineEdit idLE = new WLineEdit();
+	private final WLineEdit versionLE = new WLineEdit();
+	private final WLineEdit urlLE = new WLineEdit();
+	private final WCheckBox blastChB = new WCheckBox();
+	private final WCheckBox autoUpdateChB = new WCheckBox();
+	private final WCheckBox serviceChB = new WCheckBox();
+	private final WCheckBox uiChB = new WCheckBox();
 
-	public ToolConfigDialog(final ToolConfig toolConfig) {
+	public ToolConfigDialog(final ToolConfig toolConfig, boolean isReadOnly) {
 		show();
 
+		setWidth(new WLength(600));
+		
 		mode = toolConfig == null ? Mode.Add : Mode.Edit; 
 		getTitleBar().addWidget(new WText(mode == Mode.Add ? "Create Tool" : "Edit Tool"));
 
 		final WPushButton publishB = new WPushButton("Publish", getFooter());
 		final WPushButton newVersionB = new WPushButton("Create new Version", getFooter());
+		final WPushButton cancelB = new WPushButton("Cancel", getFooter());
 
-		final WLineEdit nameLE = new WLineEdit();
-		final WLineEdit idLE = new WLineEdit();
-		final WLineEdit versionLE = new WLineEdit();
-		final WLineEdit urlLE = new WLineEdit();
-		final WCheckBox blastChB = new WCheckBox();
-		final WCheckBox autoUpdateChB = new WCheckBox();
-		final WCheckBox serviceChB = new WCheckBox();
-		final WCheckBox uiChB = new WCheckBox();
-		final WFileUpload fileUpload = new WFileUpload();
-		
+		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
+
 		// read
 
 		if (mode == Mode.Edit) {
@@ -80,11 +77,10 @@ public class ToolConfigDialog extends WDialog {
 		} 
 
 		// validators
-		
-		nameLE.setValidator(new WValidator(true));// TODO: check unique name and id on repository level (when publish).
-		idLE.setValidator(new WValidator(true));
-		versionLE.setValidator(new WValidator(true));
-		urlLE.setValidator(new WValidator(true));
+		nameLE.setValidator(new WValidator(true));
+		idLE.setValidator(new ToolIdValidator(true));
+		versionLE.setValidator(new ToolIdValidator(true));
+		urlLE.setValidator(new ToolUrlValidator(true));
 
 		// bind
 		
@@ -100,113 +96,179 @@ public class ToolConfigDialog extends WDialog {
 		template.bindWidget("upload", fileUpload);
 		template.bindWidget("info", infoT);
 
-		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
-		fileUpload.setMultiple(true);
-		fileUpload.setProgressBar(new WProgressBar());
+		if (isReadOnly) {
+			template.disable();
+			publishB.hide();
+			newVersionB.hide();
+		}
 		
-		fileUpload.fileTooLarge().addListener(fileUpload, new Signal.Listener() {
+		// TODO: fileUpload will be replaced by editors per-file.
+		// TODO: show file list.
+		fileUpload.setMultiple(true);
+		fileUpload.getWFileUpload().fileTooLarge().addListener(fileUpload, new Signal.Listener() {
 			public void trigger() {
 				infoT.setText("File too large.");
-			}
-		});
-		
-		fileUpload.uploaded().addListener(this, new Signal.Listener() {
-			public void trigger() {
-				String toolId =  idLE.getText() + versionLE.getText();
-				String xmlDir = baseDir + "xml" + File.separator + toolId + File.separator;
-				String jobDir = baseDir + "job" + File.separator + toolId + File.separator;
-				
-				// save xml files
-				for (UploadedFile f: fileUpload.getUploadedFiles()) {
-					String[] split = f.getClientFileName().split(File.separator);
-					String fileName = split[split.length - 1];
-					FileUtil.storeFile(new File(f.getSpoolFileName()), xmlDir + fileName);
-				}
-
-				// save manifest
-				ToolManifest manifest = new ToolManifest();
-				manifest.setBlastTool(blastChB.isChecked());
-				manifest.setName(nameLE.getText());
-				manifest.setId(idLE.getText());
-				manifest.setVersion(versionLE.getText());
-
-				// save ToolConfig
-				ToolConfig newTool = new ToolConfig();
-				newTool.setAutoUpdate(autoUpdateChB.isChecked());
-				newTool.setConfiguration(xmlDir);
-				newTool.setJobDir(jobDir);
-				newTool.setPath(urlLE.getText());
-				newTool.setUi(uiChB.isChecked());
-				newTool.setWebService(serviceChB.isChecked());
-
-				// save cofig
-				Config config = Settings.getInstance().getConfig();
-				config.addTool(newTool);
-
-				try {
-					manifest.save(xmlDir);
-					config.save(baseDir);
-				} catch (IOException e) {
-					e.printStackTrace();
-					infoT.setText("Error: Config file could not be properlly updated.");
-					return;
-				}
-
-				accept();
 			}
 		});
 
 		newVersionB.clicked().addListener(newVersionB, new Signal.Listener() {
 			public void trigger() {
-				if (!validate()) {
-					return;
-				}
-				fileUpload.upload();
+				if (createNewVersion() != null)
+					accept();
 			}
 		});
-		publishB.clicked().addListener(newVersionB, new Signal.Listener() {
+
+		publishB.clicked().addListener(publishB, new Signal.Listener() {
 			public void trigger() {
-				// create zip file 
-				File zip = new File("TODO!!!!"); // TODO
-				publish(zip);
+				ToolConfig tool = createNewVersion();
+				if (tool != null) {
+					// create zip file 
+					ToolManifest manifest = tool.getToolMenifest();
+					File zip = new File(baseDir + "published" + File.separator + manifest.getUniqueToolId() + ".zip");
+					if (zip.exists()) 
+						zip.delete();
+					try {
+						zip.getParentFile().mkdirs();
+						zip.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+						infoT.setText("Error could publish.");
+					} 
+					if (FileUtil.zip(new File(tool.getConfiguration()), zip)){
+						if (ToolRepoServiceRequests.publish(zip))
+							accept();
+						else 
+							infoT.setText("Error: could not post the tool.");
+					} else {
+						infoT.setText("Error could publish. Zipping went wrong.");
+					}
+				}
 			}
 		});
+
+		cancelB.clicked().addListener(cancelB, new Signal.Listener() {
+			public void trigger() {
+				reject();
+			}
+		});
+
+		initTemplate();
 	}
 
-	private boolean validate() {
-		for(WWidget w: template.getChildren()) {
-			if (w instanceof WFormWidget
-					&& ((WFormWidget) w).validate() != WValidator.State.Valid) {
-				infoT.setText("Some fildes have invalid values.");
-				return false;
+	private void initTemplate() {
+		for(int i = template.getChildren().size() - 1; i  >= 0; --i) {
+			WWidget w =  template.getChildren().get(i);
+			if (w instanceof WFormWidget){
+				String var = template.varName(w);
+				template.bindWidget(var + "-info", new WText());
 			}
 		}
-		return true;
-	}
-
-	private String generatePasswiord() {
-		//TODO: Koen ??
-		return "TODO";
 	}
 	
-	private boolean publish(File zipFile) {
+	private boolean validate() {
+		boolean ans = true;
+	
+		for(WWidget w: template.getChildren()) {
+			if (w instanceof WFormWidget){
+				WFormWidget fw  = (WFormWidget) w;
+			
+				if (fw.validate() != WValidator.State.Valid) {
+					ans = false;
+					infoT.setText("Some fildes have invalid values.");
+				}
+				String var = template.varName(w);
+				WText info = (WText) template.resolveWidget(var + "-info");
+				if (info != null && fw.getValidator() != null) {
+					if (fw.getValueText() == null)
+						info.setText("");
+					else {
+						Result r = fw.getValidator().validate(fw.getValueText());
+						info.setText(r == null ? "" :r.getMessage());
+					}
+				}
+				ans = false;
+			}
+		}
+		return ans;
+	}
+
+	private ToolConfig createNewVersion() {
+		if (!validate())
+			return null;
+
+		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
+
+		String xmlDir = Settings.getInstance().getXmlDir(
+				idLE.getText(), versionLE.getText());
+		String jobDir = Settings.getInstance().getJobDir(
+				idLE.getText(), versionLE.getText());
 		
-		HttpClient httpClient = HttpClientBuilder.create().build();
-		//String body = zipFile.
-		//DefaultHttpClient httpClient = new DefaultHttpClient();
-		HttpPost post = new HttpPost(ToolRepoService.gerRepoServiceUrl());
-		post.addHeader(ToolRepoService.REQ_TYPE_PARAM, ToolRepoService.REQ_TYPE_PUBLISH);
-		post.addHeader(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
+		// save xml files
+		for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
+			String[] split = f.getClientFileName().split(File.separator);
+			String fileName = split[split.length - 1];
+			FileUtil.storeFile(new File(f.getSpoolFileName()), xmlDir + fileName);
+		}
+
+		// save manifest
+		ToolManifest manifest = new ToolManifest();
+		manifest.setBlastTool(blastChB.isChecked());
+		manifest.setName(nameLE.getText());
+		manifest.setId(idLE.getText());
+		manifest.setVersion(versionLE.getText());
+
+		// save ToolConfig
+		ToolConfig newTool = new ToolConfig();
+		newTool.setAutoUpdate(autoUpdateChB.isChecked());
+		newTool.setConfiguration(xmlDir);
+		newTool.setJobDir(jobDir);
+		newTool.setPath(urlLE.getText());
+		newTool.setUi(uiChB.isChecked());
+		newTool.setWebService(serviceChB.isChecked());
+
+		// save cofig
+		Config config = Settings.getInstance().getConfig();
+		if (!config.addTool(newTool))
+			return null;
 
 		try {
-			//post.setEntity(new ByteArrayEntity(zipFile));
-			post.setEntity(new FileEntity(zipFile, "zip"));
-			HttpResponse answer = httpClient.execute(post);
-
-			return (answer.getStatusLine().getStatusCode() != 200);
+			manifest.save(xmlDir);
+			config.save(baseDir);
 		} catch (IOException e) {
 			e.printStackTrace();
+			infoT.setText("Error: Config file could not be properlly updated.");
+			return null;
 		}
-		return false;
+		return newTool;
+	}
+
+	// classes
+	
+	private class ToolIdValidator extends WValidator {
+		ToolIdValidator(boolean isMandatory) {
+			super(isMandatory);
+		}
+		@Override
+		public Result validate(String input) {
+			Config config = Settings.getInstance().getConfig();
+			if (config.getToolConfigById(idLE.getText(), versionLE.getText()) != null)
+				return new Result(State.Invalid, "A tool with same id and version already exist on local server.");
+
+			return super.validate(input);
+		}
+	}
+
+	private class ToolUrlValidator extends WValidator {
+		ToolUrlValidator(boolean isMandatory) {
+			super(isMandatory);
+		}
+		@Override
+		public Result validate(String input) {
+			Config config = Settings.getInstance().getConfig();
+			if (config.getToolConfigByUrlPath(urlLE.getText()) != null)
+				return new Result(State.Invalid, "A tool with same url already exist on local server.");
+				
+			return super.validate(input);
+		}
 	}
 }

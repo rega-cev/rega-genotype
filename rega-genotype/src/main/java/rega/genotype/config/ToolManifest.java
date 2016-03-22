@@ -2,9 +2,12 @@ package rega.genotype.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import rega.genotype.ui.util.FileUtil;
 import rega.genotype.ui.util.GsonUtil;
+
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Read json tool identifier. Stored in the tool dir (tool xml dir)
@@ -23,6 +26,10 @@ public class ToolManifest {
 
 	public static ToolManifest parseJson(String json) {
 		return GsonUtil.parseJson(json, ToolManifest.class);
+	}
+
+	public static List<ToolManifest> parseJsonAsList(String json) {
+		return GsonUtil.parseJson(json, new TypeToken<List<ToolManifest> >() {}.getType());
 	}
 
 	public String toJson() {

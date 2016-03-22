@@ -1,7 +1,11 @@
 package rega.genotype.ui.admin;
 
+import java.io.IOException;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
@@ -28,5 +32,16 @@ public class AdminMain extends WtServlet{
 		getConfiguration().setMaximumRequestSize(2000*1024*1024); // 2000 MB maximum file requests, should match servlet config
 		
 		super.init(config);
+	}
+
+	public static AdminMain getAdminMainInstance() {
+		return (AdminMain) getInstance();
+	}
+
+	@Override
+	public void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		super.doPost(req, resp);
 	}
 }

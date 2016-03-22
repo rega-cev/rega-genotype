@@ -44,13 +44,15 @@ public class Config {
 		this.generalConfig = generalConfig;
 	}
 
-	public ToolConfig getToolConfigByToolId(String toolId) {
+	public ToolConfig getToolConfigById(String toolId, String version) {
 		ToolConfig toolConfig = null;
 		// find organism config
 		for (ToolConfig c: getTools())
-			if (c.getUniqueToolId() != null && c.getUniqueToolId().equals(toolId))
-				toolConfig = c;
-
+			if (c.getUniqueToolId() != null) {
+				ToolManifest m = c.getToolMenifest();
+				if (m.getId().equals(toolId) && m.getVersion().equals(version))
+					toolConfig = c;
+			}
 		return toolConfig;
 	}
 
@@ -71,18 +73,23 @@ public class Config {
 	public List<ToolConfig> getTools() {
 		return tools;
 	}
-	
-	public boolean addTool(ToolConfig tool) {
-		if (tools.contains(tool))
-			return false;
 
+	public boolean addTool(ToolConfig tool) {
+		getToolConfigByUrlPath(tool.getPath());
+		
 		return tools.add(tool);
 	}
 
-	public void setTools(List<ToolConfig> tools) {
-		this.tools = tools;
+	public List<ToolManifest> getManifests(){
+		List<ToolManifest> ans = new ArrayList<ToolManifest>();
+		for (ToolConfig c: tools){
+			ToolManifest m = c.getToolMenifest();
+			if (m != null)
+				ans.add(m);
+		}
+		return ans;
 	}
-
+	
 	// classes
 
 	public static class GeneralConfig {
@@ -185,15 +192,7 @@ public class Config {
 			}
 			return manifest;
 		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof ToolConfig)
-				return path.equals(((ToolConfig)obj).path);
 
-			return false;
-		}
-		
 		public String getUniqueToolId() {
 			return getToolMenifest() == null ? null : getToolMenifest().getUniqueToolId();
 		}

@@ -54,6 +54,10 @@ public class FileUpload extends WContainerWidget {
         }
 	}
 	
+	public WFileUpload getWFileUpload() {
+		return uploadFile;
+	}
+
 	public Signal1<File> uploadedFile() {
 		return uploadedFile;
 	}
