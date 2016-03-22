@@ -21,7 +21,5 @@
 	<classpathentry kind="lib" path="lib/jwt/deps/pdfjet/pdfjet-4.75.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/jwt-3.3.5.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar"/>
-	<classpathentry kind="lib" path="/home/michael/projects/rega-genotype/rega-genotype/lib/apache_http/httpclient-4.5.2.jar"/>
-	<classpathentry kind="lib" path="/home/michael/projects/rega-genotype/rega-genotype/lib/apache_http/httpcore-4.4.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
