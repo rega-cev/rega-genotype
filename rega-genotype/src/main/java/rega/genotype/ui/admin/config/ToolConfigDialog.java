@@ -45,7 +45,7 @@ public class ToolConfigDialog extends WDialog {
 	private final WCheckBox serviceChB = new WCheckBox();
 	private final WCheckBox uiChB = new WCheckBox();
 
-	public ToolConfigDialog(final ToolConfig toolConfig, boolean isReadOnly) {
+	public ToolConfigDialog(final ToolConfig toolConfig) {
 		show();
 
 		setWidth(new WLength(600));
@@ -97,12 +97,6 @@ public class ToolConfigDialog extends WDialog {
 		template.bindWidget("upload", fileUpload);
 		template.bindWidget("info", infoT);
 
-		if (isReadOnly) {
-			template.disable();
-			publishB.hide();
-			newVersionB.hide();
-		}
-		
 		// TODO: fileUpload will be replaced by editors per-file.
 		// TODO: show file list.
 		fileUpload.setMultiple(true);

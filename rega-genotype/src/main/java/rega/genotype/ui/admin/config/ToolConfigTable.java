@@ -147,8 +147,7 @@ public class ToolConfigTable extends Template{
 
 	private void edit(ToolInfo info) {
 		ToolConfig config = info == null ? null : info.getConfig();
-		boolean isReadOnly = info == null ? false : info.getState() != ToolState.Local;
-		ToolConfigDialog d = new ToolConfigDialog(config, isReadOnly);
+		ToolConfigDialog d = new ToolConfigDialog(config);
 		d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 			public void trigger(WDialog.DialogCode arg) {
 				if (arg == WDialog.DialogCode.Accepted) {
