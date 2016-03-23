@@ -25,7 +25,7 @@ public class AdminApplication extends WApplication{
 		useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"), "IE lte 7");
 		
 		// For now it is simple.
-		new ToolConfigTable(getRoot());
+		new AdminNavigation(getRoot());
 	}
 
 	public static AdminApplication getAppInstance() {

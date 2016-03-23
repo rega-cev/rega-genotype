@@ -12,6 +12,7 @@ import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
+import eu.webtoolkit.jwt.WSortFilterProxyModel;
 
 public class ToolConfigTableModel extends WAbstractTableModel {
 	String[] headers = { "URL", "Name", "ID", "Version", "Publication date", "Publisher" , "State" };
@@ -162,5 +163,25 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 				return c;
 		}
 		return null;
+	}
+
+	// classes
+
+	// Note: will become framework class.
+	public static class ToolConfigTableModelSortProxy extends WSortFilterProxyModel{
+
+		public ToolConfigTableModelSortProxy(ToolConfigTableModel model) {
+			setSourceModel(model);
+			setDynamicSortFilter(true);
+		}
+
+		public ToolInfo getToolInfo(WModelIndex proxyIndex) {
+			 return ((ToolConfigTableModel) getSourceModel()).
+					 getToolInfo(mapToSource(proxyIndex).getRow());
+		}
+
+		public void refresh() {
+			((ToolConfigTableModel) getSourceModel()).refresh();
+		}
 	}
 }

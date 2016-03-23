@@ -9,6 +9,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
+import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
 import rega.genotype.ui.framework.widgets.Template;
@@ -33,8 +34,7 @@ import eu.webtoolkit.jwt.WText;
  * @author michael
  */
 public class ToolConfigTable extends Template{
-	ToolConfigTableModel model;
-
+	private ToolConfigTableModelSortProxy proxyModel;
 	public ToolConfigTable(WContainerWidget parent) {
 		super(tr("admin.config.tool-config-table"), parent);
 		
@@ -56,11 +56,13 @@ public class ToolConfigTable extends Template{
 		List<ToolManifest> localManifests = getLocalManifests();
 		
 		// create table
-		model = new ToolConfigTableModel(localManifests, remoteManifests);
+		ToolConfigTableModel model = new ToolConfigTableModel(localManifests, remoteManifests);
 		final WTableView table = new WTableView();
 		table.setSelectionMode(SelectionMode.SingleSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
-		table.setModel(model);
+
+		proxyModel = new ToolConfigTableModelSortProxy(model);
+		table.setModel(proxyModel);
 		
 		final WPushButton addB = new WPushButton("Add");
 		final WPushButton editB = new WPushButton("Edit");
@@ -70,8 +72,8 @@ public class ToolConfigTable extends Template{
 		installB.clicked().addListener(installB, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
-					ToolInfo toolInfo = model.getToolInfo(
-							table.getSelectedIndexes().first().getRow());
+					ToolInfo toolInfo = proxyModel.getToolInfo(
+							table.getSelectedIndexes().first());
 					if (toolInfo.getState() == ToolState.RemoteNotSync) {
 						ToolManifest manifest = toolInfo.getManifest();
 						File f = null;
@@ -105,15 +107,15 @@ public class ToolConfigTable extends Template{
 			public void trigger(WModelIndex index, WMouseEvent arg2) {
 				if (index == null)
 					return;
-				edit(model.getToolInfo(index.getRow()));
+				edit(proxyModel.getToolInfo(index));
 			}
 		});
 
 		editB.clicked().addListener(editB, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
-					edit(model.getToolInfo(
-							table.getSelectedIndexes().first().getRow()));
+					edit(proxyModel.getToolInfo(
+							table.getSelectedIndexes().first()));
 				}
 			}
 		});
@@ -121,8 +123,8 @@ public class ToolConfigTable extends Template{
 		table.selectionChanged().addListener(this, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
-					ToolInfo toolInfo = model.getToolInfo(
-							table.getSelectedIndexes().first().getRow());
+					ToolInfo toolInfo = proxyModel.getToolInfo(
+							table.getSelectedIndexes().first());
 					installB.setEnabled(toolInfo.getState() == ToolState.RemoteNotSync);
 				} else {
 					installB.disable();
@@ -142,7 +144,7 @@ public class ToolConfigTable extends Template{
 		d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 			public void trigger(WDialog.DialogCode arg) {
 				if (arg == WDialog.DialogCode.Accepted) {
-					model.refresh();
+					proxyModel.refresh();
 				}
 			}
 		});
