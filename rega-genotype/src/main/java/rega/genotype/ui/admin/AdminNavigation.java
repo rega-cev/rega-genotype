@@ -2,6 +2,7 @@ package rega.genotype.ui.admin;
 
 import rega.genotype.ui.admin.config.GlobalConfigForm;
 import rega.genotype.ui.admin.config.ToolConfigTable;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WHBoxLayout;
 import eu.webtoolkit.jwt.WLength;
@@ -19,8 +20,14 @@ public class AdminNavigation extends WContainerWidget {
 	    WStackedWidget contents = new WStackedWidget();
 	    WMenu menu = new WMenu(contents);
 	    menu.setWidth(new WLength(150));
-	    menu.addItem("Tools", new ToolConfigTable(null));
-	    menu.addItem("Global config", new GlobalConfigForm());
+	    
+	    menu.setInternalPathEnabled();
+	    
+	    // Globale config must be created first.
+	    if (Settings.getInstance().getConfig() != null) 
+	    	menu.addItem("Tools", new ToolConfigTable(null)).setPathComponent("tools");
+
+	    menu.addItem("Global config", new GlobalConfigForm()).setPathComponent("global");;
 
 		WHBoxLayout layout = new WHBoxLayout();
 		setLayout(layout);

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.utils.Settings;
 
 /**
@@ -77,7 +78,12 @@ public class FileServlet extends HttpServlet {
 	 * return "" if id syntax is not correct.
 	 */
 	private File getFilePath(String toolUrl, String id) {
-		File xmlPath = Settings.getInstance(getServletContext()).getXmlPath(toolUrl);
+		File xmlPath;
+		xmlPath = Settings.getInstance(getServletContext()).getXmlPath(toolUrl);
+
+		if (xmlPath == null)
+			return null;
+
 		File ans = new File(xmlPath.getAbsolutePath() + id);
 
 		if (!isInDir(ans, xmlPath)) {

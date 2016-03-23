@@ -11,6 +11,7 @@ import rega.genotype.ui.framework.widgets.AutoForm;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WPushButton;
 
@@ -18,7 +19,14 @@ public class GlobalConfigForm extends WContainerWidget{
 
 	public GlobalConfigForm() {
 		super();
-		GeneralConfig generalConfig = Settings.getInstance().getConfig().getGeneralConfig();
+		final Config config;
+		if (Settings.getInstance().getConfig() == null){
+			config = new Config();
+			config.setGeneralConfig(new GeneralConfig());
+		} else 
+			config = Settings.getInstance().getConfig();
+
+		GeneralConfig generalConfig = config.getGeneralConfig();
 		final AutoForm<Config.GeneralConfig> form = new AutoForm<Config.GeneralConfig>(generalConfig) {
 			@Override
 			protected Set<String> getIgnoredFields() {
@@ -34,8 +42,11 @@ public class GlobalConfigForm extends WContainerWidget{
 			public void trigger() {
 				if (form.save()) {
 					try {
-						Config config = Settings.getInstance().getConfig();
 						config.save(Settings.getInstance().getBaseDir() + File.separator);
+						if (Settings.getInstance().getConfig() == null){
+							Settings.getInstance().setConfig(config);
+							WApplication.getInstance().redirect(WApplication.getInstance().getBookmarkUrl());
+						}
 						new MsgDialog("Info", "Global config changes are saved.");
 					} catch (IOException e) {
 						e.printStackTrace();

@@ -13,6 +13,7 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.config.Config;
+import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.util.FileUtil;
 
 /**
@@ -39,18 +40,20 @@ public class Settings {
 	
 	public Settings(File file) {
 		System.err.println("Loading config file: " + file.getAbsolutePath());
-		if (!file.exists())
-			throw new RuntimeException("Config file could not be found!");
 
-		String json = FileUtil.readFile(file);
-		config = Config.parseJson(json);
+		if (file.exists()) {
+			String json = FileUtil.readFile(file);
+			config = Config.parseJson(json);
+		}
 	}
 
 	/**
 	 * @param url url path component that defines the tool 
-	 * @return the directory that contains all the tool files.
+	 * @return the directory that contains all the tool files or null if that dir does not exist.
 	 */
 	public File getXmlPath(String url) {
+		if (config.getToolConfigByUrlPath(url) == null)
+			return null;
 		return new File(config.getToolConfigByUrlPath(url).getConfiguration());
 	}
 	/**
@@ -116,13 +119,19 @@ public class Settings {
 		return config;
 	}
 
+	public void setConfig(Config config) {
+		this.config = config;
+	}
+
 	public static void initSettings(Settings s) {
 		instance = s;
-		PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
-		SequenceAlign.clustalWPath = s.getClustalWCmd();
-		BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
-		PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
-		treeGraphCommand = s.getTreeGraphCmd();
+		if (s.getConfig() != null) {
+			PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
+			SequenceAlign.clustalWPath = s.getClustalWCmd();
+			BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
+			PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
+			treeGraphCommand = s.getTreeGraphCmd();
+		}
 	}
 
 	public static Settings getInstance() {
@@ -162,11 +171,8 @@ public class Settings {
 		 *  - we default to ./base-work-dir/
 		 */
 
-		if (context != null) {
+		if (context != null) 
 			baseDir = context.getInitParameter("configFile");
-			if (baseDir != null)
-				return baseDir;
-		} 
 
 		if (baseDir == null) {
 			System.err.println("REGA_GENOTYPE_WORK_DIR"+":" + System.getenv("REGA_GENOTYPE_WORK_DIR"));
@@ -182,6 +188,7 @@ public class Settings {
 				baseDir = "./base-work-dir/";
 		}
 
+		new File(baseDir).mkdirs(); // make sure that the dir exists
         return baseDir;
 	}
 }

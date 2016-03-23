@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
+import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
@@ -30,9 +31,13 @@ public class GenotypeApplication extends WApplication
 	protected String toolId;// url Path Component
 	
 	public GenotypeApplication(WEnvironment env,
-			ServletContext servletContext, Settings settings ,String toolId)
+			ServletContext servletContext, Settings settings ,String toolId) throws RegaGenotypeExeption
 	{
 		super(env);
+		
+		if (settings.getConfig() == null)
+			throw new RegaGenotypeExeption("Missing config file. Go to {host}/rega-genotype/admin/global to create new config file.");
+
 		this.settings = settings;
 
 		useStyleSheet(new WLink("../style/wt.css"));               // do not use Wt's inline stylesheet...
@@ -41,7 +46,7 @@ public class GenotypeApplication extends WApplication
 		servletContext_ = servletContext;
 		this.toolId = toolId;
 	}
-
+	
 	public ServletContext getServletContext()
 	{
 		return servletContext_;

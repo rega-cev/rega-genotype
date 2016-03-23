@@ -9,10 +9,12 @@ import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 
 /**
@@ -31,7 +33,15 @@ public class EtvMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {
-		GenotypeApplication app = new GenotypeApplication(env, this.getServletContext(), settings, ETV_TOOL_ID);
+		GenotypeApplication app;
+		try {
+			app = new GenotypeApplication(env, this.getServletContext(), settings, ETV_TOOL_ID);
+		} catch (RegaGenotypeExeption e) {
+			e.printStackTrace();
+			WApplication a = new WApplication(env);
+			a.getRoot().addWidget(new WText(e.getMessage()));
+			return a;
+		}
 		app.setTitle(WString.tr("etvTool.title"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");

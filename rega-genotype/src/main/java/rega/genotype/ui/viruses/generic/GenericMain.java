@@ -18,6 +18,7 @@ import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
@@ -45,17 +46,28 @@ public class GenericMain extends GenotypeMain {
 		String[] deploymentPath = env.getDeploymentPath().split("/");
 		String url = deploymentPath[deploymentPath.length - 1];
 
-		ToolConfig toolConfig = settings.getConfig().getToolConfigByUrlPath(url);
+		ToolConfig toolConfig;
 
-		if (toolConfig == null || toolConfig.getUniqueToolId() == null) {
+		if (settings.getConfig() == null 
+				|| settings.getConfig().getToolConfigByUrlPath(url) == null
+				|| settings.getConfig().getToolConfigByUrlPath(url).getUniqueToolId() == null) {
 			WApplication app = new WApplication(env);
 			app.getRoot().addWidget(new WText("Typing tool for organism " + url + " was not found."));
 			return app;
-		}
+		} else 
+			toolConfig = settings.getConfig().getToolConfigByUrlPath(url);
 
 		String urlComponent = toolConfig.getPath();
-		GenotypeApplication app = new GenotypeApplication(env, 
-				this.getServletContext(), settings, urlComponent);
+		GenotypeApplication app;
+		try {
+			app = new GenotypeApplication(env, 
+					this.getServletContext(), settings, urlComponent);
+		} catch (RegaGenotypeExeption e1) {
+			e1.printStackTrace();
+			WApplication a = new WApplication(env);
+			a.getRoot().addWidget(new WText(e1.getMessage()));
+			return a;
+		}
 
 		GenericDefinition definition;
 		try {

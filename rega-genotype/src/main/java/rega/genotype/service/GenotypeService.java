@@ -134,8 +134,7 @@ public class GenotypeService extends HttpServlet {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void init(ServletConfig config) throws ServletException {
-
+	public void init(ServletConfig config) throws ServletException {		
 		String toolName = config.getInitParameter("genotypeTool");
 		if (toolName != null)
 			try {

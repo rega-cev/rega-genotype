@@ -186,7 +186,6 @@ public class ToolConfigDialog extends WDialog {
 						info.setText(r == null ? "" :r.getMessage());
 					}
 				}
-				ans = false;
 			}
 		}
 		return ans;
@@ -196,13 +195,17 @@ public class ToolConfigDialog extends WDialog {
 		if (!validate())
 			return null;
 
+		Config config = Settings.getInstance().getConfig();
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
-
+		
 		String xmlDir = Settings.getInstance().getXmlDir(
 				idLE.getText(), versionLE.getText());
 		String jobDir = Settings.getInstance().getJobDir(
 				idLE.getText(), versionLE.getText());
-		
+
+		new File(xmlDir).mkdirs();
+		new File(jobDir).mkdirs();
+
 		// save xml files
 		for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
 			String[] split = f.getClientFileName().split(File.separator);
@@ -216,6 +219,7 @@ public class ToolConfigDialog extends WDialog {
 		manifest.setName(nameLE.getText());
 		manifest.setId(idLE.getText());
 		manifest.setVersion(versionLE.getText());
+		manifest.setPublisherName(config.getGeneralConfig().getPublisherName());
 
 		// save ToolConfig
 		ToolConfig newTool = new ToolConfig();
@@ -227,7 +231,6 @@ public class ToolConfigDialog extends WDialog {
 		newTool.setWebService(serviceChB.isChecked());
 
 		// save cofig
-		Config config = Settings.getInstance().getConfig();
 		if (!config.addTool(newTool))
 			return null;
 
