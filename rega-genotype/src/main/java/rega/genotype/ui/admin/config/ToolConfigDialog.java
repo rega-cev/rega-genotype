@@ -7,6 +7,7 @@ import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
+import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.FileUtil;
@@ -78,9 +79,9 @@ public class ToolConfigDialog extends WDialog {
 
 		// validators
 		nameLE.setValidator(new WValidator(true));
-		idLE.setValidator(new ToolIdValidator(true));
-		versionLE.setValidator(new ToolIdValidator(true));
-		urlLE.setValidator(new ToolUrlValidator(true));
+		idLE.setValidator(new WValidator(true));
+		versionLE.setValidator(new WValidator(true));
+		urlLE.setValidator(new WValidator(true));
 
 		// bind
 		
@@ -135,10 +136,16 @@ public class ToolConfigDialog extends WDialog {
 						infoT.setText("Error could publish.");
 					} 
 					if (FileUtil.zip(new File(tool.getConfiguration()), zip)){
-						if (ToolRepoServiceRequests.publish(zip))
-							accept();
-						else 
-							infoT.setText("Error: could not post the tool.");
+						try {
+							ToolRepoServiceRequests.publish(zip);
+							accept();							
+						} catch (RegaGenotypeExeption e) {
+							e.printStackTrace();
+							infoT.setText("Error: could not publish the tool. " + e.getMessage());
+						} catch (IOException e) {
+							e.printStackTrace();
+							infoT.setText("Error: could not publish the tool. " + e.getMessage());
+						}
 					} else {
 						infoT.setText("Error could publish. Zipping went wrong.");
 					}
@@ -243,35 +250,5 @@ public class ToolConfigDialog extends WDialog {
 			return null;
 		}
 		return newTool;
-	}
-
-	// classes
-	
-	private class ToolIdValidator extends WValidator {
-		ToolIdValidator(boolean isMandatory) {
-			super(isMandatory);
-		}
-		@Override
-		public Result validate(String input) {
-			Config config = Settings.getInstance().getConfig();
-			if (config.getToolConfigById(idLE.getText(), versionLE.getText()) != null)
-				return new Result(State.Invalid, "A tool with same id and version already exist on local server.");
-
-			return super.validate(input);
-		}
-	}
-
-	private class ToolUrlValidator extends WValidator {
-		ToolUrlValidator(boolean isMandatory) {
-			super(isMandatory);
-		}
-		@Override
-		public Result validate(String input) {
-			Config config = Settings.getInstance().getConfig();
-			if (config.getToolConfigByUrlPath(urlLE.getText()) != null)
-				return new Result(State.Invalid, "A tool with same url already exist on local server.");
-				
-			return super.validate(input);
-		}
 	}
 }

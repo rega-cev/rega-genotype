@@ -10,9 +10,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -23,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 
+import rega.genotype.config.ToolIndexes;
+import rega.genotype.config.ToolIndexes.ToolIndex;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.util.FileUtil;
 import eu.webtoolkit.jwt.utils.StreamUtils;
@@ -40,15 +40,13 @@ public class ToolRepoService extends HttpServlet{
 	public static String REQ_TYPE_PUBLISH  = "publish";
 	public static String REQ_TYPE_GET_MANIFESTS = "get-manifests";
 	public static String REQ_TYPE_GET_TOOL = "get-tool";
+	
+	// responce 
+	public static String RESPONCE_ERRORS = "errors";
 
-	private static String REPO_DIR = "repo-work-dir" + File.separator; // TODO 
+
+	public static String REPO_DIR = "repo-work-dir" + File.separator; // TODO 
 	private static String REPO_DIR_TMP = REPO_DIR + "tmp" + File.separator;
-
-
-	// TODO: store in file?
-	//      <password, tool id>
-	private Map<String, String> toolPasswords = new HashMap<String, String>();
-	//private List<ToolManifest> manifests = new ArrayList<ToolManifest>();
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -62,13 +60,12 @@ public class ToolRepoService extends HttpServlet{
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		// TODO Auto-generated method stub
 		super.init(config);
 	}
 
 	private void performRequest(HttpServletRequest req, HttpServletResponse resp)  throws ServletException, IOException {		
 		String reqType = getLastUrlPathComponent(req.getRequestURL().toString());
-		String pwd = req.getHeader(TOOL_PWD_PARAM);//TODO
+		String pwd = req.getHeader(TOOL_PWD_PARAM);
 		if (reqType.equals(REQ_TYPE_PUBLISH)) {
 			
 			// copy to tmp dir 
@@ -79,7 +76,9 @@ public class ToolRepoService extends HttpServlet{
 			bodyStream.close();
 	        out.close();
      
-	        if (!addTool(pwd, tmpFile)) {
+	        String errors = "";
+	        if (!addTool(pwd, tmpFile, errors)) {
+	        	resp.setHeader(RESPONCE_ERRORS, errors);
 	        	resp.setStatus(404);
 				return;
 	        }
@@ -108,25 +107,55 @@ public class ToolRepoService extends HttpServlet{
 		return new File(REPO_DIR + toolId + toolVersion + ".zip");
 	}
 	
-	private boolean addTool(String password, File toolFile) {
-		if (toolFile == null || !FileUtil.isValidZip(toolFile))
+	private boolean addTool(String password, File toolFile, String errors) {
+		if (toolFile == null || !FileUtil.isValidZip(toolFile)) {
+			errors += "Invalid tool file";
 			return false;
+		}
 
         // extract tool id and version
 		ToolManifest manifest = ToolManifest.parseJson(
 				FileUtil.getFileContent(toolFile, ToolManifest.MANIFEST_FILE_NAME));
 		
 		File toolDir = getToolFile(manifest.getId(), manifest.getVersion());
+		if (toolDir.exists()) {
+			errors += "Tool already exists in repository.";
+			return false;
+		}
+		
+		File toolIndexsFile = new File(REPO_DIR + ToolIndexes.TOOL_INDEXS_FILE_NAME);
+		ToolIndexes indexes;
+		if (toolIndexsFile.exists()) {
+			indexes = ToolIndexes.parseJsonAsList(FileUtil.readFile(toolIndexsFile));
+			// Check publisher pwd
+			ToolIndex index = indexes.getIndex(manifest.getId());
+			if (!index.getPublisherPassword().equals(password)){
+				errors += "Only the tool original publisher " + index.getPublisherName() +" can publish new versions.";
+				return false;
+			}
+		} else {
+			indexes = new ToolIndexes();
+		}
+		// Add ToolIndex for new tools
+		indexes.getIndexes().add(new ToolIndex(password, manifest.getId(), manifest.getPublisherName()));
+		try {
+			indexes.save(REPO_DIR);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			errors += "Server internal error.";
+			return false;
+		}
+		
+		
 		toolDir.getParentFile().mkdirs();
-
 		try {
 			Files.copy(toolFile.toPath(), toolDir.toPath());
 		} catch (IOException e) {
+			errors += "Server internal error.";
 			e.printStackTrace();
 			return false;
 		}
 
-		// TODO store pwd and manifest.
 		
 		return true;
 	}

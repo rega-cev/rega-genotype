@@ -35,23 +35,14 @@ import eu.webtoolkit.jwt.WText;
  */
 public class ToolConfigTable extends Template{
 	private ToolConfigTableModelSortProxy proxyModel;
-	private List<ToolManifest> remoteManifests;
+	private WText infoT = new WText();
+
 	public ToolConfigTable(WContainerWidget parent) {
 		super(tr("admin.config.tool-config-table"), parent);
 
-		WText infoT = new WText();
 		bindWidget("info", infoT);
 
-		// get remote tools
-		remoteManifests = new ArrayList<ToolManifest>();
-		String manifestsJson = ToolRepoServiceRequests.getManifests();
-		if (manifestsJson == null) {
-			infoT.setText("Could not read remote tools");
-		} else {
-			remoteManifests = ToolManifest.parseJsonAsList(manifestsJson);
-			if (remoteManifests == null)
-				infoT.setText("Could not parss remote tools");
-		}
+		List<ToolManifest> remoteManifests = getRemoteManifests();
 
 		// get local tools
 		List<ToolManifest> localManifests = getLocalManifests();
@@ -139,6 +130,21 @@ public class ToolConfigTable extends Template{
 		bindWidget("install", installB);
 	}
 
+	private List<ToolManifest> getRemoteManifests() {
+		// get remote tools
+		List<ToolManifest> remoteManifests = new ArrayList<ToolManifest>();
+		String manifestsJson = ToolRepoServiceRequests.getManifests();
+		if (manifestsJson == null) {
+			infoT.setText("Could not read remote tools");
+		} else {
+			remoteManifests = ToolManifest.parseJsonAsList(manifestsJson);
+			if (remoteManifests == null)
+				infoT.setText("Could not parss remote tools");
+		}
+
+		return remoteManifests;
+	}
+
 	private void edit(ToolInfo info) {
 		ToolConfig config = info == null ? null : info.getConfig();
 		boolean isReadOnly = info == null ? false : info.getState() != ToolState.Local;
@@ -146,7 +152,7 @@ public class ToolConfigTable extends Template{
 		d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 			public void trigger(WDialog.DialogCode arg) {
 				if (arg == WDialog.DialogCode.Accepted) {
-					proxyModel.refresh(getLocalManifests(), remoteManifests);
+					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
 				}
 			}
 		});

@@ -8,14 +8,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.util.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
+/**
+ * Centralize all requests to ToolRepoService.
+ * @author michael
+ */
 public class ToolRepoServiceRequests {
 
 	public static class ToolRepoServiceExeption extends Exception{
@@ -26,41 +32,33 @@ public class ToolRepoServiceRequests {
 	}
 	
 	private static String generatePasswiord() {
-		//TODO: Koen ??
-		return "TODO";
+		return Settings.getInstance().getConfig().getGeneralConfig().getPublisherPassword();
 	}
 
-	public static boolean publish(final File zipFile) {
-		URLConnection connection;
-		try {
-			connection = new URL(ToolRepoService.getReqPublishUrl()).openConnection();
-			connection.setDoOutput(true); // Triggers POST.
-			//connection.setRequestProperty("Accept-Charset", "UTF-8");
-			//connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + "UTF-8");
-			connection.setRequestProperty("Content-Type", "multipart/form-data"); // Allow to add a file
-			connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
-			StreamUtils.copy(new FileInputStream(zipFile), 
-					connection.getOutputStream());
+	public static void publish(final File zipFile) throws RegaGenotypeExeption, IOException {
+		HttpURLConnection connection = (HttpURLConnection) new URL(
+				ToolRepoService.getReqPublishUrl()).openConnection();
+		connection.setDoOutput(true); // Triggers POST.
+		//connection.setRequestProperty("Accept-Charset", "UTF-8");
+		//connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + "UTF-8");
+		connection.setRequestProperty("Content-Type", "multipart/form-data"); // Allow to add a file
+		connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
+		StreamUtils.copy(new FileInputStream(zipFile), 
+				connection.getOutputStream());
 
-			// Note: can throw java.io.FileNotFoundException if the server did not respond.
-			InputStream response = connection.getInputStream();
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(response));
-			String decodedString;
-			while ((decodedString = in.readLine()) != null) {
-				System.out.println(decodedString);
-			}
-			in.close();
-
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
+		if (connection.getResponseCode() != 200) {
+			String responseMessage = connection.getHeaderField(ToolRepoService.RESPONCE_ERRORS);
+			throw new RegaGenotypeExeption(responseMessage);
 		}
+		// Note: can throw java.io.FileNotFoundException if the server did not respond.
+		InputStream response = connection.getInputStream();
 
-		return true;
+		BufferedReader in = new BufferedReader(new InputStreamReader(response));
+		String decodedString;
+		while ((decodedString = in.readLine()) != null) {
+			System.out.println(decodedString);
+		}
+		in.close();
 	}
 
 	/**
