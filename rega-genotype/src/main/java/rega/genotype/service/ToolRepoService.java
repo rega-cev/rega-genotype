@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import rega.genotype.config.ToolIndexes;
@@ -76,9 +77,9 @@ public class ToolRepoService extends HttpServlet{
 			bodyStream.close();
 	        out.close();
      
-	        String errors = "";
+	        StringBuilder errors = new StringBuilder();
 	        if (!addTool(pwd, tmpFile, errors)) {
-	        	resp.setHeader(RESPONCE_ERRORS, errors);
+	        	resp.setHeader(RESPONCE_ERRORS, errors.toString());
 	        	resp.setStatus(404);
 				return;
 	        }
@@ -107,9 +108,9 @@ public class ToolRepoService extends HttpServlet{
 		return new File(REPO_DIR + toolId + toolVersion + ".zip");
 	}
 	
-	private boolean addTool(String password, File toolFile, String errors) {
+	private boolean addTool(String password, File toolFile, StringBuilder errors) {
 		if (toolFile == null || !FileUtil.isValidZip(toolFile)) {
-			errors += "Invalid tool file";
+			errors.append("Invalid tool file");
 			return false;
 		}
 
@@ -119,7 +120,7 @@ public class ToolRepoService extends HttpServlet{
 		
 		File toolDir = getToolFile(manifest.getId(), manifest.getVersion());
 		if (toolDir.exists()) {
-			errors += "Tool already exists in repository.";
+			errors.append("Tool already exists in repository.");
 			return false;
 		}
 		
@@ -130,7 +131,7 @@ public class ToolRepoService extends HttpServlet{
 			// Check publisher pwd
 			ToolIndex index = indexes.getIndex(manifest.getId());
 			if (!index.getPublisherPassword().equals(password)){
-				errors += "Only the tool original publisher " + index.getPublisherName() +" can publish new versions.";
+				errors.append("Only the tool original publisher " + index.getPublisherName() +" can publish new versions.");
 				return false;
 			}
 		} else {
@@ -142,7 +143,7 @@ public class ToolRepoService extends HttpServlet{
 			indexes.save(REPO_DIR);
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			errors += "Server internal error.";
+			errors.append("Server internal error.");
 			return false;
 		}
 		
@@ -151,7 +152,7 @@ public class ToolRepoService extends HttpServlet{
 		try {
 			Files.copy(toolFile.toPath(), toolDir.toPath());
 		} catch (IOException e) {
-			errors += "Server internal error.";
+			errors.append("Server internal error.");
 			e.printStackTrace();
 			return false;
 		}
@@ -178,7 +179,8 @@ public class ToolRepoService extends HttpServlet{
 		List<String> ans = new ArrayList<String>();
 		File repoDir = new File(REPO_DIR);
 		for (File f: repoDir.listFiles()){
-			if (FileUtil.isValidZip(f)){
+			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("zip")
+					&& FileUtil.isValidZip(f)){
 				String json = FileUtil.getFileContent(
 						f, ToolManifest.MANIFEST_FILE_NAME);
 				if (json != null)
