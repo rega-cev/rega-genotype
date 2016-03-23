@@ -27,7 +27,7 @@ public class AdminNavigation extends WContainerWidget {
 	    if (Settings.getInstance().getConfig() != null) 
 	    	menu.addItem("Tools", new ToolConfigTable(null)).setPathComponent("tools");
 
-	    menu.addItem("Global config", new GlobalConfigForm()).setPathComponent("global");;
+	    menu.addItem("Global config", new GlobalConfigForm()).setPathComponent("global");
 
 		WHBoxLayout layout = new WHBoxLayout();
 		setLayout(layout);

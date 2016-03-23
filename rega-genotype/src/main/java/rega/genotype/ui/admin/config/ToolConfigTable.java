@@ -35,14 +35,15 @@ import eu.webtoolkit.jwt.WText;
  */
 public class ToolConfigTable extends Template{
 	private ToolConfigTableModelSortProxy proxyModel;
+	private List<ToolManifest> remoteManifests;
 	public ToolConfigTable(WContainerWidget parent) {
 		super(tr("admin.config.tool-config-table"), parent);
-		
+
 		WText infoT = new WText();
 		bindWidget("info", infoT);
 
 		// get remote tools
-		List<ToolManifest> remoteManifests = new ArrayList<ToolManifest>();
+		remoteManifests = new ArrayList<ToolManifest>();
 		String manifestsJson = ToolRepoServiceRequests.getManifests();
 		if (manifestsJson == null) {
 			infoT.setText("Could not read remote tools");
@@ -56,7 +57,8 @@ public class ToolConfigTable extends Template{
 		List<ToolManifest> localManifests = getLocalManifests();
 		
 		// create table
-		ToolConfigTableModel model = new ToolConfigTableModel(localManifests, remoteManifests);
+		ToolConfigTableModel model = new ToolConfigTableModel(
+				localManifests, remoteManifests);
 		final WTableView table = new WTableView();
 		table.setSelectionMode(SelectionMode.SingleSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
@@ -144,7 +146,7 @@ public class ToolConfigTable extends Template{
 		d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 			public void trigger(WDialog.DialogCode arg) {
 				if (arg == WDialog.DialogCode.Accepted) {
-					proxyModel.refresh();
+					proxyModel.refresh(getLocalManifests(), remoteManifests);
 				}
 			}
 		});
@@ -153,6 +155,7 @@ public class ToolConfigTable extends Template{
 	private List<ToolManifest> getLocalManifests() {
 		List<ToolManifest> ans = new ArrayList<ToolManifest>();
 		File xmlBaseDir = new File(Settings.getInstance().getBaseXmlDir());
+		xmlBaseDir.mkdirs();
 		for (File toolDir: xmlBaseDir.listFiles()){
 			if (toolDir.listFiles() != null)
 				for (File f: toolDir.listFiles()){

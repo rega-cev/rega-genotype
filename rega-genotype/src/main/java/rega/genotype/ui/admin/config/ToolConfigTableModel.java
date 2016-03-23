@@ -60,26 +60,7 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 	public ToolConfigTableModel(
 			List<ToolManifest> localManifests,
 			List<ToolManifest> remoteManifests) {
-		Config config = Settings.getInstance().getConfig();
-		// add locals
-		for (ToolManifest m: localManifests) {
-			ToolInfo info = new ToolInfo();
-			info.setConfig(find(m.getId(), m.getVersion(), config));
-			info.setManifest(m);
-			ToolManifest published = find(m.getId(), m.getVersion(), remoteManifests);
-			info.setState(published != null ? ToolState.RemoteSync : ToolState.Local); 
-			rows.add(info);
-		}
-		// add remote not synced
-		for (ToolManifest m: remoteManifests) {
-			ToolManifest local = find(m.getId(), m.getVersion(), localManifests);
-			if (local == null) {
-				ToolInfo info = new ToolInfo();
-				info.setManifest(m);
-				info.setState(ToolState.RemoteNotSync);
-				rows.add(info);
-			} // else was add before.
-		}
+		refresh(localManifests, remoteManifests);
 	}
 
 	@Override
@@ -118,10 +99,9 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			case 3:
 				return info.getManifest() == null ? null : info.getManifest().getVersion();
 			case 4:
-				return "TODO date"; 
-				//return toolConfig.getToolMenifest().getCreationDate();
+				return info.getManifest() == null ? null : info.getManifest().getPublicationDate();
 			case 5:
-				return "TODO publisher"; 
+				return info.getManifest() == null ? null : info.getManifest().getPublisherName();
 			case 6:
 				return info.getState().str(); // local, uptodate, 
 			default:
@@ -134,7 +114,31 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		return null;
 	}
 
-	public void refresh() {
+	public void refresh(List<ToolManifest> localManifests,
+			List<ToolManifest> remoteManifests) {
+		
+		rows.clear();
+		Config config = Settings.getInstance().getConfig();
+		// add locals
+		for (ToolManifest m: localManifests) {
+			ToolInfo info = new ToolInfo();
+			info.setConfig(find(m.getId(), m.getVersion(), config));
+			info.setManifest(m);
+			ToolManifest published = find(m.getId(), m.getVersion(), remoteManifests);
+			info.setState(published != null ? ToolState.RemoteSync : ToolState.Local); 
+			rows.add(info);
+		}
+		// add remote not synced
+		for (ToolManifest m: remoteManifests) {
+			ToolManifest local = find(m.getId(), m.getVersion(), localManifests);
+			if (local == null) {
+				ToolInfo info = new ToolInfo();
+				info.setManifest(m);
+				info.setState(ToolState.RemoteNotSync);
+				rows.add(info);
+			} // else was add before.
+		}
+
 		layoutAboutToBeChanged().trigger();
 		layoutChanged().trigger();
 	}
@@ -180,8 +184,11 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 					 getToolInfo(mapToSource(proxyIndex).getRow());
 		}
 
-		public void refresh() {
-			((ToolConfigTableModel) getSourceModel()).refresh();
+		public void refresh(
+				List<ToolManifest> localManifests,
+				List<ToolManifest> remoteManifests) {
+			((ToolConfigTableModel) getSourceModel()).refresh(
+					localManifests, remoteManifests);
 		}
 	}
 }
