@@ -2,6 +2,8 @@ package rega.genotype.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,13 @@ public class Config {
 	}
 
 	public void save(String externalDir) throws IOException {
+		// TODO: synchronize
+
+		if (getGeneralConfig().getPublisherPassword() == null 
+				|| getGeneralConfig().getPublisherPassword().isEmpty()) 
+			getGeneralConfig().setPublisherPassword(
+					new BigInteger(130, new SecureRandom()).toString(32));
+
 		FileUtil.writeStringToFile(new File(externalDir + CONFIG_FILE_NAME), toJson());
 	}
 
@@ -102,9 +111,9 @@ public class Config {
 		private String imageMagickConvertCmd;
 		private int maxAllowedSeqs;
 		private String inkscapeCmd;
-		private String adminPassword;
-		private String repositoryId;
-		
+		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
+		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
+
 		public String getPaupCmd() {
 			return paupCmd;
 		}
@@ -159,17 +168,17 @@ public class Config {
 		public void setBlastPath(String blastPath) {
 			this.blastPath = blastPath;
 		}
-		public String getAdminPassword() {
-			return adminPassword;
+		public String getPublisherName() {
+			return publisherName;
 		}
-		public void setAdminPassword(String adminPassword) {
-			this.adminPassword = adminPassword;
+		public void setPublisherName(String publisherName) {
+			this.publisherName = publisherName;
 		}
-		public String getRepositoryId() {
-			return repositoryId;
+		public String getPublisherPassword() {
+			return publisherPassword;
 		}
-		public void setRepositoryId(String repositoryId) {
-			this.repositoryId = repositoryId;
+		public void setPublisherPassword(String publisherPassword) {
+			this.publisherPassword = publisherPassword;
 		}
 	}
 

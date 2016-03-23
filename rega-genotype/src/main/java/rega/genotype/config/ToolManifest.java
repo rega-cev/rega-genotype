@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken;
 
 /**
  * Read json tool identifier. Stored in the tool dir (tool xml dir)
- * Created by tool/ version author, and can not be edited by other users.
+ * Created by tool/ version author, and can not be edited by other users or after it was published.
  *  
  * @author michael
  */
@@ -21,6 +21,8 @@ public class ToolManifest {
 	private String id;
 	private String version;
 	private boolean blastTool;
+	private String publisherName; // Copy from publisher Server global config publisherName, read only for users.
+	private String publicationDate; // filled by Repo server, read only for users.
 
 	public ToolManifest() {}
 
@@ -68,5 +70,21 @@ public class ToolManifest {
 	}
 	public void setBlastTool(boolean blastTool) {
 		this.blastTool = blastTool;
+	}
+
+	public String getPublisherName() {
+		return publisherName;
+	}
+
+	public void setPublisherName(String publisherName) {
+		this.publisherName = publisherName;
+	}
+
+	public String getPublicationDate() {
+		return publicationDate;
+	}
+
+	public void setPublicationDate(String publicationDate) {
+		this.publicationDate = publicationDate;
 	}
 }
