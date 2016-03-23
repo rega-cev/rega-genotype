@@ -7,8 +7,8 @@ import java.util.Set;
 
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.GeneralConfig;
-import rega.genotype.ui.framework.AutoForm;
-import rega.genotype.ui.framework.MsgDialog;
+import rega.genotype.ui.framework.widgets.AutoForm;
+import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WContainerWidget;

@@ -1,4 +1,4 @@
-package rega.genotype.ui.framework;
+package rega.genotype.ui.framework.widgets;
 
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WDialog;

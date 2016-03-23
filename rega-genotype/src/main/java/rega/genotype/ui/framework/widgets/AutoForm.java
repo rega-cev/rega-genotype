@@ -1,4 +1,4 @@
-package rega.genotype.ui.framework;
+package rega.genotype.ui.framework.widgets;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
