@@ -10,7 +10,7 @@ import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
-import rega.genotype.ui.util.FileUtil;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WCheckBox;

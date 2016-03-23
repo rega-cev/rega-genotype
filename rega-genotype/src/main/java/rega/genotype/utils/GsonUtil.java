@@ -1,4 +1,4 @@
-package rega.genotype.ui.util;
+package rega.genotype.utils;
 
 import java.lang.reflect.Type;
 import java.util.List;

@@ -34,8 +34,8 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
-import rega.genotype.ui.util.FileUtil;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import rega.genotype.utils.Utils;
 

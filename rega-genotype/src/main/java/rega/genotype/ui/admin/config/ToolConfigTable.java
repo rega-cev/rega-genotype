@@ -13,7 +13,7 @@ import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSo
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
 import rega.genotype.ui.framework.widgets.Template;
-import rega.genotype.ui.util.FileUtil;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;

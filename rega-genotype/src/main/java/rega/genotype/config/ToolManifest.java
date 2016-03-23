@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import rega.genotype.ui.util.FileUtil;
-import rega.genotype.ui.util.GsonUtil;
+import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.GsonUtil;
 
 import com.google.gson.reflect.TypeToken;
 

@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
 
-import rega.genotype.ui.util.FileUtil;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 
 public class TestUtils {

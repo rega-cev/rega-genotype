@@ -1,4 +1,4 @@
-package rega.genotype.ui.util;
+package rega.genotype.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

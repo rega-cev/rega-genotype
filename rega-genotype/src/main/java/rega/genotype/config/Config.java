@@ -7,8 +7,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import rega.genotype.ui.util.FileUtil;
-import rega.genotype.ui.util.GsonUtil;
+import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.GsonUtil;
 
 /**
  * Read json config

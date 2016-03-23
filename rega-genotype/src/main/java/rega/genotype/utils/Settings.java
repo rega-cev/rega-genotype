@@ -13,8 +13,6 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.config.Config;
-import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.ui.util.FileUtil;
 
 /**
  * Singleton class which contains the application settings, parses them from the xml configuration file.

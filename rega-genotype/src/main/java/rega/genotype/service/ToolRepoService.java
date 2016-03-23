@@ -25,7 +25,7 @@ import org.apache.commons.io.IOUtils;
 import rega.genotype.config.ToolIndexes;
 import rega.genotype.config.ToolIndexes.ToolIndex;
 import rega.genotype.config.ToolManifest;
-import rega.genotype.ui.util.FileUtil;
+import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
 @SuppressWarnings("serial")

@@ -14,7 +14,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.ui.util.FileUtil;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
