@@ -36,10 +36,10 @@ public class ToolConfigForm extends Template {
 	private Mode mode;
 	private final WText infoT = new WText();
 	private final FileUpload fileUpload = new FileUpload();
-	private final WLineEdit nameLE = new WLineEdit();
-	private final WLineEdit idLE = new WLineEdit();
-	private final WLineEdit versionLE = new WLineEdit();
-	private final WLineEdit urlLE = new WLineEdit();
+	private final WLineEdit nameLE = initLineEdit();
+	private final WLineEdit idLE = initLineEdit();
+	private final WLineEdit versionLE = initLineEdit();
+	private final WLineEdit urlLE = initLineEdit();
 	private final WCheckBox blastChB = new WCheckBox();
 	private final WCheckBox autoUpdateChB = new WCheckBox();
 	private final WCheckBox serviceChB = new WCheckBox();
@@ -174,6 +174,13 @@ public class ToolConfigForm extends Template {
 		});
 
 		initTemplate();
+		validate();
+	}
+
+	private WLineEdit initLineEdit() {
+		WLineEdit le = new WLineEdit();
+		le.setWidth(new WLength(200));
+		return le;
 	}
 
 	private void initTemplate() {

@@ -178,8 +178,8 @@
 		  <tr><td>Upload files</td><td>${upload}</td></tr>
 		  <tr><td>Uploaded files</td><td>${upload-list}</td></tr>
 		</table>
-		${info}
 		<div>${publish}${save}${cancel}</div>
+		${info}
 	</message>
 	
 	<!-- blocks -->
