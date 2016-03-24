@@ -13,8 +13,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.commons.io.IOUtils;
+
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
@@ -97,21 +98,11 @@ public class ToolRepoServiceRequests {
 		String ans = null;
 		try {
 			connection = new URL(getReqManifestsUrl()).openConnection();
-			connection.setDoOutput(true); // Triggers POST.
+			//connection.setDoOutput(true); // Triggers POST.
 			connection.setRequestProperty("Content-Type", "multipart/form-data"); // Allow to add a file
 			connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
 
-			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-			writer.write("");
-			writer.flush();
-			
-			// Note: can throw java.io.FileNotFoundException if the server did not respond.
-			InputStream response = connection.getInputStream();
-
-			// read manifests 
-			BufferedReader in = new BufferedReader(new InputStreamReader(response));
-			ans = FileUtil.toString(in);
-			in.close();
+			ans = IOUtils.toString(connection.getInputStream()); 
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -144,11 +135,7 @@ public class ToolRepoServiceRequests {
 		connection.setDoOutput(true); // Triggers POST.
 		connection.setRequestProperty("Content-Type", "multipart/form-data"); // Allow to add a file
 		connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
-
-		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-		writer.write("");
-		writer.flush();
-		
+	
 		// Note: can throw java.io.FileNotFoundException if the server did not respond.
 		InputStream response = connection.getInputStream();
 		

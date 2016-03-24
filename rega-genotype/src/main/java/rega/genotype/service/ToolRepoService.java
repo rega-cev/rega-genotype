@@ -1,13 +1,11 @@
 package rega.genotype.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,25 +48,10 @@ public class ToolRepoService extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		performRequest(req, resp);
-	}
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		super.doGet(req, resp);
-	}
-
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		repoDir = config.getServletContext().getInitParameter("baseRepoDir");
-		super.init(config);
-	}
-
-	private void performRequest(HttpServletRequest req, HttpServletResponse resp)  throws ServletException, IOException {		
 		String reqType = getLastUrlPathComponent(req.getRequestURL().toString());
 		String pwd = req.getHeader(TOOL_PWD_PARAM);
 		if (reqType.equals(REQ_TYPE_PUBLISH)) {
-			
+
 			// copy to tmp dir 
 			File tmpFile = File.createTempFile("tool", ".zip");
 			FileOutputStream out = new FileOutputStream(tmpFile);
@@ -76,19 +59,27 @@ public class ToolRepoService extends HttpServlet{
 			IOUtils.copy(bodyStream, out);
 			bodyStream.close();
 	        out.close();
-     
+
 	        StringBuilder errors = new StringBuilder();
 	        if (!addTool(pwd, tmpFile, errors)) {
 	        	resp.setHeader(RESPONCE_ERRORS, errors.toString());
 	        	resp.setStatus(404);
 				return;
 	        }
-		} else if (reqType.equals(REQ_TYPE_GET_MANIFESTS)) {			
+		} else {
+    		resp.setStatus(404);
+		}
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String reqType = getLastUrlPathComponent(req.getRequestURL().toString());
+		if (reqType.equals(REQ_TYPE_GET_MANIFESTS)) {			
 			String json = storeJsonObjectsInArray(getManifests());
 			resp.setContentType("application/json");
-			StreamUtils.copy(new ByteArrayInputStream(
-					json.getBytes(StandardCharsets.UTF_8)), resp.getOutputStream());
-			resp.getOutputStream().flush();			
+			
+			resp.getWriter().print(json);
+			resp.getWriter().close();		
 		} else if (reqType.equals(REQ_TYPE_GET_TOOL)) {
 			String id = req.getParameter(TOOL_ID_PARAM);
 			String version = req.getParameter(TOOL_VERSION_PARAM);
@@ -98,16 +89,22 @@ public class ToolRepoService extends HttpServlet{
 				resp.getOutputStream().flush();	
 			} else
 				resp.setStatus(404);
-			
+
 		} else {
-    		resp.setStatus(404);
+			resp.setStatus(404);
 		}
+	}
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		repoDir = config.getServletContext().getInitParameter("baseRepoDir");
+		super.init(config);
 	}
 
 	private File getToolFile(String toolId, String toolVersion) {
 		return new File(repoDir + toolId + toolVersion + ".zip");
 	}
-	
+
 	private boolean addTool(String password, File toolFile, StringBuilder errors) {
 		if (toolFile == null || !FileUtil.isValidZip(toolFile)) {
 			errors.append("Invalid tool file");
@@ -178,16 +175,18 @@ public class ToolRepoService extends HttpServlet{
 	private List<String> getManifests() {
 		List<String> ans = new ArrayList<String>();
 		File repoDirFile = new File(repoDir);
-		for (File f: repoDirFile.listFiles()){
-			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("zip")
-					&& FileUtil.isValidZip(f)){
-				String json = FileUtil.getFileContent(
-						f, ToolManifest.MANIFEST_FILE_NAME);
-				if (json != null)
-					ans.add(json);
+		repoDirFile.mkdirs();
+		if (repoDirFile.listFiles() != null) {
+			for (File f: repoDirFile.listFiles()){
+				if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("zip")
+						&& FileUtil.isValidZip(f)){
+					String json = FileUtil.getFileContent(
+							f, ToolManifest.MANIFEST_FILE_NAME);
+					if (json != null)
+						ans.add(json);
+				}
 			}
 		}
-
 		return ans;
 	}
 
