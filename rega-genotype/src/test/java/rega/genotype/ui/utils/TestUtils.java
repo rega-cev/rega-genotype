@@ -28,7 +28,7 @@ public class TestUtils {
 			TestCase.fail("Could not write fasta String to fasta file: " + e.getMessage());
 		}
 		
-		Settings.initSettings(Settings.getInstance(null));
+		Settings.initSettings(Settings.getInstance(null, true));
 		
 		return jobDir;
 	}

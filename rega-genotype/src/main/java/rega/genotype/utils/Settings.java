@@ -136,17 +136,21 @@ public class Settings {
 		return instance;
 	}
 
+	public static Settings getInstance(ServletContext context) {
+		return getInstance(context, false);
+	}
+
 	/**
 	 * Will construct the instance if not yet constructed. 
 	 * Need to be called by every servlet because we dont know what servlet will run first. 
 	 * @param context
 	 * @return
 	 */
-	public static Settings getInstance(ServletContext context) {
+	public static Settings getInstance(ServletContext context, boolean isUnitTest) {
 		if (instance != null)
 			return instance;
 
-		String baseDir = getBaseDir(context);
+		String baseDir = isUnitTest ? "base-unit-test-work-dir/" : getBaseDir(context);
 		instance = new Settings(new File(baseDir + "config.json"));
 		instance.baseDir =  baseDir;
 
