@@ -4,8 +4,11 @@ Changes:
 
 This is also documented in INSTALL
 
+- Strating the tool:
+	run and go to url http://localhost:8080/rega-genotype/admin/
+
 1. Global_config.xml is replaced by config.json (that also contains more data) see 
-INSTALL and config.sample for more info.
+INSTALL and config.sample for more info. config.json is edited from the admin area.
 
 2. web.xml baseWorkDir param replaced conf_dir param
 This directory can be external and it will also include the xml dirs.
