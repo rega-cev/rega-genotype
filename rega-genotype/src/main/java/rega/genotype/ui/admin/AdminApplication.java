@@ -1,6 +1,5 @@
 package rega.genotype.ui.admin;
 
-import rega.genotype.ui.admin.config.ToolConfigTable;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
