@@ -9,7 +9,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
-import rega.genotype.ui.admin.config.ToolConfigDialog.Mode;
+import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
@@ -20,13 +20,11 @@ import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
-import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
-import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 
@@ -38,9 +36,11 @@ import eu.webtoolkit.jwt.WText;
 public class ToolConfigTable extends Template{
 	private ToolConfigTableModelSortProxy proxyModel;
 	private WText infoT = new WText();
+	private WStackedWidget stack;
 
-	public ToolConfigTable(WContainerWidget parent) {
-		super(tr("admin.config.tool-config-table"), parent);
+	public ToolConfigTable(WStackedWidget stack) {
+		super(tr("admin.config.tool-config-table"));
+		this.stack = stack;
 
 		bindWidget("info", infoT);
 
@@ -168,12 +168,18 @@ public class ToolConfigTable extends Template{
 		return remoteManifests;
 	}
 
-	private void edit(ToolInfo info, ToolConfigDialog.Mode mode) {
+	private void edit(ToolInfo info, ToolConfigForm.Mode mode) {
+		if (stack.getChildren().size() > 1) {
+			return; // someone clicked too fast.
+		}
 		ToolConfig config = info == null ? null : info.getConfig();
 		ToolManifest manifest = info == null ? null : info.getManifest();
-		ToolConfigDialog d = new ToolConfigDialog(config, manifest, mode);
-		d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
-			public void trigger(WDialog.DialogCode arg) {
+		final ToolConfigForm d = new ToolConfigForm(config, manifest, mode);
+		stack.addWidget(d);
+		stack.setCurrentWidget(d);
+		d.done().addListener(d, new Signal.Listener() {
+			public void trigger() {
+				stack.removeWidget(d);
 				proxyModel.refresh(getLocalManifests(), getRemoteManifests());
 			}
 		});

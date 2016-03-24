@@ -25,8 +25,12 @@ public class AdminNavigation extends WContainerWidget {
 	    menu.setInternalBasePath("/");
 
 	    // Global config must be created first.
-	    if (Settings.getInstance().getConfig() != null) 
-	    	menu.addItem("Tools", new ToolConfigTable(null)).setPathComponent("tools");
+	    if (Settings.getInstance().getConfig() != null) {
+	    	WStackedWidget stack = new WStackedWidget();
+	    	ToolConfigTable toolConfigTable = new ToolConfigTable(stack);
+	    	stack.addWidget(toolConfigTable);
+	    	menu.addItem("Tools", stack).setPathComponent("tools");
+	    }
 
 	    menu.addItem("Global config", new GlobalConfigForm()).setPathComponent("global");
 

@@ -15,7 +15,7 @@ import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WCheckBox;
-import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFormWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
@@ -31,10 +31,9 @@ import eu.webtoolkit.jwt.servlet.UploadedFile;
  * 
  * @author michael
  */
-public class ToolConfigDialog extends WDialog {
+public class ToolConfigForm extends Template {
 	public  enum Mode {Add, Edit, NewVersion, Install}
 	private Mode mode;
-	private final Template template = new Template(tr("admin.config.tool-config-dialog"));
 	private final WText infoT = new WText();
 	private final FileUpload fileUpload = new FileUpload();
 	private final WLineEdit nameLE = new WLineEdit();
@@ -45,20 +44,19 @@ public class ToolConfigDialog extends WDialog {
 	private final WCheckBox autoUpdateChB = new WCheckBox();
 	private final WCheckBox serviceChB = new WCheckBox();
 	private final WCheckBox uiChB = new WCheckBox();
+	private Signal done = new Signal();
 
-	public ToolConfigDialog(final ToolConfig toolConfig,
+	public ToolConfigForm(final ToolConfig toolConfig,
 			final ToolManifest manifest, Mode mode) {
-		show();
+		super(tr("admin.config.tool-config-dialog"));
 
 		this.mode = mode;
 		
 		setWidth(new WLength(600));
 
-		getTitleBar().addWidget(new WText(mode == Mode.Add ? "Create Tool" : "Edit Tool"));
-
-		final WPushButton publishB = new WPushButton("Publish", getFooter());
-		final WPushButton saveB = new WPushButton("Save", getFooter());
-		final WPushButton cancelB = new WPushButton("Cancel", getFooter());
+		final WPushButton publishB = new WPushButton("Publish");
+		final WPushButton saveB = new WPushButton("Save");
+		final WPushButton cancelB = new WPushButton("Cancel");
 
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
 
@@ -93,17 +91,19 @@ public class ToolConfigDialog extends WDialog {
 
 		// bind
 		
-		getContents().addWidget(template);
-		template.bindWidget("name", nameLE);
-		template.bindWidget("id", idLE);
-		template.bindWidget("version", versionLE);
-		template.bindWidget("url", urlLE);
-		template.bindWidget("blast", blastChB);
-		template.bindWidget("update", autoUpdateChB);
-		template.bindWidget("ui", uiChB);
-		template.bindWidget("service", serviceChB);
-		template.bindWidget("upload", fileUpload);
-		template.bindWidget("info", infoT);
+		bindWidget("name", nameLE);
+		bindWidget("id", idLE);
+		bindWidget("version", versionLE);
+		bindWidget("url", urlLE);
+		bindWidget("blast", blastChB);
+		bindWidget("update", autoUpdateChB);
+		bindWidget("ui", uiChB);
+		bindWidget("service", serviceChB);
+		bindWidget("upload", fileUpload);
+		bindWidget("info", infoT);
+		bindWidget("publish", publishB);
+		bindWidget("save", saveB);
+		bindWidget("cancel", cancelB);
 
 		// TODO: fileUpload will be replaced by editors per-file.
 		
@@ -117,7 +117,8 @@ public class ToolConfigDialog extends WDialog {
 			}
 		}
 		}
-		template.bindString("upload-list", uploadedFiles);
+		bindString("upload-list", uploadedFiles);
+
 		fileUpload.setMultiple(true);
 		fileUpload.getWFileUpload().fileTooLarge().addListener(fileUpload, new Signal.Listener() {
 			public void trigger() {
@@ -128,7 +129,7 @@ public class ToolConfigDialog extends WDialog {
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
 				if (save() != null)
-					accept();
+					done.trigger();
 			}
 		});
 
@@ -151,7 +152,7 @@ public class ToolConfigDialog extends WDialog {
 					if (FileUtil.zip(new File(tool.getConfiguration()), zip)){
 						try {
 							ToolRepoServiceRequests.publish(zip);
-							accept();							
+							done.trigger();				
 						} catch (RegaGenotypeExeption e) {
 							e.printStackTrace();
 							infoT.setText("Error: could not publish the tool. " + e.getMessage());
@@ -168,7 +169,7 @@ public class ToolConfigDialog extends WDialog {
 
 		cancelB.clicked().addListener(cancelB, new Signal.Listener() {
 			public void trigger() {
-				reject();
+				done.trigger();
 			}
 		});
 
@@ -176,11 +177,11 @@ public class ToolConfigDialog extends WDialog {
 	}
 
 	private void initTemplate() {
-		for(int i = template.getChildren().size() - 1; i  >= 0; --i) {
-			WWidget w =  template.getChildren().get(i);
+		for(int i = getChildren().size() - 1; i  >= 0; --i) {
+			WWidget w =  getChildren().get(i);
 			if (w instanceof WFormWidget){
-				String var = template.varName(w);
-				template.bindWidget(var + "-info", new WText());
+				String var = varName(w);
+				bindWidget(var + "-info", new WText());
 			}
 		}
 	}
@@ -188,7 +189,7 @@ public class ToolConfigDialog extends WDialog {
 	private boolean validate() {
 		boolean ans = true;
 	
-		for(WWidget w: template.getChildren()) {
+		for(WWidget w: getChildren()) {
 			if (w instanceof WFormWidget){
 				WFormWidget fw  = (WFormWidget) w;
 			
@@ -196,8 +197,8 @@ public class ToolConfigDialog extends WDialog {
 					ans = false;
 					infoT.setText("Some fildes have invalid values.");
 				}
-				String var = template.varName(w);
-				WText info = (WText) template.resolveWidget(var + "-info");
+				String var = varName(w);
+				WText info = (WText) resolveWidget(var + "-info");
 				if (info != null && fw.getValidator() != null) {
 					if (fw.getValueText() == null)
 						info.setText("");
@@ -270,6 +271,10 @@ public class ToolConfigDialog extends WDialog {
 	}
 
 	// classes
+
+	public Signal done() {
+		return done;
+	}
 
 	private class ToolIdValidator extends WValidator {
 		ToolIdValidator(boolean isMandatory) {
