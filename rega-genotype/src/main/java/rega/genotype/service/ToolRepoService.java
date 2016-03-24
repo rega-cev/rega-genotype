@@ -130,7 +130,7 @@ public class ToolRepoService extends HttpServlet{
 			indexes = ToolIndexes.parseJsonAsList(FileUtil.readFile(toolIndexsFile));
 			// Check publisher pwd
 			ToolIndex index = indexes.getIndex(manifest.getId());
-			if (!index.getPublisherPassword().equals(password)){
+			if (index != null && !index.getPublisherPassword().equals(password)){
 				errors.append("Only the tool original publisher " + index.getPublisherName() +" can publish new versions.");
 				return false;
 			}
