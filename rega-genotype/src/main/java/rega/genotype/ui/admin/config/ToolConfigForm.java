@@ -15,7 +15,7 @@ import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WCheckBox;
-import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WDate;
 import eu.webtoolkit.jwt.WFormWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
@@ -128,14 +128,14 @@ public class ToolConfigForm extends Template {
 
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
-				if (save() != null)
+				if (save(false) != null)
 					done.trigger();
 			}
 		});
 
 		publishB.clicked().addListener(publishB, new Signal.Listener() {
 			public void trigger() {
-				ToolConfig tool = save();
+				ToolConfig tool = save(true);
 				if (tool != null) {
 					// create zip file 
 					ToolManifest manifest = tool.getToolMenifest();
@@ -212,7 +212,7 @@ public class ToolConfigForm extends Template {
 		return ans;
 	}
 
-	private ToolConfig save() {
+	private ToolConfig save(boolean publishing) {
 		if (!validate())
 			return null;
 
@@ -242,6 +242,8 @@ public class ToolConfigForm extends Template {
 		manifest.setVersion(versionLE.getText());
 		manifest.setPublisherName(config.getGeneralConfig().getPublisherName());
 		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
+		if (publishing)
+			manifest.setPublicationDate(WDate.getCurrentDate().getDate());
 
 		// save ToolConfig
 		ToolConfig newTool = config.getToolConfigById(manifest.getId(), manifest.getVersion());

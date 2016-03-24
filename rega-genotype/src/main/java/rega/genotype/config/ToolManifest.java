@@ -2,6 +2,7 @@ package rega.genotype.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import rega.genotype.utils.FileUtil;
@@ -22,7 +23,7 @@ public class ToolManifest {
 	private String version;
 	private boolean blastTool;
 	private String publisherName; // Copy from publisher Server global config publisherName, read only for users.
-	private String publicationDate; // filled by Repo server, read only for users.
+	private Date publicationDate; // filled by Repo server, read only for users.
 	private String softwareVersion;
 
 	public ToolManifest() {}
@@ -81,11 +82,11 @@ public class ToolManifest {
 		this.publisherName = publisherName;
 	}
 
-	public String getPublicationDate() {
+	public Date getPublicationDate() {
 		return publicationDate;
 	}
 
-	public void setPublicationDate(String publicationDate) {
+	public void setPublicationDate(Date publicationDate) {
 		this.publicationDate = publicationDate;
 	}
 
