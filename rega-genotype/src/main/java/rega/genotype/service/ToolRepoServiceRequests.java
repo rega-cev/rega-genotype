@@ -30,14 +30,39 @@ public class ToolRepoServiceRequests {
 			super(msg);
 		}
 	}
+
+	// URLS
+	
+	private static String gerRepoServiceUrl() {
+		return Settings.getInstance().getConfig().getGeneralConfig().getRepoUrl();
+	}
+
+	private static String getReqPublishUrl() {
+		return gerRepoServiceUrl() 
+				+ File.separator  +  ToolRepoService.REQ_TYPE_PUBLISH;
+	}
+
+	private static String getReqManifestsUrl() {
+		return gerRepoServiceUrl() 
+				+ File.separator  +  ToolRepoService.REQ_TYPE_GET_MANIFESTS;
+	}
+
+	private static String getReqToolUrl(String toolId, String toolVersion) {
+		return gerRepoServiceUrl() 
+				+ File.separator  +  ToolRepoService.REQ_TYPE_GET_TOOL 
+				+ "?" + ToolRepoService.TOOL_ID_PARAM + "=" + toolId
+				+ "&" + ToolRepoService.TOOL_VERSION_PARAM + "=" + toolVersion;
+	}
 	
 	private static String generatePasswiord() {
 		return Settings.getInstance().getConfig().getGeneralConfig().getPublisherPassword();
 	}
 
+	// requests 
+	
 	public static void publish(final File zipFile) throws RegaGenotypeExeption, IOException {
 		HttpURLConnection connection = (HttpURLConnection) new URL(
-				ToolRepoService.getReqPublishUrl()).openConnection();
+				getReqPublishUrl()).openConnection();
 		connection.setDoOutput(true); // Triggers POST.
 		//connection.setRequestProperty("Accept-Charset", "UTF-8");
 		//connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + "UTF-8");
@@ -71,7 +96,7 @@ public class ToolRepoServiceRequests {
 		URLConnection connection;
 		String ans = null;
 		try {
-			connection = new URL(ToolRepoService.getReqManifestsUrl()).openConnection();
+			connection = new URL(getReqManifestsUrl()).openConnection();
 			connection.setDoOutput(true); // Triggers POST.
 			connection.setRequestProperty("Content-Type", "multipart/form-data"); // Allow to add a file
 			connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
@@ -115,7 +140,7 @@ public class ToolRepoServiceRequests {
 		} 
 		URLConnection connection;
 
-		connection = new URL(ToolRepoService.getReqToolUrl(toolId, toolVersion)).openConnection();
+		connection = new URL(getReqToolUrl(toolId, toolVersion)).openConnection();
 		connection.setDoOutput(true); // Triggers POST.
 		connection.setRequestProperty("Content-Type", "multipart/form-data"); // Allow to add a file
 		connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());

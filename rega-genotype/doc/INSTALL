@@ -47,8 +47,7 @@ Installation instructions for rega-genotype
 * Configuration
 	* create an config file like the one in config.sample and save it to a
 	  location of your choice
-	* create an environment variable named "REGA_GENOTYPE_DATA_DIR",
-	  store the location of the config file in this environment variable.
+	* Change context param - baseWorkDir.
 		This folder will be used to store information about new typing tools. 
 	* fill in the appropriate values
     Note: in future config file will be managed by a UI.
@@ -87,3 +86,8 @@ Installation instructions for rega-genotype
 	* Run typing tool on url
 	{host-name}/rega-genotype/typingtool/{path}
 	{path} = the path from the config file.
+
+
+Install repository server:
+	Change context param - baseRepoDir to a folder that will contain all the repositories. 
+

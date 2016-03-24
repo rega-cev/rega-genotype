@@ -45,9 +45,8 @@ public class ToolRepoService extends HttpServlet{
 	// responce 
 	public static String RESPONCE_ERRORS = "errors";
 
-
-	public static String REPO_DIR = "repo-work-dir" + File.separator; // TODO 
-	private static String REPO_DIR_TMP = REPO_DIR + "tmp" + File.separator;
+	// local vars.
+	private String repoDir = "repo-work-dir" + File.separator;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -61,6 +60,7 @@ public class ToolRepoService extends HttpServlet{
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
+		repoDir = config.getServletContext().getInitParameter("baseRepoDir");
 		super.init(config);
 	}
 
@@ -105,7 +105,7 @@ public class ToolRepoService extends HttpServlet{
 	}
 
 	private File getToolFile(String toolId, String toolVersion) {
-		return new File(REPO_DIR + toolId + toolVersion + ".zip");
+		return new File(repoDir + toolId + toolVersion + ".zip");
 	}
 	
 	private boolean addTool(String password, File toolFile, StringBuilder errors) {
@@ -124,7 +124,7 @@ public class ToolRepoService extends HttpServlet{
 			return false;
 		}
 		
-		File toolIndexsFile = new File(REPO_DIR + ToolIndexes.TOOL_INDEXS_FILE_NAME);
+		File toolIndexsFile = new File(repoDir + ToolIndexes.TOOL_INDEXS_FILE_NAME);
 		ToolIndexes indexes;
 		if (toolIndexsFile.exists()) {
 			indexes = ToolIndexes.parseJsonAsList(FileUtil.readFile(toolIndexsFile));
@@ -140,7 +140,7 @@ public class ToolRepoService extends HttpServlet{
 		// Add ToolIndex for new tools
 		indexes.getIndexes().add(new ToolIndex(password, manifest.getId(), manifest.getPublisherName()));
 		try {
-			indexes.save(REPO_DIR);
+			indexes.save(repoDir);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			errors.append("Server internal error.");
@@ -177,8 +177,8 @@ public class ToolRepoService extends HttpServlet{
 
 	private List<String> getManifests() {
 		List<String> ans = new ArrayList<String>();
-		File repoDir = new File(REPO_DIR);
-		for (File f: repoDir.listFiles()){
+		File repoDirFile = new File(repoDir);
+		for (File f: repoDirFile.listFiles()){
 			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("zip")
 					&& FileUtil.isValidZip(f)){
 				String json = FileUtil.getFileContent(
@@ -201,29 +201,5 @@ public class ToolRepoService extends HttpServlet{
 		}
 
 		return null;
-	}
-
-	// URLS
-	
-	private static String gerRepoServiceUrl() {
-		//TODO
-		return "http://localhost:8080/rega-genotype/repo-service";
-	}
-
-	public static String getReqPublishUrl() {
-		return ToolRepoService.gerRepoServiceUrl() 
-				+ File.separator  +  ToolRepoService.REQ_TYPE_PUBLISH;
-	}
-
-	public static String getReqManifestsUrl() {
-		return ToolRepoService.gerRepoServiceUrl() 
-				+ File.separator  +  ToolRepoService.REQ_TYPE_GET_MANIFESTS;
-	}
-
-	public static String getReqToolUrl(String toolId, String toolVersion) {
-		return ToolRepoService.gerRepoServiceUrl() 
-				+ File.separator  +  ToolRepoService.REQ_TYPE_GET_TOOL 
-				+ "?" + TOOL_ID_PARAM + "=" + toolId
-				+ "&" + TOOL_VERSION_PARAM + "=" + toolVersion;
 	}
 }

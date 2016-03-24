@@ -160,4 +160,8 @@
     <param-name>baseWorkDir</param-name>
     <param-value>./base-work-dir/</param-value>
   </context-param>
+  <context-param>
+    <param-name>baseRepoDir</param-name>
+    <param-value>./base-repo-dir/</param-value>
+  </context-param>
 </web-app>

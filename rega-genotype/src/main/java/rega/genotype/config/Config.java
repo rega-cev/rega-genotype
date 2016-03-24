@@ -113,7 +113,8 @@ public class Config {
 		private String inkscapeCmd;
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
-
+		private String repoUrl; // url of repository server.
+		
 		public String getPaupCmd() {
 			return paupCmd;
 		}
@@ -179,6 +180,15 @@ public class Config {
 		}
 		public void setPublisherPassword(String publisherPassword) {
 			this.publisherPassword = publisherPassword;
+		}
+		public String getRepoUrl() {
+			//default
+			if (repoUrl == null || repoUrl.isEmpty())
+				return "http://typingtools.emweb.be/repository";
+			return repoUrl;
+		}
+		public void setRepoUrl(String repoUrl) {
+			this.repoUrl = repoUrl;
 		}
 	}
 

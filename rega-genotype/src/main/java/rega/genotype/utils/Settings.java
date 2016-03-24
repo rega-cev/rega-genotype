@@ -170,7 +170,7 @@ public class Settings {
 		 */
 
 		if (context != null) 
-			baseDir = context.getInitParameter("configFile");
+			baseDir = context.getInitParameter("baseWorkDir");
 
 		if (baseDir == null) {
 			System.err.println("REGA_GENOTYPE_WORK_DIR"+":" + System.getenv("REGA_GENOTYPE_WORK_DIR"));
