@@ -23,6 +23,7 @@ public class ToolManifest {
 	private boolean blastTool;
 	private String publisherName; // Copy from publisher Server global config publisherName, read only for users.
 	private String publicationDate; // filled by Repo server, read only for users.
+	private String softwareVersion;
 
 	public ToolManifest() {}
 
@@ -86,5 +87,13 @@ public class ToolManifest {
 
 	public void setPublicationDate(String publicationDate) {
 		this.publicationDate = publicationDate;
+	}
+
+	public String getSoftwareVersion() {
+		return softwareVersion;
+	}
+
+	public void setSoftwareVersion(String softwareVersion) {
+		this.softwareVersion = softwareVersion;
 	}
 }

@@ -7,6 +7,7 @@ import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
+import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
@@ -221,6 +222,7 @@ public class ToolConfigDialog extends WDialog {
 		manifest.setId(idLE.getText());
 		manifest.setVersion(versionLE.getText());
 		manifest.setPublisherName(config.getGeneralConfig().getPublisherName());
+		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
 
 		// save ToolConfig
 		ToolConfig newTool = new ToolConfig();
