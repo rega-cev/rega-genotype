@@ -50,13 +50,19 @@ public class GenericMain extends GenotypeMain {
 
 		if (settings.getConfig() == null 
 				|| settings.getConfig().getToolConfigByUrlPath(url) == null
-				|| settings.getConfig().getToolConfigByUrlPath(url).getUniqueToolId() == null) {
+				|| settings.getConfig().getToolConfigByUrlPath(url).getUniqueToolId() == null) {			
 			WApplication app = new WApplication(env);
 			app.getRoot().addWidget(new WText("Typing tool for organism " + url + " was not found."));
 			return app;
 		} else 
 			toolConfig = settings.getConfig().getToolConfigByUrlPath(url);
 
+		if (!toolConfig.isUi()) {
+			WApplication app = new WApplication(env);
+			app.getRoot().addWidget(new WText("Typing tool for organism " + url + " was not found. (UI is disabled)"));
+			return app;
+		}
+		
 		String urlComponent = toolConfig.getPath();
 		GenotypeApplication app;
 		try {

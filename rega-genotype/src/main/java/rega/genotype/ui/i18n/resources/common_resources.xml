@@ -160,7 +160,7 @@
 	<!-- Admin config -->
 	<message id="admin.config.tool-config-table">
 		${table}
-		<div>${add}${edit}${install}</div>
+		<div>${add}${new-version}${edit}${install}</div>
 		<div>${info}</div>
 		
 	</message>
@@ -176,6 +176,7 @@
 		  <tr><td>Web service enabled</td><td>${service}</td></tr>
 		  <tr><td>UI enabled</td><td>${ui}</td></tr>
 		  <tr><td>Upload files</td><td>${upload}</td></tr>
+		  <tr><td>Uploaded files</td><td>${upload-list}</td></tr>
 		</table>
 		${info}
 	</message>

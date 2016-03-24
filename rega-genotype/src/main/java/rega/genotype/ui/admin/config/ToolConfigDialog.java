@@ -32,7 +32,7 @@ import eu.webtoolkit.jwt.servlet.UploadedFile;
  * @author michael
  */
 public class ToolConfigDialog extends WDialog {
-	private enum Mode {Add, Edit}
+	public  enum Mode {Add, Edit, NewVersion, Install}
 	private Mode mode;
 	private final Template template = new Template(tr("admin.config.tool-config-dialog"));
 	private final WText infoT = new WText();
@@ -46,43 +46,50 @@ public class ToolConfigDialog extends WDialog {
 	private final WCheckBox serviceChB = new WCheckBox();
 	private final WCheckBox uiChB = new WCheckBox();
 
-	public ToolConfigDialog(final ToolConfig toolConfig) {
+	public ToolConfigDialog(final ToolConfig toolConfig,
+			final ToolManifest manifest, Mode mode) {
 		show();
 
-		setWidth(new WLength(600));
+		this.mode = mode;
 		
-		mode = toolConfig == null ? Mode.Add : Mode.Edit; 
+		setWidth(new WLength(600));
+
 		getTitleBar().addWidget(new WText(mode == Mode.Add ? "Create Tool" : "Edit Tool"));
 
 		final WPushButton publishB = new WPushButton("Publish", getFooter());
-		final WPushButton newVersionB = new WPushButton("Create new Version", getFooter());
+		final WPushButton saveB = new WPushButton("Save", getFooter());
 		final WPushButton cancelB = new WPushButton("Cancel", getFooter());
 
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
 
 		// read
 
-		if (mode == Mode.Edit) {
-			ToolManifest toolMenifest = toolConfig.getToolMenifest();
-			if (toolMenifest != null) {
-				nameLE.setText(toolMenifest.getName());
-				idLE.setText(toolMenifest.getId());
-				versionLE.setText(toolMenifest.getVersion());
-				blastChB.setChecked(toolMenifest.isBlastTool());
-			}
+		if (manifest != null) {
+			nameLE.setText(manifest.getName());
+			idLE.setText(manifest.getId());
+			versionLE.setText(manifest.getVersion());
+			blastChB.setChecked(manifest.isBlastTool());
+		}
+		if (toolConfig != null){
 			urlLE.setText(toolConfig.getPath());
 			autoUpdateChB.setChecked(toolConfig.isAutoUpdate());
 			serviceChB.setChecked(toolConfig.isWebService());
 			uiChB.setChecked(toolConfig.isUi());
+		}
 
-			idLE.disable();
-		} 
+		idLE.setDisabled(mode != Mode.Add);
+		versionLE.setDisabled(mode == Mode.Edit || mode == Mode.Install);
 
 		// validators
 		nameLE.setValidator(new WValidator(true));
-		idLE.setValidator(new WValidator(true));
-		versionLE.setValidator(new WValidator(true));
-		urlLE.setValidator(new WValidator(true));
+		if (mode == Mode.Add || mode == Mode.NewVersion) {
+			idLE.setValidator(new ToolIdValidator(true));
+			versionLE.setValidator(new ToolIdValidator(true));
+			urlLE.setValidator(new ToolUrlValidator(false));
+		} else {
+			idLE.setValidator(new WValidator(true));
+			versionLE.setValidator(new WValidator(true));
+		}
 
 		// bind
 		
@@ -99,7 +106,18 @@ public class ToolConfigDialog extends WDialog {
 		template.bindWidget("info", infoT);
 
 		// TODO: fileUpload will be replaced by editors per-file.
-		// TODO: show file list.
+		
+		String uploadedFiles = new String();
+		if (manifest != null){
+		File baseXmlDir = new File(
+				Settings.getInstance().getXmlDir(manifest.getId(), manifest.getVersion()));
+		if (baseXmlDir.exists() && baseXmlDir.listFiles() != null) {
+			for (File f: baseXmlDir.listFiles()){
+				uploadedFiles += "<div>" + f.getName() + "</div>";
+			}
+		}
+		}
+		template.bindString("upload-list", uploadedFiles);
 		fileUpload.setMultiple(true);
 		fileUpload.getWFileUpload().fileTooLarge().addListener(fileUpload, new Signal.Listener() {
 			public void trigger() {
@@ -107,16 +125,16 @@ public class ToolConfigDialog extends WDialog {
 			}
 		});
 
-		newVersionB.clicked().addListener(newVersionB, new Signal.Listener() {
+		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
-				if (createNewVersion() != null)
+				if (save() != null)
 					accept();
 			}
 		});
 
 		publishB.clicked().addListener(publishB, new Signal.Listener() {
 			public void trigger() {
-				ToolConfig tool = createNewVersion();
+				ToolConfig tool = save();
 				if (tool != null) {
 					// create zip file 
 					ToolManifest manifest = tool.getToolMenifest();
@@ -193,7 +211,7 @@ public class ToolConfigDialog extends WDialog {
 		return ans;
 	}
 
-	private ToolConfig createNewVersion() {
+	private ToolConfig save() {
 		if (!validate())
 			return null;
 
@@ -225,17 +243,20 @@ public class ToolConfigDialog extends WDialog {
 		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
 
 		// save ToolConfig
-		ToolConfig newTool = new ToolConfig();
+		ToolConfig newTool = config.getToolConfigById(manifest.getId(), manifest.getVersion());
+		if (newTool == null) {
+			assert(mode != Mode.Edit);
+			newTool = new ToolConfig();
+			if (!config.addTool(newTool))
+				return null;
+		}
+
 		newTool.setAutoUpdate(autoUpdateChB.isChecked());
 		newTool.setConfiguration(xmlDir);
 		newTool.setJobDir(jobDir);
 		newTool.setPath(urlLE.getText());
 		newTool.setUi(uiChB.isChecked());
 		newTool.setWebService(serviceChB.isChecked());
-
-		// save cofig
-		if (!config.addTool(newTool))
-			return null;
 
 		try {
 			manifest.save(xmlDir);
@@ -246,5 +267,35 @@ public class ToolConfigDialog extends WDialog {
 			return null;
 		}
 		return newTool;
+	}
+
+	// classes
+
+	private class ToolIdValidator extends WValidator {
+		ToolIdValidator(boolean isMandatory) {
+			super(isMandatory);
+		}
+		@Override
+		public Result validate(String input) {
+			Config config = Settings.getInstance().getConfig();
+			if (config.getToolConfigById(idLE.getText(), versionLE.getText()) != null)
+				return new Result(State.Invalid, "A tool with same id and version already exist on local server.");
+
+			return super.validate(input);
+		}
+	}
+
+	private class ToolUrlValidator extends WValidator {
+		ToolUrlValidator(boolean isMandatory) {
+			super(isMandatory);
+		}
+		@Override
+		public Result validate(String input) {
+			Config config = Settings.getInstance().getConfig();
+			if (config.getToolConfigByUrlPath(urlLE.getText()) != null)
+				return new Result(State.Invalid, "A tool with same url already exist on local server.");
+
+			return super.validate(input);
+		}
 	}
 }

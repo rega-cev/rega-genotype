@@ -83,9 +83,7 @@ public class Config {
 		return tools;
 	}
 
-	public boolean addTool(ToolConfig tool) {
-		getToolConfigByUrlPath(tool.getPath());
-		
+	public boolean addTool(ToolConfig tool) {		
 		return tools.add(tool);
 	}
 

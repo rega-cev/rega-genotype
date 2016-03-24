@@ -9,9 +9,11 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
+import rega.genotype.ui.admin.config.ToolConfigDialog.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
+import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
@@ -60,6 +62,8 @@ public class ToolConfigTable extends Template{
 		final WPushButton addB = new WPushButton("Add");
 		final WPushButton editB = new WPushButton("Edit");
 		final WPushButton installB = new WPushButton("Install");
+		final WPushButton newVersionB = new WPushButton("Create new version");
+
 		installB.disable();
 
 		installB.clicked().addListener(installB, new Signal.Listener() {
@@ -67,8 +71,17 @@ public class ToolConfigTable extends Template{
 				if (table.getSelectedIndexes().size() == 1) {
 					ToolInfo toolInfo = proxyModel.getToolInfo(
 							table.getSelectedIndexes().first());
+					
 					if (toolInfo.getState() == ToolState.RemoteNotSync) {
 						ToolManifest manifest = toolInfo.getManifest();
+						if (Settings.getInstance().getConfig().getToolConfigById(
+								manifest.getId(), manifest.getVersion()) != null) {
+							new MsgDialog("Install faied", "Tool id = " + manifest.getId() 
+									+ ", version = " + manifest.getVersion() 
+									+ " alredy exists on local server."); 
+							return;
+						}
+
 						File f = null;
 						try {
 							f = ToolRepoServiceRequests.getTool(manifest.getId(), manifest.getVersion());
@@ -83,7 +96,7 @@ public class ToolConfigTable extends Template{
 								new File(Settings.getInstance().getXmlDir(
 								manifest.getId(), manifest.getVersion())));
 						if (f != null)
-							edit(toolInfo);
+							edit(toolInfo, Mode.Install);
 					}
 				}
 			}
@@ -91,7 +104,16 @@ public class ToolConfigTable extends Template{
 		
 		addB.clicked().addListener(addB, new Signal.Listener() {
 			public void trigger() {
-				edit(null);
+				edit(null, Mode.Add);
+			}
+		});
+
+		newVersionB.clicked().addListener(newVersionB, new Signal.Listener() {
+			public void trigger() {
+				if (table.getSelectedIndexes().size() == 1) {
+					edit(proxyModel.getToolInfo(
+							table.getSelectedIndexes().first()), Mode.NewVersion);
+				}
 			}
 		});
 
@@ -100,7 +122,7 @@ public class ToolConfigTable extends Template{
 			public void trigger(WModelIndex index, WMouseEvent arg2) {
 				if (index == null)
 					return;
-				edit(proxyModel.getToolInfo(index));
+				edit(proxyModel.getToolInfo(index), Mode.Edit);
 			}
 		});
 
@@ -108,7 +130,7 @@ public class ToolConfigTable extends Template{
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
 					edit(proxyModel.getToolInfo(
-							table.getSelectedIndexes().first()));
+							table.getSelectedIndexes().first()), Mode.Edit);
 				}
 			}
 		});
@@ -128,6 +150,7 @@ public class ToolConfigTable extends Template{
 		bindWidget("add", addB);
 		bindWidget("edit", editB);
 		bindWidget("install", installB);
+		bindWidget("new-version", newVersionB);
 	}
 
 	private List<ToolManifest> getRemoteManifests() {
@@ -145,14 +168,13 @@ public class ToolConfigTable extends Template{
 		return remoteManifests;
 	}
 
-	private void edit(ToolInfo info) {
+	private void edit(ToolInfo info, ToolConfigDialog.Mode mode) {
 		ToolConfig config = info == null ? null : info.getConfig();
-		ToolConfigDialog d = new ToolConfigDialog(config);
+		ToolManifest manifest = info == null ? null : info.getManifest();
+		ToolConfigDialog d = new ToolConfigDialog(config, manifest, mode);
 		d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 			public void trigger(WDialog.DialogCode arg) {
-				if (arg == WDialog.DialogCode.Accepted) {
-					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
-				}
+				proxyModel.refresh(getLocalManifests(), getRemoteManifests());
 			}
 		});
 	}
