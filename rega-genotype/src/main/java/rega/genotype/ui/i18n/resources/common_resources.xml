@@ -182,6 +182,34 @@
 		${info}
 	</message>
 	
+	<message id="admin.help">
+		<h2>
+		Admin UI
+		</h2>
+		<p>
+		UI for creating and publishing new typing tools.
+		published tools are stored on a remote server (currently http://typingtools.emweb.be/repository/repo-service)
+		</p>
+
+		<h3>Tool states</h3>
+		<p>
+		<div>
+		Remote (published) not installed: 
+		Tool data is stored on a remote server and not on local server.
+		</div>
+		<div>
+		Remote (published) installed: 
+		Tool data is stored on a remote server and on local server.
+		The tool can be served locally. 
+		</div>
+		<div>
+		Local tool: A tool that was created on local server and was not yet published.
+		</div>
+		</p>
+		<p>
+		Tools table contains remote and local tools. That can be identified by the tool state column. 
+		</p>
+	</message>
 	<!-- blocks -->
 
 	<message id="form-field">
