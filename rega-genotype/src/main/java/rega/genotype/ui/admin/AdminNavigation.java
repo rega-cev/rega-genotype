@@ -1,8 +1,5 @@
 package rega.genotype.ui.admin;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.regex.Pattern;
 
 import rega.genotype.ui.admin.config.GlobalConfigForm;
@@ -54,23 +51,19 @@ public class AdminNavigation extends WContainerWidget {
 	    				public void trigger(String internalPath) {
 	    					String path[] =  Pattern.compile("/").
 	    							split(internalPath.length()>1 ? internalPath.substring(1) : internalPath);
-	    					if (path.length >= 1 && path[0].equals("tools")) {
-	    						//http://localhost:8080/rega-genotype/admin/tools
+	    					if (path.length >= 1 && path[0].equals("tools")) {//http://localhost:8080/rega-genotype/admin/tools
 	    						if (path.length == 1)
 	    							toolConfigTable.showTable();
-	    						//http://localhost:8080/rega-genotype/admin/tools/edit/{id}/{version}
-	    						else if (path.length == 4 && path[1].equals(URL_PATH_EDIT)){
-	    							String id = path[2];
-	    							String version = path[3];
-	    							toolConfigTable.showEditTool(id, version, Mode.Edit);
-	    							//http://localhost:8080/rega-genotype/admin/tools/new/{id}/{version}
-	    						} else if (path.length == 4 && path[1].equals(URL_PATH_NEW)){
-	    							String id = path[2];
-	    							String version = path[3];
-	    							toolConfigTable.showEditTool(id, version, Mode.NewVersion);
-	    							//http://localhost:8080/rega-genotype/admin/tools/new
-	    						} else if (path.length == 2 && path[1].equals(URL_PATH_NEW)){
+	    						else if (path.length == 2 && path[1].equals(URL_PATH_NEW)){//http://localhost:8080/rega-genotype/admin/tools/new/
 	    							toolConfigTable.showCreateNewTool();
+	    						} else if (path.length == 4){ 
+	    							String id = path[1];
+	    							String version = path[2];
+	    							String action = path[3];
+	    							if (action.equals(URL_PATH_EDIT)) //http://localhost:8080/rega-genotype/admin/tools/edit/{id}/{version}
+	    								toolConfigTable.showEditTool(id, version, Mode.Edit);
+	    							else if (action.equals(URL_PATH_NEW)) //http://localhost:8080/rega-genotype/admin/tools/new/{id}/{version}
+	    								toolConfigTable.showEditTool(id, version, Mode.NewVersion);
 	    						} else
 	    							toolConfigTable.showTable();
 	    					} else {
@@ -81,6 +74,7 @@ public class AdminNavigation extends WContainerWidget {
 	    }
 
 	    menu.addItem("Global config", new GlobalConfigForm()).setPathComponent("global");
+	    menu.addItem("Help", new Template(tr("admin.help"))).setPathComponent("help");
 
 		WHBoxLayout layout = new WHBoxLayout();
 		setLayout(layout);
@@ -89,7 +83,7 @@ public class AdminNavigation extends WContainerWidget {
 	}
 
 	public static void setEditToolUrl(String toolId, String toolVersion) {
-		String path = "/" + URL_PATH_TOOLS + "/" + URL_PATH_EDIT + "/" + toolId + "/" + toolVersion;
+		String path = "/" + URL_PATH_TOOLS + "/" + toolId + "/" + toolVersion + "/" + URL_PATH_EDIT;
 		if (!WApplication.getInstance().getInternalPath().equals(path)) {
 			WApplication.getInstance().setInternalPath(path);
 			WApplication.getInstance().internalPathChanged().trigger(path);
@@ -97,7 +91,7 @@ public class AdminNavigation extends WContainerWidget {
 	}
 
 	public static void setNewVersionToolUrl(String toolId, String toolVersion) {
-		String path = "/" + URL_PATH_TOOLS + "/" + URL_PATH_NEW + "/" + toolId + "/" + toolVersion;
+		String path = "/" + URL_PATH_TOOLS + "/" + toolId + "/" + toolVersion  + "/" + URL_PATH_NEW;
 		if (!WApplication.getInstance().getInternalPath().equals(path)) {
 			WApplication.getInstance().setInternalPath(path);
 			WApplication.getInstance().internalPathChanged().trigger(path);
@@ -118,5 +112,4 @@ public class AdminNavigation extends WContainerWidget {
 			WApplication.getInstance().internalPathChanged().trigger(path);
 		}
 	}
-
 }
