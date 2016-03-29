@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.GenotypeTool;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
@@ -55,11 +56,14 @@ public class GenotypeService extends HttpServlet {
 		    	resp.setStatus(404);
 		    	return;
 		    } else {
-				path = req.getPathInfo().replace(File.separator, "");
-		    	toolId = settings.getConfig().getToolConfigByUrlPath(path).getUniqueToolId();
-		    	if (toolId == null) {
-		    		resp.setStatus(404); // invalid tool config.
-			    	return;
+		    	path = req.getPathInfo().replace(File.separator, "");
+		    	ToolConfig toolConfig = settings.getConfig().getToolConfigByUrlPath(path);
+		    	if (toolConfig != null) {
+		    		toolId = toolConfig.getUniqueToolId();
+		    		if (toolId == null || !toolConfig.isWebService()) {
+		    			resp.setStatus(404); // invalid tool config.
+		    			return;
+		    		}
 		    	}
 		    }
 		}
