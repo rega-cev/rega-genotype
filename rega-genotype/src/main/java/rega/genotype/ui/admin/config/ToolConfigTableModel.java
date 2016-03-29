@@ -1,6 +1,7 @@
 package rega.genotype.ui.admin.config;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import rega.genotype.config.Config;
@@ -147,6 +148,16 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		 return rows.get(row);
 	}
 
+	public ToolInfo getToolInfo(String toolId, String toolVersion) {
+		 for (ToolInfo info: rows) {
+			 if (info.manifest.getId().equals(toolId)
+					 && info.manifest.getVersion().equals(toolVersion))
+				 return info;
+		 }
+
+		 return null;
+	}
+	
 	private ToolManifest find(String toolId, String version, 
 			List<ToolManifest> manifests) {
 		// TODO!: this can not cover the case of a user that creates a tool with 
@@ -179,15 +190,19 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			setDynamicSortFilter(true);
 		}
 
+		public ToolConfigTableModel getToolConfigTableModel() {
+			return (ToolConfigTableModel) getSourceModel();
+		}
+
 		public ToolInfo getToolInfo(WModelIndex proxyIndex) {
-			 return ((ToolConfigTableModel) getSourceModel()).
+			 return getToolConfigTableModel().
 					 getToolInfo(mapToSource(proxyIndex).getRow());
 		}
 
 		public void refresh(
 				List<ToolManifest> localManifests,
 				List<ToolManifest> remoteManifests) {
-			((ToolConfigTableModel) getSourceModel()).refresh(
+			getToolConfigTableModel().refresh(
 					localManifests, remoteManifests);
 		}
 	}

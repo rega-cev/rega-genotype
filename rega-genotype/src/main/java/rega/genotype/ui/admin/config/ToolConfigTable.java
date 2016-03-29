@@ -9,6 +9,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
+import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
@@ -21,6 +22,7 @@ import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal2;
+import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
@@ -104,15 +106,17 @@ public class ToolConfigTable extends Template{
 		
 		addB.clicked().addListener(addB, new Signal.Listener() {
 			public void trigger() {
-				edit(null, Mode.Add);
+				AdminNavigation.setNewToolUrl();
 			}
 		});
 
 		newVersionB.clicked().addListener(newVersionB, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
-					edit(proxyModel.getToolInfo(
-							table.getSelectedIndexes().first()), Mode.NewVersion);
+					ToolInfo toolInfo = proxyModel.getToolInfo(table.getSelectedIndexes().first());
+					AdminNavigation.setNewVersionToolUrl(
+							toolInfo.getManifest().getId(),
+							toolInfo.getManifest().getVersion());
 				}
 			}
 		});
@@ -122,15 +126,20 @@ public class ToolConfigTable extends Template{
 			public void trigger(WModelIndex index, WMouseEvent arg2) {
 				if (index == null)
 					return;
-				edit(proxyModel.getToolInfo(index), Mode.Edit);
+				ToolInfo toolInfo = proxyModel.getToolInfo(index);
+				AdminNavigation.setEditToolUrl(
+						toolInfo.getManifest().getId(),
+						toolInfo.getManifest().getVersion());
 			}
 		});
 
 		editB.clicked().addListener(editB, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
-					edit(proxyModel.getToolInfo(
-							table.getSelectedIndexes().first()), Mode.Edit);
+					ToolInfo toolInfo = proxyModel.getToolInfo(table.getSelectedIndexes().first());
+					AdminNavigation.setEditToolUrl(
+							toolInfo.getManifest().getId(),
+							toolInfo.getManifest().getVersion());
 				}
 			}
 		});
@@ -168,6 +177,38 @@ public class ToolConfigTable extends Template{
 		return remoteManifests;
 	}
 
+	public void showCreateNewTool() {
+		edit(null, ToolConfigForm.Mode.NewVersion);
+	}
+
+	public void showEditTool(String toolId, String toolVersion, ToolConfigForm.Mode mode) {
+		showTable(); // remove prev shown tool		
+
+		ToolInfo toolInfo = proxyModel.getToolConfigTableModel().
+				getToolInfo(toolId, toolVersion);
+
+		if (toolInfo == null) {
+			WContainerWidget c = new WContainerWidget();
+			c.addWidget(new WText("Tool: id = " + toolId +
+					", version = " + toolVersion + "does not exist."));
+			WPushButton back = new WPushButton("Back", c);
+			stack.addWidget(c);
+			back.clicked().addListener(back, new Signal.Listener() {
+				public void trigger() {
+					showTable();
+				}
+			});
+		} else {
+			edit(toolInfo, mode);
+		}
+	}
+	
+	public void showTable() {
+		while (stack.getChildren().size() > 1) {
+			stack.removeWidget(stack.getWidget(1));
+		}
+	}
+
 	private void edit(ToolInfo info, ToolConfigForm.Mode mode) {
 		if (stack.getChildren().size() > 1) {
 			return; // someone clicked too fast.
@@ -179,8 +220,8 @@ public class ToolConfigTable extends Template{
 		stack.setCurrentWidget(d);
 		d.done().addListener(d, new Signal.Listener() {
 			public void trigger() {
-				stack.removeWidget(d);
 				proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+				AdminNavigation.setToolsTableUrl();
 			}
 		});
 	}
