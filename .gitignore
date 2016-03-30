@@ -6,3 +6,5 @@ target
 jobs
 *~
 rega-genotype/base-work-dir/*
+rega-genotype/base-repo-dir/*
+rega-genotype/hs_err_pid*
