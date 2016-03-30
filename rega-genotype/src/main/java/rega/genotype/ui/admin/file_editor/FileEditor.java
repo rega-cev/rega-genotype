@@ -5,11 +5,13 @@ import java.io.IOException;
 
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.FileUtil;
+import eu.webtoolkit.jwt.EventSignal;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WTextEdit;
+import eu.webtoolkit.jwt.WTextArea;
 
 /**
  * Simple xml editor with save option.
@@ -17,12 +19,18 @@ import eu.webtoolkit.jwt.WTextEdit;
  * @author michael
  */
 public class FileEditor extends WContainerWidget {
+	private final WTextArea edit = new WTextArea(this);
+	private Signal saved = new Signal();
+	private File file;
+
 	public FileEditor(final File file) {
 
-		new WText(file.getName(), this);
-		final WTextEdit edit = new WTextEdit(this);
+		this.file = file;
 		final WPushButton saveB = new WPushButton("Save", this);
 		final WText infoT = new WText(this);
+		
+		edit.setWidth(new WLength(600));
+		edit.setHeight(new WLength(300));
 		
 		String fileText = FileUtil.readFile(file);
 
@@ -34,16 +42,27 @@ public class FileEditor extends WContainerWidget {
 
 		saveB.clicked().addListener(this, new Signal.Listener() {
 			public void trigger() {
-				try {
-					FileUtil.writeStringToFile(file, edit.getText());
-					infoT.setText("Saved.");
-				} catch (IOException e) {
-					e.printStackTrace();
-					new MsgDialog("Error", "Write to file failed.");
-				}
+				save();
 			}
 		});
-		
 	}
 
+	public void save() {
+		try {
+			file.delete();
+			FileUtil.writeStringToFile(file, edit.getText());
+			saved().trigger();
+		} catch (IOException e) {
+			e.printStackTrace();
+			new MsgDialog("Error", "Write to file failed.");
+		}
+	}
+	
+	public EventSignal changed() {
+		return edit.changed();
+	}
+
+	public Signal saved() {
+		return saved;
+	}
 }

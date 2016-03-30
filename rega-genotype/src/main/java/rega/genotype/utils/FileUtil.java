@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -51,32 +50,25 @@ public class FileUtil {
 	}
 
 	public static String readFile(File path){
-		try {
-			return toString(new BufferedReader(new FileReader(path)));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
+		BufferedReader buffReader = null;
+		String ans = "";
+		try{
+			buffReader = new BufferedReader (new FileReader(path));
+			String line = buffReader.readLine();
+			while(line != null) {
+				ans += line + "\n";
+				line = buffReader.readLine();
+			}
+		}catch(IOException ioe){
+			ioe.printStackTrace();
+		}finally{
+			try{
+				buffReader.close();
+			}catch(IOException ioe1){
+				//Leave It
+			}
 		}
-		
-//		BufferedReader buffReader = null;
-//		String ans = "";
-//		try{
-//			buffReader = new BufferedReader (new FileReader(path));
-//			String line = buffReader.readLine();
-//			while(line != null) {
-//				ans += line + "\n";
-//				line = buffReader.readLine();
-//			}
-//		}catch(IOException ioe){
-//			ioe.printStackTrace();
-//		}finally{
-//			try{
-//				buffReader.close();
-//			}catch(IOException ioe1){
-//				//Leave It
-//			}
-//		}
-//		return ans;
+		return ans;
 	}
 
 	public static String toString(BufferedReader reader) {
@@ -93,6 +85,14 @@ public class FileUtil {
 		}
 
 		return builder.toString();
+	}
+
+	public static String getFileExtension(File file) {
+		String fileName = file.getName();
+		if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+			return fileName.substring(fileName.lastIndexOf(".")+1);
+		else 
+			return "";
 	}
 
 	// zip 

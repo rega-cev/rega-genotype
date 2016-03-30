@@ -7,10 +7,10 @@ import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
+import rega.genotype.ui.admin.file_editor.FileEditorView;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.Template;
-import rega.genotype.ui.util.FileUpload;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
@@ -19,12 +19,12 @@ import eu.webtoolkit.jwt.WDate;
 import eu.webtoolkit.jwt.WFormWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WValidator;
 import eu.webtoolkit.jwt.WValidator.Result;
 import eu.webtoolkit.jwt.WWidget;
-import eu.webtoolkit.jwt.servlet.UploadedFile;
 
 /**
  * Edit tool configuration form.
@@ -35,7 +35,8 @@ public class ToolConfigForm extends Template {
 	public  enum Mode {Add, Edit, NewVersion, Install}
 	private Mode mode;
 	private final WText infoT = new WText();
-	private final FileUpload fileUpload = new FileUpload();
+	//private final FileUpload fileUpload = new FileUpload();
+	private FileEditorView fileEditor;
 	private final WLineEdit nameLE = initLineEdit();
 	private final WLineEdit idLE = initLineEdit();
 	private final WLineEdit versionLE = initLineEdit();
@@ -89,43 +90,25 @@ public class ToolConfigForm extends Template {
 			versionLE.setValidator(new WValidator(true));
 		}
 
-		// bind
-		
-		bindWidget("name", nameLE);
-		bindWidget("id", idLE);
-		bindWidget("version", versionLE);
-		bindWidget("url", urlLE);
-		bindWidget("blast", blastChB);
-		bindWidget("update", autoUpdateChB);
-		bindWidget("ui", uiChB);
-		bindWidget("service", serviceChB);
-		bindWidget("upload", fileUpload);
-		bindWidget("info", infoT);
-		bindWidget("publish", publishB);
-		bindWidget("save", saveB);
-		bindWidget("cancel", cancelB);
-
-		// TODO: fileUpload will be replaced by editors per-file.
-		
-		String uploadedFiles = new String();
-		if (manifest != null){
-		File baseXmlDir = new File(
-				Settings.getInstance().getXmlDir(manifest.getId(), manifest.getVersion()));
-		if (baseXmlDir.exists() && baseXmlDir.listFiles() != null) {
-			for (File f: baseXmlDir.listFiles()){
-				uploadedFiles += "<div>" + f.getName() + "</div>";
+		File dataDir = null;
+		if (manifest != null) {
+			String dataDirStr = Settings.getInstance().getXmlDir(
+					manifest.getId(), manifest.getVersion());
+			dataDir = new File(dataDirStr);
+		} else {
+			try {
+				dataDir = File.createTempFile("tmp-xml-dir", "");
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false); 
 			}
 		}
-		}
-		bindString("upload-list", uploadedFiles);
-
-		fileUpload.setMultiple(true);
-		fileUpload.getWFileUpload().fileTooLarge().addListener(fileUpload, new Signal.Listener() {
-			public void trigger() {
-				infoT.setText("File too large.");
-			}
-		});
-
+		fileEditor = new FileEditorView(dataDir);
+		WPanel fileEditorPanel = new WPanel();
+		fileEditorPanel.setWidth(new WLength(830));
+		fileEditorPanel.setTitle("File editor");
+		fileEditorPanel.setCentralWidget(fileEditor);
+		
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
 				if (save(false) != null)
@@ -173,6 +156,22 @@ public class ToolConfigForm extends Template {
 			}
 		});
 
+		// bind
+		
+		bindWidget("name", nameLE);
+		bindWidget("id", idLE);
+		bindWidget("version", versionLE);
+		bindWidget("url", urlLE);
+		bindWidget("blast", blastChB);
+		bindWidget("update", autoUpdateChB);
+		bindWidget("ui", uiChB);
+		bindWidget("service", serviceChB);
+		bindWidget("upload", fileEditorPanel);
+		bindWidget("info", infoT);
+		bindWidget("publish", publishB);
+		bindWidget("save", saveB);
+		bindWidget("cancel", cancelB);
+		
 		initTemplate();
 		validate();
 	}
@@ -233,13 +232,6 @@ public class ToolConfigForm extends Template {
 
 		new File(xmlDir).mkdirs();
 		new File(jobDir).mkdirs();
-
-		// save xml files
-		for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
-			String[] split = f.getClientFileName().split(File.separator);
-			String fileName = split[split.length - 1];
-			FileUtil.storeFile(new File(f.getSpoolFileName()), xmlDir + fileName);
-		}
 
 		// save manifest
 		ToolManifest manifest = new ToolManifest();

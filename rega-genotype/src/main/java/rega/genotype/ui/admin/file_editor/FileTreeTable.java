@@ -23,27 +23,44 @@ import eu.webtoolkit.jwt.WTreeTableNode;
 
 public class FileTreeTable extends WTreeTable {
 
-	public FileTreeTable(File path) {
-		this(path, null);
+	private File path;
+	private boolean showSize;
+	private boolean showModifier;
+
+	public FileTreeTable(File path, boolean showSize, 
+			 boolean showModifier) {
+		this(path, showSize, showModifier, null);
 	}
 
-	public FileTreeTable(File path, WContainerWidget parent) {
+	public FileTreeTable(File path, boolean showSize, 
+			 boolean showModifier, WContainerWidget parent) {
 		super(parent);
+		this.path = path;
+		this.showSize = showSize;
+		this.showModifier = showModifier;
 
-		addColumn("Size", new WLength(80));
-		addColumn("Modified", new WLength(110));
-
-		header(1).setStyleClass("fsize");
-		header(2).setStyleClass("date");
-
-		setTreeRoot(new FileTreeTableNode(path), "File");
+		if (showSize){
+			addColumn("Size", new WLength(80));
+			header(1).setStyleClass("fsize");
+		}
+		if (showModifier) {
+			addColumn("Modified", new WLength(110));
+			header(getColumnCount() -1).setStyleClass("date");
+		}
 
 		getTree().setSelectionMode(SelectionMode.SingleSelection);
+
+		refresh();
+	}
+
+	public void refresh() {
+		setTreeRoot(new FileTreeTableNode(path, showSize, showModifier), "File");
+		
 		getTreeRoot().expand();
 		getTreeRoot().setNodeVisible(false);
 		getTreeRoot().setChildCountPolicy(ChildCountPolicy.Enabled);
 	}
-
+	
 	public FileTreeTableNode findNodeByPath(String path, FileTreeTableNode current){
 		if (path.equals(current.getPath().getPath()))
 			return current;
@@ -90,26 +107,35 @@ public class FileTreeTable extends WTreeTable {
 
 	public static class FileTreeTableNode extends WTreeTableNode {
 
-		public FileTreeTableNode(File path) {
+		private boolean showSize;
+		private boolean showModifier;
+
+		public FileTreeTableNode(File path, final boolean showSize, final boolean showModifier) {
 			super("", createIcon(path));
 			path_ = path;
+			this.showSize = showSize;
+			this.showModifier = showModifier;
 
 			getLabel().setTextFormat(TextFormat.PlainText);
 			getLabel().setText(path_.getName());
 
+			
 			if (path.exists()) {
 				if (!path.isDirectory()) {
-					long fsize = path.length();
-					setColumnWidget(1, new WText(fsize + ""));
-					getColumnWidget(1).setStyleClass("fsize");
+					if (showSize) {
+						long fsize = path.length();
+						setColumnWidget(1, new WText(fsize + ""));
+						getColumnWidget(1).setStyleClass("fsize");
+					}
 				} else
 					setSelectable(false);
 
-				SimpleDateFormat formatter = new SimpleDateFormat("M dd yyyy");
-
-				setColumnWidget(2, new WText(formatter.format(new Date(path
-						.lastModified()))));
-				getColumnWidget(2).setStyleClass("date");
+				if (showModifier) {
+					SimpleDateFormat formatter = new SimpleDateFormat("M dd yyyy");
+					setColumnWidget(2, new WText(formatter.format(new Date(path
+							.lastModified()))));
+					getColumnWidget(2).setStyleClass("date");
+				}
 			}
 		}
 
@@ -125,7 +151,7 @@ public class FileTreeTable extends WTreeTable {
 				File[] files = path_.listFiles();
 				if(files != null)// That can happen if the user has no permissions to use the file.
 					for (File f : files)
-						addChildNode(new FileTreeTableNode(f));
+						addChildNode(new FileTreeTableNode(f, showSize, showModifier));
 			}
 		}
 
