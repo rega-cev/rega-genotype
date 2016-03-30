@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -50,25 +51,48 @@ public class FileUtil {
 	}
 
 	public static String readFile(File path){
-		BufferedReader buffReader = null;
-		String ans = "";
-		try{
-			buffReader = new BufferedReader (new FileReader(path));
-			String line = buffReader.readLine();
-			while(line != null) {
-				ans += line + "\n";
-				line = buffReader.readLine();
-			}
-		}catch(IOException ioe){
-			ioe.printStackTrace();
-		}finally{
-			try{
-				buffReader.close();
-			}catch(IOException ioe1){
-				//Leave It
-			}
+		try {
+			return toString(new BufferedReader(new FileReader(path)));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
 		}
-		return ans;
+		
+//		BufferedReader buffReader = null;
+//		String ans = "";
+//		try{
+//			buffReader = new BufferedReader (new FileReader(path));
+//			String line = buffReader.readLine();
+//			while(line != null) {
+//				ans += line + "\n";
+//				line = buffReader.readLine();
+//			}
+//		}catch(IOException ioe){
+//			ioe.printStackTrace();
+//		}finally{
+//			try{
+//				buffReader.close();
+//			}catch(IOException ioe1){
+//				//Leave It
+//			}
+//		}
+//		return ans;
+	}
+
+	public static String toString(BufferedReader reader) {
+		StringBuilder builder = new StringBuilder();
+		String aux = "";
+
+		try {
+			while ((aux = reader.readLine()) != null) {
+			    builder.append(aux);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return builder.toString();
 	}
 
 	// zip 
@@ -185,21 +209,5 @@ public class FileUtil {
 			return false;
 		}
 		return true;
-	}
-
-	public static String toString(BufferedReader reader) {
-		StringBuilder builder = new StringBuilder();
-		String aux = "";
-
-		try {
-			while ((aux = reader.readLine()) != null) {
-			    builder.append(aux);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return builder.toString();
 	}
 }
