@@ -95,6 +95,53 @@ public class FileUtil {
 			return "";
 	}
 
+	/**
+	 * Same as JDK 7 Files.createTempDirectory 
+	 * @return
+	 * @throws IOException
+	 */
+	public static File createTempDirectory(String prefix) throws IOException {
+		final File temp;
+		temp = File.createTempFile(prefix, "");
+		if(!(temp.delete()))
+			throw new IOException("Could not delete temp file: " + temp.getAbsolutePath());
+		if(!(temp.mkdir()))
+			throw new IOException("Could not create temp directory: " + temp.getAbsolutePath());
+
+		return (temp);
+	}
+
+	public static void moveDirContentRecorsively(File srcDir, String destDir) {
+		if(srcDir.isDirectory() && srcDir.listFiles() != null) {
+		    File[] content = srcDir.listFiles();
+		    for (File f: content) {
+		    	File destFile = new File(destDir + File.separator + f.getName());
+		    	if (f.isDirectory()) {
+		    		destFile.mkdirs();
+		    		moveDirContentRecorsively(f, destFile.getAbsolutePath());
+		    	} else {
+		    		f.renameTo(destFile);
+		    	}
+		    		
+		    }
+		}
+	}
+
+	public static void copyDirContentRecorsively(File srcDir, String destDir) throws IOException {
+		if(srcDir.isDirectory() && srcDir.listFiles() != null) {
+		    File[] content = srcDir.listFiles();
+		    for (File f: content) {
+		    	File destFile = new File(destDir + File.separator + f.getName());
+		    	if (f.isDirectory()) {
+		    		destFile.mkdirs();
+		    		copyDirContentRecorsively(f, destFile.getAbsolutePath());
+		    	} else {
+		    		Files.copy(f.toPath(), destFile.toPath());
+		    	}
+		    		
+		    }
+		}
+	}
 	// zip 
 	
 	private static ZipFile toZipFile(final File zip) {

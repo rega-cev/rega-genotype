@@ -12,6 +12,7 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WTabWidget;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.UploadedFile;
 
 /**
@@ -22,9 +23,11 @@ import eu.webtoolkit.jwt.servlet.UploadedFile;
 public class FileEditorView extends WContainerWidget{
 	private WTable layout = new WTable(this);
 	private FileTabs fileTabs = new FileTabs();
+	private File rootDir;
 
 	public FileEditorView(final File root) {
 		super();
+		this.rootDir = root;
 
 		final FileUpload fileUpload = new FileUpload();
 		final FileTreeTable fileTree = new FileTreeTable(root, false, false);
@@ -61,11 +64,34 @@ public class FileEditorView extends WContainerWidget{
 		});
 	}
 
+	public void saveAll() {
+		fileTabs.saveAll();
+	}
+
 	// classes
+
+	public File getRootDir() {
+		return rootDir;
+	}
 
 	public static class FileTabs extends WTabWidget {
 
 		private Map<File, FileEditor> openEditors = new HashMap<File, FileEditor>();
+
+		public FileTabs() {
+			tabClosed().addListener(this,  new Signal1.Listener<Integer>() {
+				public void trigger(Integer arg) {
+					WWidget widget = getWidget(arg);
+					for (Map.Entry<File, FileEditor> e: openEditors.entrySet()){
+						if (e.getValue().equals(widget)){
+							openEditors.remove(e.getKey());
+							break;
+						}
+					}
+					removeTab(widget);
+				}
+			});
+		}
 
 		public void showTab(final File file){
 			//if (FileUtil.getFileExtension(file).equals("xml"))
@@ -77,6 +103,8 @@ public class FileEditorView extends WContainerWidget{
 				openEditors.put(file, editor);
 				setCurrentWidget(editor);
 				
+				setTabCloseable(getIndexOf(editor), true);
+
 				editor.changed().addListener(editor, new Signal.Listener() {
 					public void trigger() {
 						setTabText(getIndexOf(editor), "*" + file.getName());
@@ -90,6 +118,11 @@ public class FileEditorView extends WContainerWidget{
 				});
 
 			}
+		}
+
+		public void saveAll() {
+			for(FileEditor e: openEditors.values())
+				e.save();
 		}
 	}
 }

@@ -19,8 +19,8 @@ import com.google.gson.reflect.TypeToken;
 public class ToolManifest {
 	public static final String MANIFEST_FILE_NAME = "manifest.json";
 	private String name;
-	private String id;
-	private String version;
+	private String id; // part of the tool signature {id, version}
+	private String version;// part of the tool signature {id, version}
 	private boolean blastTool;
 	private String publisherName; // Copy from publisher Server global config publisherName, read only for users.
 	private Date publicationDate; // filled by Repo server, read only for users.
@@ -43,6 +43,11 @@ public class ToolManifest {
 	public void save(String externalDir) throws IOException {
 		FileUtil.writeStringToFile(new File(externalDir + MANIFEST_FILE_NAME), toJson());
 	}
+
+	public boolean isSameSignature(ToolManifest other) {
+		return id.equals(other.getId()) && version.equals(other.getVersion());
+	}
+
 	/**
 	 * @return unique tool id (used as the tool dir name) 
 	 */

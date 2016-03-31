@@ -34,7 +34,8 @@ public class AdminApplication extends WApplication{
 		final Config config = Settings.getInstance().getConfig();
 		
 		if (config != null 
-				&& config.getGeneralConfig().getAdminPassword() != null) {
+				&& config.getGeneralConfig().getAdminPassword() != null
+				&& !config.getGeneralConfig().getAdminPassword().equals("pwd-for-lazy-developerS*!") ) {
 			
 			// very simple auth.
 			
@@ -42,6 +43,7 @@ public class AdminApplication extends WApplication{
 			final WPushButton loginB = new WPushButton("Login", getRoot());
 			final WText infoT = new WText(getRoot());
 
+			pwdLE.setFocus();
 			pwdLE.setPlaceholderText("Admin password");
 
 			loginB.clicked().addListener(loginB, new Signal.Listener() {

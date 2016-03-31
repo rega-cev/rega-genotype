@@ -3,111 +3,108 @@ package rega.genotype.ui.admin.config;
 import java.io.File;
 import java.io.IOException;
 
-import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.admin.file_editor.FileEditorView;
-import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.ui.framework.widgets.Template;
+import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
-import eu.webtoolkit.jwt.WCheckBox;
-import eu.webtoolkit.jwt.WDate;
-import eu.webtoolkit.jwt.WFormWidget;
 import eu.webtoolkit.jwt.WLength;
-import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WValidator;
-import eu.webtoolkit.jwt.WValidator.Result;
-import eu.webtoolkit.jwt.WWidget;
 
 /**
  * Edit tool configuration form.
  * 
  * @author michael
  */
-public class ToolConfigForm extends Template {
-	public  enum Mode {Add, Edit, NewVersion, Install}
-	private Mode mode;
+public class ToolConfigForm extends FormTemplate {
+	public enum Mode {Add, Edit, NewVersion, Install}
 	private final WText infoT = new WText();
-	//private final FileUpload fileUpload = new FileUpload();
 	private FileEditorView fileEditor;
-	private final WLineEdit nameLE = initLineEdit();
-	private final WLineEdit idLE = initLineEdit();
-	private final WLineEdit versionLE = initLineEdit();
-	private final WLineEdit urlLE = initLineEdit();
-	private final WCheckBox blastChB = new WCheckBox();
-	private final WCheckBox autoUpdateChB = new WCheckBox();
-	private final WCheckBox serviceChB = new WCheckBox();
-	private final WCheckBox uiChB = new WCheckBox();
+	private ManifestForm manifestForm;
+	private LocalConfigForm localConfigForm;
+	
 	private Signal done = new Signal();
 
 	public ToolConfigForm(final ToolConfig toolConfig,
 			final ToolManifest manifest, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
-
-		this.mode = mode;
 		
 		setWidth(new WLength(600));
 
 		final WPushButton publishB = new WPushButton("Publish");
-		final WPushButton saveB = new WPushButton("Save");
-		final WPushButton cancelB = new WPushButton("Cancel");
+		final WPushButton saveB = new WPushButton("Save All");
+		final WPushButton cancelB = new WPushButton("Exit");
 
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
 
-		// read
-
-		if (manifest != null) {
-			nameLE.setText(manifest.getName());
-			idLE.setText(manifest.getId());
-			versionLE.setText(manifest.getVersion());
-			blastChB.setChecked(manifest.isBlastTool());
-		}
-		if (toolConfig != null){
-			urlLE.setText(toolConfig.getPath());
-			autoUpdateChB.setChecked(toolConfig.isAutoUpdate());
-			serviceChB.setChecked(toolConfig.isWebService());
-			uiChB.setChecked(toolConfig.isUi());
-		}
-
-		idLE.setDisabled(mode != Mode.Add);
-		versionLE.setDisabled(mode == Mode.Edit || mode == Mode.Install);
-
-		// validators
-		nameLE.setValidator(new WValidator(true));
-		if (mode == Mode.Add || mode == Mode.NewVersion) {
-			idLE.setValidator(new ToolIdValidator(true));
-			versionLE.setValidator(new ToolIdValidator(true));
-			urlLE.setValidator(new ToolUrlValidator(false));
-		} else {
-			idLE.setValidator(new WValidator(true));
-			versionLE.setValidator(new WValidator(true));
-		}
-
+		manifestForm = new ManifestForm(manifest, mode);
+		localConfigForm = new LocalConfigForm(toolConfig, mode);
+		
+		// file editor
+		
 		File dataDir = null;
-		if (manifest != null) {
-			String dataDirStr = Settings.getInstance().getXmlDir(
-					manifest.getId(), manifest.getVersion());
-			dataDir = new File(dataDirStr);
-		} else {
+		switch (mode) {
+		case Add:
 			try {
-				dataDir = File.createTempFile("tmp-xml-dir", "");
+				dataDir = FileUtil.createTempDirectory("tmp-xml-dir");
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); 
 			}
+			 break; 
+		case NewVersion:
+			String oldVersionDir = Settings.getInstance().getXmlDir(
+					manifest.getId(), manifest.getVersion());
+			try {
+				dataDir = FileUtil.createTempDirectory("tmp-xml-dir");
+				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), dataDir.getAbsolutePath());
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false); 
+			}
+			break;
+		case Edit:
+			String dataDirStr = Settings.getInstance().getXmlDir(
+					manifest.getId(), manifest.getVersion());
+			dataDir = new File(dataDirStr);
+			break;
+		default:
+			break;
 		}
 		fileEditor = new FileEditorView(dataDir);
 		WPanel fileEditorPanel = new WPanel();
 		fileEditorPanel.setWidth(new WLength(830));
 		fileEditorPanel.setTitle("File editor");
 		fileEditorPanel.setCentralWidget(fileEditor);
+
+		// bind
+
+		WPanel mamifestPanel = new WPanel();
+		mamifestPanel.setTitle("Tool Manifest");
+		mamifestPanel.setCentralWidget(manifestForm);
+
+		WPanel configPanel = new WPanel();
+		configPanel.setTitle("Tool local configuration");
+		configPanel.setCentralWidget(localConfigForm);
+		
+		bindWidget("manifest", mamifestPanel);
+		bindWidget("config", configPanel);
+		bindWidget("upload", fileEditorPanel);
+		bindWidget("info", infoT);
+		bindWidget("publish", publishB);
+		bindWidget("save", saveB);
+		bindWidget("cancel", cancelB);
+
+		initInfoFields();
+		validate();
+
+		// signals 
 		
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
@@ -155,153 +152,42 @@ public class ToolConfigForm extends Template {
 				done.trigger();
 			}
 		});
-
-		// bind
-		
-		bindWidget("name", nameLE);
-		bindWidget("id", idLE);
-		bindWidget("version", versionLE);
-		bindWidget("url", urlLE);
-		bindWidget("blast", blastChB);
-		bindWidget("update", autoUpdateChB);
-		bindWidget("ui", uiChB);
-		bindWidget("service", serviceChB);
-		bindWidget("upload", fileEditorPanel);
-		bindWidget("info", infoT);
-		bindWidget("publish", publishB);
-		bindWidget("save", saveB);
-		bindWidget("cancel", cancelB);
-		
-		initTemplate();
-		validate();
 	}
 
-	private WLineEdit initLineEdit() {
-		WLineEdit le = new WLineEdit();
-		le.setWidth(new WLength(200));
-		return le;
-	}
-
-	private void initTemplate() {
-		for(int i = getChildren().size() - 1; i  >= 0; --i) {
-			WWidget w =  getChildren().get(i);
-			if (w instanceof WFormWidget){
-				String var = varName(w);
-				bindWidget(var + "-info", new WText());
-			}
-		}
-	}
-	
-	private boolean validate() {
-		boolean ans = true;
-	
-		for(WWidget w: getChildren()) {
-			if (w instanceof WFormWidget){
-				WFormWidget fw  = (WFormWidget) w;
-			
-				if (fw.validate() != WValidator.State.Valid) {
-					ans = false;
-					infoT.setText("Some fildes have invalid values.");
-				}
-				String var = varName(w);
-				WText info = (WText) resolveWidget(var + "-info");
-				if (info != null && fw.getValidator() != null) {
-					if (fw.getValueText() == null)
-						info.setText("");
-					else {
-						Result r = fw.getValidator().validate(fw.getValueText());
-						info.setText(r == null ? "" :r.getMessage());
-					}
-				}
-			}
-		}
-		return ans;
+	@Override
+	public boolean validate() {
+		return manifestForm.validate() && localConfigForm.validate();
 	}
 
 	private ToolConfig save(boolean publishing) {
 		if (!validate())
 			return null;
 
-		Config config = Settings.getInstance().getConfig();
-		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
-		
-		String xmlDir = Settings.getInstance().getXmlDir(
-				idLE.getText(), versionLE.getText());
-		String jobDir = Settings.getInstance().getJobDir(
-				idLE.getText(), versionLE.getText());
+		fileEditor.saveAll();
 
-		new File(xmlDir).mkdirs();
-		new File(jobDir).mkdirs();
-
-		// save manifest
-		ToolManifest manifest = new ToolManifest();
-		manifest.setBlastTool(blastChB.isChecked());
-		manifest.setName(nameLE.getText());
-		manifest.setId(idLE.getText());
-		manifest.setVersion(versionLE.getText());
-		manifest.setPublisherName(config.getGeneralConfig().getPublisherName());
-		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
-		if (publishing)
-			manifest.setPublicationDate(WDate.getCurrentDate().getDate());
-
-		// save ToolConfig
-		ToolConfig newTool = config.getToolConfigById(manifest.getId(), manifest.getVersion());
-		if (newTool == null) {
-			assert(mode != Mode.Edit);
-			newTool = new ToolConfig();
-			if (!config.addTool(newTool))
-				return null;
-		}
-
-		newTool.setAutoUpdate(autoUpdateChB.isChecked());
-		newTool.setConfiguration(xmlDir);
-		newTool.setJobDir(jobDir);
-		newTool.setPath(urlLE.getText());
-		newTool.setUi(uiChB.isChecked());
-		newTool.setWebService(serviceChB.isChecked());
-
-		try {
-			manifest.save(xmlDir);
-			config.save(baseDir);
-		} catch (IOException e) {
-			e.printStackTrace();
-			infoT.setText("Error: Config file could not be properlly updated.");
+		ToolManifest manifest = manifestForm.save(publishing);
+		if (manifest == null) {
+			infoT.setText("Manifest could not be saved.");
 			return null;
 		}
-		return newTool;
+
+		String xmlDir = Settings.getInstance().getXmlDir(
+				manifest.getId(), manifest.getVersion());
+		
+		FileUtil.moveDirContentRecorsively(fileEditor.getRootDir(), xmlDir);
+
+		ToolConfig tool = localConfigForm.save(manifest);
+		if (tool == null) {
+			infoT.setText("Local configuration could not be saved.");
+			return null;
+		}
+
+		return tool;
 	}
 
 	// classes
 
 	public Signal done() {
 		return done;
-	}
-
-	private class ToolIdValidator extends WValidator {
-		ToolIdValidator(boolean isMandatory) {
-			super(isMandatory);
-		}
-		@Override
-		public Result validate(String input) {
-			Config config = Settings.getInstance().getConfig();
-			if (config.getToolConfigById(idLE.getText(), versionLE.getText()) != null)
-				return new Result(State.Invalid, "A tool with same id and version already exist on local server.");
-
-			return super.validate(input);
-		}
-	}
-
-	private class ToolUrlValidator extends WValidator {
-		ToolUrlValidator(boolean isMandatory) {
-			super(isMandatory);
-		}
-		@Override
-		public Result validate(String input) {
-			Config config = Settings.getInstance().getConfig();
-			if (config.getToolConfigByUrlPath(urlLE.getText()) != null)
-				return new Result(State.Invalid, "A tool with same url already exist on local server.");
-
-			return super.validate(input);
-		}
 	}
 }
