@@ -135,7 +135,9 @@ public class ToolRepoService extends HttpServlet{
 			indexes = new ToolIndexes();
 		}
 		// Add ToolIndex for new tools
-		indexes.getIndexes().add(new ToolIndex(password, manifest.getId(), manifest.getPublisherName()));
+		indexes.getIndexes().add(new ToolIndex(
+				password, manifest.getId(), manifest.getPublisherName(),
+				repoDir + manifest.getId() + manifest.getVersion() + ".zip"));
 		try {
 			indexes.save(repoDir);
 		} catch (IOException e1) {

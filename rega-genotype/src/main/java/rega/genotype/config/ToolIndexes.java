@@ -55,13 +55,15 @@ public class ToolIndexes {
 		private String publisherName; 
 		private String publisherPassword; 
 		private String toolId;
+		private String filePath;
 
 		public ToolIndex(){}
 
-		public ToolIndex(String publisherPassword, String toolId, String publisherName){
+		public ToolIndex(String publisherPassword, String toolId, String publisherName, String filePath){
 			this.publisherPassword = publisherPassword;
 			this.toolId = toolId;
 			this.publisherName = publisherName;
+			this.filePath = filePath;
 		}
 
 		public String getPublisherPassword() {
@@ -85,6 +87,14 @@ public class ToolIndexes {
 
 		public void setPublisherName(String publisherName) {
 			this.publisherName = publisherName;
+		}
+
+		public String getFilePath() {
+			return filePath;
+		}
+
+		public void setFilePath(String filePath) {
+			this.filePath = filePath;
 		}
 	}
 }
