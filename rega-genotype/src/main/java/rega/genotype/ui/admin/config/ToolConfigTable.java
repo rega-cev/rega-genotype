@@ -178,7 +178,7 @@ public class ToolConfigTable extends Template{
 	}
 
 	public void showCreateNewTool() {
-		edit(null, ToolConfigForm.Mode.NewVersion);
+		edit(null, ToolConfigForm.Mode.Add);
 	}
 
 	public void showEditTool(String toolId, String toolVersion, ToolConfigForm.Mode mode) {
