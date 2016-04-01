@@ -42,17 +42,14 @@ public class ToolConfigForm extends FormTemplate {
 		final WPushButton cancelB = new WPushButton("Exit");
 
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
-
-		manifestForm = new ManifestForm(manifest, mode);
-		localConfigForm = new LocalConfigForm(toolConfig, mode);
 		
 		// file editor
 		
-		File dataDir = null;
+		File toolDir = null;
 		switch (mode) {
 		case Add:
 			try {
-				dataDir = FileUtil.createTempDirectory("tmp-xml-dir");
+				toolDir = FileUtil.createTempDirectory("tmp-xml-dir");
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); 
@@ -62,8 +59,8 @@ public class ToolConfigForm extends FormTemplate {
 			String oldVersionDir = Settings.getInstance().getXmlDir(
 					manifest.getId(), manifest.getVersion());
 			try {
-				dataDir = FileUtil.createTempDirectory("tmp-xml-dir");
-				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), dataDir.getAbsolutePath());
+				toolDir = FileUtil.createTempDirectory("tmp-xml-dir");
+				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), toolDir.getAbsolutePath());
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); 
@@ -72,17 +69,21 @@ public class ToolConfigForm extends FormTemplate {
 		case Edit:
 			String dataDirStr = Settings.getInstance().getXmlDir(
 					manifest.getId(), manifest.getVersion());
-			dataDir = new File(dataDirStr);
+			toolDir = new File(dataDirStr);
 			break;
 		default:
 			break;
 		}
-		fileEditor = new FileEditorView(dataDir);
+		fileEditor = new FileEditorView(toolDir);
 		WPanel fileEditorPanel = new WPanel();
 		fileEditorPanel.setWidth(new WLength(830));
 		fileEditorPanel.setTitle("File editor");
 		fileEditorPanel.setCentralWidget(fileEditor);
 
+		// manifest and config 
+		manifestForm = new ManifestForm(manifest, mode);
+		localConfigForm = new LocalConfigForm(toolConfig, mode);
+		
 		// bind
 
 		WPanel mamifestPanel = new WPanel();
@@ -171,10 +172,7 @@ public class ToolConfigForm extends FormTemplate {
 			return null;
 		}
 
-		String xmlDir = Settings.getInstance().getXmlDir(
-				manifest.getId(), manifest.getVersion());
-		
-		FileUtil.moveDirContentRecorsively(fileEditor.getRootDir(), xmlDir);
+		renameToolDir(manifest);
 
 		ToolConfig tool = localConfigForm.save(manifest);
 		if (tool == null) {
@@ -183,6 +181,19 @@ public class ToolConfigForm extends FormTemplate {
 		}
 
 		return tool;
+	}
+
+	private void renameToolDir(ToolManifest manifest) {
+		String xmlDir = Settings.getInstance().getXmlDir(
+				manifest.getId(), manifest.getVersion());
+		File toolDir = fileEditor.getRootDir();
+
+		// make sure that the xml dir name is {id}{version} 
+		if (!toolDir.getAbsolutePath().equals(xmlDir)) {
+			FileUtil.moveDirRecorsively(toolDir, xmlDir);
+		}
+
+		// TODO: refresh file editor and local config.
 	}
 
 	// classes

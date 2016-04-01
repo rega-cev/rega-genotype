@@ -22,18 +22,6 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.IOUtils;
 
 public class FileUtil {
-
-	public static void storeFile(File file, String dir) {
-		try {
-			if (file == null)
-				return;
-			Files.copy(file.toPath(), new File(dir).toPath());
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Could not copy uploaded file", e);
-		}
-	}
-
 	public static void writeStringToFile(File f, String s) throws IOException {
 		if (!f.exists()) {
 			f.getParentFile().mkdirs();
@@ -111,6 +99,11 @@ public class FileUtil {
 		return (temp);
 	}
 
+	public static void moveDirRecorsively(File srcDir, String destDir) {
+		new File(destDir).mkdirs();
+		moveDirContentRecorsively(srcDir, destDir);
+		srcDir.delete();
+	}
 	public static void moveDirContentRecorsively(File srcDir, String destDir) {
 		if(srcDir.isDirectory() && srcDir.listFiles() != null) {
 		    File[] content = srcDir.listFiles();
@@ -120,9 +113,12 @@ public class FileUtil {
 		    		destFile.mkdirs();
 		    		moveDirContentRecorsively(f, destFile.getAbsolutePath());
 		    	} else {
-		    		f.renameTo(destFile);
+		    		try {
+						Files.move(f.toPath(), destFile.toPath());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 		    	}
-		    		
 		    }
 		}
 	}

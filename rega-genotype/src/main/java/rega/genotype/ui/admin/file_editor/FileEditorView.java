@@ -1,11 +1,13 @@
 package rega.genotype.ui.admin.file_editor;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.util.FileUpload;
-import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -48,7 +50,14 @@ public class FileEditorView extends WContainerWidget{
 				for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
 					String[] split = f.getClientFileName().split(File.separator);
 					String fileName = split[split.length - 1];
-					FileUtil.storeFile(new File(f.getSpoolFileName()), root + File.separator + fileName);
+					try {
+						Files.copy(new File(f.getSpoolFileName()).toPath(),
+								new File(root + File.separator + fileName).toPath());
+					} catch (IOException e) {
+						e.printStackTrace();
+						new MsgDialog("Error", "<div>Some files could not be copied (maybe they already exist).</div>" +
+								"<div> Error message: "+ e.getMessage() + "</div>");
+					}
 				}
 
 				fileTree.refresh();

@@ -26,7 +26,7 @@ public class ManifestForm extends FormTemplate{
 	private final WLineEdit idLE = initLineEdit();
 	private final WLineEdit versionLE = initLineEdit();
 	private final WCheckBox blastChB = new WCheckBox();
-	private Signal1<File> dirNameChanged = new Signal1<File>();
+	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
 
 	public ManifestForm(final ToolManifest manifest, Mode mode) {
 		super(tr("admin.config.tool-config-dialog.manifest"));
@@ -89,13 +89,6 @@ public class ManifestForm extends FormTemplate{
 
 		try {
 			manifest.save(xmlDir);
-			// TODO: ??
-			// make sure that the xml dir name is {id}{version} 
-			// manifest.save(toolDir.getAbsolutePath());
-			//			if (!toolDir.getAbsolutePath().equals(xmlDir)) {
-			//				toolDir.renameTo(new File(xmlDir));
-			//				dirNameChanged.trigger(toolDir);
-			//			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -110,8 +103,8 @@ public class ManifestForm extends FormTemplate{
 		return le;
 	}
 
-	public Signal1<File> dirNameChanged() {
-		return dirNameChanged;
+	public Signal1<File> saved() {
+		return saved;
 	}
 	private class ToolIdValidator extends WValidator {
 		ToolIdValidator(boolean isMandatory) {
