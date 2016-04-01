@@ -30,7 +30,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeHIV</servlet-name>
-    <url-pattern>/hiv/typingtool/*</url-pattern>
+    <url-pattern>/typingtool/hiv/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -61,7 +61,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeHIV-service</servlet-name>
-    <url-pattern>/hiv/typingservice</url-pattern>
+    <url-pattern>/typingservice/hiv</url-pattern>
   </servlet-mapping>
   
   <servlet>
@@ -73,7 +73,7 @@
 
   <servlet-mapping>
     <servlet-name>StanfordGenotypeHIV</servlet-name>
-    <url-pattern>/stanford-hiv/typingtool/*</url-pattern>
+    <url-pattern>/typingtool/stanford-hiv/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -85,7 +85,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeNoV</servlet-name>
-    <url-pattern>/norovirus/typingtool/*</url-pattern>
+    <url-pattern>/typingtool/norovirus/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -101,7 +101,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeNoV-service</servlet-name>
-    <url-pattern>/norovirus/typingservice</url-pattern>
+    <url-pattern>/typingservice/norovirus</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -113,7 +113,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeEntero</servlet-name>
-    <url-pattern>/enterovirus/typingtool/*</url-pattern>
+    <url-pattern>/typingtool/enterovirus/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -129,7 +129,7 @@
 
   <servlet-mapping>
     <servlet-name>GenotypeEntero-service</servlet-name>
-    <url-pattern>/enterovirus/typingservice</url-pattern>
+    <url-pattern>/typingservice/enterovirus</url-pattern>
   </servlet-mapping>
 
   <servlet>
