@@ -1,6 +1,8 @@
 package rega.genotype.ui.admin.config;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import rega.genotype.config.Config;
@@ -16,7 +18,16 @@ import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WSortFilterProxyModel;
 
 public class ToolConfigTableModel extends WAbstractTableModel {
-	String[] headers = { "URL", "Name", "ID", "Version", "Publication date", "Publisher" , "State" };
+	public static final int URL_COLUMN = 0;
+	public static final int NAME_COLUMN = 1;
+	public static final int ID_COLUMN = 2;
+	public static final int VERSION_COLUMN = 3;
+	public static final int DATE_COLUMN = 4;
+	public static final int PUBLISHER_COLUMN = 5;
+	public static final int STATE_COLUMN = 6;
+	public static final int UPTODATE_COLUMN = 7;
+
+	String[] headers = { "URL", "Name", "ID", "Version", "Publication date", "Publisher" , "State", "Up to date"};
 	List<ToolInfo> rows = new ArrayList<ToolInfo>();
 
 	public enum ToolState {
@@ -25,10 +36,10 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			String str() {return "Local";}
 		}, RemoteSync {   // local and remote are in sync
 			@Override
-			String str() {return "Remote in sync with local";}
+			String str() {return "Installed";}
 		}, RemoteNotSync { // published but not installed.
 			@Override
-			String str() {return "Remote NOT in sync with local";}
+			String str() {return "Remote";}
 		};  
 
 		abstract String str();
@@ -88,23 +99,30 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 	public Object getData(WModelIndex index, int role) {
 		ToolInfo info = getToolInfo(index.getRow());
 		if (role == ItemDataRole.DisplayRole) {
-			//	String[] headers = { "URL", "Name", "ID", "Version", "Date", "Publisher" , "State" };
-
 			switch (index.getColumn()) {
-			case 0:					
+			case URL_COLUMN:					
 				return info.getConfig() == null ? null : info.getConfig().getPath();
-			case 1:
+			case NAME_COLUMN:
 				return info.getManifest() == null ? null : info.getManifest().getName();
-			case 2:
+			case ID_COLUMN:
 				return info.getManifest() == null ? null : info.getManifest().getId();
-			case 3:
+			case VERSION_COLUMN:
 				return info.getManifest() == null ? null : info.getManifest().getVersion();
-			case 4:
-				return info.getManifest() == null ? null : info.getManifest().getPublicationDate();
-			case 5:
+			case DATE_COLUMN:
+				return info.getManifest() == null ? null : formtDate(info.getManifest().getPublicationDate());
+			case PUBLISHER_COLUMN:
 				return info.getManifest() == null ? null : info.getManifest().getPublisherName();
-			case 6:
-				return info.getState().str(); // local, uptodate, 
+			case STATE_COLUMN:
+				if (info.getManifest() == null)
+					return null;
+				else 
+					return info.getState() == ToolState.Local ? "Local" : "Published";
+
+			case UPTODATE_COLUMN:
+				if (info.getManifest() == null)
+					return null;
+				else
+					return info.getState() == ToolState.RemoteNotSync ? "NO" : "YES";
 			default:
 				break;
 			}
@@ -115,24 +133,32 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		return null;
 	}
 
-	public WLength getColumnWidth(int column) {
-		//	String[] headers = { "URL", "Name", "ID", "Version", "Date", "Publisher" , "State" };
-		switch (column) {
-		case 0:
-			return new WLength(100);
-		case 1:
-			return new WLength(120);
-		case 2:
-			return new WLength(100);
-		case 3:
-			return new WLength(60);
-		case 4:
-			return new WLength(120);
-		case 5:
-			return new WLength(100);
-		case 6:
-			return new WLength(60);
+	private String formtDate(Date date) {
+		if (date == null)
+			return null;
 
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		return  format.format(date);
+	}
+
+	public WLength getColumnWidth(int column) {
+		switch (column) {
+		case URL_COLUMN:
+			return new WLength(100);
+		case NAME_COLUMN:
+			return new WLength(120);
+		case ID_COLUMN:
+			return new WLength(100);
+		case VERSION_COLUMN:
+			return new WLength(60);
+		case DATE_COLUMN:
+			return new WLength(100);
+		case PUBLISHER_COLUMN:
+			return new WLength(100);
+		case STATE_COLUMN:
+			return new WLength(60);
+		case UPTODATE_COLUMN:
+			return new WLength(100);
 		default:
 			return new WLength(100);
 		}
