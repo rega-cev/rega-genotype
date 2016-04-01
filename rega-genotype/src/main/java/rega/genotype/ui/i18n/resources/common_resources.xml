@@ -160,13 +160,13 @@
 	<!-- Admin config -->
 	<message id="admin.config.tool-config-table">
 		${table}
-		<div>${add}${new-version}${edit}${install}</div>
+		<div class="action-buttons">${add}${new-version}${edit}${install}</div>
 		<div>${info}</div>
 		
 	</message>
 
 	<message id="admin.config.tool-config-dialog.manifest">
-		<table style="width:100%">
+		<table class="form-table">
 		  <tr><td>Name</td><td>${name}</td><td>${name-info}</td></tr>
 		  <tr><td>ID</td><td>${id}</td><td>${id-info}</td></tr>
 		  <tr><td>Version</td><td>${version}</td><td>${version-info}</td></tr>
@@ -175,7 +175,7 @@
 	</message>
 
 	<message id="admin.config.tool-config-dialog.config">
-		<table style="width:100%">
+		<table class="form-table">
 		  <tr><td>URL</td><td>${url}</td><td>${url-info}</td></tr>
 		  <tr><td>Auto update enabled</td><td>${update}</td></tr>
 		  <tr><td>Web service enabled</td><td>${service}</td></tr>
@@ -187,13 +187,13 @@
 		${manifest}
 		${config}
 		${upload}
-		<div>${publish}${save}${cancel}</div>
+		<div class="action-buttons">${publish}${save}${cancel}</div>
 		${info}
 	</message>
 	
 	<message id="admin.config.file-editor.file-tree">
 		${tree}
-		<div>${add}${remove}</div>
+		<div class="action-buttons">${add}${remove}</div>
 	</message>
 
 	<message id="admin.help">

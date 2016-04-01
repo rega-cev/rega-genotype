@@ -14,6 +14,7 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTabWidget;
 import eu.webtoolkit.jwt.WTable;
@@ -44,10 +45,12 @@ public class FileEditorView extends WContainerWidget{
 		fileTreeTemplate.bindWidget("add", addB);
 		fileTreeTemplate.bindWidget("remove", removeB);
 
-		fileTree.resize(200, 380);
+		fileTree.resize(200, 370);
 
 		layout.getElementAt(0, 0).addWidget(fileTreeTemplate);
 		layout.getElementAt(0, 1).addWidget(fileTabs);
+		
+		layout.getElementAt(0, 1).setWidth(new WLength("100%"));
 
 		// signals
 

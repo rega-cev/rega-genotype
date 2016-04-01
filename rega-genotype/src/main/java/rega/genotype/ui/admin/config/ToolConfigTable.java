@@ -24,6 +24,7 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.SortOrder;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
@@ -46,7 +47,7 @@ public class ToolConfigTable extends Template{
 		this.stack = stack;
 
 		bindWidget("info", infoT);
-
+		
 		List<ToolManifest> remoteManifests = getRemoteManifests();
 
 		// get local tools
@@ -58,6 +59,8 @@ public class ToolConfigTable extends Template{
 		final WTableView table = new WTableView();
 		table.setSelectionMode(SelectionMode.SingleSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
+		table.setHeight(new WLength(400));
+
 
 		proxyModel = new ToolConfigTableModelSortProxy(model);
 		table.setModel(proxyModel);

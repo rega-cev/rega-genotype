@@ -35,8 +35,6 @@ public class ToolConfigForm extends FormTemplate {
 			final ToolManifest manifest, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
 		
-		setWidth(new WLength(600));
-
 		final WPushButton publishB = new WPushButton("Publish");
 		final WPushButton saveB = new WPushButton("Save All");
 		final WPushButton cancelB = new WPushButton("Exit");
@@ -76,9 +74,10 @@ public class ToolConfigForm extends FormTemplate {
 		}
 		fileEditor = new FileEditorView(toolDir);
 		WPanel fileEditorPanel = new WPanel();
-		fileEditorPanel.setWidth(new WLength(830));
 		fileEditorPanel.setTitle("File editor");
 		fileEditorPanel.setCentralWidget(fileEditor);
+		fileEditorPanel.addStyleClass("admin-panel");
+		fileEditor.setHeight(new WLength(400));
 
 		// manifest and config 
 		manifestForm = new ManifestForm(manifest, mode);
@@ -87,10 +86,12 @@ public class ToolConfigForm extends FormTemplate {
 		// bind
 
 		WPanel mamifestPanel = new WPanel();
+		mamifestPanel.addStyleClass("admin-panel");
 		mamifestPanel.setTitle("Tool Manifest");
 		mamifestPanel.setCentralWidget(manifestForm);
 
 		WPanel configPanel = new WPanel();
+		configPanel.addStyleClass("admin-panel");
 		configPanel.setTitle("Tool local configuration");
 		configPanel.setCentralWidget(localConfigForm);
 		

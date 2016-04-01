@@ -48,11 +48,13 @@ public class FileEditor extends WContainerWidget {
 		if (mode == Mode.ImageViewer) {
 			WImage img = new WImage(new WFileResource("image", file.getAbsolutePath()),
 					file.getName());
-			img.setWidth(new WLength("100%"));
+			
+			img.setMaximumSize(new WLength("100%"), new WLength(350));
+
 			addWidget(img);
 		} else {
 			edit = new WTextArea(this);
-			edit.setWidth(new WLength(600));
+			edit.setWidth(new WLength("100%"));
 			edit.setHeight(new WLength(300));
 
 			final WPushButton saveB = new WPushButton("Save", this);

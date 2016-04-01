@@ -1,15 +1,26 @@
 package rega.genotype.ui.admin;
 
+import java.util.EnumSet;
+import java.util.List;
+
+import jdk.nashorn.internal.ir.SetSplitState;
 import rega.genotype.config.Config;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.DomElement;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.ValidationStyleFlag;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WCssStyleSheet;
+import eu.webtoolkit.jwt.WCssTheme;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WTheme;
+import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
+import eu.webtoolkit.jwt.WValidator.Result;
 
 /**
  * Determine what widget to show in admin area.
@@ -26,9 +37,10 @@ public class AdminApplication extends WApplication{
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
 		setLocalizedStrings(resources);
 
-		useStyleSheet(new WLink("../../style/genotype-rivm.css"));
-		useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"), "IE lte 7");
-		
+		useStyleSheet(new WLink("style/admin.css"));
+
+		setTheme(new WCssTheme("polished"));
+
 		// auth
 		
 		final Config config = Settings.getInstance().getConfig();

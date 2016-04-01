@@ -1,0 +1,15 @@
+.admin-panel {
+    margin-bottom: 10px;
+}
+
+.action-buttons {
+	margin-top: 5px;
+    float: right;
+}
+
+.form-table {
+    width:100%;
+}
+.form-table td { 
+    width: 200px;
+}
