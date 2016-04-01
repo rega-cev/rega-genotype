@@ -22,6 +22,7 @@ import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal2;
+import eu.webtoolkit.jwt.SortOrder;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
@@ -60,6 +61,7 @@ public class ToolConfigTable extends Template{
 
 		proxyModel = new ToolConfigTableModelSortProxy(model);
 		table.setModel(proxyModel);
+		table.sortByColumn(1, SortOrder.AscendingOrder);
 		
 		final WPushButton addB = new WPushButton("Add");
 		final WPushButton editB = new WPushButton("Edit");
