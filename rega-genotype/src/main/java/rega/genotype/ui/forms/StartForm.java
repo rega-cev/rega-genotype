@@ -11,6 +11,17 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.EnumSet;
 
+import rega.genotype.FileFormatException;
+import rega.genotype.ParameterProblemException;
+import rega.genotype.Sequence;
+import rega.genotype.SequenceAlignment;
+import rega.genotype.ui.framework.GenotypeMain;
+import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.Template;
+import rega.genotype.ui.util.FileUpload;
+import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
@@ -26,18 +37,6 @@ import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
-import rega.genotype.FileFormatException;
-import rega.genotype.ParameterProblemException;
-import rega.genotype.Sequence;
-import rega.genotype.SequenceAlignment;
-import rega.genotype.ui.framework.GenotypeMain;
-import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.framework.widgets.Template;
-import rega.genotype.ui.util.FileUpload;
-import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.Settings;
-import rega.genotype.utils.Utils;
 
 /**
  * StartForm implementation implements a widget which allows the user to submit
