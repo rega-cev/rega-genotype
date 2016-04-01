@@ -1,7 +1,6 @@
 package rega.genotype.ui.admin.config;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 import rega.genotype.config.Config;
@@ -11,6 +10,7 @@ import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WSortFilterProxyModel;
@@ -113,6 +113,29 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 				return new WLink("typingtool/" + info.getConfig().getPath());
 		}
 		return null;
+	}
+
+	public WLength getColumnWidth(int column) {
+		//	String[] headers = { "URL", "Name", "ID", "Version", "Date", "Publisher" , "State" };
+		switch (column) {
+		case 0:
+			return new WLength(100);
+		case 1:
+			return new WLength(120);
+		case 2:
+			return new WLength(100);
+		case 3:
+			return new WLength(60);
+		case 4:
+			return new WLength(120);
+		case 5:
+			return new WLength(100);
+		case 6:
+			return new WLength(60);
+
+		default:
+			return new WLength(100);
+		}
 	}
 
 	public void refresh(List<ToolManifest> localManifests,

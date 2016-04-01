@@ -65,7 +65,10 @@ public class ToolConfigTable extends Template{
 		proxyModel = new ToolConfigTableModelSortProxy(model);
 		table.setModel(proxyModel);
 		table.sortByColumn(1, SortOrder.AscendingOrder);
-		
+
+		for (int c = 0; c < model.getColumnCount(); ++c)
+			table.setColumnWidth(c, model.getColumnWidth(c));
+
 		final WPushButton addB = new WPushButton("Add");
 		final WPushButton editB = new WPushButton("Edit");
 		final WPushButton installB = new WPushButton("Install");
