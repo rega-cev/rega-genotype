@@ -121,7 +121,7 @@ public class ToolRepoService extends HttpServlet{
 			return false;
 		}
 		
-		File toolIndexsFile = new File(repoDir + ToolIndexes.TOOL_INDEXS_FILE_NAME);
+		File toolIndexsFile = new File(repoDir + ToolIndexes.TOOL_INDEXES_FILE_NAME);
 		ToolIndexes indexes;
 		if (toolIndexsFile.exists()) {
 			indexes = ToolIndexes.parseJsonAsList(FileUtil.readFile(toolIndexsFile));

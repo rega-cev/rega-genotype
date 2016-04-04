@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import rega.genotype.service.ToolRepoService;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
 
@@ -15,7 +14,7 @@ import rega.genotype.utils.GsonUtil;
  * @author michael
  */
 public class ToolIndexes {
-	public static String TOOL_INDEXS_FILE_NAME = "ToolIndexs.json";
+	public static String TOOL_INDEXES_FILE_NAME = "ToolIndexes.json";
 	
 	private List<ToolIndex> indexes = new ArrayList<ToolIndexes.ToolIndex>();
 	
@@ -28,7 +27,7 @@ public class ToolIndexes {
 	}
 
 	public void save(String externalDir) throws IOException {
-		FileUtil.writeStringToFile(new File(externalDir + TOOL_INDEXS_FILE_NAME), toJson());
+		FileUtil.writeStringToFile(new File(externalDir + TOOL_INDEXES_FILE_NAME), toJson());
 	}
 
 	public ToolIndex getIndex(String toolId) {
