@@ -105,7 +105,8 @@ public class LocalConfigForm  extends FormTemplate {
 			Config config = Settings.getInstance().getConfig();
 			ToolConfig toolConfigByUrl = config.getToolConfigByUrlPath(urlLE.getText());
 
-			if (toolConfigByUrl != null && toolConfigByUrl.getToolMenifest() != null) {
+			if (toolConfigByUrl != null && toolConfigByUrl.getToolMenifest() != null
+					&& !toolConfigByUrl.getPath().isEmpty()) {
 				if (mode == Mode.NewVersion || mode == Mode.Add || mode == Mode.Install)
 					// new tool check all urls
 					return new Result(State.Invalid, "A tool with same url already exist on local server.");
