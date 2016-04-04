@@ -69,10 +69,8 @@ public class LocalConfigForm  extends FormTemplate {
 				return null;
 		}
 
-		String xmlDir = Settings.getInstance().getXmlDir(
-				manifest.getId(), manifest.getVersion());
-		String jobDir = Settings.getInstance().getJobDir(
-				manifest.getId(), manifest.getVersion());
+		String xmlDir = manifest.suggestXmlDirName();
+		String jobDir = manifest.suggestJobDirName();
 
 		newTool.setAutoUpdate(autoUpdateChB.isChecked());
 		newTool.setConfiguration(xmlDir);
@@ -108,7 +106,7 @@ public class LocalConfigForm  extends FormTemplate {
 			ToolConfig toolConfigByUrl = config.getToolConfigByUrlPath(urlLE.getText());
 
 			if (toolConfigByUrl != null && toolConfigByUrl.getToolMenifest() != null) {
-				if (mode == Mode.NewVersion || mode == Mode.Add)
+				if (mode == Mode.NewVersion || mode == Mode.Add || mode == Mode.Install)
 					// new tool check all urls
 					return new Result(State.Invalid, "A tool with same url already exist on local server.");
 				else { // Edit

@@ -66,7 +66,7 @@ public class ManifestForm extends FormTemplate{
 		validate();
 	}
 
-	public ToolManifest save(boolean publishing) {
+	public ToolManifest save(boolean publishing, File file) {
 		Config config = Settings.getInstance().getConfig();
 
 		ToolManifest manifest = new ToolManifest();
@@ -79,16 +79,8 @@ public class ManifestForm extends FormTemplate{
 		if (publishing)
 			manifest.setPublicationDate(WDate.getCurrentDate().getDate());
 
-		String xmlDir = Settings.getInstance().getXmlDir(
-				manifest.getId(), manifest.getVersion());
-		String jobDir = Settings.getInstance().getJobDir(
-				manifest.getId(), manifest.getVersion());
-
-		new File(xmlDir).mkdirs();
-		new File(jobDir).mkdirs();
-
 		try {
-			manifest.save(xmlDir);
+			manifest.save(file.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

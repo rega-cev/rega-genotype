@@ -7,6 +7,7 @@ import java.util.List;
 
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
+import rega.genotype.utils.Settings;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -41,13 +42,23 @@ public class ToolManifest {
 	}
 
 	public void save(String externalDir) throws IOException {
-		FileUtil.writeStringToFile(new File(externalDir + MANIFEST_FILE_NAME), toJson());
+		FileUtil.writeStringToFile(new File(externalDir + File.separator + MANIFEST_FILE_NAME), toJson());
 	}
 
 	public boolean isSameSignature(ToolManifest other) {
 		return id.equals(other.getId()) && version.equals(other.getVersion());
 	}
 
+	/**
+	 * Order tool dirs in readable way.
+	 */
+	public String suggestXmlDirName() {
+		return Settings.getInstance().getBaseXmlDir() + File.separator + id + version + File.separator;
+	}
+	public String suggestJobDirName() {
+		return Settings.getInstance().getBaseJobDir() + File.separator + id + version + File.separator;
+	}
+	
 	/**
 	 * @return unique tool id (used as the tool dir name) 
 	 */

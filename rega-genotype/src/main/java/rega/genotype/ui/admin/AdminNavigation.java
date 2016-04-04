@@ -22,6 +22,7 @@ import eu.webtoolkit.jwt.WStackedWidget;
 public class AdminNavigation extends WContainerWidget {	
 	public static String URL_PATH_ADMIN = "amdin";
 	public static String URL_PATH_TOOLS = "tools";
+	public static String URL_PATH_INSTALL = "instal";
 	public static String URL_PATH_NEW = "new";
 	public static String URL_PATH_EDIT = "edit";
 
@@ -82,6 +83,8 @@ public class AdminNavigation extends WContainerWidget {
 					toolConfigTable.showEditTool(id, version, Mode.Edit);
 				else if (action.equals(URL_PATH_NEW)) //http://localhost:8080/rega-genotype/admin/tools/new/{id}/{version}
 					toolConfigTable.showEditTool(id, version, Mode.NewVersion);
+				else if (action.equals(URL_PATH_INSTALL)) //http://localhost:8080/rega-genotype/admin/tools/install/{id}/{version}
+					toolConfigTable.showEditTool(id, version, Mode.Install);
 			} else
 				toolConfigTable.showTable();
 		} else {
@@ -114,6 +117,14 @@ public class AdminNavigation extends WContainerWidget {
 	}
 	public static void setToolsTableUrl() {
 		String path = "/" + URL_PATH_TOOLS;
+		if (!WApplication.getInstance().getInternalPath().equals(path)) {
+			WApplication.getInstance().setInternalPath(path);
+			WApplication.getInstance().internalPathChanged().trigger(path);
+		}
+	}
+
+	public static void setInstallUrl(String toolId, String toolVersion) {
+		String path = "/" + URL_PATH_TOOLS + "/" + toolId + "/" + toolVersion  + "/" + URL_PATH_INSTALL;
 		if (!WApplication.getInstance().getInternalPath().equals(path)) {
 			WApplication.getInstance().setInternalPath(path);
 			WApplication.getInstance().internalPathChanged().trigger(path);

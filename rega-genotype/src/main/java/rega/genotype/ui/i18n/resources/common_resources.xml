@@ -159,6 +159,7 @@
 	
 	<!-- Admin config -->
 	<message id="admin.config.tool-config-table">
+		${version-chb}
 		${table}
 		<div class="action-buttons">${add}${new-version}${edit}${install}</div>
 		<div>${info}</div>

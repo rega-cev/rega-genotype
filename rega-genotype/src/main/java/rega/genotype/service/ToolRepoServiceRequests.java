@@ -14,6 +14,7 @@ import java.net.URLConnection;
 
 import org.apache.commons.io.IOUtils;
 
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.utils.StreamUtils;
@@ -124,8 +125,9 @@ public class ToolRepoServiceRequests {
 	 */
 	public static File getTool(String toolId, String toolVersion) throws ToolRepoServiceExeption, IOException {
 		// TODO: add to config .. 
-		File ans = new File(Settings.getInstance().getXmlDir(toolId, toolVersion));
-		if (ans.exists()) {
+		ToolConfig toolConfig = Settings.getInstance().getConfig().
+				getToolConfigById(toolId, toolVersion);
+		if (toolConfig != null) {
 			throw new ToolRepoServiceExeption("Tool: " + toolId + " version: " + toolVersion + " exists on local server.");
 		} 
 		URLConnection connection;
@@ -138,7 +140,7 @@ public class ToolRepoServiceRequests {
 		// Note: can throw java.io.FileNotFoundException if the server did not respond.
 		InputStream response = connection.getInputStream();
 		
-		ans = File.createTempFile("tool", ".zip");
+		File ans = File.createTempFile("tool", ".zip");
 
 		FileOutputStream out = new FileOutputStream(ans);
 		StreamUtils.copy(response, out);

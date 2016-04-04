@@ -65,12 +65,6 @@ public class Settings {
 		return new File(config.getToolConfigByUrlPath(url).getJobDir());
 	}
 
-	public String getXmlDir(String toolId, String toolVersion) {
-		return getBaseXmlDir() + File.separator + toolId + toolVersion + File.separator;
-	}
-	public String getJobDir(String toolId, String toolVersion) {
-		return getBaseJobDir() + File.separator + toolId + toolVersion + File.separator;
-	}
 	public String getPaupCmd() {
 		return config.getGeneralConfig().getPaupCmd();
 	}

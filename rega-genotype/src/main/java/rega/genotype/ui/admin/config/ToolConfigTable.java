@@ -102,11 +102,12 @@ public class ToolConfigTable extends Template{
 						}
 
 						// create tool config.
-						FileUtil.unzip(f, 
-								new File(Settings.getInstance().getXmlDir(
-								manifest.getId(), manifest.getVersion())));
-						if (f != null)
-							edit(toolInfo, Mode.Install);
+						FileUtil.unzip(f, new File(manifest.suggestXmlDirName()));
+						if (f != null) {
+							AdminNavigation.setInstallUrl(
+									toolInfo.getManifest().getId(),
+									toolInfo.getManifest().getVersion());
+						}
 					}
 				}
 			}
@@ -135,6 +136,9 @@ public class ToolConfigTable extends Template{
 				if (index == null)
 					return;
 				ToolInfo toolInfo = proxyModel.getToolInfo(index);
+				if (toolInfo.getState() == ToolState.RemoteNotSync)
+					return;
+
 				AdminNavigation.setEditToolUrl(
 						toolInfo.getManifest().getId(),
 						toolInfo.getManifest().getVersion());
@@ -158,8 +162,10 @@ public class ToolConfigTable extends Template{
 					ToolInfo toolInfo = proxyModel.getToolInfo(
 							table.getSelectedIndexes().first());
 					installB.setEnabled(toolInfo.getState() == ToolState.RemoteNotSync);
+					editB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
 				} else {
 					installB.disable();
+					editB.disable();
 				}
 			}
 		});
@@ -174,12 +180,13 @@ public class ToolConfigTable extends Template{
 		// get remote tools
 		List<ToolManifest> remoteManifests = new ArrayList<ToolManifest>();
 		String manifestsJson = ToolRepoServiceRequests.getManifests();
-		if (manifestsJson == null) {
+		if (manifestsJson == null || manifestsJson.isEmpty()) {
 			infoT.setText("Could not read remote tools");
 		} else {
 			remoteManifests = ToolManifest.parseJsonAsList(manifestsJson);
-			if (remoteManifests == null)
+			if (remoteManifests == null) {
 				infoT.setText("Could not parss remote tools");
+			}
 		}
 
 		return remoteManifests;
@@ -223,6 +230,7 @@ public class ToolConfigTable extends Template{
 		}
 		ToolConfig config = info == null ? null : info.getConfig();
 		ToolManifest manifest = info == null ? null : info.getManifest();
+
 		final ToolConfigForm d = new ToolConfigForm(config, manifest, mode);
 		stack.addWidget(d);
 		stack.setCurrentWidget(d);

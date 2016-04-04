@@ -6,6 +6,7 @@ import java.io.IOException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
+import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.file_editor.FileEditorView;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.FormTemplate;
@@ -40,7 +41,7 @@ public class ToolConfigForm extends FormTemplate {
 		final WPushButton cancelB = new WPushButton("Exit");
 
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
-		
+
 		// file editor
 		
 		File toolDir = null;
@@ -54,8 +55,7 @@ public class ToolConfigForm extends FormTemplate {
 			}
 			 break; 
 		case NewVersion:
-			String oldVersionDir = Settings.getInstance().getXmlDir(
-					manifest.getId(), manifest.getVersion());
+			String oldVersionDir = toolConfig.getConfiguration();
 			try {
 				toolDir = FileUtil.createTempDirectory("tmp-xml-dir");
 				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), toolDir.getAbsolutePath());
@@ -65,9 +65,17 @@ public class ToolConfigForm extends FormTemplate {
 			}
 			break;
 		case Edit:
-			String dataDirStr = Settings.getInstance().getXmlDir(
-					manifest.getId(), manifest.getVersion());
+			if (toolConfig == null){
+				AdminNavigation.setToolsTableUrl();
+				return;
+			}
+			toolDir = new File(toolConfig.getConfiguration());
+			break;
+		case Install:
+			String dataDirStr = manifest.suggestXmlDirName();
 			toolDir = new File(dataDirStr);
+			cancelB.disable();
+			publishB.disable();
 			break;
 		default:
 			break;
@@ -167,7 +175,7 @@ public class ToolConfigForm extends FormTemplate {
 
 		fileEditor.saveAll();
 
-		ToolManifest manifest = manifestForm.save(publishing);
+		ToolManifest manifest = manifestForm.save(publishing, fileEditor.getRootDir());
 		if (manifest == null) {
 			infoT.setText("Manifest could not be saved.");
 			return null;
@@ -185,9 +193,11 @@ public class ToolConfigForm extends FormTemplate {
 	}
 
 	private void renameToolDir(ToolManifest manifest) {
-		String xmlDir = Settings.getInstance().getXmlDir(
-				manifest.getId(), manifest.getVersion());
+		String xmlDir = manifest.suggestXmlDirName();
 		File toolDir = fileEditor.getRootDir();
+		
+		new File(xmlDir).mkdirs();
+		new File(manifest.suggestJobDirName()).mkdirs();
 
 		// make sure that the xml dir name is {id}{version} 
 		if (!toolDir.getAbsolutePath().equals(xmlDir)) {
