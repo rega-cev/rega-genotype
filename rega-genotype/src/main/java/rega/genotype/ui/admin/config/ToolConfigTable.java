@@ -10,7 +10,6 @@ import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
 import rega.genotype.ui.admin.AdminNavigation;
-import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
@@ -18,11 +17,13 @@ import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.CheckState;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.SortOrder;
+import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WModelIndex;
@@ -41,12 +42,14 @@ public class ToolConfigTable extends Template{
 	private ToolConfigTableModelSortProxy proxyModel;
 	private WText infoT = new WText();
 	private WStackedWidget stack;
-
+	
 	public ToolConfigTable(WStackedWidget stack) {
 		super(tr("admin.config.tool-config-table"));
 		this.stack = stack;
 
 		bindWidget("info", infoT);
+		
+		final WCheckBox versionChB = new WCheckBox("Show latest versions");
 		
 		List<ToolManifest> remoteManifests = getRemoteManifests();
 
@@ -169,6 +172,17 @@ public class ToolConfigTable extends Template{
 				}
 			}
 		});
+
+		versionChB.changed().addListener(this, new Signal.Listener() {
+			public void trigger() {
+				proxyModel.setFilterOldVersion(
+						versionChB.getCheckState() == CheckState.Checked);
+			}
+		});
+		versionChB.setChecked();
+		versionChB.checked().trigger();
+
+		bindWidget("version-chb", versionChB);
 		bindWidget("table", table);
 		bindWidget("add", addB);
 		bindWidget("edit", editB);

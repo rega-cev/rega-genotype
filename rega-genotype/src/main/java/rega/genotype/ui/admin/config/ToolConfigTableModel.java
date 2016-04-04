@@ -211,10 +211,11 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			List<ToolManifest> manifests) {
 		// TODO!: this can not cover the case of a user that creates a tool with 
 		// the same id, version as an existing tool in the repo. 
-		for (ToolManifest m: manifests) {
-			if (m.getId().equals(toolId) && m.getVersion().equals(version))
-				return m;
-		}
+		if (manifests != null)
+			for (ToolManifest m: manifests) {
+				if (m.getId().equals(toolId) && m.getVersion().equals(version))
+					return m;
+			}
 		return null;
 	}
 
@@ -229,11 +230,38 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		return null;
 	}
 
+	public boolean isLastPublishedVesrsion(int row) {
+		ToolInfo info = getToolInfo(row);
+		Date publicationDate = info.getManifest().getPublicationDate();
+		if (info.getState() == ToolState.Local || publicationDate == null)
+			return true; // not published yet
+		else {
+			for (ToolInfo otherInfo: rows) {
+				if (otherInfo.getState() != ToolState.Local
+						&& otherInfo.getManifest().getId().equals(info.getManifest().getId())
+						&& otherInfo.getManifest().getPublicationDate() != null
+						&& otherInfo.getManifest().getPublicationDate().compareTo(publicationDate) > 0)
+					return false;
+			}
+		}
+		return true;
+	}
+
 	// classes
 
 	// Note: will become framework class.
 	public static class ToolConfigTableModelSortProxy extends WSortFilterProxyModel{
-
+		private boolean filterOldVersion = true;
+		
+		@Override
+		protected boolean filterAcceptRow(int sourceRow,
+				WModelIndex sourceParent) {
+			if (filterOldVersion) {
+				return getToolConfigTableModel().isLastPublishedVesrsion(sourceRow);
+			} else 
+				return super.filterAcceptRow(sourceRow, sourceParent);
+		}
+		
 		public ToolConfigTableModelSortProxy(ToolConfigTableModel model) {
 			setSourceModel(model);
 			setDynamicSortFilter(true);
@@ -253,6 +281,15 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 				List<ToolManifest> remoteManifests) {
 			getToolConfigTableModel().refresh(
 					localManifests, remoteManifests);
+		}
+
+		public boolean isFilterOldVersion() {
+			return filterOldVersion;
+		}
+
+		public void setFilterOldVersion(boolean filterOldVersion) {
+			this.filterOldVersion = filterOldVersion;
+			invalidate();
 		}
 	}
 }
