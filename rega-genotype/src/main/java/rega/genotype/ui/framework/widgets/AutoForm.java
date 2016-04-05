@@ -39,7 +39,7 @@ public class AutoForm <T> extends WTable{
 		int row = 0;
 		List<Field> fields = getFields();
 		for (Field field : fields) {
-			getElementAt(row, 0).addWidget(new WText(field.getName()));
+			getElementAt(row, 0).addWidget(new WText(styleFiledName(field.getName())));
 			if (field.getType() == String.class) {
 				String value = (String)doGet(field, t);
 				WLineEdit le = new WLineEdit(value == null ? "" : value);
@@ -89,7 +89,22 @@ public class AutoForm <T> extends WTable{
 // 
 // 		return true;
 //	}
- 
+
+ 	private String styleFiledName(String name) {
+ 		String ans = "";
+ 		for (int i = 0; i < name.length(); ++i) {
+ 			if (i == 0){
+ 				ans += Character.toUpperCase(name.charAt(i));
+ 				continue;
+ 			} else if (Character.isUpperCase(name.charAt(i)))
+ 				ans += " ";
+
+ 			ans += name.charAt(i);
+ 		}
+
+ 		return ans;
+ 	}
+
  	/**
  	 * define class fields that should not be modified by the UI.
  	 * @return
