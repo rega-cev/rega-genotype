@@ -10,24 +10,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import eu.webtoolkit.jwt.EventSignal1;
+import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WCheckBox;
+import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFormWidget;
 import eu.webtoolkit.jwt.WIntValidator;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WValidator;
 
 /**
  * Simple editor for java class.
- * Automatically create a form that will edit the class fields.
+ * Automatically create a simple form with fixed layout that will edit the class fields.
  * 
  * @author michael
  * @param <T> class
  */
-public class AutoForm <T> extends WTable{
-	
+public class AutoForm <T> extends WContainerWidget {
+	private WText header = new WText(this); 
+	private WTable layout = new WTable(this);
+	private WPushButton saveB = new WPushButton("Save", this);
 	private Map<Field, WFormWidget> widgetMap = new HashMap<Field, WFormWidget>();
 	private T t;
 
@@ -39,19 +46,19 @@ public class AutoForm <T> extends WTable{
 		int row = 0;
 		List<Field> fields = getFields();
 		for (Field field : fields) {
-			getElementAt(row, 0).addWidget(new WText(styleFiledName(field.getName())));
+			layout.getElementAt(row, 0).addWidget(new WText(styleFiledName(field.getName())));
 			if (field.getType() == String.class) {
 				String value = (String)doGet(field, t);
 				WLineEdit le = new WLineEdit(value == null ? "" : value);
 				le.setValidator(new WValidator(true));
 				le.setWidth(new WLength(300));
-				getElementAt(row, 1).addWidget(le);
+				layout.getElementAt(row, 1).addWidget(le);
 				widgetMap.put(field, le);
 			} else if (field.getType() == boolean.class){
 				Boolean value = (Boolean)doGet(field, t);
 				WCheckBox chb = new WCheckBox();
 				chb.setChecked(value);
-				getElementAt(row, 1).addWidget(chb);
+				layout.getElementAt(row, 1).addWidget(chb);
 				widgetMap.put(field, chb);
 			} else if (field.getType() == int.class){
 				Integer value = (Integer)doGet(field, t);
@@ -60,7 +67,7 @@ public class AutoForm <T> extends WTable{
 				WIntValidator v = new WIntValidator();
 				v.setMandatory(true);
 				le.setValidator(v);
-				getElementAt(row, 1).addWidget(le);
+				layout.getElementAt(row, 1).addWidget(le);
 				widgetMap.put(field, le);
 			} else 
 				System.err.println("WARNING: AutoForm encountered new field type: " + field.getType());
@@ -68,7 +75,11 @@ public class AutoForm <T> extends WTable{
 			row++;
 		}
 		// addValidators();
-	}
+ 	}
+
+ 	public void setHeader(CharSequence text) {
+ 		header.setText(text);
+ 	}
 
  	private List<Field> getFields() {
  		List<Field> ans = new ArrayList<Field>();
@@ -79,6 +90,27 @@ public class AutoForm <T> extends WTable{
 		}
 		return ans;
  	}
+
+ 	private Field getField(String fieldName) {
+ 		for (Field field : getFields()) {
+ 			if (field.getName().equals(fieldName))
+ 				return field;
+ 		}
+ 
+ 		return null;
+ 	}
+ 
+ 	protected boolean setFieldToolTip(String fieldName, String toolTipText) {
+ 		
+ 		WFormWidget w = widgetMap.get(getField(fieldName));
+ 		if (w == null)
+ 			return false;
+ 		else
+ 			w.setToolTip(toolTipText,TextFormat.XHTMLText);
+
+ 		return true;
+ 	}
+
 //  protected boolean addValidators() {}
 // 	protected boolean addValidator(WValidator v, String fieldName) {
 // 		WFormWidget w = widgetMap.get(fieldName);
@@ -141,7 +173,11 @@ public class AutoForm <T> extends WTable{
 
 		return true;
 	}
-	
+
+	public EventSignal1<WMouseEvent> saveClicked() {
+		return saveB.clicked();
+	}
+
 	private Object doGet(Field field, T t){
 		for (Method method : t.getClass().getMethods()){
 			if (method.getName().startsWith("get")

@@ -21,7 +21,7 @@ import rega.genotype.utils.GsonUtil;
 public class Config {
 	public static final String CONFIG_FILE_NAME = "config.json";
 
-	private GeneralConfig generalConfig;
+	private GeneralConfig generalConfig = new GeneralConfig();
 	private List<ToolConfig> tools = new ArrayList<Config.ToolConfig>(); //TODO: use set 
 
 	public Config(){}

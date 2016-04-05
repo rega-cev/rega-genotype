@@ -2,6 +2,7 @@ package rega.genotype.ui.admin;
 
 import java.util.regex.Pattern;
 
+import rega.genotype.config.Config;
 import rega.genotype.ui.admin.config.GlobalConfigForm;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTable;
@@ -58,7 +59,8 @@ public class AdminNavigation extends WContainerWidget {
 	    	onInternalPathChanged(WApplication.getInstance().getInternalPath());
 	    }
 
-	    menu.addItem("Global config", new GlobalConfigForm()).setPathComponent("global");
+	    Config conf = Settings.getInstance().getConfig() == null ? new Config() : Settings.getInstance().getConfig();
+	    menu.addItem("Global config", new GlobalConfigForm(conf)).setPathComponent("global");
 	    menu.addItem("Help", new Template(tr("admin.help"))).setPathComponent("help");
 
 		WHBoxLayout layout = new WHBoxLayout();
