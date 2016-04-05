@@ -65,6 +65,23 @@ public class Config {
 		return toolConfig;
 	}
 
+	public ToolConfig getLastPublishedToolConfigById(String toolId) {
+		ToolConfig ans = null;
+		// find organism config
+		for (ToolConfig c: getTools())
+			if (c.getToolMenifest() != null) {
+				ToolManifest m = c.getToolMenifest();
+				if (m.getId().equals(toolId) 
+						&& m.getPublicationDate() != null
+						&& (ans == null 
+							|| m.getPublicationDate().compareTo(
+								ans.getToolMenifest().getPublicationDate()) > 0))
+					ans = c;
+			}
+		return ans;
+	}
+
+	
 	/**
 	 * @param url url path component that defines the tool 
 	 * @return

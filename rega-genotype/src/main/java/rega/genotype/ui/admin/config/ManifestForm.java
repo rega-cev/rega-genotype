@@ -28,10 +28,12 @@ public class ManifestForm extends FormTemplate{
 	private final WCheckBox blastChB = new WCheckBox();
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
 	private ToolManifest oldManifest;
+	private Mode mode;
 
 	public ManifestForm(final ToolManifest manifest, Mode mode) {
 		super(tr("admin.config.tool-config-dialog.manifest"));
 		this.oldManifest = manifest;
+		this.mode = mode;
 
 		// read
 
@@ -80,7 +82,7 @@ public class ManifestForm extends FormTemplate{
 		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
 		if (publishing)
 			manifest.setPublicationDate(WDate.getCurrentDate().getDate());
-		else if (oldManifest != null)
+		else if (mode == Mode.NewVersion && oldManifest != null)
 			manifest.setPublicationDate(oldManifest.getPublicationDate());
 
 		try {

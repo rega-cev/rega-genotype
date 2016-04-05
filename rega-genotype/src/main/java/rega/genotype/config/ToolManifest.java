@@ -49,6 +49,17 @@ public class ToolManifest {
 		return id.equals(other.getId()) && version.equals(other.getVersion());
 	}
 
+	public static boolean isLastPublishedVesrsion(
+			List<ToolManifest> manifests, ToolManifest manifest) {
+		Date publicationDate = manifest.getPublicationDate();
+		for (ToolManifest m: manifests) {
+			if (m.getId().equals(manifest.getId())
+					&& m.getPublicationDate() != null 
+					&& m.getPublicationDate().compareTo(publicationDate) > 0)
+				return false;
+		}
+		return true;
+	}
 	/**
 	 * Order tool dirs in readable way.
 	 */
