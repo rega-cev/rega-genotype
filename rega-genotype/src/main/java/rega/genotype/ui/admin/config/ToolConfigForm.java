@@ -169,10 +169,13 @@ public class ToolConfigForm extends FormTemplate {
 		return tool;
 	}
 
-	private void renameToolDir(ToolManifest manifest) {
+	private boolean renameToolDir(ToolManifest manifest) {
 		String xmlDir = manifest.suggestXmlDirName();
+		if (new File(xmlDir).exists())
+			return false;
+
 		File toolDir = fileEditor.getRootDir();
-		
+
 		new File(xmlDir).mkdirs();
 		new File(manifest.suggestJobDirName()).mkdirs();
 
@@ -184,6 +187,8 @@ public class ToolConfigForm extends FormTemplate {
 		localConfigForm.setXmlDir(new File(xmlDir));
 
 		// TODO: refresh file editor
+
+		return true;
 	}
 
 	// classes
