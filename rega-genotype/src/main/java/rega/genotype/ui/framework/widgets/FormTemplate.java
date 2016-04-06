@@ -44,6 +44,7 @@ public class FormTemplate extends Template {
 					else {
 						Result r = fw.getValidator().validate(fw.getValueText());
 						info.setText(r == null ? "" :r.getMessage());
+						info.addStyleClass("form-error");
 					}
 				}
 			}

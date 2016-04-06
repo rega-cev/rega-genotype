@@ -41,6 +41,8 @@ public class ToolConfigForm extends FormTemplate {
 
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
 
+		infoT.addStyleClass("form-error");
+		
 		// file editor
 		
 		File toolDir = new File(toolConfig.getConfiguration());
