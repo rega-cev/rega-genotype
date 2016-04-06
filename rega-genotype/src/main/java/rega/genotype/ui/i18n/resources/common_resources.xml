@@ -186,10 +186,11 @@
 	</message>
 
 	<message id="admin.config.tool-config-dialog">
-		<div class="header-fixed action-buttons-container">${info}<div class="float-right">${publish}${save}${cancel}</div></div>
 		${manifest}
 		${config}
 		${upload}
+		<div class="action-buttons">${publish}${save}${cancel}</div>
+		${info}
 	</message>
 	
 	<message id="admin.config.file-editor.file-tree">
