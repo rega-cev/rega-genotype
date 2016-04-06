@@ -6,13 +6,13 @@ import java.io.IOException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
-import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.file_editor.FileEditorView;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
@@ -32,8 +32,7 @@ public class ToolConfigForm extends FormTemplate {
 	
 	private Signal done = new Signal();
 
-	public ToolConfigForm(final ToolConfig toolConfig,
-			final ToolManifest manifest, Mode mode) {
+	public ToolConfigForm(final ToolConfig toolConfig) {
 		super(tr("admin.config.tool-config-dialog"));
 		
 		final WPushButton publishB = new WPushButton("Publish");
@@ -44,42 +43,8 @@ public class ToolConfigForm extends FormTemplate {
 
 		// file editor
 		
-		File toolDir = null;
-		switch (mode) {
-		case Add:
-			try {
-				toolDir = FileUtil.createTempDirectory("tmp-xml-dir");
-			} catch (IOException e) {
-				e.printStackTrace();
-				assert(false); 
-			}
-			 break; 
-		case NewVersion:
-			String oldVersionDir = toolConfig.getConfiguration();
-			try {
-				toolDir = FileUtil.createTempDirectory("tmp-xml-dir");
-				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), toolDir.getAbsolutePath());
-			} catch (IOException e) {
-				e.printStackTrace();
-				assert(false); 
-			}
-			break;
-		case Edit:
-			if (toolConfig == null){
-				AdminNavigation.setToolsTableUrl();
-				return;
-			}
-			toolDir = new File(toolConfig.getConfiguration());
-			break;
-		case Install:
-			String dataDirStr = manifest.suggestXmlDirName();
-			toolDir = new File(dataDirStr);
-			cancelB.disable();
-			publishB.disable();
-			break;
-		default:
-			break;
-		}
+		File toolDir = new File(toolConfig.getConfiguration());
+
 		fileEditor = new FileEditorView(toolDir);
 		WPanel fileEditorPanel = new WPanel();
 		fileEditorPanel.setTitle("File editor");
@@ -87,9 +52,12 @@ public class ToolConfigForm extends FormTemplate {
 		fileEditorPanel.addStyleClass("admin-panel");
 		fileEditor.setHeight(new WLength(400));
 
-		// manifest and config 
-		manifestForm = new ManifestForm(manifest, mode);
-		localConfigForm = new LocalConfigForm(toolConfig, mode);
+		// manifest 
+		manifestForm = new ManifestForm(toolConfig.getToolMenifest(), toolDir);
+		
+		// local config
+
+		localConfigForm = new LocalConfigForm(toolConfig, toolDir);
 		
 		// bind
 
@@ -115,6 +83,13 @@ public class ToolConfigForm extends FormTemplate {
 		validate();
 
 		// signals 
+
+		manifestForm.saved().addListener(manifestForm, new Signal1.Listener<File>() {
+			public void trigger(File arg) {
+				toolConfig.invalidateToolManifest();
+				fileEditor.refresh();
+			}
+		});
 		
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
@@ -175,7 +150,7 @@ public class ToolConfigForm extends FormTemplate {
 
 		fileEditor.saveAll();
 
-		ToolManifest manifest = manifestForm.save(publishing, fileEditor.getRootDir());
+		ToolManifest manifest = manifestForm.save(publishing);
 		if (manifest == null) {
 			infoT.setText("Manifest could not be saved.");
 			return null;
@@ -183,7 +158,7 @@ public class ToolConfigForm extends FormTemplate {
 
 		renameToolDir(manifest);
 
-		ToolConfig tool = localConfigForm.save(manifest);
+		ToolConfig tool = localConfigForm.save();
 		if (tool == null) {
 			infoT.setText("Local configuration could not be saved.");
 			return null;
@@ -204,7 +179,9 @@ public class ToolConfigForm extends FormTemplate {
 			FileUtil.moveDirRecorsively(toolDir, xmlDir);
 		}
 
-		// TODO: refresh file editor and local config.
+		localConfigForm.setXmlDir(new File(xmlDir));
+
+		// TODO: refresh file editor
 	}
 
 	// classes

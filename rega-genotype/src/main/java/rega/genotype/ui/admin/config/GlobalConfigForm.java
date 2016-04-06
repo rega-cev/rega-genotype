@@ -1,6 +1,5 @@
 package rega.genotype.ui.admin.config;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +22,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 			public void trigger() {
 				if (save()) {
 					try {
-						config.save(Settings.getInstance().getBaseDir() + File.separator);
+						config.save();
 						if (Settings.getInstance().getConfig() == null){
 							Settings.getInstance().setConfig(config);
 							WApplication.getInstance().redirect(WApplication.getInstance().getBookmarkUrl());

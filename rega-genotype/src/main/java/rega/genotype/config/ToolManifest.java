@@ -41,8 +41,13 @@ public class ToolManifest {
 		return GsonUtil.toJson(this);
 	}
 
-	public void save(String externalDir) throws IOException {
-		FileUtil.writeStringToFile(new File(externalDir + File.separator + MANIFEST_FILE_NAME), toJson());
+	public void save(String externalDir) {
+		try {
+			FileUtil.writeStringToFile(new File(externalDir + File.separator + MANIFEST_FILE_NAME), toJson());
+		} catch (IOException e) {
+			e.printStackTrace();
+			assert(false);
+		}
 	}
 
 	public boolean isSameSignature(ToolManifest other) {

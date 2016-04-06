@@ -30,6 +30,7 @@ public class FileEditorView extends WContainerWidget{
 	private WTable layout = new WTable(this);
 	private FileTabs fileTabs = new FileTabs();
 	private File rootDir;
+	private FileTreeTable fileTree;
 
 	public FileEditorView(final File root) {
 		super();
@@ -38,7 +39,7 @@ public class FileEditorView extends WContainerWidget{
 		final WPushButton addB = new WPushButton("Add files");
 		final WPushButton removeB = new WPushButton("Remove");
 
-		final FileTreeTable fileTree = new FileTreeTable(root, false, false);
+		fileTree = new FileTreeTable(root, false, false);
 		
 		Template fileTreeTemplate = new Template(tr("admin.config.file-editor.file-tree"));
 		fileTreeTemplate.bindWidget("tree", fileTree);
@@ -108,6 +109,9 @@ public class FileEditorView extends WContainerWidget{
 		fileTabs.saveAll();
 	}
 
+	public void refresh() {
+		fileTree.refresh();
+	}
 	// classes
 
 	public File getRootDir() {

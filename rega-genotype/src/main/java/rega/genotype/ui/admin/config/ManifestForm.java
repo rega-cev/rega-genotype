@@ -1,19 +1,21 @@
 package rega.genotype.ui.admin.config;
 
 import java.io.File;
-import java.io.IOException;
 
 import rega.genotype.config.Config;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
-import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WDate;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WValidator;
 
 /**
@@ -26,14 +28,15 @@ public class ManifestForm extends FormTemplate{
 	private final WLineEdit idLE = initLineEdit();
 	private final WLineEdit versionLE = initLineEdit();
 	private final WCheckBox blastChB = new WCheckBox();
+	private final WPushButton saveB = new WPushButton("save");
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
 	private ToolManifest oldManifest;
-	private Mode mode;
+	private File toolDir;
 
-	public ManifestForm(final ToolManifest manifest, Mode mode) {
+	public ManifestForm(final ToolManifest manifest, File toolDir) {
 		super(tr("admin.config.tool-config-dialog.manifest"));
 		this.oldManifest = manifest;
-		this.mode = mode;
+		this.toolDir = toolDir;
 
 		// read
 
@@ -41,23 +44,14 @@ public class ManifestForm extends FormTemplate{
 			nameLE.setText(manifest.getName());
 			idLE.setText(manifest.getId());
 			blastChB.setChecked(manifest.isBlastTool());
-			if (mode != Mode.NewVersion)
-				versionLE.setText(manifest.getVersion());
+			versionLE.setText(manifest.getVersion());
 		}
-
-		idLE.setDisabled(mode != Mode.Add);
-		versionLE.setDisabled(mode == Mode.Edit || mode == Mode.Install);
 
 		// validators
 
 		nameLE.setValidator(new WValidator(true));
-		if (mode == Mode.Add || mode == Mode.NewVersion) {
-			idLE.setValidator(new ToolIdValidator(true));
-			versionLE.setValidator(new ToolIdValidator(true));
-		} else {
-			idLE.setValidator(new WValidator(true));
-			versionLE.setValidator(new WValidator(true));
-		}
+		idLE.setValidator(new ToolIdValidator(true));
+		versionLE.setValidator(new ToolIdValidator(true));
 
 		// bind
 
@@ -65,12 +59,27 @@ public class ManifestForm extends FormTemplate{
 		bindWidget("id", idLE);
 		bindWidget("version", versionLE);
 		bindWidget("blast", blastChB);
+		bindWidget("save", saveB);
 
 		initInfoFields();
 		validate();
+
+		// signals
+
+		saveB.clicked().addListener(saveB, new Signal.Listener() {
+			public void trigger() {
+				if (save(false) != null)
+					new MsgDialog("Info", "Manifest saved.");
+				else
+					new MsgDialog("Error", "Could not save manifest.");
+			}
+		});
 	}
 
-	public ToolManifest save(boolean publishing, File file) {
+	public ToolManifest save(boolean publishing) {
+		if (!validate())
+			return null;
+			
 		Config config = Settings.getInstance().getConfig();
 
 		ToolManifest manifest = new ToolManifest();
@@ -82,16 +91,13 @@ public class ManifestForm extends FormTemplate{
 		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
 		if (publishing)
 			manifest.setPublicationDate(WDate.getCurrentDate().getDate());
-		else if (mode == Mode.NewVersion && oldManifest != null)
+		else if (oldManifest != null)
 			manifest.setPublicationDate(oldManifest.getPublicationDate());
 
-		try {
-			manifest.save(file.getAbsolutePath());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+		manifest.save(toolDir.getAbsolutePath());
 
+		saved().trigger(toolDir);
+		
 		return manifest;
 	}
 
@@ -116,7 +122,10 @@ public class ManifestForm extends FormTemplate{
 		@Override
 		public Result validate(String input) {
 			Config config = Settings.getInstance().getConfig();
-			if (config.getToolConfigById(idLE.getText(), versionLE.getText()) != null)
+			ToolConfig toolConfigById = config.getToolConfigById(idLE.getText(), versionLE.getText());
+			
+			if (toolConfigById != null && 
+					!toolConfigById.getConfigurationFile().getAbsolutePath().equals(toolDir.getAbsolutePath()))
 				return new Result(State.Invalid, "A tool with same id and version already exist on local server.");
 
 			return super.validate(input);

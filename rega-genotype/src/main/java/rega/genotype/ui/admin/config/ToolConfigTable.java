@@ -84,7 +84,7 @@ public class ToolConfigTable extends Template{
 				if (table.getSelectedIndexes().size() == 1) {
 					ToolInfo toolInfo = proxyModel.getToolInfo(
 							table.getSelectedIndexes().first());
-					
+
 					if (toolInfo.getState() == ToolState.RemoteNotSync) {
 						ToolManifest manifest = toolInfo.getManifest();
 						if (Settings.getInstance().getConfig().getToolConfigById(
@@ -107,6 +107,19 @@ public class ToolConfigTable extends Template{
 						// create tool config.
 						FileUtil.unzip(f, new File(manifest.suggestXmlDirName()));
 						if (f != null) {
+							// create local config for installed tool
+							ToolConfig config = new ToolConfig();
+							config.setConfiguration(manifest.suggestXmlDirName());
+							config.genetareJobDir();
+							Settings.getInstance().getConfig().putTool(config);
+							try {
+								Settings.getInstance().getConfig().save();
+							} catch (IOException e) {
+								e.printStackTrace();
+								assert(false); // coping to new dir should always work.
+							}
+
+							// redirect to edit screen.
 							AdminNavigation.setInstallUrl(
 									toolInfo.getManifest().getId(),
 									toolInfo.getManifest().getVersion());
@@ -242,10 +255,56 @@ public class ToolConfigTable extends Template{
 		if (stack.getChildren().size() > 1) {
 			return; // someone clicked too fast.
 		}
-		ToolConfig config = info == null ? null : info.getConfig();
-		ToolManifest manifest = info == null ? null : info.getManifest();
 
-		final ToolConfigForm d = new ToolConfigForm(config, manifest, mode);
+		ToolConfig config = null;
+		switch (mode) {
+		case Add:
+			config = createToolConfig();
+			
+			break;
+		case NewVersion:
+			config = info.getConfig().copy();
+			config.genetareDirs();
+			Settings.getInstance().getConfig().putTool(config);
+			try {
+				Settings.getInstance().getConfig().save();
+				String oldVersionDir = info.getConfig().getConfiguration();
+				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), 
+						config.getConfiguration());
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false); // coping to new dir should always work.
+			}
+
+			// the manifest was also copied
+			if (config.getToolMenifest() != null) {
+				config.getToolMenifest().setVersion(suggestNewVersion(config, 1));
+				config.getToolMenifest().save(config.getConfiguration());
+			}
+			break;
+		case Edit:
+			if (info.getConfig() == null){
+				// TODO:
+				AdminNavigation.setToolsTableUrl();
+				new MsgDialog("Problem!", "local config is missing.");
+				return;
+			} else {
+				config = info.getConfig();
+			}
+			break;
+		case Install:
+			String dataDirStr = info.getManifest().suggestXmlDirName();
+			File toolDir = new File(dataDirStr);
+			toolDir.mkdirs();
+			config = new ToolConfig();
+			config.setConfiguration(dataDirStr);
+
+			break;
+		default:
+			break;
+		}
+
+		final ToolConfigForm d = new ToolConfigForm(config);
 		stack.addWidget(d);
 		stack.setCurrentWidget(d);
 		d.done().addListener(d, new Signal.Listener() {
@@ -256,6 +315,27 @@ public class ToolConfigTable extends Template{
 		});
 	}
 
+	private String suggestNewVersion(ToolConfig config, Integer sggestedVersion) {
+		// find a version number that was not used yet.
+		
+		for (ToolManifest m: Settings.getInstance().getConfig().getManifests()) {
+			if (m.getId().equals(config.getToolMenifest().getId())
+					&& m.getVersion().equals(sggestedVersion.toString())){
+				return suggestNewVersion(config, sggestedVersion + 1);
+			}
+		}
+
+		return sggestedVersion.toString();
+	}
+
+	private ToolConfig createToolConfig() {
+		ToolConfig config;
+		config = new ToolConfig();
+		config.genetareDirs();
+		return config;
+	}
+
+	
 	private List<ToolManifest> getLocalManifests() {
 		List<ToolManifest> ans = new ArrayList<ToolManifest>();
 		File xmlBaseDir = new File(Settings.getInstance().getBaseXmlDir());

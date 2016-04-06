@@ -88,15 +88,12 @@ public class FileUtil {
 	 * @return
 	 * @throws IOException
 	 */
-	public static File createTempDirectory(String prefix) throws IOException {
-		final File temp;
-		temp = File.createTempFile(prefix, "");
-		if(!(temp.delete()))
-			throw new IOException("Could not delete temp file: " + temp.getAbsolutePath());
-		if(!(temp.mkdir()))
-			throw new IOException("Could not create temp directory: " + temp.getAbsolutePath());
+	public static File createTempDirectory(String prefix, File folder) throws IOException {
+		File file = new File(folder.getAbsolutePath() + File.separator + prefix + (int)(Math.random()*1000000000));
+		if (!file.mkdirs())
+			throw new IOException("Could not create file: " + file.getAbsolutePath());
 
-		return (temp);
+		return file;
 	}
 
 	public static void moveDirRecorsively(File srcDir, String destDir) {
@@ -138,8 +135,13 @@ public class FileUtil {
 		    }
 		}
 	}
+
+	public static boolean isSameFile(String path1, String path2) {
+		return new File(path1).getAbsolutePath().equals(
+				new File(path2).getAbsolutePath());
+	}
 	// zip 
-	
+
 	private static ZipFile toZipFile(final File zip) {
 		ZipFile zipFile = null;
 		try {

@@ -9,6 +9,7 @@ import java.util.List;
 
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
+import rega.genotype.utils.Settings;
 
 /**
  * Read json config
@@ -34,7 +35,11 @@ public class Config {
 		return GsonUtil.toJson(this);
 	}
 
-	public void save(String externalDir) throws IOException {
+	public void save() throws IOException {
+		save(Settings.getInstance().getBaseDir() + File.separator);
+	}
+
+	private void save(String externalDir) throws IOException {
 		// TODO: synchronize
 
 		if (getGeneralConfig().getPublisherPassword() == null 
@@ -65,6 +70,14 @@ public class Config {
 		return toolConfig;
 	}
 
+	public ToolManifest getToolManifestById(String toolId, String version) {
+		ToolConfig toolConfigById = getToolConfigById(toolId, version);
+		if (toolConfigById != null)
+			return toolConfigById.getToolMenifest();
+		else
+			return null;
+	}
+	
 	public ToolConfig getLastPublishedToolConfigById(String toolId) {
 		ToolConfig ans = null;
 		// find organism config
@@ -96,12 +109,28 @@ public class Config {
 		return toolConfig;
 	}
 
+	public ToolConfig getToolConfigByConfiguration(String xmlDir) {
+		if (xmlDir.isEmpty())
+			return null;
+
+		ToolConfig toolConfig = null;
+		for (ToolConfig c: getTools())
+			if (FileUtil.isSameFile(c.getConfiguration(), xmlDir))
+				toolConfig = c;
+
+		return toolConfig;
+	}
+
 	public List<ToolConfig> getTools() {
 		return tools;
 	}
 
-	public boolean addTool(ToolConfig tool) {		
-		return tools.add(tool);
+	public void putTool(ToolConfig tool) {
+		ToolConfig sameConfig = getToolConfigByConfiguration(tool.getConfiguration());
+		if (getToolConfigByConfiguration(tool.getConfiguration()) != null)
+			tools.remove(sameConfig);
+
+		tools.add(tool);
 	}
 
 	public List<ToolManifest> getManifests(){
@@ -215,15 +244,54 @@ public class Config {
 	}
 
 	public static class ToolConfig {
-		private String path; // unique url path component that defines the tool (default toolId)
-		private String configuration; // xmlPath - the directory that contains all the tool files.
-		private String jobDir; // will contain all the work dirs of the tool. (Generated analysis data)
+		private String path = new String(); // unique url path component that defines the tool (default toolId)
+		private String configuration = new String(); // xmlPath - the directory that contains all the tool files.
+		private String jobDir = new String(); // will contain all the work dirs of the tool. (Generated analysis data)
 		private boolean autoUpdate;
 		private boolean webService;
 		private boolean ui;
 		// ToolMenifest read manifests from configuration dir.
 		// TODO: ui will have to update manifest if it was changed.
 		transient private ToolManifest manifest = null;
+
+		public ToolConfig copy() {
+			ToolConfig c = new ToolConfig();
+			c.autoUpdate = autoUpdate;
+			c.webService = webService;
+			c.ui = ui;
+
+			return c;
+		}
+
+		/**
+		 * create and set job, xml dirs for a new tool.
+		 */
+		public void genetareDirs() {
+			genetareJobDir();
+			genetareConfigurationDir();
+		}
+
+		public void genetareConfigurationDir() {
+			try {
+				File toolDir = FileUtil.createTempDirectory("tool-dir", 
+						new File(Settings.getInstance().getBaseXmlDir()));
+				setConfiguration(toolDir + File.separator);
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false); 
+			}
+		}
+		
+		public void genetareJobDir() {
+			try {
+				File toolJobDir = FileUtil.createTempDirectory("tool-dir", 
+						new File(Settings.getInstance().getBaseJobDir()));
+				setJobDir(toolJobDir + File.separator);
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false); 
+			}
+		}
 
 		public ToolManifest getToolMenifest() {
 			File f = new File(configuration + File.separator + "manifest.json");
@@ -232,6 +300,10 @@ public class Config {
 				manifest = ToolManifest.parseJson(json);
 			}
 			return manifest;
+		}
+
+		public void invalidateToolManifest() {
+			manifest = null;
 		}
 
 		public String getUniqueToolId() {
@@ -247,10 +319,13 @@ public class Config {
 			if (path != null)
 				return path;
 			else
-				return getToolMenifest().getUniqueToolId();
+				return getToolMenifest() == null ? null : getToolMenifest().getUniqueToolId();
 		}
 		public void setPath(String path) {
 			this.path = path;
+		}
+		public File getConfigurationFile() {
+			return new File(configuration);
 		}
 		public String getConfiguration() {
 			return configuration;

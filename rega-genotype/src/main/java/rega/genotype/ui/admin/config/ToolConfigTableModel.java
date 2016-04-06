@@ -219,8 +219,7 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		return null;
 	}
 
-	private ToolConfig find(String toolId, String version, 
-			Config config) {
+	private ToolConfig find(String toolId, String version, Config config) {
 		for (ToolConfig c: config.getTools()) {
 			ToolManifest m = c.getToolMenifest();
 			if (m != null && m.getId().equals(toolId)

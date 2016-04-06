@@ -67,62 +67,62 @@ public class AdminMain extends WtServlet{
 			public void run() {
 				while(true) {
 					Config config = Settings.getInstance().getConfig();
-					String remoteManifestsJson = ToolRepoServiceRequests.getManifests();
-
-					if (remoteManifestsJson != null){
-						List<ToolManifest> remoteManifests = ToolManifest.
-								parseJsonAsList(remoteManifestsJson);
-						for (ToolManifest remoteManifest : remoteManifests) {
-							ToolConfig localLastPublished = config.
-									getLastPublishedToolConfigById(remoteManifest.getId());
-							if (localLastPublished != null
-									&& localLastPublished.isAutoUpdate()
-									&& localLastPublished.getToolMenifest().
-									getPublicationDate().compareTo(
-											remoteManifest.getPublicationDate()) < 0) {
-								// This version is not yet installed.
-								logger.info("Auto update of tool: id = " 
-										+ remoteManifest.getId() + ", version = "
-										+ remoteManifest.getVersion());
-								File f = null;
-								try {
-									f = ToolRepoServiceRequests.getTool(
-											remoteManifest.getId(), remoteManifest.getVersion());
-								} catch (ToolRepoServiceExeption e) {
-									e.printStackTrace();
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-
-								// copy tool content
-								FileUtil.unzip(f, new File(remoteManifest.suggestXmlDirName()));
-								if (f != null) {
-									// create tool config.
-									ToolConfig newConfig = new ToolConfig();
-									newConfig.setAutoUpdate(localLastPublished.isAutoUpdate());
-									newConfig.setUi(localLastPublished.isUi());
-									newConfig.setWebService(localLastPublished.isWebService());
-									newConfig.setPath(localLastPublished.getPath());
-									newConfig.setConfiguration(remoteManifest.suggestXmlDirName());
-									newConfig.setJobDir(remoteManifest.suggestJobDirName());
-
-									config.addTool(newConfig);
-
-									localLastPublished.setPath("");
+					if (config != null){
+						String remoteManifestsJson = ToolRepoServiceRequests.getManifests();
+						if (remoteManifestsJson != null){
+							List<ToolManifest> remoteManifests = ToolManifest.
+									parseJsonAsList(remoteManifestsJson);
+							for (ToolManifest remoteManifest : remoteManifests) {
+								ToolConfig localLastPublished = config.
+										getLastPublishedToolConfigById(remoteManifest.getId());
+								if (localLastPublished != null
+										&& localLastPublished.isAutoUpdate()
+										&& localLastPublished.getToolMenifest().
+										getPublicationDate().compareTo(
+												remoteManifest.getPublicationDate()) < 0) {
+									// This version is not yet installed.
+									logger.info("Auto update of tool: id = " 
+											+ remoteManifest.getId() + ", version = "
+											+ remoteManifest.getVersion());
+									File f = null;
 									try {
-										config.save(Settings.getInstance().getBaseDir() + File.separator);
+										f = ToolRepoServiceRequests.getTool(
+												remoteManifest.getId(), remoteManifest.getVersion());
+									} catch (ToolRepoServiceExeption e) {
+										e.printStackTrace();
 									} catch (IOException e) {
 										e.printStackTrace();
+									}
+
+									// copy tool content
+									FileUtil.unzip(f, new File(remoteManifest.suggestXmlDirName()));
+									if (f != null) {
+										// create tool config.
+										ToolConfig newConfig = new ToolConfig();
+										newConfig.setAutoUpdate(localLastPublished.isAutoUpdate());
+										newConfig.setUi(localLastPublished.isUi());
+										newConfig.setWebService(localLastPublished.isWebService());
+										newConfig.setPath(localLastPublished.getPath());
+										newConfig.setConfiguration(remoteManifest.suggestXmlDirName());
+										newConfig.setJobDir(remoteManifest.suggestJobDirName());
+
+										config.putTool(newConfig);
+
+										localLastPublished.setPath("");
+										try {
+											config.save();
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
 									}
 								}
 							}
 						}
 					}
-
 					// sleep
 					synchronized (lock) {
 						try {
-							lock.wait(UPDATE_INTERVAL_MIN);
+							lock.wait(60000 * UPDATE_INTERVAL_MIN);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}

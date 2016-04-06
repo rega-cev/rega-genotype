@@ -5,13 +5,15 @@ import java.io.IOException;
 
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
-import rega.genotype.config.ToolManifest;
-import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WValidator;
 
 /**
@@ -26,19 +28,21 @@ public class LocalConfigForm  extends FormTemplate {
 	private final WCheckBox autoUpdateChB = new WCheckBox();
 	private final WCheckBox serviceChB = new WCheckBox();
 	private final WCheckBox uiChB = new WCheckBox();
-	//private ToolManifest manifest;
-	private Mode mode;
-	private ToolConfig toolConfig;
+	private final WPushButton saveB = new WPushButton("save");
 
-	public LocalConfigForm(final ToolConfig toolConfig, Mode mode) {
+	//private ToolManifest manifest;
+	private ToolConfig toolConfig;
+	private File xmlDir;
+
+	public LocalConfigForm(final ToolConfig toolConfig, File xmlDir) {
 		super(tr("admin.config.tool-config-dialog.config"));
 		this.toolConfig = toolConfig;
-		this.mode = mode;
+		this.xmlDir = xmlDir;
 
 		// read
 
 		if (toolConfig != null){
-			urlLE.setText(toolConfig.getPath());
+			urlLE.setText(toolConfig.getPath() == null ? "" : toolConfig.getPath());
 			autoUpdateChB.setChecked(toolConfig.isAutoUpdate());
 			serviceChB.setChecked(toolConfig.isWebService());
 			uiChB.setChecked(toolConfig.isUi());
@@ -52,41 +56,56 @@ public class LocalConfigForm  extends FormTemplate {
 		bindWidget("update", autoUpdateChB);
 		bindWidget("ui", uiChB);
 		bindWidget("service", serviceChB);
+		bindWidget("save", saveB);
 
 		initInfoFields();
 		validate();
+
+		// signals
+
+		saveB.clicked().addListener(saveB, new Signal.Listener() {
+			public void trigger() {
+				if (save() != null)
+					new MsgDialog("Info", "Local configuration saved.");
+				else
+					new MsgDialog("Error", "Could not save local configuration.");
+			}
+		});
 	}
 
-	public ToolConfig save(final ToolManifest manifest) {
+	public ToolConfig save() {
+		if (!validate())
+			return null;
+
 		Config config = Settings.getInstance().getConfig();
 
 		// save ToolConfig
-		ToolConfig newTool = config.getToolConfigById(manifest.getId(), manifest.getVersion());
-		if (newTool == null) {
-			assert(mode != Mode.Edit);
-			newTool = new ToolConfig();
-			if (!config.addTool(newTool))
+		if (toolConfig == null) {
+			toolConfig = new ToolConfig();
+			try {
+				toolConfig.setJobDir(FileUtil.createTempDirectory(
+						"tool-job-dir", new File(Settings.getInstance().getBaseJobDir())).getAbsolutePath());
+			} catch (IOException e) {
+				e.printStackTrace();
 				return null;
+			}
 		}
 
-		String xmlDir = manifest.suggestXmlDirName();
-		String jobDir = manifest.suggestJobDirName();
+		toolConfig.setConfiguration(xmlDir.getAbsolutePath() + File.separator);
+		toolConfig.setAutoUpdate(autoUpdateChB.isChecked());
+		toolConfig.setPath(urlLE.getText());
+		toolConfig.setUi(uiChB.isChecked());
+		toolConfig.setWebService(serviceChB.isChecked());
 
-		newTool.setAutoUpdate(autoUpdateChB.isChecked());
-		newTool.setConfiguration(xmlDir);
-		newTool.setJobDir(jobDir);
-		newTool.setPath(urlLE.getText());
-		newTool.setUi(uiChB.isChecked());
-		newTool.setWebService(serviceChB.isChecked());
+		config.putTool(toolConfig);
 
 		try {
-			manifest.save(xmlDir);
-			config.save(Settings.getInstance().getBaseDir() + File.separator);
+			config.save();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-		return newTool;
+		return toolConfig;
 	}
 
 
@@ -94,6 +113,14 @@ public class LocalConfigForm  extends FormTemplate {
 		WLineEdit le = new WLineEdit();
 		le.setWidth(new WLength(200));
 		return le;
+	}
+
+	public File getXmlDir() {
+		return xmlDir;
+	}
+
+	public void setXmlDir(File xmlDir) {
+		this.xmlDir = xmlDir;
 	}
 
 	private class ToolUrlValidator extends WValidator {
@@ -107,16 +134,9 @@ public class LocalConfigForm  extends FormTemplate {
 
 			if (toolConfigByUrl != null && toolConfigByUrl.getToolMenifest() != null
 					&& !toolConfigByUrl.getPath().isEmpty()) {
-				if (mode == Mode.NewVersion || mode == Mode.Add || mode == Mode.Install)
-					// new tool check all urls
+				if (!toolConfigByUrl.getConfiguration().equals(
+						toolConfig.getConfiguration())) 
 					return new Result(State.Invalid, "A tool with same url already exist on local server.");
-				else { // Edit
-					// TODO: can manifest change ?? 
-					// existing tool the url can stay the same. 
-					if (!toolConfigByUrl.getToolMenifest().isSameSignature(
-							toolConfig.getToolMenifest())) 
-						return new Result(State.Invalid, "A tool with same url already exist on local server.");
-				}
 			}
 
 			return super.validate(input);
