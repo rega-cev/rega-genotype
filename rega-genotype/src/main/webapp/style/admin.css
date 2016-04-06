@@ -6,6 +6,9 @@
     float: right;
 }
 
+.action-buttons-container {
+	height: 30px;
+}
 .action-buttons {
 	margin-top: 5px;
     float: right;
@@ -21,4 +24,13 @@
 
 .form-error {
 	color: red;
+}
+
+.header-fixed {
+    height:auto;
+    padding:5px 2px;
+    text-align:left;
+    top:0;
+    position:fixed;
+    right:0;
 }
