@@ -62,7 +62,7 @@ public class HIVGenotypeAnalysisTest extends TestCase {
 			@Override
 			public void endSequence() {
 				String assignment = getValue("/genotype_result/sequence/conclusion/assigned/name");
-				assertEquals(assignment, "HIV-1 Subtype B");
+				assertEquals("HIV-1 Subtype B", assignment);
 			}
 
 			@Override
