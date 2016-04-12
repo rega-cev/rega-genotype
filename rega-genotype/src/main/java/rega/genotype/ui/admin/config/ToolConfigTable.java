@@ -304,7 +304,7 @@ public class ToolConfigTable extends Template{
 			break;
 		}
 
-		final ToolConfigForm d = new ToolConfigForm(config);
+		final ToolConfigForm d = new ToolConfigForm(config, mode);
 		stack.addWidget(d);
 		stack.setCurrentWidget(d);
 		d.done().addListener(d, new Signal.Listener() {

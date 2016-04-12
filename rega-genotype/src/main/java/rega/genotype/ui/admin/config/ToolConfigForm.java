@@ -32,7 +32,7 @@ public class ToolConfigForm extends FormTemplate {
 	
 	private Signal done = new Signal();
 
-	public ToolConfigForm(final ToolConfig toolConfig) {
+	public ToolConfigForm(final ToolConfig toolConfig, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
 		
 		final WPushButton publishB = new WPushButton("Publish");
@@ -55,7 +55,7 @@ public class ToolConfigForm extends FormTemplate {
 		fileEditor.setHeight(new WLength(400));
 
 		// manifest 
-		manifestForm = new ManifestForm(toolConfig.getToolMenifest(), toolDir);
+		manifestForm = new ManifestForm(toolConfig.getToolMenifest(), toolDir, mode);
 		
 		// local config
 

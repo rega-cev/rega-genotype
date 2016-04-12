@@ -5,6 +5,7 @@ import java.io.File;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
+import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.MsgDialog;
@@ -33,7 +34,7 @@ public class ManifestForm extends FormTemplate{
 	private ToolManifest oldManifest;
 	private File toolDir;
 
-	public ManifestForm(final ToolManifest manifest, File toolDir) {
+	public ManifestForm(final ToolManifest manifest, File toolDir, Mode mode) {
 		super(tr("admin.config.tool-config-dialog.manifest"));
 		this.oldManifest = manifest;
 		this.toolDir = toolDir;
@@ -46,6 +47,8 @@ public class ManifestForm extends FormTemplate{
 			blastChB.setChecked(manifest.isBlastTool());
 			versionLE.setText(manifest.getVersion());
 		}
+
+		idLE.setDisabled(mode == Mode.NewVersion);
 
 		// validators
 
