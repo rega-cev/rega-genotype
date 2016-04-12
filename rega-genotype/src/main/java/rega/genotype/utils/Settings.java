@@ -107,7 +107,7 @@ public class Settings {
 		return config.getGeneralConfig().getMaxAllowedSeqs();
 	}
 
-	public Config getConfig() {
+	public final Config getConfig() {
 		return config;
 	}
 

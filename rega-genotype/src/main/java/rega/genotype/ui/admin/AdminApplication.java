@@ -6,6 +6,7 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WCssTheme;
 import eu.webtoolkit.jwt.WEnvironment;
+import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
@@ -34,6 +35,9 @@ public class AdminApplication extends WApplication{
 		// auth
 		
 		final Config config = Settings.getInstance().getConfig();
+		
+		WImage img = new WImage(new WLink(WLink.Type.Url, "./pics/dna_long.png"), getRoot());
+		img.addStyleClass("admin-logo");
 		
 		if (config != null 
 				&& config.getGeneralConfig().getAdminPassword() != null

@@ -22,3 +22,9 @@
 .form-error {
 	color: red;
 }
+
+.admin-logo {
+    height: 50.0px;
+    margin: auto;
+    display: block;
+}
