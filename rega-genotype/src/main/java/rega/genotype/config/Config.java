@@ -26,7 +26,7 @@ public class Config {
 	private List<ToolConfig> tools = new ArrayList<Config.ToolConfig>(); //TODO: use set 
 
 	public Config(){}
-
+	
 	public static Config parseJson(String json) {
 		return GsonUtil.parseJson(json, Config.class);
 	}
@@ -40,7 +40,8 @@ public class Config {
 	}
 
 	private void save(String externalDir) throws IOException {
-		// TODO: synchronize
+		// Note: no need to synchronize: The file is read only 1 time when setting
+		// is constructed. Setting config state is constantly updated by the UI.
 
 		if (getGeneralConfig().getPublisherPassword() == null 
 				|| getGeneralConfig().getPublisherPassword().isEmpty()) 
