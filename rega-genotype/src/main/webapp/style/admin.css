@@ -28,3 +28,7 @@
     margin: auto;
     display: block;
 }
+
+body {
+    font-family: arial,sans-serif;
+}
