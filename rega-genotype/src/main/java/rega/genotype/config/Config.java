@@ -95,6 +95,24 @@ public class Config {
 		return ans;
 	}
 
+	/**
+	 * Set the published flag for every tool config.
+	 * @param remoteManifests the manifests from remote repository.
+	 */
+	public void refreshPublishedFlags(List<ToolManifest> remoteManifests) {
+		if (remoteManifests == null)
+			remoteManifests = new ArrayList<ToolManifest>();
+
+		for (ToolConfig c: getTools()){
+			c.setPublished(false);
+			if (c.getToolMenifest() != null) {
+				// find same
+				for (ToolManifest m: remoteManifests)
+					if (m.isSameSignature(c.getToolMenifest()))
+						c.setPublished(true);
+			}
+		}
+	}
 	
 	/**
 	 * @param url url path component that defines the tool 
@@ -269,6 +287,7 @@ public class Config {
 			c.autoUpdate = autoUpdate;
 			c.webService = webService;
 			c.ui = ui;
+			c.published = published;
 
 			return c;
 		}

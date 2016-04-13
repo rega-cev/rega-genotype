@@ -11,10 +11,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.utils.StreamUtils;
@@ -92,7 +94,7 @@ public class ToolRepoServiceRequests {
 	 * 
 	 * @return manifests json string or null if did not work.
 	 */
-	public static String getManifests() {
+	public static String getManifestsJson() {
 		// TODO: maybe some users are interested only in current versions on a tool?
 		URLConnection connection;
 		String ans = null;
@@ -113,6 +115,24 @@ public class ToolRepoServiceRequests {
 		}
 
 		return ans;
+	}
+
+	/**
+	 * Requests the server for the manifests of all published tools.
+	 * 
+	 * @return list of all manifests on the remote server or null if could not get the list.
+	 */
+	public static List<ToolManifest> getRemoteManifests() {
+		// get remote tools
+		List<ToolManifest> remoteManifests = null;
+		String manifestsJson = ToolRepoServiceRequests.getManifestsJson();
+		if (manifestsJson == null || manifestsJson.isEmpty()) {
+			return null;
+		} else {
+			remoteManifests = ToolManifest.parseJsonAsList(manifestsJson);
+		}
+
+		return remoteManifests;
 	}
 
 	/**

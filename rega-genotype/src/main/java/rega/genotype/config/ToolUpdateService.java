@@ -40,6 +40,7 @@ public class ToolUpdateService {
 			newConfig.setPath(localLastPublished.getPath());
 			newConfig.setConfiguration(lastPublishedRemoteManifest.suggestXmlDirName());
 			newConfig.setJobDir(lastPublishedRemoteManifest.suggestJobDirName());
+			newConfig.setPublished(true);
 
 			Settings.getInstance().getConfig().putTool(newConfig);
 
@@ -72,7 +73,7 @@ public class ToolUpdateService {
 				while(true) {
 					Config config = Settings.getInstance().getConfig();
 					if (config != null){
-						String remoteManifestsJson = ToolRepoServiceRequests.getManifests();
+						String remoteManifestsJson = ToolRepoServiceRequests.getManifestsJson();
 						if (remoteManifestsJson != null){
 							List<ToolManifest> remoteManifests = ToolManifest.
 									parseJsonAsList(remoteManifestsJson);

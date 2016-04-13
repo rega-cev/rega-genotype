@@ -312,7 +312,7 @@ public class ToolConfigTable extends Template{
 	private List<ToolManifest> getRemoteManifests() {
 		// get remote tools
 		List<ToolManifest> remoteManifests = new ArrayList<ToolManifest>();
-		String manifestsJson = ToolRepoServiceRequests.getManifests();
+		String manifestsJson = ToolRepoServiceRequests.getManifestsJson();
 		if (manifestsJson == null || manifestsJson.isEmpty()) {
 			infoT.setText("Could not read remote tools");
 		} else {
@@ -404,6 +404,14 @@ public class ToolConfigTable extends Template{
 			toolDir.mkdirs();
 			config = new ToolConfig();
 			config.setConfiguration(dataDirStr);
+			config.setPublished(true);
+
+			try {
+				Settings.getInstance().getConfig().save();
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false);
+			}
 
 			break;
 		default:

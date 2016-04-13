@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import rega.genotype.config.Config;
+import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.framework.widgets.AutoForm;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.Settings;
@@ -22,6 +23,8 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 			public void trigger() {
 				if (save()) {
 					try {
+						// The repository may have changed.
+						config.refreshPublishedFlags(ToolRepoServiceRequests.getRemoteManifests());
 						config.save();
 						if (Settings.getInstance().getConfig() == null){
 							Settings.getInstance().setConfig(config);

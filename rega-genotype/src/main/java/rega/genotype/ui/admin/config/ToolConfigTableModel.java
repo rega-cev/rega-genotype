@@ -123,7 +123,7 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 				else 
 					return isUpToDate(info.getManifest().getId()) ? "Yes" : "No";
 			case INSTALLED_COLUMN:
-					return info.getState() == ToolState.RemoteSync ? "Yes" : "No";
+					return info.getState() != ToolState.RemoteNotSync ? "Yes" : "No";
 			default:
 				break;
 			}
@@ -190,10 +190,11 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		// add locals
 		for (ToolManifest m: localManifests) {
 			ToolInfo info = new ToolInfo();
+			ToolConfig localConfig = find(m.getId(), m.getVersion(), config);
 			info.setConfig(find(m.getId(), m.getVersion(), config));
 			info.setManifest(m);
-			ToolManifest published = find(m.getId(), m.getVersion(), remoteManifests);
-			info.setState(published != null ? ToolState.RemoteSync : ToolState.Local); 
+			// ToolManifest published = find(m.getId(), m.getVersion(), remoteManifests);
+			info.setState(localConfig.isPublished() ? ToolState.RemoteSync : ToolState.Local); 
 			rows.add(info);
 		}
 		// add remote not synced
