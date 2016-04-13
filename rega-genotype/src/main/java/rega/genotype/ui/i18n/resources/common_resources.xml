@@ -159,7 +159,7 @@
 	
 	<!-- Admin config -->
 	<message id="admin.config.tool-config-table">
-		${version-chb}
+		<div>${version-chb}${remote-chb}</div>
 		${table}
 		<div class="action-buttons">${add}${import}${new-version}${edit}${update}${install}${uninstall}</div>
 		<div>${info}</div>

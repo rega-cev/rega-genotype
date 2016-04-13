@@ -278,6 +278,7 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 	// Note: will become framework class.
 	public static class ToolConfigTableModelSortProxy extends WSortFilterProxyModel{
 		private boolean filterOldVersion = true;
+		private boolean filterRemote;
 		
 		public ToolConfigTableModelSortProxy() {
 			setSortRole(ItemDataRole.EditRole);
@@ -286,12 +287,17 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		@Override
 		protected boolean filterAcceptRow(int sourceRow,
 				WModelIndex sourceParent) {
-			if (filterOldVersion) {
-				return getToolConfigTableModel().isLastPublishedVesrsion(sourceRow);
-			} else 
-				return super.filterAcceptRow(sourceRow, sourceParent);
+			if (filterRemote) {
+				ToolInfo info = getToolConfigTableModel().getToolInfo(sourceRow);
+				if (info.getState() == ToolState.RemoteNotSync)
+					return false;
+			} if (filterOldVersion) {
+				if(!getToolConfigTableModel().isLastPublishedVesrsion(sourceRow))
+					return false;
+			}  
+			return super.filterAcceptRow(sourceRow, sourceParent);
 		}
-		
+
 		public ToolConfigTableModelSortProxy(ToolConfigTableModel model) {
 			setSourceModel(model);
 			setDynamicSortFilter(true);
@@ -319,6 +325,11 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 
 		public void setFilterOldVersion(boolean filterOldVersion) {
 			this.filterOldVersion = filterOldVersion;
+			invalidate();
+		}
+
+		public void setFilterNotRemote(boolean filterRemote) {
+			this.filterRemote = filterRemote;
 			invalidate();
 		}
 	}

@@ -59,7 +59,8 @@ public class ToolConfigTable extends Template{
 		bindWidget("info", infoT);
 		
 		final WCheckBox versionChB = new WCheckBox("Show latest versions");
-		
+		final WCheckBox remoteChB = new WCheckBox("Show remote tools");
+
 		List<ToolManifest> remoteManifests = getRemoteManifests();
 
 		// get local tools
@@ -266,13 +267,23 @@ public class ToolConfigTable extends Template{
 		versionChB.changed().addListener(this, new Signal.Listener() {
 			public void trigger() {
 				proxyModel.setFilterOldVersion(
-						versionChB.getCheckState() == CheckState.Checked);
+						versionChB.getCheckState() != CheckState.Checked);
 			}
 		});
-		versionChB.setChecked();
-		versionChB.checked().trigger();
+		versionChB.setChecked(false);
+		proxyModel.setFilterOldVersion(true);
+
+		remoteChB.changed().addListener(this, new Signal.Listener() {
+			public void trigger() {
+				proxyModel.setFilterNotRemote(
+						remoteChB.getCheckState() != CheckState.Checked);
+			}
+		});
+		remoteChB.setChecked(false);
+		proxyModel.setFilterNotRemote(true);
 
 		bindWidget("version-chb", versionChB);
+		bindWidget("remote-chb", remoteChB);
 		bindWidget("table", table);
 		bindWidget("add", addB);
 		bindWidget("edit", editB);
