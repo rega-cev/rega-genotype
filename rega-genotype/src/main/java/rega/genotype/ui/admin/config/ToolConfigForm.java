@@ -61,6 +61,14 @@ public class ToolConfigForm extends FormTemplate {
 
 		localConfigForm = new LocalConfigForm(toolConfig, toolDir);
 		
+		// disable 
+
+		if (toolConfig.isPublished()) {
+			publishB.disable();
+			manifestForm.disable();
+			fileEditor.setReadOnly(true);
+		} 
+
 		// bind
 
 		WPanel mamifestPanel = new WPanel();

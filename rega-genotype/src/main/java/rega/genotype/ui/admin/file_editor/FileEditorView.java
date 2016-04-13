@@ -121,6 +121,7 @@ public class FileEditorView extends WContainerWidget{
 	public static class FileTabs extends WTabWidget {
 
 		private Map<File, FileEditor> openEditors = new HashMap<File, FileEditor>();
+		private boolean isReadOnly;
 
 		public FileTabs() {
 			tabClosed().addListener(this,  new Signal1.Listener<Integer>() {
@@ -153,6 +154,7 @@ public class FileEditorView extends WContainerWidget{
 				setCurrentWidget(openEditors.get(file));
 			else {
 				final FileEditor editor = new FileEditor(file);
+				editor.setDisabled(isReadOnly);
 				addTab(editor, file.getName());
 				openEditors.put(file, editor);
 				setCurrentWidget(editor);
@@ -178,5 +180,14 @@ public class FileEditorView extends WContainerWidget{
 			for(FileEditor e: openEditors.values())
 				e.save();
 		}
+
+		public void setReadOnly(boolean isReadOnly) {
+			this.isReadOnly = isReadOnly;
+			
+		}
+	}
+
+	public void setReadOnly(boolean isReadOnly) {
+		fileTabs.setReadOnly(isReadOnly);
 	}
 }
