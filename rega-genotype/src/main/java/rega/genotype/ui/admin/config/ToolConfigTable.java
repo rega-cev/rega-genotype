@@ -242,15 +242,10 @@ public class ToolConfigTable extends Template{
 					newVersionB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
 
 					// only the last version can be updated 
-
-					ToolConfig locaLastPublished = Settings.getInstance().getConfig().
-							getLastPublishedToolConfig(toolInfo.getManifest().getId());
-					boolean upToDate = locaLastPublished == null || ToolManifest.isLastPublishedVesrsion(
-							getRemoteManifests(), locaLastPublished.getToolMenifest());
-					updateB.setEnabled(!upToDate);
+					updateB.setEnabled(proxyModel.getToolConfigTableModel().isUpToDate(
+							toolInfo.getManifest().getId()));
 
 					// uninstall
-					
 					uninstallB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
 					if (toolInfo.getState() == ToolState.Local)
 						uninstallB.setText("Remove");

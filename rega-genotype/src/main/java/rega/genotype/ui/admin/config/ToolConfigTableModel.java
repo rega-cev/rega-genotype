@@ -29,6 +29,8 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 
 	String[] headers = { "URL", "Name", "ID", "Version", "Publication date", "Publisher" , "State", "Up to date"};
 	List<ToolInfo> rows = new ArrayList<ToolInfo>();
+	private List<ToolManifest> localManifests;
+	private List<ToolManifest> remoteManifests;
 
 	public enum ToolState {
 		Local {           // The tool is not published 
@@ -119,10 +121,11 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 					return info.getState() == ToolState.Local ? "Local" : "Published";
 
 			case UPTODATE_COLUMN:
-				if (info.getManifest() == null)
-					return null;
-				else
-					return info.getState() == ToolState.RemoteNotSync ? "NO" : "YES";
+				if (info.getManifest() == null || info.getManifest().getId() == null)
+					return "No";
+				else 
+					return isUpToDate(info.getManifest().getId()) ? "Yes" : "No";
+
 			default:
 				break;
 			}
@@ -167,6 +170,9 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 	public void refresh(List<ToolManifest> localManifests,
 			List<ToolManifest> remoteManifests) {
 		
+		this.localManifests = localManifests;
+		this.remoteManifests = remoteManifests;
+
 		rows.clear();
 		Config config = Settings.getInstance().getConfig();
 		// add locals
@@ -229,6 +235,13 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		return null;
 	}
 
+	public boolean isUpToDate(String toolId) {
+		ToolConfig locaLastPublished = Settings.getInstance().getConfig().
+				getLastPublishedToolConfig(toolId);
+		return locaLastPublished != null && ToolManifest.isLastPublishedVesrsion(
+				remoteManifests, locaLastPublished.getToolMenifest());
+	}
+
 	public boolean isLastPublishedVesrsion(int row) {
 		ToolInfo info = getToolInfo(row);
 		Date publicationDate = info.getManifest().getPublicationDate();
@@ -246,6 +259,7 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		return true;
 	}
 
+	
 	// classes
 
 	// Note: will become framework class.
