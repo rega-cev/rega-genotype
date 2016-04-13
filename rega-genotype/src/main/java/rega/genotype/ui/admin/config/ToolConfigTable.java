@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
+import rega.genotype.config.ToolUpdateService;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
 import rega.genotype.ui.admin.AdminNavigation;
@@ -14,17 +17,22 @@ import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSo
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
 import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
+import rega.genotype.ui.util.FileUpload;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.CheckState;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.SortOrder;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
@@ -32,6 +40,7 @@ import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.servlet.UploadedFile;
 
 /**
  * Show list of tools that can be edited with ToolConfigDialog.
@@ -76,6 +85,9 @@ public class ToolConfigTable extends Template{
 		final WPushButton editB = new WPushButton("Edit");
 		final WPushButton installB = new WPushButton("Install");
 		final WPushButton newVersionB = new WPushButton("Create new version");
+		final WPushButton uninstallB = new WPushButton("Uninstall");
+		final WPushButton updateB = new WPushButton("Update");
+		final WPushButton importB = new WPushButton("Import");
 
 		installB.disable();
 
@@ -104,31 +116,78 @@ public class ToolConfigTable extends Template{
 							e.printStackTrace();
 						}
 
-						// create tool config.
-						FileUtil.unzip(f, new File(manifest.suggestXmlDirName()));
-						if (f != null) {
-							// create local config for installed tool
-							ToolConfig config = new ToolConfig();
-							config.setConfiguration(manifest.suggestXmlDirName());
-							config.genetareJobDir();
-							Settings.getInstance().getConfig().putTool(config);
-							try {
-								Settings.getInstance().getConfig().save();
-							} catch (IOException e) {
-								e.printStackTrace();
-								assert(false); // coping to new dir should always work.
-							}
-
-							// redirect to edit screen.
-							AdminNavigation.setInstallUrl(
-									toolInfo.getManifest().getId(),
-									toolInfo.getManifest().getVersion());
-						}
+						importTool(manifest, f);
 					}
 				}
 			}
 		});
-		
+
+		uninstallB.clicked().addListener(uninstallB, new Signal.Listener() {
+			public void trigger() {
+				if (table.getSelectedIndexes().size() == 1) {
+					ToolInfo toolInfo = proxyModel.getToolInfo(
+							table.getSelectedIndexes().first());
+					try {
+						FileUtils.deleteDirectory(new File(toolInfo.getConfig().getConfiguration()));
+					} catch (IOException e) {
+						e.printStackTrace();
+						new MsgDialog("Error", "Could not delete tool, Error: " + e.getMessage()); 
+					}
+					Settings.getInstance().getConfig().removeTool(toolInfo.getConfig());
+					try {
+						Settings.getInstance().getConfig().save();
+					} catch (IOException e) {
+						e.printStackTrace();
+						assert(false);
+						new MsgDialog("Info", "Global config not save, due to IO error.");
+					}
+
+					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+				}
+
+			}
+		});
+
+		updateB.clicked().addListener(updateB, new Signal.Listener() {
+			public void trigger() {
+				if (table.getSelectedIndexes().size() == 1) {
+					ToolInfo toolInfo = proxyModel.getToolInfo(
+							table.getSelectedIndexes().first());
+					ToolUpdateService.update(getRemoteManifests(), toolInfo.getManifest().getId());
+					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+				}
+			}
+		});
+
+		importB.clicked().addListener(importB, new Signal.Listener() {
+			public void trigger() {
+				StandardDialog d= new StandardDialog("Import");
+				final FileUpload fileUpload = new FileUpload();
+				d.getContents().addWidget(new WText("Choose import file"));
+				d.getContents().addWidget(fileUpload);
+				d.finished().addListener(d,  new Signal1.Listener<WDialog.DialogCode>() {
+					public void trigger(DialogCode arg) {
+						if (arg == DialogCode.Accepted) {
+							if (fileUpload.getWFileUpload().getUploadedFiles().size() == 1) {
+								UploadedFile f = fileUpload.getWFileUpload().getUploadedFiles().get(0);
+								
+								String manifestJson = FileUtil.getFileContent(new File(f.getSpoolFileName()), 
+										ToolManifest.MANIFEST_FILE_NAME);
+								ToolManifest manifest = ToolManifest.parseJson(manifestJson);
+								if (manifest != null) {
+									importTool(manifest, new File(f.getSpoolFileName()));
+								} else {
+									new MsgDialog("Error", "Invalid tool file");
+								}
+							}
+						}
+					}
+				});
+
+				proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+			}
+		});
+
 		addB.clicked().addListener(addB, new Signal.Listener() {
 			public void trigger() {
 				AdminNavigation.setNewToolUrl();
@@ -178,13 +237,36 @@ public class ToolConfigTable extends Template{
 					ToolInfo toolInfo = proxyModel.getToolInfo(
 							table.getSelectedIndexes().first());
 					installB.setEnabled(toolInfo.getState() == ToolState.RemoteNotSync);
+
 					editB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
+					newVersionB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
+
+					// only the last version can be updated 
+
+					ToolConfig locaLastPublished = Settings.getInstance().getConfig().
+							getLastPublishedToolConfig(toolInfo.getManifest().getId());
+					boolean upToDate = locaLastPublished == null || ToolManifest.isLastPublishedVesrsion(
+							getRemoteManifests(), locaLastPublished.getToolMenifest());
+					updateB.setEnabled(!upToDate);
+
+					// uninstall
+					
+					uninstallB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
+					if (toolInfo.getState() == ToolState.Local)
+						uninstallB.setText("Remove");
+					else
+						uninstallB.setText("Uninstall");
+					
 				} else {
 					installB.disable();
 					editB.disable();
+					newVersionB.disable();
+					uninstallB.disable();
+					updateB.disable();
 				}
 			}
 		});
+		table.selectionChanged().trigger();
 
 		versionChB.changed().addListener(this, new Signal.Listener() {
 			public void trigger() {
@@ -201,6 +283,35 @@ public class ToolConfigTable extends Template{
 		bindWidget("edit", editB);
 		bindWidget("install", installB);
 		bindWidget("new-version", newVersionB);
+		bindWidget("uninstall", uninstallB);
+		bindWidget("update", updateB);
+		bindWidget("import", importB);
+
+	}
+
+	private void importTool(ToolManifest manifest, File f) {
+		// create tool config.
+		FileUtil.unzip(f, new File(manifest.suggestXmlDirName()));
+		if (f != null) {
+			// create local config for installed tool
+			ToolConfig config = new ToolConfig();
+			config.setConfiguration(manifest.suggestXmlDirName());
+			config.genetareJobDir();
+			Settings.getInstance().getConfig().putTool(config);
+			try {
+				Settings.getInstance().getConfig().save();
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false); // coping to new dir should always work.
+			}
+
+			// redirect to edit screen.
+			AdminNavigation.setInstallUrl(
+					manifest.getId(),
+					manifest.getVersion());
+		} else {
+			new MsgDialog("Error", "Invalid tool file.");
+		}
 	}
 
 	private List<ToolManifest> getRemoteManifests() {

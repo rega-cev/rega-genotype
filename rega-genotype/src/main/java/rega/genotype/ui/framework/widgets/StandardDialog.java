@@ -14,9 +14,17 @@ public class StandardDialog extends WDialog{
 		super(title);
 		show();
 		WPushButton okB = new WPushButton("OK", getFooter());
+		WPushButton cancelB = new WPushButton("Cancel", getFooter());
+
 		okB.clicked().addListener(okB, new Signal.Listener() {
 			public void trigger() {
 				accept();
+			}
+		});
+
+		cancelB.clicked().addListener(cancelB, new Signal.Listener() {
+			public void trigger() {
+				reject();
 			}
 		});
 	}

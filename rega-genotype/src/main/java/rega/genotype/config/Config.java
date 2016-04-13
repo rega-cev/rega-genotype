@@ -79,7 +79,7 @@ public class Config {
 			return null;
 	}
 	
-	public ToolConfig getLastPublishedToolConfigById(String toolId) {
+	public ToolConfig getLastPublishedToolConfig(String toolId) {
 		ToolConfig ans = null;
 		// find organism config
 		for (ToolConfig c: getTools())
@@ -124,6 +124,14 @@ public class Config {
 
 	public List<ToolConfig> getTools() {
 		return tools;
+	}
+	
+	public boolean removeTool(ToolConfig tool) {
+		ToolConfig sameConfig = getToolConfigByConfiguration(tool.getConfiguration());
+		if (getToolConfigByConfiguration(tool.getConfiguration()) != null)
+			return tools.remove(sameConfig);
+		else 
+			return false;
 	}
 
 	public void putTool(ToolConfig tool) {
@@ -251,6 +259,7 @@ public class Config {
 		private boolean autoUpdate;
 		private boolean webService;
 		private boolean ui;
+		private boolean published = false;
 		// ToolMenifest read manifests from configuration dir.
 		// TODO: ui will have to update manifest if it was changed.
 		transient private ToolManifest manifest = null;
@@ -357,6 +366,14 @@ public class Config {
 		}
 		public void setUi(boolean ui) {
 			this.ui = ui;
+		}
+
+		public boolean isPublished() {
+			return published;
+		}
+
+		public void setPublished(boolean published) {
+			this.published = published;
 		}
 	}
 }

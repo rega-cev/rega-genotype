@@ -30,6 +30,9 @@ public class ToolManifest {
 	public ToolManifest() {}
 
 	public static ToolManifest parseJson(String json) {
+		if (json == null)
+			return null;
+
 		return GsonUtil.parseJson(json, ToolManifest.class);
 	}
 
@@ -56,15 +59,25 @@ public class ToolManifest {
 
 	public static boolean isLastPublishedVesrsion(
 			List<ToolManifest> manifests, ToolManifest manifest) {
-		Date publicationDate = manifest.getPublicationDate();
-		for (ToolManifest m: manifests) {
-			if (m.getId().equals(manifest.getId())
-					&& m.getPublicationDate() != null 
-					&& m.getPublicationDate().compareTo(publicationDate) > 0)
-				return false;
-		}
-		return true;
+		ToolManifest lastPublishedVesrsion = lastPublishedVesrsion(manifests, manifest.id);
+		return lastPublishedVesrsion != null
+				&& lastPublishedVesrsion.getVersion().equals(manifest.getVersion());
 	}
+
+	public static ToolManifest lastPublishedVesrsion(
+			List<ToolManifest> manifests, String toolId) {
+		ToolManifest ans = null;
+		for (ToolManifest m: manifests)
+			if (m.getId().equals(toolId) 
+					&& m.getPublicationDate() != null
+					&& (ans == null 
+					|| m.getPublicationDate().compareTo(
+							ans.getPublicationDate()) > 0))
+				ans = m;
+
+		return ans;
+	}
+
 	/**
 	 * Order tool dirs in readable way.
 	 */

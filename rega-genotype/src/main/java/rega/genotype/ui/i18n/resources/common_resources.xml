@@ -161,7 +161,7 @@
 	<message id="admin.config.tool-config-table">
 		${version-chb}
 		${table}
-		<div class="action-buttons">${add}${new-version}${edit}${install}</div>
+		<div class="action-buttons">${add}${import}${new-version}${edit}${update}${install}${uninstall}</div>
 		<div>${info}</div>
 	</message>
 
