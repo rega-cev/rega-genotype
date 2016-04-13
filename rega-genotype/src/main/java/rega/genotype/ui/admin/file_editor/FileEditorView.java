@@ -14,6 +14,7 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTabWidget;
@@ -31,13 +32,15 @@ public class FileEditorView extends WContainerWidget{
 	private FileTabs fileTabs = new FileTabs();
 	private File rootDir;
 	private FileTreeTable fileTree;
+	private WPushButton addB;
+	private WPushButton removeB;
 
 	public FileEditorView(final File root) {
 		super();
 		this.rootDir = root;
 
-		final WPushButton addB = new WPushButton("Add files");
-		final WPushButton removeB = new WPushButton("Remove");
+		addB = new WPushButton("Add files");
+		removeB = new WPushButton("Remove");
 
 		fileTree = new FileTreeTable(root, false, false);
 		
@@ -81,25 +84,29 @@ public class FileEditorView extends WContainerWidget{
 				final FileUpload fileUpload = new FileUpload();
 
 				fileUpload.setMultiple(true);
-				fileUpload.uploadedFile().addListener(fileUpload, new Signal1.Listener<File>() {
-					public void trigger(File arg) {
-						for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
-							String[] split = f.getClientFileName().split(File.separator);
-							String fileName = split[split.length - 1];
-							try {
-								Files.copy(new File(f.getSpoolFileName()).toPath(),
-										new File(root + File.separator + fileName).toPath());
-							} catch (IOException e) {
-								e.printStackTrace();
-								new MsgDialog("Error", "<div>Some files could not be copied (maybe they already exist).</div>" +
-										"<div> Error message: "+ e.getMessage() + "</div>");
+				
+				d.finished().addListener(d,  new Signal1.Listener<WDialog.DialogCode>() {
+					public void trigger(DialogCode arg) {
+						if (arg == DialogCode.Accepted) {
+							for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
+								String[] split = f.getClientFileName().split(File.separator);
+								String fileName = split[split.length - 1];
+								try {
+									Files.copy(new File(f.getSpoolFileName()).toPath(),
+											new File(root + File.separator + fileName).toPath());
+								} catch (IOException e) {
+									e.printStackTrace();
+									new MsgDialog("Error", "<div>Some files could not be copied (maybe they already exist).</div>" +
+											"<div> Error message: "+ e.getMessage() + "</div>");
+								}
 							}
-						}
 
-						fileTree.refresh();
+							fileTree.refresh();
+						}
+						
 					}
 				});
-				
+
 				d.getContents().addWidget(fileUpload);
 			}
 		});
@@ -111,6 +118,12 @@ public class FileEditorView extends WContainerWidget{
 
 	public void refresh() {
 		fileTree.refresh();
+	}
+	
+	public void setReadOnly(boolean isReadOnly) {
+		fileTabs.setReadOnly(isReadOnly);
+		addB.disable();
+		removeB.disable();
 	}
 	// classes
 
@@ -185,9 +198,5 @@ public class FileEditorView extends WContainerWidget{
 			this.isReadOnly = isReadOnly;
 			
 		}
-	}
-
-	public void setReadOnly(boolean isReadOnly) {
-		fileTabs.setReadOnly(isReadOnly);
 	}
 }
