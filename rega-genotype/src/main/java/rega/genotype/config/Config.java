@@ -287,7 +287,6 @@ public class Config {
 			c.autoUpdate = autoUpdate;
 			c.webService = webService;
 			c.ui = ui;
-			c.published = published;
 
 			return c;
 		}

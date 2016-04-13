@@ -319,6 +319,7 @@ public class ToolConfigTable extends Template{
 			remoteManifests = ToolManifest.parseJsonAsList(manifestsJson);
 			if (remoteManifests == null) {
 				infoT.setText("Could not parss remote tools");
+				return new ArrayList<ToolManifest>();
 			}
 		}
 
@@ -404,6 +405,7 @@ public class ToolConfigTable extends Template{
 			toolDir.mkdirs();
 			config = new ToolConfig();
 			config.setConfiguration(dataDirStr);
+			config.genetareJobDir();
 			config.setPublished(true);
 
 			try {

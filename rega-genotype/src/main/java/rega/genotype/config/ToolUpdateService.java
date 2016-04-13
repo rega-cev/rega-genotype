@@ -77,22 +77,23 @@ public class ToolUpdateService {
 						if (remoteManifestsJson != null){
 							List<ToolManifest> remoteManifests = ToolManifest.
 									parseJsonAsList(remoteManifestsJson);
-							for (ToolManifest remoteManifest : remoteManifests) {
-								ToolConfig localLastPublished = config.
-										getLastPublishedToolConfig(remoteManifest.getId());
-								if (localLastPublished != null
-										&& localLastPublished.isAutoUpdate()
-										&& ToolManifest.isLastPublishedVesrsion(remoteManifests, remoteManifest)
-										&& localLastPublished.getToolMenifest().
-										getPublicationDate().compareTo(
-												remoteManifest.getPublicationDate()) < 0) {
-									// This version is not yet installed.
-									logger.info("Auto update of tool: id = " 
-											+ remoteManifest.getId() + ", version = "
-											+ remoteManifest.getVersion());
-									update(remoteManifests, remoteManifest.getId());
+							if (remoteManifests != null)
+								for (ToolManifest remoteManifest : remoteManifests) {
+									ToolConfig localLastPublished = config.
+											getLastPublishedToolConfig(remoteManifest.getId());
+									if (localLastPublished != null
+											&& localLastPublished.isAutoUpdate()
+											&& ToolManifest.isLastPublishedVesrsion(remoteManifests, remoteManifest)
+											&& localLastPublished.getToolMenifest().
+											getPublicationDate().compareTo(
+													remoteManifest.getPublicationDate()) < 0) {
+										// This version is not yet installed.
+										logger.info("Auto update of tool: id = " 
+												+ remoteManifest.getId() + ", version = "
+												+ remoteManifest.getVersion());
+										update(remoteManifests, remoteManifest.getId());
+									}
 								}
-							}
 						}
 					}
 					// sleep

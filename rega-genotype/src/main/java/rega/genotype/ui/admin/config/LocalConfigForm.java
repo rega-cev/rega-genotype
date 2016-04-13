@@ -96,6 +96,8 @@ public class LocalConfigForm  extends FormTemplate {
 		toolConfig.setPath(urlLE.getText());
 		toolConfig.setUi(uiChB.isChecked());
 		toolConfig.setWebService(serviceChB.isChecked());
+		if(toolConfig.getJobDir().isEmpty())
+			toolConfig.genetareJobDir();
 
 		config.putTool(toolConfig);
 
