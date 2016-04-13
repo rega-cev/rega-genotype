@@ -37,6 +37,9 @@ public class ToolRepoServiceRequests {
 	// URLS
 	
 	private static String gerRepoServiceUrl() {
+		if (Settings.getInstance().getConfig() == null)
+			return "";
+
 		return Settings.getInstance().getConfig().getGeneralConfig().getRepoUrl();
 	}
 
