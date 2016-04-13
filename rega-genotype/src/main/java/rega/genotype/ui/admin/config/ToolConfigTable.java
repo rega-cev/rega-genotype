@@ -378,7 +378,13 @@ public class ToolConfigTable extends Template{
 		switch (mode) {
 		case Add:
 			config = createToolConfig();
-			
+			Settings.getInstance().getConfig().putTool(config);
+			try {
+				Settings.getInstance().getConfig().save();
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false);
+			}
 			break;
 		case NewVersion:
 			config = info.getConfig().copy();
@@ -402,9 +408,7 @@ public class ToolConfigTable extends Template{
 			break;
 		case Edit:
 			if (info.getConfig() == null){
-				// TODO:
-				AdminNavigation.setToolsTableUrl();
-				new MsgDialog("Problem!", "local config is missing.");
+				assert(false);
 				return;
 			} else {
 				config = info.getConfig();

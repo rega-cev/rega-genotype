@@ -138,7 +138,8 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			if (index.getColumn() == 0 && info.getConfig() != null)
 				return new WLink("typingtool/" + info.getConfig().getPath());
 		} else if (role == ItemDataRole.StyleClassRole) {
-			if (info.getState() == ToolState.RemoteSync )
+			if (info.getState() == ToolState.RemoteSync 
+					|| info.getState() == ToolState.Local)
 				return "";
 			else
 				return "tools-table-unistalled-raw";
@@ -191,10 +192,10 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 		for (ToolManifest m: localManifests) {
 			ToolInfo info = new ToolInfo();
 			ToolConfig localConfig = find(m.getId(), m.getVersion(), config);
-			info.setConfig(find(m.getId(), m.getVersion(), config));
+			info.setConfig(localConfig);
 			info.setManifest(m);
 			// ToolManifest published = find(m.getId(), m.getVersion(), remoteManifests);
-			info.setState(localConfig.isPublished() ? ToolState.RemoteSync : ToolState.Local); 
+			info.setState(localConfig != null && localConfig.isPublished() ? ToolState.RemoteSync : ToolState.Local); 
 			rows.add(info);
 		}
 		// add remote not synced
