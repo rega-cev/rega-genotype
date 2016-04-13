@@ -173,55 +173,55 @@ public class Config {
 	// classes
 
 	public static class GeneralConfig {
-		private String paupCommand;
-		private String clustalWCommand;
+		private String paupCmd;
+		private String clustalWCmd;
 		private String blastPath;
-		private String treePuzzleCommand;
-		private String treeGraphCommand;
-		private String epsToPdfCommand;
-		private String imageMagickConvertCommand;
+		private String treePuzzleCmd;
+		private String treeGraphCmd;
+		private String epsToPdfCmd;
+		private String imageMagickConvertCmd;
 		private int maxAllowedSeqs;
-		private String inkscapeCommand;
+		private String inkscapeCmd;
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.
 		private String adminPassword;
 		
-		public String getPaupCommand() {
-			return paupCommand;
+		public String getPaupCmd() {
+			return paupCmd;
 		}
-		public void setPaupCommand(String paupCommand) {
-			this.paupCommand = paupCommand;
+		public void setPaupCmd(String paupCmd) {
+			this.paupCmd = paupCmd;
 		}
-		public String getClustalWCommand() {
-			return clustalWCommand;
+		public String getClustalWCmd() {
+			return clustalWCmd;
 		}
-		public void setClustalWCommand(String clustalWCommand) {
-			this.clustalWCommand = clustalWCommand;
+		public void setClustalWCmd(String clustalWCmd) {
+			this.clustalWCmd = clustalWCmd;
 		}
-		public String getTreePuzzleCommand() {
-			return treePuzzleCommand;
+		public String getTreePuzzleCmd() {
+			return treePuzzleCmd;
 		}
-		public void setTreePuzzleCommand(String treePuzzleCommand) {
-			this.treePuzzleCommand = treePuzzleCommand;
+		public void setTreePuzzleCmd(String treePuzzleCmd) {
+			this.treePuzzleCmd = treePuzzleCmd;
 		}
-		public String getTreeGraphCommand() {
-			return treeGraphCommand;
+		public String getTreeGraphCmd() {
+			return treeGraphCmd;
 		}
-		public void setTreeGraphCommand(String treeGraphCommand) {
-			this.treeGraphCommand = treeGraphCommand;
+		public void setTreeGraphCmd(String treeGraphCmd) {
+			this.treeGraphCmd = treeGraphCmd;
 		}
-		public String getEpsToPdfCommand() {
-			return epsToPdfCommand;
+		public String getEpsToPdfCmd() {
+			return epsToPdfCmd;
 		}
-		public void setEpsToPdfCommand(String epsToPdfCommand) {
-			this.epsToPdfCommand = epsToPdfCommand;
+		public void setEpsToPdfCmd(String epsToPdfCmd) {
+			this.epsToPdfCmd = epsToPdfCmd;
 		}
-		public String getImageMagickConvertCommand() {
-			return imageMagickConvertCommand;
+		public String getImageMagickConvertCmd() {
+			return imageMagickConvertCmd;
 		}
-		public void setImageMagickConvertCommand(String imageMagickConvertCommand) {
-			this.imageMagickConvertCommand = imageMagickConvertCommand;
+		public void setImageMagickConvertCmd(String imageMagickConvertCmd) {
+			this.imageMagickConvertCmd = imageMagickConvertCmd;
 		}
 		public int getMaxAllowedSeqs() {
 			return maxAllowedSeqs;
@@ -229,11 +229,11 @@ public class Config {
 		public void setMaxAllowedSeqs(int maxAllowedSeqs) {
 			this.maxAllowedSeqs = maxAllowedSeqs;
 		}
-		public String getInkscapeCommand() {
-			return inkscapeCommand;
+		public String getInkscapeCmd() {
+			return inkscapeCmd;
 		}
-		public void setInkscapeCommand(String inkscapeCommand) {
-			this.inkscapeCommand = inkscapeCommand;
+		public void setInkscapeCmd(String inkscapeCmd) {
+			this.inkscapeCmd = inkscapeCmd;
 		}
 		public String getBlastPath() {
 			return blastPath;

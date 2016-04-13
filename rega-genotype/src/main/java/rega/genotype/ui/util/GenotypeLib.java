@@ -106,9 +106,9 @@ public class GenotypeLib {
 	}
 	
 	private static void imageMagickConvert(File in, File out) throws IOException, InterruptedException {
-		System.err.println("Running: " + Settings.getInstance().getImageMagickConvertCommand() + " " + in.getAbsolutePath() + " " + out.getAbsolutePath());
+		System.err.println("Running: " + Settings.getInstance().getImageMagickConvertCmd() + " " + in.getAbsolutePath() + " " + out.getAbsolutePath());
 
-		Process ps = new ProcessBuilder(Settings.getInstance().getImageMagickConvertCommand(), in.getAbsolutePath(), out.getAbsolutePath()).start();
+		Process ps = new ProcessBuilder(Settings.getInstance().getImageMagickConvertCmd(), in.getAbsolutePath(), out.getAbsolutePath()).start();
 		
 		StreamReaderThread stdout = new StreamReaderThread(ps.getInputStream(), System.out, "image magick stdout: ");
 		stdout.start();
@@ -169,7 +169,7 @@ public class GenotypeLib {
 	}
 
 	private static void epsToPdf(File epsFile, File pdfFile) throws IOException, InterruptedException {
-		Process ps = new ProcessBuilder(Settings.getInstance().getEpsToPdfCommand(), epsFile.getAbsolutePath(), "--outfile=" + pdfFile.getAbsolutePath()).start();
+		Process ps = new ProcessBuilder(Settings.getInstance().getEpsToPdfCmd(), epsFile.getAbsolutePath(), "--outfile=" + pdfFile.getAbsolutePath()).start();
 		
 		StreamReaderThread stdout = new StreamReaderThread(ps.getInputStream(), System.out, "epstopdf stdout: ");
 		stdout.start();

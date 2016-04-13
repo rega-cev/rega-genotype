@@ -65,12 +65,12 @@ public class Settings {
 		return new File(config.getToolConfigByUrlPath(url).getJobDir());
 	}
 
-	public String getPaupCommand() {
-		return config.getGeneralConfig().getPaupCommand();
+	public String getPaupCmd() {
+		return config.getGeneralConfig().getPaupCmd();
 	}
 
-	public String getClustalWCommand() {
-		return config.getGeneralConfig().getClustalWCommand();
+	public String getClustalWCmd() {
+		return config.getGeneralConfig().getClustalWCmd();
 	}
 
 	public String getBaseXmlDir() {
@@ -87,20 +87,20 @@ public class Settings {
 		return new File(config.getGeneralConfig().getBlastPath());
 	}
 
-	public String getTreePuzzleCommand() {
-		return config.getGeneralConfig().getTreePuzzleCommand();
+	public String getTreePuzzleCmd() {
+		return config.getGeneralConfig().getTreePuzzleCmd();
 	}
 
-	public String getTreeGraphCommand() {
-		return config.getGeneralConfig().getTreeGraphCommand();
+	public String getTreeGraphCmd() {
+		return config.getGeneralConfig().getTreeGraphCmd();
 	}
 
-	public String getEpsToPdfCommand() {
-		return config.getGeneralConfig().getEpsToPdfCommand();
+	public String getEpsToPdfCmd() {
+		return config.getGeneralConfig().getEpsToPdfCmd();
 	}
 
-	public String getImageMagickConvertCommand() {
-		return config.getGeneralConfig().getImageMagickConvertCommand();
+	public String getImageMagickConvertCmd() {
+		return config.getGeneralConfig().getImageMagickConvertCmd();
 	}
 
 	public int getMaxAllowedSeqs() {
@@ -118,11 +118,11 @@ public class Settings {
 	public static void initSettings(Settings s) {
 		instance = s;
 		if (s.getConfig() != null) {
-			PhyloClusterAnalysis.paupCommand = s.getPaupCommand();
-			SequenceAlign.clustalWPath = s.getClustalWCommand();
+			PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
+			SequenceAlign.clustalWPath = s.getClustalWCmd();
 			BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
-			PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCommand();
-			treeGraphCommand = s.getTreeGraphCommand();
+			PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
+			treeGraphCommand = s.getTreeGraphCmd();
 		}
 	}
 
