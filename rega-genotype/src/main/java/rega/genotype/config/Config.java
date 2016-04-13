@@ -256,7 +256,7 @@ public class Config {
 		public String getRepoUrl() {
 			//default
 			if (repoUrl == null || repoUrl.isEmpty())
-				return "http://typingtools.emweb.be/repository";
+				return "http://typingtools.emweb.be/repository-test/repo-service";
 			return repoUrl;
 		}
 		public void setRepoUrl(String repoUrl) {
