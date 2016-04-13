@@ -10,6 +10,7 @@ import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 
@@ -36,7 +37,10 @@ public class AdminApplication extends WApplication{
 		
 		final Config config = Settings.getInstance().getConfig();
 		
-		WImage img = new WImage(new WLink(WLink.Type.Url, "./pics/dna_long.png"), getRoot());
+		WTable logo = new WTable(getRoot());
+		WText logoT = new WText("<h2>Typing Tools Manager</h2>", logo.getElementAt(0, 0));
+		logoT.addStyleClass("admin-logo-text");
+		WImage img = new WImage(new WLink(WLink.Type.Url, "./pics/dna_long.png"), logo.getElementAt(0, 1));
 		img.addStyleClass("admin-logo");
 		
 		if (config != null 

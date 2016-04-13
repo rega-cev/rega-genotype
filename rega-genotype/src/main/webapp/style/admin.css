@@ -25,8 +25,16 @@
 
 .admin-logo {
     height: 50.0px;
-    margin: auto;
-    display: block;
+   /* margin: auto;
+    display: block;*/
+}
+
+.admin-logo-text {
+    height: 50.0px;
+    line-height: 5px;
+    width: 280px;
+    color: darkblue;
+    margin-left: 30px;
 }
 
 body {
