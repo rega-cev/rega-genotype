@@ -127,6 +127,13 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			default:
 				break;
 			}
+		} else if (role == ItemDataRole.EditRole) {
+			switch (index.getColumn()) {
+			case DATE_COLUMN:
+				return info.getManifest() == null ? null : formtDate(info.getManifest().getPublicationDate());
+			default:
+				return getData(index, ItemDataRole.DisplayRole);
+			}
 		} else if (role == ItemDataRole.LinkRole) {
 			if (index.getColumn() == 0 && info.getConfig() != null)
 				return new WLink("typingtool/" + info.getConfig().getPath());
@@ -271,6 +278,10 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 	public static class ToolConfigTableModelSortProxy extends WSortFilterProxyModel{
 		private boolean filterOldVersion = true;
 		
+		public ToolConfigTableModelSortProxy() {
+			setSortRole(ItemDataRole.EditRole);
+		}
+
 		@Override
 		protected boolean filterAcceptRow(int sourceRow,
 				WModelIndex sourceParent) {
