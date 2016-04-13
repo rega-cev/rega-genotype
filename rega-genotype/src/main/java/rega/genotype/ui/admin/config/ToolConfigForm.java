@@ -52,7 +52,6 @@ public class ToolConfigForm extends FormTemplate {
 		fileEditorPanel.setTitle("File editor");
 		fileEditorPanel.setCentralWidget(fileEditor);
 		fileEditorPanel.addStyleClass("admin-panel");
-		fileEditor.setHeight(new WLength(400));
 
 		// manifest 
 		manifestForm = new ManifestForm(toolConfig.getToolMenifest(), toolDir, mode);
