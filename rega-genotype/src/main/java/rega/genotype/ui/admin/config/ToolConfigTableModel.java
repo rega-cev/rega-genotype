@@ -26,8 +26,9 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 	public static final int PUBLISHER_COLUMN = 5;
 	public static final int STATE_COLUMN = 6;
 	public static final int UPTODATE_COLUMN = 7;
+	public static final int INSTALLED_COLUMN = 8;
 
-	String[] headers = { "URL", "Name", "ID", "Version", "Publication date", "Publisher" , "State", "Up to date"};
+	String[] headers = { "URL", "Name", "ID", "Version", "Publication date", "Publisher" , "State", "Up to date", "Installed"};
 	List<ToolInfo> rows = new ArrayList<ToolInfo>();
 	private List<ToolManifest> localManifests;
 	private List<ToolManifest> remoteManifests;
@@ -115,23 +116,25 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			case PUBLISHER_COLUMN:
 				return info.getManifest() == null ? null : info.getManifest().getPublisherName();
 			case STATE_COLUMN:
-				if (info.getManifest() == null)
-					return null;
-				else 
-					return info.getState() == ToolState.Local ? "Local" : "Published";
-
+				return info.getState() == ToolState.Local ? "Local" : "Published";
 			case UPTODATE_COLUMN:
 				if (info.getManifest() == null || info.getManifest().getId() == null)
 					return "No";
 				else 
 					return isUpToDate(info.getManifest().getId()) ? "Yes" : "No";
-
+			case INSTALLED_COLUMN:
+					return info.getState() == ToolState.RemoteSync ? "Yes" : "No";
 			default:
 				break;
 			}
 		} else if (role == ItemDataRole.LinkRole) {
 			if (index.getColumn() == 0 && info.getConfig() != null)
 				return new WLink("typingtool/" + info.getConfig().getPath());
+		} else if (role == ItemDataRole.StyleClassRole) {
+			if (info.getState() == ToolState.RemoteSync )
+				return "";
+			else
+				return "tools-table-unistalled-raw";
 		}
 		return null;
 	}
@@ -162,6 +165,8 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			return new WLength(60);
 		case UPTODATE_COLUMN:
 			return new WLength(100);
+		case INSTALLED_COLUMN:
+			return new WLength(80);
 		default:
 			return new WLength(100);
 		}

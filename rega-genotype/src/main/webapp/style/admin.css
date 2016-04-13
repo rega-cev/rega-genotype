@@ -37,6 +37,10 @@
     margin-left: 30px;
 }
 
+.tools-table-unistalled-raw {
+    color: gray;
+}
+
 body {
     font-family: arial,sans-serif;
 }
