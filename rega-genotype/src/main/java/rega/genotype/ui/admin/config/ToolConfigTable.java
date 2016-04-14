@@ -243,7 +243,7 @@ public class ToolConfigTable extends Template{
 					newVersionB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
 
 					// only the last version can be updated 
-					updateB.setEnabled(proxyModel.getToolConfigTableModel().isUpToDate(
+					updateB.setEnabled(!proxyModel.getToolConfigTableModel().isUpToDate(
 							toolInfo.getManifest().getId()));
 
 					// uninstall

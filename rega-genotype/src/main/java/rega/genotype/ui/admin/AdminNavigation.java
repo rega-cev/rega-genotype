@@ -12,7 +12,6 @@ import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WHBoxLayout;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WMenu;
 import eu.webtoolkit.jwt.WStackedWidget;
 

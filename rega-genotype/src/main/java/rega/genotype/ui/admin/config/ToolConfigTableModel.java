@@ -252,7 +252,7 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 	public boolean isUpToDate(String toolId) {
 		ToolConfig locaLastPublished = Settings.getInstance().getConfig().
 				getLastPublishedToolConfig(toolId);
-		return locaLastPublished != null && ToolManifest.isLastPublishedVesrsion(
+		return locaLastPublished == null || ToolManifest.isLastPublishedVesrsion(
 				remoteManifests, locaLastPublished.getToolMenifest());
 	}
 
