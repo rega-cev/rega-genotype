@@ -1,3 +1,7 @@
+body {
+    font-family: arial,sans-serif;
+}
+
 .admin-panel {
     margin-bottom: 10px;
 }
@@ -47,6 +51,35 @@
     padding-bottom: 10px;
 }
 
-body {
-    font-family: arial,sans-serif;
+.admin-menu {
+    padding:0;
+    margin:0px 9px;
+    padding-left:0px;
+    width:100px;
+    font-weight:normal;
+    list-style:none;
+}
+
+.admin-menu a {
+    color: gray;
+    font-size: 12pt;
+    font-weight:normal;
+    text-decoration:none;
+    display: block;
+    line-height:24px;
+}
+
+.admin-menu .item a {
+  color: gray;
+}
+
+.admin-menu .itemselected a {
+    /*color:blueviolet;*/
+    color: darkblue;
+    font-weight: bold;
+}
+
+.admin-menu a:hover {
+  color: blueviolet;
+    text-decoration: none;
 }

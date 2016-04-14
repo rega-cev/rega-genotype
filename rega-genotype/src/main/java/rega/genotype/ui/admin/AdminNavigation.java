@@ -37,7 +37,7 @@ public class AdminNavigation extends WContainerWidget {
 
 	    WStackedWidget contents = new WStackedWidget();
 	    WMenu menu = new WMenu(contents);
-	    menu.setWidth(new WLength(150));
+	    menu.addStyleClass("admin-menu");
 
 	    menu.setInternalPathEnabled();
 	    menu.setInternalBasePath("/");
