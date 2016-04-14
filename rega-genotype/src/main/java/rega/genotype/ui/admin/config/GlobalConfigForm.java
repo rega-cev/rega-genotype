@@ -1,7 +1,9 @@
 package rega.genotype.ui.admin.config;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import rega.genotype.config.Config;
@@ -49,39 +51,48 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		return ignore;
 	}
 
-	private void setInfo() {
-		setFieldToolTip("paupCmd", "<div>Paup* 4 beta10</div>" 
-				+ "<div>can be purchased from http://paup.csit.fsu.edu/</div>"
-				+ "<div>make sure to install this version, since older versions can give problems!</div>");
+	@Override
+	protected Map<String, String> getFieldDisplayNames() {
+		Map<String, String> ans = new HashMap<String, String>();
+		ans.put("paupCmd", "Paup Command");
+		ans.put("clustalWCmd", "ClustalW Command");
+		ans.put("treePuzzleCmd", "Tree Puzzle Command");
+		ans.put("treeGraphCmd", "Tree Graph Command");
+		ans.put("epsToPdfCmd", "Eps To Pdf Command");
+		ans.put("imageMagickConvertCmd", "Image Magick Convert Command");
+		ans.put("inkscapeCmd", "Inkscape Command");
 
-		setFieldToolTip("clustalWCmd", "<div>clustalw</div>"
-				+ "<div>some unix based operating operating systems allow installation via the package manager</div>"
-				+ "<div>can be installed manually by downloading the appropriate</div>"
-				+ "<div>binaries or build from source code for your OS</div>"
+		return ans;
+	}
+	
+	private void setInfo() {
+		setFieldInfo("paupCmd", "<div>Paup* 4 beta10</div>" 
+				+ "<div>Can be purchased from http://paup.csit.fsu.edu/</div>"
+				+ "<div>Make sure to install this version, since older versions can give problems!</div>");
+
+		setFieldInfo("clustalWCmd", "<div>*Some unix based operating systems allow installation via the package manager.</div>"
+				+ "<div>*Can be installed manually by downloading the appropriate binaries or build from source code for your OS.</div>"
 				+ "<div>ftp://ftp.ebi.ac.uk/pub/software/clustalw2/</div>");
 
-		setFieldToolTip("treePuzzleCmd", "<div>tree-puzzle 5.2 (only for HIV)</div>"
-				+ "<div>you can download the binaries from http://www.tree-puzzle.de</div>");
+		setFieldInfo("treePuzzleCmd", "<div>tree-puzzle 5.2 (only for HIV)</div>"
+				+ "<div>You can download the binaries from http://www.tree-puzzle.de</div>");
 
-		setFieldToolTip("treeGraphCmd", "<div>if you use unix based OS you should download and build the source code</div>"
-				+ "<div>http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>"
-				+ "<div>if you use a Microsoft Windows you can download a binary</div>"
-				+ "<div>http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>");
+		setFieldInfo("treeGraphCmd", "<div>*If you use unix based OS you should download and build the source code http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>"
+				+ "<div>*If you use a Microsoft Windows you can download a binary http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>");
 
-		setFieldToolTip("blastPath", "<div>blast 2.2.11</div>"
-				+ "<div>make sure to install this version, since other versions can give problems!</div>"
-				+ "<div>the binaries can be downloaded from</div>"
-				+ "<div>ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/</div>"
-				+ "<div>select the appropriate binary for your OS</div>"
-				+ "<div>these binaries can be installed by extracting the archive to a desired location</div>");
+		setFieldInfo("blastPath", "<div>blast 2.2.11</div>"
+				+ "<div>Make sure to install this version, since other versions can give problems!</div>"
+				+ "<div>The binaries can be downloaded from ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/</div>"
+				+ "<div>Select the appropriate binary for your OS</div>"
+				+ "<div>These binaries can be installed by extracting the archive to a desired location</div>");
 
-		setFieldToolTip("imageMagickConvertCmd", "<div>http://www.imagemagick.org</div>");
+		setFieldInfo("imageMagickConvertCmd", "<div>http://www.imagemagick.org</div>");
 
-		setFieldToolTip("publisherName", "<div>All tools published from this server will use the publisher name.</div>");
+		setFieldInfo("publisherName", "<div>All Tools published from this server will use the publisher name.</div>");
 
-		setFieldToolTip("repoUrl", "<div>The url of a public repository that contains all published tools.</div>"
+		setFieldInfo("repoUrl", "<div>The url of a public repository that contains all published tools.</div>"
 				+ "<div>Currently this repository url is: http://typingtools.emweb.be/repository/repo-service</div>");
 
-		setFieldToolTip("adminPassword", "<div>Will be used to login to the adin area.</div>");
+		setFieldInfo("adminPassword", "<div>Will be used to login to the adin area.</div>");
 	}
 }

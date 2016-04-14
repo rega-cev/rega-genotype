@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import eu.webtoolkit.jwt.EventSignal1;
-import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFormWidget;
@@ -35,17 +34,25 @@ public class AutoForm <T> extends WContainerWidget {
 	private WText header = new WText(this); 
 	private WTable layout = new WTable(this);
 	private WPushButton saveB = new WPushButton("Save", this);
-	private Map<Field, WFormWidget> widgetMap = new HashMap<Field, WFormWidget>();
+	private Map<Field, WidgetContainer> widgetMap = new HashMap<Field, WidgetContainer>();
 	private T t;
 
  	public AutoForm(T t){	
  		this.t = t;
  		
+ 		layout.addStyleClass("auto-form-table");
+ 
  		// add fields
  
 		int row = 0;
 		List<Field> fields = getFields();
 		for (Field field : fields) {
+			WText info = new WText();
+			info.addStyleClass("auto-form-info ");
+			layout.getElementAt(row, 0).addWidget(info);
+			layout.getElementAt(row, 0).setColumnSpan(2);
+			row++;
+
 			layout.getElementAt(row, 0).addWidget(new WText(styleFiledName(field.getName())));
 			if (field.getType() == String.class) {
 				String value = (String)doGet(field, t);
@@ -53,13 +60,13 @@ public class AutoForm <T> extends WContainerWidget {
 				le.setValidator(new WValidator(true));
 				le.setWidth(new WLength(300));
 				layout.getElementAt(row, 1).addWidget(le);
-				widgetMap.put(field, le);
+				widgetMap.put(field, new WidgetContainer(le, info));
 			} else if (field.getType() == boolean.class){
 				Boolean value = (Boolean)doGet(field, t);
 				WCheckBox chb = new WCheckBox();
 				chb.setChecked(value);
 				layout.getElementAt(row, 1).addWidget(chb);
-				widgetMap.put(field, chb);
+				widgetMap.put(field, new WidgetContainer(chb, info));
 			} else if (field.getType() == int.class){
 				Integer value = (Integer)doGet(field, t);
 				WLineEdit le = new WLineEdit(value == null ? "" : value.toString());
@@ -68,7 +75,7 @@ public class AutoForm <T> extends WContainerWidget {
 				v.setMandatory(true);
 				le.setValidator(v);
 				layout.getElementAt(row, 1).addWidget(le);
-				widgetMap.put(field, le);
+				widgetMap.put(field, new WidgetContainer(le, info));
 			} else 
 				System.err.println("WARNING: AutoForm encountered new field type: " + field.getType());
 
@@ -100,15 +107,22 @@ public class AutoForm <T> extends WContainerWidget {
  		return null;
  	}
  
- 	protected boolean setFieldToolTip(String fieldName, String toolTipText) {
- 		
- 		WFormWidget w = widgetMap.get(getField(fieldName));
- 		if (w == null)
+ 	protected boolean setFieldInfo(String fieldName, String text) {
+ 		if (widgetMap.get(getField(fieldName)) == null)
  			return false;
  		else
- 			w.setToolTip(toolTipText,TextFormat.XHTMLText);
+ 			widgetMap.get(getField(fieldName)).info.setText(text);
 
  		return true;
+ 	}
+
+ 	/**
+ 	 * Display text for field names.
+ 	 * Default to styled java field name 
+ 	 * @return
+ 	 */
+ 	protected Map<String, String> getFieldDisplayNames() {
+ 		return new HashMap<String, String>();
  	}
 
 //  protected boolean addValidators() {}
@@ -123,6 +137,10 @@ public class AutoForm <T> extends WContainerWidget {
 //	}
 
  	private String styleFiledName(String name) {
+ 		Map<String, String> fieldDisplayNames = getFieldDisplayNames();
+ 		if (fieldDisplayNames.containsKey(name))
+ 			return fieldDisplayNames.get(name);
+ 		
  		String ans = "";
  		for (int i = 0; i < name.length(); ++i) {
  			if (i == 0){
@@ -136,7 +154,7 @@ public class AutoForm <T> extends WContainerWidget {
 
  		return ans;
  	}
-
+ 	
  	/**
  	 * define class fields that should not be modified by the UI.
  	 * @return
@@ -146,8 +164,8 @@ public class AutoForm <T> extends WContainerWidget {
  	}
  	
  	public boolean validate() {
- 		for (WFormWidget w: widgetMap.values()) 
- 			if (w.validate() != WValidator.State.Valid)
+ 		for (WidgetContainer c: widgetMap.values()) 
+ 			if (c.widget.validate() != WValidator.State.Valid)
  				return false;
  
  		return true;
@@ -160,13 +178,13 @@ public class AutoForm <T> extends WContainerWidget {
 		List<Field> fields = getFields();
 		for (Field field : fields) {
 			if (field.getType() == String.class) {
-				String value = widgetMap.get(field).getValueText();
+				String value = widgetMap.get(field).widget.getValueText();
 				doSet(field, t, value);
 			} else if (field.getType() == boolean.class) {
-				boolean value = ((WCheckBox)widgetMap.get(field)).isChecked();
+				boolean value = ((WCheckBox)widgetMap.get(field).widget).isChecked();
 				doSet(field, t, value);
 			} else if (field.getType() == int.class) {
-				String value = widgetMap.get(field).getValueText();
+				String value = widgetMap.get(field).widget.getValueText();
 				doSet(field, t, Integer.parseInt(value));
 			}
 		}
@@ -213,5 +231,16 @@ public class AutoForm <T> extends WContainerWidget {
 			}
 		}
 		return false;
+	}
+
+	// classes
+
+	private static class WidgetContainer {
+		WFormWidget widget;
+		WText info;
+		public WidgetContainer(WFormWidget widget, WText info) {
+			this.widget = widget;
+			this.info = info;
+		}
 	}
 }

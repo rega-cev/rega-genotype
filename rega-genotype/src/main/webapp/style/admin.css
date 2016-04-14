@@ -39,6 +39,14 @@
     color: gray;
 }
 
+.auto-form-info {
+	color: dodgerblue;
+}
+
+.auto-form-table td:nth-child(even) {
+    padding-bottom: 10px;
+}
+
 body {
     font-family: arial,sans-serif;
 }
