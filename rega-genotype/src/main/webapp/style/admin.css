@@ -44,13 +44,25 @@ body {
 }
 
 .auto-form-info {
-	color: dodgerblue;
+	color: #62615f;
+	font-size: 14px;
 }
 
-.auto-form-table td:nth-child(even) {
+.auto-form-table td:nth-child(odd) {
     padding-bottom: 10px;
 }
 
+.auto-form-table td {
+	width: 200.0px;
+	font-size:17px;
+	line-height: 1.5;
+}
+
+.auto-form-table td input{
+	width: 300.0px;
+	font-size:17px;
+	height:20px;
+}
 .admin-menu {
     padding:0;
     margin:0px 9px;

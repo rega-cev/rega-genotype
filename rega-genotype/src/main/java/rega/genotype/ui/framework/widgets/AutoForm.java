@@ -49,9 +49,6 @@ public class AutoForm <T> extends WContainerWidget {
 		for (Field field : fields) {
 			WText info = new WText();
 			info.addStyleClass("auto-form-info ");
-			layout.getElementAt(row, 0).addWidget(info);
-			layout.getElementAt(row, 0).setColumnSpan(2);
-			row++;
 
 			layout.getElementAt(row, 0).addWidget(new WText(styleFiledName(field.getName())));
 			if (field.getType() == String.class) {
@@ -80,6 +77,11 @@ public class AutoForm <T> extends WContainerWidget {
 				System.err.println("WARNING: AutoForm encountered new field type: " + field.getType());
 
 			row++;
+			
+			layout.getElementAt(row, 0).addWidget(info);
+			layout.getElementAt(row, 0).setColumnSpan(5);
+			row++;
+
 		}
 		// addValidators();
  	}

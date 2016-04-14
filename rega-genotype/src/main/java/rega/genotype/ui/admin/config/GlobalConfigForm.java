@@ -77,8 +77,10 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldInfo("treePuzzleCmd", "<div>tree-puzzle 5.2 (only for HIV)</div>"
 				+ "<div>You can download the binaries from http://www.tree-puzzle.de</div>");
 
-		setFieldInfo("treeGraphCmd", "<div>*If you use unix based OS you should download and build the source code http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>"
-				+ "<div>*If you use a Microsoft Windows you can download a binary http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>");
+		setFieldInfo("treeGraphCmd", "<div>*If you use unix based OS you should download and build the source code</div>"
+				+ "<div>http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>"
+				+ "<div>*If you use a Microsoft Windows you can download a binary </div>"
+				+ "<div>http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>");
 
 		setFieldInfo("blastPath", "<div>blast 2.2.11</div>"
 				+ "<div>Make sure to install this version, since other versions can give problems!</div>"
