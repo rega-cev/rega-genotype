@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
@@ -28,12 +29,13 @@ public class GenotypeApplication extends WApplication
 	private ServletContext servletContext_;
 	private Settings settings;
 	
-	protected String toolId;// url Path Component
+	private ToolConfig toolConfig;
 	
 	public GenotypeApplication(WEnvironment env,
-			ServletContext servletContext, Settings settings ,String toolId) throws RegaGenotypeExeption
+			ServletContext servletContext, Settings settings ,String urlPath) throws RegaGenotypeExeption
 	{
 		super(env);
+		this.toolConfig = Settings.getInstance().getConfig().getToolConfigByUrlPath(urlPath);
 		
 		if (settings.getConfig() == null)
 			throw new RegaGenotypeExeption("Missing config file. Go to {host}/rega-genotype/admin/global to create new config file.");
@@ -44,7 +46,6 @@ public class GenotypeApplication extends WApplication
 		useStyleSheet(new WLink("../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 
 		servletContext_ = servletContext;
-		this.toolId = toolId;
 	}
 	
 	public ServletContext getServletContext()
@@ -56,11 +57,7 @@ public class GenotypeApplication extends WApplication
 	{
 		return settings;
 	}
-
-	public String getToolId() {
-		return toolId;
-	}
-
+	
 	public static GenotypeApplication getGenotypeApplication() {
 		WApplication app = WApplication.getInstance();
 		if (app != null && app instanceof GenotypeApplication)
@@ -84,5 +81,9 @@ public class GenotypeApplication extends WApplication
 		}
 		
 		return file;
+	}
+
+	public ToolConfig getToolConfig() {
+		return toolConfig;
 	}
 }

@@ -42,7 +42,7 @@ public class Template extends WTemplate{
 		
 		GenotypeApplication app = GenotypeApplication.getGenotypeApplication();
 		if (varName.equals("resource-file"))
-			bindString(varName, FileServlet.getFileUrl(app.getToolId()));
+			bindString(varName, FileServlet.getFileUrl(app.getToolConfig().getPath()));
 
 		super.resolveString(varName, args, result);
 	}

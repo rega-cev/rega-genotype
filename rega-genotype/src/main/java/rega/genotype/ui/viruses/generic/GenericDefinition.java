@@ -66,9 +66,9 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private List<ResultColumn> resultColumns = null;
 	private List<ResultColumn> downloadColumns = null;
 	
-	public GenericDefinition(String toolId) throws JDOMException, IOException {
+	public GenericDefinition(String url) throws JDOMException, IOException {
 		this.updateInterval = 5000;
-		this.url = toolId;
+		this.url = url;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));
 		fontSize = 8;

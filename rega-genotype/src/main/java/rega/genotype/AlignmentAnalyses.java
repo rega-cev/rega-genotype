@@ -80,12 +80,14 @@ public class AlignmentAnalyses {
         private List<Cluster> clusters;
         private Cluster       parent;
         private String        tags;
+		private String        toolId;
 
-        public Cluster(String id, String name, String description, String tags) {
+        public Cluster(String id, String name, String description, String tags, String toolId) {
             this.id = id;
             this.name = name;
             this.description = description;
             this.tags = tags;
+			this.toolId = toolId;
             this.taxa = new ArrayList<Taxus>();
             this.clusters = new ArrayList<Cluster>();
             this.parent = null;
@@ -157,6 +159,10 @@ public class AlignmentAnalyses {
         public String getId() {
             return id;
         }
+
+		public String getToolId() {
+			return toolId;
+		}
 
         /**
          * @return the cluster depth: for a top level cluster it is 1, for its sub clusters,
@@ -267,7 +273,7 @@ public class AlignmentAnalyses {
             if (sequenceIdsE != null) {
             	for (int i = 0; i < alignment.getSequences().size(); ++i) {
             		AbstractSequence seq = alignment.getSequences().get(i);
-            		Cluster c = new Cluster(seq.getName(), seq.getName(), seq.getDescription(), null);
+            		Cluster c = new Cluster(seq.getName(), seq.getName(), seq.getDescription(), null, null);
             		c.addTaxus(seq.getName());
             		clusters.add(c);
             	}
@@ -453,7 +459,7 @@ public class AlignmentAnalyses {
         
         Cluster c = clusterMap.get(name);
         if (c != null && taxalist != null) {
-            Cluster result = new Cluster(c.getId(), c.getName(), c.getDescription(), c.tags);
+            Cluster result = new Cluster(c.getId(), c.getName(), c.getDescription(), c.tags, c.getToolId());
             
             List<Taxus> taxa = c.getTaxa();
 
@@ -478,6 +484,7 @@ public class AlignmentAnalyses {
         String name = element.getAttributeValue("name");
         String description = null;
         String tags = null;
+        String toolId = null;
 
         Element descriptionE = element.getChild("description");
         if (descriptionE != null)
@@ -486,8 +493,12 @@ public class AlignmentAnalyses {
         Element tagsE = element.getChild("tags");
         if (tagsE != null)
             tags = tagsE.getText();
+        
+        Element toolIdE = element.getChild("tool-id");
+        if (toolIdE != null)
+        	toolId = toolIdE.getText();
 
-        Cluster result = new Cluster(id, name, description, tags);
+        Cluster result = new Cluster(id, name, description, tags, toolId);
         clusterMap.put(id, result);
         
         List taxusEs = element.getChildren("taxus");        

@@ -7,6 +7,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.webtoolkit.jwt.WApplication;
+
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
 import rega.genotype.utils.Settings;
@@ -343,6 +345,12 @@ public class Config {
 		public String getVersion() {
 			return getToolMenifest() == null ? null : getToolMenifest().getVersion();
 		}
+
+		public String getFullUrl() {
+			return WApplication.getInstance().getEnvironment().
+					getDeploymentPath() + getPath();
+		}
+
 		public String getPath() {
 			if (path != null)
 				return path;

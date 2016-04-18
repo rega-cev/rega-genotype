@@ -8,11 +8,13 @@ package rega.genotype.ui.framework;
 import java.util.ArrayList;
 import java.util.List;
 
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.framework.widgets.Template;
+import rega.genotype.ui.viruses.generic.BlastJobOverviewForm;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal1.Listener;
 import eu.webtoolkit.jwt.WApplication;
@@ -75,14 +77,28 @@ public class GenotypeWindow extends WContainerWidget
 		
 		addForm("Submit Job", START_URL, new StartForm(this));
 		
-		JobForm jobForm = new JobForm(this, od.getJobOverview(this));
-		final WMenuItem item = addForm(tr("main.navigation.monitor").arg(""), JobForm.JOB_URL, jobForm);
-		jobForm.jobIdChanged().addListener(this, new Listener<String>() {
-			public void trigger(String jobId) {
-				item.setText(tr("main.navigation.monitor").arg(jobId));
-				item.setPathComponent(JobForm.JOB_URL + "/" + jobId);
-			}
-		});
+		ToolConfig toolConfig = GenotypeApplication.getGenotypeApplication().getToolConfig();
+		if (toolConfig.getToolMenifest().isBlastTool()) {
+			BlastJobOverviewForm blastJobOverview = new BlastJobOverviewForm(this);
+			
+			final WMenuItem item = addForm(tr("main.navigation.monitor").arg(""),
+					JobForm.JOB_URL, blastJobOverview);
+			blastJobOverview.jobIdChanged().addListener(this, new Listener<String>() {
+				public void trigger(String jobId) {
+					item.setText(tr("main.navigation.monitor").arg(jobId));
+					item.setPathComponent(JobForm.JOB_URL + "/" + jobId);
+				}
+			});
+		} else {
+			JobForm jobForm = new JobForm(this, od.getJobOverview(this));
+			final WMenuItem item = addForm(tr("main.navigation.monitor").arg(""), JobForm.JOB_URL, jobForm);
+			jobForm.jobIdChanged().addListener(this, new Listener<String>() {
+				public void trigger(String jobId) {
+					item.setText(tr("main.navigation.monitor").arg(jobId));
+					item.setPathComponent(JobForm.JOB_URL + "/" + jobId);
+				}
+			});
+		}
 	}
 
 	public void init() {
