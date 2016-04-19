@@ -13,6 +13,7 @@ import java.util.List;
 import eu.webtoolkit.jwt.WString;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
@@ -106,5 +107,9 @@ public class EtvDefinition implements OrganismDefinition {
 
 	public String getJobDir() {
 		return Settings.getInstance().getJobDir(EtvMain.ETV_TOOL_ID).getAbsolutePath();
+	}
+
+	public ToolConfig getToolConfig() {
+		return Settings.getInstance().getConfig().getToolConfigByUrlPath(EtvMain.ETV_TOOL_ID);
 	}
 }

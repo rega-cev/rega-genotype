@@ -12,6 +12,7 @@ import java.util.List;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
@@ -22,6 +23,7 @@ import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.util.DataTable;
 import rega.genotype.utils.Settings;
 import rega.genotype.viruses.nov.NoVTool;
@@ -109,5 +111,9 @@ public class NovDefinition implements OrganismDefinition {
 
 	public String getJobDir() {
 		return Settings.getInstance().getJobDir(NovMain.NOV_TOOL_ID).getAbsolutePath();
+	}
+
+	public ToolConfig getToolConfig() {
+		return Settings.getInstance().getConfig().getToolConfigByUrlPath(NovMain.NOV_TOOL_ID);
 	}
 }

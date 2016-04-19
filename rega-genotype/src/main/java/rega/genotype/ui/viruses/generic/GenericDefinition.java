@@ -22,6 +22,7 @@ import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WString;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
@@ -34,6 +35,7 @@ import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenomeAttributes;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.viruses.nov.NovMain;
 import rega.genotype.util.DataTable;
 import rega.genotype.utils.Settings;
 import rega.genotype.viruses.generic.GenericTool;
@@ -248,5 +250,9 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 
 	public String getXmlPath() {
 		return Settings.getInstance().getXmlPath(url).getAbsolutePath();
+	}
+
+	public ToolConfig getToolConfig() {
+		return Settings.getInstance().getConfig().getToolConfigByUrlPath(url);
 	}
 }
