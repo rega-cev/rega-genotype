@@ -53,6 +53,14 @@ public class GenericTool extends GenotypeTool {
         blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
     }
 
+    /**
+     * overwrite this function for specialized cluster analysis.
+     * @param c
+     * @param s 
+     */
+    protected void analyseClaster(Cluster c, AbstractSequence s) {
+    }
+
     public void analyze(AbstractSequence s) throws AnalysisException {
     	/*
     	 * First perform the blast analysis.
@@ -61,6 +69,8 @@ public class GenericTool extends GenotypeTool {
 
         if (blastResult.haveSupport()) {
         	Cluster c = blastResult.getConcludedCluster();
+
+        	analyseClaster(c, s);
 
         	/*
         	 * Reverse complement the sequence for subsequent analyses.

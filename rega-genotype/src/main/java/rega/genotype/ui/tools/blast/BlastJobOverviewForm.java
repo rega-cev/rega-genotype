@@ -1,7 +1,6 @@
 package rega.genotype.ui.tools.blast;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -16,7 +15,6 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Side;
@@ -112,42 +110,16 @@ public class BlastJobOverviewForm extends AbstractForm {
 		return jobIdChanged;
 	}
 
-	public static File sequenceFileInBlastTool(String blastJobId, String toolId){
-		String blastJobDir = Settings.getInstance().getConfig().getBlastTool().getJobDir();
-		return new File(blastJobDir + File.separator + blastJobId, toolId + ".fasta");
-	}
-
 	private WLink createToolLink(final String toolId, final String jobId) {
 		ToolConfig toolConfig = Settings.getInstance().getConfig().getLastPublishedToolConfig(toolId);
 		if (toolConfig == null)
 			return null;
-
-		saveFastaSequence(toolId, sequenceFileInBlastTool(jobId, toolId));
 
 		String url = GenotypeMain.getApp().getServletContext().getContextPath()
 		+ "/typingtool/" + toolConfig.getPath() + "/"
 		+ BLAST_JOB_ID_PATH + "/" + jobId;
 
 		return new WLink(url);
-	}
-
-	private void saveFastaSequence(String toolId, File file) {
-		if (!file.exists()) {
-			try {
-				FileUtil.writeStringToFile(file, fastaContent(toolId));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private String fastaContent(String toolId) {
-		String ans = "";
-		ToolData toolData = toolDataMap.get(toolId);
-		for(SequenceData d:toolData.sequences){
-			ans += ">" + d.sequenceName + "\n" + d.nucleotides + "\n";
-		}
-		return ans;
 	}
 	
 	// Classes
@@ -157,10 +129,9 @@ public class BlastJobOverviewForm extends AbstractForm {
 
 	private class SequenceData {
 		private String sequenceName = new String();
-		private String nucleotides  = new String();
-		public SequenceData(String sequenceName, String nucleotides) {
+		//private String nucleotides  = new String();
+		public SequenceData(String sequenceName) {
 			this.sequenceName = sequenceName;
-			this.nucleotides = nucleotides;
 		}
 	} 
 
@@ -172,12 +143,12 @@ public class BlastJobOverviewForm extends AbstractForm {
 		public void endSequence() {	
 			String toolId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/tool-id");
 			String seqName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name");
-			String nucleotides = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/nucleotides");
+			//String nucleotides = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/nucleotides");
 
 			ToolData toolData = toolDataMap.containsKey(toolId) ?
 					toolDataMap.get(toolId) : new ToolData();
 
-			toolData.sequences.add(new SequenceData(seqName, nucleotides));
+			toolData.sequences.add(new SequenceData(seqName));
 			toolDataMap.put(toolId, toolData);
 		}
 	}

@@ -11,7 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Writer;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -22,19 +22,21 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.IOUtils;
 
 public class FileUtil {
+	
 	public static void writeStringToFile(File f, String s) throws IOException {
+		writeStringToFile(f, s, false);
+	}
+
+	public static void writeStringToFile(File f, String s, boolean append) throws IOException {
 		if (!f.exists()) {
 			f.getParentFile().mkdirs();
 			f.createNewFile();
 		}
 
-		Writer output = new BufferedWriter(new FileWriter(f));
-		try {
-			output.write( s );
-		}
-		finally {
-			output.close();
-		}
+		PrintWriter out = new PrintWriter(new BufferedWriter(
+				new FileWriter(f.getAbsolutePath(), append)));
+		out.println(s);
+		out.close();
 	}
 
 	public static String readFile(File path){

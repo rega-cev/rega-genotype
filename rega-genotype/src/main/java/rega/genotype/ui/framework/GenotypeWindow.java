@@ -17,6 +17,7 @@ import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.tools.blast.BlastJobOverviewForm;
+import rega.genotype.ui.tools.blast.BlastTool;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal1;
@@ -128,7 +129,7 @@ public class GenotypeWindow extends WContainerWidget
 				OrganismDefinition od = getOrganismDefinition();
 				if (!blastJobId.isEmpty() && blastTool != null) {
 					String toolId = getOrganismDefinition().getToolConfig().getId();
-					File fastaFile = BlastJobOverviewForm.sequenceFileInBlastTool(
+					File fastaFile = BlastTool.sequenceFileInBlastTool(
 							blastJobId, toolId);
 					if (fastaFile.exists()) {
 						String fastaContent = FileUtil.readFile(fastaFile);

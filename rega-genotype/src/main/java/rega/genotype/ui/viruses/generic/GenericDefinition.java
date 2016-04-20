@@ -18,8 +18,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import eu.webtoolkit.jwt.WColor;
-import eu.webtoolkit.jwt.WString;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
@@ -32,13 +30,15 @@ import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.tools.blast.BlastTool;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenomeAttributes;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.viruses.nov.NovMain;
 import rega.genotype.util.DataTable;
 import rega.genotype.utils.Settings;
 import rega.genotype.viruses.generic.GenericTool;
+import eu.webtoolkit.jwt.WColor;
+import eu.webtoolkit.jwt.WString;
 
 /**
  * Generic OrganismDefinition implementation.
@@ -133,7 +133,12 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public void startAnalysis(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-		GenericTool tool = new GenericTool(url, workingDir);
+		GenericTool tool;
+		if (getToolConfig().getToolMenifest().isBlastTool())
+			tool = new BlastTool(url, workingDir);
+		else
+			tool = new GenericTool(url, workingDir);
+
 		tool.analyze(workingDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 					 workingDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
