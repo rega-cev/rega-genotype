@@ -15,6 +15,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.Template;
@@ -105,7 +106,7 @@ public class StartForm extends AbstractForm {
 		                    new Signal1.Listener<StandardButton>() {
 		                        public void trigger(StandardButton sb) {
 		                            if (messageBox.getButtonResult() == StandardButton.Yes) {
-		                            	startJob(fasta);
+		                            	startLocalJob(fasta);
 		                            }
 		                            if (messageBox != null)
 		                                messageBox.remove();
@@ -114,7 +115,7 @@ public class StartForm extends AbstractForm {
 		            messageBox.show();
 				} else {
 					if (error == null)
-						startJob(fasta);
+						startLocalJob(fasta);
 				}
 			}
 		});
@@ -189,17 +190,27 @@ public class StartForm extends AbstractForm {
 			errorText.setText(error);
 		}
 	}
-	
-	private void startJob(final String fastaContent) {
-		final File thisJobDir = GenotypeLib.createJobDir(
-				getMain().getOrganismDefinition().getJobDir());
+
+	private void startLocalJob(final String fastaContent) {
+		File jobDir = startJob(fastaContent, getMain().getOrganismDefinition());
+		getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(jobDir) + "/");
+	}
+
+	/**
+	 * Perform analysis on given fasta sequences, in a thread and write the results to a new job dir.
+	 * @param fastaContent
+	 * @param organismDefinition
+	 * @return The job dir
+	 */
+	public static File startJob(final String fastaContent, final OrganismDefinition organismDefinition) {
+		final File thisJobDir = GenotypeLib.createJobDir(organismDefinition.getJobDir());
 
 		Thread analysis = new Thread(new Runnable(){
 			public void run() {
 				try {
 					File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
 					FileUtil.writeStringToFile(seqFile, fastaContent);
-					getMain().getOrganismDefinition().startAnalysis(thisJobDir);
+					organismDefinition.startAnalysis(thisJobDir);
 					File done = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"DONE");
 					FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
 				} catch (IOException e) {
@@ -213,7 +224,7 @@ public class StartForm extends AbstractForm {
 		});
 		analysis.start();
 		
-		getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(thisJobDir) + "/");
+		return thisJobDir;
 	}
 
 	private boolean capSequences(String fastaContent) {

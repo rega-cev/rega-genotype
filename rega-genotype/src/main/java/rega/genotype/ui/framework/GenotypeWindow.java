@@ -5,16 +5,20 @@
  */
 package rega.genotype.ui.framework;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractForm;
+import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.viruses.generic.BlastJobOverviewForm;
+import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal1.Listener;
 import eu.webtoolkit.jwt.WApplication;
@@ -112,15 +116,37 @@ public class GenotypeWindow extends WContainerWidget
 					}
 				});
 	}
-	
-	private void handleInternalPath(String internalPath) {
-		WApplication app = WApplication.getInstance();
 
+	private void handleInternalPath(String internalPath) {
+		if (internalPath.length() != 0){
+			String path[] = internalPath.substring(1).split("/");
+			if (path.length ==2 && path[0].equals(BlastJobOverviewForm.BLAST_JOB_ID_PATH)) {
+				// Run analysis on fasta sequence from Blast tool.
+				String blastJobId = path[1];
+				ToolConfig blastTool = Settings.getInstance().getConfig().getBlastTool();
+
+				OrganismDefinition od = getOrganismDefinition();
+				if (!blastJobId.isEmpty() && blastTool != null) {
+					String toolId = getOrganismDefinition().getToolConfig().getId();
+					File fastaFile = BlastJobOverviewForm.sequenceFileInBlastTool(
+							blastJobId, toolId);
+					if (fastaFile.exists()) {
+						String fastaContent = FileUtil.readFile(fastaFile);
+						File jobFile = StartForm.startJob(fastaContent, od);
+						WApplication.getInstance().setInternalPath(
+								"/job/" + AbstractJobOverview.jobId(jobFile), true);
+						return;
+					}
+				}
+			} 
+		}
+
+		WApplication app = WApplication.getInstance();
 		for (Form f : forms)
 			if (app.internalPathMatches(f.path))
 				f.form.handleInternalPath(internalPath.substring(f.path.length()));
 	}
-	
+
 	public void changeInternalPath(String path) {
 		WApplication app = WApplication.getInstance();
 		app.setInternalPath(path, true);

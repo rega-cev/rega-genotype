@@ -97,6 +97,16 @@ public class Config {
 		return ans;
 	}
 
+	public ToolConfig getBlastTool() {
+		for (ToolConfig c: getTools()) {
+			if (c.getToolMenifest() != null 
+					&& c.getToolMenifest().isBlastTool())
+				return c;
+		}
+
+		return null;
+	}
+
 	/**
 	 * Set the published flag for every tool config.
 	 * @param remoteManifests the manifests from remote repository.
