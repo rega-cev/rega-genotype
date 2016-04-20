@@ -1,4 +1,4 @@
-package rega.genotype.ui.viruses.generic;
+package rega.genotype.ui.tools.blast;
 
 import java.io.File;
 import java.io.IOException;

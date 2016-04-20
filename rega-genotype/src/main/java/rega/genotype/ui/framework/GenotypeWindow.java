@@ -16,7 +16,7 @@ import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.framework.widgets.Template;
-import rega.genotype.ui.viruses.generic.BlastJobOverviewForm;
+import rega.genotype.ui.tools.blast.BlastJobOverviewForm;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal1;
