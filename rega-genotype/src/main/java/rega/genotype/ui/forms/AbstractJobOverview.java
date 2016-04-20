@@ -24,7 +24,6 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.util.CsvDataTable;
 import rega.genotype.util.DataTable;
 import rega.genotype.util.XlsDataTable;
-import rega.genotype.utils.Settings;
 import rega.genotype.viruses.recombination.RegionUtils;
 import rega.genotype.viruses.recombination.RegionUtils.Region;
 import eu.webtoolkit.jwt.Icon;
@@ -140,7 +139,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			updater.setInterval(getMain().getOrganismDefinition().getUpdateInterval());
 			updater.timeout().addListener(this, new Signal.Listener() {
 				public void trigger() {
-					fillTable(filter);
+					fillResultsWidget(filter);
 					updateInfo();
 					if (jobDone()) {
 						resetTimer();
@@ -150,7 +149,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			});
 		}
 
-		fillTable(filter);
+		fillResultsWidget(filter);
 		updateInfo();
 		if (jobDone())
 			showDownloads();
@@ -228,7 +227,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return analysisInProgress;
 	}
 	
-	private void fillTable(String filter) {
+	protected void fillResultsWidget(String filter) {
 		if (jobTable.getRowCount()==0) {
 			List<Header> headers = getHeaders();
 
@@ -541,5 +540,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 	public SequenceFilter getFilter() {
 		return filter;
+	}
+
+	protected void bindResults(WWidget resultsWidget) {
+		template.bindWidget("results", resultsWidget);
 	}
 }

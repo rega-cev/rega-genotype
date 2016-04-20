@@ -1,6 +1,5 @@
 package rega.genotype.ui.tools.blast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -10,10 +9,10 @@ import java.util.Map;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.forms.AbstractForm;
+import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.ItemDataRole;
@@ -22,6 +21,7 @@ import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WStandardItemModel;
+import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
 
@@ -32,42 +32,67 @@ import eu.webtoolkit.jwt.chart.WPieChart;
  * 
  * @author michael
  */
-public class BlastJobOverviewForm extends AbstractForm {
+public class BlastJobOverviewForm extends AbstractJobOverview {
 	public static final String BLAST_JOB_ID_PATH = "blast-job";
 
 	private static final int DISPLAY_COLUMN = 0;
 	private static final int DATA_COLUMN = 1;
 
-	private Template layout = new Template(tr("blast-overview"), this);
+	//private Template layout = new Template(tr("job-overview-form"), this);
 	private WStandardItemModel blastResultModel = new WStandardItemModel();
 	// <toolId, tool data>
 	private Map<String, ToolData> toolDataMap = new HashMap<String, ToolData>();
 	private Signal1<String> jobIdChanged = new Signal1<String>();
+	private String jobId;
+	private WPieChart chart;
 
 	public BlastJobOverviewForm(GenotypeWindow main) {
 		super(main);
-		layout.bindString("chart", "Empty data.");
+
+		// create chart
+
+		chart = new WPieChart();
+		chart.setModel(blastResultModel);
+		chart.setLabelsColumn(DISPLAY_COLUMN);    
+		chart.setDataColumn(DATA_COLUMN);
+		chart.resize(800, 300);
+
+		chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
+		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
+		chart.setPlotAreaPadding(30);
 	}
 
 	@Override
 	public void handleInternalPath(String internalPath) {
+		chart.hide();
+		toolDataMap.clear();
+
 		String path[] =  internalPath.split("/");
 		if (path.length > 1) {
-			String jobId = path[1];
+			jobId = path[1];
 
-			File jobDir = new File(getMain().getOrganismDefinition().getJobDir() 
-					+ File.separatorChar + jobId);
-
-			new BlastResultParser().parseFile(jobDir);
-			fillBlastResultsChart(jobId);
-
+			init(jobId, "");
 			jobIdChanged.trigger(jobId);
 		} else {
 			jobIdChanged.trigger("");
 		}
 	}
 
-	private void fillBlastResultsChart(String jobId) {
+	@Override
+	protected void fillResultsWidget(String filter) {
+		new BlastResultParser().parseFile(jobDir);
+		fillBlastResultsChart();
+		if (!toolDataMap.isEmpty()){
+			chart.show();
+			bindResults(chart);
+		}
+	}
+
+	private void fillBlastResultsChart() {
+		if (toolDataMap.isEmpty())
+			return;
+
 		// create blastResultModel
 		blastResultModel = new WStandardItemModel();
 		blastResultModel.insertColumns(blastResultModel.getColumnCount(), 2);
@@ -85,25 +110,7 @@ public class BlastJobOverviewForm extends AbstractForm {
 				blastResultModel.setData(row, 1, createToolLink(toolId, jobId), ItemDataRole.LinkRole);
 			blastResultModel.setData(row, DATA_COLUMN, e.getValue().sequences.size()); // percentage
 		}
-		// create chart
-
-		WPieChart chart = new WPieChart();
-		chart.setModel(blastResultModel);
-		chart.setLabelsColumn(DISPLAY_COLUMN);    
-		chart.setDataColumn(DATA_COLUMN);
-		chart.resize(800, 300);
-
-	    chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
-	    chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
-		chart.setPlotAreaPadding(30);
-
-
-		layout.bindWidget("chart", chart);
-
-		for (int i = 0; i < blastResultModel.getRowCount(); ++i) {
-			System.err.println(blastResultModel.getData(i, 0, ItemDataRole.DisplayRole));
-		}		
+		chart.setModel(blastResultModel);	
 	}
 
 	public Signal1<String> jobIdChanged() {
@@ -151,5 +158,23 @@ public class BlastJobOverviewForm extends AbstractForm {
 			toolData.sequences.add(new SequenceData(seqName));
 			toolDataMap.put(toolId, toolData);
 		}
+	}
+
+	// unused 
+	@Override
+	public List<Header> getHeaders() {
+		return new ArrayList<Header>();
+	}
+
+	// unused 
+	@Override
+	public List<WWidget> getData(GenotypeResultParser p) {
+		return null;
+	}
+
+	// unused 
+	@Override
+	public JobOverviewSummary getSummary(String filter) {
+		return  null;
 	}
 }
