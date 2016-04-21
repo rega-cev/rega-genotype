@@ -121,10 +121,10 @@ public class ToolRepoService extends HttpServlet{
 			return false;
 		}
 		
-		File toolIndexsFile = new File(repoDir + ToolIndexes.TOOL_INDEXES_FILE_NAME);
+		File toolIndexesFile = new File(repoDir + ToolIndexes.TOOL_INDEXES_FILE_NAME);
 		ToolIndexes indexes;
-		if (toolIndexsFile.exists()) {
-			indexes = ToolIndexes.parseJsonAsList(FileUtil.readFile(toolIndexsFile));
+		if (toolIndexesFile.exists()) {
+			indexes = ToolIndexes.parseJsonAsList(FileUtil.readFile(toolIndexesFile));
 			// Check publisher pwd
 			ToolIndex index = indexes.getIndex(manifest.getId());
 			if (index != null && !index.getPublisherPassword().equals(password)){
