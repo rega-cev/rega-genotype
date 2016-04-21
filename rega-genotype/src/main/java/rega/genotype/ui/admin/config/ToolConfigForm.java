@@ -111,6 +111,7 @@ public class ToolConfigForm extends FormTemplate {
 			public void trigger() {
 				ToolConfig tool = save(true);
 				if (tool != null) {
+					boolean publishFailed = false;
 					// create zip file 
 					ToolManifest manifest = tool.getToolMenifest();
 					File zip = new File(baseDir + "published" + File.separator + manifest.getUniqueToolId() + ".zip");
@@ -122,8 +123,9 @@ public class ToolConfigForm extends FormTemplate {
 					} catch (IOException e) {
 						e.printStackTrace();
 						infoT.setText("Error could publish.");
+						publishFailed = true;
 					} 
-					if (FileUtil.zip(new File(tool.getConfiguration()), zip)){
+					if (!publishFailed && FileUtil.zip(new File(tool.getConfiguration()), zip)){
 						try {
 							ToolRepoServiceRequests.publish(zip);
 							tool.setPublished(true);
@@ -132,12 +134,19 @@ public class ToolConfigForm extends FormTemplate {
 						} catch (RegaGenotypeExeption e) {
 							e.printStackTrace();
 							infoT.setText("Error: could not publish the tool. " + e.getMessage());
+							publishFailed = true;
 						} catch (IOException e) {
 							e.printStackTrace();
 							infoT.setText("Error: could not publish the tool. " + e.getMessage());
+							publishFailed = true;
 						}
 					} else {
 						infoT.setText("Error could publish. Zipping went wrong.");
+						publishFailed = true;
+					}
+					if (publishFailed){
+						manifest.setPublicationDate(null);
+						manifest.save(tool.getConfiguration());
 					}
 				}
 			}
