@@ -13,7 +13,6 @@ import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
@@ -58,7 +57,7 @@ public class ToolConfigForm extends FormTemplate {
 		
 		// local config
 
-		localConfigForm = new LocalConfigForm(toolConfig, toolDir);
+		localConfigForm = new LocalConfigForm(toolConfig, toolDir, manifestForm);
 		
 		// disable 
 
@@ -96,10 +95,11 @@ public class ToolConfigForm extends FormTemplate {
 		manifestForm.saved().addListener(manifestForm, new Signal1.Listener<File>() {
 			public void trigger(File arg) {
 				toolConfig.invalidateToolManifest();
+				localConfigForm.getToolConfig().invalidateToolManifest();
 				fileEditor.refresh();
 			}
 		});
-		
+
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
 				if (save(false) != null)
@@ -126,6 +126,8 @@ public class ToolConfigForm extends FormTemplate {
 					if (FileUtil.zip(new File(tool.getConfiguration()), zip)){
 						try {
 							ToolRepoServiceRequests.publish(zip);
+							tool.setPublished(true);
+							Settings.getInstance().getConfig().save();
 							done.trigger();				
 						} catch (RegaGenotypeExeption e) {
 							e.printStackTrace();

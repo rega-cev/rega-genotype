@@ -8,15 +8,12 @@ import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
-import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.Settings;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WDate;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
-import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WValidator;
 
 /**
@@ -29,7 +26,7 @@ public class ManifestForm extends FormTemplate{
 	private final WLineEdit idLE = initLineEdit();
 	private final WLineEdit versionLE = initLineEdit();
 	private final WCheckBox blastChB = new WCheckBox();
-	private final WPushButton saveB = new WPushButton("save");
+	private final WCheckBox hivChB = new WCheckBox();
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
 	private ToolManifest oldManifest;
 	private File toolDir;
@@ -45,6 +42,7 @@ public class ManifestForm extends FormTemplate{
 			nameLE.setText(manifest.getName());
 			idLE.setText(manifest.getId());
 			blastChB.setChecked(manifest.isBlastTool());
+			hivChB.setChecked(manifest.isHivTool());
 			versionLE.setText(manifest.getVersion());
 		}
 
@@ -56,27 +54,20 @@ public class ManifestForm extends FormTemplate{
 		idLE.setValidator(new ToolIdValidator(true));
 		versionLE.setValidator(new ToolIdValidator(true));
 
+		// info
+		
+		hivChB.setToolTip("HIV Tool has special functionality and it must be deployed at URL = hiv.");
+		
 		// bind
 
 		bindWidget("name", nameLE);
 		bindWidget("id", idLE);
 		bindWidget("version", versionLE);
 		bindWidget("blast", blastChB);
-		bindWidget("save", saveB);
+		bindWidget("hiv", hivChB);
 
 		initInfoFields();
 		validate();
-
-		// signals
-
-		saveB.clicked().addListener(saveB, new Signal.Listener() {
-			public void trigger() {
-				if (save(false) != null)
-					new MsgDialog("Info", "Manifest saved.");
-				else
-					new MsgDialog("Error", "Could not save manifest.");
-			}
-		});
 	}
 
 	public ToolManifest save(boolean publishing) {
@@ -86,6 +77,7 @@ public class ManifestForm extends FormTemplate{
 		Config config = Settings.getInstance().getConfig();
 
 		ToolManifest manifest = new ToolManifest();
+		manifest.setHivTool(hivChB.isChecked());
 		manifest.setBlastTool(blastChB.isChecked());
 		manifest.setName(nameLE.getText());
 		manifest.setId(idLE.getText());
@@ -135,4 +127,7 @@ public class ManifestForm extends FormTemplate{
 		}
 	}
 
+	public boolean isHivTool() {
+		return hivChB.isChecked();
+	}
 }

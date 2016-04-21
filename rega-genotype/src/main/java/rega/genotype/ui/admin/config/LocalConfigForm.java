@@ -7,6 +7,7 @@ import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
@@ -28,16 +29,19 @@ public class LocalConfigForm  extends FormTemplate {
 	private final WCheckBox autoUpdateChB = new WCheckBox();
 	private final WCheckBox serviceChB = new WCheckBox();
 	private final WCheckBox uiChB = new WCheckBox();
-	private final WPushButton saveB = new WPushButton("save");
+	private final WPushButton saveB = new WPushButton("Save manifest and local config");
 
 	//private ToolManifest manifest;
 	private ToolConfig toolConfig;
 	private File xmlDir;
+	private ManifestForm manifestForm;
 
-	public LocalConfigForm(final ToolConfig toolConfig, File xmlDir) {
+	public LocalConfigForm(final ToolConfig toolConfig, File xmlDir, 
+			ManifestForm manifestForm) {
 		super(tr("admin.config.tool-config-dialog.config"));
 		this.toolConfig = toolConfig;
 		this.xmlDir = xmlDir;
+		this.manifestForm = manifestForm;
 
 		// read
 
@@ -77,6 +81,9 @@ public class LocalConfigForm  extends FormTemplate {
 		if (!validate())
 			return null;
 
+		if (manifestForm.save(false) == null )
+			return null;
+		
 		Config config = Settings.getInstance().getConfig();
 
 		// save ToolConfig
@@ -125,6 +132,14 @@ public class LocalConfigForm  extends FormTemplate {
 		this.xmlDir = xmlDir;
 	}
 
+	public ToolConfig getToolConfig() {
+		return toolConfig;
+	}
+
+	public void setToolConfig(ToolConfig toolConfig) {
+		this.toolConfig = toolConfig;
+	}
+
 	private class ToolUrlValidator extends WValidator {
 		ToolUrlValidator(boolean isMandatory) {
 			super(isMandatory);
@@ -137,10 +152,15 @@ public class LocalConfigForm  extends FormTemplate {
 			if (toolConfigByUrl != null && toolConfigByUrl.getToolMenifest() != null
 					&& !toolConfigByUrl.getPath().isEmpty()) {
 				if (!toolConfigByUrl.getConfiguration().equals(
-						toolConfig.getConfiguration())) 
+						getToolConfig().getConfiguration())) 
 					return new Result(State.Invalid, "A tool with same url already exist on local server.");
 			}
 
+			if ( manifestForm.isHivTool()
+					&& !input.equals(HivMain.HIV_TOOL_ID)
+					&& !input.isEmpty()) {
+				return new Result(State.Invalid, "HIV tool url must be hiv.");
+			}
 			return super.validate(input);
 		}
 	}

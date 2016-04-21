@@ -171,7 +171,7 @@
 		  <tr><td class="form-table-name-td">ID</td><td class="form-table-name-td">${id}</td><td>${id-info}</td></tr>
 		  <tr><td class="form-table-name-td">Version</td><td class="form-table-name-td">${version}</td><td>${version-info}</td></tr>
 		  <tr><td class="form-table-name-td">Blast</td><td class="form-table-name-td">${blast}</td></tr>
-		  <tr><td class="form-table-name-td"></td><td class="form-table-name-td"><div class="float-right">${save}</div></td></tr>
+		  <tr><td class="form-table-name-td">HIV Tool</td><td class="form-table-name-td">${hiv}</td><td>${hiv-info}</td></tr>
 		</table>
 	</message>
 
@@ -181,7 +181,7 @@
 		  <tr><td class="form-table-name-td">Auto update enabled</td><td class="form-table-name-td">${update}</td></tr>
 		  <tr><td class="form-table-name-td">Web service enabled</td><td class="form-table-name-td">${service}</td></tr>
 		  <tr><td class="form-table-name-td">UI enabled</td><td class="form-table-name-td">${ui}</td></tr>
-		  <tr><td class="form-table-name-td"></td><td class="form-table-name-td"><div class="float-right">${save}</div></td></tr>
+		  <tr><td class="form-table-name-td"></td><td class="form-table-name-td"></td><td><div class="float-right">${save}</div></td></tr>
 		</table>
 	</message>
 

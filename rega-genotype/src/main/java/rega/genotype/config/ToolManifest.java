@@ -23,6 +23,7 @@ public class ToolManifest {
 	private String id; // part of the tool signature {id, version}
 	private String version;// part of the tool signature {id, version}
 	private boolean blastTool;
+	private boolean hivTool; //HIV tool is not generic and thus must have url = hiv.
 	private String publisherName; // Copy from publisher Server global config publisherName, read only for users.
 	private Date publicationDate; // filled by Repo server, read only for users.
 	private String softwareVersion;
@@ -141,5 +142,13 @@ public class ToolManifest {
 
 	public void setSoftwareVersion(String softwareVersion) {
 		this.softwareVersion = softwareVersion;
+	}
+
+	public boolean isHivTool() {
+		return hivTool;
+	}
+
+	public void setHivTool(boolean hivTool) {
+		this.hivTool = hivTool;
 	}
 }
