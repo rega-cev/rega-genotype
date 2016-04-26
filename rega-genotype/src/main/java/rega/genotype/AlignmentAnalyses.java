@@ -48,7 +48,7 @@ public class AlignmentAnalyses {
     /**
      * A taxus corresponds to a sequence in the alignment
      */
-    public class Taxus {
+    public static class Taxus {
     	private String id;
     	
     	public Taxus(String id) {
@@ -72,7 +72,7 @@ public class AlignmentAnalyses {
      * The cluster id is used internally (referenced from analyses), while the description
      * is reported to the user.
      */
-    public class Cluster {
+    public static class Cluster {
         private String        id;
         private String        name;
         private String        description;
@@ -93,6 +93,16 @@ public class AlignmentAnalyses {
             this.parent = null;
         }
 
+        public Cluster() {
+            this.id = null;
+            this.name = null;
+            this.description = null;
+            this.tags = null;
+			this.toolId = null;
+            this.taxa = new ArrayList<Taxus>();
+            this.clusters = new ArrayList<Cluster>();
+            this.parent = null;
+        }
         public String getName() {
             return name;
         }
@@ -108,7 +118,15 @@ public class AlignmentAnalyses {
         public void addTaxus(Taxus taxus) {
             taxa.add(taxus);
         }
-        
+
+        public boolean removeTaxus(String taxusName) {
+        	for (Taxus t: taxa)
+        		if(t.getId().equals(taxusName))
+        			return taxa.remove(t);
+
+        	return false;
+        }
+
         public void addCluster(Cluster c) {
             clusters.add(c);
             c.setParent(this);
@@ -156,6 +174,14 @@ public class AlignmentAnalyses {
             return description;
         }
 
+        public void setDescription(String description) {
+        	this.description = description;
+        }
+
+        public void setId(String id) {
+        	this.id = id;
+        }
+
         public String getId() {
             return id;
         }
@@ -164,6 +190,9 @@ public class AlignmentAnalyses {
 			return toolId;
 		}
 
+		public void setTooId(String toolId) {
+        	this.toolId = toolId;
+        }
         /**
          * @return the cluster depth: for a top level cluster it is 1, for its sub clusters,
          * this is 2, etc...
@@ -204,12 +233,16 @@ public class AlignmentAnalyses {
 		}
     }
 
+    public AlignmentAnalyses() {
+    	this.clusters = new ArrayList<Cluster>();
+        this.analyses = new HashMap<String, AbstractAnalysis>();
+        this.clusterMap = new HashMap<String, Cluster>();
+    }
+
     public AlignmentAnalyses(File fileName, GenotypeTool tool, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
 
-        this.clusters = new ArrayList<Cluster>();
-        this.analyses = new HashMap<String, AbstractAnalysis>();
-        this.clusterMap = new HashMap<String, Cluster>();
+    	this();
         this.genotypeTool = tool;
 
         retrieve(fileName, workingDir);
@@ -221,7 +254,11 @@ public class AlignmentAnalyses {
     		throw new RuntimeException("Could not find analysis named \"" + id + "\"");
         return result;
     }
-    
+
+    public void putAnalysis(String id, AbstractAnalysis analysis) {
+    	analyses.put(id, analysis);
+    }
+
     public boolean haveAnalysis(String id) {
     	return analyses.containsKey(id);
     }
@@ -229,7 +266,7 @@ public class AlignmentAnalyses {
     public Collection<AbstractAnalysis> analyses() {
     	return analyses.values();
     }
-    
+
     @SuppressWarnings("unchecked")
 	private void retrieve(File fileName, File workingDir)
             throws IOException, ParameterProblemException, FileFormatException {
@@ -526,6 +563,10 @@ public class AlignmentAnalyses {
     public SequenceAlignment getAlignment() {
         return alignment;
     }
+
+	public void setAlignment(SequenceAlignment alignment) {
+		this.alignment = alignment;
+	}
 
     /**
      * @return Returns the trimAlignment.

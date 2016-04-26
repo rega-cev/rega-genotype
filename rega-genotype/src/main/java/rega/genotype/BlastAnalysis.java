@@ -352,7 +352,8 @@ public class BlastAnalysis extends AbstractAnalysis {
         this.relativeCutoff = relativeCutoff;
         this.blastOptions = blastOptions != null ? blastOptions : "";
         this.detailsOptions = detailsOptions;
-        if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
+        if (owner.getAlignment() != null && 
+        		owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
         	this.blastOptions = "-p blastx " + this.blastOptions;
         	if (detailsOptions != null)
         		this.detailsOptions = "-p blastx " + this.detailsOptions;

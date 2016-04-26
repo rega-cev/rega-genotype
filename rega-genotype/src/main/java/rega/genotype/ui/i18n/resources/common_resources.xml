@@ -193,6 +193,43 @@
 		${info}
 	</message>
 	
+	<message id="admin.analisysis-template">
+		<table class="form-table">
+		  <col width="200"><col width="200"></col></col>
+  		  <tr><td>Sequence type</td><td>${sequence-type}</td><td>${sequence-type-info}</td></tr>
+  		  <tr><td>Blast options</td><td>${option}</td><td>${option-info}</td></tr>
+  		  <tr><td>Absolute Cut off</td><td>${absolute-cut-off}</td><td>${absolute-cut-off-info}</td></tr>
+  		  <tr><td>Absolute E value</td><td>${absolute-evalue}</td><td>${absolute-evalue-info}</td></tr>
+  		  <tr><td>Absolute P value</td><td>${absolute-pvalue}</td><td>${absolute-pvalue-info}</td></tr>
+  		  <tr><td>Relative Cut off</td><td>${relative-cut-off}</td><td>${relative-cut-off-info}</td></tr>
+  		  <tr><td>Relative E value</td><td>${relative-evalue}</td><td>${relative-evalue-info}</td></tr>
+  		  <tr><td>Relative P value</td><td>${relative-pvalue}</td><td>${relative-pvalue-info}</td></tr>
+  		  
+		</table>
+	</message>
+	
+	<message id="admin.cluster-form">
+		<h4 class="inner-header"> Edit cluster </h4>
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>ID</td><td>${id}</td><td>${id-info}</td></tr>
+  		  <tr><td>Name</td><td>${name}</td><td>${name-info}</td></tr>
+  		  <tr><td>Description</td><td>${description}</td><td>${description-info}</td></tr>
+  		  <tr><td>Tool ID</td><td>${tool-id}</td><td>${tool-id-info}</td></tr>
+		</table>
+		${fasta}
+		<div>${add-sequence}${remove-sequence}</div>
+		<div class="action-buttons">${ok}${cancel}</div>
+	</message>
+		
+	<message id="admin.config.blast-file-editor">
+		${analysis}
+		${cluster-table}
+		<div>${add}${edit}${remove}</div>
+		${add-sequences}
+		<div class="action-buttons">${save}${cancel}</div>
+	</message>
+
 	<message id="admin.config.file-editor.file-tree">
 		${tree}
 		<div class="action-buttons">${add}${remove}</div>

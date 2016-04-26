@@ -28,7 +28,7 @@ import java.util.Set;
 public class SequenceAlignment
 {
     private List<AbstractSequence> sequences;
-    int sequenceType;
+    int sequenceType = SEQUENCE_DNA;
     int alignmentScore = -1;
 
     public final static int FILETYPE_FASTA = 0;
@@ -43,6 +43,11 @@ public class SequenceAlignment
     public final static int MAX_NEXUS_TAXUS_LENGTH = 20;
     public final static int MAX_PHYLIP_TAXUS_LENGTH = 8;
 
+    public SequenceAlignment() {
+    	this.sequenceType = FILETYPE_FASTA;
+        this.sequences = new ArrayList<AbstractSequence>();
+    }
+    
     public SequenceAlignment(InputStream inputFile,
                              int fileType, int sequenceType)
         throws ParameterProblemException, IOException, FileFormatException
@@ -537,6 +542,18 @@ public class SequenceAlignment
 		return sequenceType;
 	}
 
+	public static String sequenceTypeName(int sequenceType) {
+		switch (sequenceType) {
+		case SEQUENCE_ANY:
+			return "Any";
+		case SEQUENCE_DNA:
+			return "DNA";
+		case SEQUENCE_AA:
+			return "Amino acid";
+		}
+		return "Unknown sequence type " + sequenceType;
+	}
+	
 	public void setSequenceType(int i) {
 		sequenceType = i;
 	}
@@ -564,6 +581,22 @@ public class SequenceAlignment
         return sequences.indexOf(sequence);
     }
 
+    public void addSequence(AbstractSequence sequence) {
+    	sequences.add(sequence);
+    }
+
+    public boolean removeSequence(AbstractSequence sequence) {
+    	return sequences.remove(sequence);
+    }
+
+    public boolean removeSequence(String sequenceName) {
+    	for(AbstractSequence s: sequences)
+    		if(s.getName().equals(sequenceName))
+    			return sequences.remove(s);
+
+    	return false;
+    }
+    
     public SequenceAlignment selectSequences(List<String> selection) {
         List<AbstractSequence> selected = new ArrayList<AbstractSequence>();
         for (int i = 0; i < selection.size(); ++i) {

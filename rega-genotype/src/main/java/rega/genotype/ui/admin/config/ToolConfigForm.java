@@ -7,6 +7,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.admin.file_editor.FileEditorView;
+import rega.genotype.ui.admin.file_editor.SmartFileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.utils.FileUtil;
@@ -15,6 +16,7 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WTabWidget;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -30,6 +32,7 @@ public class ToolConfigForm extends FormTemplate {
 	private LocalConfigForm localConfigForm;
 	
 	private Signal done = new Signal();
+	private SmartFileEditor smartFileEditor;
 
 	public ToolConfigForm(final ToolConfig toolConfig, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
@@ -47,10 +50,11 @@ public class ToolConfigForm extends FormTemplate {
 		File toolDir = new File(toolConfig.getConfiguration());
 
 		fileEditor = new FileEditorView(toolDir);
-		WPanel fileEditorPanel = new WPanel();
-		fileEditorPanel.setTitle("File editor");
-		fileEditorPanel.setCentralWidget(fileEditor);
-		fileEditorPanel.addStyleClass("admin-panel");
+		smartFileEditor = new SmartFileEditor(toolDir);
+
+		WTabWidget fileEditorTabs = new WTabWidget();
+		fileEditorTabs.addTab(smartFileEditor, "Smart file editor");
+		fileEditorTabs.addTab(fileEditor, "Simple file editor");
 
 		// manifest 
 		manifestForm = new ManifestForm(toolConfig.getToolMenifest(), toolDir, mode);
@@ -81,7 +85,7 @@ public class ToolConfigForm extends FormTemplate {
 		
 		bindWidget("manifest", mamifestPanel);
 		bindWidget("config", configPanel);
-		bindWidget("upload", fileEditorPanel);
+		bindWidget("upload", fileEditorTabs);
 		bindWidget("info", infoT);
 		bindWidget("publish", publishB);
 		bindWidget("save", saveB);
@@ -169,6 +173,7 @@ public class ToolConfigForm extends FormTemplate {
 			return null;
 
 		fileEditor.saveAll();
+		smartFileEditor.saveAll();
 
 		ToolManifest manifest = manifestForm.save(publishing);
 		if (manifest == null) {
