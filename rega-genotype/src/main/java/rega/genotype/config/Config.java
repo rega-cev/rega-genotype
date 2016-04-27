@@ -97,10 +97,11 @@ public class Config {
 		return ans;
 	}
 
-	public ToolConfig getBlastTool() {
+	public ToolConfig getBlastTool(String version) {
 		for (ToolConfig c: getTools()) {
 			if (c.getToolMenifest() != null 
-					&& c.getToolMenifest().isBlastTool())
+					&& c.getToolMenifest().isBlastTool()
+					&& c.getToolMenifest().getVersion().equals(version))
 				return c;
 		}
 

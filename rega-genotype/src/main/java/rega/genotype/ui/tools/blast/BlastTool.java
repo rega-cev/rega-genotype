@@ -42,8 +42,8 @@ public class BlastTool extends GenericTool {
 		}
 	}
 
-	public static File sequenceFileInBlastTool(String blastJobId, String toolId){
-		String blastJobDir = Settings.getInstance().getConfig().getBlastTool().getJobDir();
+	public static File sequenceFileInBlastTool(String blastJobId, String toolId, String blastToolVersion){
+		String blastJobDir = Settings.getInstance().getConfig().getBlastTool(blastToolVersion).getJobDir();
 		return new File(blastJobDir + File.separator + blastJobId, toolId + ".fasta");
 	}
 }

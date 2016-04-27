@@ -121,16 +121,17 @@ public class GenotypeWindow extends WContainerWidget
 	private void handleInternalPath(String internalPath) {
 		if (internalPath.length() != 0){
 			String path[] = internalPath.substring(1).split("/");
-			if (path.length ==2 && path[0].equals(BlastJobOverviewForm.BLAST_JOB_ID_PATH)) {
+			if (path.length == 3 && path[0].equals(BlastJobOverviewForm.BLAST_JOB_ID_PATH)) {
 				// Run analysis on fasta sequence from Blast tool.
-				String blastJobId = path[1];
-				ToolConfig blastTool = Settings.getInstance().getConfig().getBlastTool();
+				String blastToolVersion = path[1];
+				String blastJobId = path[2];
+				ToolConfig blastTool = Settings.getInstance().getConfig().getBlastTool(blastToolVersion);
 
 				OrganismDefinition od = getOrganismDefinition();
 				if (!blastJobId.isEmpty() && blastTool != null) {
 					String toolId = getOrganismDefinition().getToolConfig().getId();
 					File fastaFile = BlastTool.sequenceFileInBlastTool(
-							blastJobId, toolId);
+							blastJobId, toolId, blastToolVersion);
 					if (fastaFile.exists()) {
 						String fastaContent = FileUtil.readFile(fastaFile);
 						File jobFile = StartForm.startJob(fastaContent, od);

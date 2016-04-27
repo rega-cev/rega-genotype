@@ -124,7 +124,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		String url = GenotypeMain.getApp().getServletContext().getContextPath()
 		+ "/typingtool/" + toolConfig.getPath() + "/"
-		+ BLAST_JOB_ID_PATH + "/" + jobId;
+		+ BLAST_JOB_ID_PATH + "/" + getMain().getOrganismDefinition().getToolConfig().getVersion() + "/" + jobId;
 
 		return new WLink(url);
 	}
