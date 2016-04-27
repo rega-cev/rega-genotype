@@ -7,6 +7,8 @@ import java.util.List;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.util.FileServlet;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WFormWidget;
+import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTemplate;
 
@@ -45,5 +47,10 @@ public class Template extends WTemplate{
 			bindString(varName, FileServlet.getFileUrl(app.getToolConfig().getPath()));
 
 		super.resolveString(varName, args, result);
+	}
+
+	protected void setValue(WFormWidget w, Object value) {
+		if (value != null)
+			w.setValueText(value.toString());
 	}
 }

@@ -79,7 +79,7 @@ public class ParseBlastResults {
 		String assignment = "Unassigned";
 		if (r.haveSupport())
 			assignment = r.getConcludedCluster().getName();
-		System.out.println(name + "," + assignment + "," + r.getScore());
+		System.out.println(name + "," + assignment + "," + r.getAbsScore() + "," + r.getRelativeScore());
 	}
 	
 	private static String name(String line) {

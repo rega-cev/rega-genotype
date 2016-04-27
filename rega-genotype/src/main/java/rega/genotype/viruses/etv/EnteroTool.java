@@ -93,9 +93,21 @@ public class EnteroTool extends GenotypeTool {
 			 * If no conclusion: conclude the blast result
 			 */
     		if (!haveConclusion)
-    			conclude(blastResult, "Assigned based on BLAST score &gt;= " + blastAnalysis.getCutoff());
+    			if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
+       				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
+       						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff());
+       			else if (blastAnalysis.getAbsCutoff() != null)
+       				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff()); 
+       			else if (blastAnalysis.getRelativeCutoff() != null)
+       				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff());
         } else {
-            conclude("Unassigned", "Unassigned because of BLAST score &lt; " + blastAnalysis.getCutoff());
+        	if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
+   				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
+   						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff());
+   			else if (blastAnalysis.getAbsCutoff() != null)
+   				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff()); 
+   			else if (blastAnalysis.getRelativeCutoff() != null)
+   				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff());
         }
     }
 

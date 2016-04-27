@@ -10,6 +10,7 @@ import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.WComboBox;
+import eu.webtoolkit.jwt.WDoubleValidator;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WString;
 
@@ -23,10 +24,8 @@ public class BlastAnalysisForm extends FormTemplate{
 	private WComboBox sequenceTypeCB;
 	private WLineEdit absCutOffLE = new WLineEdit();
 	private WLineEdit absEValueLE = new WLineEdit();
-	private WLineEdit absPValueLE = new WLineEdit();
 	private WLineEdit relativeCutOffLE = new WLineEdit();
 	private WLineEdit relativeEValueLE = new WLineEdit();
-	private WLineEdit relativePValueLE = new WLineEdit();
 
 	private BlastAnalysis analysis;
 
@@ -45,7 +44,11 @@ public class BlastAnalysisForm extends FormTemplate{
 		};
 
 		// set values 
-		optionLE.setText(Utils.nullToEmpty(analysis.getOptions()));
+		optionLE.setText(Utils.nullToEmpty(analysis.getBlastOptions()));
+		setValue(absCutOffLE, analysis.getAbsCutoff());
+		setValue(absEValueLE, analysis.getAbsMaxEValue());
+		setValue(relativeCutOffLE, analysis.getRelativeCutoff());
+		setValue(relativeEValueLE, analysis.getRelativeMaxEValue());
 
 		if (analysis.getOwner().getAlignment() != null)
 			switch (analysis.getOwner().getAlignment().getSequenceType()) {
@@ -59,30 +62,50 @@ public class BlastAnalysisForm extends FormTemplate{
 		else
 			sequenceTypeCB.setCurrentIndex(0);
 
+		// validators
+		absCutOffLE.setValidator(new WDoubleValidator());
+		absEValueLE.setValidator(new WDoubleValidator());
+		relativeCutOffLE.setValidator(new WDoubleValidator());
+		relativeEValueLE.setValidator(new WDoubleValidator());
+
+		// bind
 		bindWidget("option", optionLE);
 		bindWidget("sequence-type", sequenceTypeCB);
 		bindWidget("absolute-cut-off", absCutOffLE);
 		bindWidget("absolute-evalue", absEValueLE);
-		bindWidget("absolute-pvalue", absPValueLE);
 		bindWidget("relative-cut-off", relativeCutOffLE);
 		bindWidget("relative-evalue", relativeEValueLE);
-		bindWidget("relative-pvalue", relativePValueLE);
 
 		initInfoFields();
+		validate();
 	}
 
 	public boolean save() {
 		if (validate()) {
 			String identify = "";
 			for(Cluster cluster: analysis.getOwner().getAllClusters()){
+				if (!identify.isEmpty())
+					identify += ",";
 				identify += cluster.getId();
 			}
 			analysis.setId(identify);
-			analysis.setOptions(optionLE.getText());
+			analysis.setBlastOptions(optionLE.getText());
 			int type = sequenceTypeCB.getCurrentIndex() + 1;
 			analysis.getOwner().getAlignment().setSequenceType(type);
+			analysis.setAbsCutoff(doubleValue(absCutOffLE));
+			analysis.setAbsMaxEValue(doubleValue(absEValueLE));
+			analysis.setRelativeCutoff(doubleValue(relativeCutOffLE));
+			analysis.setRelativeMaxEValue(doubleValue(relativeEValueLE));
+
 			return true;
 		} else 
 			return false;
+	}
+
+	private Double doubleValue(WLineEdit le) {
+		String txt = le.getText();
+		if (txt == null || txt.isEmpty())
+			return null;
+		return txt == null ? null : Double.valueOf(txt);
 	}
 }

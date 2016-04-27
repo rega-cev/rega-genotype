@@ -66,8 +66,16 @@ public class BlastXmlWriter {
 			attributes.add(new Attribute("type", "blast"));
 			analysisE.setAttributes(attributes);
 			add(analysisE, "identify", analysis.getId());
-			add(analysisE, "option", analysis.getOptions());
-			add(analysisE, "cutoff", analysis.getCutoff());
+			add(analysisE, "options", analysis.getBlastOptions());
+			
+			if (analysis.getAbsCutoff() != null)
+				add(analysisE, "absolute-cutoff", analysis.getAbsCutoff());
+			if (analysis.getRelativeCutoff() != null)
+				add(analysisE, "relative-cutoff", analysis.getRelativeCutoff());
+			if (analysis.getAbsMaxEValue() != null)
+				add(analysisE, "absolute-max-e-value", analysis.getAbsMaxEValue());
+			if (analysis.getRelativeMaxEValue() != null)
+				add(analysisE, "relative-max-e-value", analysis.getRelativeMaxEValue());
 
 			doc.getRootElement().addContent(analysisE);
 		}

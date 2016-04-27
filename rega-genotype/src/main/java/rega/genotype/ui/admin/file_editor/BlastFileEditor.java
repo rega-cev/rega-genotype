@@ -63,7 +63,7 @@ public class BlastFileEditor extends WContainerWidget{
 			alignmentAnalyses.putAnalysis("blast",
 					new BlastAnalysis(alignmentAnalyses,
 							"", new ArrayList<AlignmentAnalyses.Cluster>(),
-							0.0, 0.0, false, "", "", null));
+							0.0, 0.0, 0.0, 0.0, "", "", null));
 		}
 
 		WPanel analysisPanel = new WPanel();

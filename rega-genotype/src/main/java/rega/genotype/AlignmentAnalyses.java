@@ -348,31 +348,49 @@ public class AlignmentAnalyses {
         }
     }
 
+	private Double elementDoubleValue(Element e) {
+		if (e == null)
+			return null;
+		return e.getValue() == null ? null : Double.valueOf(e.getTextTrim());
+	}
+
     @SuppressWarnings("unchecked")
 	private AbstractAnalysis readBlastAnalaysis(Element element, String id, File workingDir) {
         Element identifyE = element.getChild("identify");
         String clusters = identifyE.getTextTrim();
         List<Cluster> cs = parseCommaSeparatedClusterIds(clusters);
 
+        Double absCutoff = elementDoubleValue(element.getChild("absolute-cutoff"));
+        Double relativeCutoff = elementDoubleValue(element.getChild("relative-cutoff"));
+        Double absMaxEValue = elementDoubleValue(element.getChild("absolute-max-e-value"));
+        Double relativeMaxEValue = elementDoubleValue(element.getChild("relative-max-e-value"));
+        
         Element cutoffE = element.getChild("cutoff");
-        Double cutoff = null;
-        boolean relativeCutoff = false;
-        Double maxPValue = null;
-        if (cutoffE != null) {
-            cutoff = Double.valueOf(cutoffE.getTextTrim());
+        if (cutoffE != null) { //  old cutoff format (support old blast.xml files)
+        	Double cutoff = null;
+        	boolean isrelativeCutoff = false;
+        	Double maxPValue = null;
+        	cutoff = Double.valueOf(cutoffE.getTextTrim());
 
-            String maxP = cutoffE.getAttributeValue("max-p-value");
-            if (maxP != null)
-            	maxPValue = Double.valueOf(maxP);
+        	String maxP = cutoffE.getAttributeValue("max-p-value");
+        	if (maxP != null)
+        		maxPValue = Double.valueOf(maxP);
 
-            String type = cutoffE.getAttributeValue("type");
-            if (type != null)
-            	if (type.equals("relative"))
-            		relativeCutoff = true;
-            	else if (type.equals("absolute"))
-            		; // default
-            	else
-            		throw new RuntimeException("BlastAnalysis: unsupported cutoff type " + type + ", expecting relative|absolute");
+        	String type = cutoffE.getAttributeValue("type");
+        	if (type != null)
+        		if (type.equals("relative"))
+        			isrelativeCutoff = true;
+        		else if (type.equals("absolute"))
+        			; // default
+        		else
+        			throw new RuntimeException("BlastAnalysis: unsupported cutoff type " + type + ", expecting relative|absolute");
+        	if (isrelativeCutoff){
+        		relativeCutoff = cutoff;
+        		relativeMaxEValue = maxPValue;
+        	} else {
+        		absCutoff = cutoff;
+        		absMaxEValue = maxPValue;
+        	}
         }
 
         String blastOptions = null;
@@ -385,7 +403,9 @@ public class AlignmentAnalyses {
         if (detailsE != null)
             detailsOptions = detailsE.getTextTrim();
 
-        BlastAnalysis analysis = new BlastAnalysis(this, id, cs, cutoff, maxPValue, relativeCutoff, blastOptions, detailsOptions, workingDir);
+        BlastAnalysis analysis = new BlastAnalysis(this, id, cs,
+        		absCutoff, absMaxEValue, relativeCutoff, relativeMaxEValue, 
+        		blastOptions, detailsOptions, workingDir);
 
         List regionsEs = element.getChildren("regions");
         

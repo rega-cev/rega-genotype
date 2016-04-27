@@ -200,11 +200,8 @@
   		  <tr><td>Blast options</td><td>${option}</td><td>${option-info}</td></tr>
   		  <tr><td>Absolute Cut off</td><td>${absolute-cut-off}</td><td>${absolute-cut-off-info}</td></tr>
   		  <tr><td>Absolute E value</td><td>${absolute-evalue}</td><td>${absolute-evalue-info}</td></tr>
-  		  <tr><td>Absolute P value</td><td>${absolute-pvalue}</td><td>${absolute-pvalue-info}</td></tr>
   		  <tr><td>Relative Cut off</td><td>${relative-cut-off}</td><td>${relative-cut-off-info}</td></tr>
   		  <tr><td>Relative E value</td><td>${relative-evalue}</td><td>${relative-evalue-info}</td></tr>
-  		  <tr><td>Relative P value</td><td>${relative-pvalue}</td><td>${relative-pvalue-info}</td></tr>
-  		  
 		</table>
 	</message>
 	

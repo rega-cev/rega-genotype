@@ -122,13 +122,13 @@ public class BlastAnalysis extends AbstractAnalysis {
     }
     
     private List<Cluster> clusters;
-    private Double cutoff;
-	private Double maxPValue;
-    private boolean relativeCutoff;
+    private Double absCutoff;
+    private Double absMaxEValue;
+    private Double relativeCutoff;
+    private Double relativeMaxEValue;
     private String blastOptions;
-	private String formatDbOptions;
-	private Map<String, ReferenceTaxus> referenceTaxa;
-	private String detailsOptions;
+    private Map<String, ReferenceTaxus> referenceTaxa;
+    private String detailsOptions;
 
 	/**
 	 * A result from a blast analysis.
@@ -141,7 +141,8 @@ public class BlastAnalysis extends AbstractAnalysis {
 	 */
     public class Result extends AbstractAnalysis.Result implements Concludable {
         private Set<Cluster> clusters;
-        private float score;
+        private float absScore;
+        private float relativeScore;
         private int start;
         private int end;
         private int matchDiffs;
@@ -150,11 +151,12 @@ public class BlastAnalysis extends AbstractAnalysis {
 		private boolean reverseCompliment;
 		private String detailsFile;
 
-        public Result(AbstractSequence sequence, Set<Cluster> bestClusters, float score,
+        public Result(AbstractSequence sequence, Set<Cluster> bestClusters, float absScore, float relativeScore,
         		int length, int diffs, int start, int end, ReferenceTaxus refseq, boolean reverseCompliment) {
             super(sequence);
             this.clusters = bestClusters;
-            this.score = score;
+            this.absScore = absScore;
+            this.relativeScore = relativeScore;
             this.matchLength = length;
             this.matchDiffs = diffs;
             this.start = start;
@@ -164,10 +166,11 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
 
         public boolean haveSupport() {
-            if (cutoff == null)
+            if (getAbsCutoff() == null && getRelativeCutoff() == null)
                 return false;
             else
-                return score >= cutoff;
+                return (getAbsCutoff() != null && absScore >= getAbsCutoff())
+                || (getRelativeCutoff() != null && relativeScore >= getRelativeCutoff());
         }
         
         public void writeXML(ResultTracer tracer) {
@@ -206,7 +209,8 @@ public class BlastAnalysis extends AbstractAnalysis {
 			tracer.printlnOpen("<cluster>");
 			tracer.add("id", cluster != null ? cluster.getId() : "none");
 			tracer.add("name", cluster != null ? cluster.getName() : "none");
-			tracer.add("score", score);
+			tracer.add("absolute-score", absScore);
+			tracer.add("relative-score", relativeScore);
 			if (cluster != null && cluster.getDescription() != null) {
 			    tracer.add("description", cluster.getDescription());
 			}
@@ -258,13 +262,6 @@ public class BlastAnalysis extends AbstractAnalysis {
         public Cluster getCluster() {
             return clusters.isEmpty() ? null : clusters.iterator().next();
         }
-
-        /**
-         * @return Returns the score.
-         */
-        public float getScore() {
-            return score;
-        }
         
         /**
         * @return Returns the start.
@@ -284,7 +281,8 @@ public class BlastAnalysis extends AbstractAnalysis {
             tracer.printlnOpen("<assigned>");
             if (!supportsMultiple()) {
             	Cluster cluster = getCluster();
-                tracer.add("score", String.valueOf(score));
+                tracer.add("absolute-score", String.valueOf(absScore));
+                tracer.add("relative-score", String.valueOf(relativeScore));
                 tracer.add("id", cluster.getId());
                 tracer.add("name", cluster.getName());
                 if (cluster.getDescription() != null) {
@@ -329,6 +327,22 @@ public class BlastAnalysis extends AbstractAnalysis {
 		public void setDetailsFile(String detailsFile) {
 			this.detailsFile = detailsFile;
 		}
+
+		public float getAbsScore() {
+			return absScore;
+		}
+
+		public void setAbsScore(float absScore) {
+			this.absScore = absScore;
+		}
+
+		public float getRelativeScore() {
+			return relativeScore;
+		}
+
+		public void setRelativeScore(float relativeScore) {
+			this.relativeScore = relativeScore;
+		}
     }
 
     boolean supportsMultiple() {
@@ -341,29 +355,19 @@ public class BlastAnalysis extends AbstractAnalysis {
 	}
 
 	public BlastAnalysis(AlignmentAnalyses owner, String id,
-                         List<Cluster> clusters, Double cutoff, Double maxPValue,
-                         boolean relativeCutoff, String blastOptions,
+                         List<Cluster> clusters, Double absCutoff, Double absMaxEValue,
+                         Double relativeCutoff, Double relativeMaxEValue,
+                         String blastOptions,
                          String detailsOptions, File workingDir) {
         super(owner, id);
         this.workingDir = workingDir;
         this.clusters = clusters;
-        this.cutoff = cutoff;
-        this.maxPValue = maxPValue;
+        this.absCutoff = absCutoff;
+        this.absMaxEValue = absMaxEValue;
         this.relativeCutoff = relativeCutoff;
+        this.relativeMaxEValue = relativeMaxEValue;
         this.blastOptions = blastOptions != null ? blastOptions : "";
         this.detailsOptions = detailsOptions;
-        if (owner.getAlignment() != null && 
-        		owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
-        	this.blastOptions = "-p blastx " + this.blastOptions;
-        	if (detailsOptions != null)
-        		this.detailsOptions = "-p blastx " + this.detailsOptions;
-        	this.formatDbOptions = "";
-        } else {
-        	this.blastOptions = "-p blastn " + this.blastOptions;
-        	if (detailsOptions != null)
-        		this.detailsOptions = "-p blastn " + this.detailsOptions;
-        	this.formatDbOptions = "-p F";
-        }
         this.referenceTaxa = new HashMap<String, ReferenceTaxus>();
     }
 
@@ -389,7 +393,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 //fd2.sync();
                 queryFile.close();
                         
-                String cmd = blastPath + formatDbCommand + " " + formatDbOptions + " -o T -i " + db.getAbsolutePath();
+                String cmd = blastPath + formatDbCommand + " " + formatDbOptions() + " -o T -i " + db.getAbsolutePath();
                 System.err.println(cmd);
                 
                 formatdb = StreamReaderRuntime.exec(cmd, null, workingDir);
@@ -397,6 +401,18 @@ public class BlastAnalysis extends AbstractAnalysis {
 
                 if (exitResult != 0) {
                     throw new ApplicationException("formatdb exited with error: " + exitResult);
+                }
+                
+                String blastOptions = "";
+        		if (owner.getAlignment() != null && 
+                		owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
+        			blastOptions = "-p blastx " + this.blastOptions;
+                	if (detailsOptions != null)
+                		blastOptions = "-p blastx " + this.detailsOptions;
+                } else {
+                	blastOptions = "-p blastn " + this.blastOptions;
+                	if (detailsOptions != null)
+                		blastOptions = "-p blastn " + this.detailsOptions;
                 }
                 
                 cmd = blastPath + blastCommand + " " + blastOptions
@@ -469,9 +485,9 @@ public class BlastAnalysis extends AbstractAnalysis {
 					}
 					return result;
 				} else
-					return createResult(sequence, null, null, 0, 0, 0, 0, 0, false);
+					return createResult(sequence, null, null, 0, 0, 0, 0, 0, 0, false);
             } else
-                return createResult(sequence, null, null, 0, 0, 0, 0, 0, false);
+                return createResult(sequence, null, null, 0, 0, 0, 0, 0, 0, false);
         } catch (IOException e) {
             if (formatdb != null)
                 formatdb.destroy();
@@ -564,7 +580,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 				}
 			}
 
-			if (ba.relativeCutoff && !bestClusters.isEmpty()) {
+			if (ba.relativeCutoff != null && !bestClusters.isEmpty()) {
 				Cluster c = ba.findCluster(values[REFID_IDX]);
 				if (!bestClusters.contains(c)) {
 					if (secondBest == null)
@@ -578,21 +594,27 @@ public class BlastAnalysis extends AbstractAnalysis {
 		if (best != null) {
 			int length = Integer.valueOf(best[3]);
 			int diffs = Integer.valueOf(best[4]) + Integer.valueOf(best[5]); // #diffs + #gaps
-			float score = Float.valueOf(best[11]);
 			float pValue = Float.valueOf(best[10]);
-			if (ba.maxPValue != null && pValue > ba.maxPValue)
-				score = -1;
+			float absScore = Float.valueOf(best[11]);
+			float relativeScore = absScore;
 
-			if (ba.relativeCutoff) {
+			if (ba.absCutoff == null || 
+					(ba.absMaxEValue != null && pValue > ba.absMaxEValue))
+				absScore = -1;
+			if (ba.relativeCutoff == null || 
+					(ba.relativeMaxEValue != null && pValue > ba.relativeMaxEValue))
+				relativeScore = -1;
+
+			if (ba.relativeCutoff != null) {
 				if (secondBest != null)
-					score = score / Float.valueOf(secondBest[11]);
+					relativeScore = relativeScore / Float.valueOf(secondBest[11]);
 			}
 
 			if (start == Integer.MAX_VALUE)
 				start = -1;
 
 			Result result = ba.createResult(sequence, bestClusters, refseq,
-					score, length, diffs, start, end, reverseCompliment);
+					absScore, relativeScore, length, diffs, start, end, reverseCompliment);
 
 			return result;
 		} else {
@@ -646,11 +668,11 @@ public class BlastAnalysis extends AbstractAnalysis {
     }
     
     private Result createResult(AbstractSequence sequence, Set<Cluster> bestClusters, ReferenceTaxus refseq,
-                                float score, int length, int diffs, int start, int end, boolean reverseCompliment) {
+                                float absScore, float relativeScore, int length, int diffs, int start, int end, boolean reverseCompliment) {
     	if (!bestClusters.isEmpty())
-    		return new Result(sequence, bestClusters, score, length, diffs, start, end, refseq, reverseCompliment);
+    		return new Result(sequence, bestClusters, absScore, relativeScore, length, diffs, start, end, refseq, reverseCompliment);
     	else
-    		return new Result(sequence, bestClusters, 0, 0, 0, 0, 0, null, reverseCompliment);
+    		return new Result(sequence, bestClusters, 0, 0, 0, 0, 0, 0, null, reverseCompliment);
     }
 
     Result run(SequenceAlignment alignment, AbstractSequence sequence) throws AnalysisException {
@@ -672,10 +694,6 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
     }
 
-	public Double getCutoff() {
-		return cutoff;
-	}
-
 	public void addReferenceTaxus(ReferenceTaxus t) {
 		referenceTaxa.put(t.getTaxus(), t);
 	}
@@ -687,5 +705,53 @@ public class BlastAnalysis extends AbstractAnalysis {
 				result.add(r.getName());
 		
 		return result;
+	}
+
+	public Double getAbsCutoff() {
+		return absCutoff;
+	}
+
+	public void setAbsCutoff(Double absCutoff) {
+		this.absCutoff = absCutoff;
+	}
+
+	public Double getAbsMaxEValue() {
+		return absMaxEValue;
+	}
+
+	public void setAbsMaxEValue(Double absMaxEValue) {
+		this.absMaxEValue = absMaxEValue;
+	}
+
+	public Double getRelativeCutoff() {
+		return relativeCutoff;
+	}
+
+	public void setRelativeCutoff(Double relativeCutoff) {
+		this.relativeCutoff = relativeCutoff;
+	}
+
+	public Double getRelativeMaxEValue() {
+		return relativeMaxEValue;
+	}
+
+	public void setRelativeMaxEValue(Double relativeMaxEValue) {
+		this.relativeMaxEValue = relativeMaxEValue;
+	}
+
+	public String getBlastOptions() {
+		return blastOptions;
+	}
+
+	public void setBlastOptions(String blastOptions) {
+		this.blastOptions = blastOptions;
+	}
+
+	private String formatDbOptions() {
+		if (owner.getAlignment() != null && 
+        		owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) 
+			return "";
+		else
+			return "-p F";
 	}
 }
