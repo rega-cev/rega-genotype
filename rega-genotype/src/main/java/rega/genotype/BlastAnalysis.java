@@ -35,6 +35,21 @@ public class BlastAnalysis extends AbstractAnalysis {
     public static String formatDbCommand = "formatdb";
     public static String blastCommand = "blastall";
 
+    // blastall results using the -m8 flag.
+    // http://www.compbio.ox.ac.uk/analysis_tools/BLAST/BLAST_blastall/blastall_examples.shtml
+    public static final int BLAST_RESULT_QUERY_ID_IDX = 0;
+    public static final int BLAST_RESULT_SUBJECT_ID_IDX = 1;
+    public static final int BLAST_RESULT_PERCENT_IDENTITY_IDX = 2;
+    public static final int BLAST_RESULT_ALINGMENT_LENGTH_IDX = 3;
+    public static final int BLAST_RESULT_MISMATCHES_IDX = 4;
+    public static final int BLAST_RESULT_GAP_IDX = 5;
+    public static final int BLAST_RESULT_Q_START_IDX = 6;
+    public static final int BLAST_RESULT_Q_END_IDX = 7;
+    public static final int BLAST_RESULT_S_START_IDX = 8;
+    public static final int BLAST_RESULT_S_END_IDX = 9;
+    public static final int BLAST_RESULT_E_VALUE_IDX = 10;
+    public static final int BLAST_RESULT_BIT_SCORE_IDX = 11;
+
     /**
      * Defines a region in a reference sequence.
      */
@@ -521,9 +536,6 @@ public class BlastAnalysis extends AbstractAnalysis {
 		ReferenceTaxus refseq = null;
 		Set<Cluster> bestClusters = new HashSet<Cluster>(), secondBestClusters = new HashSet<Cluster>();
 
-		final int SCORE_IDX = 11;
-		final int REFID_IDX = 1;
-
 		for (;;) {
 			String [] values = results.next();
 			if (values == null)
@@ -532,11 +544,11 @@ public class BlastAnalysis extends AbstractAnalysis {
 			if (best == null)
 				best = values;
 
-			if (values[SCORE_IDX].equals(best[SCORE_IDX]))
-				bestClusters.add(ba.findCluster(values[REFID_IDX]));
+			if (values[BLAST_RESULT_BIT_SCORE_IDX].equals(best[BLAST_RESULT_BIT_SCORE_IDX]))
+				bestClusters.add(ba.findCluster(values[BLAST_RESULT_SUBJECT_ID_IDX]));
 
 			ReferenceTaxus referenceTaxus = ba.referenceTaxa
-					.get(values[REFID_IDX]);
+					.get(values[BLAST_RESULT_SUBJECT_ID_IDX]);
 
 			/*
 			 * First condition: there are no explicit reference taxa configured
@@ -548,30 +560,30 @@ public class BlastAnalysis extends AbstractAnalysis {
 			 */
 			if ((ba.referenceTaxa.isEmpty() && values == best)
 					|| (referenceTaxus != null
-							&& (ba.findCluster(values[REFID_IDX]) == bestClusters
+							&& (ba.findCluster(values[BLAST_RESULT_SUBJECT_ID_IDX]) == bestClusters
 									.iterator().next()) && (refseq == null || referenceTaxus
 							.getPriority() < refseq.getPriority()))) {
 				refseq = referenceTaxus;
-				boolean queryReverseCompliment = Integer.parseInt(values[7])
-						- Integer.parseInt(values[6]) < 0;
-				boolean refReverseCompliment = Integer.parseInt(values[9])
-						- Integer.parseInt(values[8]) < 0;
-				int offsetBegin = Integer.parseInt(values[6]);
+				boolean queryReverseCompliment = Integer.parseInt(values[BLAST_RESULT_Q_END_IDX])
+						- Integer.parseInt(values[BLAST_RESULT_Q_START_IDX]) < 0;
+				boolean refReverseCompliment = Integer.parseInt(values[BLAST_RESULT_S_END_IDX])
+						- Integer.parseInt(values[BLAST_RESULT_S_START_IDX]) < 0;
+				int offsetBegin = Integer.parseInt(values[BLAST_RESULT_Q_START_IDX]);
 				int offsetEnd = seqLength
-						- Integer.parseInt(values[7]);
+						- Integer.parseInt(values[BLAST_RESULT_Q_END_IDX]);
 				if (queryReverseCompliment) {
 					offsetBegin = seqLength - offsetBegin;
 					offsetEnd = seqLength - offsetEnd;
 					reverseCompliment = true;
 				}
 				if (refReverseCompliment) {
-					String tmp = values[8];
-					values[8] = values[9];
+					String tmp = values[BLAST_RESULT_S_START_IDX];
+					values[BLAST_RESULT_S_START_IDX] = values[BLAST_RESULT_S_END_IDX];
 					values[9] = tmp;
 					reverseCompliment = true;
 				}
-				start = Integer.parseInt(values[8]) * queryFactor - offsetBegin;
-				end = Integer.parseInt(values[9]) * queryFactor + offsetEnd;
+				start = Integer.parseInt(values[BLAST_RESULT_S_START_IDX]) * queryFactor - offsetBegin;
+				end = Integer.parseInt(values[BLAST_RESULT_S_END_IDX]) * queryFactor + offsetEnd;
 
 				if (refseq != null && refseq.reportAsOther() != null) {
 					refseq = ba.referenceTaxa.get(refseq.reportAsOther());
@@ -581,21 +593,22 @@ public class BlastAnalysis extends AbstractAnalysis {
 			}
 
 			if (ba.relativeCutoff != null && !bestClusters.isEmpty()) {
-				Cluster c = ba.findCluster(values[REFID_IDX]);
+				Cluster c = ba.findCluster(values[BLAST_RESULT_SUBJECT_ID_IDX]);
 				if (!bestClusters.contains(c)) {
 					if (secondBest == null)
 						secondBest = values;
-					if (secondBest[SCORE_IDX].equals(values[SCORE_IDX]))
+					if (secondBest[BLAST_RESULT_BIT_SCORE_IDX].equals(values[BLAST_RESULT_BIT_SCORE_IDX]))
 						secondBestClusters.add(c);
 				}
 			}
 		}
 
 		if (best != null) {
-			int length = Integer.valueOf(best[3]);
-			int diffs = Integer.valueOf(best[4]) + Integer.valueOf(best[5]); // #diffs + #gaps
-			float pValue = Float.valueOf(best[10]);
-			float absScore = Float.valueOf(best[11]);
+			int length = Integer.valueOf(best[BLAST_RESULT_ALINGMENT_LENGTH_IDX]);
+			int diffs = Integer.valueOf(best[BLAST_RESULT_MISMATCHES_IDX]) 
+					+ Integer.valueOf(best[BLAST_RESULT_GAP_IDX]); // #diffs + #gaps
+			float pValue = Float.valueOf(best[BLAST_RESULT_E_VALUE_IDX]);
+			float absScore = Float.valueOf(best[BLAST_RESULT_BIT_SCORE_IDX]);
 			float relativeScore = absScore;
 
 			if (ba.absCutoff == null || 
@@ -607,7 +620,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 			if (ba.relativeCutoff != null) {
 				if (secondBest != null)
-					relativeScore = relativeScore / Float.valueOf(secondBest[11]);
+					relativeScore = relativeScore / Float.valueOf(secondBest[BLAST_RESULT_BIT_SCORE_IDX]);
 			}
 
 			if (start == Integer.MAX_VALUE)
