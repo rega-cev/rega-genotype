@@ -77,7 +77,7 @@ public class GenericMain extends GenotypeMain {
 
 		GenericDefinition definition;
 		try {
-			definition = new GenericDefinition(urlComponent);
+			definition = new GenericDefinition(toolConfig);
 		} catch (JDOMException e) {
 			e.printStackTrace();
 			showErrorMsg(app);

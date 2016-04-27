@@ -46,18 +46,22 @@ import rega.genotype.viruses.generic.GenericTool;
  * @author koen
  */
 public abstract class GenotypeTool {
-    protected String url;
     protected File workingDir = new File("."); // work dir is a new dir inside the job dir that contains all the data for current analyze.
 
     private GenotypeTool parent;
     private ResultTracer tracer;
+	private ToolConfig toolConfig;
 
     /**
      * @param toolId organism url path component
      */
-    public GenotypeTool(String toolId, File workingDir) {
-    	this.parent = null;
-    	this.url = toolId;
+    public GenotypeTool(String url, File workingDir) {
+    	this(Settings.getInstance().getConfig().getToolConfigByUrlPath(url), workingDir);
+    }
+
+    public GenotypeTool(ToolConfig toolConfig, File workingDir) {
+    	this.toolConfig = toolConfig;
+		this.parent = null;
     	this.workingDir = workingDir;
     }
 
@@ -362,7 +366,7 @@ public abstract class GenotypeTool {
     		
     		GenericDefinition genericDefinition;
 			try {
-				genericDefinition = new GenericDefinition(url);
+				genericDefinition = new GenericDefinition(toolConfig);
 			} catch (JDOMException e1) {
 				e1.printStackTrace();
 				return;
@@ -382,15 +386,16 @@ public abstract class GenotypeTool {
     	}
     }
 
-	public File getXmlPath() {
-		return Settings.getInstance().getXmlPath(url);
-	}
-
+	
 	public String getXmlPathAsString() {
-		return Settings.getInstance().getXmlPathAsString(url);
+		return toolConfig.getConfiguration();
 	}
 
 	public File getWorkingDir() {
 		return workingDir;
+	}
+
+	public ToolConfig getToolConfig() {
+		return toolConfig;
 	}
 }

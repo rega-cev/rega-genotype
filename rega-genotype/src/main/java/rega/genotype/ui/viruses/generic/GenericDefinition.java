@@ -45,7 +45,6 @@ import eu.webtoolkit.jwt.WString;
  */
 public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private Genome genome = new Genome(this);
-	private String url; // url path component that defines the tool.
 
 	public static class MenuItem {
 		String label, path, messageId;
@@ -67,10 +66,11 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	
 	private List<ResultColumn> resultColumns = null;
 	private List<ResultColumn> downloadColumns = null;
+	private ToolConfig toolConfig;
 	
-	public GenericDefinition(String url) throws JDOMException, IOException {
+	public GenericDefinition(ToolConfig toolConfig) throws JDOMException, IOException {
+		this.toolConfig = toolConfig;
 		this.updateInterval = 5000;
-		this.url = url;
 		colors = new HashMap<String, Color>();
 		colors.put("-", new Color(0x53, 0xb8, 0x08));
 		fontSize = 8;
@@ -135,9 +135,9 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	public void startAnalysis(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
 		GenericTool tool;
 		if (getToolConfig().getToolMenifest().isBlastTool())
-			tool = new BlastTool(url, workingDir);
+			tool = new BlastTool(toolConfig, workingDir);
 		else
-			tool = new GenericTool(url, workingDir);
+			tool = new GenericTool(toolConfig, workingDir);
 
 		tool.analyze(workingDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
 					 workingDir.getAbsolutePath() + File.separatorChar + "result.xml");
@@ -250,14 +250,14 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public String getJobDir() {
-		return Settings.getInstance().getJobDir(url).getAbsolutePath();
+		return toolConfig.getJobDir();
 	}
 
 	public String getXmlPath() {
-		return Settings.getInstance().getXmlPath(url).getAbsolutePath();
+		return toolConfig.getConfiguration();
 	}
 
 	public ToolConfig getToolConfig() {
-		return Settings.getInstance().getConfig().getToolConfigByUrlPath(url);
+		return toolConfig;
 	}
 }

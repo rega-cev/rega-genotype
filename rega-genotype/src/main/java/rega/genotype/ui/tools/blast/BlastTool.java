@@ -7,6 +7,7 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import rega.genotype.viruses.generic.GenericTool;
@@ -20,9 +21,9 @@ import rega.genotype.viruses.generic.GenericTool;
  */
 public class BlastTool extends GenericTool {
 
-	public BlastTool(String url, File workDir) throws IOException,
+	public BlastTool(ToolConfig toolConfig, File workDir) throws IOException,
 	ParameterProblemException, FileFormatException {
-		super(url, workDir);
+		super(toolConfig, workDir);
 	}
 
 	/**
