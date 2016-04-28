@@ -138,7 +138,10 @@ public abstract class ObjectListModelBase<T> extends WAbstractTableModel impleme
 		if (object != null) {
 			for (int row = start; row < objects.size() + start; ++row)
 				// search object
-				if (getObject(row).equals(object))
+				if (getObject(row) == null && object == null)
+					return row;
+				else if (getObject(row) != null && object != null
+						&& getObject(row).equals(object))
 					return row;
 		}			
 		// object not found OR null - select no row (the -1 row).

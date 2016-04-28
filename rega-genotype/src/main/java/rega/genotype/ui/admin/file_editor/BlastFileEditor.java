@@ -6,19 +6,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
@@ -93,8 +97,21 @@ public class BlastFileEditor extends WContainerWidget{
 
 		addSequencesB.clicked().addListener(addSequencesB, new Signal.Listener() {
 			public void trigger() {
-				FastaFileEditorDialog d = new FastaFileEditorDialog(
-						null, alignmentAnalyses);
+				final FastaFileEditorDialog d = new FastaFileEditorDialog(
+						null, alignmentAnalyses, toolConfig());
+				d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
+					public void trigger(DialogCode arg) {
+						if(arg == DialogCode.Accepted){
+							Map<AbstractSequence, Cluster> selectedSequences = d.getSelectedSequences();
+							for (Map.Entry<AbstractSequence, Cluster> e: selectedSequences.entrySet()){
+								AbstractSequence sequence = e.getKey();
+								Cluster cluster = e.getValue();
+								cluster.addTaxus(sequence.getName());
+								alignmentAnalyses.getAlignment().addSequence(sequence);
+							}
+						}
+					}
+				});
 			}
 		});
 	}
@@ -130,6 +147,14 @@ public class BlastFileEditor extends WContainerWidget{
 		return new File(toolDir.getAbsolutePath(), "blast.fasta");
 	}
 
+	private ToolConfig toolConfig() {
+		ToolManifest manifest = ToolManifest.parseJson(
+				FileUtil.readFile(new File(toolDir, ToolManifest.MANIFEST_FILE_NAME)));
+		if (manifest == null)
+			return null;
+
+		return Settings.getInstance().getConfig().getToolConfigById(manifest.getId(), manifest.getVersion());
+	}
 	/**
 	 * Read blast.xml file
 	 */
@@ -200,9 +225,7 @@ public class BlastFileEditor extends WContainerWidget{
 	private void editClaster(final Cluster cluster){
 		final boolean isNew = cluster == null;
 
-		ToolManifest manifest = ToolManifest.parseJson(
-				FileUtil.readFile(new File(toolDir, ToolManifest.MANIFEST_FILE_NAME)));
-		final ClusterForm c = new ClusterForm(cluster, alignmentAnalyses, manifest);
+		final ClusterForm c = new ClusterForm(cluster, alignmentAnalyses, toolConfig());
 		stack.addWidget(c);
 		stack.setCurrentWidget(c);
 

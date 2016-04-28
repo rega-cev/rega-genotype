@@ -577,6 +577,14 @@ public class AlignmentAnalyses {
         return clusters;
     }
 
+    public Cluster findCluster(String id){
+    	for(Cluster c: clusters)
+    		if(c.getId().equals(id))
+    			return c;
+
+    	return null;
+    }
+
     /**
      * @return Returns the alignment.
      */

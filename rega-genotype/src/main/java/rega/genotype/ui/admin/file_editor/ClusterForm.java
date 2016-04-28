@@ -52,7 +52,7 @@ public class ClusterForm extends FormTemplate{
 	private Cluster cluster;
 
 	public ClusterForm(final Cluster c, final AlignmentAnalyses alignmentAnalyses,
-			ToolManifest manifest) {
+			final ToolConfig toolConfig) {
 		super(tr("admin.cluster-form"));
 		this.cluster = c == null ? new Cluster() : c;
 
@@ -76,6 +76,7 @@ public class ClusterForm extends FormTemplate{
 				return new WString(t);
 			}
 		};
+		ToolManifest manifest = toolConfig != null ? toolConfig.getToolMenifest() : null;
 		if (cluster.getToolId() == null)
 			if (manifest == null)
 				toolIdCB.setCurrentIndex(0);
@@ -112,14 +113,14 @@ public class ClusterForm extends FormTemplate{
 		addSequenceB.clicked().addListener(addSequenceB, new Listener() {
 			public void trigger() {
 				final FastaFileEditorDialog d = new FastaFileEditorDialog(
-						cluster, alignmentAnalyses);
+						cluster, alignmentAnalyses, toolConfig);
 
 				d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 					public void trigger(DialogCode arg) {
 						if(arg == DialogCode.Accepted){
-							addedSequences.addAll(d.getSelectedSequences());
+							addedSequences.addAll(d.getSelectedSequences().keySet());
 							// add to taxuesModel
-							for (AbstractSequence s: d.getSelectedSequences())
+							for (AbstractSequence s: d.getSelectedSequences().keySet())
 								taxuesModel.appendRow(new WStandardItem(s.getName()));
 						}
 					}

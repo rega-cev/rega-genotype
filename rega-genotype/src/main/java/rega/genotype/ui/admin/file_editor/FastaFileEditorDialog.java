@@ -12,14 +12,19 @@ import java.util.List;
 import java.util.Map;
 
 import rega.genotype.AbstractSequence;
-import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AlignmentAnalyses;
+import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.util.FileUpload;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
+import rega.genotype.viruses.generic.GenericTool;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
@@ -28,6 +33,7 @@ import eu.webtoolkit.jwt.WContainerWidget.Overflow;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
@@ -38,8 +44,9 @@ import eu.webtoolkit.jwt.WTextArea;
  * @author michael
  */
 public class FastaFileEditorDialog extends WDialog{
-	private AnalysFastaFileWidget analysFastaFileWidget;
-	public FastaFileEditorDialog(final Cluster cluster, final AlignmentAnalyses alignmentAnalyses) {
+	private TaxusTable analysFastaFileWidget;
+	public FastaFileEditorDialog(final Cluster cluster, final AlignmentAnalyses alignmentAnalyses,
+			final ToolConfig toolConfig) {
 		// TODO: if not blast tool run blust tool to identify the clusters.
 		show();
 		getTitleBar().addWidget(new WText("Add sequences"));
@@ -58,8 +65,8 @@ public class FastaFileEditorDialog extends WDialog{
 
 		nextB.clicked().addListener(nextB, new Signal.Listener() {
 			public void trigger() {
-				analysFastaFileWidget = new AnalysFastaFileWidget(
-						cluster, fastaFileUpload.getText(), alignmentAnalyses);
+				analysFastaFileWidget = new TaxusTable(
+						cluster, fastaFileUpload.getText(), alignmentAnalyses, toolConfig);
 				WContainerWidget c = new WContainerWidget();
 				c.addWidget(analysFastaFileWidget);
 				getContents().removeWidget(fastaFileUpload);
@@ -81,9 +88,9 @@ public class FastaFileEditorDialog extends WDialog{
 		});
 	}
 
-	public List<AbstractSequence> getSelectedSequences() {
+	public Map<AbstractSequence, Cluster> getSelectedSequences() {
 		if (analysFastaFileWidget == null)
-			return new ArrayList<AbstractSequence>();
+			return new HashMap<AbstractSequence, Cluster>();
 		else
 			return analysFastaFileWidget.getSelectedSequences();
 	}
@@ -116,10 +123,34 @@ public class FastaFileEditorDialog extends WDialog{
 
 	// step 2: choose clusters 
 
-	private static class AnalysFastaFileWidget extends WTable { 
-		private Map<AbstractSequence, WCheckBox> sequenceMap = new HashMap<AbstractSequence, WCheckBox>();
+	private static class SequenceData {
+		WCheckBox addSequenceChB;
+		ObjectListComboBox<Cluster> clusterCB;
+		public SequenceData(WCheckBox addSequenceChB, ObjectListComboBox<Cluster> clusterCB) {
+			this.addSequenceChB = addSequenceChB;
+			this.clusterCB = clusterCB;
+		}
+	}
+
+	private static class TaxusTable extends WTable { 
+		private Map<AbstractSequence, SequenceData> sequenceMap = new HashMap<AbstractSequence, SequenceData>();
+		private AlignmentAnalyses alignmentAnalyses; // AlignmentAnalyses of the tool
+		private SequenceAlignment currentSeqAlign; // Sequences from the input fasta file
+		private List<String> taxaIds = new ArrayList<String>(); // pre-compute from alignmentAnalyses
+
+		private enum Mode {SingalCluster, AllClusters};
+		private Mode mode = Mode.SingalCluster;
 		
-		public AnalysFastaFileWidget(Cluster cluster, String fasta, AlignmentAnalyses alignmentAnalyses) {
+		public TaxusTable(Cluster cluster, String fasta,
+				AlignmentAnalyses alignmentAnalyses, ToolConfig toolConfig) {
+			this.alignmentAnalyses = alignmentAnalyses;
+
+			// pre-compute taxaIds
+			for (Cluster c: alignmentAnalyses.getAllClusters()){
+				taxaIds.addAll(c.getTaxaIds());
+			}
+
+			// headers 
 			setHeaderCount(1);
 			getElementAt(0, 0).addWidget(new WText("Add"));
 			getElementAt(0, 1).addWidget(new WText("Name"));
@@ -130,39 +161,129 @@ public class FastaFileEditorDialog extends WDialog{
 			addStyleClass("fasta-analysis-table");
 			setHeight(new WLength(300));
 
-			fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
+			alignmentAnalyses.analyses();
+
+			if (cluster == null) {// add sequences to many clusters.
+				mode = Mode.AllClusters;
+				// run the tool to identify the clusters.
+				final File jobDir = GenotypeLib.createJobDir(toolConfig.getJobDir());
+				try {
+					InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
+					currentSeqAlign = new SequenceAlignment(stream, 
+							SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+
+					stream.reset();
+					GenericTool t = new GenericTool(toolConfig, jobDir);
+					t.analyze(stream, jobDir.getAbsolutePath() + File.separator + "result.xml");
+					new Parser().parseFile(jobDir);
+				} catch (IOException e) {
+					e.printStackTrace();
+					fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
+				} catch (ParameterProblemException e) {
+					e.printStackTrace();
+					fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
+				} catch (FileFormatException e) {
+					e.printStackTrace();
+					fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
+				}
+
+				// use result parser on blast-tool-result.xml
+			} else // the cluster is pre selected
+				fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
+		}
+
+		/**
+		 * Parse result.xml file from job dir and fill the output to blastResultModel. 
+		 */
+		private class Parser extends GenotypeResultParser {
+			@Override
+			public void endSequence() {	
+				String clusterId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/id");
+				String seqName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name");
+				String concludedId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
+
+				AbstractSequence s = currentSeqAlign.findSequence(seqName);
+
+				Cluster cluster = concludedId.equals("Unassigned") ? null :
+					alignmentAnalyses.findCluster(clusterId);
+
+				addRow(s, cluster);
+			}
+		}
+
+		private void addRow(AbstractSequence s, Cluster cluster) {
+			int row = getRowCount();
+			final WCheckBox chb = new WCheckBox();
+			final WText clusterNameT = new WText("");
+
+			// clusterCB
+			List<Cluster> clusters = new ArrayList<AlignmentAnalyses.Cluster>(
+					alignmentAnalyses.getAllClusters());
+			clusters.add(0, null);
+
+			final ObjectListComboBox<Cluster> clusterCB = new ObjectListComboBox<AlignmentAnalyses.Cluster>(
+					clusters) {
+				@Override
+				protected WString render(Cluster c) {
+					if (c == null)
+						return new WString("(Empty)");
+					else
+						return new WString(c.getName());
+				}
+			};
+
+			if (taxaIds != null && taxaIds.contains(s.getName())){
+				chb.setUnChecked();
+				chb.disable();
+				getElementAt(row, 4).addWidget(new WText("Already exists"));
+				clusterCB.disable();
+			} else 
+				chb.setChecked();
+			if(mode == Mode.SingalCluster)
+				clusterCB.disable();
+
+			clusterCB.setCurrentObject(cluster);
+			clusterCB.changed().addListener(clusterCB, new Signal.Listener() {
+				public void trigger() {
+					Cluster currentCluster = clusterCB.getCurrentObject();
+					if (currentCluster == null) {
+						clusterNameT.setText("");
+						chb.setUnChecked();
+						chb.disable();
+					} else {
+						clusterNameT.setText(Utils.nullToEmpty(currentCluster.getToolId()));
+						chb.enable();
+					}
+				}
+			});
+			clusterCB.changed().trigger();
+
+			// bind
+
+			getElementAt(row, 0).addWidget(chb);
+			getElementAt(row, 1).addWidget(new WText(Utils.nullToEmpty(s.getName())));
+			getElementAt(row, 2).addWidget(clusterNameT);
+			getElementAt(row, 3).addWidget(clusterCB);
+
+			sequenceMap.put(s, new SequenceData(chb, clusterCB));
 		}
 
 		public void fillTaxuesTable(Cluster cluster, String fasta, int sequenceType) {
 			SequenceAlignment alignment = parseFasta(fasta, sequenceType);
 			if (alignment != null) {
 				List<AbstractSequence> sequences = alignment.getSequences();
-				List<String> taxaIds = cluster.getTaxaIds();
 				for (AbstractSequence s: sequences) {
-					int row = getRowCount();
-					WCheckBox chb = new WCheckBox();
-					if (taxaIds.contains(s.getName())){
-						chb.setUnChecked();
-						chb.disable();
-						getElementAt(row, 4).addWidget(new WText("Already exists"));
-					} else 
-						chb.setChecked();
-						
-					getElementAt(row, 0).addWidget(chb);
-					getElementAt(row, 1).addWidget(new WText(Utils.nullToEmpty(s.getName())));
-					getElementAt(row, 2).addWidget(new WText(Utils.nullToEmpty(cluster.getToolId())));
-					getElementAt(row, 3).addWidget(new WText(Utils.nullToEmpty(cluster.getName())));
-
-					sequenceMap.put(s, chb);
+					addRow(s, cluster);
 				}
 			}
 		}
 
-		public List<AbstractSequence> getSelectedSequences() {
-			List<AbstractSequence> ans = new ArrayList<AbstractSequence>();
-			for (Map.Entry<AbstractSequence, WCheckBox> e: sequenceMap.entrySet())
-				if (e.getValue().isChecked())
-					ans.add(e.getKey());
+		public Map<AbstractSequence, Cluster> getSelectedSequences() {
+			Map<AbstractSequence, Cluster> ans = new HashMap<AbstractSequence, Cluster>();
+			for (Map.Entry<AbstractSequence, SequenceData> e: sequenceMap.entrySet()){
+				if (e.getValue().addSequenceChB.isChecked())
+					ans.put(e.getKey(), e.getValue().clusterCB.getCurrentObject());
+			}
 
 			return ans;
 		}

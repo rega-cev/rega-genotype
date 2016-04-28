@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
@@ -124,18 +125,22 @@ public abstract class GenotypeTool {
         System.err.println("\t-w,--workingDir specify path to the working directory (default .)");
 	}
 
+    public void analyze(String sequenceFile, String traceFile) throws IOException {
+    	analyze(new FileInputStream(sequenceFile), traceFile);
+    }
+
 	/**
 	 * This function analyzes an input FASTA file, and writes results to a given
 	 * trace file.
 	 * 
 	 * For each sequence in the input file, it invokes analyze(AbstractSequence)
 	 */
-    public void analyze(String sequenceFile, String traceFile) throws IOException {
+    public void analyze(InputStream sequenceFile, String traceFile) throws IOException {
         startTracer(traceFile);
 
         LineNumberReader reader
             = new LineNumberReader
-                (new InputStreamReader(new BufferedInputStream(new FileInputStream(sequenceFile))));
+                (new InputStreamReader(new BufferedInputStream(sequenceFile)));
         
         try {
 			for (;;) {

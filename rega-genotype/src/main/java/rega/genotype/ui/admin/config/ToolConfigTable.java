@@ -58,7 +58,7 @@ public class ToolConfigTable extends Template{
 
 		bindWidget("info", infoT);
 		
-		final WCheckBox versionChB = new WCheckBox("Show latest versions");
+		final WCheckBox versionChB = new WCheckBox("Show old versions");
 		final WCheckBox remoteChB = new WCheckBox("Show remote tools");
 
 		List<ToolManifest> remoteManifests = getRemoteManifests();
