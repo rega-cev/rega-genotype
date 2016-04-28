@@ -150,7 +150,10 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		public void endSequence() {	
 			String toolId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/tool-id");
 			String seqName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name");
-			//String nucleotides = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/nucleotides");
+			String concludedId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
+
+			if (concludedId.equals("Unassigned"))
+				toolId = "Unassigned";
 
 			ToolData toolData = toolDataMap.containsKey(toolId) ?
 					toolDataMap.get(toolId) : new ToolData();
