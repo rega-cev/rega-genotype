@@ -16,7 +16,9 @@ body {
 }
 
 .form-table td { 
-    max-width: 200px;
+   /* max-width: 200px; */
+   padding-bottom: 2px;
+   padding-right: 2px;
 }
 
 .form-table input[type="text"]  { 
@@ -28,6 +30,10 @@ body {
 
 .form-error {
 	color: red;
+}
+
+.form-indent {
+    padding-left: 10px;
 }
 
 .admin-logo {

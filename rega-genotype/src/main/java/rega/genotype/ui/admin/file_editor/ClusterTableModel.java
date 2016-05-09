@@ -10,11 +10,11 @@ import eu.webtoolkit.jwt.WAbstractTableModel;
 import eu.webtoolkit.jwt.WModelIndex;
 
 public class ClusterTableModel extends WAbstractTableModel{
-	public static final int TOOL_ID_COLUMN = 0;
-	public static final int CLUSTER_ID_COLUMN = 1;
-	public static final int DESCRIPTION_COLUMN = 2;
+	public static final int CLUSTER_ID_COLUMN = 0;
+	public static final int DESCRIPTION_COLUMN = 1;
+	public static final int TOOL_ID_COLUMN = 2;
 
-	String[] headers = { "Tool ID", "Cluster ID", "Description"};
+	String[] headers = { "Cluster ID", "Description", "Tool ID"};
 
 	private List<Cluster> clusters;
 
@@ -51,12 +51,12 @@ public class ClusterTableModel extends WAbstractTableModel{
 		Cluster cluster = getCluster(index.getRow());
 		if (role == ItemDataRole.DisplayRole) {
 			switch (index.getColumn()) {
-			case TOOL_ID_COLUMN:					
-				return cluster.getToolId();
 			case CLUSTER_ID_COLUMN:
 				return cluster.getId();
 			case DESCRIPTION_COLUMN:
 				return cluster.getDescription();
+			case TOOL_ID_COLUMN:					
+				return cluster.getToolId();
 			default:
 				break;
 			}

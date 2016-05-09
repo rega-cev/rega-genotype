@@ -196,17 +196,27 @@
 	<message id="admin.analisysis-template">
 		<table class="form-table">
 		  <col width="200"><col width="200"></col></col>
-  		  <tr><td>Sequence type</td><td>${sequence-type}</td><td>${sequence-type-info}</td></tr>
+  		  <tr><td>Analysis type</td><td>${sequence-type}</td><td>${sequence-type-info}</td></tr>
   		  <tr><td>Blast options</td><td>${option}</td><td>${option-info}</td></tr>
-  		  <tr><td>Absolute Cut off</td><td>${absolute-cut-off}</td><td>${absolute-cut-off-info}</td></tr>
-  		  <tr><td>Absolute E value</td><td>${absolute-evalue}</td><td>${absolute-evalue-info}</td></tr>
-  		  <tr><td>Relative Cut off</td><td>${relative-cut-off}</td><td>${relative-cut-off-info}</td></tr>
-  		  <tr><td>Relative E value</td><td>${relative-evalue}</td><td>${relative-evalue-info}</td></tr>
+  		  <tr><td><b>Assingment cut offs</b></td> <td></td> <td class="auto-form-info">Assignment is made if result passes all cut offs</td></tr>
+  		  
+  		  <tr><td class="form-indent">Absolute score</td><td>${absolute-cut-off}</td><td class="auto-form-info">Assignment is made if score is bigger than cut off</td></tr>
+  		  <tr><td></td><td></td><td>${absolute-cut-off-info}</td></tr>
+  		  
+  		  <tr><td class="form-indent">Absolute E value</td><td>${absolute-evalue}</td><td class="auto-form-info">Assignment is made if E value is lower than cut off</td></tr>
+  		  <tr><td></td><td></td><td>${absolute-evalue-info}</td></tr>
+  		  
+  		  <tr><td class="form-indent">Relative score</td><td>${relative-cut-off}</td><td class="auto-form-info">Assignment is made if best score is this much bigger than second best</td></tr>
+  		  <tr><td></td><td></td><td>${relative-cut-off-info}</td></tr>
+  		  
+  		  <tr><td class="form-indent">Relative E value</td><td>${relative-evalue}</td><td class="auto-form-info">Assignment is made if best E value is this much smaller than second best E value</td></tr>
+  		  <tr><td></td><td></td><td>${relative-evalue-info}</td></tr>
+  		  
 		</table>
 	</message>
 	
 	<message id="admin.cluster-form">
-		<h4 class="inner-header"> Edit cluster </h4>
+		<h4 class="inner-header"> Edit cluster ${cluster-name}</h4>
 		<table class="form-table">
 	    <col width="200"><col width="200"></col></col>
 		  <tr><td>ID</td><td>${id}</td><td>${id-info}</td></tr>
@@ -222,9 +232,13 @@
 	<message id="admin.config.blast-file-editor">
 		${analysis}
 		${cluster-table}
-		<div>${add}${edit}${remove}</div>
 		${add-sequences}
 		<div class="action-buttons">${save}${cancel}</div>
+	</message>
+
+	<message id="admin.config.cluster-table">
+		${cluster-table}
+		<div>${add}${edit}${remove}</div>
 	</message>
 
 	<message id="admin.config.file-editor.file-tree">

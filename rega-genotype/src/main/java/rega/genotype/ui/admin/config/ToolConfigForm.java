@@ -53,7 +53,7 @@ public class ToolConfigForm extends FormTemplate {
 		smartFileEditor = new SmartFileEditor(toolDir);
 
 		WTabWidget fileEditorTabs = new WTabWidget();
-		fileEditorTabs.addTab(smartFileEditor, "Smart file editor");
+		fileEditorTabs.addTab(smartFileEditor, "Tool editor");
 		fileEditorTabs.addTab(fileEditor, "Simple file editor");
 
 		// manifest 

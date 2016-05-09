@@ -39,7 +39,10 @@ public class BlastAnalysisForm extends FormTemplate{
 		sequenceTypeCB = new ObjectListComboBox<SequenceType>(list) {
 			@Override
 			protected WString render(SequenceType t) {
-				return new WString(t.name());
+				if (t == SequenceType.DNA)
+					return new WString("blastn (DNA)");
+				else
+					return new WString("blastx (AA)");
 			}
 		};
 

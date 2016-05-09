@@ -191,10 +191,18 @@ public class BlastFileEditor extends WContainerWidget{
 		WPushButton editB = new WPushButton("Edit");
 		WPushButton removeB = new WPushButton("Remove");
 
-		layout.bindWidget("add", addB);
-		layout.bindWidget("edit", editB);
-		layout.bindWidget("remove", removeB);
-		layout.bindWidget("cluster-table", table);
+		Template clusterTableTemplate = new Template(tr("admin.config.cluster-table"));
+		clusterTableTemplate.bindWidget("add", addB);
+		clusterTableTemplate.bindWidget("edit", editB);
+		clusterTableTemplate.bindWidget("remove", removeB);
+		clusterTableTemplate.bindWidget("cluster-table", table);
+
+		WPanel clusterPanel = new WPanel();
+		clusterPanel.addStyleClass("admin-panel");
+		clusterPanel.setTitle("Reference clusters");
+		clusterPanel.setCentralWidget(clusterTableTemplate);
+
+		layout.bindWidget("cluster-table", clusterPanel);
 
 		addB.clicked().addListener(addB, new Signal.Listener() {
 			public void trigger() {

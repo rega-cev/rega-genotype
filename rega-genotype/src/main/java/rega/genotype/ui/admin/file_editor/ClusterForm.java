@@ -86,18 +86,27 @@ public class ClusterForm extends FormTemplate{
 
 		// taxus model
 
-		final WStandardItemModel taxuesModel = new WStandardItemModel(0, 1);
-		taxuesModel.setHeaderData(0, "Taxuses");
+		final WStandardItemModel taxuesModel = new WStandardItemModel(0, 2);
+		taxuesModel.setHeaderData(0, "Taxa");
+		taxuesModel.setHeaderData(1, "Sequence length");
 		for (Taxus t: cluster.getTaxa()) {
-			taxuesModel.appendRow(new WStandardItem(t.getId()));
+			List<WStandardItem> items = new ArrayList<WStandardItem>();
+			items.add(new WStandardItem(t.getId()));
+			AbstractSequence sequence = alignmentAnalyses.getAlignment().findSequence(t.getId());
+			if (sequence != null) 
+				items.add(new WStandardItem("" + sequence.getLength()));
+
+			taxuesModel.appendRow(items);
 		}
 		taxuesTable.setModel(taxuesModel);
 		taxuesTable.setSelectionMode(SelectionMode.ExtendedSelection);
 		taxuesTable.setSelectionBehavior(SelectionBehavior.SelectRows);
 		taxuesTable.setHeight(new WLength(100));
+		taxuesTable.setColumnWidth(0, new WLength(300));
 		
 		// bind
 
+		bindString("cluster-name", c.getName());
 		bindWidget("id", idLE);
 		bindWidget("name", nameLE);
 		bindWidget("description", descriptionLE);
