@@ -2,7 +2,6 @@ package rega.genotype.ui.admin.file_editor;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +18,9 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
+import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
@@ -47,10 +48,9 @@ public class FastaFileEditorDialog extends WDialog{
 	private TaxusTable analysFastaFileWidget;
 	public FastaFileEditorDialog(final Cluster cluster, final AlignmentAnalyses alignmentAnalyses,
 			final ToolConfig toolConfig) {
-		// TODO: if not blast tool run blust tool to identify the clusters.
 		show();
 		getTitleBar().addWidget(new WText("Add sequences"));
-		setHeight(new WLength(400));
+		setHeight(new WLength(420));
 		setResizable(true);
 		getContents().setOverflow(Overflow.OverflowAuto);
 
@@ -99,21 +99,26 @@ public class FastaFileEditorDialog extends WDialog{
 
 	// step 1: choose fasta file 
 
-	public static class FastaFileUpload extends WContainerWidget {
-		final WTextArea fastaTA = new WTextArea(this);
+	public static class FastaFileUpload extends Template {
+		final WTextArea fastaTA = new WTextArea();
 		final FileUpload upload = new FileUpload();
 		public FastaFileUpload() {
+			super(tr("admin.fasta-file-upload"));
 			fastaTA.setInline(false);
 			fastaTA.setWidth(new WLength(700));
 			fastaTA.setHeight(new WLength(300));
 
 			upload.getWFileUpload().setFilters(".fasta");
-			addWidget(upload);
+			upload.setInline(true);
+			
 			upload.uploadedFile().addListener(upload, new Signal1.Listener<File>() {
 				public void trigger(File file) {
 					fastaTA.setText(FileUtil.readFile(file));
 				}
 			});
+
+			bindWidget("upload", upload);
+			bindWidget("text-area", fastaTA);
 		}
 
 		public String getText(){
@@ -140,9 +145,11 @@ public class FastaFileEditorDialog extends WDialog{
 
 		private enum Mode {SingalCluster, AllClusters};
 		private Mode mode = Mode.SingalCluster;
+		private Cluster cluster;
 		
 		public TaxusTable(Cluster cluster, String fasta,
 				AlignmentAnalyses alignmentAnalyses, ToolConfig toolConfig) {
+			this.cluster = cluster;
 			this.alignmentAnalyses = alignmentAnalyses;
 
 			// pre-compute taxaIds
@@ -154,7 +161,7 @@ public class FastaFileEditorDialog extends WDialog{
 			setHeaderCount(1);
 			getElementAt(0, 0).addWidget(new WText("Add"));
 			getElementAt(0, 1).addWidget(new WText("Name"));
-			getElementAt(0, 2).addWidget(new WText("Tool"));
+			getElementAt(0, 2).addWidget(new WText("Blast analysis"));
 			getElementAt(0, 3).addWidget(new WText("Cluster"));
 			getElementAt(0, 4).addWidget(new WText("Info"));
 
@@ -163,33 +170,28 @@ public class FastaFileEditorDialog extends WDialog{
 
 			alignmentAnalyses.analyses();
 
-			if (cluster == null) {// add sequences to many clusters.
-				mode = Mode.AllClusters;
-				// run the tool to identify the clusters.
-				final File jobDir = GenotypeLib.createJobDir(toolConfig.getJobDir());
-				try {
-					InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
-					currentSeqAlign = new SequenceAlignment(stream, 
-							SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+			mode = Mode.AllClusters;
+			// run the tool to identify the clusters.
+			final File jobDir = GenotypeLib.createJobDir(toolConfig.getJobDir());
+			try {
+				InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
+				currentSeqAlign = new SequenceAlignment(stream, 
+						SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
-					stream.reset();
-					GenericTool t = new GenericTool(toolConfig, jobDir);
-					t.analyze(stream, jobDir.getAbsolutePath() + File.separator + "result.xml");
-					new Parser().parseFile(jobDir);
-				} catch (IOException e) {
-					e.printStackTrace();
-					fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
-				} catch (ParameterProblemException e) {
-					e.printStackTrace();
-					fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
-				} catch (FileFormatException e) {
-					e.printStackTrace();
-					fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
-				}
-
-				// use result parser on blast-tool-result.xml
-			} else // the cluster is pre selected
-				fillTaxuesTable(cluster, fasta, alignmentAnalyses.getAlignment().getSequenceType());
+				stream.reset();
+				GenericTool t = new GenericTool(toolConfig, jobDir);
+				t.analyze(stream, jobDir.getAbsolutePath() + File.separator + "result.xml");
+				new Parser().parseFile(jobDir);
+			} catch (IOException e) {
+				e.printStackTrace();
+				new MsgDialog("Error", "Failed to analyze given sequence.");
+			} catch (ParameterProblemException e) {
+				e.printStackTrace();
+				new MsgDialog("Error", "Failed to analyze given sequence.");
+			} catch (FileFormatException e) {
+				e.printStackTrace();
+				new MsgDialog("Error", "Failed to analyze given sequence.");
+			}
 		}
 
 		/**
@@ -211,10 +213,13 @@ public class FastaFileEditorDialog extends WDialog{
 			}
 		}
 
-		private void addRow(AbstractSequence s, Cluster cluster) {
+		private void addRow(AbstractSequence s, Cluster blastResultCluster) {
 			int row = getRowCount();
 			final WCheckBox chb = new WCheckBox();
-			final WText clusterNameT = new WText("");
+			final WText blastAnalysisT = new WText("");
+
+			if (blastResultCluster != null)
+				blastAnalysisT.setText(blastResultCluster.getName());
 
 			// clusterCB
 			List<Cluster> clusters = new ArrayList<AlignmentAnalyses.Cluster>(
@@ -242,16 +247,18 @@ public class FastaFileEditorDialog extends WDialog{
 			if(mode == Mode.SingalCluster)
 				clusterCB.disable();
 
-			clusterCB.setCurrentObject(cluster);
+			if (cluster != null) // Editing a cluster
+				clusterCB.setCurrentObject(cluster);
+			else // Add sequences file for all clusters.
+				clusterCB.setCurrentObject(blastResultCluster);
+
 			clusterCB.changed().addListener(clusterCB, new Signal.Listener() {
 				public void trigger() {
 					Cluster currentCluster = clusterCB.getCurrentObject();
 					if (currentCluster == null) {
-						clusterNameT.setText("");
 						chb.setUnChecked();
 						chb.disable();
 					} else {
-						clusterNameT.setText(Utils.nullToEmpty(currentCluster.getToolId()));
 						chb.enable();
 					}
 				}
@@ -262,20 +269,10 @@ public class FastaFileEditorDialog extends WDialog{
 
 			getElementAt(row, 0).addWidget(chb);
 			getElementAt(row, 1).addWidget(new WText(Utils.nullToEmpty(s.getName())));
-			getElementAt(row, 2).addWidget(clusterNameT);
+			getElementAt(row, 2).addWidget(blastAnalysisT);
 			getElementAt(row, 3).addWidget(clusterCB);
 
 			sequenceMap.put(s, new SequenceData(chb, clusterCB));
-		}
-
-		public void fillTaxuesTable(Cluster cluster, String fasta, int sequenceType) {
-			SequenceAlignment alignment = parseFasta(fasta, sequenceType);
-			if (alignment != null) {
-				List<AbstractSequence> sequences = alignment.getSequences();
-				for (AbstractSequence s: sequences) {
-					addRow(s, cluster);
-				}
-			}
 		}
 
 		public Map<AbstractSequence, Cluster> getSelectedSequences() {
@@ -286,25 +283,6 @@ public class FastaFileEditorDialog extends WDialog{
 			}
 
 			return ans;
-		}
-
-		private SequenceAlignment parseFasta(String fasta, int sequenceType) {
-			try {
-				InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
-				SequenceAlignment alignment = new SequenceAlignment(stream,
-						SequenceAlignment.FILETYPE_FASTA, sequenceType);
-				return alignment;
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (ParameterProblemException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (FileFormatException e) {
-				e.printStackTrace();
-			}
-
-			return null;
 		}
 	}
 }

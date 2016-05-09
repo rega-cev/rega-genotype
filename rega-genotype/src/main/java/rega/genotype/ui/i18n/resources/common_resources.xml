@@ -246,6 +246,12 @@
 		<div class="action-buttons">${add}${remove}</div>
 	</message>
 
+	<message id="admin.fasta-file-upload">
+		Paste fasta sequences
+		${text-area}
+		<div>Upload fasta file ${upload}</div>
+	</message>
+
 	<message id="admin.help">
 		<h2>
 		Admin UI
