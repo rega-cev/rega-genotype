@@ -28,15 +28,15 @@ import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal.Listener;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
-import eu.webtoolkit.jwt.WMessageBox;
-import eu.webtoolkit.jwt.Signal.Listener;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPanel;
@@ -239,7 +239,7 @@ public class BlastFileEditor extends WContainerWidget{
 				final WModelIndex[] indexs = table.getSelectedIndexes().toArray(
 						new WModelIndex[table.getSelectedIndexes().size()]);
 
-				String txt = "";
+				String txt = "Are you sure that you want to remove clusters: ";
 
 				for (int i = 0; i < indexs.length; ++i){
 					int row = indexs[i].getRow();
@@ -248,19 +248,21 @@ public class BlastFileEditor extends WContainerWidget{
 					txt += clusterTableModel.getCluster(row).getName();
 				}
 
-				WMessageBox d = new WMessageBox("Warning", txt, Icon.NoIcon,
+				final WMessageBox d = new WMessageBox("Warning", txt, Icon.NoIcon,
 						EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
 				d.show();
-
-				d.finished().addListener(d, new Signal1.Listener<DialogCode>() {
-					public void trigger(DialogCode arg) {
-						if (arg == DialogCode.Accepted) {
+				d.setWidth(new WLength(300));
+				d.buttonClicked().addListener(d,
+						new Signal1.Listener<StandardButton>() {
+					public void trigger(StandardButton e1) {
+						if(e1 == StandardButton.Ok){
 							for (int i = indexs.length -1; i >= 0; --i){
 								int row = indexs[i].getRow();
 								alignmentAnalyses.removeCluster(clusterTableModel.getCluster(row));
-								clusterTableModel.removeRow(row);
 							}
 						}
+						clusterTableModel.refresh();
+						d.remove();
 					}
 				});
 			}

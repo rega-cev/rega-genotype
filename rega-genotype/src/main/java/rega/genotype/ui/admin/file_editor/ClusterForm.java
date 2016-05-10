@@ -146,7 +146,7 @@ public class ClusterForm extends FormTemplate{
 				final WModelIndex[] indexs = taxuesTable.getSelectedIndexes().toArray(
 						new WModelIndex[taxuesTable.getSelectedIndexes().size()]);
 
-				String txt = "";
+				String txt = "Are you sure that you want to remove sequnces: ";
 
 				for (int i = 0; i < indexs.length; ++i){
 					int row = indexs[i].getRow();
@@ -155,19 +155,21 @@ public class ClusterForm extends FormTemplate{
 					txt += taxuesModel.getItem(row).getText();
 				}
 
-				WMessageBox d = new WMessageBox("Warning", txt, Icon.NoIcon,
+				final WMessageBox d = new WMessageBox("Warning", txt, Icon.NoIcon,
 						EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
 				d.show();
-
-				d.finished().addListener(d, new Signal1.Listener<DialogCode>() {
-					public void trigger(DialogCode arg) {
-						if (arg == DialogCode.Accepted) {
+				d.setWidth(new WLength(300));
+				d.buttonClicked().addListener(d,
+						new Signal1.Listener<StandardButton>() {
+					public void trigger(StandardButton e1) {
+						if(e1 == StandardButton.Ok){
 							for (int i = indexs.length -1; i >= 0; --i){
 								int row = indexs[i].getRow();
 								removedSequenceNames.add(taxuesModel.getItem(row).getText().toString());
 								taxuesModel.removeRow(row);
 							}
 						}
+						d.remove();
 					}
 				});
 			}
