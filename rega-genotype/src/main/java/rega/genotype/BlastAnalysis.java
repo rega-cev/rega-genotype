@@ -592,7 +592,8 @@ public class BlastAnalysis extends AbstractAnalysis {
 				}
 			}
 
-			if (ba.relativeCutoff != null && !bestClusters.isEmpty()) {
+			if ((ba.relativeCutoff != null || ba.relativeMaxEValue != null)
+					&& !bestClusters.isEmpty()) {
 				Cluster c = ba.findCluster(values[BLAST_RESULT_SUBJECT_ID_IDX]);
 				if (!bestClusters.contains(c)) {
 					if (secondBest == null)
@@ -611,14 +612,14 @@ public class BlastAnalysis extends AbstractAnalysis {
 			float absScore = Float.valueOf(best[BLAST_RESULT_BIT_SCORE_IDX]);
 			float relativeScore = absScore;
 
-			if (ba.absCutoff == null || 
+			if ((ba.absCutoff == null && ba.absMaxEValue == null)|| 
 					(ba.absMaxEValue != null && pValue > ba.absMaxEValue))
 				absScore = -1;
-			if (ba.relativeCutoff == null || 
+			if ((ba.relativeCutoff == null && ba.relativeMaxEValue == null)|| 
 					(ba.relativeMaxEValue != null && pValue > ba.relativeMaxEValue))
 				relativeScore = -1;
 
-			if (ba.relativeCutoff != null) {
+			if (ba.relativeCutoff != null || ba.relativeMaxEValue != null) {
 				if (secondBest != null)
 					relativeScore = relativeScore / Float.valueOf(secondBest[BLAST_RESULT_BIT_SCORE_IDX]);
 			}
