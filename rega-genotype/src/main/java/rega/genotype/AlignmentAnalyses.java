@@ -585,6 +585,9 @@ public class AlignmentAnalyses {
     	return null;
     }
 
+    public boolean removeCluster(Cluster c){
+    	return clusters.remove(c);
+    }
     /**
      * @return Returns the alignment.
      */

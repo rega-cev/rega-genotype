@@ -1,6 +1,7 @@
 package rega.genotype.ui.admin.file_editor;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,20 +10,23 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AlignmentAnalyses.Taxus;
-import rega.genotype.config.ToolManifest;
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal.Listener;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WFormWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStandardItem;
@@ -42,7 +46,7 @@ public class ClusterForm extends FormTemplate{
 	private WLineEdit descriptionLE = new WLineEdit();
 	private WTableView taxuesTable = new WTableView();
 	private WPushButton addSequenceB = new WPushButton("Add sequences");
-	private WPushButton removeSequenceB = new WPushButton("Remove sequences");
+	private WPushButton removeSequenceB= new WPushButton("Remove sequences");
 
 	private List<AbstractSequence> addedSequences = new ArrayList<AbstractSequence>();
 	private List<String> removedSequenceNames = new ArrayList<String>();
@@ -103,7 +107,7 @@ public class ClusterForm extends FormTemplate{
 		taxuesTable.setSelectionBehavior(SelectionBehavior.SelectRows);
 		taxuesTable.setHeight(new WLength(100));
 		taxuesTable.setColumnWidth(0, new WLength(300));
-		
+
 		// bind
 
 		bindString("cluster-name", c.getName());
@@ -137,15 +141,35 @@ public class ClusterForm extends FormTemplate{
 			}
 		});
 
-		removeSequenceB.clicked().addListener(addSequenceB, new Listener() {
-			public void trigger() {
-				WModelIndex[] indexs = taxuesTable.getSelectedIndexes().toArray(
+		removeSequenceB.clicked().addListener(removeSequenceB, new Listener() {
+			public void trigger() {				
+				final WModelIndex[] indexs = taxuesTable.getSelectedIndexes().toArray(
 						new WModelIndex[taxuesTable.getSelectedIndexes().size()]);
-				for (int i = indexs.length -1; i >= 0; --i){
+
+				String txt = "";
+
+				for (int i = 0; i < indexs.length; ++i){
 					int row = indexs[i].getRow();
-					removedSequenceNames.add(taxuesModel.getItem(row).getText().toString());
-					taxuesModel.removeRow(row);
+					if (i != 0)
+						txt += ", ";
+					txt += taxuesModel.getItem(row).getText();
 				}
+
+				WMessageBox d = new WMessageBox("Warning", txt, Icon.NoIcon,
+						EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
+				d.show();
+
+				d.finished().addListener(d, new Signal1.Listener<DialogCode>() {
+					public void trigger(DialogCode arg) {
+						if (arg == DialogCode.Accepted) {
+							for (int i = indexs.length -1; i >= 0; --i){
+								int row = indexs[i].getRow();
+								removedSequenceNames.add(taxuesModel.getItem(row).getText().toString());
+								taxuesModel.removeRow(row);
+							}
+						}
+					}
+				});
 			}
 		});
 

@@ -19,6 +19,7 @@ body {
    /* max-width: 200px; */
    padding-bottom: 2px;
    padding-right: 2px;
+   line-height: 20px;
 }
 
 .form-table input[type="text"]  { 

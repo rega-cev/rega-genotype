@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
@@ -23,13 +24,17 @@ import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
+import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WMessageBox;
+import eu.webtoolkit.jwt.Signal.Listener;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WModelIndex;
@@ -178,7 +183,7 @@ public class BlastFileEditor extends WContainerWidget{
 				SequenceAlignment.FILETYPE_FASTA);
 	}
 
-	private void createClustersTable(AlignmentAnalyses alignmentAnalyses) {
+	private void createClustersTable(final AlignmentAnalyses alignmentAnalyses) {
 		List<Cluster> clusters = alignmentAnalyses.getAllClusters();
 		clusterTableModel = new ClusterTableModel(clusters);
 		final WTableView table = new WTableView();
@@ -226,6 +231,38 @@ public class BlastFileEditor extends WContainerWidget{
 					Cluster cluster = clusterTableModel.getCluster(index.getRow());
 					editClaster(cluster);
 				}
+			}
+		});
+
+		removeB.clicked().addListener(removeB, new Listener() {
+			public void trigger() {				
+				final WModelIndex[] indexs = table.getSelectedIndexes().toArray(
+						new WModelIndex[table.getSelectedIndexes().size()]);
+
+				String txt = "";
+
+				for (int i = 0; i < indexs.length; ++i){
+					int row = indexs[i].getRow();
+					if (i != 0)
+						txt += ", ";
+					txt += clusterTableModel.getCluster(row).getName();
+				}
+
+				WMessageBox d = new WMessageBox("Warning", txt, Icon.NoIcon,
+						EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
+				d.show();
+
+				d.finished().addListener(d, new Signal1.Listener<DialogCode>() {
+					public void trigger(DialogCode arg) {
+						if (arg == DialogCode.Accepted) {
+							for (int i = indexs.length -1; i >= 0; --i){
+								int row = indexs[i].getRow();
+								alignmentAnalyses.removeCluster(clusterTableModel.getCluster(row));
+								clusterTableModel.removeRow(row);
+							}
+						}
+					}
+				});
 			}
 		});
 	}
