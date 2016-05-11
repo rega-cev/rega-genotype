@@ -67,10 +67,11 @@ table.jobTable {
 	border-collapse: collapse;
 }
 
-table.reftable {
+table.reftable, .blastResultsTable table {
 	width: 70%;
 	margin-left: 0;
 	margin-right: auto;
+	border-collapse: collapse;
 }
 
 table.jobTable td, table.jobTable th {
@@ -81,7 +82,8 @@ table.jobTable td, table.jobTable th {
 	line-height: 60px;
 }
 
-table.reftable td, table.reftable th {
+table.reftable td, table.reftable th,
+.blastResultsTable table td, .blastResultsTable table th{
 	border-top: 1px inset gray;
 	border-bottom: 1px inset gray;
 	padding: 0.5em;
@@ -89,7 +91,8 @@ table.reftable td, table.reftable th {
 }
 
 table.jobTable col,
-table.reftable col {
+table.reftable col,
+.blastResultsTable table col {
 	border-left: 1px solid gray;
 	border-right: 1px solid gray;
 }
@@ -113,7 +116,8 @@ table.jobTable tr > td {
 }
 
 table.jobTable td, table.jobTable th, 
-table.reftable td, table.reftable th {
+table.reftable td, table.reftable th,
+.blastResultsTable table td, .blastResultsTable table th {
 	border-left: 1px solid gray;
 	border-right: 1px solid gray;
 }
@@ -130,6 +134,24 @@ table.jobTable td img, .detailsForm img {
 	margin-right: auto;
 }
 
+/*
+.blastResultsTable td, .blastResultsTable th {
+	text-align: left;
+	border: 1px solid gray;
+}
+
+.blastResultsTable td, .blastResultsTable th {
+	border-top: 1px solid gray;
+	border-left: 1px solid gray;
+	padding: 0.5em;
+	text-align: left;
+}
+
+blastResultsTable col {
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
+}
+*/
 .detailsForm {
 	margin: 3ex auto;
 	width: 800px;
@@ -484,7 +506,7 @@ table.assignment-overview {
   text-align:center;
 }
 
-table.reftable caption {
+table.reftable caption, .blastResultsTable table caption {
   font-weight:bold;
   font-size:110%;
   margin:5px 0 5px 0;

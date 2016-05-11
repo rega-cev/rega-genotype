@@ -57,21 +57,21 @@ div.imgDiv, div.downloadContainer{
 	margin: 0px auto;
 }
 
-table.jobTable {
+table.jobTable, div.jobTable {
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	border-spacing: 2px;
 }
 
-table.reftable {
+table.reftable, .blastResultsTable table {
 	width: 70%;
 	margin-left: 0;
 	margin-right: auto;
 	border-spacing: 2px;
 }
 
-table.jobTable td, table.jobTable th {
+table.jobTable td, table.jobTable th, div.jobTable td, div.jobTable th {
 	border-top: 1px inset gray;
 	border-bottom: 1px inset gray;
 	padding: 0.5em;
@@ -79,7 +79,8 @@ table.jobTable td, table.jobTable th {
 	line-height: 60px;
 }
 
-table.reftable td, table.reftable th {
+table.reftable td, table.reftable th,
+.blastResultsTable table td, .blastResultsTable table th {
 	border-top: 1px inset gray;
 	border-bottom: 1px inset gray;
 	padding: 0.5em;
@@ -87,13 +88,14 @@ table.reftable td, table.reftable th {
 }
 
 table.jobTable col,
-table.reftable col {
+table.reftable col, .blastResultsTable table col {
 	border-left: 1px outset gray;
 	border-right: 1px outset gray;
 }
 
-table.jobTable td, table.jobTable th, 
-table.reftable td, table.reftable th {
+table.jobTable td, table.jobTable th,
+table.reftable td, table.reftable th,
+.blastResultsTable table td, .blastResultsTable table th {
 	border-left: 1px outset gray;
 	border-right: 1px outset gray;
 }
@@ -435,7 +437,7 @@ table.assignment-overview {
   margin-bottom:20px;
   text-align:center;
 }
-table.reftable caption{
+table.reftable caption, .blastResultsTable table caption {
   font-weight:bold;
   font-size:110%;
   margin:5px 0 5px 0;
