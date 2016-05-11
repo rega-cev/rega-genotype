@@ -15,12 +15,17 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.ItemDataRole;
+import eu.webtoolkit.jwt.PositionScheme;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WPainter;
+import eu.webtoolkit.jwt.WRectF;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WWidget;
@@ -48,22 +53,12 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	private Map<String, ToolData> toolDataMap = new HashMap<String, ToolData>();
 	private Signal1<String> jobIdChanged = new Signal1<String>();
 	private String jobId;
+	private WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
 	private WPieChart chart;
 	private WTableView table = new WTableView();
 
 	public BlastJobOverviewForm(GenotypeWindow main) {
 		super(main);
-
-		// create chart
-		chart = new WPieChart();
-		chart.setModel(blastResultModel);
-		chart.setLabelsColumn(CHART_DISPLAY_COLUMN);    
-		chart.setDataColumn(DATA_COLUMN);
-		chart.resize(800, 300);
-		chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
-		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
-		chart.setPlotAreaPadding(30);
 
 		// table
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
@@ -72,10 +67,46 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.hideColumn(CHART_DISPLAY_COLUMN);
 	}
 
+	private void createChart() {		
+		chartContainer.clear();
+
+		chart = new WPieChart() {
+			@Override
+			protected void drawLabel(WPainter painter, WRectF rect,
+					EnumSet<AlignmentFlag> alignmentFlags, CharSequence text,
+					int row) {
+				if (getModel().link(row, getDataColumn()) == null)
+					super.drawLabel(painter, rect, alignmentFlags, text, row);
+				else{
+					WAnchor a = new WAnchor(getModel().link(row, getDataColumn()), text);
+					chartContainer.addWidget(
+							createLabelWidget(a, painter, rect, alignmentFlags));
+				}
+			}
+		};
+		chartContainer.addWidget(chart);
+		chartContainer.setPositionScheme(PositionScheme.Relative);
+
+		chartContainer.resize(800, 300);
+		chartContainer.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
+		chartContainer.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+
+		chart.resize(800, 300);
+		chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
+		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+
+		chart.setModel(blastResultModel);
+		chart.setLabelsColumn(CHART_DISPLAY_COLUMN);    
+		chart.setDataColumn(DATA_COLUMN);
+		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
+		chart.setPlotAreaPadding(30);
+	}
+
 	@Override
 	public void handleInternalPath(String internalPath) {
 		table.hide();
-		chart.hide();
+		chartContainer.hide();
+		createChart();
 		toolDataMap.clear();
 
 		String path[] =  internalPath.split("/");
@@ -95,10 +126,10 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		fillBlastResultsChart();
 		if (!toolDataMap.isEmpty()){
 			table.hide();
-			chart.show();
+			chartContainer.show();
 			table.show();
 			WContainerWidget c = new WContainerWidget();
-			c.addWidget(chart);
+			c.addWidget(chartContainer);
 			c.addWidget(table);
 			bindResults(c);
 		}
