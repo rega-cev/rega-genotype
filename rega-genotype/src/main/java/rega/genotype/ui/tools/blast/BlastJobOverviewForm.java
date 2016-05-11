@@ -28,6 +28,7 @@ import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTableView;
+import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
@@ -113,11 +114,23 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		if (path.length > 1) {
 			jobId = path[1];
 
+			if (!existsJob(jobId)) {
+				showBadJobIdError();
+				return;
+			}
+
 			init(jobId, "");
 			jobIdChanged.trigger(jobId);
 		} else {
 			jobIdChanged.trigger("");
+			showBadJobIdError();
 		}
+	}
+
+	private void showBadJobIdError() {
+		clear();
+		setMargin(30);
+		addWidget(new WText(tr("monitorForm.nonExistingJobId").arg(jobId)));
 	}
 
 	@Override
