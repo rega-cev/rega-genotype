@@ -3,91 +3,24 @@ INSTALL
 
 Installation instructions for rega-genotype
 
-* Java 1.6
-	* follow the build procedure for this java project (BUILD)
-	* install the resulting war file in your servlet container
+* Strating the tool:
+-	run and go to url http://localhost:8080/rega-genotype/admin/
+- Fill in all Global config and save.
+- Now you can install tool from the repository that you specified. 
 
-* External tools
-	* Paup* 4 beta10 
-		* can be purchased from http://paup.csit.fsu.edu/
-		* make sure to install this version, since older versions
-		  can give problems!
-		
-	* clustalw
-		* some unix based operating operating systems allow
-		  installation via the package manager
-		* can be installed manually by downloading the appropriate
-		  binaries or build from source code for your OS
-			* ftp://ftp.ebi.ac.uk/pub/software/clustalw2/
-	
-	* tree-puzzle 5.2 (only for HIV)
-		* you can download the binaries from http://www.tree-puzzle.de
-			
-	* treegraph
-		* if you use unix based OS you should download and build the
-		  source code
-			* http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/
-		* if you use a Microsoft Windows you can download a binary
-			* http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/
-	
-	* blast 2.2.11
-		* make sure to install this version, since other versions can
-		  give problems!
-		* the binaries can be downloaded from
-			* ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/
-			* select the appropriate binary for your OS
-		* these binaries can be installed by extracting the archive to
-		  a desired location
-	
-	* imagemagick
-	    * http://www.imagemagick.org
-	    
-	* epstopdf 
-	
-* Configuration
-	* create an config file like the one in config.sample and save it to a
-	  location of your choice
-	* Change context param - baseWorkDir.
-		This folder will be used to store information about new typing tools. 
-	* fill in the appropriate values
-    Note: in future config file will be managed by a UI.
+Repositories:
 
-	config file format (json):
-	{
-		"generalConfig": 
-		{
-			xmlBasePath:"/home/michael/projects/rega-genotype-extenal/xml/",
-			paupCmd: "/opt/software/rega-genotype/bin/paup4b10-x86-linux",
-			clustalWCmd: "/opt/software/rega-genotype/bin/clustalw",
-			blastPath: "/usr/bin/",
-			treePuzzleCmd: "puzzle",
-			treeGraphCmd: "/opt/software/rega-genotype/bin/tgf",
-			epsToPdfCmd: "?",
-			inkscapeCmd: "?",
-			imageMagickConvertCmd: "convert",
-	        maxAllowedSeqs: "20000",
-	        adminPassword: "", 
-	        repositoryPassword: "" // leave empty, will be filled by the software.
-		}
-		,
-		"tools": // the tools will be filled by admin UI.
-		[
-			{
-				"path": "etv",
-      	"configuration": "base-work-dir/xml/ETV-generic/",
-        "jobDir": "base-work-dir/job/",
-        "autoUpdate": true,
-        "webService": true,
-         "ui": true
-			},
-	...
-	]
-	See config.sample for more info on the config file
-	* Run typing tool on url
-	{host-name}/rega-genotype/typingtool/{path}
-	{path} = the path from the config file.
+We added a central repository that contains all the published tools. 
+Communication to that repository is done from admin UI (http://localhost:8080/rega-genotype/admin/)
+repoUrl =  http://typingtools.emweb.be/repository/repo-service
+
+All the tools that existed before the migration are stored in a test repository.
+repoUrl =  http://typingtools.emweb.be/repository-test/repo-service
+The authors of this tools can connect to this repository (set repoUrl),
+download there tools, connect to the "real repository" (set repoUrl) and publish the tool.
+
+Developers can create local repository by setting 
+Global settings filed repoUrl to http://localhost:8080/rega-genotype/admin/
 
 
-Install repository server:
-	Change context param - baseRepoDir to a folder that will contain all the repositories. 
-
+* All the tools are saved in a folder specified in context param baseWorkDir.
