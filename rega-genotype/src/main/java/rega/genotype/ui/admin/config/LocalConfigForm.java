@@ -6,15 +6,12 @@ import java.io.IOException;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.framework.widgets.FormTemplate;
-import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
-import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WValidator;
 
 /**
@@ -29,7 +26,6 @@ public class LocalConfigForm  extends FormTemplate {
 	private final WCheckBox autoUpdateChB = new WCheckBox();
 	private final WCheckBox serviceChB = new WCheckBox();
 	private final WCheckBox uiChB = new WCheckBox();
-	private final WPushButton saveB = new WPushButton("Save manifest and local config");
 
 	//private ToolManifest manifest;
 	private ToolConfig toolConfig;
@@ -60,21 +56,9 @@ public class LocalConfigForm  extends FormTemplate {
 		bindWidget("update", autoUpdateChB);
 		bindWidget("ui", uiChB);
 		bindWidget("service", serviceChB);
-		bindWidget("save", saveB);
 
 		initInfoFields();
 		validate();
-
-		// signals
-
-		saveB.clicked().addListener(saveB, new Signal.Listener() {
-			public void trigger() {
-				if (save() != null)
-					new MsgDialog("Info", "Local configuration saved.");
-				else
-					new MsgDialog("Error", "Could not save local configuration.");
-			}
-		});
 	}
 
 	public ToolConfig save() {

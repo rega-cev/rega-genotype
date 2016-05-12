@@ -30,14 +30,14 @@ import eu.webtoolkit.jwt.servlet.UploadedFile;
 public class FileEditorView extends WContainerWidget{
 	private WTable layout = new WTable(this);
 	private FileTabs fileTabs = new FileTabs();
-	private File rootDir;
+	private File toolDir;
 	private FileTreeTable fileTree;
 	private WPushButton addB;
 	private WPushButton removeB;
 
 	public FileEditorView(final File root) {
 		super();
-		this.rootDir = root;
+		this.toolDir = root;
 
 		addB = new WPushButton("Add files");
 		removeB = new WPushButton("Remove");
@@ -127,8 +127,8 @@ public class FileEditorView extends WContainerWidget{
 	}
 	// classes
 
-	public File getRootDir() {
-		return rootDir;
+	public File getToolDir() {
+		return toolDir;
 	}
 
 	public static class FileTabs extends WTabWidget {
@@ -198,5 +198,9 @@ public class FileEditorView extends WContainerWidget{
 			this.isReadOnly = isReadOnly;
 			
 		}
+	}
+
+	public void setToolDir(File toolDir) {
+		this.toolDir = toolDir;
 	}
 }

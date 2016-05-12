@@ -181,7 +181,6 @@
 		  <tr><td class="form-table-name-td">Auto update enabled</td><td class="form-table-name-td">${update}</td></tr>
 		  <tr><td class="form-table-name-td">Web service enabled</td><td class="form-table-name-td">${service}</td></tr>
 		  <tr><td class="form-table-name-td">UI enabled</td><td class="form-table-name-td">${ui}</td></tr>
-		  <tr><td class="form-table-name-td"></td><td class="form-table-name-td"></td><td><div class="float-right">${save}</div></td></tr>
 		</table>
 	</message>
 
@@ -233,7 +232,6 @@
 		${analysis}
 		${cluster-table}
 		${add-sequences}
-		<div class="action-buttons">${save}${cancel}</div>
 	</message>
 
 	<message id="admin.config.cluster-table">
