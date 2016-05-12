@@ -263,7 +263,10 @@ public class FastaFileEditorDialog extends WDialog{
 					}
 				}
 			});
-			clusterCB.changed().trigger();
+			if (clusterCB.getCurrentObject() == null) {
+				chb.setUnChecked();
+				chb.disable();
+			} 
 
 			// bind
 
