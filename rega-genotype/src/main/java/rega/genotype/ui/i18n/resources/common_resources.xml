@@ -232,7 +232,6 @@
 		${analysis}
 		${cluster-table}
 		${add-sequences}
-		<div class="action-buttons">${save}${cancel}</div>
 	</message>
 
 	<message id="admin.config.cluster-table">
