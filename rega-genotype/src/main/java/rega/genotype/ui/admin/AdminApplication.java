@@ -2,6 +2,7 @@ package rega.genotype.ui.admin;
 
 import rega.genotype.config.Config;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WCssTheme;
@@ -49,9 +50,11 @@ public class AdminApplication extends WApplication{
 			
 			// very simple auth.
 			
+			new WText("Enter admin password", getRoot());
 			final WLineEdit pwdLE = new WLineEdit(getRoot());
 			final WPushButton loginB = new WPushButton("Login", getRoot());
 			final WText infoT = new WText(getRoot());
+			pwdLE.setMargin(5, Side.Left);
 
 			pwdLE.setFocus();
 			pwdLE.setPlaceholderText("Admin password");
