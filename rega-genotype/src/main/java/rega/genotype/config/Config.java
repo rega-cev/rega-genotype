@@ -191,9 +191,9 @@ public class Config {
 		private String blastPath;
 		private String treePuzzleCmd;
 		private String treeGraphCmd;
-		private String epsToPdfCmd;
-		private String imageMagickConvertCmd;
-		private int maxAllowedSeqs;
+		private String epsToPdfCmd = "epsToPdf";
+		private String imageMagickConvertCmd = "convert";
+		private int maxAllowedSeqs = 2000;
 		private String inkscapeCmd;
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
