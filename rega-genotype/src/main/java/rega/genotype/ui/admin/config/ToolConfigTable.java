@@ -466,23 +466,16 @@ public class ToolConfigTable extends Template{
 		return config;
 	}
 
-	
 	private List<ToolManifest> getLocalManifests() {
 		List<ToolManifest> ans = new ArrayList<ToolManifest>();
-		File xmlBaseDir = new File(Settings.getInstance().getBaseXmlDir());
-		xmlBaseDir.mkdirs();
-		for (File toolDir: xmlBaseDir.listFiles()){
-			if (toolDir.listFiles() != null)
-				for (File f: toolDir.listFiles()){
-					if (ToolManifest.MANIFEST_FILE_NAME.equals(f.getName())){
-						String json = FileUtil.readFile(f);
-						if (json != null) {
-							ToolManifest m = ToolManifest.parseJson(json);
-							if (m != null)
-								ans.add(m);
-						}
-					}
-				}
+		for (ToolConfig c: Settings.getInstance().getConfig().getTools()) {
+			String json = FileUtil.readFile(new File(
+					c.getConfigurationFile(), ToolManifest.MANIFEST_FILE_NAME));
+			if (json != null) {
+				ToolManifest m = ToolManifest.parseJson(json);
+				if (m != null)
+					ans.add(m);
+			}
 		}
 
 		return ans;
