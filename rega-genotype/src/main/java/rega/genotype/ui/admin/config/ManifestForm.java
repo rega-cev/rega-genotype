@@ -120,7 +120,7 @@ public class ManifestForm extends FormTemplate{
 			ToolConfig toolConfigById = config.getToolConfigById(idLE.getText(), versionLE.getText());
 			
 			if (toolConfigById != null && 
-					!toolConfigById.getConfigurationFile().getAbsolutePath().equals(toolDir.getAbsolutePath()))
+					!toolConfigById.getConfigurationFile().getAbsolutePath().equals(getToolDir().getAbsolutePath()))
 				return new Result(State.Invalid, "A tool with same id and version already exist on local server.");
 
 			return super.validate(input);
@@ -129,5 +129,13 @@ public class ManifestForm extends FormTemplate{
 
 	public boolean isHivTool() {
 		return hivChB.isChecked();
+	}
+
+	public File getToolDir() {
+		return toolDir;
+	}
+
+	public void setToolDir(File toolDir) {
+		this.toolDir = toolDir;
 	}
 }

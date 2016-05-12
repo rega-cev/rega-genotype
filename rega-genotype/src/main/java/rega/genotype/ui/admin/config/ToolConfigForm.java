@@ -208,6 +208,7 @@ public class ToolConfigForm extends FormTemplate {
 			FileUtil.moveDirRecorsively(toolDir, xmlDir);
 		}
 
+		manifestForm.setToolDir(new File(xmlDir));
 		localConfigForm.setXmlDir(new File(xmlDir));
 
 		// TODO: refresh file editor
