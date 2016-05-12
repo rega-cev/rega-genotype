@@ -69,6 +69,7 @@ public class ToolConfigForm extends FormTemplate {
 			publishB.disable();
 			manifestForm.disable();
 			fileEditor.setReadOnly(true);
+			smartFileEditor.disable();
 		} 
 
 		// bind
