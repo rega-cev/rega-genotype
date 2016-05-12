@@ -84,7 +84,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 
 		setFieldInfo("blastPath", "<div>blast 2.2.11</div>"
 				+ "<div>Make sure to install this version, since other versions can give problems!</div>"
-				+ "<div>The binaries can be downloaded from ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/</div>"
+				+ "<div>The binaries can be downloaded from ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy/2.2.11/</div>"
 				+ "<div>Select the appropriate binary for your OS</div>"
 				+ "<div>These binaries can be installed by extracting the archive to a desired location</div>");
 
