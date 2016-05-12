@@ -107,11 +107,30 @@ body {
     text-decoration: none;
 }
 
-.fasta-analysis-table th, .fasta-analysis-table td {
-	text-align: left;
-	border: 1px solid black;
-	border-collapse: separate;
-	border-spacing: 0px;
+.fasta-analysis-table th {
+    background: #6880A0 url(title-gradient.png) repeat-x scroll 0 -20px;
+    color: white;
+    border-left: 1px solid white;
+    font-weight: bold;
+    height: 100%;
+    padding: 0px 3px;
+}
+
+.fasta-analysis-table td {
+    padding: 1px 3px;
+    border-right: 0px;
+    margin-right: 1px;
+}
+
+.fasta-analysis-table td, .fasta-analysis-table th {
+	font-family: verdana,helvetica,tahoma,sans-serif;
+    font-size: 9pt;
+    cursor: default;
+    white-space: nowrap;
+    line-height: 20.0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
 }
 
 .inner-header {
