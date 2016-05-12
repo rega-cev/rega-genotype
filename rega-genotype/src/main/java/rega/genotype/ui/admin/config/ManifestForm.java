@@ -82,12 +82,14 @@ public class ManifestForm extends FormTemplate{
 		manifest.setName(nameLE.getText());
 		manifest.setId(idLE.getText());
 		manifest.setVersion(versionLE.getText());
-		manifest.setPublisherName(config.getGeneralConfig().getPublisherName());
 		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
-		if (publishing)
+		if (publishing) {
 			manifest.setPublicationDate(WDate.getCurrentDate().getDate());
-		else if (oldManifest != null)
+			manifest.setPublisherName(config.getGeneralConfig().getPublisherName());
+		} else if (oldManifest != null) {
 			manifest.setPublicationDate(oldManifest.getPublicationDate());
+			manifest.setPublisherName(oldManifest.getPublisherName());
+		}
 
 		manifest.save(toolDir.getAbsolutePath());
 
