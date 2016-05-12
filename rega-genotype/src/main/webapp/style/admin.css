@@ -12,7 +12,8 @@ body {
 
 .action-buttons {
 	margin-top: 5px;
-    float: right;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .form-table td { 
