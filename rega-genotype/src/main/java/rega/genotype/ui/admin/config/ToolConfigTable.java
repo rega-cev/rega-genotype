@@ -351,7 +351,7 @@ public class ToolConfigTable extends Template{
 			}
 
 			// redirect to edit screen.
-			AdminNavigation.setEditToolUrl(
+			AdminNavigation.setInstallToolUrl(
 					manifest.getId(),
 					manifest.getVersion());
 		} else {
