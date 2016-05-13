@@ -350,6 +350,8 @@ public class ToolConfigTable extends Template{
 				assert(false); // coping to new dir should always work.
 			}
 
+			proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+			
 			// redirect to edit screen.
 			AdminNavigation.setInstallToolUrl(
 					manifest.getId(),
