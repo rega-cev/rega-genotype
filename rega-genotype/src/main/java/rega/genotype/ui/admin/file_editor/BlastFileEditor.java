@@ -60,8 +60,6 @@ public class BlastFileEditor extends WContainerWidget{
 	public BlastFileEditor(final File toolDir) {
 		this.toolDir = toolDir;
 
-		WPushButton saveB = new WPushButton("Save");
-		WPushButton cancelB = new WPushButton("Cancel");
 		WPushButton addSequencesB = new WPushButton("Add sequences");
 
 		alignmentAnalyses = readBlastXml();
@@ -89,16 +87,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 		stack.addWidget(layout);
 		layout.bindWidget("analysis", analysisPanel);
-		layout.bindWidget("save", saveB);
-		layout.bindWidget("cancel", cancelB);
 		layout.bindWidget("add-sequences", addSequencesB);
-
-
-		saveB.clicked().addListener(saveB, new Signal.Listener() {
-			public void trigger() {
-				save();
-			}
-		});
 
 		addSequencesB.clicked().addListener(addSequencesB, new Signal.Listener() {
 			public void trigger() {
@@ -287,5 +276,9 @@ public class BlastFileEditor extends WContainerWidget{
 				stack.setCurrentWidget(layout);
 			}
 		});
+	}
+
+	public void setToolDir(File toolDir) {
+		this.toolDir = toolDir;
 	}
 }

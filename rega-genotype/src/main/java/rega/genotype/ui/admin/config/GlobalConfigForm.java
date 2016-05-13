@@ -78,13 +78,11 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				+ "<div>You can download the binaries from http://www.tree-puzzle.de</div>");
 
 		setFieldInfo("treeGraphCmd", "<div>*If you use unix based OS you should download and build the source code</div>"
-				+ "<div>http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>"
-				+ "<div>*If you use a Microsoft Windows you can download a binary </div>"
 				+ "<div>http://www.math.uni-bonn.de/people/jmueller/extra/treegraph/</div>");
 
 		setFieldInfo("blastPath", "<div>blast 2.2.11</div>"
 				+ "<div>Make sure to install this version, since other versions can give problems!</div>"
-				+ "<div>The binaries can be downloaded from ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/</div>"
+				+ "<div>The binaries can be downloaded from ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy/2.2.11/</div>"
 				+ "<div>Select the appropriate binary for your OS</div>"
 				+ "<div>These binaries can be installed by extracting the archive to a desired location</div>");
 

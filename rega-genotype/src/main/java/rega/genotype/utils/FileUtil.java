@@ -53,7 +53,8 @@ public class FileUtil {
 			ioe.printStackTrace();
 		}finally{
 			try{
-				buffReader.close();
+				if (buffReader != null)
+					buffReader.close();
 			}catch(IOException ioe1){
 				//Leave It
 			}

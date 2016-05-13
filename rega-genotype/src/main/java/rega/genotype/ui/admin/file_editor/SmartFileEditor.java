@@ -23,4 +23,13 @@ public class SmartFileEditor extends WContainerWidget {
 	public void saveAll() {
 		blastFileEditor.save();
 	}
+
+	public File getToolDir() {
+		return toolDir;
+	}
+
+	public void setToolDir(File toolDir) {
+		this.toolDir = toolDir;
+		blastFileEditor.setToolDir(toolDir);
+	}
 }

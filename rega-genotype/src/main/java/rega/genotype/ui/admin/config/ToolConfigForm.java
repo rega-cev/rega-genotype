@@ -10,6 +10,7 @@ import rega.genotype.ui.admin.file_editor.FileEditorView;
 import rega.genotype.ui.admin.file_editor.SmartFileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
@@ -38,8 +39,8 @@ public class ToolConfigForm extends FormTemplate {
 		super(tr("admin.config.tool-config-dialog"));
 		
 		final WPushButton publishB = new WPushButton("Publish");
-		final WPushButton saveB = new WPushButton("Save All");
-		final WPushButton cancelB = new WPushButton("Exit");
+		final WPushButton saveB = new WPushButton("Save");
+		final WPushButton cancelB = new WPushButton("Close");
 
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
 
@@ -69,6 +70,7 @@ public class ToolConfigForm extends FormTemplate {
 			publishB.disable();
 			manifestForm.disable();
 			fileEditor.setReadOnly(true);
+			smartFileEditor.disable();
 		} 
 
 		// bind
@@ -107,7 +109,9 @@ public class ToolConfigForm extends FormTemplate {
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
 				if (save(false) != null)
-					done.trigger();
+					new MsgDialog("Info", "Saved successfully.");
+				else
+					new MsgDialog("Info", "Could not save see validation errors.");
 			}
 		});
 
@@ -197,7 +201,7 @@ public class ToolConfigForm extends FormTemplate {
 		if (new File(xmlDir).exists())
 			return false;
 
-		File toolDir = fileEditor.getRootDir();
+		File toolDir = fileEditor.getToolDir();
 
 		new File(xmlDir).mkdirs();
 		new File(manifest.suggestJobDirName()).mkdirs();
@@ -207,7 +211,10 @@ public class ToolConfigForm extends FormTemplate {
 			FileUtil.moveDirRecorsively(toolDir, xmlDir);
 		}
 
+		manifestForm.setToolDir(new File(xmlDir));
 		localConfigForm.setXmlDir(new File(xmlDir));
+		smartFileEditor.setToolDir(new File(xmlDir));
+		fileEditor.setToolDir(new File(xmlDir));
 
 		// TODO: refresh file editor
 
