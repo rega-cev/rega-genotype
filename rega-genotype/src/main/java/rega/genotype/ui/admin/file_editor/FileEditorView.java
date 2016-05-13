@@ -14,13 +14,10 @@ import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
-import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
-import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLength;
-import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTabWidget;
 import eu.webtoolkit.jwt.WTable;
@@ -109,9 +106,11 @@ public class FileEditorView extends WContainerWidget{
 							for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
 								String[] split = f.getClientFileName().split(File.separator);
 								String fileName = split[split.length - 1];
+								File destFile = new File(root + File.separator + fileName);
+								if (destFile.exists())
+									destFile.delete();
 								try {
-									Files.copy(new File(f.getSpoolFileName()).toPath(),
-											new File(root + File.separator + fileName).toPath());
+									Files.copy(new File(f.getSpoolFileName()).toPath(), destFile.toPath());
 								} catch (IOException e) {
 									e.printStackTrace();
 									new MsgDialog("Error", "<div>Some files could not be copied (maybe they already exist).</div>" +
