@@ -164,6 +164,7 @@ public class ToolConfigTable extends Template{
 			public void trigger() {
 				StandardDialog d= new StandardDialog("Import");
 				final FileUpload fileUpload = new FileUpload();
+				fileUpload.getWFileUpload().setFilters(".zip");
 				d.getContents().addWidget(new WText("Choose import file"));
 				d.getContents().addWidget(fileUpload);
 				d.finished().addListener(d,  new Signal1.Listener<WDialog.DialogCode>() {
@@ -312,7 +313,7 @@ public class ToolConfigTable extends Template{
 			}
 
 			// redirect to edit screen.
-			AdminNavigation.setInstallUrl(
+			AdminNavigation.setEditToolUrl(
 					manifest.getId(),
 					manifest.getVersion());
 		} else {
