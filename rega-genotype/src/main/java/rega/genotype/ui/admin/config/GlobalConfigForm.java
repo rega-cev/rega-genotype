@@ -94,5 +94,8 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				+ "<div>Currently this repository url is: http://typingtools.emweb.be/repository/repo-service</div>");
 
 		setFieldInfo("adminPassword", "<div>Will be used to login to the adin area.</div>");
+		
+		setFieldInfo("epsToPdfCmd", "<div>Can be obtained from 'texlive-font-utils'</div>");
+
 	}
 }

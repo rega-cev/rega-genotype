@@ -186,15 +186,15 @@ public class Config {
 	// classes
 
 	public static class GeneralConfig {
-		private String paupCmd;
-		private String clustalWCmd;
-		private String blastPath;
-		private String treePuzzleCmd;
-		private String treeGraphCmd;
-		private String epsToPdfCmd = "epsToPdf";
+		private String paupCmd = "paup4b10";
+		private String clustalWCmd = "clustalW";
+		private String blastPath = "/usr/bin/";
+		private String treePuzzleCmd = "puzzel";
+		private String treeGraphCmd = "tgf";
+		private String epsToPdfCmd = "epstopdf";
 		private String imageMagickConvertCmd = "convert";
 		private int maxAllowedSeqs = 2000;
-		private String inkscapeCmd;
+		private String inkscapeCmd = "inkscape";
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.
