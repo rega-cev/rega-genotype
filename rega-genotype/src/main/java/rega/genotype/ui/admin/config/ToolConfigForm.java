@@ -2,6 +2,7 @@ package rega.genotype.ui.admin.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
 
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
@@ -9,12 +10,17 @@ import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.admin.file_editor.FileEditorView;
 import rega.genotype.ui.admin.file_editor.SmartFileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
+import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.StandardButton;
+import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTabWidget;
@@ -38,6 +44,7 @@ public class ToolConfigForm extends FormTemplate {
 	public ToolConfigForm(final ToolConfig toolConfig, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
 		
+		final DirtyHandler dirtyHandler = new DirtyHandler();
 		final WPushButton publishB = new WPushButton("Publish");
 		final WPushButton saveB = new WPushButton("Save");
 		final WPushButton cancelB = new WPushButton("Close");
@@ -73,6 +80,8 @@ public class ToolConfigForm extends FormTemplate {
 			smartFileEditor.disable();
 		} 
 
+		saveB.disable();
+
 		// bind
 
 		WPanel mamifestPanel = new WPanel();
@@ -93,8 +102,7 @@ public class ToolConfigForm extends FormTemplate {
 		bindWidget("save", saveB);
 		bindWidget("cancel", cancelB);
 
-		initInfoFields();
-		validate();
+		init();
 
 		// signals 
 
@@ -108,9 +116,10 @@ public class ToolConfigForm extends FormTemplate {
 
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
-				if (save(false) != null)
+				if (save(false) != null) {
 					new MsgDialog("Info", "Saved successfully.");
-				else
+					dirtyHandler.setClean();
+				} else
 					new MsgDialog("Info", "Could not save see validation errors.");
 			}
 		});
@@ -162,7 +171,36 @@ public class ToolConfigForm extends FormTemplate {
 
 		cancelB.clicked().addListener(cancelB, new Signal.Listener() {
 			public void trigger() {
-				done.trigger();
+				if (dirtyHandler.isDirty()){
+					final WMessageBox d = new WMessageBox("Warning",
+							"There are some unsaved changes. Close anyway?", Icon.NoIcon,
+							EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
+					d.show();
+					d.setWidth(new WLength(300));
+					d.buttonClicked().addListener(d,
+							new Signal1.Listener<StandardButton>() {
+						public void trigger(StandardButton e1) {
+							if(e1 == StandardButton.Ok){
+								done.trigger();
+							}
+							d.remove();
+						}
+					});
+
+				} else
+					done.trigger();
+			}
+		});
+
+		// dirty
+
+		dirtyHandler.connect(smartFileEditor.getDirtyHandler(), smartFileEditor);
+		dirtyHandler.connect(manifestForm.getDirtyHandler(), manifestForm);
+		dirtyHandler.connect(localConfigForm.getDirtyHandler(), localConfigForm);
+		dirtyHandler.connect(fileEditor.getDirtyHandler(), fileEditor);
+		dirtyHandler.dirty().addListener(this, new Signal.Listener() {
+			public void trigger() {
+				saveB.enable();
 			}
 		});
 	}
@@ -176,16 +214,21 @@ public class ToolConfigForm extends FormTemplate {
 		if (!validate())
 			return null;
 
-		fileEditor.saveAll();
-		smartFileEditor.saveAll();
+		if (fileEditor.getDirtyHandler().isDirty())
+			fileEditor.saveAll();
 
-		ToolManifest manifest = manifestForm.save(publishing);
-		if (manifest == null) {
-			infoT.setText("Manifest could not be saved.");
-			return null;
+		if (smartFileEditor.isDirty())
+			smartFileEditor.saveAll();
+
+		if (manifestForm.isDirty()){
+			ToolManifest manifest = manifestForm.save(publishing);
+			if (manifest == null) {
+				infoT.setText("Manifest could not be saved.");
+				return null;
+			}
+
+			renameToolDir(manifest);
 		}
-
-		renameToolDir(manifest);
 
 		ToolConfig tool = localConfigForm.save();
 		if (tool == null) {

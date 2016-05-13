@@ -20,6 +20,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
+import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.utils.FileUtil;
@@ -56,9 +57,11 @@ public class BlastFileEditor extends WContainerWidget{
 	private Template layout = new Template(tr("admin.config.blast-file-editor"));
 	private AlignmentAnalyses alignmentAnalyses;
 	private ClusterTableModel clusterTableModel;
+	private DirtyHandler dirtyHandler;
 
-	public BlastFileEditor(final File toolDir) {
+	public BlastFileEditor(final File toolDir, DirtyHandler dirtyHandler) {
 		this.toolDir = toolDir;
+		this.dirtyHandler = dirtyHandler;
 
 		WPushButton addSequencesB = new WPushButton("Add sequences");
 
@@ -108,6 +111,10 @@ public class BlastFileEditor extends WContainerWidget{
 				});
 			}
 		});
+
+		// dirty
+		dirtyHandler.connect(analysis.getDirtyHandler(), this);
+		
 	}
 
 	public void save() {
@@ -271,6 +278,7 @@ public class BlastFileEditor extends WContainerWidget{
 					if (isNew)
 						alignmentAnalyses.getAllClusters().add(c.getCluster());
 					clusterTableModel.refresh();
+					dirtyHandler.increaseDirty();
 				}
 				stack.removeWidget(c);
 				stack.setCurrentWidget(layout);

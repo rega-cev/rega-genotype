@@ -123,12 +123,4 @@ public class AdminNavigation extends WContainerWidget {
 			WApplication.getInstance().internalPathChanged().trigger(path);
 		}
 	}
-
-	public static void setInstallUrl(String toolId, String toolVersion) {
-		String path = "/" + URL_PATH_TOOLS + "/" + toolId + "/" + toolVersion  + "/" + URL_PATH_INSTALL;
-		if (!WApplication.getInstance().getInternalPath().equals(path)) {
-			WApplication.getInstance().setInternalPath(path);
-			WApplication.getInstance().internalPathChanged().trigger(path);
-		}
-	}
 }

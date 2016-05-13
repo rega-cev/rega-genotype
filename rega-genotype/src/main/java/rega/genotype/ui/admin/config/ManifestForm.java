@@ -66,8 +66,7 @@ public class ManifestForm extends FormTemplate{
 		bindWidget("blast", blastChB);
 		bindWidget("hiv", hivChB);
 
-		initInfoFields();
-		validate();
+		init();
 	}
 
 	public ToolManifest save(boolean publishing) {

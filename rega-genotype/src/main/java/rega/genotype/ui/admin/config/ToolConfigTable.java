@@ -16,6 +16,7 @@ import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
+import rega.genotype.ui.framework.widgets.DownloadButton;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
@@ -89,6 +90,40 @@ public class ToolConfigTable extends Template{
 		final WPushButton uninstallB = new WPushButton("Uninstall");
 		final WPushButton updateB = new WPushButton("Update");
 		final WPushButton importB = new WPushButton("Import");
+		
+		// downloadB
+		final DownloadButton downloadB = new DownloadButton("Export") {
+			@Override
+			public File downlodFile() {
+				if (table.getSelectedIndexes().size() == 1) {
+					ToolInfo toolInfo = proxyModel.getToolInfo(
+							table.getSelectedIndexes().first());
+					File toolFile = toolInfo.getConfig().getConfigurationFile();
+					if (toolFile == null || !toolFile.exists()
+							|| toolInfo.getManifest() == null) {
+						return null;
+					}
+
+					File zip = new File(Settings.getInstance().getBasePackagedToolsDir() 
+							+ File.separator + toolInfo.getManifest().getUniqueToolId() + ".zip");
+					if (zip.exists())
+						zip.delete();
+					zip.getParentFile().mkdirs();
+					try {
+						zip.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+						return null;
+					}
+
+					FileUtil.zip(toolFile, zip);
+					return zip;
+				}
+
+				return null;
+			}
+		};
+		downloadB.disable();
 
 		installB.disable();
 
@@ -164,6 +199,7 @@ public class ToolConfigTable extends Template{
 			public void trigger() {
 				StandardDialog d= new StandardDialog("Import");
 				final FileUpload fileUpload = new FileUpload();
+				fileUpload.getWFileUpload().setFilters(".zip");
 				d.getContents().addWidget(new WText("Choose import file"));
 				d.getContents().addWidget(fileUpload);
 				d.finished().addListener(d,  new Signal1.Listener<WDialog.DialogCode>() {
@@ -252,13 +288,15 @@ public class ToolConfigTable extends Template{
 						uninstallB.setText("Remove");
 					else
 						uninstallB.setText("Uninstall");
-					
+				
+					downloadB.enable();
 				} else {
 					installB.disable();
 					editB.disable();
 					newVersionB.disable();
 					uninstallB.disable();
 					updateB.disable();
+					downloadB.disable();
 				}
 			}
 		});
@@ -292,6 +330,7 @@ public class ToolConfigTable extends Template{
 		bindWidget("uninstall", uninstallB);
 		bindWidget("update", updateB);
 		bindWidget("import", importB);
+		bindWidget("export", downloadB);
 
 	}
 
@@ -312,7 +351,7 @@ public class ToolConfigTable extends Template{
 			}
 
 			// redirect to edit screen.
-			AdminNavigation.setInstallUrl(
+			AdminNavigation.setEditToolUrl(
 					manifest.getId(),
 					manifest.getVersion());
 		} else {

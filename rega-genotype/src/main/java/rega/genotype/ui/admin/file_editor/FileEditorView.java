@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import rega.genotype.ui.framework.widgets.DirtyHandler;
+import rega.genotype.ui.framework.widgets.DownloadButton;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
@@ -34,6 +36,7 @@ public class FileEditorView extends WContainerWidget{
 	private FileTreeTable fileTree;
 	private WPushButton addB;
 	private WPushButton removeB;
+	private DirtyHandler dirtyHandler = new DirtyHandler();
 
 	public FileEditorView(final File root) {
 		super();
@@ -41,6 +44,13 @@ public class FileEditorView extends WContainerWidget{
 
 		addB = new WPushButton("Add files");
 		removeB = new WPushButton("Remove");
+		
+		final DownloadButton downloadB = new DownloadButton("Download") {
+			@Override
+			public File downlodFile() {
+				return fileTree.getCurrentFile();
+			}
+		};
 
 		fileTree = new FileTreeTable(root, false, false);
 		
@@ -48,6 +58,7 @@ public class FileEditorView extends WContainerWidget{
 		fileTreeTemplate.bindWidget("tree", fileTree);
 		fileTreeTemplate.bindWidget("add", addB);
 		fileTreeTemplate.bindWidget("remove", removeB);
+		fileTreeTemplate.bindWidget("download", downloadB);
 
 		fileTree.resize(200, 300);
 
@@ -61,8 +72,12 @@ public class FileEditorView extends WContainerWidget{
 		fileTree.selctionChanged().addListener(fileTree, new Signal.Listener() {
 			public void trigger() {
 				File currentFile = fileTree.getCurrentFile();
-				if (currentFile != null)
+				if (currentFile != null) {
 					fileTabs.showTab(currentFile);
+					downloadB.enable();
+				} else {
+					downloadB.disable();
+				}
 			}
 		});
 
@@ -91,9 +106,11 @@ public class FileEditorView extends WContainerWidget{
 							for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
 								String[] split = f.getClientFileName().split(File.separator);
 								String fileName = split[split.length - 1];
+								File destFile = new File(root + File.separator + fileName);
+								if (destFile.exists())
+									destFile.delete();
 								try {
-									Files.copy(new File(f.getSpoolFileName()).toPath(),
-											new File(root + File.separator + fileName).toPath());
+									Files.copy(new File(f.getSpoolFileName()).toPath(), destFile.toPath());
 								} catch (IOException e) {
 									e.printStackTrace();
 									new MsgDialog("Error", "<div>Some files could not be copied (maybe they already exist).</div>" +
@@ -102,8 +119,8 @@ public class FileEditorView extends WContainerWidget{
 							}
 
 							fileTree.refresh();
+							dirtyHandler.increaseDirty();
 						}
-						
 					}
 				});
 
@@ -131,7 +148,7 @@ public class FileEditorView extends WContainerWidget{
 		return toolDir;
 	}
 
-	public static class FileTabs extends WTabWidget {
+	private class FileTabs extends WTabWidget {
 
 		private Map<File, FileEditor> openEditors = new HashMap<File, FileEditor>();
 		private boolean isReadOnly;
@@ -177,12 +194,14 @@ public class FileEditorView extends WContainerWidget{
 				editor.changed().addListener(editor, new Signal.Listener() {
 					public void trigger() {
 						setTabText(getIndexOf(editor), "*" + file.getName());
+						dirtyHandler.increaseDirty();
 					}
 				});
 
 				editor.saved().addListener(editor, new Signal.Listener() {
 					public void trigger() {
 						setTabText(getIndexOf(editor), file.getName());
+						dirtyHandler.decreaseDirty();
 					}
 				});
 
@@ -202,5 +221,9 @@ public class FileEditorView extends WContainerWidget{
 
 	public void setToolDir(File toolDir) {
 		this.toolDir = toolDir;
+	}
+
+	public DirtyHandler getDirtyHandler() {
+		return dirtyHandler;
 	}
 }

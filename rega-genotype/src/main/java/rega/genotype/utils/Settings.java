@@ -79,6 +79,9 @@ public class Settings {
 	public String getBaseJobDir() {
 		return baseDir  + File.separator + "job";
 	}
+	public String getBasePackagedToolsDir() {
+		return baseDir  + File.separator + "packaged-tools";
+	}
 	public String getBaseDir() {
 		return baseDir;
 	}

@@ -121,7 +121,7 @@ public class ClusterForm extends FormTemplate{
 		bindWidget("ok", okB);
 		bindWidget("cancel", cancelB);
 
-		initInfoFields();
+		init();
 
 		addSequenceB.clicked().addListener(addSequenceB, new Listener() {
 			public void trigger() {
