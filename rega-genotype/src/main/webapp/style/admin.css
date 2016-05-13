@@ -137,3 +137,26 @@ body {
 	margin-bottom: 3px;
     margin-top: 0px;
 }
+
+.like-button:hover {
+    border-color: #9CF #69E #69E #7AF;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.like-button {
+    appearance: button;
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    
+    cursor: pointer;
+    cursor: hand;
+    font-size: small; 
+    margin: 0px 2px; 
+    padding: 2px 5px; 
+    text-decoration: none; 
+    color: black;
+
+    /*background: transparent url(gradient.png) repeat-x scroll 0 0;    */
+    border: 1px outset #CCC;
+}

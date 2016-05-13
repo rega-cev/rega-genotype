@@ -7,16 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rega.genotype.ui.framework.widgets.DirtyHandler;
+import rega.genotype.ui.framework.widgets.DownloadButton;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
+import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTabWidget;
 import eu.webtoolkit.jwt.WTable;
@@ -43,6 +47,13 @@ public class FileEditorView extends WContainerWidget{
 
 		addB = new WPushButton("Add files");
 		removeB = new WPushButton("Remove");
+		
+		final DownloadButton downloadB = new DownloadButton("Download") {
+			@Override
+			public File downlodFile() {
+				return fileTree.getCurrentFile();
+			}
+		};
 
 		fileTree = new FileTreeTable(root, false, false);
 		
@@ -50,6 +61,7 @@ public class FileEditorView extends WContainerWidget{
 		fileTreeTemplate.bindWidget("tree", fileTree);
 		fileTreeTemplate.bindWidget("add", addB);
 		fileTreeTemplate.bindWidget("remove", removeB);
+		fileTreeTemplate.bindWidget("download", downloadB);
 
 		fileTree.resize(200, 300);
 
@@ -63,8 +75,12 @@ public class FileEditorView extends WContainerWidget{
 		fileTree.selctionChanged().addListener(fileTree, new Signal.Listener() {
 			public void trigger() {
 				File currentFile = fileTree.getCurrentFile();
-				if (currentFile != null)
+				if (currentFile != null) {
 					fileTabs.showTab(currentFile);
+					downloadB.enable();
+				} else {
+					downloadB.disable();
+				}
 			}
 		});
 
