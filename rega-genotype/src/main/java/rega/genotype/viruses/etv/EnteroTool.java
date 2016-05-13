@@ -17,6 +17,7 @@ import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.ui.viruses.etv.EtvMain;
 import rega.genotype.AnalysisException;
 import rega.genotype.BlastAnalysis;
+import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
@@ -83,7 +84,7 @@ public class EnteroTool extends GenotypeTool {
         				 * Cut the overlapping part to not confuse the alignment
         				 */
         				AbstractSequence s2 = re > rs ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
-        				if (phyloAnalysis(pca, s2, region.getName()))
+        				if (phyloAnalysis(pca, s2, region))
             				haveConclusion = true;
         			}        			
         		}
@@ -95,37 +96,37 @@ public class EnteroTool extends GenotypeTool {
     		if (!haveConclusion)
     			if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
        				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
-       						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff());
+       						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff(), null);
        			else if (blastAnalysis.getAbsCutoff() != null)
-       				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff()); 
+       				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
        			else if (blastAnalysis.getRelativeCutoff() != null)
-       				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff());
+       				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
         } else {
         	if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
    				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
-   						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff());
+   						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff(), null);
    			else if (blastAnalysis.getAbsCutoff() != null)
-   				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff()); 
+   				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
    			else if (blastAnalysis.getRelativeCutoff() != null)
-   				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff());
+   				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
         }
     }
 
-	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s, String regionName) throws AnalysisException {
+	private boolean phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s, Region region) throws AnalysisException {
 		PhyloClusterAnalysis.Result r = pca.run(s);
 
 		if (r.haveSupport()) {
-			conclude(r, "Supported with phylogenetic analysis and bootstrap {1} (&gt;= 70)", "serotype");
+			conclude(r, "Supported with phylogenetic analysis and bootstrap {1} (&gt;= 70)", "serotype", region);
 
-			subgenogroupPhyloAnalysis(s, pca.getOwner(), regionName, r.getConcludedCluster());
+			subgenogroupPhyloAnalysis(s, pca.getOwner(), region, r.getConcludedCluster());
 		} else
-			conclude("Could not assign", "Not supported by phylogenetic analysis", "serotype");
+			conclude("Could not assign", "Not supported by phylogenetic analysis", "serotype", region);
 
 		return true;
 	}
 
-    private boolean subgenogroupPhyloAnalysis(AbstractSequence s, AlignmentAnalyses phylo, String regionName, Cluster cluster) throws AnalysisException {
-    	String analysisName = "phylo-" + regionName + "-" + cluster.getId();
+    private boolean subgenogroupPhyloAnalysis(AbstractSequence s, AlignmentAnalyses phylo, Region region, Cluster cluster) throws AnalysisException {
+    	String analysisName = "phylo-" + region + "-" + cluster.getId();
     	
 		/*
 		 * Only if that analysis is described in the XML file.
@@ -151,9 +152,9 @@ public class EnteroTool extends GenotypeTool {
 			|| r.getConcludedCluster() == null
 			|| !r.getConcludedCluster().getId().startsWith(cluster.getId())
 			|| !r.haveSupport())
-			conclude("Could not assign", "Not supported by " + phyloName, "subgenogroup");
+			conclude("Could not assign", "Not supported by " + phyloName, "subgenogroup", region);
 		else
-			conclude(r, "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", "subgenogroup");
+			conclude(r, "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", "subgenogroup", region);
 
 		return true;
 	}

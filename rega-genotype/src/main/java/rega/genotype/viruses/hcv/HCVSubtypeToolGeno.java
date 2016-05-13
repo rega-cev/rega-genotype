@@ -53,14 +53,14 @@ public class HCVSubtypeToolGeno extends GenotypeTool {
                         conclude(pureResult,
                             "Subtype assigned based on sequence > 800 bps " +
                             "clustering with a pure subtype and CRF or sub-subtype with bootstrap > 70% " +
-                            "without recombination in the bootscan.");  
+                            "without recombination in the bootscan.", null);  
                     } 
                  else {
 //                	 Rule 3
                     conclude("Check the Report",
                        "Subtype unassigned based on sequence > 800 bps " +
                        "failure to classify as pure subtype (Bootstrap Support)" +
-                       "without recombination in the bootscan.");
+                       "without recombination in the bootscan.", null);
                 } 
  
             }  
@@ -68,7 +68,7 @@ public class HCVSubtypeToolGeno extends GenotypeTool {
             	// Rule 2 & 4
                 conclude ("Check the Bootscan",
                         "Subtype unassigned based on sequence > 800 bps " +
-                        "with recombination in the bootscan.");
+                        "with recombination in the bootscan.", null);
 
                } 
         }else {
@@ -79,20 +79,20 @@ public class HCVSubtypeToolGeno extends GenotypeTool {
                 // Rule 7
                 conclude("Check the report",
                         "Subtype unassigned based on sequence &lt; 800bp, " +
-                        "and not clustering with a pure subtype with bootstrap >70 %.");
+                        "and not clustering with a pure subtype with bootstrap >70 %.", null);
             } else {
                 if ((pure.getSupportInner() - pure.getSupportOuter()) > -50) {
                     // Rule 5
                     conclude(pure,
                             "Subtype assigned based on sequence &lt; 800bp, " +
                             "clustering with a pure subtype with bootstrap > 70%, " +
-                            "and clustering inside the pure subtype cluster.");
+                            "and clustering inside the pure subtype cluster.", null);
                 } else {
                     // Rule 6
                     conclude("Check the report",
                             "Subtype assigned based on sequence &lt; 800bp, " +
                             "clustering with a pure subtype with bootstrap > 70%, " +
-                            "however not clustering inside the pure subtype cluster.");
+                            "however not clustering inside the pure subtype cluster.", null);
                 }
             }
         }

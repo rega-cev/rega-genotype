@@ -21,6 +21,7 @@ import org.jdom.JDOMException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
@@ -192,23 +193,31 @@ public abstract class GenotypeTool {
 
     /**
      * Conclude the "unassigned" conclusion.
+     * @param region 
      */
-    protected void conclude(String conclusion, String motivation) {
-    	concludeRule(null,conclusion,motivation);
+    protected void conclude(String conclusion, String motivation, Region region) {
+    	concludeRule(null,conclusion,motivation, region);
     }
-    protected void concludeRule(String rule, String conclusion, String motivation) {
-    	concludeRule(rule, conclusion, motivation, null);
+    protected void concludeRule(String rule, String conclusion, String motivation, Region region) {
+    	concludeRule(rule, conclusion, motivation, null, region);
     }
 
     /**
      * Conclude the "unassigned" conclusion.
+     * @param region 
      */
-    protected void conclude(String conclusion, String motivation, String id) {
-    	concludeRule(null,conclusion,motivation,id);
+    protected void conclude(String conclusion, String motivation, String id, Region region) {
+    	concludeRule(null,conclusion,motivation,id, region);
     }
-    protected void concludeRule(String rule, String conclusion, String motivation, String id) {
-        getTracer().printlnOpen("<conclusion type=\"unassigned\""
-        		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
+    protected void concludeRule(String rule, String conclusion, String motivation, String id, Region region) {
+    	String s = "<conclusion type=\"unassigned\"";
+    	if (id != null)
+    		s += " id=" + getTracer().quote(id);
+    	if (region != null)
+    		s += " region=" + getTracer().quote(region.getName());    	
+    	s += ">";
+
+    	getTracer().printlnOpen(s);
         getTracer().printlnOpen("<assigned>");
         getTracer().add("id", "Unassigned");
         getTracer().add("name", (String) conclusion);
@@ -220,23 +229,30 @@ public abstract class GenotypeTool {
 
     /**
      * Conclude a plain conclusion.
+     * @param region 
      */
-    protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation) {
-    	concludeRule(null,conclusion,motivation);
+    protected void conclude(AbstractAnalysis.Concludable conclusion, String motivation, Region region) {
+    	concludeRule(null,conclusion,motivation, region);
     }
-    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, String motivation) {
-    	concludeRule(rule, conclusion, motivation, null);
+    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, String motivation, Region region) {
+    	concludeRule(rule, conclusion, motivation, null, region);
     }
 
     /**
      * Conclude a plain conclusion.
      */
-    protected void conclude(AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id) {
-    	concludeRule(null,conclusion,motivation,id);
+    protected void conclude(AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id, Region region) {
+    	concludeRule(null,conclusion,motivation,id, region);
     }
-    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id) {
-        getTracer().printlnOpen("<conclusion type=\"simple\""
-        		+ (id != null ? " id=\"" + id + "\"" : "") + ">");
+    protected void concludeRule(String rule, AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id, Region region) {
+    	String s = "<conclusion type=\"simple\"";
+    	if (id != null)
+    		s += " id=" + getTracer().quote(id);
+    	if (region != null)
+    		s += " region=" + getTracer().quote(region.getName());    	
+    	s += ">";
+ 
+        getTracer().printlnOpen(s);
         conclusion.writeConclusion(getTracer());
         getTracer().add("motivation", motivation);
     	getTracer().add("rule", rule==null ? "":rule);

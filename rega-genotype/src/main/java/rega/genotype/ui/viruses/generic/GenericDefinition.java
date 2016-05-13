@@ -123,7 +123,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 				column.field = columnE.getChildText("field");
 				String colSpan = columnE.getChildText("colSpan");
 				if (colSpan != null)
-					column.colSpan = Integer.valueOf(2);
+					column.colSpan = Integer.valueOf(colSpan);
 				else
 					column.colSpan = 1;
 				columns.add(column);
@@ -165,23 +165,38 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 
 	private void addPhyloDetailForms(GenotypeResultParser p, List<IDetailsForm> forms) {
 		String result = "/genotype_result/sequence/result";
-		
-		String phyloResult = result + "[@id='phylo-major']";
-		if (p.elementExists(phyloResult)) {
-			WString title = WString.tr("details.phylo-major.title");
-			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
 
+		List<Element> phyloMajorResults = p.getElements(result + "[@id='phylo-major']");
+
+		for (Element e : phyloMajorResults) {
+			String region = e.getAttributeValue("region");
+
+			String regionPredicate;
+			String regionDescription;
+			if (region != null) {
+				regionPredicate = " and @region='" + region + "'";
+				regionDescription = region;
+			} else {
+				regionPredicate = " and not(@region)";
+				regionDescription = "complete genome";
+			}
+
+			String phyloResult = result + "[@id='phylo-major'" + regionPredicate + "]";
+
+			WString title = WString.tr("details.phylo-major.title").arg(regionDescription);
+			forms.add(new DefaultPhylogeneticDetailsForm(phyloResult, title, title, true));
+	
 			String bestGenotype = GenotypeLib.getEscapedValue(p, phyloResult + "/best/id");
-			
-			String variantResult = result + "[@id='phylo-minor-" + bestGenotype + "']";
+
+			String variantResult = result + "[@id='phylo-minor-" + bestGenotype + "'" + regionPredicate + "]";
 			if (p.elementExists(variantResult)) {
-				WString variantTitle = WString.tr("details.phylo-minor.title").arg(bestGenotype);
+				WString variantTitle = WString.tr("details.phylo-minor.title").arg(bestGenotype).arg(regionDescription);
 				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle, true));
 			}
-			
-			String scanResult = result + "[@id='phylo-major-scan']";
+				
+			String scanResult = result + "[@id='phylo-major-scan'" + regionPredicate + "]";
 			if (p.elementExists(scanResult)) {
-				title = WString.tr("details.phylo-major-scan.title");
+				title = WString.tr("details.phylo-major-scan.title").arg(regionDescription);
 				forms.add(new DefaultRecombinationDetailsForm(scanResult, "major", title));
 			}
 		}

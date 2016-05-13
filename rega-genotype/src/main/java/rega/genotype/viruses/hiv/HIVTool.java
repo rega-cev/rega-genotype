@@ -49,10 +49,10 @@ public class HIVTool extends GenotypeTool {
             else if (result.getCluster().getId().equals("4"))
             	hiv2subtypetool.analyze(s);
             else
-                conclude(result, "Identified with BLAST score > 200");
+                conclude(result, "Identified with BLAST score > 200", null);
         } else {
 
-            conclude("Unassigned", "Unassigned because of BLAST score &lt; 200.");
+            conclude("Unassigned", "Unassigned because of BLAST score &lt; 200.", null);
         }
     }
 

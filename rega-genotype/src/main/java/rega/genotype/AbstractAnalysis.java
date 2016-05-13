@@ -146,13 +146,18 @@ public abstract class AbstractAnalysis {
         }
 
         protected void writeXMLBegin(ResultTracer tracer) {
-            tracer.printlnOpen("<result id=" + tracer.quote(getId()) + ">");
+        	String s = "<result id=" + tracer.quote(getId());
+        	if (owner.getRegion() != null)
+        		s += " region=" + tracer.quote(owner.getRegion().getName());
+        	
+        	s += ">";
+            tracer.printlnOpen(s);
         }
     };
 
     protected AlignmentAnalyses owner;
-    private String            id;
-	private String            options;
+    private String id;
+	private String options;
 	protected File workingDir;
 
     public AbstractAnalysis(AlignmentAnalyses owner, String id) {

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Stack;
 
 import org.jdom.Attribute;
@@ -82,6 +83,16 @@ public class GenotypeResultParser extends DefaultHandler
 			return (Element)o;
 		else
 			return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Element> getElements(String xpath){
+		try {
+			XPath x = XPath.newInstance(xpath);
+			return x.selectNodes(doc);
+		} catch (JDOMException e) {
+			return null;
+		}		
 	}
 	
 	private Object getObject(String xpath){

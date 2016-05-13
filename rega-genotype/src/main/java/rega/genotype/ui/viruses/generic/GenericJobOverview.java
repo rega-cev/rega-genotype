@@ -42,7 +42,8 @@ public class GenericJobOverview extends AbstractJobOverview {
 			headers.add(new Header(WString.tr("table.header.genome")));
 		} else {
 			for (ResultColumn c : columns)
-				headers.add(new Header(new WString(c.label), c.colSpan));
+				if (c.colSpan != 0)
+					headers.add(new Header(new WString(c.label), c.colSpan));
 		}
 	}
 
