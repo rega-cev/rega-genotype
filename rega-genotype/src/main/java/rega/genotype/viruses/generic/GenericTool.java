@@ -8,7 +8,10 @@ package rega.genotype.viruses.generic;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rega.genotype.AbstractAnalysis;
@@ -82,28 +85,32 @@ public class GenericTool extends GenotypeTool {
         	boolean haveConclusion = false;
 
        		try {
-       			BlastAnalysis.Region region = null;
-
-				if (blastResult.getReference() != null)
-					/*
-					 * Perhaps we have an analysis for the region covered by the input sequence ?
-					 */
-					region = findOverlappingRegion(blastResult);
-
 				/*
 				 * Perhaps we have a full-genome analysis?
 				 */
 				PhyloClusterAnalysis pca = getPhyloAnalysis(c.getId(), null, null);
 				if (pca != null) {
-					phyloAnalysis(pca, s, blastResult, region, false);
+					phyloAnalysis(pca, s, blastResult, null);
 					haveConclusion = true;
-				} else if (region != null) {
-		        	pca = getPhyloAnalysis(c.getId(), null, region);
-		        	if (pca != null) {
-		        		AbstractSequence s2 = cutRegion(s, blastResult,	region);
-		        		phyloAnalysis(pca, s2, blastResult, region, true);
-		        		haveConclusion = true;
-			        }
+				}
+
+				List<Region> regions = Collections.emptyList();
+
+				if (blastResult.getReference() != null)
+					/*
+					 * Perhaps we have an analysis for the region covered by the input sequence ?
+					 */
+					regions = findOverlappingRegions(blastResult);
+
+				if (!regions.isEmpty()) {
+					for (Region region : regions) {
+			        	pca = getPhyloAnalysis(c.getId(), null, region);
+			        	if (pca != null) {
+			        		AbstractSequence s2 = cutRegion(s, blastResult,	region);
+			        		phyloAnalysis(pca, s2, blastResult, region);
+			        		haveConclusion = true;
+				        }
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -122,19 +129,19 @@ public class GenericTool extends GenotypeTool {
        		if (!haveConclusion)
        			if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
        				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
-       						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff());
+       						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff(), null);
        			else if (blastAnalysis.getAbsCutoff() != null)
-       				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff()); 
+       				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
        			else if (blastAnalysis.getRelativeCutoff() != null)
-       				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff());
+       				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
         } else {
         	if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
    				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
-   						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff());
+   						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff(), null);
    			else if (blastAnalysis.getAbsCutoff() != null)
-   				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff()); 
+   				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
    			else if (blastAnalysis.getRelativeCutoff() != null)
-   				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff());
+   				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
         }
     }
 
@@ -145,12 +152,13 @@ public class GenericTool extends GenotypeTool {
 		return s2;
 	}
 
-	private Region findOverlappingRegion(Result blastResult) {
+	private List<Region> findOverlappingRegions(Result blastResult) {
+		List<Region> result = new ArrayList<Region>();
 		for (BlastAnalysis.Region region : blastResult.getReference().getRegions())
 			if (region.overlaps(blastResult.getStart(), blastResult.getEnd(), MINIMUM_REGION_OVERLAP))
-				return region;
+				result.add(region);
 
-		return null;
+		return result;
 	}
 
 	private PhyloClusterAnalysis getPhyloAnalysis(String genusId, String typeId, Region region) throws IOException, ParameterProblemException, FileFormatException {
@@ -171,6 +179,7 @@ public class GenericTool extends GenotypeTool {
            	String f = "phylo-" + alignmentId + ".xml";
            	if (new File(getXmlPathAsString() + f).canRead()) {
            		AlignmentAnalyses analyses = readAnalyses(getXmlPathAsString() + f, getWorkingDir());
+           		analyses.setRegion(region);
 
            		if (analyses.haveAnalysis(analysisId)) {
            			result = (PhyloClusterAnalysis) analyses.getAnalysis(analysisId);
@@ -182,16 +191,22 @@ public class GenericTool extends GenotypeTool {
 		return result;
 	}
 	
-	private void phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s, Result blastResult, Region region, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
+	/**
+	 * @param pca          phylogenetic analysis to run
+	 * @param s            sequence
+	 * @param blastResult  genus matched
+	 * @param region       region used for this analysis
+	 */
+	private void phyloAnalysis(PhyloClusterAnalysis pca, AbstractSequence s, Result blastResult, Region region) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
 		PhyloClusterAnalysis.Result r = pca.run(s);
 		ScanAnalysis.Result scanResult = checkBootScan(pca, s);
 		
 		if (r.haveSupport() && (scanResult == null || scanResult.haveSupport())) {
-			conclude(r, new WString("Supported with phylogenetic analysis and bootstrap {1} (&gt;= {2})").arg(r.getConcludedSupport()).arg(pca.getCutoff()), "type");
+			conclude(r, new WString("Supported with phylogenetic analysis and bootstrap {1} (&gt;= {2})").arg(r.getConcludedSupport()).arg(pca.getCutoff()), "type", region);
 
-			subgenogroupPhyloAnalysis(s, blastResult, region, r.getConcludedCluster(), cutToRegion);
+			subgenogroupPhyloAnalysis(s, blastResult, region, r.getConcludedCluster());
 		} else
-			conclude("Could not assign", "Not supported by phylogenetic analysis", "type");
+			conclude("Could not assign", "Not supported by phylogenetic analysis", "type", region);
 	}
 
     private ScanAnalysis.Result checkBootScan(PhyloClusterAnalysis pca, AbstractSequence s) throws AnalysisException {
@@ -205,20 +220,35 @@ public class GenericTool extends GenotypeTool {
    		return sa.run(s);
 	}
 
-	private boolean subgenogroupPhyloAnalysis(AbstractSequence s, Result blastResult, Region region, Cluster typeCluster, boolean cutToRegion) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
+	private boolean subgenogroupPhyloAnalysis(AbstractSequence s, Result blastResult, Region region, Cluster typeCluster) throws AnalysisException, IOException, ParameterProblemException, FileFormatException {
     	PhyloClusterAnalysis a = getPhyloAnalysis(blastResult.getConcludedCluster().getId(), typeCluster.getId(), region);
     	
     	if (a == null) {
     		if (region != null) {
     			region = null;
     			a = getPhyloAnalysis(blastResult.getConcludedCluster().getId(), typeCluster.getId(), region);
+        		
+        		if (a == null)
+        			return false;
+    		} else {
+       			List<Region> regions = Collections.emptyList();
+
+				if (blastResult.getReference() != null)
+					/*
+					 * Perhaps we have an analysis for the region covered by the input sequence ?
+					 */
+					regions = findOverlappingRegions(blastResult);
+
+				boolean result = false;
+				for (Region r : regions)
+					if (subgenogroupPhyloAnalysis(s, blastResult, r, typeCluster))
+						result = true;
+				
+				return result;
     		}
-    		
-    		if (a == null)
-    			return false;
     	}
 
-    	if (region != null && !cutToRegion)
+    	if (region != null)
     		s = cutRegion(s, blastResult, region);
     	
 		PhyloClusterAnalysis.Result r = a.run(s);
@@ -240,9 +270,9 @@ public class GenericTool extends GenotypeTool {
 			|| r.getConcludedCluster() == null
 			|| !r.getConcludedCluster().getId().contains(typeCluster.getId())
 			|| !r.haveSupport())
-			conclude("Could not assign", "Not supported by " + phyloName, "subtype");
+			conclude("Could not assign", "Not supported by " + phyloName, "subtype", region);
 		else
-			conclude(r, new WString("Supported with " + phyloName + " and bootstrap {1} (&gt;= {2})").arg(r.getConcludedSupport()).arg(a.getCutoff()), "subtype");
+			conclude(r, new WString("Supported with " + phyloName + " and bootstrap {1} (&gt;= {2})").arg(r.getConcludedSupport()).arg(a.getCutoff()), "subtype", region);
 
 		return true;
 	}

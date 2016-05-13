@@ -49,31 +49,31 @@ public class HIV2SubtypeTool extends GenotypeTool {
             if (scanresult.haveSupport()) {
                 if (pureresult.haveSupport()) {
                     if (pureresult.getBestCluster().getName().contains("SMM")) {
-                        conclude ("Your sequence is not HIV2", "Use the SIV Tool");
+                        conclude ("Your sequence is not HIV2", "Use the SIV Tool", null);
                         return;
 
                     }
                     if (pureresult.getBestCluster().getName().contains("RCM")) {
-                        conclude ("Your sequence is not HIV2", "Use the SIV Tool");
+                        conclude ("Your sequence is not HIV2", "Use the SIV Tool", null);
                         return;
                     }
 
                     conclude (pureresult,
-                            "Supported by boots > 70 and Bootscan > 0.9");
+                            "Supported by boots > 70 and Bootscan > 0.9", null);
                 }
 
                 else {
                     conclude ("check the report",
-                            "not supported by boots > 70 and Bootscan >0.9");
+                            "not supported by boots > 70 and Bootscan >0.9", null);
                 }
             }
 
             else {
-                conclude ("check the bootscan", "Supported by boots > 70 with detection of recombination in the bootscan");
+                conclude ("check the bootscan", "Supported by boots > 70 with detection of recombination in the bootscan", null);
             }
 
         }   else {
-            conclude ("tulio did not finish the program","koen will not finish because he is tired to work for free !");
+            conclude ("tulio did not finish the program","koen will not finish because he is tired to work for free !", null);
         }
 
     }

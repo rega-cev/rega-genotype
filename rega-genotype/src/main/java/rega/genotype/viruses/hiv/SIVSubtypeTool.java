@@ -46,16 +46,16 @@ public class SIVSubtypeTool extends GenotypeTool{
 
 			if (scanresult.haveSupport()) {
 				if (pureresult.haveSupport()) {
-					conclude(pureresult, "this is a pure subtype");
+					conclude(pureresult, "this is a pure subtype", null);
 
 				} else {
-					conclude("check the report", "this is a strange subtype");
+					conclude("check the report", "this is a strange subtype", null);
 
 				}
 
 			}
 		} else {
-			conclude("check the report", "I am lazy to continuous");
+			conclude("check the report", "I am lazy to continuous", null);
 		}
     }
 

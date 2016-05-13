@@ -86,7 +86,7 @@ public class NoVTool extends GenotypeTool {
         				 * Cut the overlapping part to not confuse the alignment
         				 */
         				AbstractSequence s2 = re > rs ? new SubSequence(s.getName(), s.getDescription(), s, rs, re) : s;
-        				if (phyloAnalysis(s2, c.getId(), region.getName()))
+        				if (phyloAnalysis(s2, c.getId(), region))
             				haveConclusion = true;
         			}        			
         		}
@@ -96,9 +96,9 @@ public class NoVTool extends GenotypeTool {
 			 * If no conclusion: conclude the blast result
 			 */
     		if (!haveConclusion)
-    			conclude(blastResult, "Assigned based on BLAST p-value &lt; 1E-5");
+    			conclude(blastResult, "Assigned based on BLAST p-value &lt; 1E-5", null);
         } else {
-            conclude("Unassigned", "Unassigned because of BLAST p-Value &gt; 1E-5");
+            conclude("Unassigned", "Unassigned because of BLAST p-Value &gt; 1E-5", null);
         }
     }
 
@@ -107,22 +107,22 @@ public class NoVTool extends GenotypeTool {
      * 
      * @return whether a conclusion could be made based on a phylogenetic analysis.
      */
-	private boolean phyloAnalysis(AbstractSequence s, String groupId, String regionName) throws AnalysisException {
-		System.err.println("Phylo analysis: GenoGroup = " + groupId + ", region = " + regionName);
+	private boolean phyloAnalysis(AbstractSequence s, String groupId, BlastAnalysis.Region region) throws AnalysisException {
+		System.err.println("Phylo analysis: GenoGroup = " + groupId + ", region = " + region.getName());
 
 		/*
 		 * Get the right phylogenetic analyses
 		 */
 		AlignmentAnalyses phylo = null;
 		if (groupId.equals("I")) {
-			if (regionName.equals("ORF1"))
+			if (region.getName().equals("ORF1"))
 				phylo = phyloAnalyses[GroupRegion.GroupI_ORF1.ordinal()];
-			else if (regionName.equals("ORF2"))
+			else if (region.getName().equals("ORF2"))
 				phylo = phyloAnalyses[GroupRegion.GroupI_ORF2.ordinal()];			
 		} else if (groupId.equals("II")) {
-			if (regionName.equals("ORF1"))
+			if (region.getName().equals("ORF1"))
 				phylo = phyloAnalyses[GroupRegion.GroupII_ORF1.ordinal()];
-			else if (regionName.equals("ORF2"))
+			else if (region.getName().equals("ORF2"))
 				phylo = phyloAnalyses[GroupRegion.GroupII_ORF2.ordinal()];			
 		}
 		
@@ -130,11 +130,11 @@ public class NoVTool extends GenotypeTool {
 			/*
 			 * Get the phylogenetic analysis for identifying genotype
 			 */
-			PhyloClusterAnalysis a = (PhyloClusterAnalysis) phylo.getAnalysis("phylo-" + regionName);
+			PhyloClusterAnalysis a = (PhyloClusterAnalysis) phylo.getAnalysis("phylo-" + region.getName());
 			
 			PhyloClusterAnalysis.Result r = a.run(s);
 
-			String phyloName = "phylogenetic analysis (" + regionName + ")";
+			String phyloName = "phylogenetic analysis (" + region.getName() + ")";
 
 			if (r.haveSupport()) {
 				Cluster major = null, variant = null;
@@ -145,20 +145,20 @@ public class NoVTool extends GenotypeTool {
 				else
 					variant = r.getConcludedCluster();
 
-				conclude(r.concludeForCluster(major), "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", regionName);
+				conclude(r.concludeForCluster(major), "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", region.getName(), region);
 
 				boolean haveSubClusters = major.getClusters().size() > 0 && !major.hasTag("no-subclusters");
 				
 				if (haveSubClusters && variant != null)
-					conclude(r.concludeForCluster(variant), "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", regionName + "-variant");
+					conclude(r.concludeForCluster(variant), "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", region.getName() + "-variant", region);
 				else {
-					boolean haveVariantAnalysis = variantPhyloAnalysis(s, phylo, regionName, r.getConcludedCluster());
+					boolean haveVariantAnalysis = variantPhyloAnalysis(s, phylo, region, r.getConcludedCluster());
 				
 					if (!haveVariantAnalysis && haveSubClusters)
-						conclude("Could not assign", "Not supported by " + phyloName, regionName + "-variant");
+						conclude("Could not assign", "Not supported by " + phyloName, region.getName() + "-variant", region);
 				}
 			} else
-				conclude("Could not assign", "Not supported by " + phyloName, regionName);
+				conclude("Could not assign", "Not supported by " + phyloName, region.getName(), region);
 
 			return true;
 		} else
@@ -170,8 +170,8 @@ public class NoVTool extends GenotypeTool {
      * 
      * @return whether a variant could be detected.
      */
-	private boolean variantPhyloAnalysis(AbstractSequence s, AlignmentAnalyses phylo, String regionName, Cluster cluster) throws AnalysisException {
-		String analysisName = "phylo-" + regionName + "-" + cluster.getId();
+	private boolean variantPhyloAnalysis(AbstractSequence s, AlignmentAnalyses phylo, BlastAnalysis.Region region, Cluster cluster) throws AnalysisException {
+		String analysisName = "phylo-" + region.getName() + "-" + cluster.getId();
 
 		/*
 		 * Only if that analysis is described in the XML file.
@@ -183,7 +183,7 @@ public class NoVTool extends GenotypeTool {
 
 		PhyloClusterAnalysis.Result r = a.run(s);
 		
-		String phyloName = "phylogenetic sub clustering analysis (" + regionName + ")";
+		String phyloName = "phylogenetic sub clustering analysis (" + region.getName() + ")";
 
 		/*
 		 * If we are clustering with the outgroup, then clearly we could not identify a variant.
@@ -197,9 +197,9 @@ public class NoVTool extends GenotypeTool {
 			|| r.getConcludedCluster() == null
 			|| !r.getConcludedCluster().getId().startsWith(cluster.getId())
 			|| !r.haveSupport())
-			conclude("Could not assign", "Not supported by " + phyloName, regionName + "-variant");
+			conclude("Could not assign", "Not supported by " + phyloName, region.getName() + "-variant", region);
 		else
-			conclude(r, "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", regionName + "-variant");
+			conclude(r, "Supported with " + phyloName + " and bootstrap {1} (&gt;= 70)", region.getName() + "-variant", region);
 
 		return true;
 	}

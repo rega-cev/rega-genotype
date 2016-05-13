@@ -122,7 +122,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
                 	
                 	if (supported.size() >= 2) {
                 		//Rule 2a: recombinant of pure types
-                		concludeRule("2a", "Recombinant of " + toRecombinantString(scanResult.getWindowCount(), supported), "Rule 2a");
+                		concludeRule("2a", "Recombinant of " + toRecombinantString(scanResult.getWindowCount(), supported), "Rule 2a", null);
                 	} else if (scanResult.getBootscanSupport() >= 0.7) {
                 		//Rule 2b=5 like rule 1
                 		rule2b(pureResult, crfResult);
@@ -130,10 +130,10 @@ public class HIV1SubtypeTool extends GenotypeTool {
                 		//Rule 2c
                 		Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
                 				pureResult.getConcludedCluster().getName() + ", potential recombinant");
-                		concludeRule("2c", concluded, "Rule 2c");
+                		concludeRule("2c", concluded, "Rule 2c", null);
                 	} else {
                 		//Rule 2d
-                		concludeRule("2d", "Recombinant", "Rule 2d");
+                		concludeRule("2d", "Recombinant", "Rule 2d", null);
                 	}
                 } else {
                 	Map<String,Integer> supported = scanCRFResult.getSupportedTypes();
@@ -141,7 +141,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
                     if (!scanCRFResult.haveSupport()) {
                     	if (supported.size() >= 2) {
                     		//Rule 3a: recombinant of CRF and pure types
-                    		concludeRule("3a", "Recombinant of " + toRecombinantString(scanCRFResult.getWindowCount(), supported), "Rule 3a");
+                    		concludeRule("3a", "Recombinant of " + toRecombinantString(scanCRFResult.getWindowCount(), supported), "Rule 3a", null);
                     	} else if (scanCRFResult.getBootscanSupport() > 0.7) {
                     		//Rule 3b=5 like rule 1 but for the CRF now
                     		rule3b(crfPhyloResult);
@@ -149,10 +149,10 @@ public class HIV1SubtypeTool extends GenotypeTool {
                     		//Rule 3c
                     		Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
                     				pureResult.getConcludedCluster().getName() + ", potential recombinant");
-                    		concludeRule("3c", concluded, "Rule 3c");
+                    		concludeRule("3c", concluded, "Rule 3c", null);
                     	} else {
                     		//Rule 3d
-                            concludeRule("3d", "Recombinant", "Rule 3d");
+                            concludeRule("3d", "Recombinant", "Rule 3d", null);
                     	}
                     } else {
                         // Rule 4
@@ -160,7 +160,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
                                 "Subtype assigned based on sequence > 800bp, " +
                                 "clustering with a CRF or subtype with bootstrap > 70%, " +
                                 "with detection of recombination in the pure subtype bootscan, " +
-                                "and further confirmed as a CRF or sub-subtype by bootscan analysis.");
+                                "and further confirmed as a CRF or sub-subtype by bootscan analysis.", null);
                     }
                }
             }
@@ -171,20 +171,20 @@ public class HIV1SubtypeTool extends GenotypeTool {
                 // Rule 9
                 concludeRule("9","Check the report",
                         "Subtype unassigned based on sequence &lt; 800bp, " +
-                        "and not clustering with a pure subtype with bootstrap >70 %.");
+                        "and not clustering with a pure subtype with bootstrap >70 %.", null);
             } else {
                 if ((pure.getSupportInner() - pure.getSupportOuter()) >= InsideCutoff) {
                     // Rule 11
                     concludeRule("11",pure,
                             "Subtype assigned based on sequence &lt; 800bp, " +
                             "clustering with a pure subtype with bootstrap > 70%, " +
-                            "and clustering inside the pure subtype cluster.");
+                            "and clustering inside the pure subtype cluster.", null);
                 } else {
                     // Rule 10
                     concludeRule("10","Check the report",
                             "Subtype assigned based on sequence &lt; 800bp, " +
                             "clustering with a pure subtype with bootstrap > 70%, " +
-                            "however not clustering inside the pure subtype cluster.");
+                            "however not clustering inside the pure subtype cluster.", null);
                 }
             }
         }
@@ -218,7 +218,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
                 concludeRule(rule + "b", pureResult,
                         "Subtype assigned based on sequence > 800 bps "
                         + "clustering with a pure subtype with bootstrap > 70% "
-                        + recombinationConclusion);
+                        + recombinationConclusion, null);
             } else {
                 // Rule 1c
             	Concludable concluded = new ClusterLike(pureResult, pureResult.getConcludedCluster().getId() + "-like",
@@ -226,14 +226,14 @@ public class HIV1SubtypeTool extends GenotypeTool {
                 concludeRule(rule + "c", concluded,
                         "Subtype unassigned based on sequence > 800 bps " +
                         "failure to classify as pure subtype (Bootstrap Support)" +
-                        recombinationConclusion);
+                        recombinationConclusion, null);
             }
         } else {
         	// Rule 1d
             concludeRule(rule + "d", "Check the report",
                "Subtype unassigned based on sequence > 800 bps " +
                "failure to classify as pure subtype (insufficient bootstrap support)" +
-               recombinationConclusion);
+               recombinationConclusion, null);
         }
     }
     

@@ -22,6 +22,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import rega.genotype.BlastAnalysis.ReferenceTaxus;
+import rega.genotype.BlastAnalysis.Region;
 
 /**
  * Class that represents information contained in a a single analysis (XML file).
@@ -44,6 +45,7 @@ public class AlignmentAnalyses {
     private SequenceAlignment             alignment;
     private boolean                       trimAlignment;
     private GenotypeTool                  genotypeTool;
+	private Region                        region;
 
     /**
      * A taxus corresponds to a sequence in the alignment
@@ -612,4 +614,12 @@ public class AlignmentAnalyses {
     public GenotypeTool getGenotypeTool() {
         return genotypeTool;
     }
+
+	public void setRegion(Region region) {
+		this.region = region;
+	}
+
+	public Region getRegion() {
+		return region;
+	}
 }

@@ -45,10 +45,10 @@ public class HCVToolGeno extends GenotypeTool {
             if (result.getCluster().getId().equals("1"))
                 hcvsubtypetool.analyze(s);
             else
-                conclude(result, "Identified with BLAST score > 200");
+                conclude(result, "Identified with BLAST score > 200", null);
         } else {
 
-            conclude("Unassigned", "Unassigned because of BLAST score &lt; 200.");
+            conclude("Unassigned", "Unassigned because of BLAST score &lt; 200.", null);
         }
     }
 
