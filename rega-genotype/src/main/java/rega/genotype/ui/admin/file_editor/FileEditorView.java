@@ -51,6 +51,7 @@ public class FileEditorView extends WContainerWidget{
 				return fileTree.getCurrentFile();
 			}
 		};
+		downloadB.disable();
 
 		fileTree = new FileTreeTable(root, false, false);
 		
