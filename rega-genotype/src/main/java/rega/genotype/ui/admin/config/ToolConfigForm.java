@@ -9,6 +9,7 @@ import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.admin.file_editor.FileEditorView;
 import rega.genotype.ui.admin.file_editor.SmartFileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
+import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.FileUtil;
@@ -73,6 +74,8 @@ public class ToolConfigForm extends FormTemplate {
 			smartFileEditor.disable();
 		} 
 
+		saveB.disable();
+
 		// bind
 
 		WPanel mamifestPanel = new WPanel();
@@ -93,8 +96,7 @@ public class ToolConfigForm extends FormTemplate {
 		bindWidget("save", saveB);
 		bindWidget("cancel", cancelB);
 
-		initInfoFields();
-		validate();
+		init();
 
 		// signals 
 
@@ -165,6 +167,19 @@ public class ToolConfigForm extends FormTemplate {
 				done.trigger();
 			}
 		});
+
+		// dirty
+
+		DirtyHandler dirtyHandler = new DirtyHandler();
+		dirtyHandler.connect(smartFileEditor.getDirtyHandler(), smartFileEditor);
+		dirtyHandler.connect(manifestForm.getDirtyHandler(), manifestForm);
+		dirtyHandler.connect(localConfigForm.getDirtyHandler(), localConfigForm);
+		dirtyHandler.connect(fileEditor.getDirtyHandler(), fileEditor);
+		dirtyHandler.dirty().addListener(this, new Signal.Listener() {
+			public void trigger() {
+				saveB.enable();
+			}
+		});
 	}
 
 	@Override
@@ -176,16 +191,21 @@ public class ToolConfigForm extends FormTemplate {
 		if (!validate())
 			return null;
 
-		fileEditor.saveAll();
-		smartFileEditor.saveAll();
+		if (fileEditor.getDirtyHandler().isDirty())
+			fileEditor.saveAll();
 
-		ToolManifest manifest = manifestForm.save(publishing);
-		if (manifest == null) {
-			infoT.setText("Manifest could not be saved.");
-			return null;
+		if (smartFileEditor.isDirty())
+			smartFileEditor.saveAll();
+
+		if (manifestForm.isDirty()){
+			ToolManifest manifest = manifestForm.save(publishing);
+			if (manifest == null) {
+				infoT.setText("Manifest could not be saved.");
+				return null;
+			}
+
+			renameToolDir(manifest);
 		}
-
-		renameToolDir(manifest);
 
 		ToolConfig tool = localConfigForm.save();
 		if (tool == null) {

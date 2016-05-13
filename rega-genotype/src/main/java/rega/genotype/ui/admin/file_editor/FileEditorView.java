@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
+import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
@@ -34,6 +35,7 @@ public class FileEditorView extends WContainerWidget{
 	private FileTreeTable fileTree;
 	private WPushButton addB;
 	private WPushButton removeB;
+	private DirtyHandler dirtyHandler = new DirtyHandler();
 
 	public FileEditorView(final File root) {
 		super();
@@ -102,8 +104,8 @@ public class FileEditorView extends WContainerWidget{
 							}
 
 							fileTree.refresh();
+							dirtyHandler.increaseDirty();
 						}
-						
 					}
 				});
 
@@ -131,7 +133,7 @@ public class FileEditorView extends WContainerWidget{
 		return toolDir;
 	}
 
-	public static class FileTabs extends WTabWidget {
+	private class FileTabs extends WTabWidget {
 
 		private Map<File, FileEditor> openEditors = new HashMap<File, FileEditor>();
 		private boolean isReadOnly;
@@ -177,12 +179,14 @@ public class FileEditorView extends WContainerWidget{
 				editor.changed().addListener(editor, new Signal.Listener() {
 					public void trigger() {
 						setTabText(getIndexOf(editor), "*" + file.getName());
+						dirtyHandler.increaseDirty();
 					}
 				});
 
 				editor.saved().addListener(editor, new Signal.Listener() {
 					public void trigger() {
 						setTabText(getIndexOf(editor), file.getName());
+						dirtyHandler.decreaseDirty();
 					}
 				});
 
@@ -202,5 +206,9 @@ public class FileEditorView extends WContainerWidget{
 
 	public void setToolDir(File toolDir) {
 		this.toolDir = toolDir;
+	}
+
+	public DirtyHandler getDirtyHandler() {
+		return dirtyHandler;
 	}
 }

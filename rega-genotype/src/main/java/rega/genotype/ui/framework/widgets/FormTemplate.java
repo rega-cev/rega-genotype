@@ -12,8 +12,16 @@ import eu.webtoolkit.jwt.WValidator.Result;
  * @author michael
  */
 public class FormTemplate extends Template {
+	private DirtyHandler dirtyHandler = new DirtyHandler();
+	
 	public FormTemplate(CharSequence text) {
 		super(text);
+	}
+
+	public void init() {
+		dirtyHandler.connect(this);
+		initInfoFields();
+		validate();
 	}
 
 	public void initInfoFields() {
@@ -50,5 +58,13 @@ public class FormTemplate extends Template {
 			}
 		}
 		return ans;
+	}
+
+	public boolean isDirty() {
+		return dirtyHandler.isDirty();
+	}
+
+	public DirtyHandler getDirtyHandler() {
+		return dirtyHandler;
 	}
 }

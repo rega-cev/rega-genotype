@@ -6,6 +6,7 @@ import java.util.List;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.utils.Utils;
@@ -79,8 +80,7 @@ public class BlastAnalysisForm extends FormTemplate{
 		bindWidget("relative-cut-off", relativeCutOffLE);
 		bindWidget("relative-evalue", relativeEValueLE);
 
-		initInfoFields();
-		validate();
+		init();
 	}
 
 	public boolean save() {

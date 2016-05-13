@@ -57,8 +57,7 @@ public class LocalConfigForm  extends FormTemplate {
 		bindWidget("ui", uiChB);
 		bindWidget("service", serviceChB);
 
-		initInfoFields();
-		validate();
+		init();
 	}
 
 	public ToolConfig save() {

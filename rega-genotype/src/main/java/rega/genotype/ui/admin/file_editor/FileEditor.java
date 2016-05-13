@@ -31,6 +31,7 @@ public class FileEditor extends WContainerWidget {
 	private WTextArea edit = null;
 	private Signal saved = new Signal();
 	private Signal changed = new Signal();
+	private WPushButton saveB;
 
 	private File file;
 
@@ -57,7 +58,9 @@ public class FileEditor extends WContainerWidget {
 			edit.setWidth(new WLength("100%"));
 			edit.setHeight(new WLength(300));
 
-			final WPushButton saveB = new WPushButton("Save", this);
+			saveB = new WPushButton("Save", this);
+			saveB.disable();
+
 			final WText infoT = new WText(this);
 
 			String fileText = FileUtil.readFile(file);
@@ -70,6 +73,7 @@ public class FileEditor extends WContainerWidget {
 
 			edit.changed().addListener(edit, new Signal.Listener() {
 				public void trigger() {
+					saveB.enable();
 					changed.trigger();
 				}
 			});
@@ -87,6 +91,7 @@ public class FileEditor extends WContainerWidget {
 			try {
 				file.delete();
 				FileUtil.writeStringToFile(file, edit.getText());
+				saveB.disable();
 				saved().trigger();
 			} catch (IOException e) {
 				e.printStackTrace();
