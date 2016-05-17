@@ -13,6 +13,7 @@ import rega.genotype.config.ToolUpdateService;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
 import rega.genotype.ui.admin.AdminNavigation;
+import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
@@ -160,7 +161,7 @@ public class ToolConfigTable extends Template{
 							e.printStackTrace();
 						}
 
-						importTool(manifest, f);
+						importTool(manifest, f, Mode.Install);
 					}
 				}
 			}
@@ -220,7 +221,7 @@ public class ToolConfigTable extends Template{
 										ToolManifest.MANIFEST_FILE_NAME);
 								ToolManifest manifest = ToolManifest.parseJson(manifestJson);
 								if (manifest != null) {
-									importTool(manifest, new File(f.getSpoolFileName()));
+									importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
 								} else {
 									new MsgDialog("Error", "Invalid tool file");
 								}
@@ -348,7 +349,7 @@ public class ToolConfigTable extends Template{
 
 	}
 
-	private void importTool(ToolManifest manifest, File f) {
+	private void importTool(ToolManifest manifest, File f, ToolConfigForm.Mode mode) {
 		// create tool config.
 		FileUtil.unzip(f, new File(manifest.suggestXmlDirName()));
 		if (f != null) {
@@ -356,6 +357,8 @@ public class ToolConfigTable extends Template{
 			ToolConfig config = new ToolConfig();
 			config.setConfiguration(manifest.suggestXmlDirName());
 			config.genetareJobDir();
+			if (mode == Mode.Install)
+				config.setPublished(true);
 			Settings.getInstance().getConfig().putTool(config);
 			try {
 				Settings.getInstance().getConfig().save();
@@ -471,22 +474,9 @@ public class ToolConfigTable extends Template{
 				config = info.getConfig();
 			}
 			break;
-		case Install:
-			String dataDirStr = info.getManifest().suggestXmlDirName();
-			File toolDir = new File(dataDirStr);
-			toolDir.mkdirs();
-			config = new ToolConfig();
-			config.setConfiguration(dataDirStr);
-			config.genetareJobDir();
-			config.setPublished(true);
-
-			try {
-				Settings.getInstance().getConfig().save();
-			} catch (IOException e) {
-				e.printStackTrace();
-				assert(false);
-			}
-
+		case Install:			
+			config = Settings.getInstance().getConfig().getToolConfigById(
+					info.getManifest().getId(), info.getManifest().getVersion());
 			break;
 		default:
 			break;

@@ -32,7 +32,7 @@ import eu.webtoolkit.jwt.WText;
  * @author michael
  */
 public class ToolConfigForm extends FormTemplate {
-	public enum Mode {Add, Edit, NewVersion, Install}
+	public enum Mode {Add, Edit, NewVersion, Install, Import}
 	private final WText infoT = new WText();
 	private FileEditorView fileEditor;
 	private ManifestForm manifestForm;
