@@ -63,9 +63,6 @@ public class LocalConfigForm  extends FormTemplate {
 	public ToolConfig save() {
 		if (!validate())
 			return null;
-
-		if (manifestForm.save(false) == null )
-			return null;
 		
 		Config config = Settings.getInstance().getConfig();
 

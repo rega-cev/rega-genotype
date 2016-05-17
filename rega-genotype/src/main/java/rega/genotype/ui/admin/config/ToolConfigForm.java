@@ -220,7 +220,7 @@ public class ToolConfigForm extends FormTemplate {
 		if (smartFileEditor.isDirty())
 			smartFileEditor.saveAll();
 
-		if (manifestForm.isDirty()){
+		if (publishing || manifestForm.isDirty()){
 			ToolManifest manifest = manifestForm.save(publishing);
 			if (manifest == null) {
 				infoT.setText("Manifest could not be saved.");
