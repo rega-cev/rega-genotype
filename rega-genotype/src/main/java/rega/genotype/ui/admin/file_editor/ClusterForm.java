@@ -110,7 +110,7 @@ public class ClusterForm extends FormTemplate{
 
 		// bind
 
-		bindString("cluster-name", c.getName());
+		bindString("cluster-name", cluster.getName() == null ? "" : cluster.getName());
 		bindWidget("id", idLE);
 		bindWidget("name", nameLE);
 		bindWidget("description", descriptionLE);

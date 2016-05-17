@@ -2,6 +2,7 @@ package rega.genotype.ui.admin.file_editor;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -171,26 +172,37 @@ public class FastaFileEditorDialog extends WDialog{
 			alignmentAnalyses.analyses();
 
 			mode = Mode.AllClusters;
-			// run the tool to identify the clusters.
-			final File jobDir = GenotypeLib.createJobDir(toolConfig.getJobDir());
-			try {
-				InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
-				currentSeqAlign = new SequenceAlignment(stream, 
-						SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+			File blastXmlFile = new File(toolConfig.getConfiguration(), "blast.xml");
+			if (!blastXmlFile.exists()) {
+				SequenceAlignment alignment = parseFasta(fasta, alignmentAnalyses.getAlignment().getSequenceType());
+				if (alignment != null) {
+					List<AbstractSequence> sequences = alignment.getSequences();
+					for (AbstractSequence s: sequences) {
+						addRow(s, null);
+					}
+				}
+			} else {
+				// run the tool to identify the clusters.
+				final File jobDir = GenotypeLib.createJobDir(toolConfig.getJobDir());
+				try {
+					InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
+					currentSeqAlign = new SequenceAlignment(stream, 
+							SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
-				stream.reset();
-				GenericTool t = new GenericTool(toolConfig, jobDir);
-				t.analyze(stream, jobDir.getAbsolutePath() + File.separator + "result.xml");
-				new Parser().parseFile(jobDir);
-			} catch (IOException e) {
-				e.printStackTrace();
-				new MsgDialog("Error", "Failed to analyze given sequence.");
-			} catch (ParameterProblemException e) {
-				e.printStackTrace();
-				new MsgDialog("Error", "Failed to analyze given sequence.");
-			} catch (FileFormatException e) {
-				e.printStackTrace();
-				new MsgDialog("Error", "Failed to analyze given sequence.");
+					stream.reset();
+					GenericTool t = new GenericTool(toolConfig, jobDir);
+					t.analyze(stream, jobDir.getAbsolutePath() + File.separator + "result.xml");
+					new Parser().parseFile(jobDir);
+				} catch (IOException e) {
+					e.printStackTrace();
+					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+				} catch (ParameterProblemException e) {
+					e.printStackTrace();
+					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+				} catch (FileFormatException e) {
+					e.printStackTrace();
+					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+				}
 			}
 		}
 
@@ -206,11 +218,30 @@ public class FastaFileEditorDialog extends WDialog{
 
 				AbstractSequence s = currentSeqAlign.findSequence(seqName);
 
-				Cluster cluster = concludedId.equals("Unassigned") ? null :
+				Cluster cluster = concludedId == null || concludedId.equals("Unassigned") ? null :
 					alignmentAnalyses.findCluster(clusterId);
 
 				addRow(s, cluster);
 			}
+		}
+
+		private SequenceAlignment parseFasta(String fasta, int sequenceType) {
+			try {
+				InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
+				SequenceAlignment alignment = new SequenceAlignment(stream,
+						SequenceAlignment.FILETYPE_FASTA, sequenceType);
+				return alignment;
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (ParameterProblemException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (FileFormatException e) {
+				e.printStackTrace();
+			}
+
+			return null;
 		}
 
 		private void addRow(AbstractSequence s, Cluster blastResultCluster) {
