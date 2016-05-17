@@ -15,6 +15,8 @@ import org.jdom.output.XMLOutputter;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.BlastAnalysis;
+import rega.genotype.BlastAnalysis.ReferenceTaxus;
+import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 
@@ -76,6 +78,25 @@ public class BlastXmlWriter {
 				add(analysisE, "absolute-max-e-value", analysis.getAbsMaxEValue());
 			if (analysis.getRelativeMaxEValue() != null)
 				add(analysisE, "relative-max-e-value", analysis.getRelativeMaxEValue());
+
+			// Reference Taxus
+			for (ReferenceTaxus ref: analysis.getReferenceTaxus()){
+				Element referenceTaxusE = new Element("regions");
+				List<Attribute> refTaxusAttributes = new ArrayList<Attribute>();
+				refTaxusAttributes.add(new Attribute("taxus", ref.getTaxus()));
+				referenceTaxusE.setAttributes(refTaxusAttributes);
+
+				for (Region region: ref.getRegions()) {
+					Element regionE = new Element("region");
+					List<Attribute> regionAttributes = new ArrayList<Attribute>();
+					regionAttributes.add(new Attribute("name", region.getName()));
+					regionAttributes.add(new Attribute("begin", "" + region.getBegin()));
+					regionAttributes.add(new Attribute("end", "" + region.getEnd()));
+					regionE.setAttributes(regionAttributes);
+					referenceTaxusE.addContent(regionE);
+				}
+				analysisE.addContent(referenceTaxusE);
+			}
 
 			doc.getRootElement().addContent(analysisE);
 		}
