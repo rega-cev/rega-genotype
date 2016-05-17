@@ -71,7 +71,8 @@ public class ClusterForm extends FormTemplate{
 
 		Set<String> toolIds = new HashSet<String>();
 		for(ToolConfig tool : Settings.getInstance().getConfig().getTools())
-			toolIds.add(tool.getId()); 
+			if (tool.getId() != null)
+				toolIds.add(tool.getId()); 
 		ArrayList<String> toolIdsList = new ArrayList<String>(toolIds);
 		toolIdsList.add(0, "(Empty)");
 		final ObjectListComboBox<String> toolIdCB = new ObjectListComboBox<String>(new ArrayList<String>(toolIds)) {
@@ -82,11 +83,12 @@ public class ClusterForm extends FormTemplate{
 		};
 		ToolManifest manifest = toolConfig != null ? toolConfig.getToolMenifest() : null;
 		if (cluster.getToolId() == null)
-			if (manifest == null)
+			if (manifest == null || manifest.getId() == null)
 				toolIdCB.setCurrentIndex(0);
 			else
 				setValue(toolIdCB, manifest.getId());
-		setValue(toolIdCB, cluster.getToolId());
+		else
+			setValue(toolIdCB, cluster.getToolId());
 
 		// taxus model
 
