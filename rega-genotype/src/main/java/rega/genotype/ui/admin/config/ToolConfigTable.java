@@ -443,7 +443,9 @@ public class ToolConfigTable extends Template{
 			break;
 		case NewVersion:
 			config = info.getConfig().copy();
-			config.genetareDirs();
+			config.genetareJobDir();
+			config.genetareConfigurationDir(
+					info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1));
 			Settings.getInstance().getConfig().putTool(config);
 			try {
 				Settings.getInstance().getConfig().save();

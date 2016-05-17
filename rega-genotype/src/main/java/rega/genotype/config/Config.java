@@ -311,11 +311,20 @@ public class Config {
 			genetareJobDir();
 			genetareConfigurationDir();
 		}
-
 		public void genetareConfigurationDir() {
+			genetareConfigurationDir(null);
+		}
+
+		public void genetareConfigurationDir(String suggestDirName) {
 			try {
-				File toolDir = FileUtil.createTempDirectory("tool-dir", 
-						new File(Settings.getInstance().getBaseXmlDir()));
+				File toolDir;
+				if (suggestDirName == null)
+					toolDir = FileUtil.createTempDirectory("tool-dir", 
+							new File(Settings.getInstance().getBaseXmlDir()));
+				else {
+					toolDir = new File(new File(Settings.getInstance().getBaseXmlDir()), suggestDirName);
+					toolDir.mkdirs();
+				}
 				setConfiguration(toolDir + File.separator);
 			} catch (IOException e) {
 				e.printStackTrace();
