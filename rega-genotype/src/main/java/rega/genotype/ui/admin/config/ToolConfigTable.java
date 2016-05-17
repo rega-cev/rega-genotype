@@ -16,13 +16,14 @@ import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
-import rega.genotype.ui.framework.widgets.DownloadButton;
+import rega.genotype.ui.framework.widgets.DownloadResource;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.CheckState;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
@@ -30,9 +31,11 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.SortOrder;
+import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WModelIndex;
@@ -92,7 +95,7 @@ public class ToolConfigTable extends Template{
 		final WPushButton importB = new WPushButton("Import");
 		
 		// downloadB
-		final DownloadButton downloadB = new DownloadButton("Export") {
+		final DownloadResource downloadR = new DownloadResource("", "") {
 			@Override
 			public File downlodFile() {
 				if (table.getSelectedIndexes().size() == 1) {
@@ -123,6 +126,11 @@ public class ToolConfigTable extends Template{
 				return null;
 			}
 		};
+		final WAnchor downloadB = new WAnchor();
+		downloadB.setTarget(AnchorTarget.TargetDownload);
+		downloadB.setText("Export");
+		downloadB.setStyleClass("like-button");
+		downloadB.setLink(new WLink(downloadR));
 		downloadB.disable();
 
 		installB.disable();
@@ -288,8 +296,14 @@ public class ToolConfigTable extends Template{
 						uninstallB.setText("Remove");
 					else
 						uninstallB.setText("Uninstall");
-				
-					downloadB.enable();
+
+					if (toolInfo.getManifest() != null){
+						File zip = new File(Settings.getInstance().getBasePackagedToolsDir() 
+								+ File.separator + toolInfo.getManifest().getUniqueToolId() + ".zip");
+						downloadR.setFileName(zip.getAbsolutePath());
+						downloadR.suggestFileName(toolInfo.getManifest().getUniqueToolId() + ".zip");
+						downloadB.enable();
+					}
 				} else {
 					installB.disable();
 					editB.disable();
