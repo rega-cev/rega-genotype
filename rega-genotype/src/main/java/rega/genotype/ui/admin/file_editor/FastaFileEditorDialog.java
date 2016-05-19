@@ -257,6 +257,10 @@ public class FastaFileEditorDialog extends WDialog{
 			List<Cluster> clusters = new ArrayList<AlignmentAnalyses.Cluster>(
 					alignmentAnalyses.getAllClusters());
 			clusters.add(0, null);
+			if (cluster != null) { // new cluster
+				clusters.remove(cluster); // place current cluster on top
+				clusters.add(1, cluster);
+			}
 
 			final ObjectListComboBox<Cluster> clusterCB = new ObjectListComboBox<AlignmentAnalyses.Cluster>(
 					clusters) {
@@ -264,6 +268,8 @@ public class FastaFileEditorDialog extends WDialog{
 				protected WString render(Cluster c) {
 					if (c == null)
 						return new WString("(Empty)");
+					else if (cluster != null && c.equals(cluster))
+						return new WString("(Currently edited cluster)");
 					else
 						return new WString(c.getName());
 				}
