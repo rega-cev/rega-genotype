@@ -13,6 +13,8 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.BlastAnalysis;
+import rega.genotype.BlastAnalysis.ReferenceTaxus;
+import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
@@ -43,7 +45,11 @@ import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStackedWidget;
+import eu.webtoolkit.jwt.WTable;
+import eu.webtoolkit.jwt.WTableCell;
+import eu.webtoolkit.jwt.WTableColumn;
 import eu.webtoolkit.jwt.WTableView;
+import eu.webtoolkit.jwt.WText;
 
 /**
  * Editor for blast.xml and blast.fasta.
@@ -83,6 +89,11 @@ public class BlastFileEditor extends WContainerWidget{
 				(BlastAnalysis) alignmentAnalyses.getAnalysis("blast"));
 		analysisPanel.setCentralWidget(analysis);
 
+		WPanel refTaxaPanel = new WPanel();
+		refTaxaPanel.addStyleClass("admin-panel");
+		refTaxaPanel.setTitle("Reference taxa");
+		refTaxaPanel.setCentralWidget(createRefTaxasTable());
+
 		createClustersTable(alignmentAnalyses);
 
 
@@ -90,6 +101,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 		stack.addWidget(layout);
 		layout.bindWidget("analysis", analysisPanel);
+		layout.bindWidget("ref-taxa", refTaxaPanel);
 		layout.bindWidget("add-sequences", addSequencesB);
 
 		addSequencesB.clicked().addListener(addSequencesB, new Signal.Listener() {
@@ -184,6 +196,47 @@ public class BlastFileEditor extends WContainerWidget{
 				SequenceAlignment.FILETYPE_FASTA);
 	}
 
+	class RefTableHeaderWidget extends WContainerWidget{
+		WPushButton removeB = new WPushButton("X");
+
+		public RefTableHeaderWidget(String text) {
+			addWidget(new WText(text));
+			WPushButton removeB = new WPushButton("X");
+			addWidget(removeB);
+		}
+	}
+	
+	private WTable createRefTaxasTable() {
+		BlastAnalysis analysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
+
+		WTable table = new WTable(){
+			@Override
+			protected WTableCell createCell(int row, int column) {
+				
+				return super.createCell(row, column);
+			}
+		};
+		WTableCell c;
+		
+		for (ReferenceTaxus ref: analysis.getReferenceTaxus()){
+			WTableColumn column;
+			if (taxus exist)
+				column = find ..
+			else
+				column = table.insertColumn(table.getColumnCount());
+
+			table.getElementAt(0, column.getColumnNum()).addWidget(
+					new RefTableHeaderWidget(ref.getTaxus()));
+			// connect remove btn
+			for(Region region : ref.getRegions()) {
+				// add 
+				region.get
+			}
+		}
+
+		return table;
+	}
+	
 	private void createClustersTable(final AlignmentAnalyses alignmentAnalyses) {
 		List<Cluster> clusters = alignmentAnalyses.getAllClusters();
 		clusterTableModel = new ClusterTableModel(clusters);

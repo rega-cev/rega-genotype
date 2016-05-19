@@ -230,6 +230,7 @@
 		
 	<message id="admin.config.blast-file-editor">
 		${analysis}
+		${ref-taxa}
 		${cluster-table}
 		${add-sequences}
 	</message>
