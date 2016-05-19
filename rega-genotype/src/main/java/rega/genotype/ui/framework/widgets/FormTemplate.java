@@ -12,7 +12,7 @@ import eu.webtoolkit.jwt.WValidator.Result;
  * @author michael
  */
 public class FormTemplate extends Template {
-	private DirtyHandler dirtyHandler = new DirtyHandler();
+	protected DirtyHandler dirtyHandler = new DirtyHandler();
 	
 	public FormTemplate(CharSequence text) {
 		super(text);

@@ -10,7 +10,6 @@ import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.admin.file_editor.FileEditorView;
 import rega.genotype.ui.admin.file_editor.SmartFileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.utils.FileUtil;
@@ -44,7 +43,6 @@ public class ToolConfigForm extends FormTemplate {
 	public ToolConfigForm(final ToolConfig toolConfig, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
 		
-		final DirtyHandler dirtyHandler = new DirtyHandler();
 		final WPushButton publishB = new WPushButton("Publish");
 		final WPushButton saveB = new WPushButton("Save");
 		final WPushButton cancelB = new WPushButton("Close");
@@ -54,22 +52,21 @@ public class ToolConfigForm extends FormTemplate {
 		infoT.addStyleClass("form-error");
 		
 		// file editor
-		
-		File toolDir = new File(toolConfig.getConfiguration());
+		File toolDir;
+		if (toolConfig.getConfiguration().isEmpty()){ // create new tool.
+			toolDir = null;
+		} else {
+			toolDir = new File(toolConfig.getConfiguration());
+		}
 
-		fileEditor = new FileEditorView(toolDir);
-		smartFileEditor = new SmartFileEditor(toolDir);
-
-		WTabWidget fileEditorTabs = new WTabWidget();
-		fileEditorTabs.addTab(smartFileEditor, "Tool editor");
-		fileEditorTabs.addTab(fileEditor, "Simple file editor");
+		createFileEditors(toolDir);
 
 		// manifest 
 		manifestForm = new ManifestForm(toolConfig.getToolMenifest(), toolDir, mode);
 		
 		// local config
 
-		localConfigForm = new LocalConfigForm(toolConfig, toolDir, manifestForm);
+		localConfigForm = new LocalConfigForm(toolConfig, manifestForm);
 		
 		// disable 
 
@@ -96,7 +93,6 @@ public class ToolConfigForm extends FormTemplate {
 		
 		bindWidget("manifest", mamifestPanel);
 		bindWidget("config", configPanel);
-		bindWidget("upload", fileEditorTabs);
 		bindWidget("info", infoT);
 		bindWidget("publish", publishB);
 		bindWidget("save", saveB);
@@ -110,15 +106,17 @@ public class ToolConfigForm extends FormTemplate {
 			public void trigger(File arg) {
 				toolConfig.invalidateToolManifest();
 				localConfigForm.getToolConfig().invalidateToolManifest();
-				fileEditor.refresh();
 			}
 		});
 
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
-				if (save(false) != null) {
+				ToolConfig savedToolConfig = save(false);
+				if (savedToolConfig != null) {
 					new MsgDialog("Info", "Saved successfully.");
 					dirtyHandler.setClean();
+					if (fileEditor == null) // was not yet created.
+						createFileEditors(savedToolConfig.getConfigurationFile());
 				} else
 					new MsgDialog("Info", "Could not save see validation errors.");
 			}
@@ -194,10 +192,8 @@ public class ToolConfigForm extends FormTemplate {
 
 		// dirty
 
-		dirtyHandler.connect(smartFileEditor.getDirtyHandler(), smartFileEditor);
 		dirtyHandler.connect(manifestForm.getDirtyHandler(), manifestForm);
 		dirtyHandler.connect(localConfigForm.getDirtyHandler(), localConfigForm);
-		dirtyHandler.connect(fileEditor.getDirtyHandler(), fileEditor);
 		dirtyHandler.dirty().addListener(this, new Signal.Listener() {
 			public void trigger() {
 				saveB.enable();
@@ -210,15 +206,36 @@ public class ToolConfigForm extends FormTemplate {
 		return manifestForm.validate() && localConfigForm.validate();
 	}
 
+	private void createFileEditors(File toolDir) {
+		if (toolDir == null){
+			// when creating a new tool file editors are created only
+			// after tool manifest is saved for the first time.
+			bindEmpty("upload"); 
+		} else {
+			fileEditor = new FileEditorView(toolDir);
+			smartFileEditor = new SmartFileEditor(toolDir);
+
+			final WTabWidget fileEditorTabs = new WTabWidget();
+			fileEditorTabs.addTab(smartFileEditor, "Tool editor");
+			fileEditorTabs.addTab(fileEditor, "Simple file editor");
+
+			bindWidget("upload", fileEditorTabs);
+
+			dirtyHandler.connect(fileEditor.getDirtyHandler(), fileEditor);
+			dirtyHandler.connect(smartFileEditor.getDirtyHandler(), smartFileEditor);
+		}
+	}
+	
 	private ToolConfig save(boolean publishing) {
 		if (!validate())
 			return null;
 
-		if (fileEditor.getDirtyHandler().isDirty())
+		if (fileEditor != null && fileEditor.getDirtyHandler().isDirty())
 			fileEditor.saveAll();
 
-		if (smartFileEditor.isDirty())
-			smartFileEditor.saveAll();
+		if (smartFileEditor != null && smartFileEditor.isDirty())
+			if (!smartFileEditor.saveAll())
+				return null;
 
 		if (publishing || manifestForm.isDirty()){
 			ToolManifest manifest = manifestForm.save(publishing);
@@ -230,7 +247,7 @@ public class ToolConfigForm extends FormTemplate {
 			renameToolDir(manifest);
 		}
 
-		ToolConfig tool = localConfigForm.save();
+		ToolConfig tool = localConfigForm.save(manifestForm.getToolDir());
 		if (tool == null) {
 			infoT.setText("Local configuration could not be saved.");
 			return null;
@@ -255,7 +272,6 @@ public class ToolConfigForm extends FormTemplate {
 		}
 
 		manifestForm.setToolDir(new File(xmlDir));
-		localConfigForm.setXmlDir(new File(xmlDir));
 		smartFileEditor.setToolDir(new File(xmlDir));
 		fileEditor.setToolDir(new File(xmlDir));
 

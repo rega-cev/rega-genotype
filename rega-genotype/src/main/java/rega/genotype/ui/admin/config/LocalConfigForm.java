@@ -29,14 +29,12 @@ public class LocalConfigForm  extends FormTemplate {
 
 	//private ToolManifest manifest;
 	private ToolConfig toolConfig;
-	private File xmlDir;
 	private ManifestForm manifestForm;
 
-	public LocalConfigForm(final ToolConfig toolConfig, File xmlDir, 
+	public LocalConfigForm(final ToolConfig toolConfig, 
 			ManifestForm manifestForm) {
 		super(tr("admin.config.tool-config-dialog.config"));
 		this.toolConfig = toolConfig;
-		this.xmlDir = xmlDir;
 		this.manifestForm = manifestForm;
 
 		// read
@@ -60,7 +58,7 @@ public class LocalConfigForm  extends FormTemplate {
 		init();
 	}
 
-	public ToolConfig save() {
+	public ToolConfig save(File toolDir) {
 		if (!validate())
 			return null;
 		
@@ -78,7 +76,7 @@ public class LocalConfigForm  extends FormTemplate {
 			}
 		}
 
-		toolConfig.setConfiguration(xmlDir.getAbsolutePath() + File.separator);
+		toolConfig.setConfiguration(toolDir.getAbsolutePath() + File.separator);
 		toolConfig.setAutoUpdate(autoUpdateChB.isChecked());
 		toolConfig.setPath(urlLE.getText());
 		toolConfig.setUi(uiChB.isChecked());
@@ -102,14 +100,6 @@ public class LocalConfigForm  extends FormTemplate {
 		WLineEdit le = new WLineEdit();
 		le.setWidth(new WLength(200));
 		return le;
-	}
-
-	public File getXmlDir() {
-		return xmlDir;
-	}
-
-	public void setXmlDir(File xmlDir) {
-		this.xmlDir = xmlDir;
 	}
 
 	public ToolConfig getToolConfig() {

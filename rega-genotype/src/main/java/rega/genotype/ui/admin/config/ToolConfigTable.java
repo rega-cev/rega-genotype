@@ -435,14 +435,7 @@ public class ToolConfigTable extends Template{
 		ToolConfig config = null;
 		switch (mode) {
 		case Add:
-			config = createToolConfig();
-			Settings.getInstance().getConfig().putTool(config);
-			try {
-				Settings.getInstance().getConfig().save();
-			} catch (IOException e) {
-				e.printStackTrace();
-				assert(false);
-			}
+			config = new ToolConfig();
 			break;
 		case NewVersion:
 			config = info.getConfig().copy();
@@ -504,13 +497,6 @@ public class ToolConfigTable extends Template{
 		}
 
 		return sggestedVersion.toString();
-	}
-
-	private ToolConfig createToolConfig() {
-		ToolConfig config;
-		config = new ToolConfig();
-		config.genetareDirs();
-		return config;
 	}
 
 	private List<ToolManifest> getLocalManifests() {

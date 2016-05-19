@@ -23,8 +23,8 @@ public class SmartFileEditor extends WContainerWidget {
 		fileEditorPanel.addStyleClass("admin-panel");
 	}
 
-	public void saveAll() {
-		blastFileEditor.save();
+	public boolean saveAll() {
+		return blastFileEditor.save();
 	}
 
 	public File getToolDir() {

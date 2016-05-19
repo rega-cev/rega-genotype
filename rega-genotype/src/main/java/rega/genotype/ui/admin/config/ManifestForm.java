@@ -29,7 +29,7 @@ public class ManifestForm extends FormTemplate{
 	private final WCheckBox hivChB = new WCheckBox();
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
 	private ToolManifest oldManifest;
-	private File toolDir;
+	private File toolDir; // used for id, version validator.
 
 	public ManifestForm(final ToolManifest manifest, File toolDir, Mode mode) {
 		super(tr("admin.config.tool-config-dialog.manifest"));
@@ -90,6 +90,10 @@ public class ManifestForm extends FormTemplate{
 			manifest.setPublisherName(oldManifest.getPublisherName());
 		}
 
+		if (toolDir == null) { // new tool
+			toolDir = new File(Settings.getInstance().getBaseXmlDir(), manifest.getUniqueToolId());
+			toolDir.mkdirs();
+		}
 		manifest.save(toolDir.getAbsolutePath());
 
 		saved().trigger(toolDir);
@@ -119,9 +123,10 @@ public class ManifestForm extends FormTemplate{
 		public Result validate(String input) {
 			Config config = Settings.getInstance().getConfig();
 			ToolConfig toolConfigById = config.getToolConfigById(idLE.getText(), versionLE.getText());
-			
+
 			if (toolConfigById != null && 
-					!toolConfigById.getConfigurationFile().getAbsolutePath().equals(getToolDir().getAbsolutePath()))
+					(toolDir == null // new tool.
+					|| !toolConfigById.getConfigurationFile().getAbsolutePath().equals(toolDir.getAbsolutePath())))
 				return new Result(State.Invalid, "A tool with same id and version already exist on local server.");
 
 			return super.validate(input);

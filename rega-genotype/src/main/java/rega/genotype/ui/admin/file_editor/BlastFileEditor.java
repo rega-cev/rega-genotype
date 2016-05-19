@@ -117,15 +117,16 @@ public class BlastFileEditor extends WContainerWidget{
 		
 	}
 
-	public void save() {
+	public boolean save() {
 		try {
 			if(!analysis.save()){
 				new MsgDialog("Error", "Analysis is not valid.");
-				return;
+				return false;
 			}
 
 			new BlastXmlWriter(blastFile(), alignmentAnalyses);
 			writeFastaFile();
+			return true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			new MsgDialog("Error", "Could not save blast.xml");
@@ -138,6 +139,8 @@ public class BlastFileEditor extends WContainerWidget{
 		} catch (RegaGenotypeExeption e) {
 			new MsgDialog("Error", e.getMessage());
 		}
+
+		return false;
 	}
 
 	private File blastFile() {
