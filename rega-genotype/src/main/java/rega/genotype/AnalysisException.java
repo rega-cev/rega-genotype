@@ -18,7 +18,7 @@ public class AnalysisException extends Exception {
                              Exception nestedException) {    	
         super("Problem during analysis \"" + analysisId
               + "\" for sequence \"" + (sequence == null ? "(no sequence)" : sequence.getName())
-              + "\": " + nestedException.getMessage());
+              + "\": " + nestedException.getMessage(), nestedException);
 
         this.analysId = analysisId;
     	this.sequence = sequence;

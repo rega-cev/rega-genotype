@@ -15,6 +15,7 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.FileFormatException;
+import rega.genotype.GenotypeTool.AnalysesType;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
@@ -191,7 +192,7 @@ public class FastaFileEditorDialog extends WDialog{
 
 					stream.reset();
 					GenericTool t = new GenericTool(toolConfig, jobDir);
-					t.analyze(stream, jobDir.getAbsolutePath() + File.separator + "result.xml");
+					t.analyze(stream, jobDir.getAbsolutePath() + File.separator + "result.xml", AnalysesType.BlastOnly);
 					new Parser().parseFile(jobDir);
 				} catch (IOException e) {
 					e.printStackTrace();

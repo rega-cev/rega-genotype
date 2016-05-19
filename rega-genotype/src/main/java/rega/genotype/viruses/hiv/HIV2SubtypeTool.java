@@ -11,6 +11,7 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
+import rega.genotype.GenotypeTool.AnalysesType;
 import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.utils.Settings;
 
@@ -40,7 +41,7 @@ public class HIV2SubtypeTool extends GenotypeTool {
     }
 
 
-    public void analyze(AbstractSequence s) throws AnalysisException {
+    public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
         if (s.getLength() > 200) {
             PhyloClusterAnalysis.Result pureresult = pureAnalysis.run(s);
 
