@@ -27,8 +27,6 @@ import rega.genotype.ui.forms.details.DefaultSequenceAssignmentForm;
 import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
-import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.ui.viruses.etv.EtvMain;
 import rega.genotype.util.DataTable;
 import rega.genotype.utils.Settings;
 import rega.genotype.viruses.hiv.HIVTool;

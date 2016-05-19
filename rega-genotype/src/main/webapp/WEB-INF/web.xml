@@ -82,62 +82,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>GenotypeNoV</servlet-name>
-    <display-name>NoV Genotyping</display-name>
-    <description>NoV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.nov.NovMain</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeNoV</servlet-name>
-    <url-pattern>/typingtool/norovirus/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>GenotypeNoV-service</servlet-name>
-    <display-name>NoV Genotyping service</display-name>
-    <description>NoV Genotyping service</description>
-    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
-    <init-param>
-    	<param-name>genotypeTool</param-name>
-    	<param-value>rega.genotype.viruses.nov.NoVTool</param-value>
-   	</init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeNoV-service</servlet-name>
-    <url-pattern>/typingservice/norovirus</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>GenotypeEntero</servlet-name>
-    <display-name>Enterovirus Genotyping</display-name>
-    <description>Enterovirus Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.etv.EtvMain</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeEntero</servlet-name>
-    <url-pattern>/typingtool/enterovirus/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>GenotypeEntero-service</servlet-name>
-    <display-name>Entero Genotyping service</display-name>
-    <description>Entero Genotyping service</description>
-    <servlet-class>rega.genotype.service.GenotypeService</servlet-class>
-    <init-param>
-    	<param-name>genotypeTool</param-name>
-    	<param-value>rega.genotype.viruses.etv.EnteroTool</param-value>
-   	</init-param>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>GenotypeEntero-service</servlet-name>
-    <url-pattern>/typingservice/enterovirus</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>TypingTool</servlet-name>
     <servlet-class>rega.genotype.ui.viruses.generic.GenericMain</servlet-class>
   </servlet>
