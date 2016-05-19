@@ -501,9 +501,9 @@ public class BlastAnalysis extends AbstractAnalysis {
 					}
 					return result;
 				} else
-					return createResult(sequence, null, null, 0, 0, 0, 0, 0, 0, false);
+					return createResult(sequence, new HashSet<AlignmentAnalyses.Cluster>(), null, 0, 0, 0, 0, 0, 0, false);
             } else
-                return createResult(sequence, null, null, 0, 0, 0, 0, 0, 0, false);
+                return createResult(sequence, new HashSet<AlignmentAnalyses.Cluster>(), null, 0, 0, 0, 0, 0, 0, false);
         } catch (IOException e) {
             if (formatdb != null)
                 formatdb.destroy();
