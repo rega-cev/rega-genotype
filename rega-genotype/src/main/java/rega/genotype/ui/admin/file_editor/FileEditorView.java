@@ -62,7 +62,7 @@ public class FileEditorView extends WContainerWidget{
 		fileTreeTemplate.bindWidget("remove", removeB);
 		fileTreeTemplate.bindWidget("download", downloadB);
 
-		fileTree.resize(200, 300);
+		fileTree.resize(300, 300);
 
 		layout.getElementAt(0, 0).addWidget(fileTreeTemplate);
 		layout.getElementAt(0, 1).addWidget(fileTabs);

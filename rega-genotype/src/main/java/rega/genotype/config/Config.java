@@ -189,7 +189,7 @@ public class Config {
 		private String paupCmd = "paup4b10";
 		private String clustalWCmd = "clustalW";
 		private String blastPath = "/usr/bin/";
-		private String treePuzzleCmd = "puzzel";
+		private String treePuzzleCmd = "puzzle";
 		private String treeGraphCmd = "tgf";
 		private String epsToPdfCmd = "epstopdf";
 		private String imageMagickConvertCmd = "convert";

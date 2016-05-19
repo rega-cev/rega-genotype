@@ -167,7 +167,7 @@ public class FastaFileEditorDialog extends WDialog{
 			getElementAt(0, 4).addWidget(new WText("Info"));
 
 			addStyleClass("fasta-analysis-table");
-			setHeight(new WLength(300));
+			setMaximumSize(new WLength(300), WLength.Auto);
 
 			alignmentAnalyses.analyses();
 
