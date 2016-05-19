@@ -1,4 +1,4 @@
-package rega.genotype.ui.admin.file_editor;
+package rega.genotype.ui.admin.file_editor.blast;
 
 import java.util.Arrays;
 import java.util.List;

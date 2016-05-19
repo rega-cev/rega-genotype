@@ -2,6 +2,7 @@ package rega.genotype.ui.admin.file_editor;
 
 import java.io.File;
 
+import rega.genotype.ui.admin.file_editor.blast.BlastFileEditor;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 
 import eu.webtoolkit.jwt.WContainerWidget;

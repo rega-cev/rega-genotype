@@ -1,4 +1,4 @@
-package rega.genotype.ui.admin.file_editor;
+package rega.genotype.ui.admin.file_editor.blast;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
