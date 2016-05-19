@@ -7,6 +7,7 @@ package rega.genotype.ui.admin.file_editor;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import eu.webtoolkit.jwt.SelectionMode;
@@ -149,6 +150,7 @@ public class FileTreeTable extends WTreeTable {
 		protected void populate() {
 			if (path_.isDirectory()) {
 				File[] files = path_.listFiles();
+				Arrays.sort(files);
 				if(files != null)// That can happen if the user has no permissions to use the file.
 					for (File f : files)
 						addChildNode(new FileTreeTableNode(f, showSize, showModifier));
