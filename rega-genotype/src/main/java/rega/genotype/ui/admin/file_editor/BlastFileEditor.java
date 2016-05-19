@@ -160,6 +160,8 @@ public class BlastFileEditor extends WContainerWidget{
 	 * Read blast.xml file
 	 */
 	private AlignmentAnalyses readBlastXml(){
+		if (!blastFile().exists())
+			return null;
 		try {
 			return new AlignmentAnalyses(blastFile(), null, null);
 		} catch (IOException e) {
