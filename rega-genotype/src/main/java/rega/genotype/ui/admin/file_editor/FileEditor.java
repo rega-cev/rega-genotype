@@ -3,107 +3,98 @@ package rega.genotype.ui.admin.file_editor;
 import java.io.File;
 import java.io.IOException;
 
-import rega.genotype.ui.framework.widgets.MsgDialog;
+import org.apache.commons.io.FileUtils;
+
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
-import eu.webtoolkit.jwt.Signal;
-import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WFileResource;
-import eu.webtoolkit.jwt.WImage;
-import eu.webtoolkit.jwt.WLength;
-import eu.webtoolkit.jwt.WPushButton;
-import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WTextArea;
+import rega.genotype.utils.Settings;
+import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.WTabWidget;
 
 /**
- * File content editor with save option.
- * 3 modes:
- * - xml editor 
- * - text editor
- * - Image viewer 
- * Mode is chosen by file extension.
+ * Coordinate between simple and smart file editors -> make sure 
+ * that they show the same data.
+ * All the files are saved in a tmp work dir and copied back to 
+ * tool dir when save is clicked. 
  * 
  * @author michael
  */
-public class FileEditor extends WContainerWidget {
-	public enum Mode {TextEditor, ImageViewer}
-	private Mode mode;
+public class FileEditor extends WTabWidget {
+	private SimpleFileEditorView simpleFileEditor;
+	private SmartFileEditor smartFileEditor;
+	private File workDir; // tmp dir with tool copy for coordination between smart and simple editors. 
+	private File toolDir;
 
-	private WTextArea edit = null;
-	private Signal saved = new Signal();
-	private Signal changed = new Signal();
-	private WPushButton saveB;
+	public FileEditor(File toolDir) {
+		
+		this.toolDir = toolDir;
+		workDir = GenotypeLib.createJobDir(
+				Settings.getInstance().getBaseJobDir() + File.separator + "file_editor");
 
-	private File file;
-
-	public FileEditor(final File file) {
-
-		this.file = file;
-
-		String extension = FileUtil.getFileExtension(file);
-		if(extension.equals("png") || extension.equals("gif")
-				|| extension.equals("jpg"))
-			mode = Mode.ImageViewer;
-		else 
-			mode = Mode.TextEditor;
-
-		if (mode == Mode.ImageViewer) {
-			WImage img = new WImage(new WFileResource("image", file.getAbsolutePath()),
-					file.getName());
-			
-			img.setMaximumSize(new WLength("100%"), new WLength(350));
-
-			addWidget(img);
-		} else {
-			edit = new WTextArea(this);
-			edit.setWidth(new WLength("100%"));
-			edit.setHeight(new WLength(300));
-
-			saveB = new WPushButton("Save", this);
-			saveB.disable();
-
-			final WText infoT = new WText(this);
-
-			String fileText = FileUtil.readFile(file);
-
-			if (fileText != null) {
-				edit.setText(fileText);
-			} else {
-				infoT.setText("Could not read file.");
-			}
-
-			edit.changed().addListener(edit, new Signal.Listener() {
-				public void trigger() {
-					saveB.enable();
-					changed.trigger();
-				}
-			});
-			saveB.clicked().addListener(this, new Signal.Listener() {
-				public void trigger() {
-					save();
-				}
-			});
+		try {
+			FileUtil.copyDirContentRecorsively(toolDir, workDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+			assert(false);
 		}
 
-	}
+		// view
 
-	public void save() {
-		if (mode != Mode.ImageViewer)
-			try {
-				file.delete();
-				FileUtil.writeStringToFile(file, edit.getText());
-				saveB.disable();
-				saved().trigger();
-			} catch (IOException e) {
-				e.printStackTrace();
-				new MsgDialog("Error", "Write to file failed.");
+		simpleFileEditor = new SimpleFileEditorView(workDir);
+		smartFileEditor = new SmartFileEditor(workDir);
+
+		addTab(smartFileEditor, "Tool editor");
+		addTab(simpleFileEditor, "Simple file editor");
+
+		currentChanged().addListener(this, new Signal1.Listener<Integer>() {
+			public void trigger(Integer arg) {
+				if (getCurrentWidget().equals(smartFileEditor)) {// simple -> smart
+					smartFileEditor.rereadFiles();
+				} else { // smart -> simple
+					smartFileEditor.saveAll();
+					simpleFileEditor.rereadFiles();
+				}
 			}
+		});
+
+		smartFileEditor.editingInnerXmlElement().addListener(this, new Signal1.Listener<Integer>() {
+			public void trigger(Integer arg) {
+				setTabEnabled(1, arg == 1);
+			}
+		});
 	}
 
-	public Signal changed() {
-		return changed;
+	public SimpleFileEditorView getSimpleFileEditor() {
+		return simpleFileEditor;
 	}
 
-	public Signal saved() {
-		return saved;
+	public SmartFileEditor getSmartFileEditor() {
+		return smartFileEditor;
+	}
+
+	public void setReadOnly(boolean isReadOnly) {
+		simpleFileEditor.setReadOnly(isReadOnly);
+		smartFileEditor.setDisabled(isReadOnly);
+	}
+
+	public boolean saveAll() {
+		if (getCurrentWidget().equals(smartFileEditor)) { // most resent changes are in sent changes are in smart
+			smartFileEditor.saveAll();
+			simpleFileEditor.rereadFiles();// only the simple editor contains all the files
+		}
+
+		simpleFileEditor.saveAll();
+
+		// copy the changes back to tool dir.
+		try {
+			FileUtils.deleteDirectory(toolDir);
+			FileUtils.moveDirectory(workDir, toolDir);
+			workDir.mkdirs();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
 	}
 }

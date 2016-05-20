@@ -84,8 +84,6 @@ public class AdminNavigation extends WContainerWidget {
 					toolConfigTable.showEditTool(id, version, Mode.Edit);
 				else if (action.equals(URL_PATH_NEW)) //http://localhost:8080/rega-genotype/admin/tools/new/{id}/{version}
 					toolConfigTable.showEditTool(id, version, Mode.NewVersion);
-				else if (action.equals(URL_PATH_INSTALL)) //http://localhost:8080/rega-genotype/admin/tools/install/{id}/{version}
-					toolConfigTable.showEditTool(id, version, Mode.Install);
 			} else
 				toolConfigTable.showTable();
 		} else {
@@ -118,14 +116,6 @@ public class AdminNavigation extends WContainerWidget {
 	}
 	public static void setToolsTableUrl() {
 		String path = "/" + URL_PATH_TOOLS;
-		if (!WApplication.getInstance().getInternalPath().equals(path)) {
-			WApplication.getInstance().setInternalPath(path);
-			WApplication.getInstance().internalPathChanged().trigger(path);
-		}
-	}
-
-	public static void setInstallToolUrl(String toolId, String toolVersion) {
-		String path = "/" + URL_PATH_TOOLS + "/" + toolId + "/" + toolVersion + "/" + URL_PATH_INSTALL;
 		if (!WApplication.getInstance().getInternalPath().equals(path)) {
 			WApplication.getInstance().setInternalPath(path);
 			WApplication.getInstance().internalPathChanged().trigger(path);

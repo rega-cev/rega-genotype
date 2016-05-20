@@ -18,15 +18,10 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.ReferenceTaxus;
 import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.SequenceAlignment;
-import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 
 public class BlastXmlWriter {
 
-	public BlastXmlWriter(File blastFile, AlignmentAnalyses alignmentAnalyses) throws IOException, RegaGenotypeExeption {
-
-		if (alignmentAnalyses.getAllClusters().isEmpty())
-			throw new RegaGenotypeExeption("Clusters must not be empty.");
-
+	public BlastXmlWriter(File blastFile, AlignmentAnalyses alignmentAnalyses) throws IOException {
 		Element analyses = new Element("genotype-analyses");
 		Document doc = new Document(analyses);
 		doc.setRootElement(analyses);

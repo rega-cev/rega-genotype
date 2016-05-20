@@ -5,6 +5,7 @@ import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WCssTheme;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WImage;
@@ -49,11 +50,11 @@ public class AdminApplication extends WApplication{
 				&& !config.getGeneralConfig().getAdminPassword().equals("pwd-for-lazy-developerS*!") ) {
 			
 			// very simple auth.
-			
-			new WText("Enter admin password", getRoot());
-			final WLineEdit pwdLE = new WLineEdit(getRoot());
-			final WPushButton loginB = new WPushButton("Login", getRoot());
-			final WText infoT = new WText(getRoot());
+			final WContainerWidget loginC = new WContainerWidget(getRoot());
+			new WText("Enter admin password", loginC);
+			final WLineEdit pwdLE = new WLineEdit(loginC);
+			final WPushButton loginB = new WPushButton("Login", loginC);
+			final WText infoT = new WText(loginC);
 			pwdLE.setMargin(5, Side.Left);
 
 			pwdLE.setFocus();
@@ -63,7 +64,7 @@ public class AdminApplication extends WApplication{
 				public void trigger() {
 					if (config.getGeneralConfig().getAdminPassword().equals(
 							pwdLE.getText())){
-						getRoot().clear();
+						getRoot().removeWidget(loginC);
 						new AdminNavigation(getRoot());
 					} else {
 						infoT.setText("Wrong password.");

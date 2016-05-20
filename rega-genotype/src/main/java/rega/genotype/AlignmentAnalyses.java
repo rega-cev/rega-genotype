@@ -492,7 +492,7 @@ public class AlignmentAnalyses {
         
         if (s.equals("*")) {
         	result.addAll(this.clusters);
-        } else {
+        } else if (!s.isEmpty()){
             String[] ids = s.split(",");
             for (int i = 0; i < ids.length; ++i) {
                 String id = ids[i].trim();

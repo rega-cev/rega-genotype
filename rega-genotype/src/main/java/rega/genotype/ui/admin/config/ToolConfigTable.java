@@ -370,7 +370,7 @@ public class ToolConfigTable extends Template{
 			proxyModel.refresh(getLocalManifests(), getRemoteManifests());
 			
 			// redirect to edit screen.
-			AdminNavigation.setInstallToolUrl(
+			AdminNavigation.setEditToolUrl(
 					manifest.getId(),
 					manifest.getVersion());
 		} else {
@@ -447,7 +447,7 @@ public class ToolConfigTable extends Template{
 				Settings.getInstance().getConfig().save();
 				String oldVersionDir = info.getConfig().getConfiguration();
 				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), 
-						config.getConfiguration());
+						config.getConfigurationFile());
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); // coping to new dir should always work.
@@ -459,15 +459,7 @@ public class ToolConfigTable extends Template{
 				config.getToolMenifest().save(config.getConfiguration());
 			}
 			break;
-		case Edit:
-			if (info.getConfig() == null){
-				assert(false);
-				return;
-			} else {
-				config = info.getConfig();
-			}
-			break;
-		case Install:			
+		case Edit:		
 			config = Settings.getInstance().getConfig().getToolConfigById(
 					info.getManifest().getId(), info.getManifest().getVersion());
 			break;

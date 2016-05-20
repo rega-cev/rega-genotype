@@ -64,6 +64,11 @@ public class ClusterTableModel extends WAbstractTableModel{
 		return null;
 	}
 
+	public void refresh(List<Cluster> clusters) {
+		this.clusters = clusters;
+		refresh();
+	}
+
 	public void refresh() {
 		layoutAboutToBeChanged().trigger();
 		layoutChanged().trigger();

@@ -7,8 +7,7 @@ import java.util.EnumSet;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
-import rega.genotype.ui.admin.file_editor.FileEditorView;
-import rega.genotype.ui.admin.file_editor.SmartFileEditor;
+import rega.genotype.ui.admin.file_editor.FileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.MsgDialog;
@@ -22,7 +21,6 @@ import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
-import eu.webtoolkit.jwt.WTabWidget;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -33,12 +31,12 @@ import eu.webtoolkit.jwt.WText;
 public class ToolConfigForm extends FormTemplate {
 	public enum Mode {Add, Edit, NewVersion, Install, Import}
 	private final WText infoT = new WText();
-	private FileEditorView fileEditor;
 	private ManifestForm manifestForm;
+	private FileEditor fileEditor;
 	private LocalConfigForm localConfigForm;
-	
+	private File toolDir;
+
 	private Signal done = new Signal();
-	private SmartFileEditor smartFileEditor;
 
 	public ToolConfigForm(final ToolConfig toolConfig, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
@@ -52,7 +50,6 @@ public class ToolConfigForm extends FormTemplate {
 		infoT.addStyleClass("form-error");
 		
 		// file editor
-		File toolDir;
 		if (toolConfig.getConfiguration().isEmpty()){ // create new tool.
 			toolDir = null;
 		} else {
@@ -73,8 +70,8 @@ public class ToolConfigForm extends FormTemplate {
 		if (toolConfig.isPublished()) {
 			publishB.disable();
 			manifestForm.disable();
+			
 			fileEditor.setReadOnly(true);
-			smartFileEditor.disable();
 		} 
 
 		saveB.disable();
@@ -212,17 +209,14 @@ public class ToolConfigForm extends FormTemplate {
 			// after tool manifest is saved for the first time.
 			bindEmpty("upload"); 
 		} else {
-			fileEditor = new FileEditorView(toolDir);
-			smartFileEditor = new SmartFileEditor(toolDir);
+			fileEditor = new FileEditor(toolDir);
 
-			final WTabWidget fileEditorTabs = new WTabWidget();
-			fileEditorTabs.addTab(smartFileEditor, "Tool editor");
-			fileEditorTabs.addTab(fileEditor, "Simple file editor");
+			bindWidget("upload", fileEditor);
 
-			bindWidget("upload", fileEditorTabs);
-
-			dirtyHandler.connect(fileEditor.getDirtyHandler(), fileEditor);
-			dirtyHandler.connect(smartFileEditor.getDirtyHandler(), smartFileEditor);
+			dirtyHandler.connect(fileEditor.getSimpleFileEditor().getDirtyHandler(), 
+					fileEditor.getSimpleFileEditor());
+			dirtyHandler.connect(fileEditor.getSmartFileEditor().getDirtyHandler(),
+					fileEditor.getSmartFileEditor());
 		}
 	}
 	
@@ -230,11 +224,8 @@ public class ToolConfigForm extends FormTemplate {
 		if (!validate())
 			return null;
 
-		if (fileEditor != null && fileEditor.getDirtyHandler().isDirty())
-			fileEditor.saveAll();
-
-		if (smartFileEditor != null && smartFileEditor.isDirty())
-			if (!smartFileEditor.saveAll())
+		if (fileEditor != null)
+			if (!fileEditor.saveAll())
 				return null;
 
 		if (publishing || manifestForm.isDirty()){
@@ -257,13 +248,11 @@ public class ToolConfigForm extends FormTemplate {
 	}
 
 	private boolean renameToolDir(ToolManifest manifest) {
-		String xmlDir = manifest.suggestXmlDirName();
-		if (new File(xmlDir).exists())
+		File xmlDir = new File(manifest.suggestXmlDirName());
+		if (xmlDir.exists())
 			return false;
 
-		File toolDir = fileEditor.getToolDir();
-
-		new File(xmlDir).mkdirs();
+		xmlDir.mkdirs();
 		new File(manifest.suggestJobDirName()).mkdirs();
 
 		// make sure that the xml dir name is {id}{version} 
@@ -271,11 +260,7 @@ public class ToolConfigForm extends FormTemplate {
 			FileUtil.moveDirRecorsively(toolDir, xmlDir);
 		}
 
-		manifestForm.setToolDir(new File(xmlDir));
-		smartFileEditor.setToolDir(new File(xmlDir));
-		fileEditor.setToolDir(new File(xmlDir));
-
-		// TODO: refresh file editor
+		manifestForm.setToolDir(xmlDir);
 
 		return true;
 	}
