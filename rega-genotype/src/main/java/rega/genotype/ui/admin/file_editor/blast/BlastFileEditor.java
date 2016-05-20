@@ -110,10 +110,10 @@ public class BlastFileEditor extends WContainerWidget{
 
 	public boolean save(File dir) {
 		try {
-			if(!analysis.save()){
-				new MsgDialog("Error", "Analysis is not valid.");
-				return false;
-			}
+			analysis.save();
+
+			if (!blastFile(dir).exists())
+				blastFile(dir).createNewFile();
 
 			new BlastXmlWriter(blastFile(dir), alignmentAnalyses);
 			writeFastaFile(dir);
