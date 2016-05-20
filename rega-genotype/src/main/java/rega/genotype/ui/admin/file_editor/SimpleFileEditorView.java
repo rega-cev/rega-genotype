@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import rega.genotype.config.ToolManifest;
@@ -76,8 +77,9 @@ public class SimpleFileEditorView extends WContainerWidget{
 
 		fileTree.selctionChanged().addListener(fileTree, new Signal.Listener() {
 			public void trigger() {
-				File currentFile = fileTree.getCurrentFile();
-				if (currentFile != null) {
+				List<File> currentFiles = fileTree.getCurrentFiles();
+				if (currentFiles.size() == 1) {
+					File currentFile = currentFiles.get(0);
 					fileTabs.showTab(currentFile);
 					WFileResource resource = new WFileResource("", currentFile.getAbsolutePath());
 					resource.suggestFileName(currentFile.getName());
@@ -91,12 +93,12 @@ public class SimpleFileEditorView extends WContainerWidget{
 
 		removeB.clicked().addListener(removeB, new Signal.Listener() {
 			public void trigger() {
-				File file = fileTree.getCurrentFile();
-				if (file != null) {
-					fileTabs.removeFile(file);
-					file.delete();
-					fileTree.refresh();
-				}
+				for(File file: fileTree.getCurrentFiles())
+					if (file != null) {
+						fileTabs.removeFile(file);
+						file.delete();
+					}
+				fileTree.refresh();
 			}
 		});
 

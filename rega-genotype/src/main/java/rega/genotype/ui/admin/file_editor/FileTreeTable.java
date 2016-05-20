@@ -7,6 +7,7 @@ package rega.genotype.ui.admin.file_editor;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +53,7 @@ public class FileTreeTable extends WTreeTable {
 			header(getColumnCount() -1).setStyleClass("date");
 		}
 
-		getTree().setSelectionMode(SelectionMode.SingleSelection);
+		getTree().setSelectionMode(SelectionMode.ExtendedSelection);
 
 		refresh();
 	}
@@ -94,13 +95,14 @@ public class FileTreeTable extends WTreeTable {
 			System.err.println("File " + path + " not found.");
 	}
 
-	public File getCurrentFile() {
+	public List<File> getCurrentFiles() {
+		List<File> ans = new ArrayList<File>();
 		for(WTreeNode node: getTree().getSelectedNodes()){
 			FileTreeTableNode fNode = (FileTreeTableNode)node;
-			return fNode.getPath(); // Assume SingleSelection
+			ans.add(fNode.getPath());
 		}
-		
-		return null;
+
+		return ans;
 	}
 
 	public Signal selctionChanged() {
