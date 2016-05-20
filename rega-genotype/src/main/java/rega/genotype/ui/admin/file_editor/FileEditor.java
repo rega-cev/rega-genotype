@@ -89,6 +89,7 @@ public class FileEditor extends WTabWidget {
 		try {
 			FileUtils.deleteDirectory(toolDir);
 			FileUtils.moveDirectory(workDir, toolDir);
+			workDir.mkdirs();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
