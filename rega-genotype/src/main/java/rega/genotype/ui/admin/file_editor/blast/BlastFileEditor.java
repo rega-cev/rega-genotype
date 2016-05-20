@@ -19,7 +19,6 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
-import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.Template;
@@ -52,33 +51,22 @@ import eu.webtoolkit.jwt.WTableView;
  * @author michael
  */
 public class BlastFileEditor extends WContainerWidget{
-	private File toolDir;
+	private File workDir;
 	private BlastAnalysisForm analysis;
 	private WStackedWidget stack = new WStackedWidget(this);
 	private Template layout = new Template(tr("admin.config.blast-file-editor"));
 	private AlignmentAnalyses alignmentAnalyses;
 	private ClusterTableModel clusterTableModel;
+	private Signal1<Integer> editingInnerXmlElement = new Signal1<Integer>();
 	private DirtyHandler dirtyHandler;
 
-	public BlastFileEditor(final File toolDir, DirtyHandler dirtyHandler) {
-		this.toolDir = toolDir;
+	public BlastFileEditor(final File workDir, DirtyHandler dirtyHandler) {
+		this.workDir = workDir;
 		this.dirtyHandler = dirtyHandler;
 
 		WPushButton addSequencesB = new WPushButton("Add sequences");
 
 		alignmentAnalyses = readBlastXml();
-
-		if (alignmentAnalyses == null){
-			final File jobDir = GenotypeLib.createJobDir(
-					Settings.getInstance().getBaseJobDir() + File.separator + "tmp");
-			jobDir.mkdirs();
-			alignmentAnalyses = new AlignmentAnalyses();
-			alignmentAnalyses.setAlignment(new SequenceAlignment());
-			alignmentAnalyses.putAnalysis("blast",
-					new BlastAnalysis(alignmentAnalyses,
-							"", new ArrayList<AlignmentAnalyses.Cluster>(),
-							0.0, 0.0, 0.0, 0.0, "", "", jobDir));
-		}
 
 		WPanel analysisPanel = new WPanel();
 		analysisPanel.addStyleClass("admin-panel");
@@ -88,7 +76,6 @@ public class BlastFileEditor extends WContainerWidget{
 		analysisPanel.setCentralWidget(analysis);
 
 		createClustersTable(alignmentAnalyses);
-
 
 		//bind
 
@@ -121,15 +108,15 @@ public class BlastFileEditor extends WContainerWidget{
 		
 	}
 
-	public boolean save() {
+	public boolean save(File dir) {
 		try {
 			if(!analysis.save()){
 				new MsgDialog("Error", "Analysis is not valid.");
 				return false;
 			}
 
-			new BlastXmlWriter(blastFile(), alignmentAnalyses);
-			writeFastaFile();
+			new BlastXmlWriter(blastFile(dir), alignmentAnalyses);
+			writeFastaFile(dir);
 			return true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -140,24 +127,22 @@ public class BlastFileEditor extends WContainerWidget{
 		} catch (ParameterProblemException e) {
 			e.printStackTrace();
 			new MsgDialog("Error", "Could not save blast.fasta");
-		} catch (RegaGenotypeExeption e) {
-			new MsgDialog("Error", e.getMessage());
-		}
+		} 
 
 		return false;
 	}
 
-	private File blastFile() {
-		return new File(toolDir.getAbsolutePath(), "blast.xml");
+	private File blastFile(File dir) {
+		return new File(dir.getAbsolutePath(), "blast.xml");
 	}
 
-	private File fastaFile() {
-		return new File(toolDir.getAbsolutePath(), "blast.fasta");
+	private File fastaFile(File dir) {
+		return new File(dir.getAbsolutePath(), "blast.fasta");
 	}
 
 	private ToolConfig toolConfig() {
 		ToolManifest manifest = ToolManifest.parseJson(
-				FileUtil.readFile(new File(toolDir, ToolManifest.MANIFEST_FILE_NAME)));
+				FileUtil.readFile(new File(workDir, ToolManifest.MANIFEST_FILE_NAME)));
 		if (manifest == null)
 			return null;
 
@@ -167,27 +152,36 @@ public class BlastFileEditor extends WContainerWidget{
 	 * Read blast.xml file
 	 */
 	private AlignmentAnalyses readBlastXml(){
-		if (!blastFile().exists())
-			return null;
-		try {
-			final File jobDir = GenotypeLib.createJobDir(
-					Settings.getInstance().getBaseJobDir() + File.separator + "tmp");
-			jobDir.mkdirs();
-			return new AlignmentAnalyses(blastFile(), null, jobDir);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		} catch (ParameterProblemException e) {
-			e.printStackTrace();
-			return null;
-		} catch (FileFormatException e) {
-			e.printStackTrace();
-			return null;
+		if (blastFile(workDir).exists()) {
+			try {
+				final File jobDir = GenotypeLib.createJobDir(
+						Settings.getInstance().getBaseJobDir() + File.separator + "tmp");
+				jobDir.mkdirs();
+				return new AlignmentAnalyses(blastFile(workDir), null, jobDir);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ParameterProblemException e) {
+				e.printStackTrace();
+			} catch (FileFormatException e) {
+				e.printStackTrace();
+			}
 		}
+
+		final File jobDir = GenotypeLib.createJobDir(
+				Settings.getInstance().getBaseJobDir() + File.separator + "tmp");
+		jobDir.mkdirs();
+		alignmentAnalyses = new AlignmentAnalyses();
+		alignmentAnalyses.setAlignment(new SequenceAlignment());
+		alignmentAnalyses.putAnalysis("blast",
+				new BlastAnalysis(alignmentAnalyses,
+						"", new ArrayList<AlignmentAnalyses.Cluster>(),
+						0.0, 0.0, 0.0, 0.0, "", "", jobDir));
+
+		return alignmentAnalyses;
 	}
 
-	private void writeFastaFile() throws ParameterProblemException, FileNotFoundException, IOException {
-		alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(fastaFile()),
+	private void writeFastaFile(File dir) throws ParameterProblemException, FileNotFoundException, IOException {
+		alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(fastaFile(dir)),
 				SequenceAlignment.FILETYPE_FASTA);
 	}
 
@@ -283,6 +277,7 @@ public class BlastFileEditor extends WContainerWidget{
 		final ClusterForm c = new ClusterForm(cluster, alignmentAnalyses, toolConfig());
 		stack.addWidget(c);
 		stack.setCurrentWidget(c);
+		editingInnerXmlElement.trigger(stack.getCount());
 
 		c.done().addListener(c, new Signal1.Listener<WDialog.DialogCode>() {
 			public void trigger(DialogCode arg) {
@@ -294,11 +289,24 @@ public class BlastFileEditor extends WContainerWidget{
 				}
 				stack.removeWidget(c);
 				stack.setCurrentWidget(layout);
+				editingInnerXmlElement.trigger(stack.getCount());
 			}
 		});
 	}
 
-	public void setToolDir(File toolDir) {
-		this.toolDir = toolDir;
+	public void rereadFiles() {
+		alignmentAnalyses = readBlastXml();
+		analysis.refresh((BlastAnalysis)
+				alignmentAnalyses.getAnalysis("blast"));
+		clusterTableModel.refresh(
+				alignmentAnalyses.getAllClusters());
+	}
+
+	public boolean validate() {
+		return analysis.validate();
+	}
+
+	public Signal1<Integer> editingInnerXmlElement() {
+		return editingInnerXmlElement;
 	}
 }

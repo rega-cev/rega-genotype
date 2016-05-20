@@ -3,9 +3,11 @@ package rega.genotype.ui.admin.file_editor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.StandardDialog;
@@ -35,15 +37,14 @@ import eu.webtoolkit.jwt.servlet.UploadedFile;
 public class SimpleFileEditorView extends WContainerWidget{
 	private WTable layout = new WTable(this);
 	private FileTabs fileTabs = new FileTabs();
-	private File toolDir;
 	private FileTreeTable fileTree;
 	private WPushButton addB;
 	private WPushButton removeB;
 	private DirtyHandler dirtyHandler = new DirtyHandler();
+	private Signal1<File[]> changed = new Signal1<File[]>();
 
-	public SimpleFileEditorView(final File root) {
+	public SimpleFileEditorView(final File workDir) {
 		super();
-		this.toolDir = root;
 
 		addB = new WPushButton("Add files");
 		removeB = new WPushButton("Remove");
@@ -53,8 +54,10 @@ public class SimpleFileEditorView extends WContainerWidget{
 		downloadB.setText("Download");
 		downloadB.setStyleClass("like-button");
 		downloadB.disable();
-
-		fileTree = new FileTreeTable(root, false, false);
+		
+		ArrayList<String> excludedFileNames = new ArrayList<String>();
+		excludedFileNames.add(ToolManifest.MANIFEST_FILE_NAME);
+		fileTree = new FileTreeTable(workDir, excludedFileNames, false, false);
 		
 		Template fileTreeTemplate = new Template(tr("admin.config.file-editor.file-tree"));
 		fileTreeTemplate.bindWidget("tree", fileTree);
@@ -111,7 +114,7 @@ public class SimpleFileEditorView extends WContainerWidget{
 							for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
 								String[] split = f.getClientFileName().split(File.separator);
 								String fileName = split[split.length - 1];
-								File destFile = new File(root + File.separator + fileName);
+								File destFile = new File(workDir + File.separator + fileName);
 								if (destFile.exists())
 									destFile.delete();
 								try {
@@ -148,10 +151,6 @@ public class SimpleFileEditorView extends WContainerWidget{
 		removeB.disable();
 	}
 	// classes
-
-	public File getToolDir() {
-		return toolDir;
-	}
 
 	private class FileTabs extends WTabWidget {
 
@@ -200,16 +199,9 @@ public class SimpleFileEditorView extends WContainerWidget{
 					public void trigger() {
 						setTabText(getIndexOf(editor), "*" + file.getName());
 						dirtyHandler.increaseDirty();
+ 						changed.trigger(new File[]{file});
 					}
 				});
-
-				editor.saved().addListener(editor, new Signal.Listener() {
-					public void trigger() {
-						setTabText(getIndexOf(editor), file.getName());
-						dirtyHandler.decreaseDirty();
-					}
-				});
-
 			}
 		}
 
@@ -220,15 +212,25 @@ public class SimpleFileEditorView extends WContainerWidget{
 
 		public void setReadOnly(boolean isReadOnly) {
 			this.isReadOnly = isReadOnly;
-			
 		}
-	}
 
-	public void setToolDir(File toolDir) {
-		this.toolDir = toolDir;
+		public void refreshFiles() {
+			for (SimpleFileEditor editor: openEditors.values()) {
+				editor.rereadFile();
+			}
+		}
 	}
 
 	public DirtyHandler getDirtyHandler() {
 		return dirtyHandler;
+	}
+
+	public Signal1<File[]> changed() {
+		return changed;
+	}
+
+	public void rereadFiles() {
+		fileTree.refresh();
+		fileTabs.refreshFiles();
 	}
 }

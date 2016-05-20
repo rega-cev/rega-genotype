@@ -447,7 +447,7 @@ public class ToolConfigTable extends Template{
 				Settings.getInstance().getConfig().save();
 				String oldVersionDir = info.getConfig().getConfiguration();
 				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), 
-						config.getConfiguration());
+						config.getConfigurationFile());
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); // coping to new dir should always work.
