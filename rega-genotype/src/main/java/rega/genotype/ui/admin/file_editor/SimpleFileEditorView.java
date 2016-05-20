@@ -32,7 +32,7 @@ import eu.webtoolkit.jwt.servlet.UploadedFile;
  * 
  * @author michael
  */
-public class FileEditorView extends WContainerWidget{
+public class SimpleFileEditorView extends WContainerWidget{
 	private WTable layout = new WTable(this);
 	private FileTabs fileTabs = new FileTabs();
 	private File toolDir;
@@ -41,7 +41,7 @@ public class FileEditorView extends WContainerWidget{
 	private WPushButton removeB;
 	private DirtyHandler dirtyHandler = new DirtyHandler();
 
-	public FileEditorView(final File root) {
+	public SimpleFileEditorView(final File root) {
 		super();
 		this.toolDir = root;
 
@@ -155,7 +155,7 @@ public class FileEditorView extends WContainerWidget{
 
 	private class FileTabs extends WTabWidget {
 
-		private Map<File, FileEditor> openEditors = new HashMap<File, FileEditor>();
+		private Map<File, SimpleFileEditor> openEditors = new HashMap<File, SimpleFileEditor>();
 		private boolean isReadOnly;
 
 		public FileTabs() {
@@ -168,7 +168,7 @@ public class FileEditorView extends WContainerWidget{
 
 		private void closeTab(Integer index) {
 			WWidget widget = getWidget(index);
-			for (Map.Entry<File, FileEditor> e: openEditors.entrySet()){
+			for (Map.Entry<File, SimpleFileEditor> e: openEditors.entrySet()){
 				if (e.getValue().equals(widget)){
 					openEditors.remove(e.getKey());
 					break;
@@ -188,7 +188,7 @@ public class FileEditorView extends WContainerWidget{
 			if (openEditors.containsKey(file))
 				setCurrentWidget(openEditors.get(file));
 			else {
-				final FileEditor editor = new FileEditor(file);
+				final SimpleFileEditor editor = new SimpleFileEditor(file);
 				editor.setDisabled(isReadOnly);
 				addTab(editor, file.getName());
 				openEditors.put(file, editor);
@@ -214,7 +214,7 @@ public class FileEditorView extends WContainerWidget{
 		}
 
 		public void saveAll() {
-			for(FileEditor e: openEditors.values())
+			for(SimpleFileEditor e: openEditors.values())
 				e.save();
 		}
 

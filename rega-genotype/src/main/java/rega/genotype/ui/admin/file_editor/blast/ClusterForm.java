@@ -127,7 +127,7 @@ public class ClusterForm extends FormTemplate{
 
 		addSequenceB.clicked().addListener(addSequenceB, new Listener() {
 			public void trigger() {
-				final FastaFileEditorDialog d = new FastaFileEditorDialog(
+				final AddSequencesDialog d = new AddSequencesDialog(
 						cluster, alignmentAnalyses, toolConfig);
 
 				d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {

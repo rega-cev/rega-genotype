@@ -98,7 +98,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 		addSequencesB.clicked().addListener(addSequencesB, new Signal.Listener() {
 			public void trigger() {
-				final FastaFileEditorDialog d = new FastaFileEditorDialog(
+				final AddSequencesDialog d = new AddSequencesDialog(
 						null, alignmentAnalyses, toolConfig());
 				d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 					public void trigger(DialogCode arg) {

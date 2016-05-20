@@ -48,9 +48,9 @@ import eu.webtoolkit.jwt.WTextArea;
  * 
  * @author michael
  */
-public class FastaFileEditorDialog extends WDialog{
+public class AddSequencesDialog extends WDialog{
 	private TaxusTable analysFastaFileWidget;
-	public FastaFileEditorDialog(final Cluster cluster, final AlignmentAnalyses alignmentAnalyses,
+	public AddSequencesDialog(final Cluster cluster, final AlignmentAnalyses alignmentAnalyses,
 			final ToolConfig toolConfig) {
 		show();
 		getTitleBar().addWidget(new WText("Add sequences"));

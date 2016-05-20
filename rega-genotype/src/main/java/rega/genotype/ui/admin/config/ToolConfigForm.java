@@ -7,7 +7,7 @@ import java.util.EnumSet;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
-import rega.genotype.ui.admin.file_editor.FileEditorView;
+import rega.genotype.ui.admin.file_editor.SimpleFileEditorView;
 import rega.genotype.ui.admin.file_editor.SmartFileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.FormTemplate;
@@ -33,7 +33,7 @@ import eu.webtoolkit.jwt.WText;
 public class ToolConfigForm extends FormTemplate {
 	public enum Mode {Add, Edit, NewVersion, Install, Import}
 	private final WText infoT = new WText();
-	private FileEditorView fileEditor;
+	private SimpleFileEditorView fileEditor;
 	private ManifestForm manifestForm;
 	private LocalConfigForm localConfigForm;
 	
@@ -212,7 +212,7 @@ public class ToolConfigForm extends FormTemplate {
 			// after tool manifest is saved for the first time.
 			bindEmpty("upload"); 
 		} else {
-			fileEditor = new FileEditorView(toolDir);
+			fileEditor = new SimpleFileEditorView(toolDir);
 			smartFileEditor = new SmartFileEditor(toolDir);
 
 			final WTabWidget fileEditorTabs = new WTabWidget();

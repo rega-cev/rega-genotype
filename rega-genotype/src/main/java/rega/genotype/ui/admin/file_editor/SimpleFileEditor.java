@@ -24,7 +24,7 @@ import eu.webtoolkit.jwt.WTextArea;
  * 
  * @author michael
  */
-public class FileEditor extends WContainerWidget {
+public class SimpleFileEditor extends WContainerWidget {
 	public enum Mode {TextEditor, ImageViewer}
 	private Mode mode;
 
@@ -35,7 +35,7 @@ public class FileEditor extends WContainerWidget {
 
 	private File file;
 
-	public FileEditor(final File file) {
+	public SimpleFileEditor(final File file) {
 
 		this.file = file;
 
