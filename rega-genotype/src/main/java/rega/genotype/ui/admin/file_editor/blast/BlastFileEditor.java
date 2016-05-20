@@ -23,6 +23,7 @@ import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.Template;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Icon;
@@ -68,12 +69,15 @@ public class BlastFileEditor extends WContainerWidget{
 		alignmentAnalyses = readBlastXml();
 
 		if (alignmentAnalyses == null){
+			final File jobDir = GenotypeLib.createJobDir(
+					Settings.getInstance().getBaseJobDir() + File.separator + "tmp");
+			jobDir.mkdirs();
 			alignmentAnalyses = new AlignmentAnalyses();
 			alignmentAnalyses.setAlignment(new SequenceAlignment());
 			alignmentAnalyses.putAnalysis("blast",
 					new BlastAnalysis(alignmentAnalyses,
 							"", new ArrayList<AlignmentAnalyses.Cluster>(),
-							0.0, 0.0, 0.0, 0.0, "", "", null));
+							0.0, 0.0, 0.0, 0.0, "", "", jobDir));
 		}
 
 		WPanel analysisPanel = new WPanel();
@@ -166,7 +170,10 @@ public class BlastFileEditor extends WContainerWidget{
 		if (!blastFile().exists())
 			return null;
 		try {
-			return new AlignmentAnalyses(blastFile(), null, null);
+			final File jobDir = GenotypeLib.createJobDir(
+					Settings.getInstance().getBaseJobDir() + File.separator + "tmp");
+			jobDir.mkdirs();
+			return new AlignmentAnalyses(blastFile(), null, jobDir);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
