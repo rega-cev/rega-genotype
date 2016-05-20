@@ -78,7 +78,8 @@ public class SimpleFileEditorView extends WContainerWidget{
 		fileTree.selctionChanged().addListener(fileTree, new Signal.Listener() {
 			public void trigger() {
 				List<File> currentFiles = fileTree.getCurrentFiles();
-				if (currentFiles.size() == 1) {
+				if (currentFiles.size() == 1
+						&& currentFiles.get(0).exists()) {
 					File currentFile = currentFiles.get(0);
 					fileTabs.showTab(currentFile);
 					WFileResource resource = new WFileResource("", currentFile.getAbsolutePath());
@@ -99,6 +100,7 @@ public class SimpleFileEditorView extends WContainerWidget{
 						file.delete();
 					}
 				fileTree.refresh();
+				dirtyHandler.increaseDirty();
 			}
 		});
 
