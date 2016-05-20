@@ -435,14 +435,7 @@ public class ToolConfigTable extends Template{
 		ToolConfig config = null;
 		switch (mode) {
 		case Add:
-			config = createToolConfig();
-			Settings.getInstance().getConfig().putTool(config);
-			try {
-				Settings.getInstance().getConfig().save();
-			} catch (IOException e) {
-				e.printStackTrace();
-				assert(false);
-			}
+			config = new ToolConfig();
 			break;
 		case NewVersion:
 			config = info.getConfig().copy();
@@ -454,7 +447,7 @@ public class ToolConfigTable extends Template{
 				Settings.getInstance().getConfig().save();
 				String oldVersionDir = info.getConfig().getConfiguration();
 				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), 
-						config.getConfiguration());
+						config.getConfigurationFile());
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); // coping to new dir should always work.
@@ -504,13 +497,6 @@ public class ToolConfigTable extends Template{
 		}
 
 		return sggestedVersion.toString();
-	}
-
-	private ToolConfig createToolConfig() {
-		ToolConfig config;
-		config = new ToolConfig();
-		config.genetareDirs();
-		return config;
 	}
 
 	private List<ToolManifest> getLocalManifests() {

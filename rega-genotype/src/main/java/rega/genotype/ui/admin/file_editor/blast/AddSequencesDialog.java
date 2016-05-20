@@ -1,10 +1,12 @@
-package rega.genotype.ui.admin.file_editor;
+package rega.genotype.ui.admin.file_editor.blast;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,19 +16,20 @@ import java.util.Map;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.AnalysisException;
+import rega.genotype.BlastAnalysis;
+import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
-import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
-import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
-import rega.genotype.viruses.generic.GenericTool;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
@@ -45,9 +48,9 @@ import eu.webtoolkit.jwt.WTextArea;
  * 
  * @author michael
  */
-public class FastaFileEditorDialog extends WDialog{
+public class AddSequencesDialog extends WDialog{
 	private TaxusTable analysFastaFileWidget;
-	public FastaFileEditorDialog(final Cluster cluster, final AlignmentAnalyses alignmentAnalyses,
+	public AddSequencesDialog(final Cluster cluster, final AlignmentAnalyses alignmentAnalyses,
 			final ToolConfig toolConfig) {
 		show();
 		getTitleBar().addWidget(new WText("Add sequences"));
@@ -141,7 +144,6 @@ public class FastaFileEditorDialog extends WDialog{
 	private static class TaxusTable extends WTable { 
 		private Map<AbstractSequence, SequenceData> sequenceMap = new HashMap<AbstractSequence, SequenceData>();
 		private AlignmentAnalyses alignmentAnalyses; // AlignmentAnalyses of the tool
-		private SequenceAlignment currentSeqAlign; // Sequences from the input fasta file
 		private List<String> taxaIds = new ArrayList<String>(); // pre-compute from alignmentAnalyses
 
 		private enum Mode {SingalCluster, AllClusters};
@@ -183,45 +185,29 @@ public class FastaFileEditorDialog extends WDialog{
 				}
 			} else {
 				// run the tool to identify the clusters.
-				final File jobDir = GenotypeLib.createJobDir(toolConfig.getJobDir());
 				try {
 					InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
-					currentSeqAlign = new SequenceAlignment(stream, 
-							SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+			        LineNumberReader reader = 
+			        		new LineNumberReader(new InputStreamReader(stream));
 
-					stream.reset();
-					GenericTool t = new GenericTool(toolConfig, jobDir);
-					t.analyze(stream, jobDir.getAbsolutePath() + File.separator + "result.xml");
-					new Parser().parseFile(jobDir);
+					for (Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
+							s != null ;
+							s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA)) {
+					    	s.removeGaps();
+					    	BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
+					    	Result blastResult = blastAnalysis.run(s);
+					    	addRow(s, blastResult.getConcludedCluster());
+					}
 				} catch (IOException e) {
-					e.printStackTrace();
-					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
-				} catch (ParameterProblemException e) {
 					e.printStackTrace();
 					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
 				} catch (FileFormatException e) {
 					e.printStackTrace();
 					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
-				}
-			}
-		}
-
-		/**
-		 * Parse result.xml file from job dir and fill the output to blastResultModel. 
-		 */
-		private class Parser extends GenotypeResultParser {
-			@Override
-			public void endSequence() {	
-				String clusterId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/id");
-				String seqName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name");
-				String concludedId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
-
-				AbstractSequence s = currentSeqAlign.findSequence(seqName);
-
-				Cluster cluster = concludedId == null || concludedId.equals("Unassigned") ? null :
-					alignmentAnalyses.findCluster(clusterId);
-
-				addRow(s, cluster);
+				} catch (AnalysisException e) {
+					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+					e.printStackTrace();
+				} 
 			}
 		}
 
@@ -256,6 +242,10 @@ public class FastaFileEditorDialog extends WDialog{
 			List<Cluster> clusters = new ArrayList<AlignmentAnalyses.Cluster>(
 					alignmentAnalyses.getAllClusters());
 			clusters.add(0, null);
+			if (cluster != null) { // new cluster
+				clusters.remove(cluster); // place current cluster on top
+				clusters.add(1, cluster);
+			}
 
 			final ObjectListComboBox<Cluster> clusterCB = new ObjectListComboBox<AlignmentAnalyses.Cluster>(
 					clusters) {
@@ -263,6 +253,8 @@ public class FastaFileEditorDialog extends WDialog{
 				protected WString render(Cluster c) {
 					if (c == null)
 						return new WString("(Empty)");
+					else if (cluster != null && c.equals(cluster))
+						return new WString("(Currently edited cluster)");
 					else
 						return new WString(c.getName());
 				}

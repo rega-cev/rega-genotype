@@ -48,6 +48,7 @@ import rega.genotype.viruses.generic.GenericTool;
  * @author koen
  */
 public abstract class GenotypeTool {
+	public enum AnalysesType {BlastOnly, Full}
     protected File workingDir = new File("."); // work dir is a new dir inside the job dir that contains all the data for current analyze.
 
     private GenotypeTool parent;
@@ -127,7 +128,11 @@ public abstract class GenotypeTool {
 	}
 
     public void analyze(String sequenceFile, String traceFile) throws IOException {
-    	analyze(new FileInputStream(sequenceFile), traceFile);
+    	analyze(new FileInputStream(sequenceFile), traceFile, AnalysesType.Full);
+    }
+
+    public void analyze(InputStream sequenceFile, String traceFile) throws IOException {
+    	analyze(sequenceFile, traceFile, AnalysesType.Full);
     }
 
 	/**
@@ -136,7 +141,7 @@ public abstract class GenotypeTool {
 	 * 
 	 * For each sequence in the input file, it invokes analyze(AbstractSequence)
 	 */
-    public void analyze(InputStream sequenceFile, String traceFile) throws IOException {
+    public void analyze(InputStream sequenceFile, String traceFile, AnalysesType analysesType) throws IOException {
         startTracer(traceFile);
 
         LineNumberReader reader
@@ -158,7 +163,7 @@ public abstract class GenotypeTool {
 
 		            long start = System.currentTimeMillis();
 			        try {
-                        analyze(s);
+                        analyze(s, analysesType);
 			        } catch (AnalysisException e) {
 			            System.err.println(e.getMessage());
 			            e.printStackTrace();
@@ -276,12 +281,16 @@ public abstract class GenotypeTool {
         getTracer().printlnClose("</conclusion>");    	
     }
 
+    public void analyze(AbstractSequence s) throws AnalysisException {
+    	analyze(s, AnalysesType.Full);
+    }
+
     /**
      * Abstract function that analyzes a sequence.
      * 
      * You should reimplement this sequence to create a new genotyping tool.
      */
-    abstract public void analyze(AbstractSequence s) throws AnalysisException;
+    abstract public void analyze(AbstractSequence s, AnalysesType analysisType) throws AnalysisException;
 
     /**
      * Abstract function that provides a self-check analysis.

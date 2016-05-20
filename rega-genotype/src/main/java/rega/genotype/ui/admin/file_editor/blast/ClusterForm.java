@@ -1,4 +1,4 @@
-package rega.genotype.ui.admin.file_editor;
+package rega.genotype.ui.admin.file_editor.blast;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -127,7 +127,7 @@ public class ClusterForm extends FormTemplate{
 
 		addSequenceB.clicked().addListener(addSequenceB, new Listener() {
 			public void trigger() {
-				final FastaFileEditorDialog d = new FastaFileEditorDialog(
+				final AddSequencesDialog d = new AddSequencesDialog(
 						cluster, alignmentAnalyses, toolConfig);
 
 				d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {

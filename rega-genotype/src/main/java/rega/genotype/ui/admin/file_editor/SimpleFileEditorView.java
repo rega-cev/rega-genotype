@@ -3,9 +3,11 @@ package rega.genotype.ui.admin.file_editor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.MsgDialog;
 import rega.genotype.ui.framework.widgets.StandardDialog;
@@ -32,18 +34,17 @@ import eu.webtoolkit.jwt.servlet.UploadedFile;
  * 
  * @author michael
  */
-public class FileEditorView extends WContainerWidget{
+public class SimpleFileEditorView extends WContainerWidget{
 	private WTable layout = new WTable(this);
 	private FileTabs fileTabs = new FileTabs();
-	private File toolDir;
 	private FileTreeTable fileTree;
 	private WPushButton addB;
 	private WPushButton removeB;
 	private DirtyHandler dirtyHandler = new DirtyHandler();
+	private Signal1<File[]> changed = new Signal1<File[]>();
 
-	public FileEditorView(final File root) {
+	public SimpleFileEditorView(final File workDir) {
 		super();
-		this.toolDir = root;
 
 		addB = new WPushButton("Add files");
 		removeB = new WPushButton("Remove");
@@ -53,8 +54,10 @@ public class FileEditorView extends WContainerWidget{
 		downloadB.setText("Download");
 		downloadB.setStyleClass("like-button");
 		downloadB.disable();
-
-		fileTree = new FileTreeTable(root, false, false);
+		
+		ArrayList<String> excludedFileNames = new ArrayList<String>();
+		excludedFileNames.add(ToolManifest.MANIFEST_FILE_NAME);
+		fileTree = new FileTreeTable(workDir, excludedFileNames, false, false);
 		
 		Template fileTreeTemplate = new Template(tr("admin.config.file-editor.file-tree"));
 		fileTreeTemplate.bindWidget("tree", fileTree);
@@ -111,7 +114,7 @@ public class FileEditorView extends WContainerWidget{
 							for (UploadedFile f: fileUpload.getWFileUpload().getUploadedFiles()) {
 								String[] split = f.getClientFileName().split(File.separator);
 								String fileName = split[split.length - 1];
-								File destFile = new File(root + File.separator + fileName);
+								File destFile = new File(workDir + File.separator + fileName);
 								if (destFile.exists())
 									destFile.delete();
 								try {
@@ -149,13 +152,9 @@ public class FileEditorView extends WContainerWidget{
 	}
 	// classes
 
-	public File getToolDir() {
-		return toolDir;
-	}
-
 	private class FileTabs extends WTabWidget {
 
-		private Map<File, FileEditor> openEditors = new HashMap<File, FileEditor>();
+		private Map<File, SimpleFileEditor> openEditors = new HashMap<File, SimpleFileEditor>();
 		private boolean isReadOnly;
 
 		public FileTabs() {
@@ -168,7 +167,7 @@ public class FileEditorView extends WContainerWidget{
 
 		private void closeTab(Integer index) {
 			WWidget widget = getWidget(index);
-			for (Map.Entry<File, FileEditor> e: openEditors.entrySet()){
+			for (Map.Entry<File, SimpleFileEditor> e: openEditors.entrySet()){
 				if (e.getValue().equals(widget)){
 					openEditors.remove(e.getKey());
 					break;
@@ -188,7 +187,7 @@ public class FileEditorView extends WContainerWidget{
 			if (openEditors.containsKey(file))
 				setCurrentWidget(openEditors.get(file));
 			else {
-				final FileEditor editor = new FileEditor(file);
+				final SimpleFileEditor editor = new SimpleFileEditor(file);
 				editor.setDisabled(isReadOnly);
 				addTab(editor, file.getName());
 				openEditors.put(file, editor);
@@ -200,35 +199,38 @@ public class FileEditorView extends WContainerWidget{
 					public void trigger() {
 						setTabText(getIndexOf(editor), "*" + file.getName());
 						dirtyHandler.increaseDirty();
+ 						changed.trigger(new File[]{file});
 					}
 				});
-
-				editor.saved().addListener(editor, new Signal.Listener() {
-					public void trigger() {
-						setTabText(getIndexOf(editor), file.getName());
-						dirtyHandler.decreaseDirty();
-					}
-				});
-
 			}
 		}
 
 		public void saveAll() {
-			for(FileEditor e: openEditors.values())
+			for(SimpleFileEditor e: openEditors.values())
 				e.save();
 		}
 
 		public void setReadOnly(boolean isReadOnly) {
 			this.isReadOnly = isReadOnly;
-			
 		}
-	}
 
-	public void setToolDir(File toolDir) {
-		this.toolDir = toolDir;
+		public void refreshFiles() {
+			for (SimpleFileEditor editor: openEditors.values()) {
+				editor.rereadFile();
+			}
+		}
 	}
 
 	public DirtyHandler getDirtyHandler() {
 		return dirtyHandler;
+	}
+
+	public Signal1<File[]> changed() {
+		return changed;
+	}
+
+	public void rereadFiles() {
+		fileTree.refresh();
+		fileTabs.refreshFiles();
 	}
 }

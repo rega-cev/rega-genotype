@@ -37,6 +37,11 @@ import javax.swing.ImageIcon;
 
 import org.apache.commons.io.IOUtils;
 
+import rega.genotype.ApplicationException;
+import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.utils.Settings;
+import rega.genotype.utils.StreamReaderThread;
 import eu.webtoolkit.jwt.FileUtils;
 import eu.webtoolkit.jwt.Utils;
 import eu.webtoolkit.jwt.Utils.HtmlEncodingFlag;
@@ -49,11 +54,6 @@ import eu.webtoolkit.jwt.WResource.DispositionType;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
-import rega.genotype.ApplicationException;
-import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.utils.Settings;
-import rega.genotype.utils.StreamReaderThread;
 
 /**
  * General utility class for creating supporting data and images for a genotype job.
@@ -272,7 +272,7 @@ public class GenotypeLib {
 			d = new File(jobDir + File.separator + r.nextInt(Integer.MAX_VALUE));
 		} while(d.exists());
 		
-		d.mkdir();
+		d.mkdirs();
 		return d;
 	}
 

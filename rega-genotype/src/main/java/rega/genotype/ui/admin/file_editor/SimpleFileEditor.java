@@ -10,7 +10,6 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLength;
-import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
 
@@ -24,18 +23,17 @@ import eu.webtoolkit.jwt.WTextArea;
  * 
  * @author michael
  */
-public class FileEditor extends WContainerWidget {
+public class SimpleFileEditor extends WContainerWidget {
 	public enum Mode {TextEditor, ImageViewer}
 	private Mode mode;
 
+	private WText infoT = null;
 	private WTextArea edit = null;
-	private Signal saved = new Signal();
 	private Signal changed = new Signal();
-	private WPushButton saveB;
 
 	private File file;
 
-	public FileEditor(final File file) {
+	public SimpleFileEditor(final File file) {
 
 		this.file = file;
 
@@ -54,32 +52,18 @@ public class FileEditor extends WContainerWidget {
 
 			addWidget(img);
 		} else {
+			infoT = new WText(this);
+
 			edit = new WTextArea(this);
 			edit.setWidth(new WLength("100%"));
 			edit.setHeight(new WLength(300));
 
-			saveB = new WPushButton("Save", this);
-			saveB.disable();
-
-			final WText infoT = new WText(this);
-
-			String fileText = FileUtil.readFile(file);
-
-			if (fileText != null) {
-				edit.setText(fileText);
-			} else {
-				infoT.setText("Could not read file.");
-			}
+			rereadFile();
 
 			edit.changed().addListener(edit, new Signal.Listener() {
 				public void trigger() {
-					saveB.enable();
-					changed.trigger();
-				}
-			});
-			saveB.clicked().addListener(this, new Signal.Listener() {
-				public void trigger() {
 					save();
+					changed.trigger();
 				}
 			});
 		}
@@ -91,8 +75,6 @@ public class FileEditor extends WContainerWidget {
 			try {
 				file.delete();
 				FileUtil.writeStringToFile(file, edit.getText());
-				saveB.disable();
-				saved().trigger();
 			} catch (IOException e) {
 				e.printStackTrace();
 				new MsgDialog("Error", "Write to file failed.");
@@ -103,7 +85,17 @@ public class FileEditor extends WContainerWidget {
 		return changed;
 	}
 
-	public Signal saved() {
-		return saved;
+	public void rereadFile() {
+		if (mode != Mode.TextEditor)
+			return;
+
+		String fileText = FileUtil.readFile(file);
+
+		if (fileText != null) {
+			edit.setText(fileText);
+		} else {
+			edit.setText("");
+			infoT.setText("Could not read file.");
+		}
 	}
 }

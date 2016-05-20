@@ -1,4 +1,4 @@
-package rega.genotype.ui.admin.file_editor;
+package rega.genotype.ui.admin.file_editor.blast;
 
 import java.util.List;
 
@@ -62,6 +62,11 @@ public class ClusterTableModel extends WAbstractTableModel{
 			}
 		}
 		return null;
+	}
+
+	public void refresh(List<Cluster> clusters) {
+		this.clusters = clusters;
+		refresh();
 	}
 
 	public void refresh() {

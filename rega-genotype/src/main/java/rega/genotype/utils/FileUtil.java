@@ -99,19 +99,20 @@ public class FileUtil {
 		return file;
 	}
 
-	public static void moveDirRecorsively(File srcDir, String destDir) {
-		new File(destDir).mkdirs();
+	public static void moveDirRecorsively(File srcDir, File destDir) {
+		destDir.mkdirs();
 		moveDirContentRecorsively(srcDir, destDir);
 		srcDir.delete();
 	}
-	public static void moveDirContentRecorsively(File srcDir, String destDir) {
+
+	public static void moveDirContentRecorsively(File srcDir, File destDir) {
 		if(srcDir.isDirectory() && srcDir.listFiles() != null) {
 		    File[] content = srcDir.listFiles();
 		    for (File f: content) {
-		    	File destFile = new File(destDir + File.separator + f.getName());
+		    	File destFile = new File(destDir, f.getName());
 		    	if (f.isDirectory()) {
 		    		destFile.mkdirs();
-		    		moveDirContentRecorsively(f, destFile.getAbsolutePath());
+		    		moveDirContentRecorsively(f, destFile);
 		    	} else {
 		    		try {
 						Files.move(f.toPath(), destFile.toPath());
@@ -123,14 +124,14 @@ public class FileUtil {
 		}
 	}
 
-	public static void copyDirContentRecorsively(File srcDir, String destDir) throws IOException {
+	public static void copyDirContentRecorsively(File srcDir, File destDir) throws IOException {
 		if(srcDir.isDirectory() && srcDir.listFiles() != null) {
 		    File[] content = srcDir.listFiles();
 		    for (File f: content) {
-		    	File destFile = new File(destDir + File.separator + f.getName());
+		    	File destFile = new File(destDir, f.getName());
 		    	if (f.isDirectory()) {
 		    		destFile.mkdirs();
-		    		copyDirContentRecorsively(f, destFile.getAbsolutePath());
+		    		copyDirContentRecorsively(f, destFile);
 		    	} else {
 		    		Files.copy(f.toPath(), destFile.toPath());
 		    	}

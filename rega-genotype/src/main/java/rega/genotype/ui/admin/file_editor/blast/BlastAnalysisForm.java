@@ -1,4 +1,4 @@
-package rega.genotype.ui.admin.file_editor;
+package rega.genotype.ui.admin.file_editor.blast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.SequenceAlignment;
-import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.utils.Utils;
@@ -34,6 +33,27 @@ public class BlastAnalysisForm extends FormTemplate{
 
 	public BlastAnalysisForm(BlastAnalysis analysis) {
 		super(tr("admin.analisysis-template"));
+		
+		refresh(analysis);
+
+		// validators
+		absCutOffLE.setValidator(new WDoubleValidator());
+		absEValueLE.setValidator(new WDoubleValidator());
+		relativeCutOffLE.setValidator(new WDoubleValidator());
+		relativeEValueLE.setValidator(new WDoubleValidator());
+
+		// bind
+		bindWidget("option", optionLE);
+		bindWidget("sequence-type", sequenceTypeCB);
+		bindWidget("absolute-cut-off", absCutOffLE);
+		bindWidget("absolute-evalue", absEValueLE);
+		bindWidget("relative-cut-off", relativeCutOffLE);
+		bindWidget("relative-evalue", relativeEValueLE);
+
+		init();
+	}
+
+	public void refresh(BlastAnalysis analysis) {
 		this.analysis = analysis;
 
 		List<SequenceType> list = Arrays.asList(SequenceType.values());
@@ -65,24 +85,8 @@ public class BlastAnalysisForm extends FormTemplate{
 			}
 		else
 			sequenceTypeCB.setCurrentIndex(0);
-
-		// validators
-		absCutOffLE.setValidator(new WDoubleValidator());
-		absEValueLE.setValidator(new WDoubleValidator());
-		relativeCutOffLE.setValidator(new WDoubleValidator());
-		relativeEValueLE.setValidator(new WDoubleValidator());
-
-		// bind
-		bindWidget("option", optionLE);
-		bindWidget("sequence-type", sequenceTypeCB);
-		bindWidget("absolute-cut-off", absCutOffLE);
-		bindWidget("absolute-evalue", absEValueLE);
-		bindWidget("relative-cut-off", relativeCutOffLE);
-		bindWidget("relative-evalue", relativeEValueLE);
-
-		init();
 	}
-
+	
 	public boolean save() {
 		if (validate()) {
 			String identify = "";

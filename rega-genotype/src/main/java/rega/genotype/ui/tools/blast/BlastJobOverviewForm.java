@@ -50,8 +50,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	//private Template layout = new Template(tr("job-overview-form"), this);
 	private WStandardItemModel blastResultModel = new WStandardItemModel();
-	// <toolId, tool data>
-	private Map<String, ToolData> toolDataMap = new HashMap<String, ToolData>();
+	// <concludedId (cluster id), cluster data>
+	private Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
 	private Signal1<String> jobIdChanged = new Signal1<String>();
 	private String jobId;
 	private WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
@@ -108,7 +108,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.hide();
 		chartContainer.hide();
 		createChart();
-		toolDataMap.clear();
+		clusterDataMap.clear();
 
 		String path[] =  internalPath.split("/");
 		if (path.length > 1) {
@@ -137,8 +137,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	protected void fillResultsWidget(String filter) {
 		new BlastResultParser().parseFile(jobDir);
 		fillBlastResultsChart();
-		if (!toolDataMap.isEmpty()){
-			table.hide();
+		if (!clusterDataMap.isEmpty()){
 			chartContainer.show();
 			table.show();
 			WContainerWidget c = new WContainerWidget();
@@ -149,7 +148,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 
 	private void fillBlastResultsChart() {
-		if (toolDataMap.isEmpty())
+		if (clusterDataMap.isEmpty())
 			return;
 
 		// create blastResultModel
@@ -159,19 +158,19 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		blastResultModel.setHeaderData(DATA_COLUMN, "Sequence count");
 
 		Config config = Settings.getInstance().getConfig();
-		for (Map.Entry<String, ToolData> e: toolDataMap.entrySet()){
-			String toolId = e.getKey();
+		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
+			ClusterData toolData = e.getValue();
 			int row = blastResultModel.getRowCount();
 			blastResultModel.insertRows(row, 1);
-			blastResultModel.setData(row, ASSINGMENT_COLUMN, e.getValue().concludedName);
-			ToolConfig toolConfig = config.getLastPublishedToolConfig(toolId);
+			blastResultModel.setData(row, ASSINGMENT_COLUMN, toolData.concludedName);
+			ToolConfig toolConfig = config.getLastPublishedToolConfig(toolData.toolId);
 			if (toolConfig != null) {
-				blastResultModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolId, jobId), ItemDataRole.LinkRole);
-				blastResultModel.setData(row, DATA_COLUMN, createToolLink(toolId, jobId), ItemDataRole.LinkRole);
+				blastResultModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
+				blastResultModel.setData(row, DATA_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
 			}
-			blastResultModel.setData(row, DATA_COLUMN, e.getValue().sequences.size()); // percentage
+			blastResultModel.setData(row, DATA_COLUMN, toolData.sequences.size()); // percentage
 			blastResultModel.setData(row, CHART_DISPLAY_COLUMN, 
-					e.getValue().concludedName + " (" + e.getValue().sequences.size() + ")");
+					toolData.concludedName + " (" + toolData.sequences.size() + ")");
 		}
 		chart.setModel(blastResultModel);
 		table.setModel(blastResultModel);
@@ -194,7 +193,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 	
 	// Classes
-	private class ToolData {
+	private class ClusterData {
+		private String toolId = new String();
 		private String concludedName = new String();
 		List<SequenceData> sequences = new ArrayList<SequenceData>();
 	}
@@ -221,12 +221,13 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (concludedName == null)
 				concludedName = "Unassigned";
 
-			ToolData toolData = toolDataMap.containsKey(toolId) ?
-					toolDataMap.get(toolId) : new ToolData();
+			ClusterData toolData = clusterDataMap.containsKey(concludedId) ?
+					clusterDataMap.get(concludedId) : new ClusterData();
 
+			toolData.toolId = toolId;	
 			toolData.concludedName = concludedName;
 			toolData.sequences.add(new SequenceData(seqName));
-			toolDataMap.put(toolId, toolData);
+			clusterDataMap.put(toolId, toolData);
 		}
 	}
 
