@@ -42,7 +42,10 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			String str() {return "Installed";}
 		}, RemoteNotSync { // published but not installed.
 			@Override
-			String str() {return "Remote";}
+			String str() {return "Published";}
+		}, Retracted { // published then installed and then removed.
+			@Override
+			String str() {return "Retracted";}
 		};  
 
 		abstract String str();
@@ -116,7 +119,8 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			case PUBLISHER_COLUMN:
 				return info.getManifest() == null ? null : info.getManifest().getPublisherName();
 			case STATE_COLUMN:
-				return info.getState() == ToolState.Local ? "Local" : "Published";
+				return info.getState() == ToolState.Retracted ? "Retracted" : 
+					info.getState() == ToolState.Local ? "Local" : "Published";
 			case UPTODATE_COLUMN:
 				if (info.getManifest() == null || info.getManifest().getId() == null)
 					return "No";
@@ -139,7 +143,8 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 				return new WLink("typingtool/" + info.getConfig().getPath());
 		} else if (role == ItemDataRole.StyleClassRole) {
 			if (info.getState() == ToolState.RemoteSync 
-					|| info.getState() == ToolState.Local)
+					|| info.getState() == ToolState.Local
+					|| info.getState() == ToolState.Retracted)
 				return "";
 			else
 				return "tools-table-unistalled-raw";
@@ -195,7 +200,16 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			info.setConfig(localConfig);
 			info.setManifest(m);
 			// ToolManifest published = find(m.getId(), m.getVersion(), remoteManifests);
-			info.setState(localConfig != null && localConfig.isPublished() ? ToolState.RemoteSync : ToolState.Local); 
+			if (localConfig == null)
+				info.setState(ToolState.Local);
+			else {
+				if (localConfig.isRetracted())
+					info.setState(ToolState.Retracted);
+				else if (localConfig.isPublished())
+					info.setState(ToolState.RemoteSync);
+				else
+					info.setState(ToolState.Local);
+			}
 			rows.add(info);
 		}
 		// add remote not synced

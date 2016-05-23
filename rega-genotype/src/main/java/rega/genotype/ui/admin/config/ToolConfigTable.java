@@ -293,7 +293,7 @@ public class ToolConfigTable extends Template{
 
 					// uninstall
 					uninstallB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
-					if (toolInfo.getState() == ToolState.Local)
+					if (toolInfo.getState() == ToolState.Local || toolInfo.getState() == ToolState.Retracted)
 						uninstallB.setText("Remove");
 					else
 						uninstallB.setText("Uninstall");

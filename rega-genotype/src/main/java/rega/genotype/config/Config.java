@@ -112,17 +112,22 @@ public class Config {
 	 * Set the published flag for every tool config.
 	 * @param remoteManifests the manifests from remote repository.
 	 */
-	public void refreshPublishedFlags(List<ToolManifest> remoteManifests) {
+	public void refreshToolCofigState(List<ToolManifest> remoteManifests) {
 		if (remoteManifests == null)
 			remoteManifests = new ArrayList<ToolManifest>();
 
 		for (ToolConfig c: getTools()){
-			c.setPublished(false);
+			// c.setPublished(false);
 			if (c.getToolMenifest() != null) {
 				// find same
+				boolean foundInRemote = false;
 				for (ToolManifest m: remoteManifests)
-					if (m.isSameSignature(c.getToolMenifest()))
+					if (m.isSameSignature(c.getToolMenifest())) {
 						c.setPublished(true);
+						foundInRemote = true;
+					}
+				if (!foundInRemote && c.isPublished()) 
+					c.setRetracted(true); // someone must have removed this tool.
 			}
 		}
 	}
@@ -290,7 +295,8 @@ public class Config {
 		private boolean autoUpdate;
 		private boolean webService;
 		private boolean ui;
-		private boolean published = false;
+		private boolean published = false; // used to remember the published state when off line.
+		private boolean retracted = false; // used to remember the retracted state when off line.
 		// ToolMenifest read manifests from configuration dir.
 		// TODO: ui will have to update manifest if it was changed.
 		transient private ToolManifest manifest = null;
@@ -420,6 +426,14 @@ public class Config {
 
 		public void setPublished(boolean published) {
 			this.published = published;
+		}
+
+		public boolean isRetracted() {
+			return retracted;
+		}
+
+		public void setRetracted(boolean retracted) {
+			this.retracted = retracted;
 		}
 	}
 }

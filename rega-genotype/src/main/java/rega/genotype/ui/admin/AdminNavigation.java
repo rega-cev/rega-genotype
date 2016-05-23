@@ -1,8 +1,11 @@
 package rega.genotype.ui.admin;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import rega.genotype.config.Config;
+import rega.genotype.config.ToolManifest;
+import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.admin.config.GlobalConfigForm;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTable;
@@ -56,6 +59,12 @@ public class AdminNavigation extends WContainerWidget {
 	    				}
 	    			});
 	    	onInternalPathChanged(WApplication.getInstance().getInternalPath());
+
+	    	if (ToolRepoServiceRequests.pingHost()) {
+	    		// refresh tool configs state since some tool could have been retracted.
+	    		List<ToolManifest> remoteManifests = ToolRepoServiceRequests.getRemoteManifests();
+	    		Settings.getInstance().getConfig().refreshToolCofigState(remoteManifests);
+	    	}
 	    }
 
 	    Config conf = Settings.getInstance().getConfig() == null ? new Config() : Settings.getInstance().getConfig();

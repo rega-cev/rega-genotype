@@ -38,6 +38,15 @@ public class ToolIndexes {
 		return null;
 	}
 
+	public boolean removeIndex(File file) {
+		for (ToolIndex index: indexes) 
+			if (new File(index.getFilePath()).getAbsolutePath().
+					equals(file.getAbsolutePath()))
+				return indexes.remove(index);
+
+		return false;
+	}
+	
 	public List<ToolIndex> getIndexes() {
 		return indexes;
 	}

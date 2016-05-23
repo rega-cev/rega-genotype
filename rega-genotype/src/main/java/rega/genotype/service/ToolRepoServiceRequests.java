@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
@@ -48,6 +50,13 @@ public class ToolRepoServiceRequests {
 				+ File.separator  +  ToolRepoService.REQ_TYPE_PUBLISH;
 	}
 
+	private static String getReqRetractUrl(String toolId, String toolVersion) {
+		return gerRepoServiceUrl() 
+				+ File.separator  +  ToolRepoService.REQ_TYPE_RETRACT_TOOL
+				+ "?" + ToolRepoService.TOOL_ID_PARAM + "=" + toolId
+				+ "&" + ToolRepoService.TOOL_VERSION_PARAM + "=" + toolVersion;
+	}
+
 	private static String getReqManifestsUrl() {
 		return gerRepoServiceUrl() 
 				+ File.separator  +  ToolRepoService.REQ_TYPE_GET_MANIFESTS;
@@ -66,6 +75,25 @@ public class ToolRepoServiceRequests {
 
 	// requests 
 	
+	public static boolean pingHost() {
+		HttpURLConnection connection;
+		try {
+			connection = (HttpURLConnection) new URL(gerRepoServiceUrl()).openConnection();
+			connection.setRequestMethod("HEAD");
+			int responseCode = connection.getResponseCode();
+			if (responseCode != 200) {
+			    return false;
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			 return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
 	public static void publish(final File zipFile) throws RegaGenotypeExeption, IOException {
 		HttpURLConnection connection = (HttpURLConnection) new URL(
 				getReqPublishUrl()).openConnection();
@@ -76,6 +104,40 @@ public class ToolRepoServiceRequests {
 		connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
 		StreamUtils.copy(new FileInputStream(zipFile), 
 				connection.getOutputStream());
+
+		if (connection.getResponseCode() != 200) {
+			String responseMessage = connection.getHeaderField(ToolRepoService.RESPONCE_ERRORS);
+			throw new RegaGenotypeExeption(responseMessage);
+		}
+		// Note: can throw java.io.FileNotFoundException if the server did not respond.
+		InputStream response = connection.getInputStream();
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(response));
+		String decodedString;
+		while ((decodedString = in.readLine()) != null) {
+			System.out.println(decodedString);
+		}
+		in.close();
+	}
+
+	/**
+	 * Delete the tool from public repository
+	 * Note: Only the tool publisher can retract it.
+	 * @param toolId
+	 * @param toolVersion
+	 * @throws RegaGenotypeExeption
+	 * @throws IOException
+	 */
+	public static void retract(String toolId, String toolVersion) throws RegaGenotypeExeption, IOException {
+		HttpURLConnection connection = (HttpURLConnection) new URL(
+				getReqRetractUrl(toolId, toolVersion)).openConnection();
+		connection.setDoOutput(true); // Triggers POST.
+		connection.setRequestMethod("DELETE");
+		connection.setRequestProperty(
+			    "Content-Type", "application/x-www-form-urlencoded" );
+		connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
+		
+		connection.connect();
 
 		if (connection.getResponseCode() != 200) {
 			String responseMessage = connection.getHeaderField(ToolRepoService.RESPONCE_ERRORS);
@@ -171,5 +233,4 @@ public class ToolRepoServiceRequests {
 
 		return ans;
 	}
-
 }

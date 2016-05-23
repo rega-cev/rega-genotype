@@ -188,7 +188,7 @@
 		${manifest}
 		${config}
 		${upload}
-		<div class="action-buttons">${publish}${save}${cancel}</div>
+		<div class="action-buttons">${publish}${retract}${save}${cancel}</div>
 		${info}
 	</message>
 	

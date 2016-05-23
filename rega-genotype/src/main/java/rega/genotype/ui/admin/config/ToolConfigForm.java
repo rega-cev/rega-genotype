@@ -42,6 +42,7 @@ public class ToolConfigForm extends FormTemplate {
 		super(tr("admin.config.tool-config-dialog"));
 		
 		final WPushButton publishB = new WPushButton("Publish");
+		final WPushButton retractB = new WPushButton("Retract");
 		final WPushButton saveB = new WPushButton("Save");
 		final WPushButton cancelB = new WPushButton("Close");
 
@@ -72,8 +73,9 @@ public class ToolConfigForm extends FormTemplate {
 			manifestForm.disable();
 			
 			fileEditor.setReadOnly(true);
-		} 
+		}
 
+		retractB.setDisabled(!toolConfig.isPublished() || toolConfig.isRetracted());
 		saveB.disable();
 
 		// bind
@@ -92,6 +94,7 @@ public class ToolConfigForm extends FormTemplate {
 		bindWidget("config", configPanel);
 		bindWidget("info", infoT);
 		bindWidget("publish", publishB);
+		bindWidget("retract", retractB);
 		bindWidget("save", saveB);
 		bindWidget("cancel", cancelB);
 
@@ -119,6 +122,42 @@ public class ToolConfigForm extends FormTemplate {
 			}
 		});
 
+		retractB.clicked().addListener(retractB, new Signal.Listener() {
+			public void trigger() {
+				final WMessageBox d = new WMessageBox("Warning",
+						"Retract will delete the tool from the public repository.", Icon.NoIcon,
+						EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
+				d.show();
+				d.setWidth(new WLength(300));
+				d.buttonClicked().addListener(d,
+						new Signal1.Listener<StandardButton>() {
+					public void trigger(StandardButton e1) {
+						if(e1 == StandardButton.Ok){
+							try {
+								ToolRepoServiceRequests.retract(
+										toolConfig.getToolMenifest().getId(), 
+										toolConfig.getToolMenifest().getVersion());
+								toolConfig.setPublished(false);
+								Settings.getInstance().getConfig().save();
+								d.setText("Successfully retracted.");
+								d.setButtons(StandardButton.Cancel);
+							} catch (RegaGenotypeExeption e) {
+								e.printStackTrace();
+								d.setText("Error: could not retract the tool. " + e.getMessage());
+								d.setButtons(StandardButton.Cancel);
+							} catch (IOException e) {
+								e.printStackTrace();
+								d.setText("Error: could not retract the tool. " + e.getMessage());
+								d.setButtons(StandardButton.Cancel);
+							}
+						}
+						else
+							d.remove();
+					}
+				});
+			}
+		});
+	
 		publishB.clicked().addListener(publishB, new Signal.Listener() {
 			public void trigger() {
 				ToolConfig tool = save(true);
