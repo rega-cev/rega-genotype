@@ -26,7 +26,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				if (save()) {
 					try {
 						// The repository may have changed.
-						config.refreshPublishedFlags(ToolRepoServiceRequests.getRemoteManifests());
+						config.refreshToolCofigState(ToolRepoServiceRequests.getRemoteManifests());
 						config.save();
 						if (Settings.getInstance().getConfig() == null){
 							Settings.getInstance().setConfig(config);

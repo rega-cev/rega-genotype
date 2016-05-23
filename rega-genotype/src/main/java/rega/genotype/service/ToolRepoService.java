@@ -39,6 +39,8 @@ public class ToolRepoService extends HttpServlet{
 	public static String REQ_TYPE_PUBLISH  = "publish";
 	public static String REQ_TYPE_GET_MANIFESTS = "get-manifests";
 	public static String REQ_TYPE_GET_TOOL = "get-tool";
+	public static String REQ_TYPE_RETRACT_TOOL = "retract-tool";
+	public static String REQ_TYPE_EMPTY = "repo-service";
 	
 	// responce 
 	public static String RESPONCE_ERRORS = "errors";
@@ -89,9 +91,49 @@ public class ToolRepoService extends HttpServlet{
 				resp.getOutputStream().flush();	
 			} else
 				resp.setStatus(404);
-
+		} else if (reqType.equals(REQ_TYPE_EMPTY)) {
+			resp.setStatus(200); // ping
 		} else {
 			resp.setStatus(404);
+		}
+	}
+
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		String reqType = getLastUrlPathComponent(req.getRequestURL().toString());
+		String pwd = req.getHeader(TOOL_PWD_PARAM);
+		if (reqType.equals(REQ_TYPE_RETRACT_TOOL)) {	
+			String id = req.getParameter(TOOL_ID_PARAM);
+			String version = req.getParameter(TOOL_VERSION_PARAM);
+			
+			for (ToolIndex index: getToolIndexes().getIndexes()) {
+				if (index.getToolId().equals(id)){
+					File toolFile;
+					if (index.getFilePath() != null)
+						toolFile = new File(index.getFilePath());
+					else // support old tools
+						toolFile = getToolFile(id, version);
+
+					if (toolFile.exists()) {
+						ToolManifest manifest = ToolManifest.parseJson(
+								FileUtil.getFileContent(toolFile, ToolManifest.MANIFEST_FILE_NAME));
+						if (manifest != null 
+								&& manifest.getId().equals(id)
+								&& manifest.getVersion().equals(version)) {
+							if (index.getPublisherPassword().equals(pwd)) {
+								toolFile.delete();
+								getToolIndexes().removeIndex(toolFile);
+								getToolIndexes().save(repoDir);
+								resp.setStatus(200);
+								break;
+							} else {
+								resp.setStatus(404);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -121,19 +163,15 @@ public class ToolRepoService extends HttpServlet{
 			return false;
 		}
 		
-		File toolIndexesFile = new File(repoDir + ToolIndexes.TOOL_INDEXES_FILE_NAME);
-		ToolIndexes indexes;
-		if (toolIndexesFile.exists()) {
-			indexes = ToolIndexes.parseJsonAsList(FileUtil.readFile(toolIndexesFile));
-			// Check publisher pwd
-			ToolIndex index = indexes.getIndex(manifest.getId());
-			if (index != null && !index.getPublisherPassword().equals(password)){
-				errors.append("Only the tool original publisher " + index.getPublisherName() +" can publish new versions.");
-				return false;
-			}
-		} else {
-			indexes = new ToolIndexes();
+		ToolIndexes indexes = getToolIndexes();
+
+		// Check publisher pwd
+		ToolIndex index = indexes.getIndex(manifest.getId());
+		if (index != null && !index.getPublisherPassword().equals(password)){
+			errors.append("Only the tool original publisher " + index.getPublisherName() +" can publish new versions.");
+			return false;
 		}
+
 		// Add ToolIndex for new tools
 		indexes.getIndexes().add(new ToolIndex(
 				password, manifest.getId(), manifest.getPublisherName(),
@@ -161,7 +199,14 @@ public class ToolRepoService extends HttpServlet{
 	}
 
 	// utils
-	
+
+	private ToolIndexes getToolIndexes() {
+		File toolIndexesFile = new File(repoDir + ToolIndexes.TOOL_INDEXES_FILE_NAME);
+		if (toolIndexesFile.exists()) 
+			return ToolIndexes.parseJsonAsList(FileUtil.readFile(toolIndexesFile));
+		else 
+			return new ToolIndexes();
+	}
 	private String storeJsonObjectsInArray(List<String> jsonObjects) {
 		String ans = "[";
 		for (int i = 0; i < jsonObjects.size(); ++i) {
