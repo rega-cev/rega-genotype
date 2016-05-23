@@ -456,6 +456,8 @@ public class ToolConfigTable extends Template{
 			// the manifest was also copied
 			if (config.getToolMenifest() != null) {
 				config.getToolMenifest().setVersion(suggestNewVersion(config, 1));
+				config.getToolMenifest().setPublicationDate(null);
+				config.getToolMenifest().setPublisherName(null);
 				config.getToolMenifest().save(config.getConfiguration());
 			}
 			break;
