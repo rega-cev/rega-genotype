@@ -13,8 +13,6 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.BlastAnalysis;
-import rega.genotype.BlastAnalysis.ReferenceTaxus;
-import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
@@ -45,9 +43,6 @@ import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStackedWidget;
-import eu.webtoolkit.jwt.WTable;
-import eu.webtoolkit.jwt.WTableCell;
-import eu.webtoolkit.jwt.WTableColumn;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 
@@ -65,6 +60,7 @@ public class BlastFileEditor extends WContainerWidget{
 	private ClusterTableModel clusterTableModel;
 	private Signal1<Integer> editingInnerXmlElement = new Signal1<Integer>();
 	private DirtyHandler dirtyHandler;
+	private ReferenceTaxaTable referenceTaxaTable;
 
 	public BlastFileEditor(final File workDir, DirtyHandler dirtyHandler) {
 		this.workDir = workDir;
@@ -81,10 +77,11 @@ public class BlastFileEditor extends WContainerWidget{
 				(BlastAnalysis) alignmentAnalyses.getAnalysis("blast"));
 		analysisPanel.setCentralWidget(analysis);
 
+		referenceTaxaTable = new ReferenceTaxaTable((BlastAnalysis) alignmentAnalyses.getAnalysis("blast"));
 		WPanel refTaxaPanel = new WPanel();
 		refTaxaPanel.addStyleClass("admin-panel");
 		refTaxaPanel.setTitle("Reference taxa");
-		refTaxaPanel.setCentralWidget(createRefTaxasTable());
+		refTaxaPanel.setCentralWidget(referenceTaxaTable);
 
 		createClustersTable(alignmentAnalyses);
 
@@ -117,7 +114,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 		// dirty
 		dirtyHandler.connect(analysis.getDirtyHandler(), this);
-		
+		dirtyHandler.connect(referenceTaxaTable.getDirtyHandler(), this);
 	}
 
 	public boolean save(File dir) {
@@ -205,37 +202,6 @@ public class BlastFileEditor extends WContainerWidget{
 			WPushButton removeB = new WPushButton("X");
 			addWidget(removeB);
 		}
-	}
-	
-	private WTable createRefTaxasTable() {
-		BlastAnalysis analysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
-
-		WTable table = new WTable(){
-			@Override
-			protected WTableCell createCell(int row, int column) {
-				
-				return super.createCell(row, column);
-			}
-		};
-		WTableCell c;
-		
-		for (ReferenceTaxus ref: analysis.getReferenceTaxus()){
-			WTableColumn column;
-			if (taxus exist)
-				column = find ..
-			else
-				column = table.insertColumn(table.getColumnCount());
-
-			table.getElementAt(0, column.getColumnNum()).addWidget(
-					new RefTableHeaderWidget(ref.getTaxus()));
-			// connect remove btn
-			for(Region region : ref.getRegions()) {
-				// add 
-				region.get
-			}
-		}
-
-		return table;
 	}
 	
 	private void createClustersTable(final AlignmentAnalyses alignmentAnalyses) {

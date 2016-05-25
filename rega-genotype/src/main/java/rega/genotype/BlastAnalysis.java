@@ -64,12 +64,24 @@ public class BlastAnalysis extends AbstractAnalysis {
     		this.end = end;
     	}
 
+    	public void setBegin(int begin) {
+    		this.begin = begin;
+    	}
+  
 		public int getBegin() {
 			return begin;
 		}
 
+		public void setEnd(int end) {
+			this.end = end;
+		}
+
 		public int getEnd() {
 			return end;
+		}
+
+		public void setName(String name) {
+			this.name = name;
 		}
 
 		public String getName() {
@@ -109,17 +121,25 @@ public class BlastAnalysis extends AbstractAnalysis {
     		this.reportOtherOffset = offset;
     	}
 
-    	void addRegion(Region r) {
+    	public void addRegion(Region r) {
     		if (this.regions == null)
     			this.regions = new ArrayList<Region>();
     		
     		regions.add(r);
+    	}
+    
+    	public boolean removeRegion(Region region) {
+    		return regions.remove(region);
     	}
     	
     	public List<Region> getRegions() {
     		return regions;
     	}
 
+    	public void setTaxus(String taxus) {
+			this.taxus = taxus;
+		}
+ 
 		public String getTaxus() {
 			return taxus;
 		}
@@ -713,8 +733,21 @@ public class BlastAnalysis extends AbstractAnalysis {
 		referenceTaxa.put(t.getTaxus(), t);
 	}
 
+	public void removeReferenceTaxus(ReferenceTaxus t) {
+		referenceTaxa.remove(t.getTaxus());
+	}
+
 	public Collection<ReferenceTaxus> getReferenceTaxus() {
 		return referenceTaxa.values();
+	}
+
+	public ReferenceTaxus findReferenceTaxus(String taxusId) {
+		for (ReferenceTaxus taxus: getReferenceTaxus()) {
+			if (taxus.getTaxus().equals(taxusId))
+				return taxus;
+		}
+
+		return null;
 	}
 
 	public Set<String> getRegions() {

@@ -20,6 +20,9 @@ import eu.webtoolkit.jwt.WTabWidget;
  * @author michael
  */
 public class FileEditor extends WTabWidget {
+	private static final int SMART_EDITOR_TAB = 0;
+	private static final int SIMPLE_EDITOR_TAB = 1;
+	
 	private SimpleFileEditorView simpleFileEditor;
 	private SmartFileEditor smartFileEditor;
 	private File workDir; // tmp dir with tool copy for coordination between smart and simple editors. 
@@ -48,7 +51,7 @@ public class FileEditor extends WTabWidget {
 
 		currentChanged().addListener(this, new Signal1.Listener<Integer>() {
 			public void trigger(Integer arg) {
-				if (getCurrentWidget().equals(smartFileEditor)) {// simple -> smart
+				if (getCurrentIndex() == SMART_EDITOR_TAB) {// simple -> smart
 					smartFileEditor.rereadFiles();
 				} else { // smart -> simple
 					smartFileEditor.saveAll();
@@ -78,7 +81,7 @@ public class FileEditor extends WTabWidget {
 	}
 
 	public boolean saveAll() {
-		if (getCurrentWidget().equals(smartFileEditor)) { // most resent changes are in sent changes are in smart
+		if (getCurrentIndex() == SMART_EDITOR_TAB) { // most resent changes are in sent changes are in smart
 			smartFileEditor.saveAll();
 			simpleFileEditor.rereadFiles();// only the simple editor contains all the files
 		}
@@ -87,6 +90,9 @@ public class FileEditor extends WTabWidget {
 
 		// copy the changes back to tool dir.
 		try {
+			// TODO: 
+			// 1. lock ()! 
+			// 2. copy toolDir to temp dir (in case that move does not works)!
 			FileUtils.deleteDirectory(toolDir);
 			FileUtils.moveDirectory(workDir, toolDir);
 			workDir.mkdirs();

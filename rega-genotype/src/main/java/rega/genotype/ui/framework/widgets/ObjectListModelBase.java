@@ -3,18 +3,24 @@ package rega.genotype.ui.framework.widgets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import eu.webtoolkit.jwt.ItemFlag;
 import eu.webtoolkit.jwt.WAbstractTableModel;
 import eu.webtoolkit.jwt.WModelIndex;
 
 public abstract class ObjectListModelBase<T> extends WAbstractTableModel implements ObjectModel<T> {
 	protected List<T> objects;
 	protected boolean nullSelectable = false;
+	// <row, flags>
+	protected Map<Integer, EnumSet<ItemFlag>> userFlags = new HashMap<Integer, EnumSet<ItemFlag>>();
 
 	public ObjectListModelBase(List<T> objects) {
 		this.objects = objects;
@@ -117,6 +123,19 @@ public abstract class ObjectListModelBase<T> extends WAbstractTableModel impleme
 		if(nullSelectable)
 			return objects.size() + 1 ;
 		return objects.size();
+	}
+
+
+	@Override
+	public EnumSet<ItemFlag> getFlags(WModelIndex index) {
+		if (userFlags.containsKey(index.getRow()))
+			return userFlags.get(index.getRow());
+		else	
+			return super.getFlags(index);
+	}
+
+	public void setFlags(int row, EnumSet<ItemFlag> flags) {
+		userFlags.put(row, flags);
 	}
 
 	public T getObject(int row){

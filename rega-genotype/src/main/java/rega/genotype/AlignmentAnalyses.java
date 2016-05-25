@@ -575,6 +575,15 @@ public class AlignmentAnalyses {
         return result;
     }
 
+    public List<Taxus> getAllTaxa() {
+    	List<Taxus> taxa = new ArrayList<Taxus>();
+    	for (Cluster cluster: getAllClusters()) 
+			for (Taxus t: cluster.getTaxa()) 
+				taxa.add(t);
+
+    	return taxa;
+    }
+    
     public List<Cluster> getAllClusters() {
         return clusters;
     }

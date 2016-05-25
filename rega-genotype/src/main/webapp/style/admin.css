@@ -160,3 +160,16 @@ body {
     /*background: transparent url(gradient.png) repeat-x scroll 0 0;    */
     border: 1px outset #CCC;
 }
+
+.reference-taxa-table td {
+    padding: 5px;
+}
+.reference-taxa-table td:hover {
+  color: blueviolet;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.reference-taxa-table button {
+    border-radius: 30px;
+}
