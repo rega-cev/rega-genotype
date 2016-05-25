@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -150,6 +152,10 @@ public class BlastAnalysis extends AbstractAnalysis {
 		
 		public int getPriority() {
 			return priority;
+		}
+
+		public void setPriority(int priority) {
+			this.priority = priority;
 		}
 
 		public String reportAsOther() {
@@ -747,6 +753,21 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 	public Collection<ReferenceTaxus> getReferenceTaxus() {
 		return referenceTaxa.values();
+	}
+
+	/**
+	 * @return ReferenceTaxa ordered by priority.
+	 * 
+	 * priority is determined by the order of reference taxa in blast.xml
+	 */
+	public List<ReferenceTaxus> getSortedReferenceTaxus() {
+		List<ReferenceTaxus> referenceTaxa = new ArrayList<ReferenceTaxus>(getReferenceTaxus());
+		Collections.sort(referenceTaxa, new Comparator<ReferenceTaxus>() {
+			public int compare(ReferenceTaxus r1, ReferenceTaxus r2) {
+				return ((Integer)r1.getPriority()).compareTo(r2.getPriority());
+			}
+		});
+		return referenceTaxa;
 	}
 
 	public ReferenceTaxus findReferenceTaxus(String taxusId) {

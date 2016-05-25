@@ -75,7 +75,7 @@ public class BlastXmlWriter {
 				add(analysisE, "relative-max-e-value", analysis.getRelativeMaxEValue());
 
 			// Reference Taxus
-			for (ReferenceTaxus ref: analysis.getReferenceTaxus()){
+			for (ReferenceTaxus ref: analysis.getSortedReferenceTaxus()){
 				Element referenceTaxusE = new Element("regions");
 				List<Attribute> refTaxusAttributes = new ArrayList<Attribute>();
 				refTaxusAttributes.add(new Attribute("taxus", ref.getTaxus()));

@@ -69,7 +69,7 @@ public class ReferenceTaxaTable extends WTable {
 		getElementAt(1, 0).addWidget(addTaxusB);
 
 		// read
-		for (ReferenceTaxus taxus: analysis.getReferenceTaxus()){
+		for (ReferenceTaxus taxus: analysis.getSortedReferenceTaxus()){
 			WTableRow row = getTaxusRow(taxus.getTaxus());
 			if (row == null)
 				row = createRowHeader(taxus);
@@ -375,6 +375,7 @@ public class ReferenceTaxaTable extends WTable {
 				region.setName(regionId);
 				referenceTaxus.addRegion(region);
 			}
+			referenceTaxus.setPriority(r); // priority is determined by the order of reference taxa in blast.xml
 			analysis.addReferenceTaxus(referenceTaxus);
 		}
 	}
