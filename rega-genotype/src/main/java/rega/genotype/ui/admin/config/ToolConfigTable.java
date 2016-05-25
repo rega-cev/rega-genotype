@@ -328,6 +328,7 @@ public class ToolConfigTable extends Template{
 
 		remoteChB.changed().addListener(this, new Signal.Listener() {
 			public void trigger() {
+				proxyModel.refresh(getLocalManifests(), getRemoteManifests());
 				proxyModel.setFilterNotRemote(
 						remoteChB.getCheckState() != CheckState.Checked);
 			}
