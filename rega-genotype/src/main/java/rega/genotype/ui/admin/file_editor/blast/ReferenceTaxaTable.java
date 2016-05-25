@@ -10,19 +10,23 @@ import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.ReferenceTaxus;
 import rega.genotype.BlastAnalysis.Region;
+import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.InPlaceEdit;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
+import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.ItemFlag;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WIntValidator;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTable;
@@ -34,7 +38,7 @@ import eu.webtoolkit.jwt.WValidator;
 import eu.webtoolkit.jwt.WValidator.State;
 
 /**
- * Edit blast.xml refrence taxa
+ * Edit blast.xml reference taxa
  * 
  * @author michael
  */
@@ -109,6 +113,11 @@ public class ReferenceTaxaTable extends WTable {
 		
 		addTaxusB.clicked().addListener(addTaxusB, new Signal.Listener() {
 			public void trigger() {
+				if (analysis.getOwner().getAllTaxa().isEmpty()) {
+					Dialogs.infoDialog("Info",
+							"There is no taxa in current tool. Add taxa before creating reference taxus.");
+					return;
+				}
 				ReferenceTaxus refTaxus = new ReferenceTaxus(nextTaxus(), taxusHeaderMap.size());
 				WTableRow row = createRowHeader(refTaxus);
 				for (int c = 1; c < getColumnCount() -1; ++c){

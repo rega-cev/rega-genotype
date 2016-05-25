@@ -3,7 +3,7 @@ package rega.genotype.ui.admin.file_editor;
 import java.io.File;
 import java.io.IOException;
 
-import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -77,7 +77,7 @@ public class SimpleFileEditor extends WContainerWidget {
 				FileUtil.writeStringToFile(file, edit.getText());
 			} catch (IOException e) {
 				e.printStackTrace();
-				new MsgDialog("Error", "Write to file failed.");
+				Dialogs.infoDialog("Error", "Write to file failed.");
 			}
 	}
 

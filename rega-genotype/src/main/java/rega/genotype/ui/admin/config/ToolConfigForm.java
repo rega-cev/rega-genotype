@@ -10,7 +10,7 @@ import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.admin.file_editor.FileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.FormTemplate;
-import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Icon;
@@ -113,12 +113,12 @@ public class ToolConfigForm extends FormTemplate {
 			public void trigger() {
 				ToolConfig savedToolConfig = save(false);
 				if (savedToolConfig != null) {
-					new MsgDialog("Info", "Saved successfully.");
+					Dialogs.infoDialog("Info", "Saved successfully.");
 					dirtyHandler.setClean();
 					if (fileEditor == null) // was not yet created.
 						createFileEditors(savedToolConfig.getConfigurationFile());
 				} else
-					new MsgDialog("Info", "Could not save see validation errors.");
+					Dialogs.infoDialog("Info", "Could not save see validation errors.");
 			}
 		});
 

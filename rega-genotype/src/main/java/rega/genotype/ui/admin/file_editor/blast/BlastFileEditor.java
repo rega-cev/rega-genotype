@@ -20,7 +20,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
-import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
@@ -132,13 +132,13 @@ public class BlastFileEditor extends WContainerWidget{
 			return true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-			new MsgDialog("Error", "Could not save blast.xml");
+			Dialogs.infoDialog("Error", "Could not save blast.xml");
 		} catch (IOException e) {
 			e.printStackTrace();
-			new MsgDialog("Error", "Could not save blast.fasta");
+			Dialogs.infoDialog("Error", "Could not save blast.fasta");
 		} catch (ParameterProblemException e) {
 			e.printStackTrace();
-			new MsgDialog("Error", "Could not save blast.fasta");
+			Dialogs.infoDialog("Error", "Could not save blast.fasta");
 		} 
 
 		return false;

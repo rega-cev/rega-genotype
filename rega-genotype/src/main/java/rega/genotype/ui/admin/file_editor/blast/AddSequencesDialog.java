@@ -24,7 +24,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
-import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
@@ -200,12 +200,12 @@ public class AddSequencesDialog extends WDialog{
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
-					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+					Dialogs.infoDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
 				} catch (FileFormatException e) {
 					e.printStackTrace();
-					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+					Dialogs.infoDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
 				} catch (AnalysisException e) {
-					new MsgDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+					Dialogs.infoDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
 					e.printStackTrace();
 				} 
 			}

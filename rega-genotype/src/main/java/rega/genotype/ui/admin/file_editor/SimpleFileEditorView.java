@@ -10,7 +10,7 @@ import java.util.Map;
 
 import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
-import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
@@ -125,7 +125,7 @@ public class SimpleFileEditorView extends WContainerWidget{
 									Files.copy(new File(f.getSpoolFileName()).toPath(), destFile.toPath());
 								} catch (IOException e) {
 									e.printStackTrace();
-									new MsgDialog("Error", "<div>Some files could not be copied (maybe they already exist).</div>" +
+									Dialogs.infoDialog("Error", "<div>Some files could not be copied (maybe they already exist).</div>" +
 											"<div> Error message: "+ e.getMessage() + "</div>");
 								}
 							}

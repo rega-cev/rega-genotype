@@ -9,7 +9,7 @@ import java.util.Set;
 import rega.genotype.config.Config;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.ui.framework.widgets.AutoForm;
-import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;
@@ -32,13 +32,13 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 							Settings.getInstance().setConfig(config);
 							WApplication.getInstance().redirect(WApplication.getInstance().getBookmarkUrl());
 						}
-						new MsgDialog("Info", "Global config changes are saved.");
+						Dialogs.infoDialog("Info", "Global config changes are saved.");
 					} catch (IOException e) {
 						e.printStackTrace();
-						new MsgDialog("Info", "Global config not save, due to IO error.");
+						Dialogs.infoDialog("Info", "Global config not save, due to IO error.");
 					}
 				} else {
-					new MsgDialog("Info", "Global config not save, see validation errors.");
+					Dialogs.infoDialog("Info", "Global config not save, see validation errors.");
 				}
 			}
 		});

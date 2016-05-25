@@ -18,7 +18,7 @@ import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSo
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
 import rega.genotype.ui.framework.widgets.DownloadResource;
-import rega.genotype.ui.framework.widgets.MsgDialog;
+import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
@@ -146,7 +146,7 @@ public class ToolConfigTable extends Template{
 						ToolManifest manifest = toolInfo.getManifest();
 						if (Settings.getInstance().getConfig().getToolConfigById(
 								manifest.getId(), manifest.getVersion()) != null) {
-							new MsgDialog("Install faied", "Tool id = " + manifest.getId() 
+							Dialogs.infoDialog("Install faied", "Tool id = " + manifest.getId() 
 									+ ", version = " + manifest.getVersion() 
 									+ " alredy exists on local server."); 
 							return;
@@ -176,7 +176,7 @@ public class ToolConfigTable extends Template{
 						FileUtils.deleteDirectory(new File(toolInfo.getConfig().getConfiguration()));
 					} catch (IOException e) {
 						e.printStackTrace();
-						new MsgDialog("Error", "Could not delete tool, Error: " + e.getMessage()); 
+						Dialogs.infoDialog("Error", "Could not delete tool, Error: " + e.getMessage()); 
 					}
 					Settings.getInstance().getConfig().removeTool(toolInfo.getConfig());
 					try {
@@ -184,7 +184,7 @@ public class ToolConfigTable extends Template{
 					} catch (IOException e) {
 						e.printStackTrace();
 						assert(false);
-						new MsgDialog("Info", "Global config not save, due to IO error.");
+						Dialogs.infoDialog("Info", "Global config not save, due to IO error.");
 					}
 
 					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
@@ -223,7 +223,7 @@ public class ToolConfigTable extends Template{
 								if (manifest != null) {
 									importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
 								} else {
-									new MsgDialog("Error", "Invalid tool file");
+									Dialogs.infoDialog("Error", "Invalid tool file");
 								}
 							}
 						}
@@ -375,7 +375,7 @@ public class ToolConfigTable extends Template{
 					manifest.getId(),
 					manifest.getVersion());
 		} else {
-			new MsgDialog("Error", "Invalid tool file.");
+			Dialogs.infoDialog("Error", "Invalid tool file.");
 		}
 	}
 
