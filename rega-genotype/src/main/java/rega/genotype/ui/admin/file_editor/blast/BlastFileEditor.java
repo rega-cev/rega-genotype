@@ -120,6 +120,7 @@ public class BlastFileEditor extends WContainerWidget{
 	public boolean save(File dir) {
 		try {
 			analysis.save();
+			referenceTaxaTable.save();
 
 			if (!blastFile(dir).exists())
 				blastFile(dir).createNewFile();

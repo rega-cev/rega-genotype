@@ -131,7 +131,11 @@ public class BlastAnalysis extends AbstractAnalysis {
     	public boolean removeRegion(Region region) {
     		return regions.remove(region);
     	}
-    	
+   
+    	public void clearRegions() {
+    		regions.clear();
+    	}
+
     	public List<Region> getRegions() {
     		return regions;
     	}
@@ -731,6 +735,10 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 	public void addReferenceTaxus(ReferenceTaxus t) {
 		referenceTaxa.put(t.getTaxus(), t);
+	}
+
+	public void clearReferenceTaxus() {
+		referenceTaxa.clear();
 	}
 
 	public void removeReferenceTaxus(ReferenceTaxus t) {

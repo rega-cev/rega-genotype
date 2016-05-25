@@ -39,13 +39,17 @@ import eu.webtoolkit.jwt.WValidator.State;
  * @author michael
  */
 public class ReferenceTaxaTable extends WTable {
+	// model
 	// <column, regionId> horizontal header data
 	private Map<WTableColumn, String> regionHeaderMap = new HashMap<WTableColumn, String>();
 	// vertical header data
-	private Map<WTableRow, TaxusWidget> taxusHeaderMap = new HashMap<WTableRow, TaxusWidget>();
+	private Map<WTableRow, ReferenceTaxus> taxusHeaderMap = new HashMap<WTableRow, ReferenceTaxus>();
 	private Map<WTableCell, Region> regionMap = new HashMap<WTableCell, Region>();
-
 	private BlastAnalysis analysis;
+
+	// view
+	private Map<WTableRow, ObjectListComboBox<Taxus>> taxusWidgetMap =
+			new HashMap<WTableRow, ObjectListComboBox<Taxus>>();
 
 	private WPushButton addTaxusB = new WPushButton("+");
 	private WPushButton addRegionB = new WPushButton("+");
@@ -64,40 +68,11 @@ public class ReferenceTaxaTable extends WTable {
 		getElementAt(0, 1).addWidget(addRegionB);
 		getElementAt(1, 0).addWidget(addTaxusB);
 
-		addRegionB.clicked().addListener(addRegionB, new Signal.Listener() {
-			public void trigger() {
-				WTableColumn column = insertColumn(getColumnCount() - 1);
-
-				getElementAt(0, column.getColumnNum()).addWidget(createRegionHeaderWidget("", column));
-
-				for (int r = 1; r < getRowCount() -1; ++r){
-					createRegionWidget(r, column.getColumnNum(),
-							new Region(regionHeaderMap.get(column), 0, 0),
-							taxusHeaderMap.get(getRowAt(r)).refTaxus);
-				}
-				dirtyHandler.increaseDirty();
-			}
-		});
-		
-		addTaxusB.clicked().addListener(addTaxusB, new Signal.Listener() {
-			public void trigger() {
-				ReferenceTaxus refTaxus = new ReferenceTaxus(nextTaxus(), taxusHeaderMap.size());
-				analysis.addReferenceTaxus(refTaxus);
-				WTableRow row = new TaxusWidget(refTaxus).row;
-				for (int c = 1; c < getColumnCount() -1; ++c){
-					createRegionWidget(row.getRowNum(), c, new Region(regionHeaderMap.get(getColumnAt(c)), 0, 0), refTaxus);
-				}
-
-				if(nextTaxus() == null) // all taxa has ref taxus.
-					addTaxusB.disable();
-				dirtyHandler.increaseDirty();
-			}
-		});
-
+		// read
 		for (ReferenceTaxus taxus: analysis.getReferenceTaxus()){
 			WTableRow row = getTaxusRow(taxus.getTaxus());
 			if (row == null)
-				row = new TaxusWidget(taxus).row;
+				row = createRowHeader(taxus);
 
 			for(Region region : taxus.getRegions()) {
 				WTableColumn column = getRegionColumn(region.getName());
@@ -108,9 +83,44 @@ public class ReferenceTaxaTable extends WTable {
 					regionHeaderMap.put(column, region.getName());
 				}
 
-				createRegionWidget(row.getRowNum(), column.getColumnNum(), region, taxus);
+				createRegionWidget(row.getRowNum(), column.getColumnNum(), region);
 			}
 		}
+		// fill empty cells
+		for (int r = 1; r < getRowCount() - 1; ++r)
+			for (int c = 1; c < getColumnCount() -1; ++c)
+				if (!regionMap.containsKey(getElementAt(r, c)))
+					createRegionWidget(r, c, 
+							new Region(regionHeaderMap.get(getColumnAt(c)), 0, 0));
+
+		//signals
+		addRegionB.clicked().addListener(addRegionB, new Signal.Listener() {
+			public void trigger() {
+				WTableColumn column = insertColumn(getColumnCount() - 1);
+				getElementAt(0, column.getColumnNum()).addWidget(createRegionHeaderWidget("", column));
+
+				for (int r = 1; r < getRowCount() -1; ++r){
+					createRegionWidget(r, column.getColumnNum(),
+							new Region(regionHeaderMap.get(column), 0, 0));
+				}
+				dirtyHandler.increaseDirty();
+			}
+		});
+		
+		addTaxusB.clicked().addListener(addTaxusB, new Signal.Listener() {
+			public void trigger() {
+				ReferenceTaxus refTaxus = new ReferenceTaxus(nextTaxus(), taxusHeaderMap.size());
+				WTableRow row = createRowHeader(refTaxus);
+				for (int c = 1; c < getColumnCount() -1; ++c){
+					createRegionWidget(row.getRowNum(), c,
+							new Region(regionHeaderMap.get(getColumnAt(c)), 0, 0));
+				}
+
+				if(nextTaxus() == null) // all taxa has ref taxus.
+					addTaxusB.disable();
+				dirtyHandler.increaseDirty();
+			}
+		});
 	}
 
 	private WTableColumn getRegionColumn(String regionName) {
@@ -122,13 +132,13 @@ public class ReferenceTaxaTable extends WTable {
 	}
 
 	private WTableRow getTaxusRow(String taxusId) {
-		for ( Map.Entry<WTableRow, TaxusWidget> e: taxusHeaderMap.entrySet()) 
-			if(e.getValue().refTaxus.getTaxus().equals(taxusId))
+		for ( Map.Entry<WTableRow, ReferenceTaxus> e: taxusHeaderMap.entrySet()) 
+			if(e.getValue().getTaxus().equals(taxusId))
 				return e.getKey();
 
 		return null;
 	}
-	private WContainerWidget createRegionHeaderWidget(final String regionName, final WTableColumn column) {
+	private WContainerWidget createRegionHeaderWidget(String regionName, final WTableColumn column) {
 		WContainerWidget c = new WContainerWidget();
 
 		// regionNameE
@@ -137,6 +147,8 @@ public class ReferenceTaxaTable extends WTable {
 		regionNameE.getEdit().setWidth(new WLength(80));
 		regionNameE.setEmptyText("(Empty)");
 		regionNameE.setButtonsEnabled(false);
+
+		//signals
 		regionNameE.getEdit().setValidator(new WValidator() {
 			@Override
 			public Result validate(String input) {
@@ -154,12 +166,7 @@ public class ReferenceTaxaTable extends WTable {
 		regionNameE.valueChanged().addListener(regionNameE, new Signal.Listener() {
 			public void trigger() {
 				if (regionNameE.getEdit().validate() == State.Valid) {
-					regionHeaderMap.remove(regionName);
-					regionHeaderMap.put(column, regionName);
-					for (int r = 1; r < getRowCount() - 1; ++r){
-						Region region = regionMap.get(getElementAt(r, column.getColumnNum()));
-						region.setName(regionName);
-					}
+					regionHeaderMap.put(column, regionNameE.getEdit().getValueText());
 					dirtyHandler.increaseDirty();
 				} else 
 					regionNameE.getTextWidget().clicked().trigger(null);
@@ -170,14 +177,10 @@ public class ReferenceTaxaTable extends WTable {
 		WPushButton removeB = new WPushButton("-" ,c);
 		removeB.clicked().addListener(removeB, new Signal.Listener() {
 			public void trigger() {
-				for (ReferenceTaxus ref: analysis.getReferenceTaxus()) {
-					for (int i = ref.getRegions().size() - 1; i >=0; --i) {
-						if (ref.getRegions().get(i).getName().equals(regionName))
-							ref.removeRegion(ref.getRegions().get(i));
-					}
-				}
-
-				regionHeaderMap.remove(regionName);
+				// remove a column.
+				for (int r = 1; r < getRowCount() - 1; r++)
+					regionMap.remove(getElementAt(r, column.getColumnNum()));
+				regionHeaderMap.remove(column);
 				deleteColumn(column.getColumnNum());
 				dirtyHandler.increaseDirty();
 			}
@@ -186,12 +189,9 @@ public class ReferenceTaxaTable extends WTable {
 		return c;
 	}
 
-	private void createRegionWidget(int row, int column, final Region region,
-			final ReferenceTaxus referenceTaxus) {
-
+	private void createRegionWidget(int row, int column, final Region region) {
 		final WText text = new WText(
 				region.getBegin() + " -> " + region.getEnd());
-		//text.setMinimumSize(new WLength(100), new WLength(30));
 
 		final WTableCell cell = getElementAt(row, column);
 		regionMap.put(cell, region);
@@ -252,14 +252,6 @@ public class ReferenceTaxaTable extends WTable {
 							region.setEnd(Integer.parseInt(endLE.getText()));
 							text.setText(region.getBegin() + " -> " + region.getEnd());
 
-							boolean isRegionExists = false;
-							for (Region r: referenceTaxus.getRegions()){
-								if (r.getName().equals(region.getName()))
-									isRegionExists = true;
-							}
-							if (!isRegionExists)
-								referenceTaxus.addRegion(region);
-							
 							dirtyHandler.increaseDirty();
 						}
 						d.remove();
@@ -268,6 +260,60 @@ public class ReferenceTaxaTable extends WTable {
 
 			}
 		});
+	}
+
+	private WTableRow createRowHeader(final ReferenceTaxus refTaxus) {
+		final WTableRow row = insertRow(getRowCount() - 1);
+
+		// taxusCB
+		Taxus currentSelectedTaxus = null;
+		List<Taxus> taxa = analysis.getOwner().getAllTaxa();
+		for (Taxus t: taxa) 
+			if (refTaxus != null && t.getId().equals(refTaxus.getTaxus()))
+				currentSelectedTaxus = t;
+
+		final ObjectListComboBox<Taxus> taxusCB = new ObjectListComboBox<Taxus>(taxa) {
+			@Override
+			protected WString render(Taxus t) {
+				return new WString(t.getId());
+			}
+		};
+		if (currentSelectedTaxus != null) 
+			taxusCB.setCurrentObject(currentSelectedTaxus);
+		else 
+			taxusCB.setCurrentIndex(0);
+
+		taxusCB.changed().addListener(taxusCB, new Signal.Listener() {
+			public void trigger() {
+				Taxus selectedTaxus = taxusCB.getCurrentObject();
+				refTaxus.setTaxus(selectedTaxus.getId());
+				updateTaxaCBs();
+				dirtyHandler.increaseDirty();
+			}
+		});
+		updateTaxaCBs();
+
+		// layout
+		WContainerWidget c = new WContainerWidget();
+		c.addWidget(taxusCB);
+		// remove row
+		WPushButton removeB = new WPushButton("-" ,c);
+		removeB.clicked().addListener(removeB, new Signal.Listener() {
+			public void trigger() {
+				for (int c = 1; c < getColumnCount() - 1; ++c)
+					regionMap.remove(getElementAt(row.getRowNum(), c));
+				taxusHeaderMap.remove(row);
+				deleteRow(row.getRowNum());
+				addTaxusB.enable();
+				dirtyHandler.increaseDirty();
+			}
+		});
+
+		getElementAt(row.getRowNum(), 0).addWidget(c);
+		taxusHeaderMap.put(row, refTaxus);
+		taxusWidgetMap.put(row, taxusCB);
+
+		return row;
 	}
 
 	private WIntValidator createRegionValidator() {
@@ -285,7 +331,7 @@ public class ReferenceTaxaTable extends WTable {
 	}
 
 	private String nextTaxus() {
-		Collection<ReferenceTaxus> referenceTaxa = analysis.getReferenceTaxus();
+		Collection<ReferenceTaxus> referenceTaxa = taxusHeaderMap.values();
 		for (Taxus t: analysis.getOwner().getAllTaxa())
 			if (!contains(referenceTaxa, t.getId()))
 				return t.getId();
@@ -293,85 +339,43 @@ public class ReferenceTaxaTable extends WTable {
 	}
 
 	private void updateTaxaCBs() {
-		for (TaxusWidget w: taxusHeaderMap.values()) {
-			w.updateTaxaCB();
+		for (ObjectListComboBox<Taxus> cb: taxusWidgetMap.values()) {
+			updateTaxaCB(cb);
 		}
+	}
+
+	void updateTaxaCB(ObjectListComboBox<Taxus> taxusCB) {
+		int currentIndex = taxusCB.getCurrentIndex();
+		Collection<ReferenceTaxus> referenceTaxa = taxusHeaderMap.values();
+		for (int r = 0; r < taxusCB.getCount(); r++) {
+			if (currentIndex != r 
+					&& contains(referenceTaxa, taxusCB.getModel().getObject(r).getId())) {
+				taxusCB.getModel().setFlags(r, EnumSet.noneOf(ItemFlag.class));
+			} else {
+				taxusCB.getModel().setFlags(r, EnumSet.of(ItemFlag.ItemIsSelectable));
+			}
+		}
+		taxusCB.getModel().refresh();
+		taxusCB.setCurrentIndex(currentIndex);
 	}
 
 	public DirtyHandler getDirtyHandler() {
 		return dirtyHandler;
 	}
 
-	// classes
+	public void save() {
+		analysis.clearReferenceTaxus();
 
-	private class TaxusWidget {
-		WTableRow row;
-		ObjectListComboBox<Taxus> taxusCB;
-		ReferenceTaxus refTaxus;
-
-		public TaxusWidget(final ReferenceTaxus refTaxus) {
-			this.refTaxus = refTaxus;
-			// taxusCB
-			Taxus currentSelectedTaxus = null;
-			List<Taxus> taxa = analysis.getOwner().getAllTaxa();
-			for (Taxus t: taxa) 
-				if (refTaxus != null && t.getId().equals(refTaxus.getTaxus()))
-					currentSelectedTaxus = t;
-
-			taxusCB = new ObjectListComboBox<Taxus>(taxa) {
-				@Override
-				protected WString render(Taxus t) {
-					return new WString(t.getId());
-				}
-			};
-			if (currentSelectedTaxus != null) 
-				taxusCB.setCurrentObject(currentSelectedTaxus);
-			else 
-				taxusCB.setCurrentIndex(0);
-
-			taxusCB.changed().addListener(taxusCB, new Signal.Listener() {
-				public void trigger() {
-					Taxus selectedTaxus = taxusCB.getCurrentObject();
-					refTaxus.setTaxus(selectedTaxus.getId());
-					updateTaxaCBs();
-					dirtyHandler.increaseDirty();
-				}
-			});
-			updateTaxaCBs();
-
-			// layout
-			WContainerWidget c = new WContainerWidget();
-			c.addWidget(taxusCB);
-			// remove
-			WPushButton removeB = new WPushButton("-" ,c);
-			removeB.clicked().addListener(removeB, new Signal.Listener() {
-				public void trigger() {
-					analysis.removeReferenceTaxus(refTaxus);
-					taxusHeaderMap.remove(row);
-					deleteRow(row.getRowNum());
-					addTaxusB.enable();
-					dirtyHandler.increaseDirty();
-				}
-			});
-
-			row = insertRow(getRowCount() - 1);
-			getElementAt(row.getRowNum(), 0).addWidget(c);
-			taxusHeaderMap.put(row, this);
-		}
-
-		void updateTaxaCB() {
-			int currentIndex = taxusCB.getCurrentIndex();
-			Collection<ReferenceTaxus> referenceTaxa = analysis.getReferenceTaxus();
-			for (int r = 0; r < taxusCB.getCount(); r++) {
-				if (currentIndex != r 
-						&& contains(referenceTaxa, taxusCB.getModel().getObject(r).getId())) {
-					taxusCB.getModel().setFlags(r, EnumSet.noneOf(ItemFlag.class));
-				} else {
-					taxusCB.getModel().setFlags(r, EnumSet.of(ItemFlag.ItemIsSelectable));
-				}
+		for (int r = 1; r < getRowCount() - 1; ++r) {
+			ReferenceTaxus referenceTaxus = taxusHeaderMap.get(getRowAt(r));
+			referenceTaxus.clearRegions();
+			for (int c = 1; c < getColumnCount() - 1; ++c) {
+				String regionId = regionHeaderMap.get(getColumnAt(c));
+				Region region = regionMap.get(getElementAt(r, c));
+				region.setName(regionId);
+				referenceTaxus.addRegion(region);
 			}
-			taxusCB.getModel().refresh();
-			taxusCB.setCurrentIndex(currentIndex);
+			analysis.addReferenceTaxus(referenceTaxus);
 		}
 	}
 }
