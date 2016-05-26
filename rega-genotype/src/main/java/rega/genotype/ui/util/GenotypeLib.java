@@ -39,8 +39,8 @@ import org.apache.commons.io.IOUtils;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.utils.Settings;
 import rega.genotype.utils.StreamReaderThread;
 import eu.webtoolkit.jwt.FileUtils;
 import eu.webtoolkit.jwt.Utils;

@@ -8,8 +8,8 @@ import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.Settings;
 import rega.genotype.viruses.generic.GenericTool;
 
 /**

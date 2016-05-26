@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.forms.AbstractJobOverview;
@@ -19,7 +20,6 @@ import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.tools.blast.BlastJobOverviewForm;
 import rega.genotype.ui.tools.blast.BlastTool;
 import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal1.Listener;
 import eu.webtoolkit.jwt.WApplication;

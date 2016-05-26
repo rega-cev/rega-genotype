@@ -12,8 +12,8 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.GenotypeTool.AnalysesType;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.viruses.hiv.HivMain;
-import rega.genotype.utils.Settings;
 
 /**
  * Created by IntelliJ IDEA.

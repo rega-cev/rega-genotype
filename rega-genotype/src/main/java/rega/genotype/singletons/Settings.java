@@ -3,7 +3,7 @@
  * 
  * See the LICENSE file for terms of use.
  */
-package rega.genotype.utils;
+package rega.genotype.singletons;
 
 import java.io.File;
 
@@ -13,6 +13,7 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.config.Config;
+import rega.genotype.utils.FileUtil;
 
 /**
  * Singleton class which contains the application settings, parses them from the xml configuration file.

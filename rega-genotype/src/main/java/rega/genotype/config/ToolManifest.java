@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
-import rega.genotype.utils.Settings;
 
 import com.google.gson.reflect.TypeToken;
 

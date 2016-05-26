@@ -5,10 +5,10 @@ import java.io.IOException;
 
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;

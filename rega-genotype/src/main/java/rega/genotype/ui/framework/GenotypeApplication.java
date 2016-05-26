@@ -11,8 +11,8 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;

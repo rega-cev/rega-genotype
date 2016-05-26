@@ -8,7 +8,7 @@ package rega.genotype.ui.framework;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-import rega.genotype.utils.Settings;
+import rega.genotype.singletons.Settings;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WtServlet;
 

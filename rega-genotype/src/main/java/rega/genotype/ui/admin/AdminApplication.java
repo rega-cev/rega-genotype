@@ -1,7 +1,7 @@
 package rega.genotype.ui.admin;
 
 import rega.genotype.config.Config;
-import rega.genotype.utils.Settings;
+import rega.genotype.singletons.Settings;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;

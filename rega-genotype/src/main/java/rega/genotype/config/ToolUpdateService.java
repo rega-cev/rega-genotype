@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
+import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.Settings;
 
 public class ToolUpdateService {
 

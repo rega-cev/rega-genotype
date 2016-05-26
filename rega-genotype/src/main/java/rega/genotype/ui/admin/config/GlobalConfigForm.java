@@ -8,9 +8,9 @@ import java.util.Set;
 
 import rega.genotype.config.Config;
 import rega.genotype.service.ToolRepoServiceRequests;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.widgets.AutoForm;
 import rega.genotype.ui.framework.widgets.Dialogs;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;
 

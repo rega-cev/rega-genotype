@@ -25,8 +25,8 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.PhyloClusterAnalysis.Result;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.viruses.hiv.HivMain;
-import rega.genotype.utils.Settings;
 import rega.genotype.ResultTracer;
 import rega.genotype.ScanAnalysis;
 

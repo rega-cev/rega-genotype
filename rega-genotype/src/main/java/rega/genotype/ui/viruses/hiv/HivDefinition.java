@@ -17,6 +17,7 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.DefaultTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.DefaultJobOverview;
@@ -28,7 +29,6 @@ import rega.genotype.ui.forms.details.DefaultSignalDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.util.DataTable;
-import rega.genotype.utils.Settings;
 import rega.genotype.viruses.hiv.HIVTool;
 import eu.webtoolkit.jwt.WString;
 

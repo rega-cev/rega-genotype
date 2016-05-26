@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.utils.Settings;
 
 /**
  * Serve files on a url.

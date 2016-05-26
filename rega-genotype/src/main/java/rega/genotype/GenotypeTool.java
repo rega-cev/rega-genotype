@@ -26,10 +26,10 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.viruses.generic.GenericDefinition;
 import rega.genotype.util.CsvDataTable;
 import rega.genotype.util.DataTable;
-import rega.genotype.utils.Settings;
 import rega.genotype.viruses.generic.GenericTool;
 
 /**

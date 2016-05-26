@@ -9,9 +9,9 @@ import java.util.List;
 
 import eu.webtoolkit.jwt.WApplication;
 
+import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
-import rega.genotype.utils.Settings;
 
 /**
  * Read json config

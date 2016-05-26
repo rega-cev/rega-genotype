@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WTabWidget;
 

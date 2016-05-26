@@ -19,8 +19,8 @@ import org.apache.commons.io.IOUtils;
 
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
+import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
 /**
