@@ -33,7 +33,6 @@ import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WString;
-import eu.webtoolkit.jwt.WTableView;
 
 /**
  * Editing of cluster from blast.xml file.
