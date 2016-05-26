@@ -25,8 +25,6 @@ import eu.webtoolkit.jwt.WStackedWidget;
 public class AdminNavigation extends WContainerWidget {	
 	public static String URL_PATH_ADMIN = "amdin";
 	public static String URL_PATH_TOOLS = "tools";
-	public static String URL_PATH_INSTALL = "instal";
-	public static String URL_PATH_NEW = "new";
 	public static String URL_PATH_EDIT = "edit";
 
 	public static String URL_PARAM_ID = "id";
@@ -83,16 +81,12 @@ public class AdminNavigation extends WContainerWidget {
 		if (path.length >= 1 && path[0].equals("tools")) {//http://localhost:8080/rega-genotype/admin/tools
 			if (path.length == 1)
 				toolConfigTable.showTable();
-			else if (path.length == 2 && path[1].equals(URL_PATH_NEW)){//http://localhost:8080/rega-genotype/admin/tools/new/
-				toolConfigTable.showCreateNewTool();
-			} else if (path.length == 4){ 
+			else if (path.length == 4){ 
 				String id = path[1];
 				String version = path[2];
 				String action = path[3];
 				if (action.equals(URL_PATH_EDIT)) //http://localhost:8080/rega-genotype/admin/tools/edit/{id}/{version}
 					toolConfigTable.showEditTool(id, version, Mode.Edit);
-				else if (action.equals(URL_PATH_NEW)) //http://localhost:8080/rega-genotype/admin/tools/new/{id}/{version}
-					toolConfigTable.showEditTool(id, version, Mode.NewVersion);
 			} else
 				toolConfigTable.showTable();
 		} else {
@@ -108,21 +102,6 @@ public class AdminNavigation extends WContainerWidget {
 		}
 	}
 
-	public static void setNewVersionToolUrl(String toolId, String toolVersion) {
-		String path = "/" + URL_PATH_TOOLS + "/" + toolId + "/" + toolVersion  + "/" + URL_PATH_NEW;
-		if (!WApplication.getInstance().getInternalPath().equals(path)) {
-			WApplication.getInstance().setInternalPath(path);
-			WApplication.getInstance().internalPathChanged().trigger(path);
-		}
-	}
-
-	public static void setNewToolUrl() {
-		String path = "/" + URL_PATH_TOOLS + "/" + URL_PATH_NEW;
-		if (!WApplication.getInstance().getInternalPath().equals(path)) {
-			WApplication.getInstance().setInternalPath(path);
-			WApplication.getInstance().internalPathChanged().trigger(path);
-		}
-	}
 	public static void setToolsTableUrl() {
 		String path = "/" + URL_PATH_TOOLS;
 		if (!WApplication.getInstance().getInternalPath().equals(path)) {

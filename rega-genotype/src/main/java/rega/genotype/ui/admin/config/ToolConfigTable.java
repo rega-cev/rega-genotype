@@ -246,17 +246,43 @@ public class ToolConfigTable extends Template{
 
 		addB.clicked().addListener(addB, new Signal.Listener() {
 			public void trigger() {
-				AdminNavigation.setNewToolUrl();
+				edit(null, Mode.Add);
 			}
 		});
 
 		newVersionB.clicked().addListener(newVersionB, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
-					ToolInfo toolInfo = proxyModel.getToolInfo(table.getSelectedIndexes().first());
-					AdminNavigation.setNewVersionToolUrl(
-							toolInfo.getManifest().getId(),
-							toolInfo.getManifest().getVersion());
+					ToolInfo info = proxyModel.getToolInfo(table.getSelectedIndexes().first());
+
+					ToolConfig config = info.getConfig().copy();
+					config.genetareJobDir();
+					config.genetareConfigurationDir(
+							info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1));
+					Settings.getInstance().getConfig().putTool(config);
+					try {
+						Settings.getInstance().getConfig().save();
+						String oldVersionDir = info.getConfig().getConfiguration();
+						FileUtil.copyDirContentRecorsively(new File(oldVersionDir), 
+								config.getConfigurationFile());
+					} catch (IOException e) {
+						e.printStackTrace();
+						assert(false); // coping to new dir should always work.
+					}
+
+					// the manifest was also copied
+					if (config.getToolMenifest() != null) {
+						config.getToolMenifest().setVersion(suggestNewVersion(config, 1));
+						config.getToolMenifest().setPublicationDate(null);
+						config.getToolMenifest().setPublisherName(null);
+						config.getToolMenifest().save(config.getConfiguration());
+					}
+
+					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+
+					AdminNavigation.setEditToolUrl(
+							config.getToolMenifest().getId(),
+							config.getToolMenifest().getVersion());
 				}
 			}
 		});
@@ -422,6 +448,7 @@ public class ToolConfigTable extends Template{
 					", version = " + toolVersion + "does not exist."));
 			WPushButton back = new WPushButton("Back", c);
 			stack.addWidget(c);
+			stack.setCurrentWidget(c);
 			back.clicked().addListener(back, new Signal.Listener() {
 				public void trigger() {
 					showTable();
@@ -448,30 +475,6 @@ public class ToolConfigTable extends Template{
 		case Add:
 			config = new ToolConfig();
 			break;
-		case NewVersion:
-			config = info.getConfig().copy();
-			config.genetareJobDir();
-			config.genetareConfigurationDir(
-					info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1));
-			Settings.getInstance().getConfig().putTool(config);
-			try {
-				Settings.getInstance().getConfig().save();
-				String oldVersionDir = info.getConfig().getConfiguration();
-				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), 
-						config.getConfigurationFile());
-			} catch (IOException e) {
-				e.printStackTrace();
-				assert(false); // coping to new dir should always work.
-			}
-
-			// the manifest was also copied
-			if (config.getToolMenifest() != null) {
-				config.getToolMenifest().setVersion(suggestNewVersion(config, 1));
-				config.getToolMenifest().setPublicationDate(null);
-				config.getToolMenifest().setPublisherName(null);
-				config.getToolMenifest().save(config.getConfiguration());
-			}
-			break;
 		case Edit:		
 			config = Settings.getInstance().getConfig().getToolConfigById(
 					info.getManifest().getId(), info.getManifest().getVersion());
@@ -487,6 +490,7 @@ public class ToolConfigTable extends Template{
 			public void trigger() {
 				proxyModel.refresh(getLocalManifests(), getRemoteManifests());
 				AdminNavigation.setToolsTableUrl();
+				showTable(); // in case that the url did not change (add tool)
 			}
 		});
 	}
