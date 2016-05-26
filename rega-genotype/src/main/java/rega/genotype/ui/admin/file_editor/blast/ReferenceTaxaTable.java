@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.ReferenceTaxus;
@@ -16,6 +17,7 @@ import rega.genotype.ui.framework.widgets.InPlaceEdit;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import eu.webtoolkit.jwt.ItemFlag;
 import eu.webtoolkit.jwt.Orientation;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -208,6 +210,16 @@ public class ReferenceTaxaTable extends WTable {
 				final WDialog d = new WDialog("Edit region");
 				d.show();
 
+				String regionName = regionHeaderMap.get(cell.getTableColumn());
+				final ReferenceTaxus referenceTaxus = taxusHeaderMap.get(cell.getTableRow());
+				final AbstractSequence s = analysis.getOwner().
+						getAlignment().getSequence(referenceTaxus.getTaxus());
+				final String sequence = s != null ? s.getSequence().toUpperCase() : "";
+
+				new WText("Enter start and end of the region " + regionName 
+						+ " in taxus " + referenceTaxus.getTaxus(),
+						d.getContents()).setPadding(new WLength(10), Side.Top);
+
 				String start = "" + region.getBegin();
 				String end = "" + region.getEnd();
 				final WLineEdit startLE = new WLineEdit(start);
@@ -215,6 +227,20 @@ public class ReferenceTaxaTable extends WTable {
 				startLE.setValidator(createRegionValidator());
 				endLE.setValidator(createRegionValidator());
 
+				// show the sequence 
+				final WTable sequenceTable = new WTable(d.getContents());
+				sequenceTable.addStyleClass("sequence-table");
+				int lineWidth = 50;
+				for (int r = 0; r < sequence.length(); r += lineWidth){
+					sequenceTable.getElementAt(r, 0).addWidget(
+							new WText((r + 1) + "" ));
+					sequenceTable.getElementAt(r, 1).addWidget(
+							new WText(sequence.substring(r, 
+									Math.min((r + lineWidth) - 1, sequence.length()))));
+				}
+				sequenceTable.setHeight(new WLength(200));
+				
+				// choose start, end.
 				final WTable layout = new WTable(d.getContents());
 				layout.setStyleClass("form-table");
 				layout.getElementAt(0, 0).addWidget(new WText("Start"));

@@ -311,6 +311,14 @@ public class SequenceAlignment
 		return new Sequence(a[0], false, "", checkLegal(a[1], reader.getLineNumber(), sequenceType));
 	}
 
+	public AbstractSequence getSequence(String sequenceName) {
+		for (AbstractSequence s: sequences)
+			if (s.getName().equals(sequenceName))
+				return s;
+
+		return null;
+	}
+
 	public List<AbstractSequence> getSequences() {
         return sequences;
     }

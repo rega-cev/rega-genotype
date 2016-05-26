@@ -173,3 +173,17 @@ body {
 .reference-taxa-table button {
     border-radius: 30px;
 }
+
+.sequence-table {
+    margin: 10px;
+    width: 550px;
+    height: 300.0px;
+    overflow: auto;
+    display: block;
+	font-family: Courier, monospace;
+}
+
+.sequence-table td {
+    text-align: right;
+    padding-right: 5px;
+}
