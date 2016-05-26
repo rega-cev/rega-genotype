@@ -176,13 +176,7 @@ public class AddSequencesDialog extends WDialog{
 			mode = Mode.AllClusters;
 			File blastXmlFile = new File(toolConfig.getConfiguration(), "blast.xml");
 			if (!blastXmlFile.exists()) {
-				SequenceAlignment alignment = parseFasta(fasta, alignmentAnalyses.getAlignment().getSequenceType());
-				if (alignment != null) {
-					List<AbstractSequence> sequences = alignment.getSequences();
-					for (AbstractSequence s: sequences) {
-						addRow(s, null);
-					}
-				}
+				initSimpleTable(fasta, alignmentAnalyses);
 			} else {
 				// run the tool to identify the clusters.
 				try {
@@ -200,14 +194,30 @@ public class AddSequencesDialog extends WDialog{
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
-					Dialogs.infoDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+					initSimpleTable(fasta, alignmentAnalyses);
+					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
 				} catch (FileFormatException e) {
 					e.printStackTrace();
-					Dialogs.infoDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+					initSimpleTable(fasta, alignmentAnalyses);
+					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
 				} catch (AnalysisException e) {
-					Dialogs.infoDialog("Error", "Failed to analyze given sequence. " + e.getMessage());
+					initSimpleTable(fasta, alignmentAnalyses);
+					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
 					e.printStackTrace();
 				} 
+			}
+		}
+
+		/**
+		 * Could not perform blast analysis -> blast column is empty.
+		 */
+		private void initSimpleTable(String fasta, AlignmentAnalyses alignmentAnalyses) {
+			SequenceAlignment alignment = parseFasta(fasta, alignmentAnalyses.getAlignment().getSequenceType());
+			if (alignment != null) {
+				List<AbstractSequence> sequences = alignment.getSequences();
+				for (AbstractSequence s: sequences) {
+					addRow(s, null);
+				}
 			}
 		}
 
