@@ -72,8 +72,7 @@ public class ToolEditingSynchronizer {
 
 		try {
 			FileUtils.deleteDirectory(toolDir);
-			FileUtils.moveDirectory(tmpWorkDir, toolDir);
-			tmpWorkDir.mkdirs(); // need to continue working on the tool.
+			FileUtils.copyDirectory(tmpWorkDir, toolDir);
 		} catch (IOException e) {
 			e.printStackTrace();
 
