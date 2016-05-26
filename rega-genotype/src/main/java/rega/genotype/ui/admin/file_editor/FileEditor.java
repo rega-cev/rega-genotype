@@ -1,13 +1,10 @@
 package rega.genotype.ui.admin.file_editor;
 
 import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
 
 import rega.genotype.singletons.Settings;
+import rega.genotype.singletons.ToolEditingSynchronizer;
 import rega.genotype.ui.util.GenotypeLib;
-import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WTabWidget;
 
@@ -34,12 +31,7 @@ public class FileEditor extends WTabWidget {
 		workDir = GenotypeLib.createJobDir(
 				Settings.getInstance().getBaseJobDir() + File.separator + "file_editor");
 
-		try {
-			FileUtil.copyDirContentRecorsively(toolDir, workDir);
-		} catch (IOException e) {
-			e.printStackTrace();
-			assert(false);
-		}
+		ToolEditingSynchronizer.getInstance().readTool(workDir, toolDir);
 
 		// view
 
@@ -89,18 +81,6 @@ public class FileEditor extends WTabWidget {
 		simpleFileEditor.saveAll();
 
 		// copy the changes back to tool dir.
-		try {
-			// TODO: 
-			// 1. lock ()! 
-			// 2. copy toolDir to temp dir (in case that move does not works)!
-			FileUtils.deleteDirectory(toolDir);
-			FileUtils.moveDirectory(workDir, toolDir);
-			workDir.mkdirs();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-
-		return true;
+		return ToolEditingSynchronizer.getInstance().saveTool(workDir, toolDir);
 	}
 }
