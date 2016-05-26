@@ -14,6 +14,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
+import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.SelectionBehavior;
@@ -44,7 +45,7 @@ public class ClusterForm extends FormTemplate{
 	private WLineEdit idLE = new WLineEdit();
 	private WLineEdit nameLE = new WLineEdit();
 	private WLineEdit descriptionLE = new WLineEdit();
-	private WTableView taxuesTable = new WTableView();
+	private StandardTableView taxuesTable = new StandardTableView();
 	private WPushButton addSequenceB = new WPushButton("Add sequences");
 	private WPushButton removeSequenceB= new WPushButton("Remove sequences");
 
@@ -109,6 +110,7 @@ public class ClusterForm extends FormTemplate{
 		taxuesTable.setSelectionBehavior(SelectionBehavior.SelectRows);
 		taxuesTable.setHeight(new WLength(100));
 		taxuesTable.setColumnWidth(0, new WLength(300));
+		taxuesTable.setTableWidth();
 
 		// bind
 

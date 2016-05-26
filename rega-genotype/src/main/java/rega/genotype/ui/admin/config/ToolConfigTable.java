@@ -17,9 +17,10 @@ import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
-import rega.genotype.ui.framework.widgets.DownloadResource;
 import rega.genotype.ui.framework.widgets.Dialogs;
+import rega.genotype.ui.framework.widgets.DownloadResource;
 import rega.genotype.ui.framework.widgets.StandardDialog;
+import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.utils.FileUtil;
@@ -36,14 +37,13 @@ import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
-import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStackedWidget;
-import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.servlet.UploadedFile;
 
@@ -74,7 +74,7 @@ public class ToolConfigTable extends Template{
 		// create table
 		ToolConfigTableModel model = new ToolConfigTableModel(
 				localManifests, remoteManifests);
-		final WTableView table = new WTableView();
+		final StandardTableView table = new StandardTableView();
 		table.setSelectionMode(SelectionMode.SingleSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
 		table.setHeight(new WLength(400));
@@ -84,8 +84,18 @@ public class ToolConfigTable extends Template{
 		table.setModel(proxyModel);
 		table.sortByColumn(2, SortOrder.AscendingOrder);
 
-		for (int c = 0; c < model.getColumnCount(); ++c)
-			table.setColumnWidth(c, model.getColumnWidth(c));
+		table.setColumnWidth(ToolConfigTableModel.URL_COLUMN, new WLength(100));
+		table.setColumnWidth(ToolConfigTableModel.NAME_COLUMN, new WLength(120));
+		table.setColumnWidth(ToolConfigTableModel.ID_COLUMN, new WLength(100));
+		table.setColumnWidth(ToolConfigTableModel.VERSION_COLUMN, new WLength(60));
+		table.setColumnWidth(ToolConfigTableModel.DATE_COLUMN, new WLength(100));
+		table.setColumnWidth(ToolConfigTableModel.PUBLISHER_COLUMN, new WLength(100));
+		table.setColumnWidth(ToolConfigTableModel.STATE_COLUMN, new WLength(60));
+		table.setColumnWidth(ToolConfigTableModel.UPTODATE_COLUMN, new WLength(100));
+		table.setColumnWidth(ToolConfigTableModel.INSTALLED_COLUMN, new WLength(80));
+
+		table.setTableWidth();
+		setMaximumSize(table.getWidth(), WLength.Auto);
 
 		final WPushButton addB = new WPushButton("Add");
 		final WPushButton editB = new WPushButton("Edit");

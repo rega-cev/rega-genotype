@@ -12,7 +12,6 @@ import rega.genotype.utils.Settings;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WSortFilterProxyModel;
@@ -158,31 +157,6 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		return  format.format(date);
-	}
-
-	public WLength getColumnWidth(int column) {
-		switch (column) {
-		case URL_COLUMN:
-			return new WLength(100);
-		case NAME_COLUMN:
-			return new WLength(120);
-		case ID_COLUMN:
-			return new WLength(100);
-		case VERSION_COLUMN:
-			return new WLength(60);
-		case DATE_COLUMN:
-			return new WLength(100);
-		case PUBLISHER_COLUMN:
-			return new WLength(100);
-		case STATE_COLUMN:
-			return new WLength(60);
-		case UPTODATE_COLUMN:
-			return new WLength(100);
-		case INSTALLED_COLUMN:
-			return new WLength(80);
-		default:
-			return new WLength(100);
-		}
 	}
 
 	public void refresh(List<ToolManifest> localManifests,

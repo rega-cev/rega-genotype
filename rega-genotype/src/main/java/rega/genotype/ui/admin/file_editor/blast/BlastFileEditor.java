@@ -21,6 +21,7 @@ import rega.genotype.config.ToolManifest;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.Dialogs;
+import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
@@ -210,11 +211,12 @@ public class BlastFileEditor extends WContainerWidget{
 	private void createClustersTable(final AlignmentAnalyses alignmentAnalyses) {
 		List<Cluster> clusters = alignmentAnalyses.getAllClusters();
 		clusterTableModel = new ClusterTableModel(clusters);
-		final WTableView table = new WTableView();
+		final StandardTableView table = new StandardTableView();
 		table.setModel(clusterTableModel);
 		table.setSelectionMode(SelectionMode.SingleSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
 		table.setHeight(new WLength(200));
+		table.setTableWidth();
 
 		WPushButton addB = new WPushButton("Add");
 		WPushButton editB = new WPushButton("Edit");
