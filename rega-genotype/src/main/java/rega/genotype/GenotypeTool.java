@@ -148,6 +148,8 @@ public abstract class GenotypeTool {
             = new LineNumberReader
                 (new InputStreamReader(new BufferedInputStream(sequenceFile)));
         
+        TODO: call init db ->formatDB
+        
         try {
 			for (;;) {
 				if (cancelAnalysis()) {

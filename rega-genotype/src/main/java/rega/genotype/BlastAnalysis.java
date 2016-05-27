@@ -415,10 +415,35 @@ public class BlastAnalysis extends AbstractAnalysis {
         this.blastOptions = blastOptions != null ? blastOptions : "";
         this.detailsOptions = detailsOptions;
         this.referenceTaxa = new HashMap<String, ReferenceTaxus>();
-    }
+	}
 
-    private Result compute(SequenceAlignment analysisDb, AbstractSequence sequence)
-            throws ApplicationException {
+	todo call formatDB at the start of analysis,
+	remove formatDB from compute
+	public boolean formatDB(SequenceAlignment analysisDb) throws IOException, InterruptedException, ApplicationException {
+		File db = getTempFile("db.fasta");
+		FileOutputStream dbFile = new FileOutputStream(db);
+		//FileDescriptor fd = dbFile.getFD();
+		analysisDb.writeFastaOutput(dbFile);
+		//dbFile.flush();
+		//fd.sync();
+		dbFile.close();
+
+		String cmd = blastPath + formatDbCommand + " " + formatDbOptions() + " -o T -i " + db.getAbsolutePath();
+		System.err.println(cmd);
+
+		Process formatdb = null;
+		formatdb = StreamReaderRuntime.exec(cmd, null, workingDir);
+		int exitResult = formatdb.waitFor();
+
+		if (exitResult != 0) {
+			throw new ApplicationException("formatdb exited with error: " + exitResult);
+		}
+
+		return true;
+	}
+
+	private Result compute(SequenceAlignment analysisDb, AbstractSequence sequence)
+			throws ApplicationException {
         Process formatdb = null;
         Process blast = null;
         try {
