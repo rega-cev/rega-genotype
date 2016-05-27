@@ -75,7 +75,7 @@ public class ToolConfigTable extends Template{
 		ToolConfigTableModel model = new ToolConfigTableModel(
 				localManifests, remoteManifests);
 		final StandardTableView table = new StandardTableView();
-		table.setSelectionMode(SelectionMode.SingleSelection);
+		table.setSelectionMode(SelectionMode.ExtendedSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
 		table.setHeight(new WLength(400));
 
@@ -179,35 +179,44 @@ public class ToolConfigTable extends Template{
 
 		uninstallB.clicked().addListener(uninstallB, new Signal.Listener() {
 			public void trigger() {
-				if (table.getSelectedIndexes().size() == 1) {
-					final ToolInfo toolInfo = proxyModel.getToolInfo(
-							table.getSelectedIndexes().first());
+				if (table.getSelectedIndexes().size() > 0) {
+					String toolsStr = "";
+					for (WModelIndex index: table.getSelectedIndexes()){
+						if (!toolsStr.isEmpty())
+							toolsStr += " ,";
+						toolsStr +=  proxyModel.getToolInfo(index).getManifest().getName();
+					}
 
-					Dialogs.removeDialog(toolInfo.getManifest().getName()).finished().addListener(
+					Dialogs.removeDialog(toolsStr).finished().addListener(
 							table, new Signal1.Listener<DialogCode>() {
 						public void trigger(DialogCode arg) {
 							if (arg == DialogCode.Accepted) {
-								try {
-									FileUtils.deleteDirectory(new File(toolInfo.getConfig().getConfiguration()));
-								} catch (IOException e) {
-									e.printStackTrace();
-									Dialogs.infoDialog("Error", "Could not delete tool, Error: " + e.getMessage()); 
-								}
-								Settings.getInstance().getConfig().removeTool(toolInfo.getConfig());
-								try {
-									Settings.getInstance().getConfig().save();
-								} catch (IOException e) {
-									e.printStackTrace();
-									assert(false);
-									Dialogs.infoDialog("Info", "Global config not save, due to IO error.");
-								}
+								List<ToolInfo> infos = new ArrayList<ToolConfigTableModel.ToolInfo>();
+								for (WModelIndex index: table.getSelectedIndexes())
+									infos.add(proxyModel.getToolInfo(index));
 
-								proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+								for (ToolInfo toolInfo: infos){
+									try {
+										FileUtils.deleteDirectory(new File(toolInfo.getConfig().getConfiguration()));
+									} catch (IOException e) {
+										e.printStackTrace();
+										Dialogs.infoDialog("Error", "Could not delete tool, Error: " + e.getMessage()); 
+									}
+									Settings.getInstance().getConfig().removeTool(toolInfo.getConfig());
+									try {
+										Settings.getInstance().getConfig().save();
+									} catch (IOException e) {
+										e.printStackTrace();
+										assert(false);
+										Dialogs.infoDialog("Info", "Global config not save, due to IO error.");
+									}
+
+									proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+								}
 							}
 						}
 					});
 				}
-
 			}
 		});
 
@@ -348,6 +357,14 @@ public class ToolConfigTable extends Template{
 						downloadR.setFileName(zip.getAbsolutePath());
 						downloadR.suggestFileName(toolInfo.getManifest().getUniqueToolId() + ".zip");
 						downloadB.enable();
+					}
+				} else if (table.getSelectedIndexes().size() > 1) {
+					uninstallB.enable();
+					uninstallB.setText("Remove/Uninstall");
+					for (WModelIndex index: table.getSelectedIndexes()){
+						final ToolInfo toolInfo = proxyModel.getToolInfo(index);
+						if (toolInfo.getState() == ToolState.RemoteNotSync)
+							uninstallB.disable();
 					}
 				} else {
 					installB.disable();
