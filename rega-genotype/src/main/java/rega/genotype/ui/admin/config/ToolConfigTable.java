@@ -40,6 +40,7 @@ import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
@@ -180,24 +181,32 @@ public class ToolConfigTable extends Template{
 		uninstallB.clicked().addListener(uninstallB, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
-					ToolInfo toolInfo = proxyModel.getToolInfo(
+					final ToolInfo toolInfo = proxyModel.getToolInfo(
 							table.getSelectedIndexes().first());
-					try {
-						FileUtils.deleteDirectory(new File(toolInfo.getConfig().getConfiguration()));
-					} catch (IOException e) {
-						e.printStackTrace();
-						Dialogs.infoDialog("Error", "Could not delete tool, Error: " + e.getMessage()); 
-					}
-					Settings.getInstance().getConfig().removeTool(toolInfo.getConfig());
-					try {
-						Settings.getInstance().getConfig().save();
-					} catch (IOException e) {
-						e.printStackTrace();
-						assert(false);
-						Dialogs.infoDialog("Info", "Global config not save, due to IO error.");
-					}
 
-					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+					Dialogs.removeDialog(toolInfo.getManifest().getName()).finished().addListener(
+							table, new Signal1.Listener<DialogCode>() {
+						public void trigger(DialogCode arg) {
+							if (arg == DialogCode.Accepted) {
+								try {
+									FileUtils.deleteDirectory(new File(toolInfo.getConfig().getConfiguration()));
+								} catch (IOException e) {
+									e.printStackTrace();
+									Dialogs.infoDialog("Error", "Could not delete tool, Error: " + e.getMessage()); 
+								}
+								Settings.getInstance().getConfig().removeTool(toolInfo.getConfig());
+								try {
+									Settings.getInstance().getConfig().save();
+								} catch (IOException e) {
+									e.printStackTrace();
+									assert(false);
+									Dialogs.infoDialog("Info", "Global config not save, due to IO error.");
+								}
+
+								proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+							}
+						}
+					});
 				}
 
 			}

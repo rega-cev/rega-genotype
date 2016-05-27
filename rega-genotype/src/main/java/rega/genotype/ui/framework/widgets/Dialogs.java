@@ -35,4 +35,10 @@ public class Dialogs{
 		});
 		return m;
 	}
+
+	public static WMessageBox removeDialog(String itemsText){
+		return infoDialog("Remove", "Are you sure that you want to remove " + itemsText,
+				EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
+	}
+
 }
