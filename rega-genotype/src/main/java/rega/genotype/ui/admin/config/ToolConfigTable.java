@@ -40,7 +40,6 @@ import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
-import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
