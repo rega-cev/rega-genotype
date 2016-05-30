@@ -842,6 +842,14 @@ public class BlastAnalysis extends AbstractAnalysis {
 		return blastOptions;
 	}
 
+	public String getDetailsOptions() {
+		return detailsOptions;
+	}
+
+	public void setDetailsOptions(String detailsOptions) {
+		this.detailsOptions = detailsOptions;
+	}
+
 	public void setBlastOptions(String blastOptions) {
 		this.blastOptions = blastOptions;
 	}

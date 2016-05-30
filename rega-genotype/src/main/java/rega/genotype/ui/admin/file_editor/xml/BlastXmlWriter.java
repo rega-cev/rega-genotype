@@ -64,7 +64,8 @@ public class BlastXmlWriter {
 			analysisE.setAttributes(attributes);
 			add(analysisE, "identify", analysis.getId());
 			add(analysisE, "options", analysis.getBlastOptions());
-			
+			add(analysisE, "details", analysis.getDetailsOptions());
+
 			if (analysis.getAbsCutoff() != null)
 				add(analysisE, "absolute-cutoff", analysis.getAbsCutoff());
 			if (analysis.getRelativeCutoff() != null)

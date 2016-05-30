@@ -197,6 +197,8 @@
 		  <col width="200"><col width="200"></col></col>
   		  <tr><td>Analysis type</td><td>${sequence-type}</td><td>${sequence-type-info}</td></tr>
   		  <tr><td>Blast options</td><td>${option}</td><td>${option-info}</td></tr>
+  		  <tr><td>Blast details options</td><td>${details-option}</td><td>${details-option-info}</td></tr>
+  		  
   		  <tr><td><b>Assingment cut offs</b></td> <td></td> <td class="auto-form-info">Assignment is made if result passes all cut offs</td></tr>
   		  
   		  <tr><td class="form-indent">Absolute score</td><td>${absolute-cut-off}</td><td class="auto-form-info">Assignment is made if score is bigger than cut off</td></tr>

@@ -21,6 +21,7 @@ import eu.webtoolkit.jwt.WString;
  */
 public class BlastAnalysisForm extends FormTemplate{
 	private WLineEdit optionLE = new WLineEdit();
+	private WLineEdit detailOptionLE = new WLineEdit();
 	private WComboBox sequenceTypeCB;
 	private WLineEdit absCutOffLE = new WLineEdit();
 	private WLineEdit absEValueLE = new WLineEdit();
@@ -44,6 +45,7 @@ public class BlastAnalysisForm extends FormTemplate{
 
 		// bind
 		bindWidget("option", optionLE);
+		bindWidget("details-option", detailOptionLE);
 		bindWidget("sequence-type", sequenceTypeCB);
 		bindWidget("absolute-cut-off", absCutOffLE);
 		bindWidget("absolute-evalue", absEValueLE);
@@ -69,6 +71,7 @@ public class BlastAnalysisForm extends FormTemplate{
 
 		// set values 
 		optionLE.setText(Utils.nullToEmpty(analysis.getBlastOptions()));
+		detailOptionLE.setText(Utils.nullToEmpty(analysis.getDetailsOptions()));
 		setValue(absCutOffLE, analysis.getAbsCutoff());
 		setValue(absEValueLE, analysis.getAbsMaxEValue());
 		setValue(relativeCutOffLE, analysis.getRelativeCutoff());
@@ -97,6 +100,7 @@ public class BlastAnalysisForm extends FormTemplate{
 			}
 			analysis.setId(identify);
 			analysis.setBlastOptions(optionLE.getText());
+			analysis.setDetailsOptions(detailOptionLE.getText());
 			int type = sequenceTypeCB.getCurrentIndex() + 1;
 			analysis.getOwner().getAlignment().setSequenceType(type);
 			analysis.setAbsCutoff(doubleValue(absCutOffLE));
