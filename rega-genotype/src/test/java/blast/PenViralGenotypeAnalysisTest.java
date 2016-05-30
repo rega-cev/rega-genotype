@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Test;
+
 import junit.framework.TestCase;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
@@ -13,6 +15,7 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.tools.blast.BlastTool;
 import rega.genotype.ui.utils.TestUtils;
+import rega.genotype.utils.FileUtil;
 
 public class PenViralGenotypeAnalysisTest extends TestCase{
 private String fasta;
@@ -38,6 +41,7 @@ private String fasta;
 		TestUtils.deleteJobDirs(jobDirs);
 	}
 
+	@Test
     public void testAnalysisRuntime() {
        	File jobDir = TestUtils.setup(fasta);
     	jobDirs.add(jobDir);
@@ -73,4 +77,35 @@ private String fasta;
     	};
     	p.parseFile(jobDir);
     }
+
+    @Test
+    public void testBenchmark() {
+    	ToolConfig toolConfig = Settings.getInstance().getConfig().getToolConfigById("pen-viral", "1");
+
+    	String longFasta = FileUtil.readFile(new File(toolConfig.getConfiguration(), "test-sequemces.fasta"));
+    	File jobDir = TestUtils.setup(longFasta);
+    	jobDirs.add(jobDir);
+
+    	BlastTool blastTool;
+		try {
+			blastTool = new BlastTool(toolConfig, jobDir);
+			
+			long startTime = System.currentTimeMillis();
+
+	    	blastTool.analyze(TestUtils.getFastaFile(jobDir).getAbsolutePath(),
+					TestUtils.getResultFile(jobDir).getAbsolutePath());
+
+	    	System.err.println("Full analysis time in ms: " + (System.currentTimeMillis() - startTime));
+			// assertTrue((System.currentTimeMillis() - startTime) < 7000); // can change on different computers. 
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			fail("IOException occured during analysis runtime");
+		} catch (ParameterProblemException e1) {
+			e1.printStackTrace();
+			fail("ParameterProblemException occured during analysis runtime");
+		} catch (FileFormatException e1) {
+			e1.printStackTrace();
+			fail("FileFormatException occured during analysis runtime");
+		}
+	}
 }
