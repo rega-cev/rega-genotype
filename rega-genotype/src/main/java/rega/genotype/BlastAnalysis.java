@@ -431,8 +431,6 @@ public class BlastAnalysis extends AbstractAnalysis {
 	
 	@SuppressWarnings("unused")
 	public boolean formatDB(SequenceAlignment analysis) throws ApplicationException {
-        long startTime = System.currentTimeMillis();
-
         cleanOldDB();
 
         SequenceAlignment analysisDb = analysis.selectSequencesFromClusters(clusters);
@@ -471,8 +469,6 @@ public class BlastAnalysis extends AbstractAnalysis {
                 formatdb.destroy();
 			throw new ApplicationException("formatdb failed error: " + e.getMessage(), e);
 		}
-
-        System.out.println("formatDB time in ms = " + (System.currentTimeMillis() - startTime));
 
 		return true;
 	}

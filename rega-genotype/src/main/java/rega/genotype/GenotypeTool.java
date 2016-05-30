@@ -143,13 +143,10 @@ public abstract class GenotypeTool {
         LineNumberReader reader
             = new LineNumberReader
                 (new InputStreamReader(new BufferedInputStream(sequenceFile)));
-        
-        long startTime = System.currentTimeMillis();
 
         try {
         	formatDB();
 			for (;;) {
-	        	
 
 				if (cancelAnalysis()) {
 					System.err.println("Cancelled job: " + currentJob());
@@ -164,13 +161,7 @@ public abstract class GenotypeTool {
 
 		            long start = System.currentTimeMillis();
 			        try {
-			        	
-	                    long startTime2 = System.currentTimeMillis();
-
                         analyze(s);
-
-                        System.out.println("1 sequence analysis time in ms = " + (System.currentTimeMillis() - startTime2));
-
 			        } catch (AnalysisException e) {
 			            System.err.println(e.getMessage());
 			            e.printStackTrace();
@@ -197,8 +188,6 @@ public abstract class GenotypeTool {
 		} finally {
 			stopTracer();
 		}
-
-        System.out.println("Full Analysis time in ms = " + (System.currentTimeMillis() - startTime));
     }
 
     protected void stopTracer() {
