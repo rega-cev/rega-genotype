@@ -1,4 +1,4 @@
-package rega.genotype.ui.tools.blast;
+package rega.genotype.tools.blast;
 
 import java.io.File;
 import java.io.IOException;
