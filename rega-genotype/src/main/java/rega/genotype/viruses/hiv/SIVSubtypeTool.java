@@ -6,12 +6,12 @@ import java.io.IOException;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AnalysisException;
+import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
-import rega.genotype.GenotypeTool.AnalysesType;
 import rega.genotype.ui.viruses.hiv.HivMain;
 
 /**
@@ -74,5 +74,10 @@ public class SIVSubtypeTool extends GenotypeTool{
 	@Override
 	protected boolean cancelAnalysis() {
 		return false;
+	}
+
+	@Override
+	protected void formatDB() throws ApplicationException {
+		
 	}
  }

@@ -19,6 +19,7 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AnalysisException;
+import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.BlastAnalysis.Result;
@@ -65,6 +66,12 @@ public class GenericTool extends GenotypeTool {
     protected void analyseClaster(Cluster c, AbstractSequence s) {
     }
 
+	@Override
+	protected void formatDB() throws ApplicationException {
+		blastAnalysis.formatDB(blastXml.getAlignment());
+	}
+
+	@Override
     public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
     	/*
     	 * First perform the blast analysis.
@@ -114,13 +121,10 @@ public class GenericTool extends GenotypeTool {
         				}
         			}
         		} catch (IOException e) {
-        			e.printStackTrace();
         			throw new AnalysisException("", s, e);
         		} catch (ParameterProblemException e) {
-        			e.printStackTrace();
         			throw new AnalysisException("", s, e);
         		} catch (FileFormatException e) {
-        			e.printStackTrace();
         			throw new AnalysisException("", s, e);
         		}
 

@@ -7,6 +7,7 @@ package rega.genotype;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,7 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -394,11 +394,6 @@ public class BlastAnalysis extends AbstractAnalysis {
     boolean supportsMultiple() {
     	return detailsOptions != null;
     }
-    
-    @Override
-	public Result run(AbstractSequence sequence) throws AnalysisException {
-		return (rega.genotype.BlastAnalysis.Result) super.run(sequence);
-	}
 
 	public BlastAnalysis(AlignmentAnalyses owner, String id,
                          List<Cluster> clusters, Double absCutoff, Double absMaxEValue,
@@ -417,45 +412,78 @@ public class BlastAnalysis extends AbstractAnalysis {
         this.referenceTaxa = new HashMap<String, ReferenceTaxus>();
 	}
 
-	todo call formatDB at the start of analysis,
-	remove formatDB from compute
-	public boolean formatDB(SequenceAlignment analysisDb) throws IOException, InterruptedException, ApplicationException {
-		File db = getTempFile("db.fasta");
-		FileOutputStream dbFile = new FileOutputStream(db);
-		//FileDescriptor fd = dbFile.getFD();
-		analysisDb.writeFastaOutput(dbFile);
-		//dbFile.flush();
-		//fd.sync();
-		dbFile.close();
+	private void cleanOldDB() {
+		getTempFile("db.fasta").delete();
+        if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_DNA) {
+            getTempFile("db.fasta.nhr").delete();
+            getTempFile("db.fasta.nin").delete();
+            getTempFile("db.fasta.nsd").delete();
+            getTempFile("db.fasta.nsi").delete();
+            getTempFile("db.fasta.nsq").delete();
+        } else {
+            getTempFile("db.fasta.phr").delete();
+            getTempFile("db.fasta.pin").delete();
+            getTempFile("db.fasta.psd").delete();
+            getTempFile("db.fasta.psi").delete();
+            getTempFile("db.fasta.psq").delete();
+        }
+	}
+	
+	@SuppressWarnings("unused")
+	public boolean formatDB(SequenceAlignment analysis) throws ApplicationException {
+        long startTime = System.currentTimeMillis();
 
-		String cmd = blastPath + formatDbCommand + " " + formatDbOptions() + " -o T -i " + db.getAbsolutePath();
-		System.err.println(cmd);
+        cleanOldDB();
 
+        SequenceAlignment analysisDb = analysis.selectSequencesFromClusters(clusters);
+	
 		Process formatdb = null;
-		formatdb = StreamReaderRuntime.exec(cmd, null, workingDir);
-		int exitResult = formatdb.waitFor();
+		File db = getTempFile("db.fasta");
+		FileOutputStream dbFile;
+		try {
+			dbFile = new FileOutputStream(db);
+			//FileDescriptor fd = dbFile.getFD();
+			analysisDb.writeFastaOutput(dbFile);
+			//dbFile.flush();
+			//fd.sync();
+			dbFile.close();
 
-		if (exitResult != 0) {
-			throw new ApplicationException("formatdb exited with error: " + exitResult);
+			String cmd = blastPath + formatDbCommand + " " + formatDbOptions() + " -o T -i " + db.getAbsolutePath();
+			System.err.println(cmd);
+
+
+			formatdb = StreamReaderRuntime.exec(cmd, null, workingDir);
+			int exitResult = formatdb.waitFor();
+
+			if (exitResult != 0) {
+				throw new ApplicationException("formatdb exited with error: " + exitResult);
+			}
+		} catch (FileNotFoundException e) {
+			if (formatdb != null)
+                formatdb.destroy();
+			throw new ApplicationException("formatdb failed error: " + e.getMessage(), e);
+		} catch (IOException e) {
+			if (formatdb != null)
+                formatdb.destroy();
+			throw new ApplicationException("formatdb failed error: " + e.getMessage(), e);
+		} catch (InterruptedException e) {
+			if (formatdb != null)
+                formatdb.destroy();
+			throw new ApplicationException("formatdb failed error: " + e.getMessage(), e);
 		}
+
+        System.out.println("formatDB time in ms = " + (System.currentTimeMillis() - startTime));
 
 		return true;
 	}
 
-	private Result compute(SequenceAlignment analysisDb, AbstractSequence sequence)
+	private Result compute(AbstractSequence sequence)
 			throws ApplicationException {
-        Process formatdb = null;
+        
         Process blast = null;
+
         try {
             if (sequence.getLength() != 0) {
-                File db = getTempFile("db.fasta");
-                FileOutputStream dbFile = new FileOutputStream(db);
-                //FileDescriptor fd = dbFile.getFD();
-                analysisDb.writeFastaOutput(dbFile);
-                //dbFile.flush();
-                //fd.sync();
-                dbFile.close();
-
                 File query = getTempFile("query.fasta");
                 FileOutputStream queryFile = new FileOutputStream(query);
                 //FileDescriptor fd2 = dbFile.getFD();
@@ -463,17 +491,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 //queryFile.flush();
                 //fd2.sync();
                 queryFile.close();
-                        
-                String cmd = blastPath + formatDbCommand + " " + formatDbOptions() + " -o T -i " + db.getAbsolutePath();
-                System.err.println(cmd);
-                
-                formatdb = StreamReaderRuntime.exec(cmd, null, workingDir);
-                int exitResult = formatdb.waitFor();
 
-                if (exitResult != 0) {
-                    throw new ApplicationException("formatdb exited with error: " + exitResult);
-                }
-                
                 String blastOptions = "";
         		if (owner.getAlignment() != null && 
                 		owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
@@ -485,8 +503,9 @@ public class BlastAnalysis extends AbstractAnalysis {
                 	if (detailsOptions != null)
                 		blastOptions = "-p blastn " + this.detailsOptions;
                 }
-                
-                cmd = blastPath + blastCommand + " " + blastOptions
+
+        		File db = getTempFile("db.fasta");
+        		String cmd = blastPath + blastCommand + " " + blastOptions
                 	+ " -i " + query.getAbsolutePath()
                     + " -m 8 -d " + db.getAbsolutePath();
                 System.err.println(cmd);
@@ -519,7 +538,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 boolean aa = owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA;
                 Result result = parseBlastResults(br, this, aa, sequence);
                 
-                exitResult = blast.waitFor();
+                int exitResult = blast.waitFor();
 
                 blast.getErrorStream().close();
                 blast.getInputStream().close();
@@ -533,22 +552,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 if (detailsOptions != null)
                 	detailsFile = collectDetails(query, db);                
 
-                db.delete();                
                 query.delete();
-
-                if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_DNA) {
-                    getTempFile("db.fasta.nhr").delete();
-                    getTempFile("db.fasta.nin").delete();
-                    getTempFile("db.fasta.nsd").delete();
-                    getTempFile("db.fasta.nsi").delete();
-                    getTempFile("db.fasta.nsq").delete();
-                } else {
-                    getTempFile("db.fasta.phr").delete();
-                    getTempFile("db.fasta.pin").delete();
-                    getTempFile("db.fasta.psd").delete();
-                    getTempFile("db.fasta.psi").delete();
-                    getTempFile("db.fasta.psq").delete();
-                }
 
 				if (result != null) {
 					if (detailsFile != null) {
@@ -560,15 +564,11 @@ public class BlastAnalysis extends AbstractAnalysis {
             } else
                 return createResult(sequence, new HashSet<AlignmentAnalyses.Cluster>(), null, 0, 0, 0, 0, 0, 0, false);
         } catch (IOException e) {
-            if (formatdb != null)
-                formatdb.destroy();
             if (blast != null)
                 blast.destroy();
             throw new ApplicationException("Error: I/O Error while invoking blast: "
                 + e.getMessage());
         } catch (InterruptedException e) {
-            if (formatdb != null)
-                formatdb.destroy();
             if (blast != null)
                 blast.destroy();
             throw new ApplicationException("Error: I/O Error while invoking blast: "
@@ -746,23 +746,32 @@ public class BlastAnalysis extends AbstractAnalysis {
     }
 
     Result run(SequenceAlignment alignment, AbstractSequence sequence) throws AnalysisException {
-        try {
-            List<String> sequences = new ArrayList<String>();
-            Set<String> clusterSequences = new LinkedHashSet<String>();
-
-            for (int i = 0; i < clusters.size(); ++i) {
-                List<String> taxa = clusters.get(i).getTaxaIds();
-                clusterSequences.addAll(taxa);
-            }
-            sequences.addAll(clusterSequences);
-
-            SequenceAlignment analysisDb = alignment.selectSequences(sequences);
-            
-            return compute(analysisDb, sequence);
-        } catch (ApplicationException e) {
-            throw new AnalysisException(getId(), sequence, e);
-        }
+    	try {
+    		formatDB(alignment);
+    		return compute(sequence);
+    	} catch (ApplicationException e) {
+    		throw new AnalysisException(getId(), sequence, e);
+    	}
     }
+
+    /**
+     * Will make the computation based on existing db. 
+     * IMPORTANT: formatDb should be called 1 time before analyzing 
+     * all the sequences of current job.
+     */
+    @Override
+	public Result run(AbstractSequence sequence) throws AnalysisException {
+    	try {
+    		Result r = compute(sequence);
+    		if (getTracer() != null)
+    			getTracer().addResult(r);
+    		return (rega.genotype.BlastAnalysis.Result) r;
+
+    	} catch (ApplicationException e) {
+    		throw new AnalysisException(getId(), sequence, e);
+    	}
+		// return (rega.genotype.BlastAnalysis.Result) super.run(sequence);
+	}
 
 	public void addReferenceTaxus(ReferenceTaxus t) {
 		referenceTaxa.put(t.getTaxus(), t);

@@ -196,7 +196,7 @@ public abstract class AbstractAnalysis {
         return r;
     }
 
-    private ResultTracer getTracer() {
+    protected ResultTracer getTracer() {
     	if (owner.getGenotypeTool() != null)
     		return owner.getGenotypeTool().getTracer();
     	else

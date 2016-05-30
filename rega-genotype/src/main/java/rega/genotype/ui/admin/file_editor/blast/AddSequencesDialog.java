@@ -17,6 +17,7 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AnalysisException;
+import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.FileFormatException;
@@ -184,11 +185,12 @@ public class AddSequencesDialog extends WDialog{
 			        LineNumberReader reader = 
 			        		new LineNumberReader(new InputStreamReader(stream));
 
+			    	BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
+			    	blastAnalysis.formatDB(alignmentAnalyses.getAlignment());
 					for (Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
 							s != null ;
 							s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA)) {
 					    	s.removeGaps();
-					    	BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
 					    	Result blastResult = blastAnalysis.run(s);
 					    	addRow(s, blastResult.getConcludedCluster());
 					}
@@ -201,6 +203,10 @@ public class AddSequencesDialog extends WDialog{
 					initSimpleTable(fasta, alignmentAnalyses);
 					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
 				} catch (AnalysisException e) {
+					initSimpleTable(fasta, alignmentAnalyses);
+					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
+					e.printStackTrace();
+				} catch (ApplicationException e) {
 					initSimpleTable(fasta, alignmentAnalyses);
 					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
 					e.printStackTrace();

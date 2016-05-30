@@ -12,6 +12,7 @@ import java.io.IOException;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AnalysisException;
+import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
@@ -41,6 +42,12 @@ public class HIVTool extends GenotypeTool {
         hiv2subtypetool.setParent(this);
     }
 
+	@Override
+	protected void formatDB() throws ApplicationException {
+		blastAnalysis.formatDB(hiv.getAlignment());
+	}
+
+	@Override
     public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
         BlastAnalysis.Result result = blastAnalysis.run(s);
         
