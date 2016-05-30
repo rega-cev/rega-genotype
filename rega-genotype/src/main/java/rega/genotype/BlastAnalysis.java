@@ -492,20 +492,8 @@ public class BlastAnalysis extends AbstractAnalysis {
                 //fd2.sync();
                 queryFile.close();
 
-                String blastOptions = "";
-        		if (owner.getAlignment() != null && 
-                		owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) {
-        			blastOptions = "-p blastx " + this.blastOptions;
-                	if (detailsOptions != null)
-                		blastOptions = "-p blastx " + this.detailsOptions;
-                } else {
-                	blastOptions = "-p blastn " + this.blastOptions;
-                	if (detailsOptions != null)
-                		blastOptions = "-p blastn " + this.detailsOptions;
-                }
-
         		File db = getTempFile("db.fasta");
-        		String cmd = blastPath + blastCommand + " " + blastOptions
+        		String cmd = blastPath + blastCommand + blastProgramOption() + blastOptions
                 	+ " -i " + query.getAbsolutePath()
                     + " -m 8 -d " + db.getAbsolutePath();
                 System.err.println(cmd);
@@ -693,7 +681,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 	}
 
     private String collectDetails(File query, File db) throws IOException, InterruptedException, ApplicationException {
-        String cmd = blastPath + blastCommand + " " + detailsOptions
+        String cmd = blastPath + blastCommand + blastProgramOption() + detailsOptions
             	+ " -i " + query.getAbsolutePath()
                 + " -T -d " + db.getAbsolutePath();
         System.err.println(cmd);
@@ -868,5 +856,13 @@ public class BlastAnalysis extends AbstractAnalysis {
 			return "";
 		else
 			return "-p F";
+	}
+
+	private String blastProgramOption() {
+		if (owner.getAlignment() != null && 
+				owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) 
+			return " -p blastx ";
+		else
+			return " -p blastn ";
 	}
 }
