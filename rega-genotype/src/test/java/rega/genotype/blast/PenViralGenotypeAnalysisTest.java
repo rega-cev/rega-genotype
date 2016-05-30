@@ -1,19 +1,20 @@
-package blast;
+package rega.genotype.blast;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
 
-import junit.framework.TestCase;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.singletons.Settings;
-import rega.genotype.ui.tools.blast.BlastTool;
+import rega.genotype.tools.blast.BlastTool;
 import rega.genotype.ui.utils.TestUtils;
 import rega.genotype.utils.FileUtil;
 
@@ -80,6 +81,10 @@ private String fasta;
 
     @Test
     public void testBenchmark() {
+    	boolean doTestBenchmark = false;
+    	if (!doTestBenchmark)
+    		return; // This test can slow down ant.
+
     	ToolConfig toolConfig = Settings.getInstance().getConfig().getToolConfigById("pen-viral", "1");
 
     	String longFasta = FileUtil.readFile(new File(toolConfig.getConfiguration(), "test-sequemces.fasta"));

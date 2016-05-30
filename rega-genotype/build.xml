@@ -96,9 +96,10 @@
       </classpath>
 
       <formatter type="brief" usefile="false" />
-      
+
       <test name="rega.genotype.SequencesTest" />
       <test name="rega.genotype.ui.hiv.HIVGenotypeAnalysisTest" />
+      <test name="rega.genotype.blast.PenViralGenotypeAnalysisTest" />
     </junit>
 
     <fail message="test failed" if="test.failure" />
