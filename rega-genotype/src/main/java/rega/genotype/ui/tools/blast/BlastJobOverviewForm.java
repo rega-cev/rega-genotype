@@ -68,7 +68,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.hideColumn(CHART_DISPLAY_COLUMN);
 	}
 
-	private void createChart() {		
+	private void createChart() {
+		if (chart != null)
+			chart.remove();
 		chartContainer.clear();
 
 		chart = new WPieChart() {
