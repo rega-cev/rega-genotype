@@ -49,7 +49,6 @@ import rega.genotype.viruses.generic.GenericTool;
  * @author koen
  */
 public abstract class GenotypeTool {
-	public enum AnalysesType {BlastOnly, Full}
     protected File workingDir = new File("."); // work dir is a new dir inside the job dir that contains all the data for current analyze.
 
     private GenotypeTool parent;
@@ -129,11 +128,7 @@ public abstract class GenotypeTool {
 	}
 
     public void analyze(String sequenceFile, String traceFile) throws IOException {
-    	analyze(new FileInputStream(sequenceFile), traceFile, AnalysesType.Full);
-    }
-
-    public void analyze(InputStream sequenceFile, String traceFile) throws IOException {
-    	analyze(sequenceFile, traceFile, AnalysesType.Full);
+    	analyze(new FileInputStream(sequenceFile), traceFile);
     }
 
 	/**
@@ -142,7 +137,7 @@ public abstract class GenotypeTool {
 	 * 
 	 * For each sequence in the input file, it invokes analyze(AbstractSequence)
 	 */
-    public void analyze(InputStream sequenceFile, String traceFile, AnalysesType analysesType) throws IOException {
+    public void analyze(InputStream sequenceFile, String traceFile) throws IOException {
         startTracer(traceFile);
 
         LineNumberReader reader
@@ -172,7 +167,7 @@ public abstract class GenotypeTool {
 			        	
 	                    long startTime2 = System.currentTimeMillis();
 
-                        analyze(s, analysesType);
+                        analyze(s);
 
                         System.out.println("1 sequence analysis time in ms = " + (System.currentTimeMillis() - startTime2));
 
@@ -299,10 +294,6 @@ public abstract class GenotypeTool {
         getTracer().printlnClose("</conclusion>");    	
     }
 
-    public void analyze(AbstractSequence s) throws AnalysisException {
-    	analyze(s, AnalysesType.Full);
-    }
-
     protected void conclude(BlastAnalysis blastAnalysis, Result blastResult) {
         if (blastResult.haveSupport() && blastResult.getConcludedCluster() != null) {
  			if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
@@ -329,7 +320,7 @@ public abstract class GenotypeTool {
      * 
      * You should reimplement this sequence to create a new genotyping tool.
      */
-    abstract public void analyze(AbstractSequence s, AnalysesType analysisType) throws AnalysisException;
+    abstract public void analyze(AbstractSequence s) throws AnalysisException;
 
     /**
      * Abstract function that provides a self-check analysis.

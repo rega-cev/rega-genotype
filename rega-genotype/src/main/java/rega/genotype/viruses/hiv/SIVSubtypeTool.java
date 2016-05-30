@@ -40,7 +40,7 @@ public class SIVSubtypeTool extends GenotypeTool{
         scanAnalysis = (ScanAnalysis) siv.getAnalysis("scan-pure");
     }
 
-    public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
+    public void analyze(AbstractSequence s) throws AnalysisException {
      if (s.getLength() > 800) {
 			PhyloClusterAnalysis.Result pureresult = pureAnalysis.run(s);
 			ScanAnalysis.Result scanresult = scanAnalysis.run(s);

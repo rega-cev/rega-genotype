@@ -89,7 +89,7 @@ public class HIV1SubtypeTool extends GenotypeTool {
         crfAnalysis = (PhyloClusterAnalysis) hiv1.getAnalysis("crf");
     }
 
-    public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
+    public void analyze(AbstractSequence s) throws AnalysisException {
         if (s.getLength() > 800) {
             final PhyloClusterAnalysis.Result pureResult = pureAnalysis.run(s);
             ScanAnalysis.Result scanResult = scanAnalysis.run(s);

@@ -17,7 +17,6 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.GenotypeTool.AnalysesType;
 import rega.genotype.ui.viruses.hiv.HivMain;
 
 public class HIVTool extends GenotypeTool {	
@@ -48,7 +47,7 @@ public class HIVTool extends GenotypeTool {
 	}
 
 	@Override
-    public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
+    public void analyze(AbstractSequence s) throws AnalysisException {
         BlastAnalysis.Result result = blastAnalysis.run(s);
         
         if (result.haveSupport()) {

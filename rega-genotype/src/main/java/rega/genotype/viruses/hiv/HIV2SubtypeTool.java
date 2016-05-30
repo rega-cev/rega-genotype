@@ -40,7 +40,7 @@ public class HIV2SubtypeTool extends GenotypeTool {
     }
 
 
-    public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
+    public void analyze(AbstractSequence s) throws AnalysisException {
         if (s.getLength() > 200) {
             PhyloClusterAnalysis.Result pureresult = pureAnalysis.run(s);
 

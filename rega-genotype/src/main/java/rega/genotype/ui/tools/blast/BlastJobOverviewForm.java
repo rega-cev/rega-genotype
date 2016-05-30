@@ -227,7 +227,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			toolData.toolId = toolId;	
 			toolData.concludedName = concludedName;
 			toolData.sequences.add(new SequenceData(seqName));
-			clusterDataMap.put(toolId, toolData);
+			clusterDataMap.put(concludedId, toolData);
 		}
 	}
 
