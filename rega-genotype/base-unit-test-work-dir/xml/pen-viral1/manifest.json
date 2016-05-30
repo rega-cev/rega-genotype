@@ -1,0 +1,9 @@
+{
+  "name": "pen-viral",
+  "id": "pen-viral",
+  "version": "1",
+  "blastTool": true,
+  "hivTool": false,
+  "publisherName": "EMWEB",
+  "softwareVersion": "0"
+}

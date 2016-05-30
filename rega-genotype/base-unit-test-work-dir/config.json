@@ -28,6 +28,14 @@
       "autoUpdate": true,
       "webService": true,
       "ui": true
+    },
+    {
+      "path": "pen-viral",
+      "configuration": "base-unit-test-work-dir/xml/pen-viral1/",
+      "jobDir": "base-work-dir/job/unit-test/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
     }
   ]
 }
