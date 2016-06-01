@@ -192,7 +192,7 @@
 		</cluster>
 	</clusters>
 
-	<analysis id="phylo-ORF2" type="paup">
+	<analysis id="phylo-major" type="paup">
 		<identify>
 			II.1, II.2, II.3, II.4[0;22], II.5, II.6, II.7, II.8, II.9,
 			II.10, II.11, II.12, II.13, II.14, II.15, II.16, II.17,
@@ -223,7 +223,7 @@
     </options>
 	</analysis>
 
-	<analysis id="phylo-ORF2-II.4" type="paup">
+	<analysis id="phylo-minor" type="paup">
 		<identify>
 			II.4|Camb, II.4|Brist, II.4|1995, II.4|2003, II.4|2002, II.4|2002CN,
 			II.4|2005, II.4|2004, II.4|2006a, II.4|2006b, II.4|2007JP, II.4|2007EU, II.4|2009, II.4|2012,
