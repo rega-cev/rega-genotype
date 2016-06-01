@@ -9,8 +9,10 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.utils.Utils;
+import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WComboBox;
 import eu.webtoolkit.jwt.WDoubleValidator;
+import eu.webtoolkit.jwt.WIntValidator;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WString;
 
@@ -27,6 +29,9 @@ public class BlastAnalysisForm extends FormTemplate{
 	private WLineEdit absEValueLE = new WLineEdit();
 	private WLineEdit relativeCutOffLE = new WLineEdit();
 	private WLineEdit relativeEValueLE = new WLineEdit();
+	private WLineEdit absSimilarityLE = new WLineEdit();
+	private WLineEdit relativeSimilarityLE = new WLineEdit();
+	private WCheckBox exactMatchingChB = new WCheckBox();
 
 	private BlastAnalysis analysis;
 
@@ -42,6 +47,8 @@ public class BlastAnalysisForm extends FormTemplate{
 		absEValueLE.setValidator(new WDoubleValidator());
 		relativeCutOffLE.setValidator(new WDoubleValidator());
 		relativeEValueLE.setValidator(new WDoubleValidator());
+		absSimilarityLE.setValidator(new WIntValidator(0, 100));
+		relativeSimilarityLE.setValidator(new WIntValidator(0, 100));
 
 		// bind
 		bindWidget("option", optionLE);
@@ -51,6 +58,11 @@ public class BlastAnalysisForm extends FormTemplate{
 		bindWidget("absolute-evalue", absEValueLE);
 		bindWidget("relative-cut-off", relativeCutOffLE);
 		bindWidget("relative-evalue", relativeEValueLE);
+		bindWidget("relative-cut-off", relativeCutOffLE);
+		bindWidget("relative-evalue", relativeEValueLE);
+		bindWidget("absolute-similarity", absSimilarityLE);
+		bindWidget("relative-similarity", relativeSimilarityLE);
+		bindWidget("exact-matching", exactMatchingChB);
 
 		init();
 	}
@@ -76,6 +88,9 @@ public class BlastAnalysisForm extends FormTemplate{
 		setValue(absEValueLE, analysis.getAbsMaxEValue());
 		setValue(relativeCutOffLE, analysis.getRelativeCutoff());
 		setValue(relativeEValueLE, analysis.getRelativeMaxEValue());
+		setValue(absSimilarityLE, analysis.getAbsSimilarityMinPercent());
+		setValue(relativeSimilarityLE, analysis.getRelativeSimilarityMinPercent());
+		setValue(exactMatchingChB, analysis.getExactMatching());
 
 		if (analysis.getOwner().getAlignment() != null)
 			switch (analysis.getOwner().getAlignment().getSequenceType()) {
@@ -107,6 +122,9 @@ public class BlastAnalysisForm extends FormTemplate{
 			analysis.setAbsMaxEValue(doubleValue(absEValueLE));
 			analysis.setRelativeCutoff(doubleValue(relativeCutOffLE));
 			analysis.setRelativeMaxEValue(doubleValue(relativeEValueLE));
+			analysis.setAbsSimilarityMinPercent(doubleValue(absSimilarityLE));
+			analysis.setRelativeSimilarityMinPercent(doubleValue(relativeSimilarityLE));
+			analysis.setExactMatching(exactMatchingChB.isChecked());
 
 			return true;
 		} else 

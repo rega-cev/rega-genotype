@@ -10169,9 +10169,12 @@
 
 		<identify>*</identify>
 
-		<cutoff>
-			50
-		</cutoff>
+		<absolute-cutoff>50.0</absolute-cutoff>
+    <relative-cutoff>3.0</relative-cutoff>
+    <absolute-max-e-value>3.0</absolute-max-e-value>
+    <relative-max-e-value>3.0</relative-max-e-value>
+    <absolute-similarity>93.0</absolute-similarity>
+    <relative-similarity>13.0</relative-similarity>
 
 		<options>
 			-q -1 -r 1

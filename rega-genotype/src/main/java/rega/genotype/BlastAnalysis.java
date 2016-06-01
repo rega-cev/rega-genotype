@@ -6,6 +6,7 @@
 package rega.genotype;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -172,6 +174,9 @@ public class BlastAnalysis extends AbstractAnalysis {
     private Double absMaxEValue;
     private Double relativeCutoff;
     private Double relativeMaxEValue;
+    private Double absSimilarityMinPercent;
+    private Double relativeSimilarityMinPercent;
+    private boolean exactMatching = false;
     private String blastOptions;
     private Map<String, ReferenceTaxus> referenceTaxa;
     private String detailsOptions;
@@ -189,6 +194,8 @@ public class BlastAnalysis extends AbstractAnalysis {
         private Set<Cluster> clusters;
         private float absScore;
         private float relativeScore;
+        private float absSimilarity;
+        private float relativeSimilarity;
         private int start;
         private int end;
         private int matchDiffs;
@@ -198,11 +205,14 @@ public class BlastAnalysis extends AbstractAnalysis {
 		private String detailsFile;
 
         public Result(AbstractSequence sequence, Set<Cluster> bestClusters, float absScore, float relativeScore,
+        		float absSimilarity, float relativeSimilarity,
         		int length, int diffs, int start, int end, ReferenceTaxus refseq, boolean reverseCompliment) {
             super(sequence);
             this.clusters = bestClusters;
             this.absScore = absScore;
             this.relativeScore = relativeScore;
+            this.absSimilarity = absSimilarity;
+            this.relativeSimilarity = relativeSimilarity;
             this.matchLength = length;
             this.matchDiffs = diffs;
             this.start = start;
@@ -229,7 +239,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
             tracer.add("identity", String.valueOf((float)(matchLength - matchDiffs)/matchLength));
 
-            if (!supportsMultiple()) {
+            if (!exactMatching) {
                 writeCluster(tracer, getCluster());
             } else {
                 tracer.printlnOpen("<clusters>");
@@ -248,15 +258,14 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
 
 		private float calcSimilarity() {
-			return (float)(matchLength - matchDiffs)/matchLength * 100;
+			return BlastAnalysis.calcSimilarity(matchLength, matchDiffs);
 		}
 
 		private void writeCluster(ResultTracer tracer, Cluster cluster) {
 			tracer.printlnOpen("<cluster>");
 			tracer.add("id", cluster != null ? cluster.getId() : "none");
 			tracer.add("name", cluster != null ? cluster.getName() : "none");
-			tracer.add("absolute-score", absScore);
-			tracer.add("relative-score", relativeScore);
+			writeScores(tracer);
 			if (cluster != null && cluster.getDescription() != null) {
 			    tracer.add("description", cluster.getDescription());
 			}
@@ -325,10 +334,9 @@ public class BlastAnalysis extends AbstractAnalysis {
 
         public void writeConclusion(ResultTracer tracer) {
             tracer.printlnOpen("<assigned>");
-            if (!supportsMultiple()) {
+            if (!exactMatching) {
             	Cluster cluster = getCluster();
-                tracer.add("absolute-score", String.valueOf(absScore));
-                tracer.add("relative-score", String.valueOf(relativeScore));
+            	writeScores(tracer);
                 tracer.add("id", cluster.getId());
                 tracer.add("name", cluster.getName());
                 if (cluster.getDescription() != null) {
@@ -341,8 +349,9 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
 
 		private void addMultiple(ResultTracer tracer) {
+			writeScores(tracer);
 			float similarity = calcSimilarity();
-			tracer.add("score", String.valueOf(similarity));
+			tracer.add("similarity-score", String.valueOf(similarity));
 			if (clusters.size() == 1 || similarity == 100) {
 				tracer.add("id", getClusterIds());
 				tracer.add("description", getDescription());
@@ -352,6 +361,13 @@ public class BlastAnalysis extends AbstractAnalysis {
 				tracer.add("description", getDescription());
 				tracer.add("name", "NT (non-typeable)");
 			}
+		}
+
+		private void writeScores(ResultTracer tracer) {
+            tracer.add("absolute-score", String.valueOf(absScore));
+            tracer.add("relative-score", String.valueOf(relativeScore));
+            tracer.add("absolute-similarity", String.valueOf(absSimilarity));
+            tracer.add("relative-similarity", String.valueOf(relativeSimilarity));
 		}
 
 		public Cluster getConcludedCluster() {
@@ -389,24 +405,40 @@ public class BlastAnalysis extends AbstractAnalysis {
 		public void setRelativeScore(float relativeScore) {
 			this.relativeScore = relativeScore;
 		}
-    }
 
-    boolean supportsMultiple() {
-    	return detailsOptions != null;
+		public float getAbsSimilarity() {
+			return absSimilarity;
+		}
+
+		public void setAbsSimilarity(float absSimilarity) {
+			this.absSimilarity = absSimilarity;
+		}
+
+		public float getRelativeSimilarity() {
+			return relativeSimilarity;
+		}
+
+		public void setRelativeSimilarity(float relativeSimilarity) {
+			this.relativeSimilarity = relativeSimilarity;
+		}
     }
 
 	public BlastAnalysis(AlignmentAnalyses owner, String id,
-                         List<Cluster> clusters, Double absCutoff, Double absMaxEValue,
-                         Double relativeCutoff, Double relativeMaxEValue,
-                         String blastOptions,
+                         List<Cluster> clusters, 
+                         Double absCutoff, Double absMaxEValue, Double absSimilarity,
+                         Double relativeCutoff, Double relativeMaxEValue, Double relativeSimilarity,
+                         boolean exactMatching, String blastOptions,
                          String detailsOptions, File workingDir) {
         super(owner, id);
         this.workingDir = workingDir;
         this.clusters = clusters;
         this.absCutoff = absCutoff;
         this.absMaxEValue = absMaxEValue;
+        this.absSimilarityMinPercent = absSimilarity;
         this.relativeCutoff = relativeCutoff;
         this.relativeMaxEValue = relativeMaxEValue;
+        this.relativeSimilarityMinPercent = relativeSimilarity;
+        this.exactMatching = exactMatching;
         this.blastOptions = blastOptions != null ? blastOptions : "";
         this.detailsOptions = detailsOptions;
         this.referenceTaxa = new HashMap<String, ReferenceTaxus>();
@@ -544,9 +576,9 @@ public class BlastAnalysis extends AbstractAnalysis {
 					}
 					return result;
 				} else
-					return createResult(sequence, new HashSet<AlignmentAnalyses.Cluster>(), null, 0, 0, 0, 0, 0, 0, false);
+					return createResult(sequence, new HashSet<AlignmentAnalyses.Cluster>(), null, 0, 0, 0, 0, 0, 0, 0, 0, false);
             } else
-                return createResult(sequence, new HashSet<AlignmentAnalyses.Cluster>(), null, 0, 0, 0, 0, 0, 0, false);
+                return createResult(sequence, new HashSet<AlignmentAnalyses.Cluster>(), null, 0, 0, 0, 0, 0, 0, 0, 0, false);
         } catch (IOException e) {
             if (blast != null)
                 blast.destroy();
@@ -574,7 +606,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 		boolean reverseCompliment = false;
 
 		ReferenceTaxus refseq = null;
-		Set<Cluster> bestClusters = new HashSet<Cluster>(), secondBestClusters = new HashSet<Cluster>();
+		Set<Cluster> bestClusters = new HashSet<Cluster>();
 
 		for (;;) {
 			String [] values = results.next();
@@ -632,14 +664,13 @@ public class BlastAnalysis extends AbstractAnalysis {
 				}
 			}
 
-			if ((ba.relativeCutoff != null || ba.relativeMaxEValue != null)
+			if ((ba.relativeCutoff != null || ba.relativeMaxEValue != null 
+					|| ba.relativeSimilarityMinPercent != null )
 					&& !bestClusters.isEmpty()) {
 				Cluster c = ba.findCluster(values[BLAST_RESULT_SUBJECT_ID_IDX]);
 				if (!bestClusters.contains(c)) {
 					if (secondBest == null)
 						secondBest = values;
-					if (secondBest[BLAST_RESULT_BIT_SCORE_IDX].equals(values[BLAST_RESULT_BIT_SCORE_IDX]))
-						secondBestClusters.add(c);
 				}
 			}
 		}
@@ -651,24 +682,42 @@ public class BlastAnalysis extends AbstractAnalysis {
 			float pValue = Float.valueOf(best[BLAST_RESULT_E_VALUE_IDX]);
 			float absScore = Float.valueOf(best[BLAST_RESULT_BIT_SCORE_IDX]);
 			float relativeScore = absScore;
+			float similarity = calcSimilarity(length, diffs);
+			float relativeSimilarity = similarity;
 
-			if ((ba.absCutoff == null && ba.absMaxEValue == null)|| 
-					(ba.absMaxEValue != null && pValue > ba.absMaxEValue))
+			if ((ba.absCutoff == null && ba.absMaxEValue == null)
+					|| (ba.absMaxEValue != null && pValue > ba.absMaxEValue)
+					|| (ba.absCutoff != null && absScore < (ba.absCutoff)))
 				absScore = -1;
-			if ((ba.relativeCutoff == null && ba.relativeMaxEValue == null)|| 
+
+			if ((ba.relativeCutoff == null && ba.relativeMaxEValue == null) || 
 					(ba.relativeMaxEValue != null && pValue > ba.relativeMaxEValue))
 				relativeScore = -1;
+			else if (secondBest != null)
+				relativeScore = relativeScore / Float.valueOf(secondBest[BLAST_RESULT_BIT_SCORE_IDX]);
 
-			if (ba.relativeCutoff != null || ba.relativeMaxEValue != null) {
-				if (secondBest != null)
-					relativeScore = relativeScore / Float.valueOf(secondBest[BLAST_RESULT_BIT_SCORE_IDX]);
+			// similarity
+			
+			if (ba.absSimilarityMinPercent == null)
+				similarity = -1;
+			
+			if (ba.relativeSimilarityMinPercent == null 
+					|| similarity < ba.relativeSimilarityMinPercent)
+				relativeSimilarity = -1; // relative similarity test faild.
+			else if (secondBest != null) {
+				int secondBestLength = Integer.valueOf(secondBest[BLAST_RESULT_ALINGMENT_LENGTH_IDX]);
+				int secondBestDiffs = Integer.valueOf(secondBest[BLAST_RESULT_MISMATCHES_IDX]) 
+						+ Integer.valueOf(secondBest[BLAST_RESULT_GAP_IDX]); // #diffs + #gaps
+
+				float secondBestSimilarity = calcSimilarity(secondBestLength, secondBestDiffs);
+				relativeSimilarity = relativeSimilarity / secondBestSimilarity;
 			}
 
 			if (start == Integer.MAX_VALUE)
 				start = -1;
 
 			Result result = ba.createResult(sequence, bestClusters, refseq,
-					absScore, relativeScore, length, diffs, start, end, reverseCompliment);
+					absScore, relativeScore, similarity, relativeSimilarity, length, diffs, start, end, reverseCompliment);
 
 			return result;
 		} else {
@@ -722,11 +771,13 @@ public class BlastAnalysis extends AbstractAnalysis {
     }
     
     private Result createResult(AbstractSequence sequence, Set<Cluster> bestClusters, ReferenceTaxus refseq,
-                                float absScore, float relativeScore, int length, int diffs, int start, int end, boolean reverseCompliment) {
+                                float absScore, float relativeScore, float absSimilarity, float relativeSimilarity,
+                                int length, int diffs, int start, int end, boolean reverseCompliment) {
     	if (!bestClusters.isEmpty())
-    		return new Result(sequence, bestClusters, absScore, relativeScore, length, diffs, start, end, refseq, reverseCompliment);
+    		return new Result(sequence, bestClusters, absScore, relativeScore, absSimilarity, relativeSimilarity,
+    				length, diffs, start, end, refseq, reverseCompliment);
     	else
-    		return new Result(sequence, bestClusters, 0, 0, 0, 0, 0, 0, null, reverseCompliment);
+    		return new Result(sequence, bestClusters, 0, 0, 0, 0, 0, 0, 0, 0, null, reverseCompliment);
     }
 
     Result run(SequenceAlignment alignment, AbstractSequence sequence) throws AnalysisException {
@@ -838,6 +889,31 @@ public class BlastAnalysis extends AbstractAnalysis {
 		this.relativeMaxEValue = relativeMaxEValue;
 	}
 
+	public Double getAbsSimilarityMinPercent() {
+		return absSimilarityMinPercent;
+	}
+
+	public void setAbsSimilarityMinPercent(Double absSimilarityMinPercent) {
+		this.absSimilarityMinPercent = absSimilarityMinPercent;
+	}
+
+	public Double getRelativeSimilarityMinPercent() {
+		return relativeSimilarityMinPercent;
+	}
+
+	public void setRelativeSimilarityMinPercent(
+			Double relativeSimilarityMinPercent) {
+		this.relativeSimilarityMinPercent = relativeSimilarityMinPercent;
+	}
+
+	public Boolean getExactMatching() {
+		return exactMatching;
+	}
+
+	public void setExactMatching(Boolean exactMatching) {
+		this.exactMatching = exactMatching;
+	}
+
 	public String getBlastOptions() {
 		return blastOptions;
 	}
@@ -852,6 +928,10 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 	public void setBlastOptions(String blastOptions) {
 		this.blastOptions = blastOptions;
+	}
+
+	public static float calcSimilarity(int length, int diff) {
+		return (float)(length - diff)/length * 100;
 	}
 
 	private String formatDbOptions() {

@@ -212,7 +212,14 @@
   		  
   		  <tr><td class="form-indent">Relative E value</td><td>${relative-evalue}</td><td class="auto-form-info">Assignment is made if best E value is this much smaller than second best E value</td></tr>
   		  <tr><td></td><td></td><td>${relative-evalue-info}</td></tr>
-  		  
+
+  		  <tr><td class="form-indent">Absolute similarity %</td><td>${absolute-similarity}</td><td class="auto-form-info">Assignment is made if a sequence with similarity bigger then absolute similarity is found.</td></tr>
+  		  <tr><td></td><td></td><td>${absolute-similarity-info}</td></tr>
+
+  		  <tr><td class="form-indent">Relative similarity %</td><td>${relative-similarity}</td><td class="auto-form-info">Assignment is made if best similarity is this much smaller than second best similarity</td></tr>
+  		  <tr><td></td><td></td><td>${relative-similarity-info}</td></tr>
+
+		  <tr><td class="form-indent">Exact matching</td><td>${exact-matching}</td><td class="auto-form-info">Assignment is made if the sequence was found. In that case a group of closest clusters will be presented.</td></tr>
 		</table>
 	</message>
 	

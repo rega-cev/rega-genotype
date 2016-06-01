@@ -74,7 +74,13 @@ public class BlastXmlWriter {
 				add(analysisE, "absolute-max-e-value", analysis.getAbsMaxEValue());
 			if (analysis.getRelativeMaxEValue() != null)
 				add(analysisE, "relative-max-e-value", analysis.getRelativeMaxEValue());
-
+			
+			if (analysis.getAbsSimilarityMinPercent() != null)
+				add(analysisE, "absolute-similarity", analysis.getAbsSimilarityMinPercent());
+			if (analysis.getRelativeSimilarityMinPercent() != null)
+				add(analysisE, "relative-similarity", analysis.getRelativeSimilarityMinPercent());
+			if (analysis.getExactMatching() != null)
+				add(analysisE, "exact-matching", analysis.getExactMatching());
 			// Reference Taxus
 			for (ReferenceTaxus ref: analysis.getSortedReferenceTaxus()){
 				Element referenceTaxusE = new Element("regions");
@@ -119,5 +125,9 @@ public class BlastXmlWriter {
 
     public void add(Element e, String tag, int value) {
         add(e, tag, Integer.toString(value));
+    }
+
+    public void add(Element e, String tag, boolean value) {
+        add(e, tag, Boolean.toString(value));
     }
 }
