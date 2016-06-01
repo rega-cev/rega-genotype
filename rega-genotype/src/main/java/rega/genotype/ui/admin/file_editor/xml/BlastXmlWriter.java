@@ -116,11 +116,11 @@ public class BlastXmlWriter {
     }
     
     public void add(Element e, String tag, float value) {
-        add(e, tag, String.valueOf(Math.round(value * 1000)/1000.));
+        add(e, tag, String.valueOf(value));
     }
 
     public void add(Element e, String tag, double value) {
-        add(e, tag, String.valueOf(Math.round(value * 1000)/1000.));
+        add(e, tag, String.valueOf(value));
     }
 
     public void add(Element e, String tag, int value) {

@@ -12,7 +12,6 @@ import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WComboBox;
 import eu.webtoolkit.jwt.WDoubleValidator;
-import eu.webtoolkit.jwt.WIntValidator;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WString;
 
@@ -47,8 +46,8 @@ public class BlastAnalysisForm extends FormTemplate{
 		absEValueLE.setValidator(new WDoubleValidator());
 		relativeCutOffLE.setValidator(new WDoubleValidator());
 		relativeEValueLE.setValidator(new WDoubleValidator());
-		absSimilarityLE.setValidator(new WIntValidator(0, 100));
-		relativeSimilarityLE.setValidator(new WIntValidator(0, 100));
+		absSimilarityLE.setValidator(new WDoubleValidator(0, 100));
+		relativeSimilarityLE.setValidator(new WDoubleValidator(0, 100));
 
 		// bind
 		bindWidget("option", optionLE);

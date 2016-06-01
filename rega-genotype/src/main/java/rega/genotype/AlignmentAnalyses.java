@@ -418,7 +418,7 @@ public class AlignmentAnalyses {
 
         BlastAnalysis analysis = new BlastAnalysis(this, id, cs,
         		absCutoff, absMaxEValue, absSimilarity, 
-        		relativeSimilarity, relativeCutoff, relativeMaxEValue, exactMatching,
+        		relativeCutoff, relativeMaxEValue, relativeSimilarity, exactMatching,
         		blastOptions, detailsOptions, workingDir);
 
         List regionsEs = element.getChildren("regions");

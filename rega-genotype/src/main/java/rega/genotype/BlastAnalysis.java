@@ -222,11 +222,20 @@ public class BlastAnalysis extends AbstractAnalysis {
         }
 
         public boolean haveSupport() {
-            if (getAbsCutoff() == null && getRelativeCutoff() == null)
+            if (getAbsCutoff() == null 
+            		&& getAbsMaxEValue() == null
+            		&& getRelativeMaxEValue() == null
+            		&& getRelativeCutoff() == null
+            		&& getAbsSimilarityMinPercent() == null 
+            		&& getRelativeSimilarityMinPercent() == null)
                 return false;
-            else
-                return (getAbsCutoff() != null && absScore >= getAbsCutoff())
-                || (getRelativeCutoff() != null && relativeScore >= getRelativeCutoff());
+            else //Assignment is made if result passes all cut offs
+                return (getAbsCutoff() == null || absScore >= getAbsCutoff())
+                && (getAbsMaxEValue() == null || absScore != -1)
+                && (getRelativeCutoff() == null || relativeScore >= getRelativeCutoff())
+                && (getRelativeMaxEValue() == null || relativeScore != -1)
+                && (getAbsSimilarityMinPercent() == null || absSimilarity >= getAbsSimilarityMinPercent())
+                && (getRelativeSimilarityMinPercent() == null || relativeSimilarity >= getRelativeSimilarityMinPercent());
         }
         
         public void writeXML(ResultTracer tracer) {
@@ -685,24 +694,17 @@ public class BlastAnalysis extends AbstractAnalysis {
 			float similarity = calcSimilarity(length, diffs);
 			float relativeSimilarity = similarity;
 
-			if ((ba.absCutoff == null && ba.absMaxEValue == null)
-					|| (ba.absMaxEValue != null && pValue > ba.absMaxEValue)
-					|| (ba.absCutoff != null && absScore < (ba.absCutoff)))
+			if (ba.absMaxEValue != null && pValue > ba.absMaxEValue)
 				absScore = -1;
 
-			if ((ba.relativeCutoff == null && ba.relativeMaxEValue == null) || 
-					(ba.relativeMaxEValue != null && pValue > ba.relativeMaxEValue))
+			if (ba.relativeMaxEValue != null && pValue > ba.relativeMaxEValue)
 				relativeScore = -1;
-			else if (secondBest != null)
+			else if (secondBest != null) 
 				relativeScore = relativeScore / Float.valueOf(secondBest[BLAST_RESULT_BIT_SCORE_IDX]);
 
 			// similarity
-			
-			if (ba.absSimilarityMinPercent == null)
-				similarity = -1;
-			
-			if (ba.relativeSimilarityMinPercent == null 
-					|| similarity < ba.relativeSimilarityMinPercent)
+			if (ba.relativeSimilarityMinPercent != null 
+					&& similarity < ba.relativeSimilarityMinPercent)
 				relativeSimilarity = -1; // relative similarity test faild.
 			else if (secondBest != null) {
 				int secondBestLength = Integer.valueOf(secondBest[BLAST_RESULT_ALINGMENT_LENGTH_IDX]);

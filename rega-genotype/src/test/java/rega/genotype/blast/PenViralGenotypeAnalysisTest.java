@@ -10,7 +10,6 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import rega.genotype.AlignmentAnalyses;
-import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.FileFormatException;
@@ -33,6 +32,8 @@ public class PenViralGenotypeAnalysisTest extends TestCase{
 	private String fasta;
 	private List<File> jobDirs = new ArrayList<File>();
 	private final double DELTA = 0.01;
+	private AlignmentAnalyses alignmentAnalyses = null;
+	private BlastAnalysis blastAnalysis = null;
 
 	protected void setUp() {	
 		fasta = ">2I_AF100469_Mexico_1992\n" + 
@@ -47,6 +48,42 @@ public class PenViralGenotypeAnalysisTest extends TestCase{
 				"GGGGAAGAACATGCAGTCGGAAATGACACAGGAAAACATGGTAAAGAAGTCAAGATAACACCACAGAG" + 
 				"CTCCATCACAGAGGCGGAACTGACAGGCTATGGCACTGTTACGATGGAGTGCTCTCCAAGAACGGGCC" + 
 				"TCGACTTCAATGAGATGGTGTTGCTGCAAATGGAAGACAAAGCTTGGCTGGTGCACAGACAATGGTTC";
+		
+		File jobDir = TestUtils.setup(fasta);
+    	jobDirs.add(jobDir);
+
+    	//tool data is in base-unit-test-work-dir/xml/pen-viral1
+    	ToolConfig toolConfig = Settings.getInstance().getConfig().getToolConfigById("pen-viral", "1");
+
+		try {
+			File blastFile = new File(toolConfig.getConfiguration(), "blast.xml");
+			jobDir.mkdirs();
+			alignmentAnalyses = new AlignmentAnalyses(blastFile, null, jobDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("could not create AlignmentAnalyses.");
+		} catch (ParameterProblemException e) {
+			e.printStackTrace();
+			fail("could not create AlignmentAnalyses.");
+		} catch (FileFormatException e) {
+			e.printStackTrace();
+			fail("could not create AlignmentAnalyses.");
+		}
+		blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
+
+		// clear cutoffs 
+		blastAnalysis.setDetailsOptions(null);
+		blastAnalysis.setAbsCutoff(null);
+		blastAnalysis.setAbsMaxEValue(null);
+		blastAnalysis.setAbsSimilarityMinPercent(null);
+		blastAnalysis.setRelativeCutoff(null);
+		blastAnalysis.setRelativeMaxEValue(null);
+		blastAnalysis.setRelativeSimilarityMinPercent(null);
+
+		List<Result> analysisResults = blastAnalysis.analyze(alignmentAnalyses, fasta);
+		assertTrue(analysisResults.size() == 1);
+		Result result = analysisResults.get(0);
+		assertFalse(result.haveSupport()); // no cutoffs specified. 
     }
 
 	protected void tearDown() {
@@ -101,46 +138,81 @@ public class PenViralGenotypeAnalysisTest extends TestCase{
 			}    		
     	};
     	p.parseFile(jobDir);
-    }
+	}
+
+	/**
+	 * Test: Assignment is made if result passes all cut offs. (if 1 
+	 * cutoff is not satisfied result.haveSupport() is false else it is tyue)
+	 */
 
 	@Test
-	public void testBlast() {
-		File jobDir = TestUtils.setup(fasta);
-    	jobDirs.add(jobDir);
-
-    	//tool data is in base-unit-test-work-dir/xml/pen-viral1
-    	ToolConfig toolConfig = Settings.getInstance().getConfig().getToolConfigById("pen-viral", "1");
-		
-		AlignmentAnalyses alignmentAnalyses = null;
-		try {
-			File blastFile = new File(toolConfig.getConfiguration(), "blast.xml");
-			jobDir.mkdirs();
-			alignmentAnalyses = new AlignmentAnalyses(blastFile, null, jobDir);
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail("could not create AlignmentAnalyses.");
-		} catch (ParameterProblemException e) {
-			e.printStackTrace();
-			fail("could not create AlignmentAnalyses.");
-		} catch (FileFormatException e) {
-			e.printStackTrace();
-			fail("could not create AlignmentAnalyses.");
-		}
-		BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
-		blastAnalysis.setDetailsOptions(null); // this part does not change the computation.
-
-		// test max cutoff
+	public void testMaxCutoff() {
 		blastAnalysis.setAbsCutoff(1000.0);
-		List<Result> analysisResults = blastAnalysis.analyze(alignmentAnalyses, fasta);
-		assertTrue(analysisResults.size() == 1);
+		check(alignmentAnalyses, false);
 
-		Result result = analysisResults.get(0);
-
-		assertTrue(result.getAbsScore() == -1);
-		assertEquals(result.getConcludedCluster(), null);
+		blastAnalysis.setAbsCutoff(100.0);
+		check(alignmentAnalyses, true);
 	}
-	
-    @Test
+
+	@Test
+	public void testAbsMaxEValueCutoff() {
+		blastAnalysis.setAbsMaxEValue(Math.pow(Math.E, -10));// on a small database the probability of randomly getting a match is very low.
+		Result result = blastAnalysis.analyze(alignmentAnalyses, 
+				">HIGH_E_VALUE_SEQUENCE\n" +
+				"ACTGCTGATGTTGAATTAGA").get(0);
+		assertFalse(result.haveSupport());
+
+		blastAnalysis.setAbsMaxEValue(0.0);
+		check(alignmentAnalyses, true);
+	}
+
+	@Test
+	public void testRelativeCutoff() {
+		blastAnalysis.setRelativeCutoff(10.0);
+		check(alignmentAnalyses, false);
+
+		blastAnalysis.setRelativeCutoff(1.0);
+		check(alignmentAnalyses, true);
+	}
+
+	@Test
+	public void testRelativeMaxEValueCutoff() {
+		blastAnalysis.setRelativeMaxEValue(Math.pow(Math.E, -33));// on a small database the probability of randomly getting a match is very low.
+		Result result = blastAnalysis.analyze(alignmentAnalyses, 
+				">HIGH_E_VALUE_SEQUENCE\n" +
+						"ACTGCTGATGTTGAATTAGA"
+				).get(0);
+		assertFalse(result.haveSupport());
+
+		blastAnalysis.setRelativeMaxEValue(0.0);
+		check(alignmentAnalyses, true);
+	}
+
+	@Test
+	public void testAbsSimilarityCutoff() {
+		blastAnalysis.setAbsSimilarityMinPercent(95.0);
+		check(alignmentAnalyses, false);
+
+		blastAnalysis.setAbsSimilarityMinPercent(80.0);
+		check(alignmentAnalyses, true);
+	}
+
+	@Test
+	public void testRelativeSimilarityCutoff() {
+		blastAnalysis.setRelativeSimilarityMinPercent(10.0);
+		check(alignmentAnalyses, false);
+
+		blastAnalysis.setRelativeSimilarityMinPercent(1.0);
+		check(alignmentAnalyses, true);
+	}
+
+	private void check(AlignmentAnalyses alignmentAnalyses, boolean haveSupport) {
+		List<Result> analysisResults = blastAnalysis.analyze(alignmentAnalyses, fasta);
+		Result result = analysisResults.get(0);
+		assertEquals(result.haveSupport(), haveSupport);
+	}
+
+	@Test
     public void testBenchmark() {
     	boolean doTestBenchmark = false;
     	if (!doTestBenchmark)
