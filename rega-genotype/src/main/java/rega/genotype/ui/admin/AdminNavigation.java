@@ -58,11 +58,13 @@ public class AdminNavigation extends WContainerWidget {
 	    			});
 	    	onInternalPathChanged(WApplication.getInstance().getInternalPath());
 
+	    	/*
 	    	if (ToolRepoServiceRequests.pingHost()) {
 	    		// refresh tool configs state since some tool could have been retracted.
 	    		List<ToolManifest> remoteManifests = ToolRepoServiceRequests.getRemoteManifests();
 	    		Settings.getInstance().getConfig().refreshToolCofigState(remoteManifests);
 	    	}
+	    	*/
 	    }
 
 	    Config conf = Settings.getInstance().getConfig() == null ? new Config() : Settings.getInstance().getConfig();

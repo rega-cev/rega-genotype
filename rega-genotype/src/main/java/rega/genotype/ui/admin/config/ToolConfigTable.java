@@ -66,7 +66,7 @@ public class ToolConfigTable extends Template{
 		final WCheckBox versionChB = new WCheckBox("Show old versions");
 		final WCheckBox remoteChB = new WCheckBox("Show remote tools");
 
-		List<ToolManifest> remoteManifests = getRemoteManifests();
+		List<ToolManifest> remoteManifests = new ArrayList<ToolManifest>();
 
 		// get local tools
 		List<ToolManifest> localManifests = getLocalManifests();
