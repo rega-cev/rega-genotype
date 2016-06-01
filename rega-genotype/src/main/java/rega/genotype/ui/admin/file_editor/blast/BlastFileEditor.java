@@ -187,7 +187,7 @@ public class BlastFileEditor extends WContainerWidget{
 		alignmentAnalyses.putAnalysis("blast",
 				new BlastAnalysis(alignmentAnalyses,
 						"", new ArrayList<AlignmentAnalyses.Cluster>(),
-						0.0, 0.0, 0.0, 0.0, "", "", jobDir));
+						0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, "", "", jobDir));
 
 		return alignmentAnalyses;
 	}

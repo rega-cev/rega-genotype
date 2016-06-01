@@ -19,6 +19,7 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AnalysisException;
+import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.BlastAnalysis.Result;
@@ -65,7 +66,13 @@ public class GenericTool extends GenotypeTool {
     protected void analyseClaster(Cluster c, AbstractSequence s) {
     }
 
-    public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
+	@Override
+	protected void formatDB() throws ApplicationException {
+		blastAnalysis.formatDB(blastXml.getAlignment());
+	}
+
+	@Override
+    public void analyze(AbstractSequence s) throws AnalysisException {
     	/*
     	 * First perform the blast analysis.
     	 */
@@ -84,49 +91,45 @@ public class GenericTool extends GenotypeTool {
 
         	boolean haveConclusion = false;
 
-        	if (analysesType == AnalysesType.Full)
-        		try {
-        			/*
-        			 * Perhaps we have a full-genome analysis?
-        			 */
-        			PhyloClusterAnalysis pca = getPhyloAnalysis(c.getId(), null, null);
-        			if (pca != null) {
-        				phyloAnalysis(pca, s, blastResult, null);
-        				haveConclusion = true;
-        			}
-
-        			List<Region> regions = Collections.emptyList();
-
-        			if (blastResult.getReference() != null)
-        				/*
-        				 * Perhaps we have an analysis for the region covered by the input sequence ?
-        				 */
-        				regions = findOverlappingRegions(blastResult);
-
-        			if (!regions.isEmpty()) {
-        				for (Region region : regions) {
-        					pca = getPhyloAnalysis(c.getId(), null, region);
-        					if (pca != null) {
-        						AbstractSequence s2 = cutRegion(s, blastResult,	region);
-        						phyloAnalysis(pca, s2, blastResult, region);
-        						haveConclusion = true;
-        					}
-        				}
-        			}
-        		} catch (IOException e) {
-        			e.printStackTrace();
-        			throw new AnalysisException("", s, e);
-        		} catch (ParameterProblemException e) {
-        			e.printStackTrace();
-        			throw new AnalysisException("", s, e);
-        		} catch (FileFormatException e) {
-        			e.printStackTrace();
-        			throw new AnalysisException("", s, e);
+        	try {
+        		/*
+        		 * Perhaps we have a full-genome analysis?
+        		 */
+        		PhyloClusterAnalysis pca = getPhyloAnalysis(c.getId(), null, null);
+        		if (pca != null) {
+        			phyloAnalysis(pca, s, blastResult, null);
+        			haveConclusion = true;
         		}
 
+        		List<Region> regions = Collections.emptyList();
+
+        		if (blastResult.getReference() != null)
+        			/*
+        			 * Perhaps we have an analysis for the region covered by the input sequence ?
+        			 */
+        			regions = findOverlappingRegions(blastResult);
+
+        		if (!regions.isEmpty()) {
+        			for (Region region : regions) {
+        				pca = getPhyloAnalysis(c.getId(), null, region);
+        				if (pca != null) {
+        					AbstractSequence s2 = cutRegion(s, blastResult,	region);
+        					phyloAnalysis(pca, s2, blastResult, region);
+        					haveConclusion = true;
+        				}
+        			}
+        		}
+        	} catch (IOException e) {
+        		throw new AnalysisException("", s, e);
+        	} catch (ParameterProblemException e) {
+        		throw new AnalysisException("", s, e);
+        	} catch (FileFormatException e) {
+        		throw new AnalysisException("", s, e);
+        	}
+
         	/*
-			 * If no conclusion: conclude the blast result
-			 */
+        	 * If no conclusion: conclude the blast result
+        	 */
        		if (!haveConclusion)
        			if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
        				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 

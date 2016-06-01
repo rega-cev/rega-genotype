@@ -19,19 +19,19 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import rega.genotype.FileFormatException;
+import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
-import rega.genotype.singletons.Settings;
+import rega.genotype.tools.blast.BlastTool;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.tools.blast.BlastTool;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenomeAttributes;
 import rega.genotype.ui.util.GenotypeLib;
@@ -133,7 +133,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 
 	public void startAnalysis(File workingDir) throws IOException, ParameterProblemException, FileFormatException {
-		GenericTool tool;
+		GenotypeTool tool;
 		if (getToolConfig().getToolMenifest().isBlastTool())
 			tool = new BlastTool(toolConfig, workingDir);
 		else

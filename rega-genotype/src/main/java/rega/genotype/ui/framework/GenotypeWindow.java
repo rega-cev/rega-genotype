@@ -11,14 +11,14 @@ import java.util.List;
 
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.singletons.Settings;
+import rega.genotype.tools.blast.BlastJobOverviewForm;
+import rega.genotype.tools.blast.BlastTool;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.framework.widgets.Template;
-import rega.genotype.ui.tools.blast.BlastJobOverviewForm;
-import rega.genotype.ui.tools.blast.BlastTool;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal1.Listener;

@@ -356,6 +356,12 @@ public class AlignmentAnalyses {
 		return e.getValue() == null ? null : Double.valueOf(e.getTextTrim());
 	}
 
+	private Boolean elementBooleanValue(Element e) {
+		if (e == null)
+			return null;
+		return e.getValue() == null ? null : Boolean.valueOf(e.getTextTrim());
+	}
+	
     @SuppressWarnings("unchecked")
 	private AbstractAnalysis readBlastAnalaysis(Element element, String id, File workingDir) {
         Element identifyE = element.getChild("identify");
@@ -366,7 +372,12 @@ public class AlignmentAnalyses {
         Double relativeCutoff = elementDoubleValue(element.getChild("relative-cutoff"));
         Double absMaxEValue = elementDoubleValue(element.getChild("absolute-max-e-value"));
         Double relativeMaxEValue = elementDoubleValue(element.getChild("relative-max-e-value"));
-        
+        Double absSimilarity = elementDoubleValue(element.getChild("absolute-similarity"));
+        Double relativeSimilarity = elementDoubleValue(element.getChild("relative-similarity"));
+        Boolean exactMatching = elementBooleanValue(element.getChild("exact-matching"));
+        if (exactMatching == null)
+        	exactMatching = false;
+
         Element cutoffE = element.getChild("cutoff");
         if (cutoffE != null) { //  old cutoff format (support old blast.xml files)
         	Double cutoff = null;
@@ -406,7 +417,8 @@ public class AlignmentAnalyses {
             detailsOptions = detailsE.getTextTrim();
 
         BlastAnalysis analysis = new BlastAnalysis(this, id, cs,
-        		absCutoff, absMaxEValue, relativeCutoff, relativeMaxEValue, 
+        		absCutoff, absMaxEValue, absSimilarity, 
+        		relativeCutoff, relativeMaxEValue, relativeSimilarity, exactMatching,
         		blastOptions, detailsOptions, workingDir);
 
         List regionsEs = element.getChildren("regions");
