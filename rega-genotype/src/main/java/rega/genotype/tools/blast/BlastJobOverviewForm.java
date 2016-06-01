@@ -214,11 +214,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	 */
 	private class BlastResultParser extends GenotypeResultParser {
 		@Override
-		public void endSequence() {	
-			String toolId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/clusters/cluster/tool-id");
+		public void endSequence() {
+			String toolId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/tool-id");
 			String seqName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name");
-			String concludedId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/clusters/cluster/concluded-id");
-			String concludedName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/clusters/cluster/concluded-name");
+			String concludedId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
+			String concludedName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
 
 			if (concludedName == null)
 				concludedName = "Unassigned";
