@@ -6,13 +6,12 @@ import java.io.IOException;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AnalysisException;
+import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
-import rega.genotype.GenotypeTool.AnalysesType;
-import rega.genotype.singletons.Settings;
 import rega.genotype.ui.viruses.hiv.HivMain;
 
 /**
@@ -41,7 +40,7 @@ public class HIV2SubtypeTool extends GenotypeTool {
     }
 
 
-    public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
+    public void analyze(AbstractSequence s) throws AnalysisException {
         if (s.getLength() > 200) {
             PhyloClusterAnalysis.Result pureresult = pureAnalysis.run(s);
 
@@ -93,6 +92,9 @@ public class HIV2SubtypeTool extends GenotypeTool {
 	@Override
 	protected boolean cancelAnalysis() {
 		return false;
+	}
+	@Override
+	protected void formatDB() throws ApplicationException {		
 	}
 }
 

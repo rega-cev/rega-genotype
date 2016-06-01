@@ -185,7 +185,7 @@ public class ResultTracer {
         printlnClose("</error>");
 	}
 
-	public void printError(FileFormatException e) {
+	public void printError(Exception e) {
 		indent = 2;
         printlnOpen("<error>");
         println(e.getMessage());

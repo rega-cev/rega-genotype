@@ -22,6 +22,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import rega.genotype.BlastAnalysis.Region;
+import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
@@ -48,7 +49,6 @@ import rega.genotype.viruses.generic.GenericTool;
  * @author koen
  */
 public abstract class GenotypeTool {
-	public enum AnalysesType {BlastOnly, Full}
     protected File workingDir = new File("."); // work dir is a new dir inside the job dir that contains all the data for current analyze.
 
     private GenotypeTool parent;
@@ -128,11 +128,7 @@ public abstract class GenotypeTool {
 	}
 
     public void analyze(String sequenceFile, String traceFile) throws IOException {
-    	analyze(new FileInputStream(sequenceFile), traceFile, AnalysesType.Full);
-    }
-
-    public void analyze(InputStream sequenceFile, String traceFile) throws IOException {
-    	analyze(sequenceFile, traceFile, AnalysesType.Full);
+    	analyze(new FileInputStream(sequenceFile), traceFile);
     }
 
 	/**
@@ -141,15 +137,17 @@ public abstract class GenotypeTool {
 	 * 
 	 * For each sequence in the input file, it invokes analyze(AbstractSequence)
 	 */
-    public void analyze(InputStream sequenceFile, String traceFile, AnalysesType analysesType) throws IOException {
+    public void analyze(InputStream sequenceFile, String traceFile) throws IOException {
         startTracer(traceFile);
 
         LineNumberReader reader
             = new LineNumberReader
                 (new InputStreamReader(new BufferedInputStream(sequenceFile)));
-        
+
         try {
+        	formatDB();
 			for (;;) {
+
 				if (cancelAnalysis()) {
 					System.err.println("Cancelled job: " + currentJob());
 					break;
@@ -163,7 +161,7 @@ public abstract class GenotypeTool {
 
 		            long start = System.currentTimeMillis();
 			        try {
-                        analyze(s, analysesType);
+                        analyze(s);
 			        } catch (AnalysisException e) {
 			            System.err.println(e.getMessage());
 			            e.printStackTrace();
@@ -183,6 +181,10 @@ public abstract class GenotypeTool {
             System.err.println(e.getMessage());
             e.printStackTrace();
             tracer.printError(e);
+		} catch (ApplicationException e1) {
+			System.err.println(e1.getMessage());
+			e1.printStackTrace();
+			tracer.printError(e1);
 		} finally {
 			stopTracer();
 		}
@@ -281,16 +283,33 @@ public abstract class GenotypeTool {
         getTracer().printlnClose("</conclusion>");    	
     }
 
-    public void analyze(AbstractSequence s) throws AnalysisException {
-    	analyze(s, AnalysesType.Full);
-    }
+    protected void conclude(BlastAnalysis blastAnalysis, Result blastResult) {
+        if (blastResult.haveSupport() && blastResult.getConcludedCluster() != null) {
+ 			if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
+   				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
+   						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff(), null);
+   			else if (blastAnalysis.getAbsCutoff() != null)
+   				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
+   			else if (blastAnalysis.getRelativeCutoff() != null)
+   				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
 
+        } else {
+           	if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
+   				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
+   						+ " and relative score &gt;= " + blastAnalysis.getRelativeCutoff(), null);
+   			else if (blastAnalysis.getAbsCutoff() != null)
+   				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
+   			else if (blastAnalysis.getRelativeCutoff() != null)
+   				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
+        }
+    }
+    
     /**
      * Abstract function that analyzes a sequence.
      * 
      * You should reimplement this sequence to create a new genotyping tool.
      */
-    abstract public void analyze(AbstractSequence s, AnalysesType analysisType) throws AnalysisException;
+    abstract public void analyze(AbstractSequence s) throws AnalysisException;
 
     /**
      * Abstract function that provides a self-check analysis.
@@ -303,6 +322,12 @@ public abstract class GenotypeTool {
     abstract protected String currentJob();
     
     abstract protected boolean cancelAnalysis();
+
+    /**
+     * Should be used to init the environment for analyzing. (for blast format-db command) 
+     * Format db will be call at the start of analyze.
+     */
+    abstract protected void formatDB() throws ApplicationException;
     
     /**
      * Read analyses from a given XML file.

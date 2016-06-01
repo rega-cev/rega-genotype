@@ -16,8 +16,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import rega.genotype.AlignmentAnalyses.Cluster;
 
 /**
  * Represents an alignment of multiple sequences, and provides I/O methods to read and
@@ -604,6 +607,19 @@ public class SequenceAlignment
 
     	return false;
     }
+    
+    public SequenceAlignment selectSequencesFromClusters(List<Cluster> clusters) {
+		List<String> sequences = new ArrayList<String>();
+		Set<String> clusterSequences = new LinkedHashSet<String>();
+
+		for (int i = 0; i < clusters.size(); ++i) {
+			List<String> taxa = clusters.get(i).getTaxaIds();
+			clusterSequences.addAll(taxa);
+		}
+		sequences.addAll(clusterSequences);
+
+		return selectSequences(sequences);
+	}
     
     public SequenceAlignment selectSequences(List<String> selection) {
         List<AbstractSequence> selected = new ArrayList<AbstractSequence>();

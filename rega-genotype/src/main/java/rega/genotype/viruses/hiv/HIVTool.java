@@ -12,11 +12,11 @@ import java.io.IOException;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AnalysisException;
+import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.GenotypeTool.AnalysesType;
 import rega.genotype.ui.viruses.hiv.HivMain;
 
 public class HIVTool extends GenotypeTool {	
@@ -41,7 +41,13 @@ public class HIVTool extends GenotypeTool {
         hiv2subtypetool.setParent(this);
     }
 
-    public void analyze(AbstractSequence s, AnalysesType analysesType) throws AnalysisException {
+	@Override
+	protected void formatDB() throws ApplicationException {
+		blastAnalysis.formatDB(hiv.getAlignment());
+	}
+
+	@Override
+    public void analyze(AbstractSequence s) throws AnalysisException {
         BlastAnalysis.Result result = blastAnalysis.run(s);
         
         if (result.haveSupport()) {

@@ -196,7 +196,7 @@ public abstract class AbstractAnalysis {
         return r;
     }
 
-    private ResultTracer getTracer() {
+    protected ResultTracer getTracer() {
     	if (owner.getGenotypeTool() != null)
     		return owner.getGenotypeTool().getTracer();
     	else
@@ -220,11 +220,14 @@ public abstract class AbstractAnalysis {
     }
 
     protected String makeResource(File file, String suffix) throws IOException {
-        File resource = getTracer().getResourceFile(suffix);
-        file.renameTo(resource);
-        return resource.getName();
+    	if (getTracer() == null)
+    		return null; // blast analysis can be run with no owner.
+
+    	File resource = getTracer().getResourceFile(suffix);
+    	file.renameTo(resource);
+    	return resource.getName();
     }
-    
+
     protected File getTempFile(String fileName) {
         return new File(workingDir + File.separator + fileName);
     }
