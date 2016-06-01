@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,16 +14,12 @@ import java.util.Map;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
-import rega.genotype.AnalysisException;
-import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
-import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
@@ -180,37 +174,13 @@ public class AddSequencesDialog extends WDialog{
 				initSimpleTable(fasta, alignmentAnalyses);
 			} else {
 				// run the tool to identify the clusters.
-				try {
-					InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
-			        LineNumberReader reader = 
-			        		new LineNumberReader(new InputStreamReader(stream));
-
-			    	BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
-			    	blastAnalysis.formatDB(alignmentAnalyses.getAlignment());
-					for (Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
-							s != null ;
-							s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA)) {
-					    	s.removeGaps();
-					    	Result blastResult = blastAnalysis.run(s);
-					    	addRow(s, blastResult.getConcludedCluster());
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					initSimpleTable(fasta, alignmentAnalyses);
-					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
-				} catch (FileFormatException e) {
-					e.printStackTrace();
-					initSimpleTable(fasta, alignmentAnalyses);
-					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
-				} catch (AnalysisException e) {
-					initSimpleTable(fasta, alignmentAnalyses);
-					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
-					e.printStackTrace();
-				} catch (ApplicationException e) {
-					initSimpleTable(fasta, alignmentAnalyses);
-					Dialogs.infoDialog("Error", "Blast Column can not be filled reason: Failed to analyze given sequence. " + e.getMessage());
-					e.printStackTrace();
-				} 
+		    	BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
+		    	List<Result> analysisResults = blastAnalysis.analyze(alignmentAnalyses, fasta);
+		    	if (analysisResults == null)
+		    		initSimpleTable(fasta, alignmentAnalyses);
+		    	else
+		    		for (Result result: analysisResults)
+		    			addRow(result.getSequence(), result.getConcludedCluster());
 			}
 		}
 

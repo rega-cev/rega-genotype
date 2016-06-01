@@ -801,13 +801,48 @@ public class BlastAnalysis extends AbstractAnalysis {
     		if (getTracer() != null)
     			getTracer().addResult(r);
     		return (rega.genotype.BlastAnalysis.Result) r;
-
     	} catch (ApplicationException e) {
     		throw new AnalysisException(getId(), sequence, e);
     	}
 		// return (rega.genotype.BlastAnalysis.Result) super.run(sequence);
 	}
 
+    /**
+     * Run blast analysis on given fasta input.
+     * @return BlastAnalysis.Result for every sequence in the input.
+     */
+    public List<Result> analyze(AlignmentAnalyses alignmentAnalyses, String fasta) {
+    	List<Result> ans = new ArrayList<BlastAnalysis.Result>();
+		try {
+			InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
+	        LineNumberReader reader = 
+	        		new LineNumberReader(new InputStreamReader(stream));
+
+	    	BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
+	    	blastAnalysis.formatDB(alignmentAnalyses.getAlignment());
+			for (Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
+					s != null ;
+					s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA)) {
+			    	s.removeGaps();
+			    	ans.add(blastAnalysis.run(s));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} catch (FileFormatException e) {
+			e.printStackTrace();
+			return null;
+		} catch (AnalysisException e) {
+			e.printStackTrace();
+			return null;
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return ans;
+    }
+    
 	public void addReferenceTaxus(ReferenceTaxus t) {
 		referenceTaxa.put(t.getTaxus(), t);
 	}
