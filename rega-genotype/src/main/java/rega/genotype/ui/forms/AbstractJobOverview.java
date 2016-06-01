@@ -437,35 +437,41 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			if (getSequenceIndex() - getFilteredSequences() >= numRows) {
 				jobTable.setHidden(false);
 
-				List<WWidget> data = getData(this);
-
-				int row = jobTable.getRowCount();
-				for (int i = 0; i < data.size(); i++) {
-					OrganismDefinition od = AbstractJobOverview.this.getMain().getOrganismDefinition();
-
-					if (od.getRecombinationResultXPaths() != null) {
-						for (String path : od.getRecombinationResultXPaths()) {
-							if (elementExists(path + "/recombination")) {
-								hasRecombinationResults = true;
-								break;
+				if (numRows < 1000) {
+					List<WWidget> data = getData(this);
+	
+					int row = jobTable.getRowCount();
+					for (int i = 0; i < data.size(); i++) {
+						OrganismDefinition od = AbstractJobOverview.this.getMain().getOrganismDefinition();
+	
+						if (od.getRecombinationResultXPaths() != null) {
+							for (String path : od.getRecombinationResultXPaths()) {
+								if (elementExists(path + "/recombination")) {
+									hasRecombinationResults = true;
+									break;
+								}
 							}
 						}
+						
+						WTableCell cell = jobTable.getElementAt(row, i);
+						cell.setId("");
+						WWidget widget = data.get(i);
+						if (widget != null) {
+							cell.addWidget(widget);
+							if (widget.getObjectName().length() == 0)
+								widget.setId("");
+						}
+	
+						if (WApplication.getInstance().getEnvironment().getUserAgent().indexOf("MSIE") != -1)
+							cell.setStyleClass(jobTable.getColumnAt(i).getStyleClass());
 					}
-					
-					WTableCell cell = jobTable.getElementAt(row, i);
-					cell.setId("");
-					WWidget widget = data.get(i);
-					if (widget != null) {
-						cell.addWidget(widget);
-						if (widget.getObjectName().length() == 0)
-							widget.setId("");
-					}
-
-					if (WApplication.getInstance().getEnvironment().getUserAgent().indexOf("MSIE") != -1)
-						cell.setStyleClass(jobTable.getColumnAt(i).getStyleClass());
+	
+					jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
+				} else if (jobTable.getRowCount() == 1000) {
+					WTableCell cell = jobTable.getElementAt(1000, 0);
+					cell.setColumnSpan(jobTable.getColumnCount());
+					cell.addWidget(new WText("Showing only first 1000 results... See downloads for complete results."));
 				}
-
-				jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
 
 				if (summary != null) 
 					summary.update(this, getMain().getOrganismDefinition());
