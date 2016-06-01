@@ -25,13 +25,13 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 			public void trigger() {
 				if (save()) {
 					try {
-						// The repository may have changed.
-						config.refreshToolCofigState(ToolRepoServiceRequests.getRemoteManifests());
 						config.save();
 						if (Settings.getInstance().getConfig() == null){
 							Settings.getInstance().setConfig(config);
 							WApplication.getInstance().redirect(WApplication.getInstance().getBookmarkUrl());
 						}
+						// The repository may have changed.
+						config.refreshToolCofigState(ToolRepoServiceRequests.getRemoteManifests());
 						Dialogs.infoDialog("Info", "Global config changes are saved.");
 					} catch (IOException e) {
 						e.printStackTrace();
