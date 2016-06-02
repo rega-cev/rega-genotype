@@ -389,12 +389,15 @@ public class ToolConfigTable extends Template{
 
 		remoteChB.changed().addListener(this, new Signal.Listener() {
 			public void trigger() {
-				proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+				List<ToolManifest> remoteManifests = getRemoteManifests();
+				proxyModel.refresh(getLocalManifests(), remoteManifests);
 				proxyModel.setFilterNotRemote(
 						remoteChB.getCheckState() != CheckState.Checked);
+				Settings.getInstance().getConfig().refreshToolCofigState(remoteManifests);
 			}
 		});
 		remoteChB.setChecked(false);
+		remoteChB.setToolTip("Show tool from remote repository and synchronize the state existing tools with the remote repository.");
 		proxyModel.setFilterNotRemote(true);
 
 		bindWidget("version-chb", versionChB);
