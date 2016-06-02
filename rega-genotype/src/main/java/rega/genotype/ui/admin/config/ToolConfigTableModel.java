@@ -116,7 +116,10 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 			case DATE_COLUMN:
 				return info.getManifest() == null ? null : formtDate(info.getManifest().getPublicationDate());
 			case PUBLISHER_COLUMN:
-				return info.getManifest() == null ? null : info.getManifest().getPublisherName();
+				if (info.getState() == ToolState.Local || info.getManifest() == null)
+					return null;
+				else
+					return info.getManifest().getPublisherName();
 			case STATE_COLUMN:
 				return info.getState() == ToolState.Retracted ? "Retracted" : 
 					info.getState() == ToolState.Local ? "Local" : "Published";
