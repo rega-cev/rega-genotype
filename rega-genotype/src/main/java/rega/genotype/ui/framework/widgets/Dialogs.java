@@ -15,7 +15,7 @@ import eu.webtoolkit.jwt.WMessageBox;
  */
 public class Dialogs{
 	public static WMessageBox infoDialog(String title, String text){
-		return infoDialog(title, text, EnumSet.of(StandardButton.Cancel));
+		return infoDialog(title, text, EnumSet.of(StandardButton.Ok));
 	}
 
 	public static WMessageBox infoDialog(String title, String text,
