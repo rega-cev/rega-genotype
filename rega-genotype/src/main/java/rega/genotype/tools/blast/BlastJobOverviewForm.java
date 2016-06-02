@@ -63,9 +63,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		// table
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		table.setWidth(new WLength(300));
+		table.setWidth(new WLength(400));
 		table.setStyleClass("blastResultsTable");
 		table.hideColumn(CHART_DISPLAY_COLUMN);
+		table.setColumnWidth(0, new WLength(340));
+		table.setColumnWidth(1, new WLength(60));
 	}
 
 	private void createChart() {
