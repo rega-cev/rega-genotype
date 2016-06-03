@@ -30,6 +30,7 @@ import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.ScanAnalysis;
 import rega.genotype.SubSequence;
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.singletons.Settings;
 import eu.webtoolkit.jwt.WString;
 
 /**
@@ -51,6 +52,11 @@ public class GenericTool extends GenotypeTool {
     private BlastAnalysis blastAnalysis;
     private Map<String, PhyloClusterAnalysis> phyloAnalyses = new HashMap<String, PhyloClusterAnalysis>();
 
+    // called from GenotypeTool main!
+    public GenericTool(String url, File workDir) throws IOException, ParameterProblemException, FileFormatException {
+    	this(Settings.getInstance().getConfig().getToolConfigByUrlPath(url), workDir);
+    }
+    
     public GenericTool(ToolConfig toolConfig, File workDir) throws IOException, ParameterProblemException, FileFormatException {
     	super(toolConfig, workDir);
   
