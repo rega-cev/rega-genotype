@@ -378,9 +378,9 @@ public abstract class GenotypeTool {
     	if (toolConfig == null) {
     		System.err.println("Tool with url path " + url + "could not be found.");
     	}
-    	
+
     	String sequenceFile = toolConfig.getConfiguration() + parseArgsResult.remainingArgs[3];
-    	String traceFile = toolConfig.getConfiguration() + parseArgsResult.remainingArgs[4];
+    	String traceFile = parseArgsResult.workingDir + parseArgsResult.remainingArgs[4];
     	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(String.class, File.class).
     			newInstance(url, new File(parseArgsResult.workingDir));
 
