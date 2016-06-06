@@ -247,6 +247,7 @@ public abstract class GenotypeTool {
 
     /**
      * Conclude a plain conclusion.
+     * @param id: can be type or subtype 
      */
     protected void conclude(AbstractAnalysis.Concludable conclusion, CharSequence motivation, String id, Region region) {
     	concludeRule(null,conclusion,motivation,id, region);
