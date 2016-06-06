@@ -139,6 +139,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	@Override
 	protected void fillResultsWidget(String filter) {
+		clusterDataMap.clear();
+		createChart();
 		new BlastResultParser().parseFile(jobDir);
 		fillBlastResultsChart();
 		if (!clusterDataMap.isEmpty()){
