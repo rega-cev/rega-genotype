@@ -219,7 +219,8 @@
   		  <tr><td class="form-indent">Relative similarity %</td><td>${relative-similarity}</td><td class="auto-form-info">Assignment is made if best similarity is this much smaller than second best similarity</td></tr>
   		  <tr><td></td><td></td><td>${relative-similarity-info}</td></tr>
 
-		  <tr><td class="form-indent">Exact matching</td><td>${exact-matching}</td><td class="auto-form-info">Assignment is made if the sequence was found. In that case a group of closest clusters will be presented.</td></tr>
+		  <tr><td class="form-indent">Exact matching</td><td>${exact-matching}</td><td class="auto-form-info">Assignment is made if the sequence was found.</td></tr>
+		  <tr><td class="form-indent">Show multiple</td><td>${show-multiple}</td><td class="auto-form-info">All clusters with a score that satisfies all cutoffs are shown.</td></tr>
 		</table>
 	</message>
 	

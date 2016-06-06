@@ -31,6 +31,7 @@ public class BlastAnalysisForm extends FormTemplate{
 	private WLineEdit absSimilarityLE = new WLineEdit();
 	private WLineEdit relativeSimilarityLE = new WLineEdit();
 	private WCheckBox exactMatchingChB = new WCheckBox();
+	private WCheckBox showMultipleChB = new WCheckBox();
 
 	private BlastAnalysis analysis;
 
@@ -62,6 +63,7 @@ public class BlastAnalysisForm extends FormTemplate{
 		bindWidget("absolute-similarity", absSimilarityLE);
 		bindWidget("relative-similarity", relativeSimilarityLE);
 		bindWidget("exact-matching", exactMatchingChB);
+		bindWidget("show-multiple", showMultipleChB);
 
 		init();
 	}
@@ -90,6 +92,7 @@ public class BlastAnalysisForm extends FormTemplate{
 		setValue(absSimilarityLE, analysis.getAbsSimilarityMinPercent());
 		setValue(relativeSimilarityLE, analysis.getRelativeSimilarityMinPercent());
 		setValue(exactMatchingChB, analysis.getExactMatching());
+		setValue(showMultipleChB, analysis.isShowMultiple());
 
 		if (analysis.getOwner().getAlignment() != null)
 			switch (analysis.getOwner().getAlignment().getSequenceType()) {
@@ -124,6 +127,7 @@ public class BlastAnalysisForm extends FormTemplate{
 			analysis.setAbsSimilarityMinPercent(doubleValue(absSimilarityLE));
 			analysis.setRelativeSimilarityMinPercent(doubleValue(relativeSimilarityLE));
 			analysis.setExactMatching(exactMatchingChB.isChecked());
+			analysis.setShowMultiple(showMultipleChB.isChecked());
 
 			return true;
 		} else 

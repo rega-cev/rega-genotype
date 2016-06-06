@@ -177,6 +177,7 @@ public class BlastAnalysis extends AbstractAnalysis {
     private Double absSimilarityMinPercent;
     private Double relativeSimilarityMinPercent;
     private boolean exactMatching = false;
+    private boolean showMultiple = false;
     private String blastOptions;
     private Map<String, ReferenceTaxus> referenceTaxa;
     private String detailsOptions;
@@ -248,7 +249,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
             tracer.add("identity", String.valueOf((float)(matchLength - matchDiffs)/matchLength));
 
-            if (!exactMatching) {
+            if (!showMultiple) {
                 writeCluster(tracer, getCluster());
             } else {
                 tracer.printlnOpen("<clusters>");
@@ -343,13 +344,13 @@ public class BlastAnalysis extends AbstractAnalysis {
 
         public void writeConclusion(ResultTracer tracer) {
             tracer.printlnOpen("<assigned>");
-            if (!exactMatching) {
+            if (!showMultiple) {
             	Cluster cluster = getCluster();
             	writeScores(tracer);
-                tracer.add("id", cluster.getId());
-                tracer.add("name", cluster.getName());
-                if (cluster.getDescription() != null) {
-                    tracer.add("description", cluster.getDescription());
+            	tracer.add("id", cluster.getId());
+            	tracer.add("name", !exactMatching || calcSimilarity() == 100 ?  cluster.getName() : "NT (non-typeable)");
+            	if (cluster.getDescription() != null) {
+            		tracer.add("description", cluster.getDescription());
                 }
             } else {
                 addMultiple(tracer);
@@ -361,10 +362,10 @@ public class BlastAnalysis extends AbstractAnalysis {
 			writeScores(tracer);
 			float similarity = calcSimilarity();
 			tracer.add("similarity-score", String.valueOf(similarity));
-			if (clusters.size() == 1 || similarity == 100) {
+			if (!exactMatching || clusters.size() == 1 || similarity == 100) {
 				tracer.add("id", getClusterIds());
 				tracer.add("description", getDescription());
-				tracer.add("name", similarity == 100 ? getClusterNames() : "NT (non-typeable)");
+				tracer.add("name", !exactMatching || similarity == 100 ? getClusterNames() : "NT (non-typeable)");
 			} else {
 				tracer.add("id", getClusterIds());
 				tracer.add("description", getDescription());
@@ -436,7 +437,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                          List<Cluster> clusters, 
                          Double absCutoff, Double absMaxEValue, Double absSimilarity,
                          Double relativeCutoff, Double relativeMaxEValue, Double relativeSimilarity,
-                         boolean exactMatching, String blastOptions,
+                         boolean exactMatching, boolean showMultiple, String blastOptions,
                          String detailsOptions, File workingDir) {
         super(owner, id);
         this.workingDir = workingDir;
@@ -448,6 +449,7 @@ public class BlastAnalysis extends AbstractAnalysis {
         this.relativeMaxEValue = relativeMaxEValue;
         this.relativeSimilarityMinPercent = relativeSimilarity;
         this.exactMatching = exactMatching;
+        this.showMultiple = showMultiple;
         this.blastOptions = blastOptions != null ? blastOptions : "";
         this.detailsOptions = detailsOptions;
         this.referenceTaxa = new HashMap<String, ReferenceTaxus>();
@@ -949,6 +951,14 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 	public void setExactMatching(Boolean exactMatching) {
 		this.exactMatching = exactMatching;
+	}
+
+	public boolean isShowMultiple() {
+		return showMultiple;
+	}
+
+	public void setShowMultiple(boolean showMultiple) {
+		this.showMultiple = showMultiple;
 	}
 
 	public String getBlastOptions() {

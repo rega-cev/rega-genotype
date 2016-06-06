@@ -81,6 +81,7 @@ public class BlastXmlWriter {
 				add(analysisE, "relative-similarity", analysis.getRelativeSimilarityMinPercent());
 			if (analysis.getExactMatching() != null)
 				add(analysisE, "exact-matching", analysis.getExactMatching());
+			add(analysisE, "show-multiple", analysis.isShowMultiple());
 			// Reference Taxus
 			for (ReferenceTaxus ref: analysis.getSortedReferenceTaxus()){
 				Element referenceTaxusE = new Element("regions");

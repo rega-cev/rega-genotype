@@ -375,8 +375,11 @@ public class AlignmentAnalyses {
         Double absSimilarity = elementDoubleValue(element.getChild("absolute-similarity"));
         Double relativeSimilarity = elementDoubleValue(element.getChild("relative-similarity"));
         Boolean exactMatching = elementBooleanValue(element.getChild("exact-matching"));
+        Boolean showMultiple = elementBooleanValue(element.getChild("show-multiple"));
         if (exactMatching == null)
         	exactMatching = false;
+        if (showMultiple == null)
+        	showMultiple = false;
 
         Element cutoffE = element.getChild("cutoff");
         if (cutoffE != null) { //  old cutoff format (support old blast.xml files)
@@ -419,7 +422,7 @@ public class AlignmentAnalyses {
         BlastAnalysis analysis = new BlastAnalysis(this, id, cs,
         		absCutoff, absMaxEValue, absSimilarity, 
         		relativeCutoff, relativeMaxEValue, relativeSimilarity, exactMatching,
-        		blastOptions, detailsOptions, workingDir);
+        		showMultiple, blastOptions, detailsOptions, workingDir);
 
         List regionsEs = element.getChildren("regions");
         

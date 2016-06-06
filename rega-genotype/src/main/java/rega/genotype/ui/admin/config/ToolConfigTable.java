@@ -250,7 +250,7 @@ public class ToolConfigTable extends Template{
 								if (manifest != null) {
 									importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
 								} else {
-									Dialogs.infoDialog("Error", "Invalid tool file");
+									Dialogs.infoDialog("Error", "Invalid tool file: No manifest");
 								}
 							}
 						}
