@@ -206,6 +206,18 @@ public class PenViralGenotypeAnalysisTest extends TestCase{
 		check(alignmentAnalyses, true);
 	}
 
+	@Test
+	public void testMultiple() {
+		// 2 sequences with good score should both be in the results.
+		blastAnalysis.setAbsCutoff(50.0);
+		String s = fasta + "\n" + fasta;
+		List<Result> analysisResults =
+				blastAnalysis.analyze(alignmentAnalyses, s);
+		Result result = analysisResults.get(0);
+		assertEquals(analysisResults.size(), 2);
+		assertEquals(result.haveSupport(), true);
+	}
+
 	private void check(AlignmentAnalyses alignmentAnalyses, boolean haveSupport) {
 		List<Result> analysisResults = blastAnalysis.analyze(alignmentAnalyses, fasta);
 		Result result = analysisResults.get(0);
