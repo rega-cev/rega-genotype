@@ -47,16 +47,16 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	private static final int DATA_COLUMN = 1; // sequence count column. percentages of the chart.
 	private static final int CHART_DISPLAY_COLUMN = 2;
 
-
 	//private Template layout = new Template(tr("job-overview-form"), this);
 	private WStandardItemModel blastResultModel = new WStandardItemModel();
 	// <concludedId (cluster id), cluster data>
-	private Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
 	private Signal1<String> jobIdChanged = new Signal1<String>();
 	private String jobId;
 	private WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
 	private WPieChart chart;
 	private WTableView table = new WTableView();
+
+	private BlastResultParser blastResultParser;
 
 	public BlastJobOverviewForm(GenotypeWindow main) {
 		super(main);
@@ -109,10 +109,10 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	@Override
 	public void handleInternalPath(String internalPath) {
+
+		System.err.println("handleInternalPath");
 		table.hide();
 		chartContainer.hide();
-		createChart();
-		clusterDataMap.clear();
 
 		String path[] =  internalPath.split("/");
 		if (path.length > 1) {
@@ -124,6 +124,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			}
 
 			init(jobId, "");
+
 			jobIdChanged.trigger(jobId);
 		} else {
 			jobIdChanged.trigger("");
@@ -138,25 +139,20 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 
 	@Override
-	protected void fillResultsWidget(String filter) {
-		clusterDataMap.clear();
-		createChart();
-		new BlastResultParser().parseFile(jobDir);
-		fillBlastResultsChart();
-		if (!clusterDataMap.isEmpty()){
-			chartContainer.show();
-			table.show();
-			WContainerWidget c = new WContainerWidget();
-			c.addWidget(chartContainer);
-			c.addWidget(table);
-			bindResults(c);
-		}
+	protected GenotypeResultParser createParser() {
+		blastResultParser = new BlastResultParser();
+		return blastResultParser;
 	}
 
-	private void fillBlastResultsChart() {
-		if (clusterDataMap.isEmpty())
+	@Override
+	public void fillResultsWidget() {
+		createChart();
+
+		if (blastResultParser == null || blastResultParser.clusterDataMap.isEmpty())
 			return;
 
+		Map<String, ClusterData> clusterDataMap = blastResultParser.clusterDataMap;
+		
 		// create blastResultModel
 		blastResultModel = new WStandardItemModel();
 		blastResultModel.insertColumns(blastResultModel.getColumnCount(), 3);
@@ -174,12 +170,19 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 				blastResultModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
 				blastResultModel.setData(row, DATA_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
 			}
-			blastResultModel.setData(row, DATA_COLUMN, toolData.sequences.size()); // percentage
+			blastResultModel.setData(row, DATA_COLUMN, toolData.sequenceNames.size()); // percentage
 			blastResultModel.setData(row, CHART_DISPLAY_COLUMN, 
-					toolData.concludedName + " (" + toolData.sequences.size() + ")");
+					toolData.concludedName + " (" + toolData.sequenceNames.size() + ")");
 		}
 		chart.setModel(blastResultModel);
 		table.setModel(blastResultModel);
+
+		chartContainer.show();
+		table.show();
+		WContainerWidget c = new WContainerWidget();
+		c.addWidget(chartContainer);
+		c.addWidget(table);
+		bindResults(c);
 	}
 
 	public Signal1<String> jobIdChanged() {
@@ -199,42 +202,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 	
 	// Classes
-	private class ClusterData {
-		private String toolId = new String();
-		private String concludedName = new String();
-		List<SequenceData> sequences = new ArrayList<SequenceData>();
-	}
-
-	private class SequenceData {
-		private String sequenceName = new String();
-		//private String nucleotides  = new String();
-		public SequenceData(String sequenceName) {
-			this.sequenceName = sequenceName;
-		}
-	} 
-
-	/**
-	 * Parse result.xml file from job dir and fill the output to blastResultModel. 
-	 */
-	private class BlastResultParser extends GenotypeResultParser {
-		@Override
-		public void endSequence() {
-			String toolId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/tool-id");
-			String seqName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name");
-			String concludedId = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
-			String concludedName = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
-
-			if (concludedName == null)
-				concludedName = "Unassigned";
-
-			ClusterData toolData = clusterDataMap.containsKey(concludedId) ?
-					clusterDataMap.get(concludedId) : new ClusterData();
-
-			toolData.toolId = toolId;	
-			toolData.concludedName = concludedName;
-			toolData.sequences.add(new SequenceData(seqName));
-			clusterDataMap.put(concludedId, toolData);
-		}
+	public static class ClusterData {
+		String toolId = new String();
+		String concludedName = new String();
+		String concludedId = new String();
+		List<String> sequenceNames = new ArrayList<String>();
 	}
 
 	// unused 
@@ -253,5 +225,43 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	@Override
 	public JobOverviewSummary getSummary(String filter) {
 		return  null;
+	}
+
+	/**
+	 * Parse result.xml file from job dir and fill the output to
+	 * blastResultModel.
+	 */
+	public static class BlastResultParser extends GenotypeResultParser {
+		private Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
+
+		public BlastResultParser() {
+		}
+
+		@Override
+		public void endSequence() {
+			String toolId = GenotypeLib
+					.getEscapedValue(this,
+							"/genotype_result/sequence/result[@id='blast']/cluster/tool-id");
+			String seqName = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/@name");
+			String concludedId = GenotypeLib
+					.getEscapedValue(this,
+							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
+			String concludedName = GenotypeLib
+					.getEscapedValue(this,
+							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
+
+			if (concludedName == null)
+				concludedName = "Unassigned";
+
+			ClusterData toolData = clusterDataMap.containsKey(concludedId) ? clusterDataMap
+					.get(concludedId) : new ClusterData();
+
+			toolData.toolId = toolId;
+			toolData.concludedName = concludedName;
+			toolData.sequenceNames.add(seqName);
+			toolData.concludedId = concludedId;
+			clusterDataMap.put(concludedId, toolData);
+		}
 	}
 }

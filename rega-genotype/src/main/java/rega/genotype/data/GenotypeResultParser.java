@@ -6,8 +6,10 @@
 package rega.genotype.data;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Stack;
@@ -25,6 +27,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import eu.webtoolkit.jwt.Signal1;
+
 /**
  * A sax parser which parses the rega-genotype analysis result file and offers
  * an XPath interface to an individual sequence result.
@@ -41,6 +45,15 @@ public class GenotypeResultParser extends DefaultHandler
 	private int filteredSequences;
 
 	private boolean stop = false;
+
+	public enum ParsingState {
+		Pasring, Ended
+	}
+
+	/**
+	 * signal that end of file is reached. Example: if result.xml is not yet finished a parser thread can wait till it is done.
+	 */
+	private Signal1<ParsingState> eof = new Signal1<ParsingState>();
 
 	public GenotypeResultParser() {
 		this(-1);
@@ -152,9 +165,8 @@ public class GenotypeResultParser extends DefaultHandler
 	    		stack.pop();
 	    	}
 
-	    	if (qName.equals("sequence") && getCurrentPath().equals("/genotype_result")) {
+	    	if (qName.equals("sequence") && getCurrentPath().equals("/genotype_result"))
 	    		endSequence();
-	    	}
     	}
     }
 
@@ -210,11 +222,39 @@ public class GenotypeResultParser extends DefaultHandler
     	return false;
     }
 
-	public void endFile() { }
+	/**
+	 * Read xml file, if end of file is reached but there is a missing closing
+	 * tag (normally </genotype_result>) the reader will go 1 char back and call
+	 * paused()
+	 * 
+	 * @author michael
+	 */
+	private class GenotypeResultReader extends LineNumberReader {
+		public GenotypeResultReader(java.io.Reader in) {
+			super(in);
+		}
 
-    public void parse(InputSource source)  throws SAXException, IOException {
-    	reset();
-    	XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+		@Override
+		public int read(char[] cbuf, int off, int len) throws IOException {
+			int ans = super.read(cbuf, off, len);
+			if (ans != -1)
+				mark(ans);
+			else {
+				if (stack.size() != 0) { // continue reading later
+					reset();
+					eof.trigger(ParsingState.Pasring);
+				}
+			}
+			return ans;
+		}
+	}
+
+	public void endFile() { 
+		eof.trigger(ParsingState.Ended);
+	}
+
+	public void parse(InputSource source) throws SAXException, IOException {
+		XMLReader xmlReader = XMLReaderFactory.createXMLReader();
         xmlReader.setContentHandler(this);
         xmlReader.setErrorHandler(this);
         try {
@@ -230,8 +270,12 @@ public class GenotypeResultParser extends DefaultHandler
     	File resultFile = new File(jobDir.getAbsolutePath()+File.separatorChar+"result.xml");
     	
     	if(resultFile.exists()) {
-	    	try {
-				parse(new InputSource(new FileReader(resultFile)));
+    		try {
+				GenotypeResultReader reader =
+						new GenotypeResultReader(new InputStreamReader(
+								new FileInputStream(resultFile)));
+				InputSource inputSource = new InputSource(reader);
+				parse(inputSource);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -256,6 +300,10 @@ public class GenotypeResultParser extends DefaultHandler
 
 	public boolean stopped(){
 		return stop;
+	}
+
+	public Signal1<ParsingState> eof() {
+		return eof;
 	}
 
 	public static GenotypeResultParser parseFile(File jobDir, int selectedSequenceIndex) {

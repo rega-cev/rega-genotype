@@ -13,6 +13,7 @@ import java.util.List;
 import org.jdom.Element;
 
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.data.GenotypeResultParser.ParsingState;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ui.data.FastaGenerator;
@@ -33,6 +34,7 @@ import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLink;
@@ -74,16 +76,24 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			span = aSpan;
 		}
 	}
-	
+
+	/**
+	 * Synchronize read write results.xml
+	 *
+	 * Tool analysis writes results.xml that can take long time. Parsing the results is done
+	 * in the parserThread that adds the existing results to the view widget waits (5s the
+	 * updater is responsible for that) and checks for new results in the results.xml file.
+	 */
+	private Thread parserThread;
+	private WTimer updater;
+	private GenotypeResultParser parser;
+
 	protected File jobDir;
 	private WTable jobTable;
 	private JobOverviewSummary summary;
 	private SequenceFilter filter;
 	
-	private WTimer updater;
-	
 	private Template template;
-	private String jobId;
 	
 	private boolean hasRecombinationResults;
 	
@@ -105,7 +115,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public void init(final String jobId, final String filter) {
-		this.jobId = jobId;
 		this.jobDir = getJobDir(jobId);
 
 		this.hasRecombinationResults = false;
@@ -122,8 +131,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		};
 		
 		jobTable.clear();
-		
-		resetTimer();
 
 		template.bindWidget("downloads", createDownloadsWidget(filter));
 		
@@ -134,31 +141,15 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		template.bindWidget("analysis-in-progress", createInProgressWidget());
 
-		if (!jobDone()) {
-			updater = new WTimer();
-			updater.setInterval(getMain().getOrganismDefinition().getUpdateInterval());
-			updater.timeout().addListener(this, new Signal.Listener() {
-				public void trigger() {
-					fillResultsWidget(filter);
-					updateInfo();
-					if (jobDone()) {
-						resetTimer();
-						showDownloads();
-					}
-				}
-			});
-		}
+		if (parser != null)
+			stop();
+		parser = createParser();
+		startTimer();
 
-		fillResultsWidget(filter);
-		updateInfo();
-		if (jobDone())
-			showDownloads();
-		
-		if (updater != null)
-			updater.start();
+		updateView();
 	}
-	
-	private void showDownloads() {
+
+	protected void showDownloads() {
 		showWidget("downloads", true);
 		showWidget("recombination-fragment-downloads", true);
 	}
@@ -169,14 +160,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			w.setHidden(!show);
 	}
 	
-	private void resetTimer() {
-		if (updater != null) {
-			updater.stop();
-			updater = null;
-		}
-	}
-	
-	private boolean jobDone() {
+	protected boolean jobDone() {
 		File jobDone = new File(jobDir.getAbsolutePath() + File.separatorChar + "DONE");
 		return jobDone.exists();
 	}
@@ -185,7 +169,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return new File(jobDir, ".CANCEL").exists();
 	}
 	
-	private void updateInfo() {
+	protected void updateInfo() {
 		showWidget("analysis-in-progress", !jobDone());
 		
 		if (jobDone() && jobCancelled())
@@ -226,8 +210,15 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		analysisInProgress.hide();
 		return analysisInProgress;
 	}
-	
-	protected void fillResultsWidget(String filter) {
+
+	public void updateView() {
+		fillResultsWidget();
+		updateInfo();
+		if (jobDone())
+			showDownloads();
+	}
+
+	protected void fillResultsWidget() {
 		if (jobTable.getRowCount()==0) {
 			List<Header> headers = getHeaders();
 
@@ -252,8 +243,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			jobTable.getRowAt(0).setId("");
 			jobTable.setHidden(true);
 		}
-		
-		new Parser().parseFile(jobDir);
 	}
 	
 	public WWidget createRecombinationFragmentDownloadsWidget(final String filter) {
@@ -427,12 +416,108 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return csvTableDownload;
 	}
 
+	public void startTimer() {
+		updater = new WTimer();
+		updater.setInterval(getMain().getOrganismDefinition()
+				.getUpdateInterval());
+		updater.timeout().addListener(updater, new Signal.Listener() {
+			public void trigger() {
+				update();
+			}
+		});
+		updater.start();
+		update();
+	}
+
+	private void resetTimer() {
+		if (updater != null) {
+			updater.stop();
+			updater = null;
+		}
+	}
+
+	public void stop() {
+		parser.stopParsing();
+		resetTimer();
+		parser = null;
+		parserThread = null;
+	}
+
+	private void update() {
+		if (parserThread == null) {
+			File resultFile =
+					new File(getJobdir().getAbsolutePath()
+							+ File.separatorChar + "result.xml");
+			if (!resultFile.exists())
+				return;
+			final WApplication app = WApplication.getInstance();
+
+			parserThread = new Thread(new Runnable() {
+				public void run() {
+					parser.eof().addListener(AbstractJobOverview.this,
+							new Signal1.Listener<ParsingState>() {
+								public void trigger(ParsingState parsingState) {
+									// update view
+									UpdateLock updateLock = app.getUpdateLock();
+									updateView();
+									app.triggerUpdate();
+									updateLock.release();
+
+									switch (parsingState) {
+									case Pasring:
+										synchronized (parserThread) {
+											try {
+												if (!jobDone())
+													parserThread.wait();// pause till more data is added to the file
+											} catch (InterruptedException e) {
+												e.printStackTrace();
+												assert (false);
+											}
+										}
+										break;
+									case Ended:
+										break;
+									}
+								}
+							});
+
+					parser.parseFile(getJobdir());
+				}
+			});
+
+			parserThread.start();
+		} else {
+			if (jobDone()) {
+				resetTimer();
+			}
+			synchronized (parserThread) {
+				parserThread.notifyAll();
+			}
+		}
+	}
+
+	/**
+	 * re implement if you need to use a different parser.
+	 * 
+	 * @return
+	 */
+	protected GenotypeResultParser createParser() {
+		return new Parser();
+	}
+
 	private class Parser extends GenotypeResultParser {		
+		private WApplication app;
+
+		Parser() {
+			app = WApplication.getInstance();
+		}
 		@Override
 		public void endSequence() {
 			if (skipSequence())
 				return;
-			
+
+			UpdateLock updateLock = app.getUpdateLock(); // parsing is called from parserThread.
+
 			int numRows = AbstractJobOverview.this.jobTable.getRowCount()-1;
 			if (getSequenceIndex() - getFilteredSequences() >= numRows) {
 				jobTable.setHidden(false);
@@ -475,6 +560,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 				if (summary != null) 
 					summary.update(this, getMain().getOrganismDefinition());
+
+				app.triggerUpdate();
+				updateLock.release();
 			}
 		}
 
@@ -546,6 +634,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 	public SequenceFilter getFilter() {
 		return filter;
+	}
+
+	public File getJobdir() {
+		return jobDir;
 	}
 
 	protected void bindResults(WWidget resultsWidget) {

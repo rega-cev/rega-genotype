@@ -46,6 +46,8 @@ public class GenotypeApplication extends WApplication
 		useStyleSheet(new WLink("../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 
 		servletContext_ = servletContext;
+
+		enableUpdates(); // ParserDispatcher uses triggerUpdate. 
 	}
 	
 	public ServletContext getServletContext()
