@@ -97,9 +97,15 @@ public class GenericMain extends GenotypeMain {
 
 		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
 		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
-		
-		app.useStyleSheet(new WLink("../../style/genotype-rivm.css"));
-		app.useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"), "IE lte 7");
+
+		if (getConfiguration().internalDeploymentSize() == 1) {
+			app.useStyleSheet(new WLink("../../style/genotype-rivm.css"));
+			app.useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"),
+					"IE lte 7");
+
+			app.useStyleSheet(new WLink("../../style/wt.css")); // do not use Wt's inline stylesheet...
+			app.useStyleSheet(new WLink("../../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
+		}
 
 		GenotypeWindow window = new GenotypeWindow(definition);
 
