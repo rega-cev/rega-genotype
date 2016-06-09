@@ -11,7 +11,6 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import eu.webtoolkit.jwt.WApplication;
-import eu.webtoolkit.jwt.WCombinedLocalizedStrings;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
@@ -32,6 +31,14 @@ public class HivMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
 		
+		if (settings.getConfig().getToolConfigByUrlPath(HIV_TOOL_ID) == null) {
+			WApplication app = new WApplication(env);
+			app.getRoot().addWidget(
+					new WText("Typing tool for " + HIV_TOOL_ID
+							+ " was not found."));
+			return app;
+		}
+
 		GenotypeApplication app;
 		try {
 			app = new GenotypeApplication(env, this.getServletContext(), settings, HIV_TOOL_ID);

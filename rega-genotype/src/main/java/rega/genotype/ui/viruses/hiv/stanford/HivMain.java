@@ -31,6 +31,15 @@ public class HivMain extends GenotypeMain {
 
 	@Override
 	public WApplication createApplication(WEnvironment env) {
+
+		if (settings.getConfig().getToolConfigByUrlPath(HIV_STANFORD_URL) == null) {
+			WApplication app = new WApplication(env);
+			app.getRoot().addWidget(
+					new WText("Typing tool for " + HIV_STANFORD_URL
+							+ " was not found."));
+			return app;
+		}
+
 		GenotypeApplication app;
 		try {
 			app = new GenotypeApplication(env, this.getServletContext(), settings, HIV_STANFORD_URL);
