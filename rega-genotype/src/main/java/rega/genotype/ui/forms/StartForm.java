@@ -102,6 +102,7 @@ public class StartForm extends AbstractForm {
 		                    Icon.Information, 
 		                    EnumSet.of(StandardButton.Yes,StandardButton.No));
 		            messageBox.setModal(false);
+					messageBox.setWidth(new WLength(600));
 		            messageBox.buttonClicked().addListener(StartForm.this,
 		                    new Signal1.Listener<StandardButton>() {
 		                        public void trigger(StandardButton sb) {

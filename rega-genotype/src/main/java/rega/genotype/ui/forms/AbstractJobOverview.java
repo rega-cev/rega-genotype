@@ -37,6 +37,7 @@ import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WMouseEvent;
@@ -189,6 +190,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 						tr("monitorForm.areYouSureToCancel"),
 		                Icon.Information, EnumSet.of(StandardButton.Yes, StandardButton.No));
 		        messageBox.setModal(false);
+		        messageBox.setWidth(new WLength(600));
 		        messageBox.buttonClicked().addListener(AbstractJobOverview.this, new Signal1.Listener<StandardButton>() {
 					public void trigger(StandardButton sb) {
 						if (messageBox.getButtonResult() == StandardButton.Yes) {
