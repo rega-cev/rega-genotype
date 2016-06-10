@@ -91,8 +91,9 @@ public class BlastAnalysisForm extends FormTemplate{
 		setValue(relativeEValueLE, analysis.getRelativeMaxEValue());
 		setValue(absSimilarityLE, analysis.getAbsSimilarityMinPercent());
 		setValue(relativeSimilarityLE, analysis.getRelativeSimilarityMinPercent());
-		setValue(exactMatchingChB, analysis.getExactMatching());
-		setValue(showMultipleChB, analysis.isShowMultiple());
+		if (analysis.getExactMatching() != null)
+			exactMatchingChB.setChecked(analysis.getExactMatching());
+		showMultipleChB.setChecked(analysis.isShowMultiple());
 
 		if (analysis.getOwner().getAlignment() != null)
 			switch (analysis.getOwner().getAlignment().getSequenceType()) {
