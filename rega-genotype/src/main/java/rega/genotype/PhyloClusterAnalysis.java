@@ -32,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.singletons.Settings;
 
 /**
  * Implements a clustering analysis using phylogenetic methods:
@@ -52,8 +53,6 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
     static private final int PAUP_ANALYSIS     = 1;
   
     static public String mrBayesCommand = "mrbayes";
-    static public String paupCommand = "paup";
-    static public String puzzleCommand = "puzzle";
 
     private List<Cluster> clusters;
     private Double cutoff;
@@ -368,7 +367,8 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
 			/*
 			 * Run paup
 			 */
-			String cmd = paupCommand + " -n " + nexFile.getAbsolutePath();
+			String paupCmd = Settings.getInstance().getPaupCmd();
+			String cmd = paupCmd + " -n " + nexFile.getAbsolutePath();
 
             System.err.println(cmd + " (pwd=" + outputDir + ")");
 			paup = runtime.exec(cmd, null, outputDir);
@@ -689,6 +689,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             /*
              * Run puzzle
              */
+			String puzzleCommand = Settings.getInstance().getTreePuzzleCmd();
             String cmd = puzzleCommand + " " + infile.getAbsolutePath();
             System.err.println("cmd: " + cmd);
             puzzle = runtime.exec(cmd, null, workingDir);

@@ -122,10 +122,8 @@ public class Settings {
 	public static void initSettings(Settings s) {
 		instance = s;
 		if (s.getConfig() != null) {
-			PhyloClusterAnalysis.paupCommand = s.getPaupCmd();
 			SequenceAlign.clustalWPath = s.getClustalWCmd();
 			BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
-			PhyloClusterAnalysis.puzzleCommand = s.getTreePuzzleCmd();
 			treeGraphCommand = s.getTreeGraphCmd();
 		}
 	}
