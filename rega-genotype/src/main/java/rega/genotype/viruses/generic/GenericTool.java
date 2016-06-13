@@ -318,7 +318,7 @@ public class GenericTool extends GenotypeTool {
 
 	@Override
 	protected boolean cancelAnalysis() {
-		return false;
+		return new File(workingDir, ".CANCEL").exists();
 	}
 
 	@Override
