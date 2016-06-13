@@ -106,6 +106,7 @@ public class AddSequencesDialog extends WDialog{
 			fastaTA.setInline(false);
 			fastaTA.setWidth(new WLength(700));
 			fastaTA.setHeight(new WLength(300));
+			Utils.removeSpellCheck(fastaTA);
 
 			upload.getWFileUpload().setFilters(".fasta");
 			upload.setInline(true);

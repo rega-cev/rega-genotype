@@ -23,6 +23,7 @@ import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
@@ -73,7 +74,8 @@ public class StartForm extends AbstractForm {
 		sequenceTA.setStyleClass("fasta-ta");
 		sequenceTA.setText(tr("sequenceInput.example").toString());
 
-		
+		Utils.removeSpellCheck(sequenceTA);
+
 		WInteractWidget run = createButton("sequenceInput.run","sequenceInput.run.icon");
 		t.bindWidget("analyze-button", run);
 		run.setObjectName("button-run");
