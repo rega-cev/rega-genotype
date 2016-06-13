@@ -377,7 +377,9 @@ public abstract class GenotypeTool {
     	
     	ToolConfig toolConfig = Settings.getInstance().getConfig().getToolConfigByUrlPath(url);
     	if (toolConfig == null) {
-    		System.err.println("Tool with url path " + url + "could not be found.");
+			System.err.println("Tool with url path " + url
+					+ " could not be found.");
+			return;
     	}
 
     	String sequenceFile = toolConfig.getConfiguration() + parseArgsResult.remainingArgs[3];
