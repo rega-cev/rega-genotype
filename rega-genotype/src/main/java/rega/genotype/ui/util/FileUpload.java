@@ -7,6 +7,8 @@ package rega.genotype.ui.util;
 
 import java.io.File;
 
+import rega.genotype.ui.framework.widgets.Dialogs;
+
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -39,6 +41,13 @@ public class FileUpload extends WContainerWidget {
 				uploadedFile.trigger(new File(uploadFile.getSpoolFileName()));
 			}
 		});
+
+		uploadFile.fileTooLarge().addListener(this,
+				new Signal1.Listener<Long>() {
+					public void trigger(Long arg) {
+						Dialogs.infoDialog("Info", "File too lagre: " + arg);
+					}
+				});
         
         if (!uploadFile.canUpload()) {
         	//TODO show an upload button when the upload is not performed 
