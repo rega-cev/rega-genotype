@@ -47,7 +47,9 @@ public class GenotypeResultParser extends DefaultHandler
 	private boolean stop = false;
 
 	public enum ParsingState {
-		Pasring, Ended
+		Pasring, // analysis is not yet finished, parser reached end of file.
+		Ended,   // analysis finished and parser reached end of file.
+		Stopped  // parsing was stopped
 	}
 
 	/**
@@ -296,6 +298,7 @@ public class GenotypeResultParser extends DefaultHandler
     
     public void stopParsing() {
     	stop = true;
+    	eof.trigger(ParsingState.Stopped);
     }
 
 	public boolean stopped(){

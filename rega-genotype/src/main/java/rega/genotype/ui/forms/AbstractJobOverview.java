@@ -29,7 +29,6 @@ import rega.genotype.viruses.recombination.RegionUtils;
 import rega.genotype.viruses.recombination.RegionUtils.Region;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Orientation;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WAnchor;
@@ -145,7 +144,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		if (parser != null)
 			stop();
 		parser = createParser();
-		startTimer();
+		startParserThread();
 
 		updateView();
 	}
@@ -418,83 +417,77 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return csvTableDownload;
 	}
 
-	public void startTimer() {
-		updater = new WTimer();
-		updater.setInterval(getMain().getOrganismDefinition()
-				.getUpdateInterval());
-		updater.timeout().addListener(updater, new Signal.Listener() {
-			public void trigger() {
-				update();
-			}
-		});
-		updater.start();
-		update();
-	}
-
-	private void resetTimer() {
-		if (updater != null) {
-			updater.stop();
-			updater = null;
-		}
-	}
-
 	public void stop() {
 		parser.stopParsing();
-		resetTimer();
 		parser = null;
 		parserThread = null;
 	}
 
-	private void update() {
+	private void startParserThread() {
 		if (parserThread == null) {
-			File resultFile =
-					new File(getJobdir().getAbsolutePath()
-							+ File.separatorChar + "result.xml");
-			if (!resultFile.exists())
-				return;
 			final WApplication app = WApplication.getInstance();
+			final int interval = getMain().getOrganismDefinition().getUpdateInterval();
+			final Object lock = new Object();
 
 			parserThread = new Thread(new Runnable() {
+				boolean stop = false;
 				public void run() {
+					final File resultFile = new File(getJobdir().getAbsolutePath()
+							+ File.separatorChar + "result.xml");
+					// wait till result.xml is ready
+					while (!stop && !resultFile.exists()){
+						synchronized (lock) {
+							try {
+								lock.wait(interval);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+								assert (false);
+							}
+						}
+					}
+
 					parser.eof().addListener(AbstractJobOverview.this,
 							new Signal1.Listener<ParsingState>() {
-								public void trigger(ParsingState parsingState) {
-									// update view
-									UpdateLock updateLock = app.getUpdateLock();
-									updateView();
-									app.triggerUpdate();
-									updateLock.release();
+						public void trigger(ParsingState parsingState) {
+							// update view
+							UpdateLock updateLock = app.getUpdateLock();
+							updateView();
+							app.triggerUpdate();
+							updateLock.release();
 
-									switch (parsingState) {
-									case Pasring:
-										synchronized (parserThread) {
-											try {
-												if (!jobDone())
-													parserThread.wait();// pause till more data is added to the file
-											} catch (InterruptedException e) {
-												e.printStackTrace();
-												assert (false);
+							if (!jobCancelled())
+								switch (parsingState) {
+								case Pasring:
+									synchronized (lock) {
+										try {
+											if (!jobDone()){
+												int interval = getMain().getOrganismDefinition().getUpdateInterval();
+												long length = resultFile.length();
+												while (!stop && length == resultFile.length()) // no new results yet
+													lock.wait(interval); // pause till more data is added to the file
 											}
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+											assert (false);
 										}
-										break;
-									case Ended:
-										break;
 									}
+									break;
+								case Ended:
+									break;
+								case Stopped:
+									stop = true;
+									break;
 								}
-							});
+
+						}
+					});
 
 					parser.parseFile(getJobdir());
 				}
 			});
 
+			parserThread.setName("parserThread");
 			parserThread.start();
-		} else {
-			if (jobDone()) {
-				resetTimer();
-			}
-			synchronized (parserThread) {
-				parserThread.notifyAll();
-			}
 		}
 	}
 
