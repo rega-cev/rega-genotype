@@ -183,7 +183,7 @@ body {
 	font-family: Courier, monospace;
 }
 
-.sequence-table td {
+.sequence-table td:nth-child(odd) {
     text-align: right;
     padding-right: 5px;
 }
