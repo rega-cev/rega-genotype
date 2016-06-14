@@ -138,6 +138,7 @@ public class ToolConfigForm extends FormTemplate {
 										toolConfig.getToolMenifest().getId(), 
 										toolConfig.getToolMenifest().getVersion());
 								toolConfig.setPublished(false);
+								toolConfig.setRetracted(true);
 								Settings.getInstance().getConfig().save();
 								d.setText("Successfully retracted.");
 								d.setButtons(StandardButton.Cancel);
