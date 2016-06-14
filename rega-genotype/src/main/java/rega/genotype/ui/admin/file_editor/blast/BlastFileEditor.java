@@ -76,14 +76,14 @@ public class BlastFileEditor extends WContainerWidget{
 		analysis = new BlastAnalysisForm(
 				(BlastAnalysis) alignmentAnalyses.getAnalysis("blast"));
 		analysisPanel.setCentralWidget(analysis);
-
-		referenceTaxaTable = new ReferenceTaxaTable((BlastAnalysis) alignmentAnalyses.getAnalysis("blast"));
+		BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
+		referenceTaxaTable = new ReferenceTaxaTable(blastAnalysis);
 		WPanel refTaxaPanel = new WPanel();
 		refTaxaPanel.addStyleClass("admin-panel");
 		refTaxaPanel.setTitle("Reference taxa");
 		refTaxaPanel.setCentralWidget(referenceTaxaTable);
 		refTaxaPanel.setCollapsible(true);
-		refTaxaPanel.setCollapsed(true);
+		refTaxaPanel.setCollapsed(blastAnalysis.getReferenceTaxus().isEmpty());
 
 		createClustersTable(alignmentAnalyses);
 
