@@ -1,12 +1,16 @@
 package rega.genotype.blast;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import rega.genotype.AlignmentAnalyses;
@@ -88,6 +92,57 @@ public class PenViralGenotypeAnalysisTest extends TestCase{
 
 	protected void tearDown() {
 		TestUtils.deleteJobDirs(jobDirs);
+	}
+
+	@Test
+	public void testCLI() {
+		// CLI: is using some reflections therefore it is easy
+		// to brake it by changing some function declarations.
+		// Note: this is testing the latest build of CLI Tool
+		// (dist/rega-genotype-cli-tool-alpha.jar)
+
+		String cmd = "java -jar "
+				+ " dist/rega-genotype-cli-tool-alpha.jar "
+				+ " rega.genotype.viruses.generic.GenericTool "
+				+ " zika xml short.fasta result.xml "
+				+ " -c base-unit-test-work-dir/config.json "
+				+ " -w base-unit-test-work-dir/job/ ";
+
+		Runtime runtime = Runtime.getRuntime();
+		Process p;
+		try {
+			p = runtime.exec(cmd, null, new File("."));
+
+			p.waitFor();
+
+			InputStream stderr = p.getErrorStream();
+			InputStreamReader isr = new InputStreamReader(stderr);
+			BufferedReader br = new BufferedReader(isr);
+			String line = null;
+			while ( (line = br.readLine()) != null)
+				System.err.println(line);
+			br.close();
+
+			p.getErrorStream().close();
+			p.getInputStream().close();
+			p.getOutputStream().close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			assertTrue(false);
+		} finally {
+			try {
+				FileUtils.deleteDirectory(new File("base-unit-test-work-dir/job"));
+				new File("base-unit-test-work-dir/job").mkdirs();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		assertTrue(true);
 	}
 
 	@Test
