@@ -109,8 +109,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	@Override
 	public void handleInternalPath(String internalPath) {
+		createChart();
+		blastResultParser = null;
 
-		System.err.println("handleInternalPath");
 		table.hide();
 		chartContainer.hide();
 
