@@ -39,6 +39,7 @@ public class ToolRepoService extends HttpServlet{
 	public static String REQ_TYPE_PUBLISH  = "publish";
 	public static String REQ_TYPE_GET_MANIFESTS = "get-manifests";
 	public static String REQ_TYPE_GET_TOOL = "get-tool";
+	public static String REQ_TYPE_SERVER_VERSION = "get-server-version";
 	public static String REQ_TYPE_RETRACT_TOOL = "retract-tool";
 	public static String REQ_TYPE_EMPTY = "repo-service";
 	
@@ -91,8 +92,11 @@ public class ToolRepoService extends HttpServlet{
 				resp.getOutputStream().flush();	
 			} else
 				resp.setStatus(404);
+		} else if (reqType.equals(REQ_TYPE_SERVER_VERSION)) {
+			resp.getWriter().print("server version 0");
+			resp.getWriter().close();	
 		} else if (reqType.equals(REQ_TYPE_EMPTY)) {
-			resp.setStatus(200); // ping
+			// ping
 		} else {
 			resp.setStatus(404);
 		}
