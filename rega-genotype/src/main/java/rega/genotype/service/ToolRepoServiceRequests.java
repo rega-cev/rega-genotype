@@ -131,14 +131,13 @@ public class ToolRepoServiceRequests {
 				getReqRetractUrl(toolId, toolVersion)).openConnection();
 		connection.setDoOutput(true); // Triggers POST.
 		connection.setRequestMethod("DELETE");
-		connection.setRequestProperty(
-			    "Content-Type", "application/x-www-form-urlencoded" );
+		connection.setRequestProperty("Content-Type", "application/json" );
 		connection.setRequestProperty(ToolRepoService.TOOL_PWD_PARAM, generatePasswiord());
 		
 		connection.connect();
 
 		if (connection.getResponseCode() != 200) {
-			String responseMessage = connection.getHeaderField(ToolRepoService.RESPONCE_ERRORS);
+			String responseMessage = " <br></br> " + connection.getResponseCode() + " <br></br> " + connection.getResponseMessage();
 			throw new RegaGenotypeExeption(responseMessage);
 		}
 		// Note: can throw java.io.FileNotFoundException if the server did not respond.

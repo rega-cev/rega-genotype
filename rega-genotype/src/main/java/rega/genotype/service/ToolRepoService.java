@@ -125,15 +125,16 @@ public class ToolRepoService extends HttpServlet{
 								toolFile.delete();
 								getToolIndexes().removeIndex(toolFile);
 								getToolIndexes().save(repoDir);
-								resp.setStatus(200);
 								break;
 							} else {
-								resp.setStatus(404);
+								resp.sendError(404, "Only the tool publisher is allowed to retract it.");
 							}
 						}
 					}
 				}
 			}
+		}  else {
+			resp.setStatus(404);
 		}
 	}
 

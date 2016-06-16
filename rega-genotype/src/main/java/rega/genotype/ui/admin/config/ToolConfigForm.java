@@ -151,6 +151,7 @@ public class ToolConfigForm extends FormTemplate {
 								d.setText("Error: could not retract the tool. " + e.getMessage());
 								d.setButtons(StandardButton.Cancel);
 							}
+							retractB.disable();
 						}
 						else
 							d.remove();
