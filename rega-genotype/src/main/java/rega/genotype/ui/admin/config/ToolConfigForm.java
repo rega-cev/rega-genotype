@@ -69,7 +69,7 @@ public class ToolConfigForm extends FormTemplate {
 		// disable 
 
 		if (toolConfig.isPublished()) {
-			publishB.disable();
+			publishB.setDisabled(!toolConfig.isRetracted());
 			manifestForm.disable();
 			
 			fileEditor.setReadOnly(true);
@@ -182,6 +182,7 @@ public class ToolConfigForm extends FormTemplate {
 						try {
 							ToolRepoServiceRequests.publish(zip);
 							tool.setPublished(true);
+							tool.setRetracted(false);
 							Settings.getInstance().getConfig().save();
 							done.trigger();				
 						} catch (RegaGenotypeExeption e) {
