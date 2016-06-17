@@ -7,13 +7,13 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.config.GlobalConfigForm;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTable;
-import rega.genotype.ui.framework.widgets.Template;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WHBoxLayout;
 import eu.webtoolkit.jwt.WMenu;
 import eu.webtoolkit.jwt.WStackedWidget;
+import eu.webtoolkit.jwt.WTemplate;
 
 /**
  * Admin menu
@@ -58,7 +58,7 @@ public class AdminNavigation extends WContainerWidget {
 
 	    Config conf = Settings.getInstance().getConfig() == null ? new Config() : Settings.getInstance().getConfig();
 	    menu.addItem("Global config", new GlobalConfigForm(conf)).setPathComponent("global");
-	    menu.addItem("Help", new Template(tr("admin.help"))).setPathComponent("help");
+	    menu.addItem("Help", new WTemplate(tr("admin.help"))).setPathComponent("help");
 
 		WHBoxLayout layout = new WHBoxLayout();
 		setLayout(layout);

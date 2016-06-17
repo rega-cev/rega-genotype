@@ -288,6 +288,26 @@
 		<p>
 		Tools table contains remote and local tools. That can be identified by the tool state column. 
 		</p>
+		
+		<h4>Create a new tool from existing files</h4>
+		<div>1. Press add.</div>
+		<div>2. Fill in the manifest and local config data and press save.</div>
+		<div>3. Choose Simple File Editor -> add file (all the files) -> save</div>
+		<div>	Note: display images in resources.xml </div>
+		<div>4. If you are the tool maintainer you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service)</div>
+		
+		<h4>Edit existing tool</h4>
+		<div>1. Press install the tool.</div>
+		<div>2. Press create new version </div>
+		<div>3. Fill in the manifest and local config data and press save.</div>
+		<div>4. Edit</div>
+		<div>5. If you are the tool maintainer you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service)</div>
+		
+		<h4>Display images in resources.xml</h4>
+		<div>1. add the image files: Simple File Editor -> add files.</div>
+		<div>2. add to resources.xml:</div>
+		<div>&lt;img src="$${resource-file}/imageName"&gt; &lt;/img&gt;</div>
+
 	</message>
 	<!-- blocks -->
 
