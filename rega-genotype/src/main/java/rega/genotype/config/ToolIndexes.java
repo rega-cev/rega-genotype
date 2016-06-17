@@ -38,15 +38,15 @@ public class ToolIndexes {
 		return null;
 	}
 
-	public boolean removeIndex(File file) {
+	public boolean removeIndex(String toolId, String version) {
 		for (ToolIndex index: indexes) 
-			if (new File(index.getFilePath()).getAbsolutePath().
-					equals(file.getAbsolutePath()))
+			if (index.getToolId().equals(toolId) 
+					&& index.getToolVersion().equals(version))
 				return indexes.remove(index);
 
 		return false;
 	}
-	
+
 	public List<ToolIndex> getIndexes() {
 		return indexes;
 	}
@@ -63,15 +63,18 @@ public class ToolIndexes {
 		private String publisherName; 
 		private String publisherPassword; 
 		private String toolId;
-		private String filePath;
+		private String toolVersion;
+		private String fileName;
 
 		public ToolIndex(){}
 
-		public ToolIndex(String publisherPassword, String toolId, String publisherName, String filePath){
+		public ToolIndex(String publisherPassword, String toolId,
+				String toolVersion, String publisherName, String fileName){
 			this.publisherPassword = publisherPassword;
 			this.toolId = toolId;
 			this.publisherName = publisherName;
-			this.filePath = filePath;
+			this.fileName = fileName;
+			this.toolVersion = toolVersion;
 		}
 
 		public String getPublisherPassword() {
@@ -97,12 +100,24 @@ public class ToolIndexes {
 			this.publisherName = publisherName;
 		}
 
-		public String getFilePath() {
-			return filePath;
+		public File getFile(String repoDir) {
+			return new File(repoDir, fileName);
 		}
 
-		public void setFilePath(String filePath) {
-			this.filePath = filePath;
+		public String getFileName() {
+			return fileName;
+		}
+
+		public void setFileName(String fileName) {
+			this.fileName = fileName;
+		}
+
+		public String getToolVersion() {
+			return toolVersion;
+		}
+
+		public void setToolVersion(String toolVersion) {
+			this.toolVersion = toolVersion;
 		}
 	}
 }

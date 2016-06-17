@@ -110,14 +110,11 @@ public class ToolRepoService extends HttpServlet{
 		if (reqType.equals(REQ_TYPE_RETRACT_TOOL)) {	
 			String id = req.getParameter(TOOL_ID_PARAM);
 			String version = req.getParameter(TOOL_VERSION_PARAM);
-			
-			for (ToolIndex index: getToolIndexes().getIndexes()) {
+
+			ToolIndexes toolIndexes = getToolIndexes();
+			for (ToolIndex index: toolIndexes.getIndexes()) {
 				if (index.getToolId().equals(id)){
-					File toolFile;
-					if (index.getFilePath() != null)
-						toolFile = new File(index.getFilePath());
-					else // support old tools
-						toolFile = getToolFile(id, version);
+					File toolFile = index.getFile(repoDir);
 
 					if (toolFile.exists()) {
 						ToolManifest manifest = ToolManifest.parseJson(
@@ -127,8 +124,8 @@ public class ToolRepoService extends HttpServlet{
 								&& manifest.getVersion().equals(version)) {
 							if (index.getPublisherPassword().equals(pwd)) {
 								toolFile.delete();
-								getToolIndexes().removeIndex(toolFile);
-								getToolIndexes().save(repoDir);
+								toolIndexes.removeIndex(id, version);
+								toolIndexes.save(repoDir);
 								break;
 							} else {
 								resp.sendError(404, "Only the tool publisher is allowed to retract it.");
@@ -179,8 +176,9 @@ public class ToolRepoService extends HttpServlet{
 
 		// Add ToolIndex for new tools
 		indexes.getIndexes().add(new ToolIndex(
-				password, manifest.getId(), manifest.getPublisherName(),
-				repoDir + manifest.getId() + manifest.getVersion() + ".zip"));
+				password, manifest.getId(), manifest.getVersion(), 
+				manifest.getPublisherName(),
+				manifest.getId() + manifest.getVersion() + ".zip"));
 		try {
 			indexes.save(repoDir);
 		} catch (IOException e1) {
