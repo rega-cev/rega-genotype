@@ -113,4 +113,13 @@
     <param-name>baseRepoDir</param-name>
     <param-value>./base-repo-dir/</param-value>
   </context-param>
+  
+  <servlet>
+    <servlet-name>GetJobServlet</servlet-name>
+    <servlet-class>rega.genotype.servlet.GetJobServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetJobServlet</servlet-name>
+    <url-pattern>/get_job/*</url-pattern>
+  </servlet-mapping>
 </web-app>
