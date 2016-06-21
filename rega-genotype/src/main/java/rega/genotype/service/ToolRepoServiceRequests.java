@@ -45,24 +45,24 @@ public class ToolRepoServiceRequests {
 
 	private static String getReqPublishUrl() {
 		return gerRepoServiceUrl() 
-				+ File.separator  +  ToolRepoService.REQ_TYPE_PUBLISH;
+				+ "/"  +  ToolRepoService.REQ_TYPE_PUBLISH;
 	}
 
 	private static String getReqRetractUrl(String toolId, String toolVersion) {
 		return gerRepoServiceUrl() 
-				+ File.separator  +  ToolRepoService.REQ_TYPE_RETRACT_TOOL
+				+ "/"  +  ToolRepoService.REQ_TYPE_RETRACT_TOOL
 				+ "?" + ToolRepoService.TOOL_ID_PARAM + "=" + toolId
 				+ "&" + ToolRepoService.TOOL_VERSION_PARAM + "=" + toolVersion;
 	}
 
 	private static String getReqManifestsUrl() {
 		return gerRepoServiceUrl() 
-				+ File.separator  +  ToolRepoService.REQ_TYPE_GET_MANIFESTS;
+				+ "/"  +  ToolRepoService.REQ_TYPE_GET_MANIFESTS;
 	}
 
 	private static String getReqToolUrl(String toolId, String toolVersion) {
 		return gerRepoServiceUrl() 
-				+ File.separator  +  ToolRepoService.REQ_TYPE_GET_TOOL 
+				+ "/"  +  ToolRepoService.REQ_TYPE_GET_TOOL 
 				+ "?" + ToolRepoService.TOOL_ID_PARAM + "=" + toolId
 				+ "&" + ToolRepoService.TOOL_VERSION_PARAM + "=" + toolVersion;
 	}

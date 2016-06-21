@@ -66,10 +66,15 @@ public class RecombinationForm extends AbstractForm{
 		WImage genome = GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
 			@Override
 			public void handleRequest(WebRequest request, WebResponse response) {
+				String typeVirusImage = "0";
+				File f = new File(getMain().getOrganismDefinition().getXmlPath()+"/genome_"+p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id").replaceAll("\\d", "")+".png");
 				try {
+					if (f.exists()){
+						typeVirusImage = p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id").replaceAll("\\d", "").replaceAll("\\d", "");
+					}
 					if (getFileName().isEmpty()) {
 						File file = getMain().getOrganismDefinition().getLargeGenome().getGenomePNG(
-								jobDir, sequenceIndex, id, start, end, 0, type,
+								jobDir, sequenceIndex, id, start, end, typeVirusImage, type,
 								p.getValue("/genotype_result/sequence/result[@id='scan-" + type + "']/data"),
 								regions);
 						setFileName(file.getAbsolutePath());

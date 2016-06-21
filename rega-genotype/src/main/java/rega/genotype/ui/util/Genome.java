@@ -46,7 +46,7 @@ public class Genome {
 		         *((double)attributes.getGenomeImageEndX() - attributes.getGenomeImageStartX()));
 	}
 	
-	public File getGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, int variant, String type, String csvData, List<Region> regions) throws IOException{
+	public File getGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, String variant, String type, String csvData, List<Region> regions) throws IOException{
 		File pngFile = new File(jobDir.getAbsolutePath() 
 				+ File.separatorChar + "genome"
 				+ "_" + sequenceIndex 
@@ -62,7 +62,7 @@ public class Genome {
 		return pngFile;
 	}
 	
-	protected BufferedImage drawImage(String genotype, int start, int end, int variant, String csvData, List<Region> regions) throws IOException{
+	protected BufferedImage drawImage(String genotype, int start, int end, String variant, String csvData, List<Region> regions) throws IOException{
 		int w[];
 		String assign[];
 		int scanWindowSize;
@@ -75,7 +75,7 @@ public class Genome {
 		    
 		    for(int i = 1; i<csvTable.numRows(); i++) {
 		    	w[i-1] = Integer.parseInt(csvTable.valueAt(0, i));
-		    	assign[i-1] = csvTable.valueAt(csvTable.numColumns() -1 -variant, i);
+		    	assign[i-1] = csvTable.valueAt(csvTable.numColumns() -1 - 0, i);
 		    }
 		    
 		    scanWindowSize = w[0]*2;
@@ -175,7 +175,7 @@ public class Genome {
 				y);
 	}
 	
-	public File getSmallGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, int variant, String type, String csvData) throws IOException {
+	public File getSmallGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, String variant, String type, String csvData) throws IOException {
 		  File smallPngFile = new File(jobDir.getAbsolutePath() + File.separatorChar + "genomesmall_" + sequenceIndex + "_" + type + "_" + variant + ".png");
 
 		  if (!smallPngFile.exists()) {
@@ -186,7 +186,7 @@ public class Genome {
 		  return smallPngFile;
 	}
 
-	public File getGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, int variant, String type, String csvData) throws IOException {
+	public File getGenomePNG(File jobDir, int sequenceIndex, String genotype, int start, int end, String variant, String type, String csvData) throws IOException {
 		return getGenomePNG(jobDir, sequenceIndex, genotype, start, end, variant, type, csvData, null);
 	}
 }

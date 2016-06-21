@@ -599,7 +599,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return jobPath(jobDir);
 	}
 	
-	protected WImage createGenomeImage(final GenotypeResultParser p, final String assignedId, boolean unassigned) {
+	protected WImage createGenomeImage(final GenotypeResultParser p, final String assignedId, final String myTypeGenome, boolean unassigned) {
 		String startV = p.getValue("/genotype_result/sequence/result[@id='blast']/start");
 		final int start = unassigned || startV == null ? -1 : Integer.parseInt(startV);
 		String endV = p.getValue("/genotype_result/sequence/result[@id='blast']/end");
@@ -609,9 +609,14 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
 			@Override
 			public void handleRequest(WebRequest request, WebResponse response) {
+				String typeVirusImage = "0";
+				File f = new File(getMain().getOrganismDefinition().getXmlPath()+"/genome_"+myTypeGenome.replaceAll("\\d", "")+".png");
 				try {
+					if (f.exists()){
+						typeVirusImage = myTypeGenome.replaceAll("\\d", "");
+					}
 					if (getFileName().isEmpty()) {
-						File file = getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, sequenceIndex, assignedId, start, end, 0, "", null);
+						File file = getMain().getOrganismDefinition().getGenome().getSmallGenomePNG(jobDir, sequenceIndex, assignedId, start, end, typeVirusImage, "", null);
 						setFileName(file.getAbsolutePath());
 					}
 	

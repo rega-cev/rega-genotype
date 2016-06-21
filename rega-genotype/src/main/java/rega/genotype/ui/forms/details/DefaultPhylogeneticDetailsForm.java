@@ -14,10 +14,12 @@ import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.AlignmentResource;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WImage;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
@@ -43,10 +45,10 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 
 	public void fillForm(GenotypeResultParser p, OrganismDefinition od, File jobDir) {
 		String phyloPath = xpath;
-		initPhyloSection(p, commentTitle, jobDir, phyloPath);
+		initPhyloSection(p, od, commentTitle, jobDir, phyloPath);
 	}
 	
-	private void initPhyloSection(GenotypeResultParser p, WString header, final File jobDir, String phyloPath) {
+	private void initPhyloSection(GenotypeResultParser p, OrganismDefinition od, WString header, final File jobDir, String phyloPath) {
 		WWidget w;
 		w = new WText(header, this);
 		w.setId("");
@@ -136,6 +138,22 @@ public class DefaultPhylogeneticDetailsForm extends IDetailsForm {
 				new WFileResource("", GenotypeLib.getFile(jobDir, p.getValue(phyloPath+"/log")).getAbsolutePath()), "paup-log.txt"));
 		li.addWidget(w = new WText(" (Contains bootstrap values)"));
 		w.setId("");
+		
+		if (od.getToolConfig().getPath().equalsIgnoreCase("htlv")){
+			li = ul.addItem(new WText("Analyse in HTLV Molecular Epidemiology Database "));
+			li.addWidget(createHTLVDatabaseLink(jobDir));
+		}
+		w.setId("");
+	}
+	
+	private WAnchor createHTLVDatabaseLink(File jobDir) {
+		String[] toolDir = jobDir.getPath().replace("\\", "/").split("/");
+		WLink databaseLink = new WLink("http:////htlv1db.bahia.fiocruz.br/index.php?page=genotype_result_reader&job_dir="+ toolDir[toolDir.length - 2] +"&job_id=" + jobDir.getName());
+		
+		WAnchor databaseAnchor = new WAnchor(databaseLink, "HTLV-1 Database");
+		databaseAnchor.setTarget(AnchorTarget.TargetNewWindow);
+		
+		return databaseAnchor;
 	}
 
 	public WString getComment() {
