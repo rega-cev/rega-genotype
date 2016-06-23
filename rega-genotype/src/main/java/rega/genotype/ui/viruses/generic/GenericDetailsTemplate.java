@@ -13,7 +13,6 @@ import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
-
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.util.GenotypeLib;
@@ -38,14 +37,19 @@ public class GenericDetailsTemplate extends WTemplate {
 			WImage genome = GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
 				@Override
 				public void handleRequest(WebRequest request, WebResponse response) {
+					String typeVirusImage = "0";
+					File f = new File(od.getXmlPath()+"/genome_"+parser.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id").replaceAll("\\d", "")+".png");
 					try {
+						if (f.exists()){
+							typeVirusImage = parser.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id").replaceAll("\\d", "").replaceAll("\\d", "");
+						}
 						if (getFileName().isEmpty()) {
 							String startV = parser.getValue("/genotype_result/sequence/result[@id='blast']/start");
 							int start = startV == null ? -1 : Integer.parseInt(startV);
 							String endV = parser.getValue("/genotype_result/sequence/result[@id='blast']/end");
 							int end = endV == null ? -1 : Integer.parseInt(endV);
 							int sequenceIndex = parser.getSequenceIndex();
-							File file = od.getGenome().getGenomePNG(jobDir, sequenceIndex, "-", start, end, 0, "etv", null);
+							File file = od.getGenome().getGenomePNG(jobDir, sequenceIndex, "-", start, end, typeVirusImage, "etv", null);
 							setFileName(file.getAbsolutePath());
 						}
 

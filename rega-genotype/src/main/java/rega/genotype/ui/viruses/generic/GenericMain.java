@@ -46,7 +46,7 @@ public class GenericMain extends GenotypeMain {
 	public WApplication createApplication(WEnvironment env) {		
 		String[] deploymentPath = env.getDeploymentPath().split("/");
 		String url = deploymentPath[deploymentPath.length - 1];
-
+		getConfiguration().setFavicon("/"+deploymentPath[1]+"/pics/favicon1.ico");
 		ToolConfig toolConfig;
 
 		if (settings.getConfig() == null 
@@ -107,7 +107,27 @@ public class GenericMain extends GenotypeMain {
 			app.useStyleSheet(new WLink("../../style/wt.css")); // do not use Wt's inline stylesheet...
 			app.useStyleSheet(new WLink("../../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 		}
-
+		if (!WString.tr((String)"tool.meta.robots").equals((Object)"??tool.meta.robots??")) {
+            app.addMetaHeader("robots", (CharSequence)WString.tr((String)"tool.meta.robots"));
+        }
+        if (!WString.tr((String)"tool.meta.title").equals((Object)"??tool.meta.title??")) {
+            app.addMetaHeader("title", (CharSequence)WString.tr((String)"tool.meta.title"));
+        }
+        if (!WString.tr((String)"tool.meta.generator").equals((Object)"??tool.meta.generator??")) {
+            app.addMetaHeader("generator", (CharSequence)WString.tr((String)"tool.meta.generator"));
+        }
+        if (!WString.tr((String)"tool.meta.Content-Language").equals((Object)"??tool.meta.Content-Language??")) {
+            app.addMetaHeader("Content-Language", (CharSequence)WString.tr((String)"tool.meta.Content-Language"));
+        }
+        if (!WString.tr((String)"tool.meta.description").equals((Object)"??tool.meta.description??")) {
+            app.addMetaHeader("description", (CharSequence)WString.tr((String)"tool.meta.description"));
+        }
+        if (!WString.tr((String)"tool.meta.keywords").equals((Object)"??tool.meta.keywords??")) {
+            app.addMetaHeader("keywords", (CharSequence)WString.tr((String)"tool.meta.keywords"));
+        }
+        if (!WString.tr((String)"tool.meta.google-site-verification").equals((Object)"??tool.meta.google-site-verification??")) {
+            app.addMetaHeader("google-site-verification", (CharSequence)WString.tr((String)"tool.meta.google-site-verification"));
+        }
 		GenotypeWindow window = new GenotypeWindow(definition);
 
 		for (GenericDefinition.MenuItem item : definition.getMenuItems())

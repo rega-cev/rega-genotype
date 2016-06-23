@@ -102,9 +102,14 @@ public class DefaultSequenceAssignmentForm extends IDetailsForm {
 			WImage genome = GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
 				@Override
 				public void handleRequest(WebRequest request, WebResponse response) {
+					String typeVirusImage = "0";
+					File f = new File(od.getXmlPath()+"/genome_"+p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id").replaceAll("\\d", "")+".png");
 					try {
+						if (f.exists()){
+							typeVirusImage = p.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id").replaceAll("\\d", "").replaceAll("\\d", "");
+						}
 						if (getFileName().isEmpty()) {
-							File file = od.getGenome().getGenomePNG(jobDir, sequenceIndex, id, start, end, index, scanType, csvData);
+							File file = od.getGenome().getGenomePNG(jobDir, sequenceIndex, id, start, end, typeVirusImage, scanType, csvData);
 							setFileName(file.getAbsolutePath());
 						}
 						super.handleRequest(request, response);
