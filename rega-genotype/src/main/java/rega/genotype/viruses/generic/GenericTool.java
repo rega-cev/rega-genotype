@@ -92,7 +92,7 @@ public class GenericTool extends GenotypeTool {
         	/*
         	 * Reverse complement the sequence for subsequent analyses.
         	 */
-        	if (blastResult.isReverseCompliment())
+        	if (blastResult.isReverseComplement())
         		s = s.reverseCompliment();
 
         	boolean haveConclusion = false;

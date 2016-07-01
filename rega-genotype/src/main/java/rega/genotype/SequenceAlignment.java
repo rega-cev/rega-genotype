@@ -579,6 +579,28 @@ public class SequenceAlignment
         }
     }
 
+    public int firstNonGapPosition() {
+    	int firstNonGap = 0;
+
+    	for (int i = 0; i < sequences.size(); ++i) {
+            Sequence s = (Sequence) sequences.get(i);
+            firstNonGap = Math.max(firstNonGap, s.firstNonGapPosition());
+    	}
+    	
+    	return firstNonGap;
+	}
+
+    public int lastNonGapPosition() {
+    	int lastNonGap = getLength();
+
+    	for (int i = 0; i < sequences.size(); ++i) {
+            Sequence s = (Sequence) sequences.get(i);
+            lastNonGap = Math.min(lastNonGap, s.lastNonGapPosition());
+    	}
+    	
+    	return lastNonGap;
+	}
+
     public AbstractSequence findSequence(String name) {
     	name = name.replaceAll(":", "_").replaceAll(",", "_"); // Apparently, clustal will do that!
         for (int i = 0; i < sequences.size(); ++i)
@@ -642,4 +664,5 @@ public class SequenceAlignment
 	public void setAlignmentScore(int alignmentScore) {
 		this.alignmentScore = alignmentScore;
 	}
+
 }
