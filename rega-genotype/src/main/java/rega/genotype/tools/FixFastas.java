@@ -17,7 +17,7 @@ public class FixFastas {
             (new InputStreamReader(new BufferedInputStream(new FileInputStream(args[0]))));
     
 		for (;;) {
-		    Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
+		    Sequence s = SequenceAlignment.readFastqFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
 		    if (s != null) {
 		    	System.out.println("<sequence name=\"" + s.getName() + "\">");
 		    	System.out.println(s.getSequence());
