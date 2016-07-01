@@ -194,6 +194,7 @@ public class Config {
 		private String paupCmd = "paup4b10";
 		private String clustalWCmd = "clustalW";
 		private String blastPath = "/usr/bin/";
+		private String diamondPath = "diamond";
 		private String treePuzzleCmd = "puzzle";
 		private String treeGraphCmd = "tgf";
 		private String epsToPdfCmd = "epstopdf";
@@ -258,6 +259,12 @@ public class Config {
 		}
 		public void setBlastPath(String blastPath) {
 			this.blastPath = blastPath;
+		}
+		public String getDiamondPath() {
+			return diamondPath;
+		}
+		public void setDiamondPath(String diamondPath) {
+			this.diamondPath = diamondPath;
 		}
 		public String getPublisherName() {
 			return publisherName;
