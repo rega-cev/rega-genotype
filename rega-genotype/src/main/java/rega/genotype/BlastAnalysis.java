@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.sun.org.apache.bcel.internal.generic.GETFIELD;
+
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.utils.StreamReaderRuntime;
 
@@ -37,6 +39,7 @@ import rega.genotype.utils.StreamReaderRuntime;
  */
 public class BlastAnalysis extends AbstractAnalysis {
 	public static String blastPath = "";
+	public static String diamondPath = "";
     public static String formatDbCommand = "formatdb";
     public static String blastCommand = "blastall";
 
@@ -479,6 +482,7 @@ public class BlastAnalysis extends AbstractAnalysis {
         SequenceAlignment analysisDb = analysis.selectSequencesFromClusters(clusters);
 	
 		Process formatdb = null;
+		Process formatdb1 = null;
 		File db = getTempFile("db.fasta");
 		FileOutputStream dbFile;
 		try {
@@ -488,8 +492,17 @@ public class BlastAnalysis extends AbstractAnalysis {
 			//dbFile.flush();
 			//fd.sync();
 			dbFile.close();
-
-			String cmd = blastPath + formatDbCommand + " " + formatDbOptions() + " -o T -i " + db.getAbsolutePath();
+			String cmd = "";
+			if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA){
+				File query = getTempFile("sequences.fasta");
+				cmd = diamondPath + " " + formatDbOptions() + " --in " + query.getAbsolutePath() + " -d "+ getTempFile("") + File.separator + "nr.dmnd";
+				formatdb1 = StreamReaderRuntime.exec(cmd, null, workingDir);
+				int exitResult = formatdb1.waitFor();
+				File nr = getTempFile("nr.dmnd");
+				cmd = diamondPath + " blastx -d " + nr.getAbsolutePath() + " -q "+ db.getAbsolutePath() +" -a "+ getTempFile("") + File.separator + "matches.daa";
+			}else{
+				cmd = blastPath + formatDbCommand + " " + formatDbOptions() + " -o T -i " + db.getAbsolutePath();
+			}
 			System.err.println(cmd);
 
 
@@ -532,10 +545,17 @@ public class BlastAnalysis extends AbstractAnalysis {
                 queryFile.close();
 
         		File db = getTempFile("db.fasta");
-        		String cmd = blastPath + blastCommand + blastProgramOption() + blastOptions
-                	+ " -i " + query.getAbsolutePath()
-                    + " -m 8 -d " + db.getAbsolutePath();
-                System.err.println(cmd);
+        		String cmd = "";
+        		if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA){
+        			cmd = diamondPath + blastCommand + blastProgramOption() + blastOptions
+    	                	+ " -i " + query.getAbsolutePath()
+    	                    + " -m 8 -d " + db.getAbsolutePath();
+        		}else{
+	        		cmd = blastPath + blastCommand + blastProgramOption() + blastOptions
+	                	+ " -i " + query.getAbsolutePath()
+	                    + " -m 8 -d " + db.getAbsolutePath();
+        		}
+        		System.err.println(cmd);
 
                 blast = Runtime.getRuntime().exec(cmd, null, workingDir);
                 InputStream inputStream = blast.getInputStream();
@@ -562,7 +582,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 					}
                 };
                 
-                boolean aa = owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA;
+                boolean aa = false;//owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA;
                 Result result = parseBlastResults(br, this, aa, sequence);
                 
                 int exitResult = blast.waitFor();
@@ -991,7 +1011,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 	private String formatDbOptions() {
 		if (owner.getAlignment() != null && 
         		owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA) 
-			return "";
+			return "makedb";
 		else
 			return "-p F";
 	}

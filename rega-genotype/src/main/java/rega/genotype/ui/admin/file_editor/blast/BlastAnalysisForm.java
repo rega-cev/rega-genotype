@@ -78,7 +78,7 @@ public class BlastAnalysisForm extends FormTemplate{
 				if (t == SequenceType.DNA)
 					return new WString("blastn (DNA)");
 				else
-					return new WString("blastx (AA)");
+					return new WString("Diamond (AA)");
 			}
 		};
 

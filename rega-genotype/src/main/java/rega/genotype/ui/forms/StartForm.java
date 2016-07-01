@@ -47,10 +47,12 @@ import eu.webtoolkit.jwt.WTextArea;
 public class StartForm extends AbstractForm {
 	private WTextArea sequenceTA;
 	private FileUpload fileUpload;
+	private String fileUploadFasta;
 	
 	private WLineEdit jobIdTF;
 	
 	private WText errorJobId, errorText;
+	private String msgUploadFile = "Successfully uploaded file! Click Start to process the file.";
 	
 	public StartForm(GenotypeWindow main) {
 		super(main);
@@ -91,7 +93,12 @@ public class StartForm extends AbstractForm {
 	
 		run.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				final String fasta = sequenceTA.getText();
+				final String fasta;
+				if (((sequenceTA.getText().equalsIgnoreCase("")) || (sequenceTA.getText().equalsIgnoreCase(msgUploadFile))) && (!(getFastaTextArea().equalsIgnoreCase("")))){
+					fasta = getFastaTextArea();
+				}else{
+					fasta = sequenceTA.getText();
+				}				
 				
 				CharSequence error = verifyFasta(fasta);
 				validateInput(error);
@@ -121,6 +128,8 @@ public class StartForm extends AbstractForm {
 						startLocalJob(fasta);
 				}
 			}
+
+			
 		});
 
 		fileUpload = new FileUpload();
@@ -131,7 +140,9 @@ public class StartForm extends AbstractForm {
 				try {
 					if (f.exists()) {
 						String fasta = GenotypeLib.readFileToString(f);
-						sequenceTA.setText(fasta);
+						sequenceTA.setText(msgUploadFile);
+						setFastaTextArea(fasta);
+						
 						CharSequence error = verifyFasta(fasta);
 						validateInput(error);
 					}
@@ -288,5 +299,13 @@ public class StartForm extends AbstractForm {
 	@Override
 	public void handleInternalPath(String internalPath) {
 		
+	}
+	
+	private void setFastaTextArea(String fileUploadFasta){
+		this.fileUploadFasta = fileUploadFasta;
+	}
+	
+	private String getFastaTextArea(){
+		return this.fileUploadFasta;
 	}
 }

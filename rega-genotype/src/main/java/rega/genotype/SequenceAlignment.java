@@ -155,6 +155,19 @@ public class SequenceAlignment
                 return;
         }
     }
+    
+	private void readFastqFile(InputStream inputFile, int sequenceType)
+			throws IOException, FileFormatException {
+		LineNumberReader reader = new LineNumberReader(new InputStreamReader(inputFile));
+		for (;;) {
+			Sequence s = readFastqFileSequence(reader, sequenceType);
+			if (s != null) {
+				sequences.add(s);
+			} else {
+				return;
+			}
+		}
+	}
 
     public static Sequence readFastaFileSequence(LineNumberReader reader, int sequenceType)
         throws IOException, FileFormatException
@@ -164,7 +177,7 @@ public class SequenceAlignment
          */
         String header;
         do {
-            header = reader.readLine();
+            header = reader.readLine();            
             if (header == null)
                 return null; // no new sequence to be found
         } while (header.length() == 0);
@@ -217,6 +230,54 @@ public class SequenceAlignment
 
         return new Sequence(name, nameCapped, description, sequence.toString());
     }
+    
+	public static Sequence readFastqFileSequence(LineNumberReader reader,
+			int sequenceType) throws IOException, FileFormatException {
+
+		String line;
+		int control = 0;
+		int lengthSequence = 0;
+		int lengthQuality = 0;
+		StringBuffer sequence = new StringBuffer();
+		String name = "";
+        String quality = "";
+		do{
+			reader.mark(1000);
+			line=reader.readLine();
+			if (line!=null){
+				if ((control == 0) || (control > 1 && (control%4 == 0))){ //line 1
+					//System.out.println(line.toString()+"->"+control+"%4=" + control%4);
+					if (line.charAt(0) != '@'){
+						throw new FileFormatException("Expecting a '@'", reader.getLineNumber());
+					}
+					if (!line.substring(1).matches("[^!#$%^&\\*()+]*")){
+						throw new FileFormatException("Illegal character (one of '!@#$%^&\\*()+=')",reader.getLineNumber());
+					}
+					name = line.substring(1).toString();
+				}
+				if (control > 0 && (control-1)%4 == 0){ //line 2
+					sequence.append(checkLegal(line, reader.getLineNumber(),sequenceType));
+					lengthSequence = line.length();
+				}
+				if (control > 0 && ((control-3)%4 == 0)){ //line 4
+					lengthQuality = line.length();
+					if (lengthSequence != lengthQuality){
+						throw new FileFormatException("Quality must contain the same number of symbols as letters in the sequence",reader.getLineNumber());
+					}
+					quality = line.toString();
+					lengthSequence = 0;
+					lengthQuality = 0;
+					line = null;
+				}
+				control++;
+			}else{
+				return null; // no new sequence to be found
+			}
+		}while(line!=null);
+		reader.reset();
+		reader.readLine();
+		return new Sequence(name, false, quality, sequence.toString());
+	}
 
     private static String checkLegal(String s, int line, int sequenceType) throws FileFormatException {
     	s = s.replaceAll("[ \\t\\n\\r]", "");

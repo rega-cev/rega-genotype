@@ -10,6 +10,7 @@ import java.io.File;
 import javax.servlet.ServletContext;
 
 import rega.genotype.BlastAnalysis;
+import rega.genotype.DiamondAnalysis;
 import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.config.Config;
@@ -90,6 +91,10 @@ public class Settings {
 	public File getBlastPath() {
 		return new File(config.getGeneralConfig().getBlastPath());
 	}
+	
+	public File getDiamondPath() {
+		return new File(config.getGeneralConfig().getDiamondPath());
+	}
 
 	public String getTreePuzzleCmd() {
 		return config.getGeneralConfig().getTreePuzzleCmd();
@@ -124,6 +129,7 @@ public class Settings {
 		if (s.getConfig() != null) {
 			SequenceAlign.clustalWPath = s.getClustalWCmd();
 			BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
+			DiamondAnalysis.diamondPath = s.getDiamondPath().getAbsolutePath();
 			treeGraphCommand = s.getTreeGraphCmd();
 		}
 	}
