@@ -205,12 +205,12 @@ public class BlastAnalysis extends AbstractAnalysis {
         private int matchDiffs;
         private int matchLength;
         private ReferenceTaxus refseq;
-		private boolean reverseCompliment;
+		private boolean reverseComplement;
 		private String detailsFile;
 
         public Result(AbstractSequence sequence, Set<Cluster> bestClusters, float absScore, float relativeScore,
         		float absSimilarity, float relativeSimilarity,
-        		int length, int diffs, int start, int end, ReferenceTaxus refseq, boolean reverseCompliment) {
+        		int length, int diffs, int start, int end, ReferenceTaxus refseq, boolean reverseComplement) {
             super(sequence);
             this.clusters = bestClusters;
             this.absScore = absScore;
@@ -222,7 +222,7 @@ public class BlastAnalysis extends AbstractAnalysis {
             this.start = start;
             this.end = end;
             this.refseq = refseq;
-            this.reverseCompliment = reverseCompliment;
+            this.reverseComplement = reverseComplement;
         }
 
         public boolean haveSupport() {
@@ -282,7 +282,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 			if (cluster != null && cluster.getDescription() != null) {
 			    tracer.add("description", cluster.getDescription());
 			}
-			tracer.add("reverse-compliment", String.valueOf(reverseCompliment));
+			tracer.add("reverse-compliment", String.valueOf(reverseComplement));
 			tracer.add("concluded-id", haveSupport() ? cluster.getId() : "Unassigned");
 			tracer.add("concluded-name", haveSupport() ? cluster.getName() : "Unassigned");
 			tracer.add("tool-id", cluster != null ? cluster.getToolId() : "none");
@@ -391,8 +391,8 @@ public class BlastAnalysis extends AbstractAnalysis {
 			return 0;
 		}
 
-		public boolean isReverseCompliment() {
-			return reverseCompliment;
+		public boolean isReverseComplement() {
+			return reverseComplement;
 		}
 		
 		public ReferenceTaxus getReference() {
@@ -679,14 +679,21 @@ public class BlastAnalysis extends AbstractAnalysis {
 					offsetEnd = seqLength - offsetEnd;
 					reverseCompliment = true;
 				}
+
 				if (refReverseCompliment) {
-					String tmp = values[BLAST_RESULT_S_START_IDX];
-					values[BLAST_RESULT_S_START_IDX] = values[BLAST_RESULT_S_END_IDX];
-					values[9] = tmp;
+					offsetBegin = -offsetBegin;
+					offsetEnd = -offsetEnd;
 					reverseCompliment = true;
 				}
+
 				start = Integer.parseInt(values[BLAST_RESULT_S_START_IDX]) * queryFactor - offsetBegin;
 				end = Integer.parseInt(values[BLAST_RESULT_S_END_IDX]) * queryFactor + offsetEnd;
+
+				if (refReverseCompliment) {
+					int tmp = start;
+					start = end;
+					end = tmp;
+				}
 
 				if (refseq != null && refseq.reportAsOther() != null) {
 					refseq = ba.referenceTaxa.get(refseq.reportAsOther());
