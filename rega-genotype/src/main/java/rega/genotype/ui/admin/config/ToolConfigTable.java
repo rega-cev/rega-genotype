@@ -438,7 +438,7 @@ public class ToolConfigTable extends Template{
 			// create local config for installed tool
 			ToolConfig config = new ToolConfig();
 			config.setConfiguration(manifest.suggestXmlDirName());
-			config.genetareJobDir();
+			config.genetareJobDir(manifest.suggestXmlDirName());
 			if (mode == Mode.Install)
 				config.setPublished(true);
 			Settings.getInstance().getConfig().putTool(config);
@@ -573,9 +573,10 @@ public class ToolConfigTable extends Template{
 			ToolInfo info = proxyModel.getToolInfo(table.getSelectedIndexes().first());
 
 			ToolConfig config = info.getConfig().copy();
-			config.genetareJobDir();
-			config.genetareConfigurationDir(
-					info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1));
+			String suggestedDirName = info.getConfig().getToolMenifest().getId() +
+					suggestNewVersion(info.getConfig(), 1);
+			config.genetareJobDir(suggestedDirName);
+			config.genetareConfigurationDir(suggestedDirName);
 			Settings.getInstance().getConfig().putTool(config);
 			try {
 				Settings.getInstance().getConfig().save();
