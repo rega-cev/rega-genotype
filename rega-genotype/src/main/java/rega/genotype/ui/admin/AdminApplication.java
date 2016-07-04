@@ -55,8 +55,9 @@ public class AdminApplication extends WApplication{
 			final WLineEdit pwdLE = new WLineEdit(loginC);
 			final WPushButton loginB = new WPushButton("Login", loginC);
 			final WText infoT = new WText(loginC);
-			pwdLE.setMargin(5, Side.Left);
 
+			pwdLE.setAttributeValue("type", "password");
+			pwdLE.setMargin(5, Side.Left);
 			pwdLE.setFocus();
 			pwdLE.setPlaceholderText("Admin password");
 
