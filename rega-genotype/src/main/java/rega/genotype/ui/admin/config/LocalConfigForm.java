@@ -76,13 +76,12 @@ public class LocalConfigForm  extends FormTemplate {
 			}
 		}
 
-		toolConfig.setConfiguration(toolDir.getAbsolutePath() + File.separator);
+		toolConfig.genetareConfigurationDir(toolDir.getName());
 		toolConfig.setAutoUpdate(autoUpdateChB.isChecked());
 		toolConfig.setPath(urlLE.getText());
 		toolConfig.setUi(uiChB.isChecked());
 		toolConfig.setWebService(serviceChB.isChecked());
-		if(toolConfig.getJobDir().isEmpty())
-			toolConfig.genetareJobDir();
+		toolConfig.genetareJobDir(toolDir.getName());
 
 		config.putTool(toolConfig);
 

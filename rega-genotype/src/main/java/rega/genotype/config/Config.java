@@ -321,7 +321,7 @@ public class Config {
 		 * create and set job, xml dirs for a new tool.
 		 */
 		public void genetareDirs() {
-			genetareJobDir();
+			genetareJobDir(null);
 			genetareConfigurationDir();
 		}
 		public void genetareConfigurationDir() {
@@ -345,15 +345,22 @@ public class Config {
 			}
 		}
 		
-		public void genetareJobDir() {
+		public void genetareJobDir(String suggestDirName) {
 			try {
-				File toolJobDir = FileUtil.createTempDirectory("tool-dir", 
-						new File(Settings.getInstance().getBaseJobDir()));
-				setJobDir(toolJobDir + File.separator);
+				File toolDir;
+				if (suggestDirName == null)
+					toolDir = FileUtil.createTempDirectory("tool-dir", 
+							new File(Settings.getInstance().getBaseJobDir()));
+				else {
+					toolDir = new File(new File(Settings.getInstance().getBaseJobDir()), suggestDirName);
+					toolDir.mkdirs();
+				}
+				setJobDir(toolDir + File.separator);
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); 
 			}
+
 		}
 
 		public ToolManifest getToolMenifest() {
