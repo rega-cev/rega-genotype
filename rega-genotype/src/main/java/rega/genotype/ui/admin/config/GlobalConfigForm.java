@@ -102,6 +102,10 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldInfo("adminPassword", "<div>Will be used to login to the adin area.</div>");
 		
 		setFieldInfo("epsToPdfCmd", "<div>Can be obtained from 'texlive-font-utils'</div>");
+		
+		setFieldInfo("fastqcCmd", "<div>Can be obtained from http://www.bioinformatics.babraham.ac.uk/projects/download.html</div>");
+		setFieldInfo("spadesCmd", "<div>Can be obtained from http://bioinf.spbau.ru/spades</div>");
+
 
 	}
 }

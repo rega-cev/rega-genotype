@@ -205,7 +205,7 @@ public class Config {
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.
 		private String adminPassword;
-		private String fastqcCmd;
+		private String fastqcCmd = "fastqc";
 		private String spadesCmd = "spades";
 		
 		public String getPaupCmd() {
