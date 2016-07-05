@@ -17,6 +17,7 @@ public class NgsAnalysis {
 	public static final String FASTQ_FILES_DIR = "fastq_files";
 	public static final String QC_REPORT_DIR = "qc_report";
 	public static final String ASSEMBALED_CONTIGS_DIR = "assembaled_contigs";
+	public static final String DIAMOND_BLAST_DIR = "diamond_blast";
 
 	/**
 	 * Contract long virus contigs from ngs output. 
@@ -138,6 +139,24 @@ public class NgsAnalysis {
 		return out;
 	}
 
+	/**
+	 * Diamond blast will remove non virus reads and separate the virus
+	 * reads to different files.
+	 * The result files will be saved in DIAMOND_BLAST_DIR
+	 * 
+	 * @param sequenceFile1 File with forward reads.
+	 * @param sequenceFile2 File with reverse reads.
+	 * @param workDir
+	 * @return
+	 * @throws ApplicationException
+	 */
+	public static List<File> runDiamondBlast(File sequenceFile1, File sequenceFile2,
+			File workDir) throws ApplicationException {		
+		File diamondDir = new File(workDir, DIAMOND_BLAST_DIR);
+
+		return null; //TODO
+	}
+	
 	public static String contigsDir(String virusName) {
 		return ASSEMBALED_CONTIGS_DIR + "_" + virusName;
 	}
