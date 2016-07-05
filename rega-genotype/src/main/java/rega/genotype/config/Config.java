@@ -206,6 +206,7 @@ public class Config {
 		private String repoUrl; // url of repository server.
 		private String adminPassword;
 		private String fastqcCmd;
+		private String spadesCmd = "spades";
 		
 		public String getPaupCmd() {
 			return paupCmd;
@@ -299,6 +300,12 @@ public class Config {
 		}
 		public void setFastqcCmd(String fastqcCmd) {
 			this.fastqcCmd = fastqcCmd;
+		}
+		public String getSpadesCmd() {
+			return spadesCmd;
+		}
+		public void setSpadesCmd(String spadesCmd) {
+			this.spadesCmd = spadesCmd;
 		}
 	}
 
