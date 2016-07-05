@@ -34,7 +34,13 @@
     </message>
   	<message id="startForm.monitorJob">
   		<h2>C) Or, revisit results from a previous run:</h2>
-    </message>  	
+    </message>
+    <message id="startForm.ngs">
+  		<h2>D) NGS upload FASTQ, assemble a contig from FASTQ files and analyze it:</h2>
+    </message> 	
+    <message id="startForm.upload-fastq-1">upload fastq pair end 1:</message>
+    <message id="startForm.upload-fastq-2">upload fastq pair end 1:</message>
+
   	<message id="startForm.labelJobId">Job-id:</message>
   	<message id="startForm.monitor">Retrieve results</message>
   	<message id="startForm.errorJobId">Invalid job id.</message>
@@ -232,6 +238,7 @@
   		  <tr><td>Name</td><td>${name}</td><td>${name-info}</td></tr>
   		  <tr><td>Description</td><td>${description}</td><td>${description-info}</td></tr>
   		  <tr><td>Tool ID</td><td>${tool-id}</td><td>${tool-id-info}</td></tr>
+  		  <tr><td>Taxonomy ID</td><td>${taxonomy-id-text}${taxonomy-id-button}</td></tr>
 		</table>
 		${fasta}
 		<div>${add-sequence}${remove-sequence}</div>
