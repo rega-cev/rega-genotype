@@ -27,7 +27,10 @@ public class NgsProgress {
 
 	private State state = State.UploadStarted;
 	private String errors = new String();
-
+	private String fastqPE1FileName;// File with forward reads.
+	private String fastqPE2FileName;// File with reverse reads.
+	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
+	
 	public NgsProgress() {}
 
 	public static NgsProgress read(File workDir) {
@@ -73,5 +76,29 @@ public class NgsProgress {
 
 	public void setErrors(String errors) {
 		this.errors = errors;
+	}
+
+	public String getFastqPE1FileName() {
+		return fastqPE1FileName;
+	}
+
+	public void setFastqPE1FileName(String fastqPE1FileName) {
+		this.fastqPE1FileName = fastqPE1FileName;
+	}
+
+	public String getFastqPE2FileName() {
+		return fastqPE2FileName;
+	}
+
+	public void setFastqPE2FileName(String fastqPE2FileName) {
+		this.fastqPE2FileName = fastqPE2FileName;
+	}
+
+	public String getFastqSEFileName() {
+		return fastqSEFileName;
+	}
+
+	public void setFastqSEFileName(String fastqSEFileName) {
+		this.fastqSEFileName = fastqSEFileName;
 	}
 }

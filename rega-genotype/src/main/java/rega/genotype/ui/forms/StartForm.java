@@ -18,6 +18,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.ngs.NgsAnalysis;
+import rega.genotype.ngs.NgsProgress;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -207,8 +208,16 @@ public class StartForm extends AbstractForm {
 					File fastqDir = new File(workDir, NgsAnalysis.FASTQ_FILES_DIR);
 					fastqDir.mkdirs();
 					FileUtils.copyFile(fastqFile1, new File(fastqDir, fastqFileUpload1.getClientFileName()));
-					if (fastqFile2 != null)
-						FileUtils.copyFile(fastqFile2, new File(fastqDir, fastqFileUpload2.getClientFileName()));
+					FileUtils.copyFile(fastqFile2, new File(fastqDir, fastqFileUpload2.getClientFileName()));
+
+					NgsProgress ngsProgress = new NgsProgress();
+
+					//PE
+					ngsProgress.setFastqPE1FileName(fastqFileUpload1.getClientFileName());
+					ngsProgress.setFastqPE2FileName(fastqFileUpload2.getClientFileName());
+
+					// SE TODO
+					ngsProgress.save(workDir);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
