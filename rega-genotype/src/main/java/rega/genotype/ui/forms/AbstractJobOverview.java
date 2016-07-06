@@ -16,6 +16,9 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.GenotypeResultParser.ParsingState;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
+import rega.genotype.ngs.NgsProgress;
+import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ngs.NgsWidget;
 import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -107,6 +110,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		template.bindEmpty("analysis-cancelled");
 		
 		jobTable = new WTable(this);
+		template.bindEmpty("ngs-results");
 		template.bindWidget("results", jobTable);
 		jobTable.setHeaderCount(1, Orientation.Horizontal);
 		jobTable.setHeaderCount(1, Orientation.Vertical);
@@ -217,6 +221,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		updateInfo();
 		if (jobDone())
 			showDownloads();
+	}
+
+	protected void updateNgsView() {
+		template.bindWidget("ngs-results", new NgsWidget(jobDir));
 	}
 
 	protected void fillResultsWidget() {
@@ -432,6 +440,28 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			parserThread = new Thread(new Runnable() {
 				boolean stop = false;
 				public void run() {
+					// prepare NGS data
+					NgsProgress ngsProgress = NgsProgress.read(jobDir);
+					if (ngsProgress != null) {
+						while (!stop && ngsProgress.getState() != State.FinishedAll){
+							synchronized (lock) {
+								try {
+									UpdateLock updateLock = app.getUpdateLock();
+									updateNgsView();
+									app.triggerUpdate();
+									updateLock.release();
+									if (ngsProgress.getState() == State.FinishedAll
+											|| !ngsProgress.getErrors().isEmpty())
+										break;
+									lock.wait(interval);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+									assert (false);
+								}
+							}
+						}
+					}
+
 					final File resultFile = new File(getJobdir().getAbsolutePath()
 							+ File.separatorChar + "result.xml");
 					// wait till result.xml is ready

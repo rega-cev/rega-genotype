@@ -63,4 +63,12 @@ public class SubSequence extends AbstractSequence {
 	public boolean isNameCapped() {
 		return sequence.isNameCapped();
 	}
+	
+	public void setQuality(String quality) {
+		this.description = quality;
+	}
+	
+	public String getQuality() {
+		return description;
+	}
 }

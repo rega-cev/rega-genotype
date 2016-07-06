@@ -195,6 +195,8 @@ public class Config {
 		private String clustalWCmd = "clustalW";
 		private String blastPath = "/usr/bin/";
 		private String diamondPath = "diamond";
+		private String dbDiamondPath = "db.dmnd";
+		private String taxonamyDiamondPath = "taxonamy.fasta";
 		private String treePuzzleCmd = "puzzle";
 		private String treeGraphCmd = "tgf";
 		private String epsToPdfCmd = "epstopdf";
@@ -205,6 +207,8 @@ public class Config {
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.
 		private String adminPassword;
+		private String fastqcCmd;
+		private String spadesCmd = "spades";
 		
 		public String getPaupCmd() {
 			return paupCmd;
@@ -266,6 +270,18 @@ public class Config {
 		public void setDiamondPath(String diamondPath) {
 			this.diamondPath = diamondPath;
 		}
+		public String getDbDiamondPath() {
+			return dbDiamondPath;
+		}
+		public void setDbDiamondPath(String dbDiamondPath) {
+			this.dbDiamondPath = dbDiamondPath;
+		}
+		public String getTxDiamondPath() {
+			return taxonamyDiamondPath;
+		}
+		public void setTxDiamondPath(String taxonamyDiamondPath) {
+			this.taxonamyDiamondPath = taxonamyDiamondPath;
+		}
 		public String getPublisherName() {
 			return publisherName;
 		}
@@ -292,6 +308,18 @@ public class Config {
 		}
 		public void setAdminPassword(String adminPassword) {
 			this.adminPassword = adminPassword;
+		}
+		public String getFastqcCmd() {
+			return fastqcCmd;
+		}
+		public void setFastqcCmd(String fastqcCmd) {
+			this.fastqcCmd = fastqcCmd;
+		}
+		public String getSpadesCmd() {
+			return spadesCmd;
+		}
+		public void setSpadesCmd(String spadesCmd) {
+			this.spadesCmd = spadesCmd;
 		}
 	}
 
@@ -321,7 +349,7 @@ public class Config {
 		 * create and set job, xml dirs for a new tool.
 		 */
 		public void genetareDirs() {
-			genetareJobDir();
+			genetareJobDir(null);
 			genetareConfigurationDir();
 		}
 		public void genetareConfigurationDir() {
@@ -345,15 +373,22 @@ public class Config {
 			}
 		}
 		
-		public void genetareJobDir() {
+		public void genetareJobDir(String suggestDirName) {
 			try {
-				File toolJobDir = FileUtil.createTempDirectory("tool-dir", 
-						new File(Settings.getInstance().getBaseJobDir()));
-				setJobDir(toolJobDir + File.separator);
+				File toolDir;
+				if (suggestDirName == null)
+					toolDir = FileUtil.createTempDirectory("tool-dir", 
+							new File(Settings.getInstance().getBaseJobDir()));
+				else {
+					toolDir = new File(new File(Settings.getInstance().getBaseJobDir()), suggestDirName);
+					toolDir.mkdirs();
+				}
+				setJobDir(toolDir + File.separator);
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); 
 			}
+
 		}
 
 		public ToolManifest getToolMenifest() {

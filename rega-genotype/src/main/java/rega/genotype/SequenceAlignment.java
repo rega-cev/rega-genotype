@@ -35,6 +35,7 @@ public class SequenceAlignment
     int alignmentScore = -1;
 
     public final static int FILETYPE_FASTA = 0;
+    public final static int FILETYPE_FASTQ = 0;
     public final static int FILETYPE_CLUSTAL = 1;
     public final static int FILETYPE_NEXUS = 2;
     public final static int FILETYPE_PHYLIP = 3;
@@ -228,7 +229,7 @@ public class SequenceAlignment
             }
         } while (s != null);
 
-        return new Sequence(name, nameCapped, description, sequence.toString());
+        return new Sequence(name, nameCapped, description, sequence.toString(), null);
     }
     
 	public static Sequence readFastqFileSequence(LineNumberReader reader,
@@ -240,6 +241,7 @@ public class SequenceAlignment
 		int lengthQuality = 0;
 		StringBuffer sequence = new StringBuffer();
 		String name = "";
+        String description = "";
         String quality = "";
 		do{
 			reader.mark(1000);
@@ -259,6 +261,9 @@ public class SequenceAlignment
 					sequence.append(checkLegal(line, reader.getLineNumber(),sequenceType));
 					lengthSequence = line.length();
 				}
+				if (control > 0 && (control-2)%4 == 0){ //line 2
+					description = line.toString();
+				}
 				if (control > 0 && ((control-3)%4 == 0)){ //line 4
 					lengthQuality = line.length();
 					if (lengthSequence != lengthQuality){
@@ -276,7 +281,7 @@ public class SequenceAlignment
 		}while(line!=null);
 		reader.reset();
 		reader.readLine();
-		return new Sequence(name, false, quality, sequence.toString());
+		return new Sequence(name, false, description, sequence.toString(), quality);
 	}
 
     private static String checkLegal(String s, int line, int sequenceType) throws FileFormatException {
@@ -372,7 +377,7 @@ public class SequenceAlignment
 		if (a.length != 2)
 			throw new FileFormatException("Unexpected sequence line format", reader.getLineNumber());
 		
-		return new Sequence(a[0], false, "", checkLegal(a[1], reader.getLineNumber(), sequenceType));
+		return new Sequence(a[0], false, "", checkLegal(a[1], reader.getLineNumber(), sequenceType), null);
 	}
 
 	public AbstractSequence getSequence(String sequenceName) {

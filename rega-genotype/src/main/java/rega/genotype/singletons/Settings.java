@@ -11,7 +11,6 @@ import javax.servlet.ServletContext;
 
 import rega.genotype.BlastAnalysis;
 import rega.genotype.DiamondAnalysis;
-import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.config.Config;
 import rega.genotype.utils.FileUtil;
@@ -192,7 +191,16 @@ public class Settings {
 				baseDir = "./base-work-dir/";
 		}
 
-		new File(baseDir).mkdirs(); // make sure that the dir exists
-        return baseDir;
+		File baseDirfile = new File(baseDir);
+		if(!baseDirfile.exists()) {
+			if (new File(baseDir).mkdirs()) // make sure that the dir exists
+				throw new RuntimeException(
+						"base work dir could not be created. Check if java has permissions to write in " + baseDir
+						+ " On tomcat Add " +
+						"<Parameter name=\"baseWorkDir\" value=\"path/to/base-work-dir\" override=\"false\"/>" +
+						" to $CATALINA_BASE/conf/context.xml " +
+						"Note: you need to give read write permissions to baseWorkDir");
+		}
+		return baseDir;
 	}
 }
