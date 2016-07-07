@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Enumeration;
@@ -39,6 +40,23 @@ public class FileUtil {
 		out.close();
 	}
 
+	public static void appendToFile(File src, File destination) throws IOException {
+		if (!destination.exists()) {
+			destination.getParentFile().mkdirs();
+			destination.createNewFile();
+		}
+
+		PrintWriter out = new PrintWriter(new BufferedWriter(
+				new FileWriter(destination.getAbsolutePath(), true)));
+		LineNumberReader reader = new LineNumberReader(new FileReader(src));
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			out.println(line);
+		}
+		reader.close();
+		out.close();
+	}
+	
 	public static String readFile(File path){
 		BufferedReader buffReader = null;
 		String ans = "";

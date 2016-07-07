@@ -1,7 +1,6 @@
 package rega.genotype.ngs;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,7 +14,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.usadellab.trimmomatic.TrimmomaticSE;
 
@@ -25,6 +23,7 @@ import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.StreamReaderRuntime;
 
 public class NgsAnalysis {
@@ -86,12 +85,10 @@ public class NgsAnalysis {
 		// QC
 
 		try {
-				NgsAnalysis.qcReport(fastqDir.listFiles(), workDir);
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-			ngsProgress.setErrors("QC failed: " + e.getMessage());
-			ngsProgress.save(workDir);
-			return false;
+			NgsAnalysis.qcReport(fastqDir.listFiles(), workDir);
+		} catch (ApplicationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 		ngsProgress.setState(State.QcFinished);
@@ -102,7 +99,7 @@ public class NgsAnalysis {
 			if (fastqSE != null) {
 				// TODO
 			} else {
-			preprocessFastQ(fastqPE1, fastqPE2, workDir);
+				preprocessFastQ(fastqPE1, fastqPE2, workDir);
 			}
 		} catch (ApplicationException e) {
 			e.printStackTrace();
@@ -167,9 +164,56 @@ public class NgsAnalysis {
 		ngsProgress.setState(State.DiamondFinished);
 
 		// spades
+		File dimondResultDir = new File(workDir, DIAMOND_RESULT_DIR);
+		for (File d: dimondResultDir.listFiles()){
+			if (!d.isDirectory())
+				continue;
 
+			File sequenceFile1 = null;
+			File sequenceFile2 = null;
+
+			for (File f: d.listFiles()) {
+				// TODO: read pair end give the files constant names !
+				if (f.getName().contains("_1"))
+					sequenceFile1 = f;
+				if (f.getName().contains("_2"))
+					sequenceFile2 = f;
+			}
+
+			try {
+				File assemble = assemble(sequenceFile1, sequenceFile2, workDir, d.getName());
+				if (assemble == null)
+					continue;
+
+				// fill sequences.xml'
+				File sequences = new File(workDir, SEQUENCES_FILE);
+				if (!sequences.exists())
+					try {
+						sequences.createNewFile();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						ngsProgress.setErrors("assemble failed, could not create sequences.xml");
+						ngsProgress.save(workDir);
+						return false;
+					}
+
+				FileUtil.appendToFile(assemble, sequences);
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				ngsProgress.setErrors("assemble failed." + e.getMessage());
+				ngsProgress.save(workDir);
+				return false;
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				ngsProgress.setErrors("assemble failed." + e1.getMessage());
+				ngsProgress.save(workDir);
+				return false;
+			}
+		}
+
+		ngsProgress.setState(State.FinishedAll);
 		ngsProgress.save(workDir);
-		return false; // TODO: change to true when ready.
+		return true; 
 	}
 
 	private static File diamondBlastX(File workDir, File query, double limiteScore) throws ApplicationException {
@@ -560,7 +604,9 @@ public class NgsAnalysis {
 			int exitResult = p.waitFor();
 
 			if (exitResult != 0) {
-				throw new ApplicationException("Spades exited with error: " + exitResult);
+				//TODO
+				return null;
+				//throw new ApplicationException("Spades exited with error: " + exitResult);
 			}
 		} catch (IOException e) {
 			throw new ApplicationException("Spades failed error: " + e.getMessage(), e);
