@@ -218,6 +218,7 @@ public class StartForm extends AbstractForm {
 
 					// SE TODO
 					ngsProgress.save(workDir);
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

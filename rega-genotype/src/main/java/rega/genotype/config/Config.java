@@ -195,6 +195,8 @@ public class Config {
 		private String clustalWCmd = "clustalW";
 		private String blastPath = "/usr/bin/";
 		private String diamondPath = "diamond";
+		private String dbDiamondPath = "db.dmnd";
+		private String taxonamyDiamondPath = "taxonamy.fasta";
 		private String treePuzzleCmd = "puzzle";
 		private String treeGraphCmd = "tgf";
 		private String epsToPdfCmd = "epstopdf";
@@ -267,6 +269,18 @@ public class Config {
 		}
 		public void setDiamondPath(String diamondPath) {
 			this.diamondPath = diamondPath;
+		}
+		public String getDbDiamondPath() {
+			return dbDiamondPath;
+		}
+		public void setDbDiamondPath(String dbDiamondPath) {
+			this.dbDiamondPath = dbDiamondPath;
+		}
+		public String getTxDiamondPath() {
+			return taxonamyDiamondPath;
+		}
+		public void setTxDiamondPath(String taxonamyDiamondPath) {
+			this.taxonamyDiamondPath = taxonamyDiamondPath;
 		}
 		public String getPublisherName() {
 			return publisherName;

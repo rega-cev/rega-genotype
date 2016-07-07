@@ -30,7 +30,7 @@ public class NgsProgress {
 	private String fastqPE1FileName;// File with forward reads.
 	private String fastqPE2FileName;// File with reverse reads.
 	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
-	
+
 	public NgsProgress() {}
 
 	public static NgsProgress read(File workDir) {
