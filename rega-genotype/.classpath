@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="lib/jwt/deps/pdfjet/pdfjet-4.75.jar"/>
 	<classpathentry kind="lib" path="lib/jwt/jwt-3.3.5.jar"/>
 	<classpathentry kind="lib" path="lib/gson/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/urlrewritefilter-4.0.3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
