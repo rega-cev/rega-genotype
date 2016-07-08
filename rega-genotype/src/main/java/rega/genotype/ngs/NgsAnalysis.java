@@ -35,7 +35,7 @@ import rega.genotype.utils.StreamReaderRuntime;
 public class NgsAnalysis {
 	public static final String FASTQ_FILES_DIR = "fastq_files";
 	public static final String QC_REPORT_DIR = "qc_report";
-	public static final String QC_REPORT_AFTER_PREPROCESS_DIR = "qc_report";
+	public static final String QC_REPORT_AFTER_PREPROCESS_DIR = "qc2_report";
 	public static final String ASSEMBALED_CONTIGS_DIR = "assembaled_contigs";
 	public static final String DIAMOND_BLAST_DIR = "diamond_blast";
 	public static final String DIAMOND_RESULT_DIR = "diamond_result";
@@ -44,7 +44,7 @@ public class NgsAnalysis {
 	public static final String PREPROCESSED_FILE_NAMR_PAIRD = "paird_";
 	public static final String PREPROCESSED_FILE_NAMR_UNPAIRD = "unpaird_";
 	public static final String SEQUENCES_FILE = "sequences.fasta";
-	public static final String CUT_ADAPTER_FILE_END = "_CA";
+	public static final String CUT_ADAPTER_FILE_END = "CA_";
 
 
 	/**
@@ -125,7 +125,7 @@ public class NgsAnalysis {
 		// QC 2
 
 		try {
-			NgsAnalysis.qcReport(new File[]{fastqPE1, fastqPE2}, 
+			NgsAnalysis.qcReport(new File[] {preprocessed1, preprocessed2}, 
 					new File(workDir, QC_REPORT_AFTER_PREPROCESS_DIR));
 		} catch (ApplicationException e1) {
 			// TODO Auto-generated catch block
