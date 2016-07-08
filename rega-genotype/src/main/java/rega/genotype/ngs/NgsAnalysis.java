@@ -532,6 +532,7 @@ public class NgsAnalysis {
 		cmd += " -2 " + sequenceFile2.getAbsolutePath();
 
 		cmd += " -o " + contigsDir.getAbsolutePath();
+		cmd += " --phred-offset 33 ";
 
 		System.err.println(cmd);
 		Process p = null;
