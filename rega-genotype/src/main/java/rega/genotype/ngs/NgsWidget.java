@@ -27,7 +27,7 @@ public class NgsWidget extends WContainerWidget{
 		if (ngsProgress == null)
 			return;
 
-		new WText("NGS state is " + ngsProgress.getState(), this);
+		new WText("<b>NGS state is " + ngsProgress.getState().text + "</b>", this);
 		if (!ngsProgress.getErrors().isEmpty() )
 			new WText("<div>Error: " + ngsProgress.getErrors() + "</div>", this);
 
@@ -46,6 +46,8 @@ public class NgsWidget extends WContainerWidget{
 	}
 
 	private void addQC(File qcDir) {
+		if (qcDir.listFiles() == null)
+			return;
 		for (File f: qcDir.listFiles()) {
 			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("html")){
 				WContainerWidget c = new WContainerWidget(this);
