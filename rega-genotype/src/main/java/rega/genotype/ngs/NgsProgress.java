@@ -2,32 +2,42 @@ package rega.genotype.ngs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
 
+/**
+ * JSON file that monitors NGS analysis state.
+ * Used by NgsWidget.
+ * 
+ * @author michael
+ */
 public class NgsProgress {
 	public static final String NGS_PROGRESS_FILL = "ngs_progress";
 
 	public enum State {
-		UploadStarted(0),
-		FastQ_File_Uploaded(1),
-		QcFinished(2),
-		PreprocessingFinished(3),
-		Qc2Finished(4),
-		DiamondFinished(5),
-		SpadesFinished(6),
-		FinishedAll(7);
+		Uploading(0, "uploading"),
+		QC(1, "runing QC"),
+		Preprocessing(2, "runing preprocessing"),
+		QC2(3, "runing QC of preprocessed."),
+		Diamond(4, "runing diamond blast"),
+		Spades(5, "runing spades"),
+		FinishedAll(6, "finished");
 
 		public final int code;
-		State(int code) {
+		public final String text;
+		State(int code, String text) {
 			this.code = code;
+			this.text = text;
 		}
 	}
 
-	private State state = State.UploadStarted;
+	private State state = State.Uploading;
 	private String errors = new String();
-	private String fastqPE1FileName;// File with forward reads.
+	private List<String> spadesErrors = new ArrayList<String>(); // spades can crash on files with small amount of sequences, in that case it is still good to check the other viruses.
+ 	private String fastqPE1FileName;// File with forward reads.
 	private String fastqPE2FileName;// File with reverse reads.
 	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
 
@@ -100,5 +110,13 @@ public class NgsProgress {
 
 	public void setFastqSEFileName(String fastqSEFileName) {
 		this.fastqSEFileName = fastqSEFileName;
+	}
+
+	public List<String> getSpadesErrors() {
+		return spadesErrors;
+	}
+
+	public void setSpadesErrors(List<String> spadesErrors) {
+		this.spadesErrors = spadesErrors;
 	}
 }

@@ -201,15 +201,16 @@ public class Config {
 		private String treeGraphCmd = "tgf";
 		private String epsToPdfCmd = "epstopdf";
 		private String imageMagickConvertCmd = "convert";
+		private String fastqcCmd = "fastqc";
+		private String spadesCmd = "spades";
+		private String cutAdaptCmd = "cutadapt";
 		private int maxAllowedSeqs = 2000;
 		private String inkscapeCmd = "inkscape";
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.
 		private String adminPassword;
-		private String fastqcCmd = "fastqc";
-		private String spadesCmd = "spades";
-		
+
 		public String getPaupCmd() {
 			return paupCmd;
 		}
@@ -276,12 +277,6 @@ public class Config {
 		public void setDbDiamondPath(String dbDiamondPath) {
 			this.dbDiamondPath = dbDiamondPath;
 		}
-		public String getTxDiamondPath() {
-			return taxonamyDiamondPath;
-		}
-		public void setTxDiamondPath(String taxonamyDiamondPath) {
-			this.taxonamyDiamondPath = taxonamyDiamondPath;
-		}
 		public String getPublisherName() {
 			return publisherName;
 		}
@@ -320,6 +315,18 @@ public class Config {
 		}
 		public void setSpadesCmd(String spadesCmd) {
 			this.spadesCmd = spadesCmd;
+		}
+		public String getCutAdaptCmd() {
+			return cutAdaptCmd;
+		}
+		public void setCutAdaptCmd(String cutAdaptCmd) {
+			this.cutAdaptCmd = cutAdaptCmd;
+		}
+		public String getTaxonamyDiamondPath() {
+			return taxonamyDiamondPath;
+		}
+		public void setTaxonamyDiamondPath(String taxonamyDiamondPath) {
+			this.taxonamyDiamondPath = taxonamyDiamondPath;
 		}
 	}
 

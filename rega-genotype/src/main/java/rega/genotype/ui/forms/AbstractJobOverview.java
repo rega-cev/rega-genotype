@@ -443,23 +443,29 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					// prepare NGS data
 					NgsProgress ngsProgress = NgsProgress.read(jobDir);
 					if (ngsProgress != null) {
-						while (!stop && ngsProgress.getState() != State.FinishedAll){
-							synchronized (lock) {
-								try {
-									UpdateLock updateLock = app.getUpdateLock();
-									updateNgsView();
-									app.triggerUpdate();
-									updateLock.release();
-									if (ngsProgress.getState() == State.FinishedAll
-											|| !ngsProgress.getErrors().isEmpty())
-										break;
-									lock.wait(interval);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-									assert (false);
+						if (ngsProgress.getState() == State.FinishedAll) {
+							UpdateLock updateLock = app.getUpdateLock();
+							updateNgsView();
+							app.triggerUpdate();
+							updateLock.release();
+						} else 
+							while (!stop && ngsProgress.getState() != State.FinishedAll){
+								synchronized (lock) {
+									try {
+										UpdateLock updateLock = app.getUpdateLock();
+										updateNgsView();
+										app.triggerUpdate();
+										updateLock.release();
+										if (ngsProgress.getState() == State.FinishedAll
+												|| !ngsProgress.getErrors().isEmpty())
+											break;
+										lock.wait(interval);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+										assert (false);
+									}
 								}
 							}
-						}
 					}
 
 					final File resultFile = new File(getJobdir().getAbsolutePath()

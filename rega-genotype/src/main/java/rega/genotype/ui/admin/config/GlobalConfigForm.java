@@ -105,7 +105,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		
 		setFieldInfo("fastqcCmd", "<div>Can be obtained from http://www.bioinformatics.babraham.ac.uk/projects/download.html</div>");
 		setFieldInfo("spadesCmd", "<div>Can be obtained from http://bioinf.spbau.ru/spades</div>");
-
+		setFieldInfo("cutAdaptCmd", "<div>Can be obtained from https://cutadapt.readthedocs.io/en/stable/installation.html</div>");
 
 	}
 }
