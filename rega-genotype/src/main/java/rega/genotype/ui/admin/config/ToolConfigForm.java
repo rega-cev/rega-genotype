@@ -267,7 +267,7 @@ public class ToolConfigForm extends FormTemplate {
 			return null;
 
 		if (fileEditor != null)
-			if (!fileEditor.saveAll())
+			if (!fileEditor.saveAll(toolDir))
 				return null;
 
 		if (publishing || manifestForm.isDirty()){
@@ -300,6 +300,7 @@ public class ToolConfigForm extends FormTemplate {
 		// make sure that the xml dir name is {id}{version} 
 		if (!toolDir.getAbsolutePath().equals(xmlDir)) {
 			FileUtil.moveDirRecorsively(toolDir, xmlDir);
+			toolDir = xmlDir;
 		}
 
 		manifestForm.setToolDir(xmlDir);
