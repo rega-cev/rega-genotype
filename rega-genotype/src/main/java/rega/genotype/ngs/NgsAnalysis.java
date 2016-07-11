@@ -427,9 +427,10 @@ public class NgsAnalysis {
 			while ((line = bf.readLine()) != null)  {
 				String[] name = line.split("\\t");
 				String[] taxon = name[1].split("_");
-				if (!taxoIdCount.containsKey(taxon[0]))
-					taxoIdCount.put(taxon[0], 0);
-				taxoIdCount.put(taxon[0], taxoIdCount.get(taxon[0]) + 1);
+				String key = taxon[0] + "_" + taxon[1];
+				if (!taxoIdCount.containsKey(key))
+					taxoIdCount.put(key, 0);
+				taxoIdCount.put(key, taxoIdCount.get(key) + 1);
 			}
 			bf.close();
 		} catch (FileNotFoundException e) {
