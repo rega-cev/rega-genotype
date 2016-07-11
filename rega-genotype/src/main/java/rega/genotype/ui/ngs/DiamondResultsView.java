@@ -59,25 +59,6 @@ public class DiamondResultsView extends WContainerWidget{
 		//chart.setModel(blastResultModel);
 	}
 
-	// TODO: pre save that
-	private int sequernceCount(File fasqFile) {
-		BufferedReader reader;
-		int lines = 0;
-		try {
-			reader = new BufferedReader(new FileReader(fasqFile));
-			while (reader.readLine() != null) 
-				lines++;
-			reader.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return lines / 4;
-	}
-
 	private void createChart() {
 		chart = new WPieChart();
 		addWidget(chart);
