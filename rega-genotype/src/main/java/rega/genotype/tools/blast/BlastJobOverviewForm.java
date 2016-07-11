@@ -16,6 +16,7 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
+import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.PositionScheme;
 import eu.webtoolkit.jwt.Side;
@@ -199,7 +200,10 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		+ "/typingtool/" + toolConfig.getPath() + "/"
 		+ BLAST_JOB_ID_PATH + "/" + getMain().getOrganismDefinition().getToolConfig().getVersion() + "/" + jobId;
 
-		return new WLink(url);
+		WLink link = new WLink(url);
+		link.setTarget(AnchorTarget.TargetNewWindow);
+
+		return link;
 	}
 	
 	// Classes
