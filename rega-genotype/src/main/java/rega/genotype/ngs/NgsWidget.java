@@ -5,12 +5,17 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ui.framework.widgets.StandardDialog;
+import rega.genotype.ui.ngs.DiamondResultsView;
 
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -20,7 +25,7 @@ import eu.webtoolkit.jwt.WText;
  */
 public class NgsWidget extends WContainerWidget{
 
-	public NgsWidget(File workDir) {
+	public NgsWidget(final File workDir) {
 		super();
 
 		NgsProgress ngsProgress = NgsProgress.read(workDir);
@@ -43,6 +48,15 @@ public class NgsWidget extends WContainerWidget{
 			addQC(qcDir);
 		}
 
+		if (ngsProgress.getState().code >= State.Spades.code) {
+			WPushButton diamondBlastB = new WPushButton("Diamond Blast results", this);
+			diamondBlastB.clicked().addListener(diamondBlastB, new Signal.Listener() {
+				public void trigger() {
+					WDialog d = new StandardDialog("Diamond Balst results");
+					d.getContents().addWidget(new DiamondResultsView(workDir));
+				}
+			});
+		}
 	}
 
 	private void addQC(File qcDir) {
