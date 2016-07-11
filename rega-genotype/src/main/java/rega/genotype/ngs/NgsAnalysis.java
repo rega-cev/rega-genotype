@@ -168,7 +168,7 @@ public class NgsAnalysis {
 		File matches = null;
 		File view = null;
 		try {
-			matches = diamondBlastX(diamondDir, fastqMerge, 50.0);
+			matches = diamondBlastX(diamondDir, fastqMerge);
 			view = diamondView(diamondDir, matches);
 			File resultDiamondDir = new File(workDir, NgsAnalysis.DIAMOND_RESULT_DIR);
 			if (!(resultDiamondDir.exists())){
@@ -253,13 +253,14 @@ public class NgsAnalysis {
 		return true; 
 	}
 
-	private static File diamondBlastX(File workDir, File query, double limiteScore) throws ApplicationException {
+	private static File diamondBlastX(File workDir, File query) throws ApplicationException {
 		Process blastx = null;
 		File matches = new File(workDir.getAbsolutePath() + File.separator + "matches.daa");
 		try {
-			String cmd = Settings.getInstance().getConfig().getGeneralConfig().getDiamondPath() + " blastx -d "
-					+ Settings.getInstance().getConfig().getGeneralConfig().getDbDiamondPath() + " -q " + query.getAbsolutePath()
-					+ " -a " + matches + " -k 1 --min-score "+ limiteScore +" --quiet";
+			GeneralConfig gc = Settings.getInstance().getConfig().getGeneralConfig();
+			String cmd = gc.getDiamondPath() + " blastx -d "
+					+ gc.getDbDiamondPath() + " -q " + query.getAbsolutePath()
+					+ " -a " + matches + " -k 1  --quiet";
 			System.err.println(cmd);
 			blastx = StreamReaderRuntime.exec(cmd, null, workDir);
 			int exitResult = blastx.waitFor();
