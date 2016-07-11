@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -20,6 +20,7 @@ import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.config.Config.GeneralConfig;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
@@ -97,8 +98,10 @@ public class NgsAnalysis {
 			NgsAnalysis.qcReport(fastqDir.listFiles(),
 					new File(workDir, QC_REPORT_DIR));
 		} catch (ApplicationException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			ngsProgress.setErrors("QC failed: " + e1.getMessage());
+			ngsProgress.save(workDir);
+			return false;
 		}
 
 		ngsProgress.setState(State.Preprocessing);
@@ -128,8 +131,10 @@ public class NgsAnalysis {
 			NgsAnalysis.qcReport(new File[] {preprocessed1, preprocessed2}, 
 					new File(workDir, QC_REPORT_AFTER_PREPROCESS_DIR));
 		} catch (ApplicationException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			ngsProgress.setErrors("QC failed: " + e1.getMessage());
+			ngsProgress.save(workDir);
+			return false;
 		}
 
 		ngsProgress.setState(State.Diamond);
@@ -175,10 +180,15 @@ public class NgsAnalysis {
 				resultDiamondDir.mkdirs();
 			}
 			try {
-				boolean x = creatFastqResultDiamond(resultDiamondDir, view, fastqDir.listFiles());
+				creatDiamondResults(resultDiamondDir, view, fastqDir.listFiles()) ;
 			} catch (FileFormatException e) {
 				e.printStackTrace();
 				ngsProgress.setErrors("diamond files could not be merged." + e.getMessage());
+				ngsProgress.save(workDir);
+				return false;
+			} catch (IOException e) {
+				e.printStackTrace();
+				ngsProgress.setErrors("diamond analysis failed: " + e.getMessage());
 				ngsProgress.save(workDir);
 				return false;
 			}
@@ -348,60 +358,80 @@ public class NgsAnalysis {
 		megerFile.close();
 		return result;
 	}
-	
-	private static boolean creatFastqResultDiamond(File workDir, File view, File[] files) throws FileFormatException {
+
+	// assume that the map is not very big.
+	private static String getTaxusId(Map<String, LinkedHashSet<String>> taxoId, String taxusName) {
+		for (Map.Entry<String, LinkedHashSet<String>> e: taxoId.entrySet()) {
+			if (e.getValue().contains(taxusName))
+				return e.getKey();
+		}
+
+		return null;
+	}
+
+	private static void creatDiamondResults(File workDir, File view, File[] files) throws FileFormatException, IOException {
 		String line = "";
-		 try {
-			BufferedReader  bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
-			Collection taxoId = new ArrayList();
+
+		BufferedReader bf;
+		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
+		Map<String, String> taxoNameId = new HashMap<String, String>();
+		while ((line = bf.readLine()) != null)  {
+			String[] name = line.split("\\t");
+			String[] taxon = name[1].split("_");
+			taxoNameId.put(name[0], taxon[0]);
+		}
+		bf.close();
+
+		for (Map.Entry<String, String> s: taxoNameId.entrySet())
+			System.err.println(s.getKey() + " = " + s.getValue());
+
+		for(File f : files){
+			FileReader fileReader = new FileReader(f.getAbsolutePath());
+			LineNumberReader lnr = new LineNumberReader(fileReader);
+			while(true){
+				Sequence s = SequenceAlignment.readFastqFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
+				if (s == null){
+					break;
+				}
+
+				String[] name = s.getName().split(" "); // TODO was name ?
+
+				String taxosId = taxoNameId.get(name[0]);
+				if (taxosId == null)
+					continue; // TODO ??
+				File taxonDir = new File(workDir, taxosId);
+				taxonDir.mkdirs();
+
+				FileWriter fastq = new FileWriter(taxonDir.getAbsoluteFile() + File.separator + f.getName(), true);
+				PrintWriter saveFastq = new PrintWriter(fastq);
+
+				saveFastq.println("@" + s.getName());
+				saveFastq.println(s.getSequence());
+				saveFastq.println(s.getDescription());
+				saveFastq.println(s.getQuality());
+
+				fastq.close();
+			}
+			fileReader.close();
+			lnr.close();
+		}
+	}
+
+	public static Map<String, Integer> countDiamondREsults(File workDir) {
+		File view = new File(workDir + File.separator + DIAMOND_BLAST_DIR, "matches.fasta");
+		BufferedReader bf;
+		Map<String, Integer> taxoIdCount = new HashMap<String, Integer>();
+		try {
+			bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
+			String line;
 			while ((line = bf.readLine()) != null)  {
 				String[] name = line.split("\\t");
 				String[] taxon = name[1].split("_");
-				taxoId.add(taxon[0]);
+				if (!taxoIdCount.containsKey(taxon[0]))
+					taxoIdCount.put(taxon[0], 0);
+				taxoIdCount.put(taxon[0], taxoIdCount.get(taxon[0]) + 1);
 			}
-			line = "";
-			Collection taxoIdOnly = new LinkedHashSet(taxoId);
-			for (Iterator i =  taxoIdOnly.iterator(); i.hasNext();){
-				String taxosId = i.next().toString();
-				File taxonDir = new File(workDir, taxosId);
-				if (!taxonDir.exists()){
-					taxonDir.mkdirs();
-				}
-				BufferedReader txBf = new BufferedReader(new FileReader(view.getAbsolutePath()));
-				Collection nameVirus = new ArrayList();
-				FileWriter matches = new FileWriter(taxonDir.getAbsoluteFile() + File.separator + view.getName());
-			    PrintWriter saveFile = new PrintWriter(matches);
-				while ((line = txBf.readLine()) != null)  {
-					String[] name = line.split("\\t");
-					String[] taxon = name[1].split("_");
-					if (taxosId.equalsIgnoreCase(taxon[0])){
-						nameVirus.add(name[0]);
-						saveFile.println(line);
-					}
-				}
-				matches.close();
-				Collection nameVirusOnly = new LinkedHashSet(nameVirus);
-				for(File f : files){
-					FileWriter fastq = new FileWriter(taxonDir.getAbsoluteFile() + File.separator + f.getName());
-				    PrintWriter saveFastq = new PrintWriter(fastq);
-					FileReader fr = new FileReader(f.getAbsolutePath());
-					LineNumberReader lnr = new LineNumberReader(fr);
-					while(true){
-						Sequence s = SequenceAlignment.readFastqFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
-						if (s == null){
-							break;
-						}
-						String[] name = s.getName().split(" ");
-						if (nameVirusOnly.contains(name[0])){
-							saveFastq.println("@" + s.getName());
-							saveFastq.println(s.getSequence());
-							saveFastq.println(s.getDescription());
-							saveFastq.println(s.getQuality());
-						}
-					}
-					fastq.close();
-				}
-			}
+			bf.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -409,9 +439,10 @@ public class NgsAnalysis {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return true;
+
+		return taxoIdCount;
 	}
-	
+
 	/**
 	 * Use FastQC to generate quality control reports
 	 * @param sequenceFiles
@@ -488,23 +519,6 @@ public class NgsAnalysis {
 				p.destroy();
 			throw new ApplicationException("preprocessing failed error: " + e.getMessage(), e);
 		}
-	}
-	/**
-	 * Diamond blast will remove non virus reads and separate the virus
-	 * reads to different files.
-	 * The result files will be saved in DIAMOND_BLAST_DIR
-	 * 
-	 * @param sequenceFile1 File with forward reads.
-	 * @param sequenceFile2 File with reverse reads.
-	 * @param workDir
-	 * @return
-	 * @throws ApplicationException
-	 */
-	public static List<File> runDiamondBlast(File sequenceFile1, File sequenceFile2,
-			File workDir) throws ApplicationException {		
-		File diamondDir = new File(workDir, DIAMOND_BLAST_DIR);
-
-		return null; //TODO
 	}
 
 	public static String contigsDir(String virusName) {
