@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.jdom.JDOMException;
 
 import rega.genotype.config.Config.ToolConfig;
@@ -19,6 +20,7 @@ import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
+import rega.genotype.ui.util.FileServlet;
 import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
@@ -96,17 +98,30 @@ public class GenericMain extends GenotypeMain {
 		
 		app.setTitle(WString.tr("tool.title"));
 
-		app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
-		app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
+		// tool css
 
-		if (getConfiguration().internalDeploymentSize() == 1) {
-			app.useStyleSheet(new WLink("../../style/genotype-rivm.css"));
-			app.useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"),
-					"IE lte 7");
-
-			app.useStyleSheet(new WLink("../../style/wt.css")); // do not use Wt's inline stylesheet...
-			app.useStyleSheet(new WLink("../../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
+		File xmlDir = new File(toolConfig.getConfiguration());
+		boolean cssFound = false;
+		for (File f: xmlDir.listFiles()) {
+			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("css")){
+				app.useStyleSheet(new WLink(FileServlet.getFileUrl(toolConfig.getPath()) + "/" + f.getName()));
+				cssFound = true;
+			}
 		}
+		if (!cssFound){ // support old tools
+			app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
+			app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
+
+			if (getConfiguration().internalDeploymentSize() == 1) {
+				app.useStyleSheet(new WLink("../../style/genotype-rivm.css"));
+				app.useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"),
+						"IE lte 7");
+
+				app.useStyleSheet(new WLink("../../style/wt.css")); // do not use Wt's inline stylesheet...
+				app.useStyleSheet(new WLink("../../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
+			}
+		}
+
 		if (!WString.tr((String)"tool.meta.robots").equals((Object)"??tool.meta.robots??")) {
             app.addMetaHeader("robots", (CharSequence)WString.tr((String)"tool.meta.robots"));
         }

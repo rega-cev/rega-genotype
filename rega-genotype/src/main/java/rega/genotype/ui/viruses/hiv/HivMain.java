@@ -7,12 +7,15 @@ package rega.genotype.ui.viruses.hiv;
 
 import java.io.File;
 
+import org.apache.commons.io.FilenameUtils;
+
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
+import rega.genotype.ui.util.FileServlet;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
@@ -53,15 +56,24 @@ public class HivMain extends GenotypeMain {
 		}
 
 		ToolConfig toolConfig = settings.getConfig().getToolConfigByUrlPath(HIV_TOOL_ID);
-
 		
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
 		resources.use(toolConfig.getConfiguration() + File.separator + "resources");
 		app.setLocalizedStrings(resources);
-		
-		app.useStyleSheet(new WLink("../style/hiv/genotype.css"));
-		
+
+		File xmlDir = new File(toolConfig.getConfiguration());
+		boolean cssFound = false;
+		for (File f: xmlDir.listFiles()) {
+			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("css")){
+				app.useStyleSheet(new WLink(FileServlet.getFileUrl(toolConfig.getPath()) + "/" + f.getName()));
+				cssFound = true;
+			}
+		}
+
+		if (!cssFound) // support old tools
+			app.useStyleSheet(new WLink("../style/hiv/genotype.css"));
+			
 		GenotypeWindow window = new GenotypeWindow(new HivDefinition());
 		
 		window.addForm("Tutorial", "tutorial", new DocumentationForm(window, tr("tutorial-doc")));
