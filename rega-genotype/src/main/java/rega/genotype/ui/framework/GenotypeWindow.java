@@ -138,8 +138,12 @@ public class GenotypeWindow extends WContainerWidget
 						WApplication.getInstance().setInternalPath(
 								"/job/" + AbstractJobOverview.jobId(jobFile), true);
 						return;
+					} else {
+						System.err.println("ERROR: in handleInternalPath " + internalPath + " file " +  fastaFile.getAbsolutePath() + " does not exist.");
 					}
-				}
+				} else
+					System.err.println("ERROR: in handleInternalPath " + internalPath + " blastJobId = " + blastJobId + "blastTool = " + blastTool);
+
 			} 
 		}
 
