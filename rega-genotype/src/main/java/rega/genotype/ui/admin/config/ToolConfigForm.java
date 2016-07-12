@@ -73,6 +73,8 @@ public class ToolConfigForm extends FormTemplate {
 			manifestForm.disable();
 			
 			fileEditor.setReadOnly(true);
+
+			infoT.setText("Published tools are not editable. If you need to locally edit this tool, create a new version.");
 		}
 
 		retractB.setDisabled(!toolConfig.isPublished() || toolConfig.isRetracted());
