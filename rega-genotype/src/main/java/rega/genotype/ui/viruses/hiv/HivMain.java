@@ -5,6 +5,9 @@
  */
 package rega.genotype.ui.viruses.hiv;
 
+import java.io.File;
+
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -48,10 +51,13 @@ public class HivMain extends GenotypeMain {
 			a.getRoot().addWidget(new WText(e.getMessage()));
 			return a;
 		}
+
+		ToolConfig toolConfig = settings.getConfig().getToolConfigByUrlPath(HIV_TOOL_ID);
+
 		
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
-		resources.use("/rega/genotype/ui/viruses/hiv/resources");
+		resources.use(toolConfig.getConfiguration() + File.separator + "resources");
 		app.setLocalizedStrings(resources);
 		
 		app.useStyleSheet(new WLink("../style/hiv/genotype.css"));
