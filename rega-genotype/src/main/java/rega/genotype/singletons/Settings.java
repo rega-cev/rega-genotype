@@ -193,7 +193,7 @@ public class Settings {
 
 		File baseDirfile = new File(baseDir);
 		if(!baseDirfile.exists()) {
-			if (new File(baseDir).mkdirs()) // make sure that the dir exists
+			if (!new File(baseDir).mkdirs()) // make sure that the dir exists
 				throw new RuntimeException(
 						"base work dir could not be created. Check if java has permissions to write in " + baseDir
 						+ " On tomcat Add " +
