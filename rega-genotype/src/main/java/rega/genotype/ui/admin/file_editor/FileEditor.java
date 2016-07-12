@@ -23,11 +23,9 @@ public class FileEditor extends WTabWidget {
 	private SimpleFileEditorView simpleFileEditor;
 	private SmartFileEditor smartFileEditor;
 	private File workDir; // tmp dir with tool copy for coordination between smart and simple editors. 
-	private File toolDir;
 
 	public FileEditor(File toolDir) {
 		
-		this.toolDir = toolDir;
 		workDir = GenotypeLib.createJobDir(
 				Settings.getInstance().getBaseJobDir() + File.separator + "file_editor");
 
@@ -72,7 +70,7 @@ public class FileEditor extends WTabWidget {
 		smartFileEditor.setDisabled(isReadOnly);
 	}
 
-	public boolean saveAll() {
+	public boolean saveAll(File toolDir) {
 		if (getCurrentIndex() == SMART_EDITOR_TAB) { // most resent changes are in sent changes are in smart
 			smartFileEditor.saveAll();
 			simpleFileEditor.rereadFiles();// only the simple editor contains all the files

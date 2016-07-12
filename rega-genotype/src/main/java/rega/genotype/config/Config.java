@@ -7,11 +7,10 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.webtoolkit.jwt.WApplication;
-
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
+import eu.webtoolkit.jwt.WApplication;
 
 /**
  * Read json config
@@ -95,6 +94,17 @@ public class Config {
 					ans = c;
 			}
 		return ans;
+	}
+
+	public ToolConfig getCurrentVersion(String toolId) {
+		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
+			ToolManifest m = c.getToolMenifest();
+			if (c.isCurrentUsedVersion() && m != null 
+					&& m.getId().equals(toolId))
+				return c;
+		}
+
+		return getLastPublishedToolConfig(toolId);
 	}
 
 	public ToolConfig getBlastTool(String version) {
@@ -339,8 +349,10 @@ public class Config {
 		private boolean ui;
 		private boolean published = false; // used to remember the published state when off line.
 		private boolean retracted = false; // used to remember the retracted state when off line.
+		// if true the pan viral tool will redirect to this tool version. 
+		// Unique per tool id.
+		private boolean currentUsedVersion = false; 
 		// ToolMenifest read manifests from configuration dir.
-		// TODO: ui will have to update manifest if it was changed.
 		transient private ToolManifest manifest = null;
 
 		public ToolConfig copy() {
@@ -483,6 +495,19 @@ public class Config {
 
 		public void setRetracted(boolean retracted) {
 			this.retracted = retracted;
+		}
+
+		public boolean isCurrentUsedVersion() {
+			return currentUsedVersion;
+		}
+
+		/**
+		 * If true the pan viral tool will redirect to this tool version. 
+		 * Unique per tool id !!
+		 * @param usedByPanViralTool
+		 */
+		public void setCurrentUsedVersion(boolean currentUsedVersion) {
+			this.currentUsedVersion = currentUsedVersion;
 		}
 	}
 }

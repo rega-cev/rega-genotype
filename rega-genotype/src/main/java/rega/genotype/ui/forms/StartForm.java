@@ -10,9 +10,13 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
-
+import rega.genotype.AlignmentAnalyses;
+import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
@@ -177,6 +181,23 @@ public class StartForm extends AbstractForm {
 		errorJobId.hide();
 		
 		t.bindWidget("error-job", errorJobId);
+
+		// blast.xml place holders
+		AlignmentAnalyses alignmentAnalyses = readBlastXml();
+		if(alignmentAnalyses == null) {
+			t.bindEmpty("count_virus_from_blast.xml");
+			t.bindEmpty("count_typing_tools");
+		} else {
+			List<Cluster> allClusters = alignmentAnalyses.getAllClusters();
+			Set<String> tools = new HashSet<String>();
+			for (Cluster c:allClusters) {
+				if(c.getToolId() != null && !c.getToolId().isEmpty())
+					tools.add(c.getToolId());
+			}
+
+			t.bindString("count_virus_from_blast.xml", allClusters.size() + "");
+			t.bindString("count_typing_tools", tools.size() + "");
+		}
 
 		// NGS
 
@@ -382,12 +403,28 @@ public class StartForm extends AbstractForm {
 	public void handleInternalPath(String internalPath) {
 		
 	}
-	
+
 	private void setFastaTextArea(String fileUploadFasta){
 		this.fileUploadFasta = fileUploadFasta;
 	}
-	
+
 	private String getFastaTextArea(){
 		return this.fileUploadFasta;
+	}
+
+	private AlignmentAnalyses readBlastXml(){
+		File xmlDir = new File(getMain().getOrganismDefinition().getXmlPath());
+		if (AlignmentAnalyses.blastFile(xmlDir).exists()) {
+			try {
+				return new AlignmentAnalyses(AlignmentAnalyses.blastFile(xmlDir), null, null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ParameterProblemException e) {
+				e.printStackTrace();
+			} catch (FileFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }

@@ -351,7 +351,7 @@ public class ToolConfigTable extends Template{
 					else
 						uninstallB.setText("Uninstall");
 
-					if (toolInfo.getManifest() != null){
+					if (toolInfo.getManifest() != null && toolInfo.getConfig() != null){
 						File zip = new File(Settings.getInstance().getBasePackagedToolsDir() 
 								+ File.separator + toolInfo.getManifest().getUniqueToolId() + ".zip");
 						downloadR.setFileName(zip.getAbsolutePath());
