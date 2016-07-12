@@ -112,6 +112,13 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		jobTable.setHeaderCount(1, Orientation.Vertical);
 		jobTable.setStyleClass("jobTable");
 		jobTable.setObjectName("job-table");
+
+		// on slow servers it can take some time till init is called
+		template.bindEmpty("summary");
+		template.bindEmpty("job-id");
+		template.bindEmpty("downloads");
+		template.bindEmpty("recombination-fragment-downloads");
+		template.bindEmpty("analysis-in-progress");
 	}
 
 	public void init(final String jobId, final String filter) {
