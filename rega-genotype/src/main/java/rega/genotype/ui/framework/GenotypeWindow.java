@@ -108,7 +108,6 @@ public class GenotypeWindow extends WContainerWidget
 
 	public void init() {
 		WApplication app = WApplication.getInstance();
-		handleInternalPath(app.getInternalPath());
 
 		app.internalPathChanged().addListener(this,
 				new Signal1.Listener<String>() {
@@ -116,6 +115,7 @@ public class GenotypeWindow extends WContainerWidget
 						handleInternalPath(internalPath);
 					}
 				});
+		handleInternalPath(app.getInternalPath());
 	}
 
 	private void handleInternalPath(String internalPath) {
