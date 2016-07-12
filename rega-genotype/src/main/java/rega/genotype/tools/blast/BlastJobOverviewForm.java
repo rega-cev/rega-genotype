@@ -203,7 +203,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			int row = blastResultModel.getRowCount();
 			blastResultModel.insertRows(row, 1);
 			blastResultModel.setData(row, ASSINGMENT_COLUMN, toolData.concludedName);
-			ToolConfig toolConfig = config.getLastPublishedToolConfig(toolData.toolId);
+			ToolConfig toolConfig = config.getCurrentVersion(toolData.toolId);
 			if (toolConfig != null) {
 				blastResultModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
 				blastResultModel.setData(row, DATA_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
@@ -237,7 +237,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 
 	private WLink createToolLink(final String toolId, final String jobId) {
-		ToolConfig toolConfig = Settings.getInstance().getConfig().getLastPublishedToolConfig(toolId);
+		ToolConfig toolConfig = Settings.getInstance().getConfig().getCurrentVersion(toolId);
 		if (toolConfig == null)
 			return null;
 

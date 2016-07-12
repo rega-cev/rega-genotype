@@ -178,9 +178,10 @@
 	<message id="admin.config.tool-config-dialog.config">
 		<table class="form-table">
 		  <tr><td class="form-table-name-td">URL</td><td class="form-table-name-td">${url}</td><td>${url-info}</td></tr>
-		  <tr><td class="form-table-name-td">Auto update enabled</td><td class="form-table-name-td">${update}</td></tr>
-		  <tr><td class="form-table-name-td">Web service enabled</td><td class="form-table-name-td">${service}</td></tr>
-		  <tr><td class="form-table-name-td">UI enabled</td><td class="form-table-name-td">${ui}</td></tr>
+		  <tr><td class="form-table-name-td">Auto update enabled</td><td class="form-table-name-td">${update}</td><td class="auto-form-info">A new version of the tool will be auto installed when it is available in repository.</td></tr>
+		  <tr><td class="form-table-name-td">Web service enabled</td><td class="form-table-name-td">${service}</td><td class="auto-form-info">Allow to send requests with curl</td></tr>
+		  <tr><td class="form-table-name-td">UI enabled</td><td class="form-table-name-td">${ui}</td><td class="auto-form-info">Allow users to surf to the tool url</td></tr>
+		  <tr><td class="form-table-name-td">Current version</td><td class="form-table-name-td">${current-version}</td><td class="auto-form-info">If true the pan-viral tool will choose this tool version for the virus. Note: there is 1 current version per tool id</td></tr>
 		</table>
 	</message>
 

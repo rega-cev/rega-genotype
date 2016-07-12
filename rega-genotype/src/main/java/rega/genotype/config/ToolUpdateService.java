@@ -41,6 +41,9 @@ public class ToolUpdateService {
 			newConfig.setConfiguration(lastPublishedRemoteManifest.suggestXmlDirName());
 			newConfig.setJobDir(lastPublishedRemoteManifest.suggestJobDirName());
 			newConfig.setPublished(true);
+			
+			newConfig.setCurrentUsedVersion(localLastPublished.isCurrentUsedVersion());
+			localLastPublished.setCurrentUsedVersion(false);
 
 			Settings.getInstance().getConfig().putTool(newConfig);
 
