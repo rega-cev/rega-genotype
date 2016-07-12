@@ -119,6 +119,8 @@ public class GenotypeWindow extends WContainerWidget
 	}
 
 	private void handleInternalPath(String internalPath) {
+		System.err.println("handleInternalPath: " + internalPath);
+
 		if (internalPath.length() != 0){
 			String path[] = internalPath.substring(1).split("/");
 			if (path.length == 3 && path[0].equals(BlastJobOverviewForm.BLAST_JOB_ID_PATH)) {
@@ -126,6 +128,8 @@ public class GenotypeWindow extends WContainerWidget
 				String blastToolVersion = path[1];
 				String blastJobId = path[2];
 				ToolConfig blastTool = Settings.getInstance().getConfig().getBlastTool(blastToolVersion);
+
+				System.err.println("handleInternalPath blast_job " + internalPath);
 
 				OrganismDefinition od = getOrganismDefinition();
 				if (!blastJobId.isEmpty() && blastTool != null) {
@@ -135,6 +139,7 @@ public class GenotypeWindow extends WContainerWidget
 					if (fastaFile.exists()) {
 						String fastaContent = FileUtil.readFile(fastaFile);
 						File jobFile = StartForm.startJob(fastaContent, od);
+						System.err.println("handleInternalPath redirecting to " + internalPath + " file " +  fastaFile.getAbsolutePath());
 						WApplication.getInstance().setInternalPath(
 								"/job/" + AbstractJobOverview.jobId(jobFile), true);
 						return;
