@@ -79,18 +79,6 @@
     <servlet-name>GenotypeHIV-service</servlet-name>
     <url-pattern>/typingservice/hiv</url-pattern>
   </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>StanfordGenotypeHIV</servlet-name>
-    <display-name>Stanford HIV Genotyping</display-name>
-    <description>Stanford HIV Genotyping</description>
-    <servlet-class>rega.genotype.ui.viruses.hiv.stanford.HivMain</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>StanfordGenotypeHIV</servlet-name>
-    <url-pattern>/typingtool/stanford-hiv/*</url-pattern>
-  </servlet-mapping>
 
   <servlet>
     <servlet-name>TypingTool</servlet-name>
