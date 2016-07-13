@@ -7,14 +7,16 @@ package rega.genotype.ui.viruses.generic;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.jdom.JDOMException;
 
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest.FileType;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -45,7 +47,9 @@ public class GenericMain extends GenotypeMain {
 	}
 	
 	@Override
-	public WApplication createApplication(WEnvironment env) {		
+	public WApplication createApplication(WEnvironment env) {	
+		System.err.println("createApplication");
+		
 		String[] deploymentPath = env.getDeploymentPath().split("/");
 		String url = deploymentPath[deploymentPath.length - 1];
 		getConfiguration().setFavicon("/"+deploymentPath[1]+"/pics/favicon1.ico");
@@ -99,27 +103,25 @@ public class GenericMain extends GenotypeMain {
 		app.setTitle(WString.tr("tool.title"));
 
 		// tool css
-
-		File xmlDir = new File(toolConfig.getConfiguration());
-		boolean cssFound = false;
-		for (File f: xmlDir.listFiles()) {
-			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("css")){
-				app.useStyleSheet(new WLink(FileServlet.getFileUrl(toolConfig.getPath()) + "/" + f.getName()));
-				cssFound = true;
+		List<FileManifest> fileManifests = definition.getFileManifests();
+		if (!fileManifests.isEmpty()) {
+			for (FileManifest fm: fileManifests) {
+				WLink link = new WLink(FileServlet.getFileUrl(toolConfig.getPath()) 
+						+ "/" + fm.getFileName());
+				if (fm.getFileType() == FileType.CSS_IE)
+					app.useStyleSheet(link, "IE lte 7");
+				else
+					app.useStyleSheet(link);
 			}
-		}
-		if (!cssFound){ // support old tools
-			app.useStyleSheet(new WLink("../style/genotype-rivm.css"));
-			app.useStyleSheet(new WLink("../style/genotype-rivm-ie.css"), "IE lte 7");
+		} else { // support old tools
+			String path = "";
 
-			if (getConfiguration().internalDeploymentSize() == 1) {
-				app.useStyleSheet(new WLink("../../style/genotype-rivm.css"));
-				app.useStyleSheet(new WLink("../../style/genotype-rivm-ie.css"),
-						"IE lte 7");
-
-				app.useStyleSheet(new WLink("../../style/wt.css")); // do not use Wt's inline stylesheet...
-				app.useStyleSheet(new WLink("../../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
-			}
+			if (getConfiguration().internalDeploymentSize() == 1) 
+				path += "../";
+			app.useStyleSheet(new WLink(path + "../style/genotype-rivm.css"));
+			app.useStyleSheet(new WLink(path + "../style/genotype-rivm-ie.css"),"IE lte 7");
+			app.useStyleSheet(new WLink(path + "../style/wt.css")); // do not use Wt's inline stylesheet...
+			app.useStyleSheet(new WLink(path + "../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 		}
 
 		if (!WString.tr((String)"tool.meta.robots").equals((Object)"??tool.meta.robots??")) {

@@ -6,10 +6,16 @@
 package rega.genotype.ui.viruses.hiv;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
+import org.jdom.JDOMException;
 
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest.FileType;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -62,18 +68,31 @@ public class HivMain extends GenotypeMain {
 		resources.use(toolConfig.getConfiguration() + File.separator + "resources");
 		app.setLocalizedStrings(resources);
 
-		File xmlDir = new File(toolConfig.getConfiguration());
-		boolean cssFound = false;
-		for (File f: xmlDir.listFiles()) {
-			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("css")){
-				app.useStyleSheet(new WLink(FileServlet.getFileUrl(toolConfig.getPath()) + "/" + f.getName()));
-				cssFound = true;
-			}
+		List<FileManifest> fileManifests;
+		try {
+			fileManifests = ConfigXmlReader.readFileManifests(new File(toolConfig.getConfiguration()));
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			fileManifests = new ArrayList<FileManifest>();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fileManifests = new ArrayList<FileManifest>();
 		}
-
-		if (!cssFound) // support old tools
+		if (!fileManifests.isEmpty()) {
+			for (FileManifest fm: fileManifests) {
+				WLink link = new WLink(FileServlet.getFileUrl(toolConfig.getPath()) 
+						+ "/" + fm.getFileName());
+				if (fm.getFileType() == FileType.CSS_IE)
+					app.useStyleSheet(link, "IE lte 7");
+				else
+					app.useStyleSheet(link);
+			}
+		} else { // support old tools
 			app.useStyleSheet(new WLink("../style/hiv/genotype.css"));
-			
+		
+			app.useStyleSheet(new WLink("../style/wt.css"));               // do not use Wt's inline stylesheet...
+			app.useStyleSheet(new WLink("../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
+		}
 		GenotypeWindow window = new GenotypeWindow(new HivDefinition());
 		
 		window.addForm("Tutorial", "tutorial", new DocumentationForm(window, tr("tutorial-doc")));

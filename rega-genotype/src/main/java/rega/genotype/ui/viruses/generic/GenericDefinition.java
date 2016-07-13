@@ -26,6 +26,8 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.tools.blast.BlastTool;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -67,6 +69,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private List<ResultColumn> resultColumns = null;
 	private List<ResultColumn> downloadColumns = null;
 	private ToolConfig toolConfig;
+	private List<FileManifest> fileManifests; 
 	
 	public GenericDefinition(ToolConfig toolConfig) throws JDOMException, IOException {
 		this.toolConfig = toolConfig;
@@ -108,6 +111,8 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 
 		resultColumns = readColumnList(root, "result-list");
 		downloadColumns = readColumnList(root, "result-download");
+
+		fileManifests = ConfigXmlReader.readFileManifests(new File(getXmlPath()));
 	}
 
 	private List<ResultColumn> readColumnList(Element root, String tag) {
@@ -274,5 +279,13 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 
 	public ToolConfig getToolConfig() {
 		return toolConfig;
+	}
+
+	public List<FileManifest> getFileManifests() {
+		return fileManifests;
+	}
+
+	public void setFileManifests(List<FileManifest> fileManifests) {
+		this.fileManifests = fileManifests;
 	}
 }
