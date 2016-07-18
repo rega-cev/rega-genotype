@@ -220,7 +220,7 @@ public class NgsAnalysis {
 				ca2 = new File(sequenceFile2.getParentFile(), CUT_ADAPTER_FILE_END + sequenceFile2.getName());
 
 				cutAdapters(sequenceFile1, ca1);
-				cutAdapters(sequenceFile1, ca2);
+				cutAdapters(sequenceFile2, ca2);
 
 			} catch (ApplicationException e2) {
 				e2.printStackTrace();
