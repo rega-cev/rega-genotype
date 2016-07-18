@@ -62,8 +62,10 @@ public class BlastTool extends GenotypeTool {
 		}
 	}
 
-	public static File sequenceFileInBlastTool(String blastJobId, String toolId, String blastToolVersion){
-		String blastJobDir = Settings.getInstance().getConfig().getBlastTool(blastToolVersion).getJobDir();
+	public static File sequenceFileInBlastTool(String blastJobId, String toolId, 
+			String blastToolId, String blastToolVersion){
+		String blastJobDir = Settings.getInstance().getConfig().getBlastTool(
+				blastToolId, blastToolVersion).getJobDir();
 		return new File(blastJobDir + File.separator + blastJobId, toolId + ".fasta");
 	}
 

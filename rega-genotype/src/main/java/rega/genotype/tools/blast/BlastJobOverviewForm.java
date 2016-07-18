@@ -24,6 +24,7 @@ import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.ViewItemRenderFlag;
 import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
@@ -35,6 +36,7 @@ import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
 
@@ -243,7 +245,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		String url = GenotypeMain.getApp().getServletContext().getContextPath()
 		+ "/typingtool/" + toolConfig.getPath() + "/"
-		+ BLAST_JOB_ID_PATH + "/" + getMain().getOrganismDefinition().getToolConfig().getVersion() + "/" + jobId;
+		+ BLAST_JOB_ID_PATH + "/" + getMain().getOrganismDefinition().getToolConfig().getId()
+		+ "/" + getMain().getOrganismDefinition().getToolConfig().getVersion() + "/" + jobId;
 
 		WLink link = new WLink(url);
 		link.setTarget(AnchorTarget.TargetNewWindow);
@@ -281,10 +284,20 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	 * Parse result.xml file from job dir and fill the output to
 	 * blastResultModel.
 	 */
-	public static class BlastResultParser extends GenotypeResultParser {
+	public class BlastResultParser extends GenotypeResultParser {
 		private Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
+		private WApplication app;
 
 		public BlastResultParser() {
+			app = WApplication.getInstance();
+		}
+
+		@Override
+		public void updateUi() {
+			UpdateLock updateLock = app.getUpdateLock();
+			updateView();
+			app.triggerUpdate();
+			updateLock.release();
 		}
 
 		@Override

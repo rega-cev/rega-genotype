@@ -13,7 +13,6 @@ import java.util.List;
 import org.jdom.Element;
 
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.data.GenotypeResultParser.ParsingState;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ngs.NgsProgress;
@@ -88,7 +87,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	 * updater is responsible for that) and checks for new results in the results.xml file.
 	 */
 	private Thread parserThread;
-	private WTimer updater;
 	private GenotypeResultParser parser;
 
 	protected File jobDir;
@@ -99,7 +97,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private Template template;
 	
 	private boolean hasRecombinationResults;
-	
+
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main);
 		
@@ -116,6 +114,13 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		jobTable.setHeaderCount(1, Orientation.Vertical);
 		jobTable.setStyleClass("jobTable");
 		jobTable.setObjectName("job-table");
+
+		// on slow servers it can take some time till init is called
+		template.bindEmpty("summary");
+		template.bindEmpty("job-id");
+		template.bindEmpty("downloads");
+		template.bindEmpty("recombination-fragment-downloads");
+		template.bindEmpty("analysis-in-progress");
 	}
 
 	public void init(final String jobId, final String filter) {
@@ -433,7 +438,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	private void startParserThread() {
 		if (parserThread == null) {
-			final WApplication app = WApplication.getInstance();
 			final int interval = getMain().getOrganismDefinition().getUpdateInterval();
 			final Object lock = new Object();
 
@@ -484,43 +488,19 @@ public abstract class AbstractJobOverview extends AbstractForm {
 						}
 					}
 
-					parser.eof().addListener(AbstractJobOverview.this,
-							new Signal1.Listener<ParsingState>() {
-						public void trigger(ParsingState parsingState) {
-							// update view
-							UpdateLock updateLock = app.getUpdateLock();
-							updateView();
-							app.triggerUpdate();
-							updateLock.release();
-
-							if (!jobCancelled())
-								switch (parsingState) {
-								case Pasring:
-									synchronized (lock) {
-										try {
-											if (!jobDone()){
-												int interval = getMain().getOrganismDefinition().getUpdateInterval();
-												long length = resultFile.length();
-												while (!stop && length == resultFile.length()) // no new results yet
-													lock.wait(interval); // pause till more data is added to the file
-											}
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-											assert (false);
-										}
-									}
-									break;
-								case Ended:
-									break;
-								case Stopped:
-									stop = true;
-									break;
-								}
-
-						}
-					});
-
 					parser.parseFile(getJobdir());
+
+					while (!stop && !jobDone()){
+						parser.updateUi();
+						synchronized (lock) {
+							try {
+								lock.wait(interval);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+								assert (false);
+							}
+						}
+					}
 				}
 			});
 
@@ -599,6 +579,14 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			}
 		}
 
+		@Override
+		public void updateUi() {
+			UpdateLock updateLock = app.getUpdateLock();
+			updateView();
+			app.triggerUpdate();
+			updateLock.release();
+		}
+		
 		@Override
 		public boolean skipSequence() {
 			return filter.excludeSequence(this);

@@ -51,10 +51,6 @@ public class HivDefinition implements OrganismDefinition {
 	public AbstractJobOverview getJobOverview(GenotypeWindow main) {
 		return new DefaultJobOverview(main);
 	}
-	
-	public String getXmlPath() {
-		return "/rega/genotype/ui/viruses/hiv/";
-	}
 
 	public AbstractDataTableGenerator getDataTableGenerator(SequenceFilter sequenceFilter, DataTable t) throws IOException {
 		return new DefaultTableGenerator(sequenceFilter, t);
@@ -132,5 +128,9 @@ public class HivDefinition implements OrganismDefinition {
 
 	public ToolConfig getToolConfig() {
 		return Settings.getInstance().getConfig().getToolConfigByUrlPath(HivMain.HIV_TOOL_ID);
+	}
+
+	public String getXmlPath() {
+		return getToolConfig().getConfiguration();
 	}
 }

@@ -107,10 +107,11 @@ public class Config {
 		return getLastPublishedToolConfig(toolId);
 	}
 
-	public ToolConfig getBlastTool(String version) {
+	public ToolConfig getBlastTool(String id, String version) {
 		for (ToolConfig c: getTools()) {
 			if (c.getToolMenifest() != null 
 					&& c.getToolMenifest().isBlastTool()
+					&& c.getToolMenifest().getId().equals(id)
 					&& c.getToolMenifest().getVersion().equals(version))
 				return c;
 		}

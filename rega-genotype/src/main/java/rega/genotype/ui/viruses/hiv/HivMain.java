@@ -5,11 +5,23 @@
  */
 package rega.genotype.ui.viruses.hiv;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jdom.JDOMException;
+
+import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest.FileType;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
+import rega.genotype.ui.util.FileServlet;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
@@ -48,14 +60,39 @@ public class HivMain extends GenotypeMain {
 			a.getRoot().addWidget(new WText(e.getMessage()));
 			return a;
 		}
+
+		ToolConfig toolConfig = settings.getConfig().getToolConfigByUrlPath(HIV_TOOL_ID);
 		
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
-		resources.use("/rega/genotype/ui/viruses/hiv/resources");
+		resources.use(toolConfig.getConfiguration() + File.separator + "resources");
 		app.setLocalizedStrings(resources);
+
+		List<FileManifest> fileManifests;
+		try {
+			fileManifests = ConfigXmlReader.readFileManifests(new File(toolConfig.getConfiguration()));
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			fileManifests = new ArrayList<FileManifest>();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fileManifests = new ArrayList<FileManifest>();
+		}
+		if (!fileManifests.isEmpty()) {
+			for (FileManifest fm: fileManifests) {
+				WLink link = new WLink(FileServlet.getFileUrl(toolConfig.getPath()) 
+						+ "/" + fm.getFileName());
+				if (fm.getFileType() == FileType.CSS_IE)
+					app.useStyleSheet(link, "IE lte 7");
+				else
+					app.useStyleSheet(link);
+			}
+		} else { // support old tools
+			app.useStyleSheet(new WLink("../style/hiv/genotype.css"));
 		
-		app.useStyleSheet(new WLink("../style/hiv/genotype.css"));
-		
+			app.useStyleSheet(new WLink("../style/wt.css"));               // do not use Wt's inline stylesheet...
+			app.useStyleSheet(new WLink("../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
+		}
 		GenotypeWindow window = new GenotypeWindow(new HivDefinition());
 		
 		window.addForm("Tutorial", "tutorial", new DocumentationForm(window, tr("tutorial-doc")));
