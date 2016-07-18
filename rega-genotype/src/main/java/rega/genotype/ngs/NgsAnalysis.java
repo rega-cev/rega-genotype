@@ -258,7 +258,12 @@ public class NgsAnalysis {
 			}
 		}
 
-		ngsProgress.setState(State.FinishedAll);
+		File sequences = new File(workDir, SEQUENCES_FILE);
+		if (!sequences.exists())
+			ngsProgress.setErrors("No assembly results.");
+		else
+			ngsProgress.setState(State.FinishedAll);
+
 		ngsProgress.save(workDir);
 		return true; 
 	}
