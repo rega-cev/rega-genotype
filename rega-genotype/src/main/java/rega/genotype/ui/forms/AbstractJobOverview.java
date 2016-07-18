@@ -438,6 +438,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	private void startParserThread() {
 		if (parserThread == null) {
+			final WApplication app = WApplication.getInstance();
 			final int interval = getMain().getOrganismDefinition().getUpdateInterval();
 			final Object lock = new Object();
 
