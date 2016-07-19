@@ -116,8 +116,6 @@ public class GenericMain extends GenotypeMain {
 		} else { // support old tools
 			String path = "";
 
-			if (getConfiguration().internalDeploymentSize() == 1) 
-				path += "../";
 			app.useStyleSheet(new WLink(path + "../style/genotype-rivm.css"));
 			app.useStyleSheet(new WLink(path + "../style/genotype-rivm-ie.css"),"IE lte 7");
 			app.useStyleSheet(new WLink(path + "../style/wt.css")); // do not use Wt's inline stylesheet...
