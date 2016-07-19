@@ -114,7 +114,12 @@ public class GenericMain extends GenotypeMain {
 					app.useStyleSheet(link);
 			}
 		} else { // support old tools
+
+			// FIXME: suspected JWT bug.
 			String path = "";
+			String[] internalPath = app.getInternalPath().split("/");
+			if (internalPath.length > 1)
+				path += "../";
 
 			app.useStyleSheet(new WLink(path + "../style/genotype-rivm.css"));
 			app.useStyleSheet(new WLink(path + "../style/genotype-rivm-ie.css"),"IE lte 7");
