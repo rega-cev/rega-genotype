@@ -290,6 +290,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		public BlastResultParser() {
 			app = WApplication.getInstance();
+			setReaderBlocksOnEof(true);
 		}
 
 		@Override

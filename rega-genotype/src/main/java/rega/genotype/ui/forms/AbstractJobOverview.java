@@ -485,6 +485,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		Parser() {
 			app = WApplication.getInstance();
+			setReaderBlocksOnEof(true);
 		}
 		@Override
 		public void endSequence() {

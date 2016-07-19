@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Stack;
@@ -41,6 +42,7 @@ public class GenotypeResultParser extends DefaultHandler
 	private int sequenceIndex;
 	private int selectedSequenceIndex;
 	private int filteredSequences;
+	private boolean readerBlocksOnEof = false;
 
 	private boolean stop = false;
 
@@ -274,9 +276,13 @@ public class GenotypeResultParser extends DefaultHandler
 
 		if(resultFile.exists()) {
 			try {
-				GenotypeResultReader reader =
-						new GenotypeResultReader(new InputStreamReader(
-								new FileInputStream(resultFile)));
+				InputStreamReader streamReader = new InputStreamReader(
+						new FileInputStream(resultFile));
+				Reader reader;
+				if(readerBlocksOnEof)
+					reader = new GenotypeResultReader(streamReader);
+				else
+					reader = new BufferedReader(streamReader);
 
 				InputSource inputSource = new InputSource(reader);
 				parse(inputSource);
@@ -324,5 +330,13 @@ public class GenotypeResultParser extends DefaultHandler
 		p.dumpDebug();
 		System.err.println(p.getValue("/genotype_result/sequence/result/start"));
 		System.err.println(p.getSequenceIndex());
+	}
+
+	public boolean isReaderBlocksOnEof() {
+		return readerBlocksOnEof;
+	}
+
+	public void setReaderBlocksOnEof(boolean readerBlocksOnEof) {
+		this.readerBlocksOnEof = readerBlocksOnEof;
 	}
 }
