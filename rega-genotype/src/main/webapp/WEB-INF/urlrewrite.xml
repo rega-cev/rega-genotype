@@ -12,4 +12,14 @@
         <from>/([^/]+)/typingtool</from>
         <to>/typingtool/$1</to>
     </rule>
+    
+    <rule>
+        <from>^/typingtool/([^/]+)/style/(.*)</from>
+        <to>/style/$2</to>
+    </rule>
+    
+     <rule>
+        <from>^/typingtool/style</from>
+        <to>/style</to>
+    </rule>
 </urlrewrite>
