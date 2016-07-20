@@ -24,6 +24,7 @@ import rega.genotype.config.ToolIndexes;
 import rega.genotype.config.ToolIndexes.ToolIndex;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.utils.FileUtil;
+import eu.webtoolkit.jwt.Utils;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
 @SuppressWarnings("serial")
@@ -84,8 +85,8 @@ public class ToolRepoService extends HttpServlet{
 			resp.getWriter().print(json);
 			resp.getWriter().close();		
 		} else if (reqType.equals(REQ_TYPE_GET_TOOL)) {
-			String id = req.getParameter(TOOL_ID_PARAM);
-			String version = req.getParameter(TOOL_VERSION_PARAM);
+			String id = Utils.urlDecode(req.getParameter(TOOL_ID_PARAM));
+			String version = Utils.urlDecode(req.getParameter(TOOL_VERSION_PARAM));
 			File toolFile = getToolFile(id, version);
 			if (toolFile.exists()) {
 				StreamUtils.copy(new FileInputStream(toolFile), resp.getOutputStream());
@@ -93,7 +94,7 @@ public class ToolRepoService extends HttpServlet{
 			} else
 				resp.setStatus(404);
 		} else if (reqType.equals(REQ_TYPE_SERVER_VERSION)) {
-			resp.getWriter().print("server version 0");
+			resp.getWriter().print("server version 1");
 			resp.getWriter().close();	
 		} else if (reqType.equals(REQ_TYPE_EMPTY)) {
 			// ping
@@ -108,8 +109,8 @@ public class ToolRepoService extends HttpServlet{
 		String reqType = getLastUrlPathComponent(req.getRequestURL().toString());
 		String pwd = req.getHeader(TOOL_PWD_PARAM);
 		if (reqType.equals(REQ_TYPE_RETRACT_TOOL)) {	
-			String id = req.getParameter(TOOL_ID_PARAM);
-			String version = req.getParameter(TOOL_VERSION_PARAM);
+			String id = Utils.urlDecode(req.getParameter(TOOL_ID_PARAM));
+			String version = Utils.urlDecode(req.getParameter(TOOL_VERSION_PARAM));
 
 			ToolIndexes toolIndexes = getToolIndexes();
 			for (ToolIndex index: toolIndexes.getIndexes()) {
