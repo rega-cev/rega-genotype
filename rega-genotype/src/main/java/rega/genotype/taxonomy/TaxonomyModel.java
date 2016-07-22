@@ -19,54 +19,73 @@ import eu.webtoolkit.jwt.WStandardItemModel;
  * @author michael
  */
 public class TaxonomyModel extends WStandardItemModel {
-	public enum DataType{Taxon, Lineage}
+	public static int SCIENTIFIC_NAME_ROLE = ItemDataRole.UserRole;
+	public static int TAXONOMY_ID_ROLE = ItemDataRole.UserRole + 1;
+	public static int DEPTH = 7; // Kingdom,Phylum/Division,Class,Legion,Order,Family,Tribe,Genus,Species
 
 	private static TaxonomyModel instance = null;
 
 	private TaxonomyModel(){
-		instance = new TaxonomyModel();
-		File taxonomyFile = UpdateTaxonomyFileService.taxonomyFile();
-		if (taxonomyFile.exists())
-			instance.read(taxonomyFile);
 	}
 	public static synchronized TaxonomyModel getInstance() {
 		if (instance == null) {
-			new TaxonomyModel();
+			instance = new TaxonomyModel();
+
+			File taxonomyFile = UpdateTaxonomyFileService.taxonomyFile();
+			if (taxonomyFile.exists())
+				instance.read(taxonomyFile);
 		}
 
 		return instance;
 	}
 
-	private WStandardItem findChild(WStandardItem parent, String text) {
+	private WStandardItem findChild(WStandardItem parent, String scientificName) {
 		for (int i = 0; i < parent.getRowCount(); ++i) {
-			if (parent.getChild(i).getText().equals(text))
+			if (parent.getChild(i).getData(SCIENTIFIC_NAME_ROLE).equals(scientificName))
 				return parent.getChild(i);
 		}
 
 		return null;
 	}
-	
-	private void addItem(String taxon, String[] linage) {
+
+	private void append(WStandardItem parent, WStandardItem child) {
+		List<WStandardItem> items = new ArrayList<WStandardItem>();
+		items.add(child);
+		parent.appendRow(items);
+	}
+
+	private void addItem(String taxon, String scientificName, String[] linage) {
+		scientificName = scientificName.trim();
 		WStandardItem parent = getInvisibleRootItem();
 		for(String l: linage) {
+			l = l.trim();
 			WStandardItem nextParent = findChild(parent, l);
-			if (nextParent == null
-					|| nextParent.getData(ItemDataRole.UserRole).equals(DataType.Taxon)) { 
+			if (nextParent == null) {
 				// create path
-				WStandardItem item = new WStandardItem(l);
-				item.setData(DataType.Lineage, ItemDataRole.UserRole);
-				List<WStandardItem> items = new ArrayList<WStandardItem>();
-				items.add(item);
-				parent.appendRow(items);
-			} else { // continue searching
-				parent = nextParent;
+				nextParent = new WStandardItem(l);
+				nextParent.setData(l, SCIENTIFIC_NAME_ROLE);
+				append(parent, nextParent);
+			}
+			parent = nextParent;// continue searching
+		}
+
+		if (linage.length < DEPTH) {
+			WStandardItem child = findChild(parent, scientificName);
+			if (child != null) {
+				// item is parent -> only add taxon id
+				child.setData(taxon, TAXONOMY_ID_ROLE);
+				child.setText(scientificName + " (" + taxon + ")");
+				return;
 			}
 		}
-		WStandardItem item = new WStandardItem(taxon);
-		item.setData(DataType.Taxon, ItemDataRole.UserRole);
-		List<WStandardItem> items = new ArrayList<WStandardItem>();
-		items.add(item);
-		parent.appendRow(items);
+
+		if (scientificName.equals("Alphacoronavirus"))
+			System.err.println();
+
+		WStandardItem item = new WStandardItem(scientificName + " (" + taxon + ")");
+		item.setData(scientificName, SCIENTIFIC_NAME_ROLE);
+		item.setData(taxon, TAXONOMY_ID_ROLE);
+		append(parent, item);
 	}
 
 	public void read(File csvFile) {
@@ -77,26 +96,33 @@ public class TaxonomyModel extends WStandardItemModel {
 		String cvsSplitBy = "\t"; // tab
 
 		try {
-
 			boolean header = true;
 			br = new BufferedReader(new FileReader(csvFile));
 			while ((line = br.readLine()) != null) {
-
 				String[] cells = line.split(cvsSplitBy);
 
 				if (header) { // check header
 					assert(cells[0].equals("Taxon"));
+					assert(cells[2].equals("Scientific name"));
 					assert(cells[8].equals("Lineage"));
 					header = false;
+					continue;
 				}
-				if (cells.length < 9)
-					continue; // TODO?
 
 				String taxon = cells[0];
-				String[] linage = cells[8].split(";");
-				addItem(taxon, linage);
+				String scientificName = cells[2];
+				String[] linage = new String[0];
+				
+				if (cells.length < 9) { // linage can be empty
+					addItem(taxon, scientificName, linage);
+					continue;
+				}
 
-				System.out.println(cells[8]);
+				linage = cells[8].split(";");
+
+				addItem(taxon, scientificName, linage);
+
+				System.out.println(cells[8] + " -> " + cells[2]);
 			}
 
 		} catch (FileNotFoundException e) {
@@ -112,5 +138,8 @@ public class TaxonomyModel extends WStandardItemModel {
 				}
 			}
 		}
+
+		if (getColumnCount() > 0)
+			setHeaderData(0, "Taxonomy");
 	} 
 }
