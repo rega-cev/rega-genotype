@@ -110,12 +110,7 @@ public class BlastAnalysisForm extends FormTemplate{
 	
 	public boolean save() {
 		if (validate()) {
-			String identify = "";
-			for(Cluster cluster: analysis.getOwner().getAllClusters()){
-				if (!identify.isEmpty())
-					identify += ",";
-				identify += cluster.getId();
-			}
+			String identify = "*";
 			analysis.setId(identify);
 			analysis.setBlastOptions(optionLE.getText());
 			analysis.setDetailsOptions(detailOptionLE.getText());
