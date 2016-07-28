@@ -68,6 +68,9 @@ public class TaxonomyWidget extends WContainerWidget {
 				tree.expandToDepth(10);
 			}
 		});
+
+		if (taxonomyModel.getRowCount() == 0)
+			info.setText("The taxonmy file is empty. Use the update taxonomy button (under the tools table) to download it from uniprot.");
 	}
 
 	public String getSelectedTaxonomyId() {
