@@ -7,9 +7,11 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import rega.genotype.ApplicationException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.config.ToolUpdateService;
+import rega.genotype.scripts.CreatePanViralBlastXml;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
 import rega.genotype.singletons.Settings;
@@ -34,20 +36,25 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.SortOrder;
+import eu.webtoolkit.jwt.TextFlag;
+import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
-import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
+import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WTextArea;
 import eu.webtoolkit.jwt.servlet.UploadedFile;
 
 /**
@@ -108,7 +115,8 @@ public class ToolConfigTable extends Template{
 		final WPushButton updateB = new WPushButton("Update");
 		final WPushButton importB = new WPushButton("Import");
 		final WPushButton updateTaxonomyB = new WPushButton("Update taxonomy");
-		
+		final WPushButton autoCreatePanViralToolB = new WPushButton("Auto create pav-viral tool");
+
 		// downloadB
 		final DownloadResource downloadR = new DownloadResource("", "") {
 			@Override
@@ -436,6 +444,39 @@ public class ToolConfigTable extends Template{
 			}
 		});
 
+		autoCreatePanViralToolB.clicked().addListener(autoCreatePanViralToolB, new Signal.Listener() {
+			public void trigger() {
+				final StandardDialog d = new StandardDialog("Auto create pan-viral tool", false);
+				d.getContents().addWidget(new WText("<div>A new pan-viral tool will be auto crated.</div>"));
+				d.getContents().addWidget(new WText("<div>Uplaod  ICTV Master Species List in csv format.</div>"));
+				final WFileUpload upload = new WFileUpload(d.getContents());
+				upload.setFilters(".csv");
+
+				final WPushButton createB = new WPushButton("Create", d.getContents());
+				final WText info = new WText(d.getContents());
+				createB.clicked().addListener(createB, new Signal.Listener() {
+					public void trigger() {
+						upload.upload();
+					}
+				});
+
+				upload.uploaded().addListener(upload, new Signal.Listener() {
+					public void trigger() {
+						if (upload.getUploadedFiles().size() == 0) 
+							info.setText("Upload file first.");
+
+						try {
+							CreatePanViralBlastXml.readICTVMasterSpeciesList(
+									new File(upload.getSpoolFileName()));
+						} catch (ApplicationException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						}
+					}
+				});
+			}
+		});
+
 		bindWidget("version-chb", versionChB);
 		bindWidget("remote-chb", remoteChB);
 		bindWidget("table", table);
@@ -448,6 +489,7 @@ public class ToolConfigTable extends Template{
 		bindWidget("import", importB);
 		bindWidget("export", downloadB);
 		bindWidget("update-taxonomy", updateTaxonomyB);
+		bindWidget("auto-create-pan-viral", autoCreatePanViralToolB);
 	}
 
 	private void importTool(ToolManifest manifest, File f, ToolConfigForm.Mode mode) {
