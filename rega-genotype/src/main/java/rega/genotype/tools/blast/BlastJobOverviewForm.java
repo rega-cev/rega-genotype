@@ -16,20 +16,27 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
+import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.PositionScheme;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal1;
+import eu.webtoolkit.jwt.ViewItemRenderFlag;
+import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
 
@@ -43,9 +50,12 @@ import eu.webtoolkit.jwt.chart.WPieChart;
 public class BlastJobOverviewForm extends AbstractJobOverview {
 	public static final String BLAST_JOB_ID_PATH = "blast-job";
 
-	private static final int ASSINGMENT_COLUMN = 0;
-	private static final int DATA_COLUMN = 1; // sequence count column. percentages of the chart.
+	private static final int ASSINGMENT_COLUMN =    0;
+	private static final int DATA_COLUMN =          1; // sequence count column. percentages of the chart.
 	private static final int CHART_DISPLAY_COLUMN = 2;
+	private static final int PERCENTAGE_COLUMN =    3;
+	private static final int COLOR_COLUMN =         4;
+
 
 	//private Template layout = new Template(tr("job-overview-form"), this);
 	private WStandardItemModel blastResultModel = new WStandardItemModel();
@@ -63,11 +73,28 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		// table
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		table.setWidth(new WLength(400));
+		table.setWidth(new WLength(500));
 		table.setStyleClass("blastResultsTable");
 		table.hideColumn(CHART_DISPLAY_COLUMN);
-		table.setColumnWidth(0, new WLength(340));
-		table.setColumnWidth(1, new WLength(60));
+		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
+		table.setColumnWidth(DATA_COLUMN, new WLength(70));
+		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(50));
+		table.setColumnWidth(COLOR_COLUMN, new WLength(50));
+
+		table.setItemDelegateForColumn(COLOR_COLUMN, new WAbstractItemDelegate() {
+			@Override
+			public WWidget update(WWidget widget, WModelIndex index, EnumSet<ViewItemRenderFlag> flags) {
+				WContainerWidget w = new WContainerWidget();
+				w.setStyleClass("legend-item");
+				WColor c = (WColor)index.getData(ItemDataRole.UserRole + 1);
+				if (c != null)
+					w.getDecorationStyle().setBackgroundColor(c);
+
+				w.setMargin(WLength.Auto, Side.Left, Side.Right);
+
+				return w;
+			}
+		});
 	}
 
 	private void createChart() {
@@ -99,6 +126,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		chart.resize(800, 300);
 		chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
 		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+		chart.setStartAngle(90);
 
 		chart.setModel(blastResultModel);
 		chart.setLabelsColumn(CHART_DISPLAY_COLUMN);    
@@ -156,17 +184,28 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		
 		// create blastResultModel
 		blastResultModel = new WStandardItemModel();
-		blastResultModel.insertColumns(blastResultModel.getColumnCount(), 3);
-		blastResultModel.setHeaderData(ASSINGMENT_COLUMN, "Assignment");
-		blastResultModel.setHeaderData(DATA_COLUMN, "Sequence count");
+		blastResultModel.insertColumns(blastResultModel.getColumnCount(), 5);
+		
+		blastResultModel.setHeaderData(ASSINGMENT_COLUMN, tr("detailsForm.summary.assignment"));
+		blastResultModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.numberSeqs"));
+		blastResultModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.percentage"));
+		blastResultModel.setHeaderData(COLOR_COLUMN, tr("detailsForm.summary.legend"));
+
+		// find total 
+		double total = 0;
+		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
+			ClusterData toolData = e.getValue();
+			total += toolData.sequenceNames.size();
+		}
 
 		Config config = Settings.getInstance().getConfig();
+		int i = 0;
 		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
 			ClusterData toolData = e.getValue();
 			int row = blastResultModel.getRowCount();
 			blastResultModel.insertRows(row, 1);
 			blastResultModel.setData(row, ASSINGMENT_COLUMN, toolData.concludedName);
-			ToolConfig toolConfig = config.getLastPublishedToolConfig(toolData.toolId);
+			ToolConfig toolConfig = config.getCurrentVersion(toolData.toolId);
 			if (toolConfig != null) {
 				blastResultModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
 				blastResultModel.setData(row, DATA_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
@@ -174,6 +213,15 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			blastResultModel.setData(row, DATA_COLUMN, toolData.sequenceNames.size()); // percentage
 			blastResultModel.setData(row, CHART_DISPLAY_COLUMN, 
 					toolData.concludedName + " (" + toolData.sequenceNames.size() + ")");
+
+			WColor color = chart.getPalette().getBrush(i).getColor();
+			blastResultModel.setData(row, COLOR_COLUMN, color, 
+					ItemDataRole.UserRole + 1);
+
+			blastResultModel.setData(row, PERCENTAGE_COLUMN, 
+					(double)toolData.sequenceNames.size() / total * 100.0);
+
+			i++;
 		}
 		chart.setModel(blastResultModel);
 		table.setModel(blastResultModel);
@@ -191,15 +239,19 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 
 	private WLink createToolLink(final String toolId, final String jobId) {
-		ToolConfig toolConfig = Settings.getInstance().getConfig().getLastPublishedToolConfig(toolId);
+		ToolConfig toolConfig = Settings.getInstance().getConfig().getCurrentVersion(toolId);
 		if (toolConfig == null)
 			return null;
 
 		String url = GenotypeMain.getApp().getServletContext().getContextPath()
 		+ "/typingtool/" + toolConfig.getPath() + "/"
-		+ BLAST_JOB_ID_PATH + "/" + getMain().getOrganismDefinition().getToolConfig().getVersion() + "/" + jobId;
+		+ BLAST_JOB_ID_PATH + "/" + getMain().getOrganismDefinition().getToolConfig().getId()
+		+ "/" + getMain().getOrganismDefinition().getToolConfig().getVersion() + "/" + jobId;
 
-		return new WLink(url);
+		WLink link = new WLink(url);
+		link.setTarget(AnchorTarget.TargetNewWindow);
+
+		return link;
 	}
 	
 	// Classes
@@ -232,10 +284,21 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	 * Parse result.xml file from job dir and fill the output to
 	 * blastResultModel.
 	 */
-	public static class BlastResultParser extends GenotypeResultParser {
+	public class BlastResultParser extends GenotypeResultParser {
 		private Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
+		private WApplication app;
 
 		public BlastResultParser() {
+			app = WApplication.getInstance();
+			setReaderBlocksOnEof(true);
+		}
+
+		@Override
+		public void updateUi() {
+			UpdateLock updateLock = app.getUpdateLock();
+			updateView();
+			app.triggerUpdate();
+			updateLock.release();
 		}
 
 		@Override

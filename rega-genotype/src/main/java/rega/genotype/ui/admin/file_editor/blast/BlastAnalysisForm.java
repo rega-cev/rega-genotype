@@ -78,7 +78,7 @@ public class BlastAnalysisForm extends FormTemplate{
 				if (t == SequenceType.DNA)
 					return new WString("blastn (DNA)");
 				else
-					return new WString("Diamond (AA)");
+					return new WString("blastx (AA)");
 			}
 		};
 
@@ -110,12 +110,7 @@ public class BlastAnalysisForm extends FormTemplate{
 	
 	public boolean save() {
 		if (validate()) {
-			String identify = "";
-			for(Cluster cluster: analysis.getOwner().getAllClusters()){
-				if (!identify.isEmpty())
-					identify += ",";
-				identify += cluster.getId();
-			}
+			String identify = "*";
 			analysis.setId(identify);
 			analysis.setBlastOptions(optionLE.getText());
 			analysis.setDetailsOptions(detailOptionLE.getText());

@@ -17,15 +17,13 @@ public class Sequence extends AbstractSequence
     private boolean nameCapped;
 	private String description;
     private String sequence;
-    private String quality;
 	private AbstractSequence sourceSequence = this;
 
-    public Sequence(String name, boolean nameCapped, String description, String sequence, String quality) {
+    public Sequence(String name, boolean nameCapped, String description, String sequence) {
         this.name = name;
         this.nameCapped = nameCapped;
         this.description = description;
         this.sequence = sequence;
-        this.quality = quality;
     }
 
     public String getName() {
@@ -96,13 +94,5 @@ public class Sequence extends AbstractSequence
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public void setQuality(String quality) {
-		this.quality = quality;
-	}
-
-	public String getQuality() {
-		return quality;
 	}
 }

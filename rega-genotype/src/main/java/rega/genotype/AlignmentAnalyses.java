@@ -646,4 +646,8 @@ public class AlignmentAnalyses {
 	public Region getRegion() {
 		return region;
 	}
+
+	public static File blastFile(File dir) {
+		return new File(dir.getAbsolutePath(), "blast.xml");
+	}
 }

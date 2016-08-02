@@ -7,11 +7,10 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.webtoolkit.jwt.WApplication;
-
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
+import eu.webtoolkit.jwt.WApplication;
 
 /**
  * Read json config
@@ -97,10 +96,22 @@ public class Config {
 		return ans;
 	}
 
-	public ToolConfig getBlastTool(String version) {
+	public ToolConfig getCurrentVersion(String toolId) {
+		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
+			ToolManifest m = c.getToolMenifest();
+			if (c.isCurrentUsedVersion() && m != null 
+					&& m.getId().equals(toolId))
+				return c;
+		}
+
+		return getLastPublishedToolConfig(toolId);
+	}
+
+	public ToolConfig getBlastTool(String id, String version) {
 		for (ToolConfig c: getTools()) {
 			if (c.getToolMenifest() != null 
 					&& c.getToolMenifest().isBlastTool()
+					&& c.getToolMenifest().getId().equals(id)
 					&& c.getToolMenifest().getVersion().equals(version))
 				return c;
 		}
@@ -194,9 +205,6 @@ public class Config {
 		private String paupCmd = "paup4b10";
 		private String clustalWCmd = "clustalW";
 		private String blastPath = "/usr/bin/";
-		private String diamondPath = "diamond";
-		private String dbDiamondPath = "db.dmnd";
-		private String taxonamyDiamondPath = "taxonamy.fasta";
 		private String treePuzzleCmd = "puzzle";
 		private String treeGraphCmd = "tgf";
 		private String epsToPdfCmd = "epstopdf";
@@ -207,8 +215,6 @@ public class Config {
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.
 		private String adminPassword;
-		private String fastqcCmd;
-		private String spadesCmd = "spades";
 		
 		public String getPaupCmd() {
 			return paupCmd;
@@ -264,24 +270,6 @@ public class Config {
 		public void setBlastPath(String blastPath) {
 			this.blastPath = blastPath;
 		}
-		public String getDiamondPath() {
-			return diamondPath;
-		}
-		public void setDiamondPath(String diamondPath) {
-			this.diamondPath = diamondPath;
-		}
-		public String getDbDiamondPath() {
-			return dbDiamondPath;
-		}
-		public void setDbDiamondPath(String dbDiamondPath) {
-			this.dbDiamondPath = dbDiamondPath;
-		}
-		public String getTxDiamondPath() {
-			return taxonamyDiamondPath;
-		}
-		public void setTxDiamondPath(String taxonamyDiamondPath) {
-			this.taxonamyDiamondPath = taxonamyDiamondPath;
-		}
 		public String getPublisherName() {
 			return publisherName;
 		}
@@ -309,18 +297,6 @@ public class Config {
 		public void setAdminPassword(String adminPassword) {
 			this.adminPassword = adminPassword;
 		}
-		public String getFastqcCmd() {
-			return fastqcCmd;
-		}
-		public void setFastqcCmd(String fastqcCmd) {
-			this.fastqcCmd = fastqcCmd;
-		}
-		public String getSpadesCmd() {
-			return spadesCmd;
-		}
-		public void setSpadesCmd(String spadesCmd) {
-			this.spadesCmd = spadesCmd;
-		}
 	}
 
 	public static class ToolConfig {
@@ -332,8 +308,10 @@ public class Config {
 		private boolean ui;
 		private boolean published = false; // used to remember the published state when off line.
 		private boolean retracted = false; // used to remember the retracted state when off line.
+		// if true the pan viral tool will redirect to this tool version. 
+		// Unique per tool id.
+		private boolean currentUsedVersion = false; 
 		// ToolMenifest read manifests from configuration dir.
-		// TODO: ui will have to update manifest if it was changed.
 		transient private ToolManifest manifest = null;
 
 		public ToolConfig copy() {
@@ -349,7 +327,7 @@ public class Config {
 		 * create and set job, xml dirs for a new tool.
 		 */
 		public void genetareDirs() {
-			genetareJobDir(null);
+			genetareJobDir();
 			genetareConfigurationDir();
 		}
 		public void genetareConfigurationDir() {
@@ -373,22 +351,15 @@ public class Config {
 			}
 		}
 		
-		public void genetareJobDir(String suggestDirName) {
+		public void genetareJobDir() {
 			try {
-				File toolDir;
-				if (suggestDirName == null)
-					toolDir = FileUtil.createTempDirectory("tool-dir", 
-							new File(Settings.getInstance().getBaseJobDir()));
-				else {
-					toolDir = new File(new File(Settings.getInstance().getBaseJobDir()), suggestDirName);
-					toolDir.mkdirs();
-				}
-				setJobDir(toolDir + File.separator);
+				File toolJobDir = FileUtil.createTempDirectory("tool-dir", 
+						new File(Settings.getInstance().getBaseJobDir()));
+				setJobDir(toolJobDir + File.separator);
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); 
 			}
-
 		}
 
 		public ToolManifest getToolMenifest() {
@@ -476,6 +447,19 @@ public class Config {
 
 		public void setRetracted(boolean retracted) {
 			this.retracted = retracted;
+		}
+
+		public boolean isCurrentUsedVersion() {
+			return currentUsedVersion;
+		}
+
+		/**
+		 * If true the pan viral tool will redirect to this tool version. 
+		 * Unique per tool id !!
+		 * @param usedByPanViralTool
+		 */
+		public void setCurrentUsedVersion(boolean currentUsedVersion) {
+			this.currentUsedVersion = currentUsedVersion;
 		}
 	}
 }

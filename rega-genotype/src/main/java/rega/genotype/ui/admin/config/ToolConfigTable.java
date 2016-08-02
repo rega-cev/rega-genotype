@@ -273,9 +273,9 @@ public class ToolConfigTable extends Template{
 					ToolInfo info = proxyModel.getToolInfo(table.getSelectedIndexes().first());
 
 					ToolConfig config = info.getConfig().copy();
-					String suggestedDirName = info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1);
-					config.genetareJobDir(suggestedDirName);
-					config.genetareConfigurationDir(suggestedDirName);
+					config.genetareJobDir();
+					config.genetareConfigurationDir(
+							info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1));
 					Settings.getInstance().getConfig().putTool(config);
 					try {
 						Settings.getInstance().getConfig().save();
@@ -351,7 +351,7 @@ public class ToolConfigTable extends Template{
 					else
 						uninstallB.setText("Uninstall");
 
-					if (toolInfo.getManifest() != null){
+					if (toolInfo.getManifest() != null && toolInfo.getConfig() != null){
 						File zip = new File(Settings.getInstance().getBasePackagedToolsDir() 
 								+ File.separator + toolInfo.getManifest().getUniqueToolId() + ".zip");
 						downloadR.setFileName(zip.getAbsolutePath());
@@ -421,7 +421,7 @@ public class ToolConfigTable extends Template{
 			// create local config for installed tool
 			ToolConfig config = new ToolConfig();
 			config.setConfiguration(manifest.suggestXmlDirName());
-			config.genetareJobDir(manifest.suggestXmlDirName());
+			config.genetareJobDir();
 			if (mode == Mode.Install)
 				config.setPublished(true);
 			Settings.getInstance().getConfig().putTool(config);

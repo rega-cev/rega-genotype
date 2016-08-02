@@ -10,14 +10,16 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
-
+import rega.genotype.AlignmentAnalyses;
+import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
-import rega.genotype.ngs.NgsAnalysis;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -28,11 +30,9 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.Icon;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WApplication;
-import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WInteractWidget;
 import eu.webtoolkit.jwt.WLength;
@@ -52,15 +52,10 @@ import eu.webtoolkit.jwt.WTextArea;
 public class StartForm extends AbstractForm {
 	private WTextArea sequenceTA;
 	private FileUpload fileUpload;
-	private String fileUploadFasta;
-	private WFileUpload fastqFileUpload1;
-	private WFileUpload fastqFileUpload2;
-	private WPushButton fastqStart;
 	
 	private WLineEdit jobIdTF;
 	
 	private WText errorJobId, errorText;
-	private String msgUploadFile = "Successfully uploaded file! Click Start to process the file.";
 	
 	public StartForm(GenotypeWindow main) {
 		super(main);
@@ -101,12 +96,7 @@ public class StartForm extends AbstractForm {
 	
 		run.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
-				final String fasta;
-				if (((sequenceTA.getText().equalsIgnoreCase("")) || (sequenceTA.getText().equalsIgnoreCase(msgUploadFile))) && (!(getFastaTextArea().equalsIgnoreCase("")))){
-					fasta = getFastaTextArea();
-				}else{
-					fasta = sequenceTA.getText();
-				}				
+				final String fasta = sequenceTA.getText();
 				
 				CharSequence error = verifyFasta(fasta);
 				validateInput(error);
@@ -136,8 +126,6 @@ public class StartForm extends AbstractForm {
 						startLocalJob(fasta);
 				}
 			}
-
-			
 		});
 
 		fileUpload = new FileUpload();
@@ -148,9 +136,7 @@ public class StartForm extends AbstractForm {
 				try {
 					if (f.exists()) {
 						String fasta = GenotypeLib.readFileToString(f);
-						sequenceTA.setText(msgUploadFile);
-						setFastaTextArea(fasta);
-						
+						sequenceTA.setText(fasta);
 						CharSequence error = verifyFasta(fasta);
 						validateInput(error);
 					}
@@ -177,69 +163,21 @@ public class StartForm extends AbstractForm {
 		
 		t.bindWidget("error-job", errorJobId);
 
-		// NGS
-
-		fastqFileUpload1 = new WFileUpload();
-		fastqFileUpload2 = new WFileUpload();
-		fastqStart = new WPushButton("Start NGS analysis");
-
-		fastqStart.clicked().addListener(fastqStart, new Signal.Listener() {
-			public void trigger() {
-				fastqFileUpload1.upload();
+		AlignmentAnalyses alignmentAnalyses = readBlastXml();
+		if(alignmentAnalyses == null) {
+			t.bindEmpty("count_virus_from_blast.xml");
+			t.bindEmpty("count_typing_tools");
+		} else {
+			List<Cluster> allClusters = alignmentAnalyses.getAllClusters();
+			Set<String> tools = new HashSet<String>();
+			for (Cluster c:allClusters) {
+				if(c.getToolId() != null && !c.getToolId().isEmpty())
+					tools.add(c.getToolId());
 			}
-		});
 
-		fastqFileUpload1.uploaded().addListener(this, new Signal.Listener() {
-			public void trigger() {
-				fastqFileUpload2.upload();
-			}
-		});
-
-		fastqFileUpload2.uploaded().addListener(this, new Signal.Listener() {
-			public void trigger() {
-				//Start NGS analysis and send assembled sequences to normal analysis.
-				File fastqFile1 = new File(fastqFileUpload1.getSpoolFileName());
-				File fastqFile2 = new File(fastqFileUpload2.getSpoolFileName());
-
-				final File workDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getJobDir());
-
-				try {
-					File fastqDir = new File(workDir, NgsAnalysis.FASTQ_FILES_DIR);
-					fastqDir.mkdirs();
-					FileUtils.copyFile(fastqFile1, new File(fastqDir, fastqFileUpload1.getClientFileName()));
-					if (fastqFile2 != null)
-						FileUtils.copyFile(fastqFile2, new File(fastqDir, fastqFileUpload2.getClientFileName()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				Thread ngsAnalysis = new Thread(new Runnable() {
-					public void run() {
-						try {
-							if (NgsAnalysis.analyze(workDir)) {
-								// analyze assembled fasta files 
-								getMain().getOrganismDefinition().startAnalysis(workDir);
-								File done = new File(workDir.getAbsolutePath()+File.separatorChar+"DONE");
-								FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-							assert(false);
-						} catch (ParameterProblemException e) {
-							e.printStackTrace();
-						} catch (FileFormatException e) {
-							e.printStackTrace();
-						}
-					}
-				});
-				ngsAnalysis.start();
-				getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(workDir) + "/");
-			}
-		});
-
-		t.bindWidget("fastq-start", fastqStart);
-		t.bindWidget("fastq-upload1", fastqFileUpload1);
-		t.bindWidget("fastq-upload2", fastqFileUpload2);
+			t.bindString("count_virus_from_blast.xml", allClusters.size() + "");
+			t.bindString("count_typing_tools", tools.size() + "");
+		}
 	}
 	
 	private WInteractWidget createButton(String textKey, String iconKey) {
@@ -372,12 +310,20 @@ public class StartForm extends AbstractForm {
 	public void handleInternalPath(String internalPath) {
 		
 	}
-	
-	private void setFastaTextArea(String fileUploadFasta){
-		this.fileUploadFasta = fileUploadFasta;
-	}
-	
-	private String getFastaTextArea(){
-		return this.fileUploadFasta;
+
+	private AlignmentAnalyses readBlastXml(){
+		File xmlDir = new File(getMain().getOrganismDefinition().getXmlPath());
+		if (AlignmentAnalyses.blastFile(xmlDir).exists()) {
+			try {
+				return new AlignmentAnalyses(AlignmentAnalyses.blastFile(xmlDir), null, null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ParameterProblemException e) {
+				e.printStackTrace();
+			} catch (FileFormatException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }

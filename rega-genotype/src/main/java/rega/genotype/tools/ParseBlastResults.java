@@ -74,7 +74,7 @@ public class ParseBlastResults {
 		//TODO aa should be configurable
 		boolean aa = false;
 		//TODO provide a proper sequence, this would require to pass the FASTA as well, for now, we pass a bogus sequence
-		AbstractSequence sequence = new Sequence("", false, "", "", "");
+		AbstractSequence sequence = new Sequence("", false, "", "");
 		BlastAnalysis.Result r = BlastAnalysis.parseBlastResults(new BlastResultList(results), ba, aa, sequence);
 		String assignment = "Unassigned";
 		if (r.haveSupport())

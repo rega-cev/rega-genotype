@@ -27,9 +27,10 @@ public class ToolUpdateService {
 			e.printStackTrace();
 		}
 
-		// copy tool content
-		FileUtil.unzip(f, new File(lastPublishedRemoteManifest.suggestXmlDirName()));
 		if (f != null) {
+			// copy tool content
+			FileUtil.unzip(f, new File(lastPublishedRemoteManifest.suggestXmlDirName()));
+
 			ToolConfig localLastPublished = Settings.getInstance().getConfig().
 					getLastPublishedToolConfig(lastPublishedRemoteManifest.getId());
 			// create tool config.
@@ -41,6 +42,9 @@ public class ToolUpdateService {
 			newConfig.setConfiguration(lastPublishedRemoteManifest.suggestXmlDirName());
 			newConfig.setJobDir(lastPublishedRemoteManifest.suggestJobDirName());
 			newConfig.setPublished(true);
+			
+			newConfig.setCurrentUsedVersion(localLastPublished.isCurrentUsedVersion());
+			localLastPublished.setCurrentUsedVersion(false);
 
 			Settings.getInstance().getConfig().putTool(newConfig);
 

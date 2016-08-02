@@ -10,7 +10,7 @@ import java.io.File;
 import javax.servlet.ServletContext;
 
 import rega.genotype.BlastAnalysis;
-import rega.genotype.DiamondAnalysis;
+import rega.genotype.PhyloClusterAnalysis;
 import rega.genotype.SequenceAlign;
 import rega.genotype.config.Config;
 import rega.genotype.utils.FileUtil;
@@ -90,10 +90,6 @@ public class Settings {
 	public File getBlastPath() {
 		return new File(config.getGeneralConfig().getBlastPath());
 	}
-	
-	public File getDiamondPath() {
-		return new File(config.getGeneralConfig().getDiamondPath());
-	}
 
 	public String getTreePuzzleCmd() {
 		return config.getGeneralConfig().getTreePuzzleCmd();
@@ -128,7 +124,6 @@ public class Settings {
 		if (s.getConfig() != null) {
 			SequenceAlign.clustalWPath = s.getClustalWCmd();
 			BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
-			DiamondAnalysis.diamondPath = s.getDiamondPath().getAbsolutePath();
 			treeGraphCommand = s.getTreeGraphCmd();
 		}
 	}
@@ -191,16 +186,7 @@ public class Settings {
 				baseDir = "./base-work-dir/";
 		}
 
-		File baseDirfile = new File(baseDir);
-		if(!baseDirfile.exists()) {
-			if (new File(baseDir).mkdirs()) // make sure that the dir exists
-				throw new RuntimeException(
-						"base work dir could not be created. Check if java has permissions to write in " + baseDir
-						+ " On tomcat Add " +
-						"<Parameter name=\"baseWorkDir\" value=\"path/to/base-work-dir\" override=\"false\"/>" +
-						" to $CATALINA_BASE/conf/context.xml " +
-						"Note: you need to give read write permissions to baseWorkDir");
-		}
-		return baseDir;
+		new File(baseDir).mkdirs(); // make sure that the dir exists
+        return baseDir;
 	}
 }

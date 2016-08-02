@@ -86,12 +86,6 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				+ "<div>Select the appropriate binary for your OS</div>"
 				+ "<div>These binaries can be installed by extracting the archive to a desired location</div>");
 
-		setFieldInfo("diamondPath", "<div>DIAMOND v0.8.9</div>"
-				+ "<div>Make sure to install this version, since other versions can give problems!</div>"
-				+ "<div>The binaries can be downloaded from https://github.com/bbuchfink/diamond/releases/</div>"
-				+ "<div>Select the appropriate binary for your OS</div>"
-				+ "<div>These binaries can be installed by extracting the archive to a desired location</div>");
-
 		setFieldInfo("imageMagickConvertCmd", "<div>http://www.imagemagick.org</div>");
 
 		setFieldInfo("publisherName", "<div>All Tools published from this server will use the publisher name.</div>");

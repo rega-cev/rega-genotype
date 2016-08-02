@@ -33,9 +33,6 @@ public abstract class AbstractSequence {
      * @return the sequence itself
      */
     public abstract String getSequence();
-    
-    
-    public abstract String getQuality();
 
     /**
      * @return he sequence length (== getSequence().getLength())
@@ -112,7 +109,7 @@ public abstract class AbstractSequence {
 			s.append(ch);
 		}
 		
-		Sequence result = new Sequence(getName(), isNameCapped(), getDescription(), s.toString(), null);
+		Sequence result = new Sequence(getName(), isNameCapped(), getDescription(), s.toString());
 		result.setSourceSequence(this);
 		
 		return result;
