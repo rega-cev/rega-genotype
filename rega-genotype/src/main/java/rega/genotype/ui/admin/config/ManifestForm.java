@@ -1,13 +1,20 @@
 package rega.genotype.ui.admin.config;
 
 import java.io.File;
+import java.io.IOException;
 
+import rega.genotype.AlignmentAnalyses;
+import rega.genotype.ApplicationException;
+import rega.genotype.FileFormatException;
+import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyWidget;
+import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
+import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.StandardDialog;
@@ -16,8 +23,10 @@ import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WDate;
 import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WValidator;
 
@@ -32,6 +41,7 @@ public class ManifestForm extends FormTemplate{
 	private final WLineEdit versionLE = initLineEdit();
 	private final WText taxonomyT = new WText();
 	private final WCheckBox blastChB = new WCheckBox();
+	private WPushButton autoCreatePanViralToolB = new WPushButton("Auto create pav-viral tool");
 	private final WCheckBox hivChB = new WCheckBox();
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
 	private ToolManifest oldManifest;
@@ -88,7 +98,56 @@ public class ManifestForm extends FormTemplate{
 				});
 			}
 		});
-		
+
+		autoCreatePanViralToolB.clicked().addListener(autoCreatePanViralToolB, new Signal.Listener() {
+			public void trigger() {
+				final StandardDialog d = new StandardDialog("Auto create pan-viral tool", false);
+				d.getContents().addWidget(new WText("<div>A new pan-viral tool will be auto crated.</div>"));
+				d.getContents().addWidget(new WText("<div>Uplaod  ICTV Master Species List in csv format.</div>"));
+				final WFileUpload upload = new WFileUpload(d.getContents());
+				upload.setFilters(".csv");
+
+				final WPushButton createB = new WPushButton("Create", d.getContents());
+				final WText info = new WText(d.getContents());
+				createB.clicked().addListener(createB, new Signal.Listener() {
+					public void trigger() {
+						upload.upload();
+					}
+				});
+
+				upload.uploaded().addListener(upload, new Signal.Listener() {
+					public void trigger() {
+						if (upload.getUploadedFiles().size() == 0) 
+							info.setText("Upload file first.");
+
+						try {
+							PanViralToolGenerator createPanViralBlastXml = new PanViralToolGenerator();
+							AlignmentAnalyses alignmentAnalyses = createPanViralBlastXml.readICTVMasterSpeciesList(
+									new File(upload.getSpoolFileName()));
+
+							//new BlastXmlWriter(blastFile, alignmentAnalyses);
+
+						} catch (ApplicationException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (IOException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (ParameterProblemException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (FileFormatException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						}
+					}
+				});
+			}
+		});
+
 		// bind
 
 		bindWidget("name", nameLE);
@@ -97,6 +156,7 @@ public class ManifestForm extends FormTemplate{
 		bindWidget("blast", blastChB);
 		bindWidget("hiv", hivChB);
 		bindWidget("taxonomy-text", taxonomyT);
+		bindWidget("auto-create-pan-viral", autoCreatePanViralToolB);
 
 		init();
 	}

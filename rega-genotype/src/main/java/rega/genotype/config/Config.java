@@ -211,6 +211,7 @@ public class Config {
 		private String imageMagickConvertCmd = "convert";
 		private int maxAllowedSeqs = 2000;
 		private String inkscapeCmd = "inkscape";
+		private String edirectPath = "/usr/bin/edirect/";
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.
@@ -296,6 +297,12 @@ public class Config {
 		}
 		public void setAdminPassword(String adminPassword) {
 			this.adminPassword = adminPassword;
+		}
+		public String getEdirectPath() {
+			return edirectPath;
+		}
+		public void setEdirectPath(String edirectPath) {
+			this.edirectPath = edirectPath;
 		}
 	}
 
