@@ -51,6 +51,10 @@ public class HIVTool extends GenotypeTool {
         BlastAnalysis.Result result = blastAnalysis.run(s);
         
         if (result.haveSupport()) {
+        	
+        	if (result.isReverseComplement())
+        		s = s.reverseCompliment();
+        	
             if (result.getCluster().getId().equals("1"))
                 hiv1subtypetool.analyze(s);
             else if (result.getCluster().getId().equals("4"))

@@ -29,12 +29,14 @@ public class ScanAnalysis extends AbstractAnalysis {
     public class Result extends AbstractAnalysis.Result implements Scannable {
         private List<Scannable> windowResults;
 		private List<FragmentResult> recombinationResults;
-		private Map<String, Integer> supportedTypes = null; 
+		private Map<String, Integer> supportedTypes = null;
+		private int trimmedBegin; 
 
-        public Result(AbstractSequence sequence, List<Scannable> windowResults, List<FragmentResult> recombinationResults) {
+        public Result(AbstractSequence sequence, List<Scannable> windowResults, List<FragmentResult> recombinationResults, int trimmedBegin) {
             super(sequence);
             this.windowResults = windowResults;
             this.recombinationResults = recombinationResults;
+            this.setTrimmedBegin(trimmedBegin);
         }
 
 		public double getBootscanSupport() {
@@ -265,6 +267,14 @@ public class ScanAnalysis extends AbstractAnalysis {
 		public List<String> scanDiscreteValues() {
             return new ArrayList<String>();
 		}
+
+		public int getTrimmedBegin() {
+			return trimmedBegin;
+		}
+
+		public void setTrimmedBegin(int trimmedBegin) {
+			this.trimmedBegin = trimmedBegin;
+		}
     }
 
     private AbstractAnalysis analysis;
@@ -288,8 +298,12 @@ public class ScanAnalysis extends AbstractAnalysis {
         try {
             SequenceAlignment aligned = profileAlign(alignment, sequence, workingDir);
 
+            int begin = aligned.firstNonGapPosition();
+            int end = aligned.lastNonGapPosition();
+            SequenceAlignment trimmed = aligned.getSubSequence(begin, end);
+            
             List<SequenceAlignment> windows
-                = SlidingGene.generateSlidingWindow(aligned, window, step);
+                = SlidingGene.generateSlidingWindow(trimmed, window, step);
             List<Scannable> windowResults
                 = new ArrayList<Scannable>();
 
@@ -299,10 +313,10 @@ public class ScanAnalysis extends AbstractAnalysis {
 
         	List<FragmentResult> recombinationResults = null;
             if (haveOption("recombination")) {
-				recombinationResults = doRecombinationAnalysis(getOption("recombination"), windowResults, aligned, sequence);
+				recombinationResults = doRecombinationAnalysis(getOption("recombination"), windowResults, trimmed, sequence);
             }
 
-            return new Result(sequence, windowResults, recombinationResults);
+            return new Result(sequence, windowResults, recombinationResults, begin);
         } catch (AlignmentException e) {
             throw new AnalysisException(getId(), sequence, e);
         }

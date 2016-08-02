@@ -5,10 +5,12 @@ import java.io.IOException;
 
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.utils.FileUtil;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
@@ -26,6 +28,8 @@ public class LocalConfigForm  extends FormTemplate {
 	private final WCheckBox autoUpdateChB = new WCheckBox();
 	private final WCheckBox serviceChB = new WCheckBox();
 	private final WCheckBox uiChB = new WCheckBox();
+	private final WCheckBox currentVesionChB = new WCheckBox();
+
 
 	//private ToolManifest manifest;
 	private ToolConfig toolConfig;
@@ -44,6 +48,7 @@ public class LocalConfigForm  extends FormTemplate {
 			autoUpdateChB.setChecked(toolConfig.isAutoUpdate());
 			serviceChB.setChecked(toolConfig.isWebService());
 			uiChB.setChecked(toolConfig.isUi());
+			currentVesionChB.setChecked(toolConfig.isCurrentUsedVersion());
 		}
 
 		urlLE.setValidator(new ToolUrlValidator(false));
@@ -53,6 +58,7 @@ public class LocalConfigForm  extends FormTemplate {
 		bindWidget("url", urlLE);
 		bindWidget("update", autoUpdateChB);
 		bindWidget("ui", uiChB);
+		bindWidget("current-version", currentVesionChB);
 		bindWidget("service", serviceChB);
 
 		init();
@@ -83,6 +89,17 @@ public class LocalConfigForm  extends FormTemplate {
 		toolConfig.setWebService(serviceChB.isChecked());
 		if(toolConfig.getJobDir().isEmpty())
 			toolConfig.genetareJobDir();
+
+		toolConfig.setCurrentUsedVersion(currentVesionChB.isChecked());
+
+		// make sure that current version is unique.
+		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
+			ToolManifest m = c.getToolMenifest();
+			if (c.isCurrentUsedVersion() && m != null 
+					&& m.getId().equals(toolConfig.getId()) 
+					&& !m.getVersion().equals(toolConfig.getVersion()))
+				c.setCurrentUsedVersion(false);
+		}
 
 		config.putTool(toolConfig);
 

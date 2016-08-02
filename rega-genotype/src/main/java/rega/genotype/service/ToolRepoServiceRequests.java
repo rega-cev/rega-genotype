@@ -19,6 +19,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
+import eu.webtoolkit.jwt.Utils;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
 /**
@@ -51,8 +52,8 @@ public class ToolRepoServiceRequests {
 	private static String getReqRetractUrl(String toolId, String toolVersion) {
 		return gerRepoServiceUrl() 
 				+ "/"  +  ToolRepoService.REQ_TYPE_RETRACT_TOOL
-				+ "?" + ToolRepoService.TOOL_ID_PARAM + "=" + toolId
-				+ "&" + ToolRepoService.TOOL_VERSION_PARAM + "=" + toolVersion;
+				+ "?" + ToolRepoService.TOOL_ID_PARAM + "=" + Utils.urlEncode(toolId)
+				+ "&" + ToolRepoService.TOOL_VERSION_PARAM + "=" + Utils.urlEncode(toolVersion);
 	}
 
 	private static String getReqManifestsUrl() {
@@ -63,8 +64,8 @@ public class ToolRepoServiceRequests {
 	private static String getReqToolUrl(String toolId, String toolVersion) {
 		return gerRepoServiceUrl() 
 				+ "/"  +  ToolRepoService.REQ_TYPE_GET_TOOL 
-				+ "?" + ToolRepoService.TOOL_ID_PARAM + "=" + toolId
-				+ "&" + ToolRepoService.TOOL_VERSION_PARAM + "=" + toolVersion;
+				+ "?" + ToolRepoService.TOOL_ID_PARAM + "=" + Utils.urlEncode(toolId)
+				+ "&" + ToolRepoService.TOOL_VERSION_PARAM + "=" + Utils.urlEncode(toolVersion);
 	}
 	
 	private static String generatePasswiord() {

@@ -73,6 +73,8 @@ public class ToolConfigForm extends FormTemplate {
 			manifestForm.disable();
 			
 			fileEditor.setReadOnly(true);
+
+			infoT.setText("Published tools are not editable. If you need to locally edit this tool, create a new version.");
 		}
 
 		retractB.setDisabled(!toolConfig.isPublished() || toolConfig.isRetracted());
@@ -267,7 +269,7 @@ public class ToolConfigForm extends FormTemplate {
 			return null;
 
 		if (fileEditor != null)
-			if (!fileEditor.saveAll())
+			if (!fileEditor.saveAll(toolDir))
 				return null;
 
 		if (publishing || manifestForm.isDirty()){
@@ -300,6 +302,7 @@ public class ToolConfigForm extends FormTemplate {
 		// make sure that the xml dir name is {id}{version} 
 		if (!toolDir.getAbsolutePath().equals(xmlDir)) {
 			FileUtil.moveDirRecorsively(toolDir, xmlDir);
+			toolDir = xmlDir;
 		}
 
 		manifestForm.setToolDir(xmlDir);
