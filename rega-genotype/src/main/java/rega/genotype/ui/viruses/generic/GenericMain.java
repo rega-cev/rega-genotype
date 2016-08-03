@@ -114,14 +114,10 @@ public class GenericMain extends GenotypeMain {
 					app.useStyleSheet(link);
 			}
 		} else { // support old tools
-			String path = "";
-
-			if (getConfiguration().internalDeploymentSize() == 1) 
-				path += "../";
-			app.useStyleSheet(new WLink(path + "../style/genotype-rivm.css"));
-			app.useStyleSheet(new WLink(path + "../style/genotype-rivm-ie.css"),"IE lte 7");
-			app.useStyleSheet(new WLink(path + "../style/wt.css")); // do not use Wt's inline stylesheet...
-			app.useStyleSheet(new WLink(path + "../style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
+			app.useStyleSheet(new WLink("style/genotype-rivm.css"));
+			app.useStyleSheet(new WLink("style/genotype-rivm-ie.css"),"IE lte 7");
+			app.useStyleSheet(new WLink("style/wt.css")); // do not use Wt's inline stylesheet...
+			app.useStyleSheet(new WLink("style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 		}
 
 		if (!WString.tr((String)"tool.meta.robots").equals((Object)"??tool.meta.robots??")) {
