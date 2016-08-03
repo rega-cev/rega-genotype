@@ -24,3 +24,8 @@ Global settings filed repoUrl to http://localhost:8080/rega-genotype/repo-servic
 
 
 * All the tools are saved in a folder specified in context param baseWorkDir.
+Note: On tomcat Add
+<Parameter name="baseWorkDir" value="path/to/base-work-dir" override="false"/>
+to $CATALINA_BASE/conf/context.xml 
+you need to give read write permissions to baseWorkDir
+
