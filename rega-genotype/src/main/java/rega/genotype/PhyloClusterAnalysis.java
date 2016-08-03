@@ -515,13 +515,8 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             Map<String,Float> result = new HashMap<String, Float>();
 
             if (!finds1.isEmpty()) {
-            	int r = 0;
-            	if (finds2.size() != 0){
-            		r = finds1.size() / finds2.size();
-            	}else{
-            		r = finds1.size() / finds1.size();
-            	}
-            	
+                int r = finds1.size() / finds2.size();
+                
                 for (int i = 0; i < finds2.size(); ++i) {
                     String p1 = "";
                     for (int j = 0; j < r; ++j)
