@@ -1,0 +1,28 @@
+PRIORITY
+* details pics, generate them during analysis?
+* ref seq name is too long
+* report form: Indicate how long results are kept (configuration option).
+* check the jobDir whether it exists, if not give an appropriate error message
+* google find the subtypetool (meta content)
+* HIV/HTLV report bootstrap is not showing
+
+LATER
+* WMessage args, WAnchors
+  ??
+
+* remove treegraph dependency (figtree?)
+
+* htlv 	-> filter overview -> error brackets ( in url
+
+* hpv:
+ - two genomes on details form
+
+* no introduction-form exception
+* is title-filtered field allways nececessary?
+* doc rule css
+* example seqs formatting
+* upload file, # seqs in fasta > # allowed seqs -> no message, just nothing happens
+
+
+  
+  

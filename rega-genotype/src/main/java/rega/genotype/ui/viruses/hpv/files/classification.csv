@@ -1,0 +1,7 @@
+"Taxonomic level","Criteria","Number"
+"Genera","Less than 60% nt identity in entire L1 ORF","18 genera (alpha to sigma)"
+"","","2 additional new genera, yet unnamed (containing TtPV2 and RaPV1 respectively)"
+"Species","Between 60% and 70% nt identity in L1","From 1 species (in most genera) up to 15 species (in genus alpha)"
+"Genotypes","Between 71 and 89% nt identity in L1","Currently 120 papillomavirus genotypes completely genomically characterized and available in Genbank (98 human: HPV; 32 non-human)"
+"Subtypes","Between 90 and 98% identity in L1","Very rare"
+"Variants","More than 98% identity in L1",""

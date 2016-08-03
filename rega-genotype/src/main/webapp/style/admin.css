@@ -1,0 +1,189 @@
+body {
+    font-family: arial,sans-serif;
+}
+
+.admin-panel {
+    margin-bottom: 10px;
+}
+
+.float-right {
+    float: right;
+}
+
+.action-buttons {
+	margin-top: 5px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-table td { 
+   /* max-width: 200px; */
+   padding-bottom: 2px;
+   padding-right: 2px;
+   line-height: 20px;
+}
+
+.form-table input[type="text"]  { 
+    width: 200px;
+}
+.form-table-name-td { 
+    width: 200px;
+}
+
+.form-error {
+	color: red;
+}
+
+.form-indent {
+    padding-left: 10px;
+}
+
+.admin-logo {
+    height: 50.0px;
+}
+
+.admin-logo-text {
+    height: 50.0px;
+    line-height: 5px;
+    width: 280px;
+    color: darkblue;
+    margin-left: 30px;
+}
+
+.tools-table-unistalled-raw {
+    color: gray;
+}
+
+.auto-form-info {
+	color: #62615f;
+	font-size: 14px;
+}
+
+.auto-form-table td:nth-child(odd) {
+    padding-bottom: 10px;
+}
+
+.auto-form-table td {
+	width: 200.0px;
+	font-size:17px;
+	line-height: 1.5;
+}
+
+.auto-form-table td input{
+	width: 300.0px;
+	font-size:17px;
+	height:20px;
+}
+.admin-menu {
+    padding:0;
+    margin:0px 9px;
+    padding-left:0px;
+    width:100px;
+    font-weight:normal;
+    list-style:none;
+}
+
+.admin-menu a {
+    color: gray;
+    font-size: 12pt;
+    font-weight:normal;
+    text-decoration:none;
+    display: block;
+    line-height:24px;
+}
+
+.admin-menu .item a {
+  color: gray;
+}
+
+.admin-menu .itemselected a {
+    /*color:blueviolet;*/
+    color: darkblue;
+    font-weight: bold;
+}
+
+.admin-menu a:hover {
+  color: blueviolet;
+    text-decoration: none;
+}
+
+.fasta-analysis-table th {
+    background: #6880A0 url(title-gradient.png) repeat-x scroll 0 -20px;
+    color: white;
+    border-left: 1px solid white;
+    font-weight: bold;
+    height: 100%;
+    padding: 0px 3px;
+}
+
+.fasta-analysis-table td {
+    padding: 1px 3px;
+    border-right: 0px;
+    margin-right: 1px;
+}
+
+.fasta-analysis-table td, .fasta-analysis-table th {
+	font-family: verdana,helvetica,tahoma,sans-serif;
+    font-size: 9pt;
+    cursor: default;
+    white-space: nowrap;
+    line-height: 20.0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.inner-header {
+	margin-bottom: 3px;
+    margin-top: 0px;
+}
+
+.like-button:hover {
+    border-color: #9CF #69E #69E #7AF;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.like-button {
+    appearance: button;
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    
+    cursor: pointer;
+    cursor: hand;
+    font-size: small; 
+    margin: 0px 2px; 
+    padding: 2px 5px; 
+    text-decoration: none; 
+    color: black;
+
+    /*background: transparent url(gradient.png) repeat-x scroll 0 0;    */
+    border: 1px outset #CCC;
+}
+
+.reference-taxa-table td {
+    padding: 5px;
+}
+.reference-taxa-table td:hover {
+  color: blueviolet;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.reference-taxa-table button {
+    border-radius: 30px;
+}
+
+.sequence-table {
+    margin: 10px;
+    width: 550px;
+    height: 300.0px;
+    overflow: auto;
+    display: block;
+	font-family: Courier, monospace;
+}
+
+.sequence-table td:nth-child(odd) {
+    text-align: right;
+    padding-right: 5px;
+}

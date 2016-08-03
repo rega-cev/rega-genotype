@@ -1,0 +1,153 @@
+{
+  "generalConfig": {
+    "paupCmd": "/opt/software/rega-genotype/bin/paup4b10-x86-linux",
+    "clustalWCmd": "/opt/software/rega-genotype/bin/clustalw",
+    "blastPath": "/usr/bin/",
+    "treePuzzleCmd": "puzzle",
+    "treeGraphCmd": "/opt/software/rega-genotype/bin/tgf",
+    "epsToPdfCmd": "?",
+    "imageMagickConvertCmd": "convert",
+    "maxAllowedSeqs": 20000,
+    "inkscapeCmd": "?",
+    "adminPassword": "",
+    "repositoryId": ""
+  },
+  "tools": [
+    {
+      "path": "etv",
+      "configuration": "base-work-dir/xml/ETV-generic/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "enterovirus",
+      "configuration": "base-work-dir/xml/ETV/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "norovirus",
+      "configuration": "base-work-dir/xml/NoV/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "hiv",
+      "configuration": "base-work-dir/xml/HIV/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "spn",
+      "configuration": "base-work-dir/xml/SPN/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "chl-psi-ompa",
+      "configuration": "base-work-dir/xml/CHL-PSI-OMPA/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "phylo",
+      "configuration": "base-work-dir/xml/PHYLO/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "hpv2",
+      "configuration": "base-work-dir/xml/HPV2/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "hcv",
+      "configuration": "base-work-dir/xml/HCV/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "hcv2",
+      "configuration": "base-work-dir/xml/HCV2/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "htlv12",
+      "configuration": "base-work-dir/xml/HTLV12/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "dengue",
+      "configuration": "base-work-dir/xml/dengue/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "corona",
+      "configuration": "base-work-dir/xml/corona/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "HAV",
+      "configuration": "base-work-dir/xml/HAV/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "aedesviruses",
+      "configuration": "base-work-dir/xml/Aedesviruses/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "chikungunya",
+      "configuration": "base-work-dir/xml/chikungunya/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "zika",
+      "configuration": "base-work-dir/xml/zika/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    }
+  ]
+}

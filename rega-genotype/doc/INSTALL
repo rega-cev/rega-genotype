@@ -1,0 +1,31 @@
+INSTALL
+-------
+
+Installation instructions for rega-genotype
+
+* Strating the tool:
+-	run and go to url http://localhost:8080/rega-genotype/admin/
+- Fill in all Global config and save.
+- Now you can install tool from the repository that you specified. 
+
+Repositories:
+
+We added a central repository that contains all the published tools. 
+Communication to that repository is done from admin UI (http://localhost:8080/rega-genotype/admin/)
+repoUrl =  http://typingtools.emweb.be/repository/repo-service
+
+All the tools that existed before the migration are stored in a test repository.
+repoUrl =  http://typingtools.emweb.be/repository-test/repo-service
+The authors of this tools can connect to this repository (set repoUrl),
+download there tools, connect to the "real repository" (set repoUrl) and publish the tool.
+
+Developers can create local repository by setting 
+Global settings filed repoUrl to http://localhost:8080/rega-genotype/repo-service
+
+
+* All the tools are saved in a folder specified in context param baseWorkDir.
+Note: On tomcat Add
+<Parameter name="baseWorkDir" value="path/to/base-work-dir" override="false"/>
+to $CATALINA_BASE/conf/context.xml 
+you need to give read write permissions to baseWorkDir
+

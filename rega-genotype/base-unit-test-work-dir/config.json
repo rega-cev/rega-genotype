@@ -1,0 +1,41 @@
+{
+  "generalConfig": {
+    "paupCmd": "/opt/software/rega-genotype/bin/paup4b10-x86-linux",
+    "clustalWCmd": "/opt/software/rega-genotype/bin/clustalw",
+    "blastPath": "/usr/bin/",
+    "treePuzzleCmd": "puzzle",
+    "treeGraphCmd": "/opt/software/rega-genotype/bin/tgf",
+    "epsToPdfCmd": "?",
+    "imageMagickConvertCmd": "convert",
+    "maxAllowedSeqs": 20001,
+    "inkscapeCmd": "?",
+    "publisherName": "EMWEB",
+    "publisherPassword": "60tjpp2ukvfcudojpoek872idr"
+  },
+  "tools": [
+    {
+      "path": "norovirus",
+      "configuration": "base-unit-test-work-dir/xml/NoV/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "hiv",
+      "configuration": "base-unit-test-work-dir/xml/HIV/",
+      "jobDir": "base-work-dir/job/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    },
+    {
+      "path": "pen-viral",
+      "configuration": "base-unit-test-work-dir/xml/pen-viral1/",
+      "jobDir": "base-work-dir/job/unit-test/",
+      "autoUpdate": true,
+      "webService": true,
+      "ui": true
+    }
+  ]
+}

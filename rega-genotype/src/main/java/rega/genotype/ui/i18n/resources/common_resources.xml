@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+	<message id="sequenceInput.uploadFile">Upload file and start!</message>
+	<message id="sequenceInput.uploadingFile">Uploading file</message>
+  	<message id="sequenceInput.run">Analyse!</message>
+  	<message id="sequenceInput.clear">Clear</message>
+  	<message id="sequenceInput.example"></message>
+  	
+  	<message id="sequenceInput.capWarning.title">Warning</message>
+  	<message id="sequenceInput.capWarning.msg">
+	  	<p>
+	  		There is one or more sequence with a name with more than 30 characters in your FASTA file.
+	  	</p>
+	  	<p>
+	  		The software does not work properly with such sequence names,<br/>
+	  		so these names will be capped.
+	  	</p>
+	  	<p>
+	  		Do you still want to proceed?
+	  	</p>
+  	</message>
+
+  	<message id="sequenceInput.inputSequenceInFastaFormat">
+  		<p>You may either:</p>
+  		  <ol style="list-style-type: upper-alpha">
+  		    <li>paste one or more sequences in FASTA format in the input field.</li>
+  		    <li>upload a FASTA file.</li>
+  		    <li>revisit results of a previous run</li>
+  		  </ol>
+  		<h2>A) Paste nucleotide sequence(s) in FASTA format:</h2>
+    </message>
+  	<message id="sequenceInput.uploadSequenceInFastaFormat">
+  		<h2>B) Or, upload a FASTA with nucleotide sequences:</h2>
+    </message>
+  	<message id="startForm.monitorJob">
+  		<h2>C) Or, revisit results from a previous run:</h2>
+    </message>  	
+  	<message id="startForm.labelJobId">Job-id:</message>
+  	<message id="startForm.monitor">Retrieve results</message>
+  	<message id="startForm.errorJobId">Invalid job id.</message>
+  	<message id="startForm.errorSequence">Too many sequences.</message>
+  	<message id="startForm.noSequence">No sequences were provided.</message>
+  	<message id="startForm.tooManySequences">Too many sequences were provided.</message>
+  	<message id="startForm.ioError">I/O error reading the sequence.</message>
+
+	<message id="monitorForm.cancelButton">Cancel job</message>
+  	<message id="monitorForm.analysisInProgress">
+  		<p>
+  			Analysis in progress... (Showing partial results).<br/>
+  			This page will be automatically updated every ${update-time-seconds} seconds... ${cancel-button}
+  			<br/>
+  			<img src="${resource-file}/ajax-loader.gif" width="16" heigth="16"></img>
+  		</p>
+  	</message>
+  	<message id="monitorForm.report">Report</message>
+	<message id="monitorForm.downloadResults">Download results:</message>
+	<message id="monitorForm.csvTable">Table (CSV format)</message>
+	<message id="monitorForm.xlsTable">Table (Excel format)</message>
+	<message id="monitorForm.fasta">Sequences (Fasta format)</message>
+	<message id="monitorForm.xmlFile">XML File</message>
+	<message id="monitorForm.downloadJob">Download all job files:</message>
+	<message id="monitorForm.jobFile">ZIP</message>
+	<message id="monitorForm.cancelling">Cancelling job</message>
+	<message id="monitorForm.areYouSureToCancel">Are you sure you want to cancel this job?</message>
+	
+	<message id="monitorForm.nonExistingJobId">Job id {1} doesn't exist</message>
+	
+	<message id="detailsForm.nonExistingSequenceId">Sequence id {1} doesn't exist</message>
+	
+	<message id="detailsForm.summary.title"><h2><i>Summary</i></h2></message>
+	<message id="detailsForm.summary.assignment">Rega Assignment</message>
+	<message id="detailsForm.summary.numberSeqs">Number of sequences</message>
+	<message id="detailsForm.summary.percentage">Percentage</message>
+	<message id="detailsForm.summary.legend">Legend</message>
+	<message id="detailsForm.summary.total"><i>Total</i></message>
+	
+	<message id="detailsForm.summary.filter.title"><h2>Phylogenetic statistics</h2></message>
+	
+	<message id="detailsForm.summary.filter.nrSequences">Number of sequences</message>
+	
+	<message id="detailsForm.summary.filter.njTreeStats">NJ Tree Statistics</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootstrap">Average bootstrap</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootstrapInside">Average bootstrap inside</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootstrapOutside">Average bootstrap outside</message>
+	
+	<message id="detailsForm.summary.filter.bootscanStats">Bootscan Statistics</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootscan">Average bootscan</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootscanSupport">Average bootscan support</message>
+	<message id="detailsForm.summary.filter.njTreeStats.avgBootscanNoSupport">Average bootscan no support</message>
+	
+	<message id="main.navigation.start">Submit job</message>
+	
+	<message id="main.navigation.monitor">Monitor job [{1}]</message>
+	
+	<message id="main.navigation.details">Analysis details [{1}]</message>
+	<message id="main.navigation.howToCite">How to cite</message>
+	<message id="main.navigation.tutorial">Tutorial</message>
+	<message id="main.navigation.decisionTrees">Decision trees</message>
+	<message id="main.navigation.subtypingProcess">Subtyping process</message>
+	<message id="main.navigation.exampleSequences">Example sequences</message>
+	<message id="main.navigation.contactUs">Contact us</message>
+	
+	<message id="defaultSequenceAssignment.title">Sequence Assignment</message>
+	
+
+	<message id="defaultSequenceAssignment.name-length">
+		<div class="dsa-text">
+			<span class="label">Name:</span> {1} <span class="label">Length:</span> {2}
+		</div>
+	</message>
+
+	<message id="defaultSequenceAssignment.assignment-bootstrap">
+		<div class="dsa-text">
+			<span class="label">Assignment:</span> {1} <span class="label">Bootstrap:</span> {2}
+		</div>
+	</message>
+
+	<message id="defaultSequenceAssignment.motivation">Motivation: </message>
+
+	<message id="defaultSequenceAssignment.referenceSequence">
+		<p class="refseq">
+			Your sequence starts at position {1} and finishes at position {2} relative to the {3} reference sequence.
+		</p>
+	</message>
+	
+	<message id="details.analysisDetails"><h2>Analysis details</h2></message>
+	
+	<message id="details.phylo-major-scan.title">Recombination Analysis Details</message>
+	
+	<message id="defaultPhylogeneticAnalyses.title">Phylogenetic analyses</message>
+	<message id="defaultPhylogeneticAnalyses.comment">
+		This section contains the alignments, inferred phylogenetic trees, and detailed results of the evolutionary analysis.
+	</message>
+
+	<message id="defaultRecombinationAnalyses.title">Recombination analyses</message>
+	<message id="defaultRecombinationAnalyses.detailedRecombination">Detailed recombination analyses</message>
+	<message id="defaultRecombinationAnalyses.comment">
+		This section contains the recombination plots, and data from which they were derived.
+	</message>
+	<message id="defaultRecombinationAnalyses.sequenceName">Sequence name:</message>
+	<message id="defaultRecombinationAnalyses.bootscanClusterSupport">Bootscan cluster support:</message>
+	<message id="defaultRecombinationAnalyses.download">Download: </message>
+	<message id="defaultRecombinationAnalyses.bootscanAnalysis">Bootscan analysis performed with window size {1} and step size {2}.</message>
+	<message id="defaultRecombinationAnalyses.profile">Recombination profile: </message>
+	<message id="defaultRecombinationAnalyses.profile.short">short: {1}</message>
+	<message id="defaultRecombinationAnalyses.profile.long">long: {1}</message>
+	<message id="defaultRecombinationAnalyses.profile.best">best: {1}</message>
+	
+	<message id="defaultSignalAnalysis.title">Phylogenetic signal analysis</message>
+	<message id="defaultSignalAnalysis.comment">This section contains details of the phylogenetic signal analysis.</message>
+	<message id="defaultSignalAnalysis.extraComment">Recombination Analyses are only performed for sequences with more than 800 bp.</message>
+	<message id="defaultSignalAnalysis.signalValue">Phylogenetic signal:</message>
+	<message id="defaultSignalAnalysis.signalComment">
+		Alignments with phylogenetic signal higher than 0.9 are considered suitable for the REGA subtype analysis. View the quartets mapped to the triangle.
+	</message>
+	<message id="defaultSignalAnalysis.extraComment">
+		Recombination Analyses are only performed for sequences with more than 800 bp.
+	</message>	
+	
+	<!-- Admin config -->
+	<message id="admin.config.tool-config-table">
+		<div>${version-chb}${remote-chb}</div>
+		${table}
+		<div class="action-buttons">${add}${import}${export}${new-version}${edit}${update}${install}${uninstall}</div>
+		<div>${info}</div>
+	</message>
+
+	<message id="admin.config.tool-config-dialog.manifest">
+		<table class="form-table">
+		  <tr><td class="form-table-name-td">Name</td><td class="form-table-name-td">${name}</td><td>${name-info}</td></tr>
+		  <tr><td class="form-table-name-td">ID</td><td class="form-table-name-td">${id}</td><td>${id-info}</td></tr>
+		  <tr><td class="form-table-name-td">Version</td><td class="form-table-name-td">${version}</td><td>${version-info}</td></tr>
+		  <tr><td class="form-table-name-td">Blast</td><td class="form-table-name-td">${blast}</td></tr>
+		  <tr><td class="form-table-name-td">HIV Tool</td><td class="form-table-name-td">${hiv}</td><td>${hiv-info}</td></tr>
+		</table>
+	</message>
+
+	<message id="admin.config.tool-config-dialog.config">
+		<table class="form-table">
+		  <tr><td class="form-table-name-td">URL</td><td class="form-table-name-td">${url}</td><td>${url-info}</td></tr>
+		  <tr><td class="form-table-name-td">Auto update enabled</td><td class="form-table-name-td">${update}</td><td class="auto-form-info">A new version of the tool will be auto installed when it is available in repository.</td></tr>
+		  <tr><td class="form-table-name-td">Web service enabled</td><td class="form-table-name-td">${service}</td><td class="auto-form-info">Allow to send requests with curl</td></tr>
+		  <tr><td class="form-table-name-td">UI enabled</td><td class="form-table-name-td">${ui}</td><td class="auto-form-info">Allow users to surf to the tool url</td></tr>
+		  <tr><td class="form-table-name-td">Current version</td><td class="form-table-name-td">${current-version}</td><td class="auto-form-info">If true the pan-viral tool will choose this tool version for the virus. Note: there is 1 current version per tool id</td></tr>
+		</table>
+	</message>
+
+	<message id="admin.config.tool-config-dialog">
+		${manifest}
+		${config}
+		${upload}
+		<div class="action-buttons">${publish}${retract}${save}${cancel}</div>
+		${info}
+	</message>
+	
+	<message id="admin.analisysis-template">
+		<table class="form-table">
+		  <col width="200"><col width="200"></col></col>
+  		  <tr><td>Analysis type</td><td>${sequence-type}</td><td>${sequence-type-info}</td></tr>
+  		  <tr><td>Blast options</td><td>${option}</td><td>${option-info}</td></tr>
+  		  <tr><td>Blast details options</td><td>${details-option}</td><td>${details-option-info}</td></tr>
+  		  
+  		  <tr><td><b>Assingment cut offs</b></td> <td></td> <td class="auto-form-info">Assignment is made if result passes all cut offs</td></tr>
+  		  
+  		  <tr><td class="form-indent">Absolute score</td><td>${absolute-cut-off}</td><td class="auto-form-info">Assignment is made if score is bigger than cut off</td></tr>
+  		  <tr><td></td><td></td><td>${absolute-cut-off-info}</td></tr>
+  		  
+  		  <tr><td class="form-indent">Absolute E value</td><td>${absolute-evalue}</td><td class="auto-form-info">Assignment is made if E value is lower than cut off</td></tr>
+  		  <tr><td></td><td></td><td>${absolute-evalue-info}</td></tr>
+  		  
+  		  <tr><td class="form-indent">Relative score</td><td>${relative-cut-off}</td><td class="auto-form-info">Assignment is made if best score is this much bigger than second best</td></tr>
+  		  <tr><td></td><td></td><td>${relative-cut-off-info}</td></tr>
+  		  
+  		  <tr><td class="form-indent">Relative E value</td><td>${relative-evalue}</td><td class="auto-form-info">Assignment is made if best E value is this much smaller than second best E value</td></tr>
+  		  <tr><td></td><td></td><td>${relative-evalue-info}</td></tr>
+
+  		  <tr><td class="form-indent">Absolute similarity %</td><td>${absolute-similarity}</td><td class="auto-form-info">Assignment is made if a sequence with similarity bigger then absolute similarity is found.</td></tr>
+  		  <tr><td></td><td></td><td>${absolute-similarity-info}</td></tr>
+
+  		  <tr><td class="form-indent">Relative similarity %</td><td>${relative-similarity}</td><td class="auto-form-info">Assignment is made if best similarity is this much smaller than second best similarity</td></tr>
+  		  <tr><td></td><td></td><td>${relative-similarity-info}</td></tr>
+
+		  <tr><td class="form-indent">Exact matching</td><td>${exact-matching}</td><td class="auto-form-info">Assignment is made if the sequence was found.</td></tr>
+		  <tr><td class="form-indent">Show multiple</td><td>${show-multiple}</td><td class="auto-form-info">All clusters with a score that satisfies all cutoffs are shown.</td></tr>
+		</table>
+	</message>
+	
+	<message id="admin.cluster-form">
+		<h4 class="inner-header"> Edit cluster ${cluster-name}</h4>
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>ID</td><td>${id}</td><td>${id-info}</td></tr>
+  		  <tr><td>Name</td><td>${name}</td><td>${name-info}</td></tr>
+  		  <tr><td>Description</td><td>${description}</td><td>${description-info}</td></tr>
+  		  <tr><td>Tool ID</td><td>${tool-id}</td><td>${tool-id-info}</td></tr>
+		</table>
+		${fasta}
+		<div>${add-sequence}${remove-sequence}</div>
+		<div class="action-buttons">${ok}${cancel}</div>
+	</message>
+		
+	<message id="admin.config.blast-file-editor">
+		${analysis}
+		${ref-taxa}
+		${cluster-table}
+		${add-sequences}
+	</message>
+
+	<message id="admin.config.cluster-table">
+		${cluster-table}
+		<div>${add}${edit}${remove}</div>
+	</message>
+
+	<message id="admin.config.file-editor.file-tree">
+		${tree}
+		<div class="action-buttons">${add}${remove}${download}</div>
+	</message>
+
+	<message id="admin.fasta-file-upload">
+		Paste fasta sequences
+		${text-area}
+		<div>Upload fasta file ${upload}</div>
+	</message>
+
+	<message id="admin.help">
+		<h2>
+		Admin UI
+		</h2>
+		<p>
+		UI for creating and publishing new typing tools.
+		published tools are stored on a remote server (currently http://typingtools.emweb.be/repository/repo-service)
+		</p>
+
+		<h3>Tool states</h3>
+		<p>
+		<div>
+		Remote (published) not installed: 
+		Tool data is stored on a remote server and not on local server.
+		</div>
+		<div>
+		Remote (published) installed: 
+		Tool data is stored on a remote server and on local server.
+		The tool can be served locally. 
+		</div>
+		<div>
+		Local tool: A tool that was created on local server and was not yet published.
+		</div>
+		</p>
+		<p>
+		Tools table contains remote and local tools. That can be identified by the tool state column. 
+		</p>
+		
+		<h4>Create a new tool from existing files</h4>
+		<div>1. Press add.</div>
+		<div>2. Fill in the manifest and local config data and press save.</div>
+		<div>3. Choose Simple File Editor -> add file (all the files) -> save</div>
+		<div>	Note: display images in resources.xml </div>
+		<div>4. If you are the tool maintainer you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service)</div>
+		
+		<h4>Edit existing tool</h4>
+		<div>1. Press install the tool.</div>
+		<div>2. Press create new version </div>
+		<div>3. Fill in the manifest and local config data and press save.</div>
+		<div>4. Edit</div>
+		<div>5. If you are the tool maintainer you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service)</div>
+		
+		<h4>Display images in resources.xml</h4>
+		<div>1. add the image files: Simple File Editor -> add files.</div>
+		<div>2. add to resources.xml:</div>
+		<div>&lt;img src="$${resource-file}/imageName"&gt; &lt;/img&gt;</div>
+
+	</message>
+	<!-- blocks -->
+
+	<message id="form-field">
+		<div>
+			<label for="${id:{2}}">{1}</label>
+			${{2}}
+		</div>
+	</message>
+</messages>

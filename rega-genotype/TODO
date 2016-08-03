@@ -1,0 +1,33 @@
+now:
+* fix upload button
+* allow to delete job results
+* job overview:
+	* format summary and overview table
+	* remove the annotations from the genome images
+* add cancel analysis option
+* test back button in the app
+* is there still a problem with "Retrieve results" button?
+* citations -> pubmed liks
+* example sequence in the input field
+	-> remove, maybe add extra button "Try examples"
+	-> if we do not remove it, should disappear when the text field is clicked?
+* restyle + fix upload button
+* cutoff line in the bootscan analysis pdf, jwt bug?
+
+
+HIV doc:
+* submitting a sequence, revisiting a job 
+	-> documentation
+* A basic phylogenetics explanation or at least a link to a nice explanation is needed for those who are unfamiliar and want to know more
+** Examples questions:
+*** What is the meaning of like?
+*** What is the meaning of the brackets, specially for G (14_BG), A (01_AE)? Even though they are in the decision trees., they do not understand the meaning.
+* remove readseq from the doc
+* fix the naming of the example seqs (use the genbdank id)
+* update the typing rules in the tutorial
+* include recombinant in the examples
+
+later:
+* links to CSV, XLS and XML file: should be accessible via URL (eg: /job/$jobid$/csv)
+* exportable citations
+* the bootscan analysis pdf does not have a sample or job id
