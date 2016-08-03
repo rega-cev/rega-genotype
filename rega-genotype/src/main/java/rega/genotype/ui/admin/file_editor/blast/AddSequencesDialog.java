@@ -64,6 +64,7 @@ public class AddSequencesDialog extends WDialog{
 
 		nextB.clicked().addListener(nextB, new Signal.Listener() {
 			public void trigger() {
+				WPushButton selectAll = new WPushButton(AddSequencesDialog.this.getContents());
 				analysFastaFileWidget = new TaxusTable(
 						cluster, fastaFileUpload.getText(), alignmentAnalyses, toolConfig);
 				WContainerWidget c = new WContainerWidget();
@@ -72,6 +73,14 @@ public class AddSequencesDialog extends WDialog{
 				getContents().addWidget(analysFastaFileWidget);
 				nextB.hide();
 				okB.show();
+				selectAll.setText("Select All");
+				selectAll.clicked().addListener(selectAll, new Signal.Listener() {
+					public void trigger() {
+						for(WCheckBox c: AddSequencesDialog.this.analysFastaFileWidget.checkBoxs)
+							if (c.isEnabled())
+							c.setChecked();
+					}
+				});
 			}
 		});
 
@@ -141,7 +150,8 @@ public class AddSequencesDialog extends WDialog{
 		private Map<AbstractSequence, SequenceData> sequenceMap = new HashMap<AbstractSequence, SequenceData>();
 		private AlignmentAnalyses alignmentAnalyses; // AlignmentAnalyses of the tool
 		private List<String> taxaIds = new ArrayList<String>(); // pre-compute from alignmentAnalyses
-
+		final List<WCheckBox> checkBoxs = new ArrayList();
+		
 		private enum Mode {SingalCluster, AllClusters};
 		private Mode mode = Mode.SingalCluster;
 		private Cluster cluster;
@@ -221,6 +231,7 @@ public class AddSequencesDialog extends WDialog{
 			int row = getRowCount();
 			final WCheckBox chb = new WCheckBox();
 			final WText blastAnalysisT = new WText("");
+			this.checkBoxs.add(chb);
 
 			if (blastResultCluster != null)
 				blastAnalysisT.setText(blastResultCluster.getName());

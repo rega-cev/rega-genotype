@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 public class GetJobServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1959942053030342948L;
-	protected String dir = new File(".").getAbsolutePath();
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
@@ -24,9 +23,10 @@ public class GetJobServlet extends HttpServlet {
 
 		try{
 			
-		String path = dir + "/base-work-dir/job/"
+		String path = getServletContext().getInitParameter("baseWorkDir") + "/job/"
 				+ req.getParameter("job_dir") + "/" + req.getParameter("job_id") + "/" + req.getParameter("file");
 		
+		System.out.println(path);
 		PrintWriter out = res.getWriter();
 		FileInputStream fis = new FileInputStream(path);
 		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
