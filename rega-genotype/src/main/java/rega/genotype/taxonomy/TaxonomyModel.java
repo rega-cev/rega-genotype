@@ -85,6 +85,8 @@ public class TaxonomyModel extends WStandardItemModel {
 
 	public void read(File csvFile) {
 		clear();
+		taxons.clear();
+		items.clear();
 
 		BufferedReader br = null;
 		String line = "";
