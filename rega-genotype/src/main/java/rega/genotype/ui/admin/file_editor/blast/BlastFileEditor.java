@@ -144,11 +144,11 @@ public class BlastFileEditor extends WContainerWidget{
 		return false;
 	}
 
-	private File blastFile(File dir) {
+	public static File blastFile(File dir) {
 		return new File(dir.getAbsolutePath(), "blast.xml");
 	}
 
-	private File fastaFile(File dir) {
+	public static File fastaFile(File dir) {
 		return new File(dir.getAbsolutePath(), "blast.fasta");
 	}
 

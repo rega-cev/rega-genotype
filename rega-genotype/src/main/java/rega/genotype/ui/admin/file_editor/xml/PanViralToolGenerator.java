@@ -1,15 +1,20 @@
 package rega.genotype.ui.admin.file_editor.xml;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import eu.webtoolkit.jwt.Signal1;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
@@ -23,7 +28,6 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.StreamReaderRuntime;
 
 /**
  * Auto generate blast.xml for pan-viral tool from "ICTV Master Species List"
@@ -57,22 +61,25 @@ public class PanViralToolGenerator {
 	class Data {
 		String description;
 		String taxonomyId;
-		Data(String description, String taxonomyId){
+		private String organizedName;
+		Data(String description, String taxonomyId, String organizedName){
 			this.description = description;
 			this.taxonomyId = taxonomyId;
+			this.organizedName = organizedName;
 		}
 	}
 
 	// <AccessionNumber, data (description)> 
 	private Map<String, Data> accessionNumMap = new HashMap<String, Data>(); 
-
-	public AlignmentAnalyses readICTVMasterSpeciesList(File ictvMasterSpeciesListFile) throws ApplicationException, IOException, InterruptedException, ParameterProblemException, FileFormatException {
+	private Signal1<AlignmentAnalyses> finished = new Signal1<AlignmentAnalyses>();
+	
+	public AlignmentAnalyses createAlignmentAnalyses(File ictvMasterSpeciesListFile) throws ApplicationException, IOException, InterruptedException, ParameterProblemException, FileFormatException {
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ";";
 
 		StringBuilder accessionNumbers = new StringBuilder();
-
+		
 		// parse ICTV Master Species List
 
 		try {
@@ -190,18 +197,31 @@ public class PanViralToolGenerator {
 		FileUtil.writeStringToFile(query, accessionNumbers.toString());
 
 		// Query from NCBI
-
-		String script = "/home/michael/install/edirect/tests/q5"; //TODO !!
 		
 		File fastaOut = new File(workDir, "fasta-out");
+		File fastaOutPreprocessed = new File(workDir, "fasta-out-preprocessed");
 		File taxonomyOut = new File(workDir, "taxonomy-out");
-
-		String cmd = script + " " + edirectPath + " " +  query.getAbsolutePath() + " " +  taxonomyOut.getAbsolutePath() + " " + fastaOut.getAbsolutePath();
 		
-		System.err.println(cmd);		
+		String epost = edirectPath + "epost";
+		String efetch = edirectPath + "efetch";
+		String xtract = edirectPath + "xtract";
+
+		String cmd = 
+				// query taxonomy ids
+				"cat " + query.getAbsolutePath() + "|" 
+				+ epost + " -db nuccore -format acc|"
+				+ efetch + " -db nuccore -format docsum | " 
+				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + taxonomyOut.getAbsolutePath() + "\n" 
+				// query fasta
+				+ "cat " + query.getAbsolutePath() + "|" 
+				+ epost + " -db nuccore -format acc|" 
+				+ efetch + " -db nuccore -format fasta > " + fastaOut.getAbsolutePath();
+
+		String[] shellCmd = {"/bin/sh", "-c", cmd};
+		System.err.println(shellCmd);
 
 		Process fetchFasta = null;
-		fetchFasta = StreamReaderRuntime.exec(cmd, null, workDir);
+		fetchFasta = Runtime.getRuntime().exec(shellCmd);
 		int exitResult = fetchFasta.waitFor();
 		if (exitResult != 0){
 			throw new ApplicationException("fetchFasta exited with error: " + exitResult);
@@ -214,20 +234,39 @@ public class PanViralToolGenerator {
 		String l = null;
 		while ((l = taxonomyBr.readLine()) != null) {
 			String[] row = l.split("\t");
-			String accessionNumber = row[0];
-			String taxonomyId = row[1];
+			String accessionNumber = getAccessionNumber(row[0]);
+			if (accessionNumber == null)
+				continue;
 
+			String taxonomyId = row[1];
+			String organizedName = row[2];
 			Data data = accessionNumMap.get(accessionNumber);
-			accessionNumMap.put(accessionNumber, new Data(data.description, taxonomyId));
+			accessionNumMap.put(accessionNumber, new Data(data.description, taxonomyId, organizedName));
 		}
 		taxonomyBr.close();
+
+		// preprocess fasta: remove the description.
+
+		BufferedReader fastaBr = new BufferedReader(new FileReader(fastaOut));
+		PrintWriter fastaWriter = new PrintWriter(new BufferedWriter(
+				new FileWriter(fastaOutPreprocessed.getAbsolutePath(), true)));
+		String fastaLine = null;
+		while ((fastaLine = fastaBr.readLine()) != null) {
+			if (fastaLine.length() > 0 && fastaLine.charAt(0) == '>'){
+				fastaWriter.println(">" + fastaLine.split(" ")[0]);
+			} else {
+				fastaWriter.println(fastaLine);
+			}
+		}
+		fastaBr.close();
+		fastaWriter.close();
 
 		// create blast.xml
 
 		final File jobDir = GenotypeLib.createJobDir(workDir + File.separator + "tmp");
 		jobDir.mkdirs();
 		AlignmentAnalyses alignmentAnalyses = new AlignmentAnalyses();
-		SequenceAlignment sequenceAlignment = new SequenceAlignment(new FileInputStream(fastaOut),
+		SequenceAlignment sequenceAlignment = new SequenceAlignment(new FileInputStream(fastaOutPreprocessed),
 				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 		alignmentAnalyses.setAlignment(sequenceAlignment);
 		BlastAnalysis blastAnalysis = new BlastAnalysis(alignmentAnalyses,
@@ -235,22 +274,27 @@ public class PanViralToolGenerator {
 				50.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, "-q -1 -r 1", "", jobDir);
 		alignmentAnalyses.putAnalysis("blast", blastAnalysis);
 
-		String ds = FASTA_DESCRIPTION_SEPARATOR;
-
 		for (AbstractSequence s: alignmentAnalyses.getAlignment().getSequences()) {
-			String[] row = s.getName().split("\t");
-			String accessionNumber = row[1];
+			String accessionNumber = getAccessionNumber(s.getName());
+			if (accessionNumber == null)
+				continue;
+
 			Data data = accessionNumMap.get(accessionNumber);
 
 			// sequence 
-			s.setName(accessionNumber + ds + data.taxonomyId + ds + data.description);
+			s.setName(accessionNumber + FASTA_DESCRIPTION_SEPARATOR 
+					+ data.taxonomyId + FASTA_DESCRIPTION_SEPARATOR + data.description);
 
 			// cluster
 			Cluster cluster = alignmentAnalyses.findCluster(data.taxonomyId);
 			if(cluster == null) {
 				cluster = new Cluster();
-				cluster.setId(data.taxonomyId);
-				cluster.setName("TODO"); //TODO
+				if (data.taxonomyId == null) {
+					System.err.println("taxonomyId == null : " + accessionNumber);
+					continue;//TODO
+				}
+				cluster.setId(accessionNumber);
+				cluster.setName(data.organizedName);
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 
@@ -259,12 +303,43 @@ public class PanViralToolGenerator {
 
 		return alignmentAnalyses;
 	}
-	
+
+	private String getAccessionNumber(String fastaName) {
+		String accessionNumber = null;
+		String[] split = fastaName.split("\\|");
+		for(int i = 0; i < split.length - 1; ++i){
+			String s = split[i];
+			if (s.equals("gb") || s.equals("emb") || s.equals("dbj")
+					|| s.equals("tpe") || s.equals("ref"))
+				accessionNumber = split[i + 1];
+		}
+		if (accessionNumber == null) {
+			System.err.println("bad accession numebr regex " + fastaName);
+			return null;
+		}
+
+		Data data = accessionNumMap.get(accessionNumber);
+		if (data == null) {
+			if (accessionNumber.contains(".")) // the result for accession number x can be x.1
+				accessionNumber = accessionNumber.split("\\.")[0];
+			data = accessionNumMap.get(accessionNumber);
+			if (data == null) {
+				System.err.println("bad accession numebr " + accessionNumber + " from: " + fastaName );
+				return null; // it is possible that the accession number in ictv master list contains error; 
+			}
+		}
+
+		return accessionNumber;
+	}
+
 	private void constructQuery(String accessionNum, StringBuilder accessionNumbers) {
+		accessionNum.replace(" ", "");
 		accessionNumbers.append(accessionNum + "\n");
 	}
 
 	private void addField(String accessionNum, String[] row){
+		accessionNum.replace(" ", "");
+
 		String ds = FASTA_DESCRIPTION_SEPARATOR;
 
 		String description = accessionNum + ds
@@ -272,8 +347,15 @@ public class PanViralToolGenerator {
 				+ row[FamilyCol] + ds 
 				+ row[SubfamilyCol] + ds 
 				+ row[GenusCol] + ds 
-				+ row[SpeciesCol] + ds; 
+				+ row[SpeciesCol] + ds;
+		
+		description.replace(" ", "_");
 
-		accessionNumMap.put(accessionNum, new Data(description, null));
+		accessionNumMap.put(accessionNum, new Data(description, null, null));
+	}
+
+
+	public Signal1<AlignmentAnalyses> finished() {
+		return finished;
 	}
 }

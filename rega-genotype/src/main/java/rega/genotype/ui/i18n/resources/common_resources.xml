@@ -172,7 +172,7 @@
 		  <tr><td class="form-table-name-td">ID</td><td class="form-table-name-td">${id}</td><td>${id-info}</td></tr>
 		  <tr><td class="form-table-name-td">Version</td><td class="form-table-name-td">${version}</td><td>${version-info}</td></tr>
 		  <tr><td class="form-table-name-td">Taxonomy ID</td><td class="form-table-name-td">${taxonomy-text}</td></tr>
-		  <tr><td class="form-table-name-td">Pan-viral</td><td class="form-table-name-td">${blast}${auto-create-pan-viral}</td></tr>
+		  <tr><td class="form-table-name-td">Pan-viral</td><td class="form-table-name-td">${blast}</td></tr>
 		  <tr><td class="form-table-name-td">HIV Tool</td><td class="form-table-name-td">${hiv}</td><td>${hiv-info}</td></tr>
 		</table>
 	</message>
@@ -191,7 +191,7 @@
 		${manifest}
 		${config}
 		${upload}
-		<div class="action-buttons">${publish}${retract}${save}${cancel}</div>
+		<div class="action-buttons">${publish}${retract}${auto-create-pan-viral}${save}${cancel}</div>
 		${info}
 	</message>
 	

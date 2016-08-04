@@ -1,22 +1,36 @@
 package rega.genotype.ui.admin.config;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.EnumSet;
 
+import rega.genotype.AlignmentAnalyses;
+import rega.genotype.ApplicationException;
+import rega.genotype.FileFormatException;
+import rega.genotype.ParameterProblemException;
+import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.file_editor.FileEditor;
+import rega.genotype.ui.admin.file_editor.blast.BlastFileEditor;
+import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
+import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.Dialogs;
+import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
+import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WPanel;
@@ -45,6 +59,7 @@ public class ToolConfigForm extends FormTemplate {
 		final WPushButton retractB = new WPushButton("Retract");
 		final WPushButton saveB = new WPushButton("Save");
 		final WPushButton cancelB = new WPushButton("Close");
+		final WPushButton autoCreatePanViralToolB = new WPushButton("Auto create pav-viral tool");
 
 		final String baseDir = Settings.getInstance().getBaseDir() + File.separator;
 
@@ -80,6 +95,9 @@ public class ToolConfigForm extends FormTemplate {
 		retractB.setDisabled(!toolConfig.isPublished() || toolConfig.isRetracted());
 		saveB.disable();
 
+		if (mode == Mode.Add)
+			autoCreatePanViralToolB.disable();
+
 		// bind
 
 		WPanel mamifestPanel = new WPanel();
@@ -99,6 +117,7 @@ public class ToolConfigForm extends FormTemplate {
 		bindWidget("retract", retractB);
 		bindWidget("save", saveB);
 		bindWidget("cancel", cancelB);
+		bindWidget("auto-create-pan-viral", autoCreatePanViralToolB);
 
 		init();
 
@@ -119,6 +138,7 @@ public class ToolConfigForm extends FormTemplate {
 					dirtyHandler.setClean();
 					if (fileEditor == null) // was not yet created.
 						createFileEditors(savedToolConfig.getConfigurationFile());
+					autoCreatePanViralToolB.enable();
 				} else
 					Dialogs.infoDialog("Info", "Could not save see validation errors.");
 			}
@@ -228,6 +248,90 @@ public class ToolConfigForm extends FormTemplate {
 
 				} else
 					done.trigger();
+			}
+		});
+
+		autoCreatePanViralToolB.clicked().addListener(autoCreatePanViralToolB, new Signal.Listener() {
+			public void trigger() {
+				final WDialog d = new WDialog("Auto create pan-viral tool");
+				d.show();
+				final WPushButton close = new WPushButton("Close", d.getFooter());
+				close.clicked().addListener(close, new Signal.Listener() {
+					public void trigger() {
+						d.reject();
+					}
+				});
+				d.getContents().addWidget(new WText("<div>A new pan-viral tool will be auto crated.</div>"
+						+ "<div>The tool will contain all viruses that have accession number in ICTV Master Species List.</div>"
+						+ "<div>This will overwrite your blast configuration.</div>"
+						+ "<div>Note: accession numbers that are not properlly formated will be ignored. </div>"
+						+ "<div>Uplaod ICTV Master Species List in csv separated by ; format.</div>"));
+				final WFileUpload upload = new WFileUpload(d.getContents());
+				upload.setFilters(".csv");
+
+				final WPushButton createB = new WPushButton("Create", d.getContents());
+				final WText info = new WText(d.getContents());
+				info.addStyleClass("auto-form-info");
+				info.setInline(false);
+				createB.clicked().addListener(createB, new Signal.Listener() {
+					public void trigger() {
+						upload.upload();
+					}
+				});
+				createB.setMargin(10);
+
+				upload.uploaded().addListener(upload, new Signal.Listener() {
+					public void trigger() {
+						if (upload.getUploadedFiles().size() == 0) 
+							info.setText("Upload file first.");
+						else {
+							info.setText("Crating Pan-viral tool please wait...");
+							close.disable();
+						}
+
+						final WApplication app = WApplication.getInstance();
+
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								try {
+									PanViralToolGenerator autoCreatePanViral = new PanViralToolGenerator();
+									AlignmentAnalyses alignmentAnalyses = autoCreatePanViral.createAlignmentAnalyses(
+											new File(upload.getSpoolFileName()));
+
+									new BlastXmlWriter(BlastFileEditor.blastFile(toolDir), alignmentAnalyses);
+									alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(BlastFileEditor.fastaFile(toolDir)),
+											SequenceAlignment.FILETYPE_FASTA);
+
+									UpdateLock lock = app.getUpdateLock();
+									createFileEditors(toolDir); // refresh the editors.
+									info.setText("Pan viral tool was auto created. You can still make some modifications from the editor.");
+									close.enable();
+									app.triggerUpdate();
+									lock.release();
+
+								} catch (ApplicationException e) {
+									e.printStackTrace();
+									info.setText("Error: " + e.getMessage());
+								} catch (IOException e) {
+									e.printStackTrace();
+									info.setText("Error: " + e.getMessage());
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+									info.setText("Error: " + e.getMessage());
+								} catch (ParameterProblemException e) {
+									e.printStackTrace();
+									info.setText("Error: " + e.getMessage());
+								} catch (FileFormatException e) {
+									e.printStackTrace();
+									info.setText("Error: " + e.getMessage());
+								}
+
+							}
+						});
+						t.start();
+
+					}
+				});
 			}
 		});
 
