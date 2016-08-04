@@ -7,23 +7,19 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import rega.genotype.AlignmentAnalyses;
-import rega.genotype.ApplicationException;
-import rega.genotype.FileFormatException;
-import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.config.ToolUpdateService;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.taxonomy.UpdateTaxonomyFileService;
 import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
-import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.DownloadResource;
 import rega.genotype.ui.framework.widgets.StandardDialog;
@@ -39,8 +35,6 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.SortOrder;
-import eu.webtoolkit.jwt.TextFlag;
-import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
@@ -48,16 +42,13 @@ import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
-import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
-import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WTextArea;
 import eu.webtoolkit.jwt.servlet.UploadedFile;
 
 /**
@@ -434,6 +425,7 @@ public class ToolConfigTable extends Template{
 							public void run() {
 								UpdateTaxonomyFileService.updateTaxonomyModel();
 								UpdateLock updateLock = app.getUpdateLock();
+								TaxonomyModel.getInstance().read(UpdateTaxonomyFileService.taxonomyFile());
 								info.setText("Update finished");
 								d.getCancelB().enable();
 								app.triggerUpdate();

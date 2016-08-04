@@ -23,7 +23,6 @@ public class UpdateTaxonomyFileService {
 
 	public static void updateTaxonomyModel() {
 		download();
-		TaxonomyModel.getInstance().read(taxonomyFile());
 	}
 	
 	public static File download() {
