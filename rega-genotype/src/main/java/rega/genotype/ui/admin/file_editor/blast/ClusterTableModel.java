@@ -11,10 +11,10 @@ import eu.webtoolkit.jwt.WModelIndex;
 
 public class ClusterTableModel extends WAbstractTableModel{
 	public static final int CLUSTER_ID_COLUMN = 0;
-	public static final int DESCRIPTION_COLUMN = 1;
+	public static final int NAME_COLUMN = 1;
 	public static final int TOOL_ID_COLUMN = 2;
 
-	String[] headers = { "Cluster ID", "Description", "Tool ID"};
+	String[] headers = { "Cluster ID", "Name", "Tool ID"};
 
 	private List<Cluster> clusters;
 
@@ -53,8 +53,8 @@ public class ClusterTableModel extends WAbstractTableModel{
 			switch (index.getColumn()) {
 			case CLUSTER_ID_COLUMN:
 				return cluster.getId();
-			case DESCRIPTION_COLUMN:
-				return cluster.getDescription();
+			case NAME_COLUMN:
+				return cluster.getName();
 			case TOOL_ID_COLUMN:					
 				return cluster.getToolId();
 			default:
