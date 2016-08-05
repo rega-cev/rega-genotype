@@ -599,9 +599,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			@Override
 			public void handleRequest(WebRequest request, WebResponse response) {
 				String typeVirusImage = "0";
-				File f = new File(getMain().getOrganismDefinition().getXmlPath()+"/genome_"+myTypeGenome.replaceAll("\\d", "")+".png");
+				File f = myTypeGenome == null ? null :
+						new File(getMain().getOrganismDefinition().getXmlPath()+"/genome_"+myTypeGenome.replaceAll("\\d", "")+".png");
 				try {
-					if (f.exists()){
+					if (myTypeGenome != null && f.exists()){
 						typeVirusImage = myTypeGenome.replaceAll("\\d", "");
 					}
 					if (getFileName().isEmpty()) {

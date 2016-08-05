@@ -423,7 +423,7 @@ public class ToolConfigTable extends Template{
 						
 						Thread t = new Thread(new Runnable() {
 							public void run() {
-								UpdateTaxonomyFileService.updateTaxonomyModel();
+								UpdateTaxonomyFileService.download();
 								UpdateLock updateLock = app.getUpdateLock();
 								TaxonomyModel.getInstance().read(UpdateTaxonomyFileService.taxonomyFile());
 								info.setText("Update finished");

@@ -96,7 +96,23 @@ public class Config {
 		return ans;
 	}
 
+	public String getToolId(String taxonomyId) {
+		if (taxonomyId == null)
+			return null;
+
+		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
+			ToolManifest m = c.getToolMenifest();
+			if (m.getTaxonomyId() != null && m.getTaxonomyId().equals(taxonomyId))
+				return m.getId();
+		}
+
+		return null;
+	}
+
 	public ToolConfig getCurrentVersion(String toolId) {
+		if (toolId == null)
+			return null;
+
 		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
 			ToolManifest m = c.getToolMenifest();
 			if (c.isCurrentUsedVersion() && m != null 

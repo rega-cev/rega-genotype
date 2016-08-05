@@ -26,6 +26,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 
@@ -282,7 +283,7 @@ public class PanViralToolGenerator {
 			Data data = accessionNumMap.get(accessionNumber);
 
 			// sequence 
-			s.setName(accessionNumber + FASTA_DESCRIPTION_SEPARATOR 
+			s.setName(accessionNumber + " " 
 					+ data.taxonomyId + FASTA_DESCRIPTION_SEPARATOR + data.description);
 
 			// cluster
@@ -291,14 +292,19 @@ public class PanViralToolGenerator {
 				cluster = new Cluster();
 				if (data.taxonomyId == null) {
 					System.err.println("taxonomyId == null : " + accessionNumber);
-					continue;//TODO
+					continue; // should not get here
 				}
-				cluster.setId(accessionNumber);
+				String mnemenic = TaxonomyModel.getInstance().getMnemenic(data.taxonomyId);
+				String id = data.taxonomyId;
+				if (mnemenic != null && !mnemenic.isEmpty())
+					id += "_" + mnemenic;
+				cluster.setId(id);
 				cluster.setName(data.organizedName);
+				cluster.setTaxonomyId(data.taxonomyId);
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 
-			cluster.addTaxus(new Taxus(data.taxonomyId));	
+			cluster.addTaxus(new Taxus(accessionNumber));	
 		}
 
 		return alignmentAnalyses;

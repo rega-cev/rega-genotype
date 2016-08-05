@@ -20,10 +20,6 @@ import rega.genotype.singletons.Settings;
 public class UpdateTaxonomyFileService {
 	private static String TAXONOMY_URL = "http://www.uniprot.org/taxonomy/?query=Viruses&format=tab";
 	private static String TAXONOMY_FILE_NAME = "taxonomy.tab";
-
-	public static void updateTaxonomyModel() {
-		download();
-	}
 	
 	public static File download() {
 		URLConnection connection;

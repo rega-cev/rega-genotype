@@ -234,7 +234,7 @@
 		  <tr><td>ID</td><td>${id}</td><td>${id-info}</td></tr>
   		  <tr><td>Name</td><td>${name}</td><td>${name-info}</td></tr>
   		  <tr><td>Description</td><td>${description}</td><td>${description-info}</td></tr>
-  		  <tr><td>Tool ID</td><td>${tool-id}</td><td>${tool-id-info}</td></tr>
+  		  <tr><td>Taxonomy ID</td><td>${taxonomy-id}</td></tr>
 		</table>
 		${fasta}
 		<div>${add-sequence}${remove-sequence}</div>

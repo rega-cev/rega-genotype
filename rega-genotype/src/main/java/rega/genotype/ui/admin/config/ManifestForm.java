@@ -10,15 +10,11 @@ import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyWidget;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
-import rega.genotype.ui.framework.widgets.StandardDialog;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WDate;
-import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
-import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WValidator;
 
 /**
@@ -30,7 +26,7 @@ public class ManifestForm extends FormTemplate{
 	private final WLineEdit nameLE = initLineEdit();
 	private final WLineEdit idLE = initLineEdit();
 	private final WLineEdit versionLE = initLineEdit();
-	private final WText taxonomyT = new WText();
+	private final TaxonomyWidget taxonomyT = new TaxonomyWidget();
 	private final WCheckBox blastChB = new WCheckBox();
 	private final WCheckBox hivChB = new WCheckBox();
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
@@ -50,7 +46,7 @@ public class ManifestForm extends FormTemplate{
 			blastChB.setChecked(manifest.isBlastTool());
 			hivChB.setChecked(manifest.isHivTool());
 			versionLE.setText(manifest.getVersion());
-			setTaxonomyIdText(manifest.getTaxonomyId());
+			taxonomyT.setTaxonomyIdText(manifest.getTaxonomyId());
 		}
 
 		idLE.setDisabled(mode == Mode.NewVersion);
@@ -65,27 +61,12 @@ public class ManifestForm extends FormTemplate{
 		
 		hivChB.setToolTip("HIV Tool has special functionality and it must be deployed at URL = hiv.");
 		
-		//style 
+		// signal
 
-		taxonomyT.setStyleClass("hoverable");
-
-		// signals
-
-		taxonomyT.clicked().addListener(taxonomyT, new Signal.Listener() {
-			public void trigger() {
-				final StandardDialog d = new StandardDialog("Choose taxonomy id");
-				final TaxonomyWidget taxonomyWidget = new TaxonomyWidget();
-				d.getContents().addWidget(taxonomyWidget);
-				d.setWidth(new WLength(600));
-				d.setHeight(new WLength(500));
-				d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
-					public void trigger(WDialog.DialogCode arg) {
-						if(arg == WDialog.DialogCode.Accepted) {
-							setTaxonomyIdText(taxonomyWidget.getSelectedTaxonomyId());
-							dirtyHandler.increaseDirty();
-						}
-					}
-				});
+		taxonomyT.finished().addListener(taxonomyT, new Signal1.Listener<String>() {
+			public void trigger(String selectedTaxonomyId) {
+				taxonomyT.setTaxonomyIdText(selectedTaxonomyId);
+				dirtyHandler.increaseDirty();
 			}
 		});
 
@@ -113,7 +94,7 @@ public class ManifestForm extends FormTemplate{
 		manifest.setName(nameLE.getText());
 		manifest.setId(idLE.getText());
 		manifest.setVersion(versionLE.getText());
-		manifest.setTaxonomyId(taxonomyT.getText().toString());
+		manifest.setTaxonomyId(taxonomyT.getValue());
 		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
 		if (publishing) {
 			manifest.setPublicationDate(WDate.getCurrentDate().getDate());
@@ -164,13 +145,6 @@ public class ManifestForm extends FormTemplate{
 
 			return super.validate(input);
 		}
-	}
-
-	private void setTaxonomyIdText(String taxonomyId) {
-		if (taxonomyId == null || taxonomyId.isEmpty())
-			taxonomyT.setText("(Empty)");
-		else
-			taxonomyT.setText(taxonomyId);
 	}
 
 	public boolean isHivTool() {

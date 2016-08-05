@@ -23,6 +23,7 @@ import eu.webtoolkit.jwt.WStandardItemModel;
 public class TaxonomyModel extends WStandardItemModel {
 	public static int SCIENTIFIC_NAME_ROLE = ItemDataRole.UserRole;
 	public static int TAXONOMY_ID_ROLE = ItemDataRole.UserRole + 1;
+	public static int MNEMENIC_ROLE = ItemDataRole.UserRole + 2;
 	public static int DEPTH = 7; // Kingdom,Phylum/Division,Class,Legion,Order,Family,Tribe,Genus,Species
 
 	public static int TAXON_COL = 0;
@@ -77,10 +78,15 @@ public class TaxonomyModel extends WStandardItemModel {
 				row[SCIENTIFIC_NAME_COL] + " (" + row[TAXON_COL] + ")");
 		item.setData(row[SCIENTIFIC_NAME_COL], SCIENTIFIC_NAME_ROLE);
 		item.setData(row[TAXON_COL], TAXONOMY_ID_ROLE);
+		item.setData(row[MNEMENIC_COL], MNEMENIC_ROLE);
 
 		items.put(row[TAXON_COL], item);
 
 		return item;
+	}
+	public String getMnemenic(String taxonomyId) {
+		 WStandardItem item = items.get(taxonomyId);
+		 return item == null ? null : item.getData(MNEMENIC_ROLE).toString();
 	}
 
 	public void read(File csvFile) {

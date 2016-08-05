@@ -205,10 +205,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			int row = blastResultModel.getRowCount();
 			blastResultModel.insertRows(row, 1);
 			blastResultModel.setData(row, ASSINGMENT_COLUMN, toolData.concludedName);
-			ToolConfig toolConfig = config.getCurrentVersion(toolData.toolId);
+			String toolId = config.getToolId(toolData.taxonomyId);
+			ToolConfig toolConfig = toolId == null ? null : config.getCurrentVersion(toolId);
 			if (toolConfig != null) {
-				blastResultModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
-				blastResultModel.setData(row, DATA_COLUMN, createToolLink(toolData.toolId, jobId), ItemDataRole.LinkRole);
+				blastResultModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
+				blastResultModel.setData(row, DATA_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
 			}
 			blastResultModel.setData(row, DATA_COLUMN, toolData.sequenceNames.size()); // percentage
 			blastResultModel.setData(row, CHART_DISPLAY_COLUMN, 
@@ -238,8 +239,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		return jobIdChanged;
 	}
 
-	private WLink createToolLink(final String toolId, final String jobId) {
-		ToolConfig toolConfig = Settings.getInstance().getConfig().getCurrentVersion(toolId);
+	private WLink createToolLink(final String taxonomyId, final String jobId) {
+		Config config = Settings.getInstance().getConfig();
+		ToolConfig toolConfig = config.getCurrentVersion(config.getToolId(taxonomyId));
 		if (toolConfig == null)
 			return null;
 
@@ -256,7 +258,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	
 	// Classes
 	public static class ClusterData {
-		String toolId = new String();
+		String taxonomyId = new String();
 		String concludedName = new String();
 		String concludedId = new String();
 		List<String> sequenceNames = new ArrayList<String>();
@@ -303,9 +305,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		@Override
 		public void endSequence() {
-			String toolId = GenotypeLib
+			String taxonomyId = GenotypeLib
 					.getEscapedValue(this,
-							"/genotype_result/sequence/result[@id='blast']/cluster/tool-id");
+							"/genotype_result/sequence/result[@id='blast']/cluster/taxonomy-id");
 			String seqName = GenotypeLib.getEscapedValue(this,
 					"/genotype_result/sequence/@name");
 			String concludedId = GenotypeLib
@@ -318,10 +320,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (concludedName == null)
 				concludedName = "Unassigned";
 
-			ClusterData toolData = clusterDataMap.containsKey(concludedId) ? clusterDataMap
-					.get(concludedId) : new ClusterData();
+			ClusterData toolData = clusterDataMap.containsKey(concludedId) ? clusterDataMap.get(concludedId) : new ClusterData();
 
-			toolData.toolId = toolId;
+			if (concludedId != null && !concludedId.equals("Unassigned"))
+				toolData.taxonomyId = taxonomyId;
+
 			toolData.concludedName = concludedName;
 			toolData.sequenceNames.add(seqName);
 			toolData.concludedId = concludedId;
