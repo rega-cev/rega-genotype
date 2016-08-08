@@ -89,7 +89,7 @@ public class SequenceAlign {
     
     private static SequenceAlignment clustalPairAlign(AbstractSequence s1, AbstractSequence s2, File workingDir, double gapOpenPenalty, double gapExtensionPenalty)
             throws AlignmentException {
-		String clustalWPath = Settings.getInstance().getBlastPathStr();
+		String clustalWPath = Settings.getInstance().getClustalWCmd();
 
         try {
             File f = File.createTempFile("pair", ".fasta");
@@ -176,7 +176,7 @@ public class SequenceAlign {
                                                          File workingDir)
             throws AlignmentException {
 
-		String clustalWPath = Settings.getInstance().getBlastPathStr();
+		String clustalWPath = Settings.getInstance().getClustalWCmd();
         try {
             File f = File.createTempFile("profile", ".fasta");
             File f2 = File.createTempFile("query", ".fasta");
