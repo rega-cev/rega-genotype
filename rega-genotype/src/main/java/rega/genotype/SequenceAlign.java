@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import rega.genotype.singletons.Settings;
+
 /**
  * Class that computes pairwise or profile sequence alignments based on clustalw.
  * 
@@ -31,8 +33,6 @@ import java.util.regex.Pattern;
  * @author koen
  */
 public class SequenceAlign {
-    public static String clustalWPath = "clustalw";
-
     static Map<AbstractSequence, Map<SequenceAlignment, SequenceAlignment>>
         alignmentCache = new HashMap<AbstractSequence, Map<SequenceAlignment, SequenceAlignment>>();
 
@@ -89,6 +89,8 @@ public class SequenceAlign {
     
     private static SequenceAlignment clustalPairAlign(AbstractSequence s1, AbstractSequence s2, File workingDir, double gapOpenPenalty, double gapExtensionPenalty)
             throws AlignmentException {
+		String clustalWPath = Settings.getInstance().getBlastPathStr();
+
         try {
             File f = File.createTempFile("pair", ".fasta");
             File f3 = File.createTempFile("aligned", ".fasta");
@@ -174,6 +176,7 @@ public class SequenceAlign {
                                                          File workingDir)
             throws AlignmentException {
 
+		String clustalWPath = Settings.getInstance().getBlastPathStr();
         try {
             File f = File.createTempFile("profile", ".fasta");
             File f2 = File.createTempFile("query", ".fasta");

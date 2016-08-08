@@ -87,6 +87,10 @@ public class Settings {
 		return baseDir;
 	}
 
+	public String getBlastPathStr() {
+		return getBlastPath().getAbsolutePath() + File.separatorChar;
+	}
+
 	public File getBlastPath() {
 		return new File(config.getGeneralConfig().getBlastPath());
 	}
@@ -121,11 +125,8 @@ public class Settings {
 
 	public static void initSettings(Settings s) {
 		instance = s;
-		if (s.getConfig() != null) {
-			SequenceAlign.clustalWPath = s.getClustalWCmd();
-			BlastAnalysis.blastPath = s.getBlastPath().getAbsolutePath() + File.separatorChar;
+		if (s.getConfig() != null)
 			treeGraphCommand = s.getTreeGraphCmd();
-		}
 	}
 
 	public static Settings getInstance() {
