@@ -65,6 +65,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	private WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
 	private WPieChart chart;
 	private WTableView table = new WTableView();
+	private int numRows = 0;
 
 	private BlastResultParser blastResultParser;
 
@@ -168,8 +169,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 
 	@Override
-	protected GenotypeResultParser createParser() {
-		blastResultParser = new BlastResultParser();
+	protected GenotypeResultParser createParser(WApplication app) {
+		blastResultParser = new BlastResultParser(app);
 		return blastResultParser;
 	}
 
@@ -288,8 +289,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		private Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
 		private WApplication app;
 
-		public BlastResultParser() {
-			app = WApplication.getInstance();
+		public BlastResultParser(WApplication app) {
+			this.app = app;
 			setReaderBlocksOnEof(true);
 		}
 
@@ -303,29 +304,32 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		@Override
 		public void endSequence() {
-			String toolId = GenotypeLib
-					.getEscapedValue(this,
-							"/genotype_result/sequence/result[@id='blast']/cluster/tool-id");
-			String seqName = GenotypeLib.getEscapedValue(this,
-					"/genotype_result/sequence/@name");
-			String concludedId = GenotypeLib
-					.getEscapedValue(this,
-							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
-			String concludedName = GenotypeLib
-					.getEscapedValue(this,
-							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
+			if (getSequenceIndex() - getFilteredSequences() > numRows) {
+				numRows++;
+				String toolId = GenotypeLib
+						.getEscapedValue(this,
+								"/genotype_result/sequence/result[@id='blast']/cluster/tool-id");
+				String seqName = GenotypeLib.getEscapedValue(this,
+						"/genotype_result/sequence/@name");
+				String concludedId = GenotypeLib
+						.getEscapedValue(this,
+								"/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
+				String concludedName = GenotypeLib
+						.getEscapedValue(this,
+								"/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
 
-			if (concludedName == null)
-				concludedName = "Unassigned";
+				if (concludedName == null)
+					concludedName = "Unassigned";
 
-			ClusterData toolData = clusterDataMap.containsKey(concludedId) ? clusterDataMap
-					.get(concludedId) : new ClusterData();
+				ClusterData toolData = clusterDataMap.containsKey(concludedId) ? clusterDataMap
+						.get(concludedId) : new ClusterData();
 
-			toolData.toolId = toolId;
-			toolData.concludedName = concludedName;
-			toolData.sequenceNames.add(seqName);
-			toolData.concludedId = concludedId;
-			clusterDataMap.put(concludedId, toolData);
+						toolData.toolId = toolId;
+						toolData.concludedName = concludedName;
+						toolData.sequenceNames.add(seqName);
+						toolData.concludedId = concludedId;
+						clusterDataMap.put(concludedId, toolData);
+			}
 		}
 	}
 }

@@ -47,7 +47,6 @@ import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableCell;
 import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WTimer;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
@@ -146,9 +145,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		template.bindWidget("analysis-in-progress", createInProgressWidget());
 
-		if (parser != null)
-			stop();
-		parser = createParser();
+// TODO: fix incremental reading of results file.
+//		if (parser != null)
+//			stop();
+//		parser = createParser();
 		startParserThread();
 
 		updateView();
@@ -423,12 +423,13 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public void stop() {
-		parser.stopParsing();
-		parser = null;
+//		parser.stopParsing();
+//		parser = null;
 		parserThread = null;
 	}
 
 	private void startParserThread() {
+		final WApplication app = WApplication.getInstance();
 		if (parserThread == null) {
 			final int interval = getMain().getOrganismDefinition().getUpdateInterval();
 			final Object lock = new Object();
@@ -450,10 +451,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 						}
 					}
 
-					parser.parseFile(getJobdir());
-
-					while (!stop && !jobDone()){
-						parser.updateUi();
+					while (!stop && !jobDone()) {
+						createParser(app).parseFile(getJobdir());
 						synchronized (lock) {
 							try {
 								lock.wait(interval);
@@ -463,6 +462,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 							}
 						}
 					}
+					createParser(app).parseFile(getJobdir());
 				}
 			});
 
@@ -476,15 +476,15 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	 * 
 	 * @return
 	 */
-	protected GenotypeResultParser createParser() {
-		return new Parser();
+	protected GenotypeResultParser createParser(WApplication app) {
+		return new Parser(app);
 	}
 
 	private class Parser extends GenotypeResultParser {		
 		private WApplication app;
 
-		Parser() {
-			app = WApplication.getInstance();
+		Parser(WApplication app) {
+			this.app = app;
 			setReaderBlocksOnEof(true);
 		}
 		@Override
@@ -537,9 +537,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				if (summary != null) 
 					summary.update(this, getMain().getOrganismDefinition());
 
-				app.triggerUpdate();
-				updateLock.release();
 			}
+
+			app.triggerUpdate();
+			updateLock.release();
 		}
 
 		@Override
