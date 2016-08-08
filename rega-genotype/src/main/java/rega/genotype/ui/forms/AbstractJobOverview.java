@@ -430,45 +430,45 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	private void startParserThread() {
 		final WApplication app = WApplication.getInstance();
-		if (parserThread == null) {
-			final int interval = getMain().getOrganismDefinition().getUpdateInterval();
-			final Object lock = new Object();
+		final int interval = getMain().getOrganismDefinition().getUpdateInterval();
+		final Object lock = new Object();
 
-			parserThread = new Thread(new Runnable() {
-				boolean stop = false;
-				public void run() {
-					final File resultFile = new File(getJobdir().getAbsolutePath()
-							+ File.separatorChar + "result.xml");
-					// wait till result.xml is ready
-					while (!stop && !resultFile.exists()){
-						synchronized (lock) {
-							try {
-								lock.wait(interval);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								assert (false);
-							}
+		parserThread = new Thread(new Runnable() {
+			boolean stop = false;
+			public void run() {
+				final File resultFile = new File(getJobdir().getAbsolutePath()
+						+ File.separatorChar + "result.xml");
+				// wait till result.xml is ready
+				while (!stop && !resultFile.exists()){
+					synchronized (lock) {
+						try {
+							lock.wait(interval);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+							assert (false);
 						}
 					}
-
-					while (!stop && !jobDone()) {
-						createParser(app).parseFile(getJobdir());
-						synchronized (lock) {
-							try {
-								lock.wait(interval);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								assert (false);
-							}
-						}
-					}
-					createParser(app).parseFile(getJobdir());
 				}
-			});
 
-			parserThread.setName("parserThread");
-			parserThread.start();
-		}
+				while (!stop && !jobDone()) {
+					createParser(app).parseFile(getJobdir());
+					synchronized (lock) {
+						try {
+							lock.wait(interval);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+							assert (false);
+						}
+					}
+				}
+
+				createParser(app).parseFile(getJobdir());
+			}
+		});
+
+		parserThread.setName("parserThread");
+		parserThread.start();
+
 	}
 
 	/**
@@ -485,7 +485,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		Parser(WApplication app) {
 			this.app = app;
-			setReaderBlocksOnEof(true);
+			//setReaderBlocksOnEof(true);
 		}
 		@Override
 		public void endSequence() {

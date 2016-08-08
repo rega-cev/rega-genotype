@@ -287,7 +287,8 @@ public class GenotypeResultParser extends DefaultHandler
 				InputSource inputSource = new InputSource(reader);
 				parse(inputSource);
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				if (!e.getMessage().contains("XML document structures must start and end within the same entity."))
+					throw new RuntimeException(e);
 			}
 		}
 	}

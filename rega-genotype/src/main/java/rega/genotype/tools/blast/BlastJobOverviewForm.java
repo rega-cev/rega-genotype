@@ -291,7 +291,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		public BlastResultParser(WApplication app) {
 			this.app = app;
-			setReaderBlocksOnEof(true);
+			//setReaderBlocksOnEof(true);
 		}
 
 		@Override
