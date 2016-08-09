@@ -7,7 +7,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
-import rega.genotype.ui.admin.file_editor.blast.TaxonomyWidget;
+import rega.genotype.ui.admin.file_editor.blast.TaxonomyButton;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import eu.webtoolkit.jwt.Signal1;
@@ -26,7 +26,7 @@ public class ManifestForm extends FormTemplate{
 	private final WLineEdit nameLE = initLineEdit();
 	private final WLineEdit idLE = initLineEdit();
 	private final WLineEdit versionLE = initLineEdit();
-	private final TaxonomyWidget taxonomyT = new TaxonomyWidget();
+	private final TaxonomyButton taxonomyT = new TaxonomyButton();
 	private final WCheckBox blastChB = new WCheckBox();
 	private final WCheckBox hivChB = new WCheckBox();
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change

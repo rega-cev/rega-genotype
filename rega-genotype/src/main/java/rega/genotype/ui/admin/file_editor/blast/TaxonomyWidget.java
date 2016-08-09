@@ -1,61 +1,43 @@
 package rega.genotype.ui.admin.file_editor.blast;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import rega.genotype.AlignmentAnalyses;
+import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.taxonomy.TaxonomyModel;
-import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.StandardItemModelSearchProxy;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
 import eu.webtoolkit.jwt.Signal;
-import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTreeView;
 
-public class TaxonomyWidget extends WText {
-	// arg = SelectedTaxonomyId
-	private Signal1<String> finished = new Signal1<String>();
+/**
+ * Show taxonomy tree.
+ * 
+ * @author michael
+ */
+public class TaxonomyWidget extends WContainerWidget {
 	private String selectedTaxonomyId = new String();
 
-	public TaxonomyWidget() {
-
-		setStyleClass("hoverable");
-
-		clicked().addListener(this, new Signal.Listener() {
-			public void trigger() {
-				final StandardDialog d = new StandardDialog("Choose taxonomy id");
-				d.getContents().addWidget(createCentralWidget());
-				d.setWidth(new WLength(600));
-				d.setHeight(new WLength(500));
-				d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
-					public void trigger(WDialog.DialogCode arg) {
-						if(arg == WDialog.DialogCode.Accepted) {
-							finished.trigger(selectedTaxonomyId);
-						}
-					}
-				});
-
-			}
-		});
-	}
-
-	private WContainerWidget createCentralWidget() {
-		WContainerWidget centralWidget = new WContainerWidget();
+	public TaxonomyWidget(ToolConfig toolConfig) {
 		final WLineEdit searchLE;
 		final WPushButton expandAllB;
 		final WTreeView tree;
 		final WText info;
 		final StandardItemModelSearchProxy searchProxy;
 
-		new WText("Search", centralWidget);
-		searchLE = new WLineEdit(centralWidget);
-		expandAllB = new WPushButton("Expand all", centralWidget);
-		tree = new WTreeView(centralWidget);
-		info = new WText("", centralWidget);
-
+		new WText("Search", this);
+		searchLE = new WLineEdit(this);
+		expandAllB = new WPushButton("Expand all", this);
+		tree = new WTreeView(this);
+		info = new WText("", this);
 
 		searchLE.addStyleClass("standard-margin");
 		expandAllB.addStyleClass("standard-margin");
@@ -63,6 +45,9 @@ public class TaxonomyWidget extends WText {
 
 		TaxonomyModel taxonomyModel = TaxonomyModel.getInstance();
 		searchProxy = new StandardItemModelSearchProxy(taxonomyModel);
+		searchProxy.setVisibleLeafs(getTaxonomyIds(toolConfig));
+		searchProxy.setFilterRole(TaxonomyModel.TAXONOMY_ID_ROLE);
+
 		tree.setModel(searchProxy);
 		tree.setSelectionBehavior(SelectionBehavior.SelectRows);
 		tree.setSelectionMode(SelectionMode.SingleSelection);
@@ -81,10 +66,10 @@ public class TaxonomyWidget extends WText {
 
 		tree.selectionChanged().addListener(info, new Signal.Listener() {
 			public void trigger() {
-				if (tree.getSelectedIndexes().size() == 1) { 
-					selectedTaxonomyId = (String) searchProxy.getData(tree.getSelectedIndexes().first(), TaxonomyModel.TAXONOMY_ID_ROLE);
-					info.setText(selectedTaxonomyId);
-				}
+				if (tree.getSelectedIndexes().size() == 1)
+					selectedTaxonomyId = (String) searchProxy.getData(
+							tree.getSelectedIndexes().first(), 
+							TaxonomyModel.TAXONOMY_ID_ROLE);
 			}
 		});
 
@@ -96,25 +81,29 @@ public class TaxonomyWidget extends WText {
 
 		if (taxonomyModel.getRowCount() == 0)
 			info.setText("The taxonmy file is empty. Use the update taxonomy button (under the tools table) to download it from uniprot.");
-
-		return centralWidget;
 	}
 
-	public void setTaxonomyIdText(String taxonomyId) {
-		if (taxonomyId == null || taxonomyId.isEmpty())
-			setText("(Empty)");
-		else
-			setText(taxonomyId);
-	}
-
-	public String getValue() {
-		if (getText().toString().equals("(Empty)"))
+	private Set<String> getTaxonomyIds(ToolConfig toolConfig) {
+		if (toolConfig == null)
 			return null;
-		else
-			return getText().toString();
+
+		AlignmentAnalyses alignmentAnalyses = BlastFileEditor.readBlastXml(
+				toolConfig.getConfigurationFile());
+		Set<String> taxonomyIds = new HashSet<String>();
+		for (Cluster c:alignmentAnalyses.getAllClusters()) 
+				taxonomyIds.add(c.getTaxonomyId());
+
+		return taxonomyIds;
 	}
 
-	public Signal1<String> finished() {
-		return finished;
+	private void printWrongTaxons(Set<String> taxonomyIds) {
+		// debug: some taxonomy ids are not found in uniprot file. 
+		TaxonomyModel taxonomyModel = TaxonomyModel.getInstance();
+		for (String s: taxonomyIds) 
+			if (!taxonomyModel.getTaxons().containsKey(s))
+				System.err.println("Hirarchy for taxon " + s + " not found");
+	}
+	public String getSelectedTaxonomyId() {
+		return selectedTaxonomyId;
 	}
 }

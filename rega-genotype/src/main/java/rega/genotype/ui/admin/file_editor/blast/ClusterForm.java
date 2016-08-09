@@ -35,7 +35,7 @@ import eu.webtoolkit.jwt.WStandardItemModel;
  */
 public class ClusterForm extends FormTemplate{
 
-	private TaxonomyWidget taxonomyW = new TaxonomyWidget();
+	private TaxonomyButton taxonomyW = new TaxonomyButton();
 	private WLineEdit idLE = new WLineEdit();
 	private WLineEdit nameLE = new WLineEdit();
 	private WLineEdit descriptionLE = new WLineEdit();

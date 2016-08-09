@@ -170,4 +170,7 @@ public class TaxonomyModel extends WStandardItemModel {
 			}
 		}
 	}
+	public Map<String, String[]> getTaxons() {
+		return taxons;
+	}
 }

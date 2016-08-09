@@ -68,7 +68,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 		WPushButton addSequencesB = new WPushButton("Add sequences");
 
-		alignmentAnalyses = readBlastXml();
+		alignmentAnalyses = readBlastXml(workDir);
 
 		WPanel analysisPanel = new WPanel();
 		analysisPanel.addStyleClass("admin-panel");
@@ -160,10 +160,11 @@ public class BlastFileEditor extends WContainerWidget{
 
 		return Settings.getInstance().getConfig().getToolConfigById(manifest.getId(), manifest.getVersion());
 	}
+
 	/**
 	 * Read blast.xml file
 	 */
-	private AlignmentAnalyses readBlastXml(){
+	public static AlignmentAnalyses readBlastXml(File workDir){
 		if (blastFile(workDir).exists()) {
 			try {
 				final File jobDir = GenotypeLib.createJobDir(
@@ -182,7 +183,7 @@ public class BlastFileEditor extends WContainerWidget{
 		final File jobDir = GenotypeLib.createJobDir(
 				Settings.getInstance().getBaseJobDir() + File.separator + "tmp");
 		jobDir.mkdirs();
-		alignmentAnalyses = new AlignmentAnalyses();
+		AlignmentAnalyses alignmentAnalyses = new AlignmentAnalyses();
 		alignmentAnalyses.setAlignment(new SequenceAlignment());
 		alignmentAnalyses.putAnalysis("blast",
 				new BlastAnalysis(alignmentAnalyses,
@@ -318,7 +319,7 @@ public class BlastFileEditor extends WContainerWidget{
 	}
 
 	public void rereadFiles() {
-		alignmentAnalyses = readBlastXml();
+		alignmentAnalyses = readBlastXml(workDir);
 		analysis.refresh((BlastAnalysis)
 				alignmentAnalyses.getAnalysis("blast"));
 		clusterTableModel.refresh(
