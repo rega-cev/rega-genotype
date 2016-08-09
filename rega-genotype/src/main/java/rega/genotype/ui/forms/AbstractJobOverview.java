@@ -612,7 +612,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 					super.handleRequest(request, response);
 				} catch (IOException e) {
-					throw new RuntimeException(e);
+					e.printStackTrace(); // some times the images dont exist.
 				}
 			}				
 		});
