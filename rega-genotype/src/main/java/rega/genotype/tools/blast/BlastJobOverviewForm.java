@@ -129,7 +129,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		chart.setStartAngle(90);
 
 		chart.setModel(blastResultModel);
-		chart.setLabelsColumn(CHART_DISPLAY_COLUMN);    
+		//chart.setLabelsColumn(CHART_DISPLAY_COLUMN);
 		chart.setDataColumn(DATA_COLUMN);
 		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
 		chart.setPlotAreaPadding(30);
