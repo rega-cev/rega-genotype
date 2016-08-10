@@ -69,7 +69,7 @@
 	
 	<message id="detailsForm.summary.title"><h2><i>Summary</i></h2></message>
 	<message id="detailsForm.summary.assignment">Rega Assignment</message>
-	<message id="detailsForm.summary.numberSeqs">Number of sequences</message>
+	<message id="detailsForm.summary.numberSeqs">sequences #</message>
 	<message id="detailsForm.summary.percentage">Percentage</message>
 	<message id="detailsForm.summary.legend">Legend</message>
 	<message id="detailsForm.summary.total"><i>Total</i></message>

@@ -75,11 +75,12 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 		table.setWidth(new WLength(500));
 		table.setStyleClass("blastResultsTable");
+		table.setHeaderHeight(new WLength(20));
 		table.hideColumn(CHART_DISPLAY_COLUMN);
 		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
-		table.setColumnWidth(DATA_COLUMN, new WLength(70));
-		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(50));
-		table.setColumnWidth(COLOR_COLUMN, new WLength(50));
+		table.setColumnWidth(DATA_COLUMN, new WLength(80));
+		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(60));
+		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
 
 		table.setItemDelegateForColumn(COLOR_COLUMN, new WAbstractItemDelegate() {
 			@Override
