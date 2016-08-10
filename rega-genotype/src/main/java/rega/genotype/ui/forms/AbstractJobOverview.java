@@ -90,7 +90,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private JobOverviewSummary summary;
 	private SequenceFilter filter;
 	
-	private Template template;
+	protected Template template;
 	
 	private boolean hasRecombinationResults;
 

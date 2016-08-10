@@ -152,6 +152,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 				return;
 			}
 
+			template.show();
 			init(jobId, "");
 
 			jobIdChanged.trigger(jobId);
@@ -162,9 +163,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 
 	private void showBadJobIdError() {
-		clear();
 		setMargin(30);
 		addWidget(new WText(tr("monitorForm.nonExistingJobId").arg(jobId)));
+		template.hide();
 	}
 
 	@Override
