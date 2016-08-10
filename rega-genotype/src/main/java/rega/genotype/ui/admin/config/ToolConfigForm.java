@@ -21,7 +21,6 @@ import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.FormTemplate;
-import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Signal;
@@ -311,21 +310,28 @@ public class ToolConfigForm extends FormTemplate {
 
 								} catch (ApplicationException e) {
 									e.printStackTrace();
-									info.setText("Error: " + e.getMessage());
+									updateInfo("Error: " + e.getMessage());
 								} catch (IOException e) {
 									e.printStackTrace();
-									info.setText("Error: " + e.getMessage());
+									updateInfo("Error: " + e.getMessage());
 								} catch (InterruptedException e) {
 									e.printStackTrace();
-									info.setText("Error: " + e.getMessage());
+									updateInfo("Error: " + e.getMessage());
 								} catch (ParameterProblemException e) {
 									e.printStackTrace();
-									info.setText("Error: " + e.getMessage());
+									updateInfo("Error: " + e.getMessage());
 								} catch (FileFormatException e) {
 									e.printStackTrace();
-									info.setText("Error: " + e.getMessage());
+									updateInfo("Error: " + e.getMessage());
 								}
 
+							}
+
+							private void updateInfo(String text) {
+								UpdateLock lock = app.getUpdateLock();
+								info.setText(text);
+								app.triggerUpdate();
+								lock.release();
 							}
 						});
 						t.start();
