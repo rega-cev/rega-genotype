@@ -126,6 +126,7 @@ public class ToolConfigForm extends FormTemplate {
 			public void trigger(File arg) {
 				toolConfig.invalidateToolManifest();
 				localConfigForm.getToolConfig().invalidateToolManifest();
+				toolDir = manifestForm.getToolDir();
 			}
 		});
 
@@ -260,11 +261,11 @@ public class ToolConfigForm extends FormTemplate {
 						d.reject();
 					}
 				});
-				d.getContents().addWidget(new WText("<div>A new pan-viral tool will be auto crated.</div>"
+				d.getContents().addWidget(new WText("<div>A new pan-viral tool will be auto created.</div>"
 						+ "<div>The tool will contain all viruses that have accession number in ICTV Master Species List.</div>"
 						+ "<div>This will overwrite your blast configuration.</div>"
-						+ "<div>Note: accession numbers that are not properlly formated will be ignored. </div>"
-						+ "<div>Uplaod ICTV Master Species List in csv separated by ; format.</div>"));
+						+ "<div>Note: accession numbers that are not properly formatted will be ignored. </div>"
+						+ "<div>Upload ICTV Master Species List in csv separated by ; format.</div>"));
 				final WFileUpload upload = new WFileUpload(d.getContents());
 				upload.setFilters(".csv");
 
@@ -297,14 +298,15 @@ public class ToolConfigForm extends FormTemplate {
 									AlignmentAnalyses alignmentAnalyses = autoCreatePanViral.createAlignmentAnalyses(
 											new File(upload.getSpoolFileName()));
 
-									new BlastXmlWriter(BlastFileEditor.blastFile(toolDir), alignmentAnalyses);
-									alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(BlastFileEditor.fastaFile(toolDir)),
+									new BlastXmlWriter(BlastFileEditor.blastFile(fileEditor.getWorkDir()), alignmentAnalyses);
+									alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(BlastFileEditor.fastaFile(fileEditor.getWorkDir())),
 											SequenceAlignment.FILETYPE_FASTA);
 
 									UpdateLock lock = app.getUpdateLock();
-									createFileEditors(toolDir); // refresh the editors.
+									createFileEditors(fileEditor.getWorkDir()); // refresh the editors.
 									info.setText("Pan viral tool was auto created. You can still make some modifications from the editor.");
 									close.enable();
+									dirtyHandler.increaseDirty();
 									app.triggerUpdate();
 									lock.release();
 
