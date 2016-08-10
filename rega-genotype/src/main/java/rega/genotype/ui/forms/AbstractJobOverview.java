@@ -491,7 +491,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		private WApplication app;
 
 		Parser() {
-			app = WApplication.getInstance();
+			this.app = WApplication.getInstance();
 			setReaderBlocksOnEof(true);
 		}
 		@Override
@@ -544,9 +544,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				if (summary != null) 
 					summary.update(this, getMain().getOrganismDefinition());
 
-				app.triggerUpdate();
-				updateLock.release();
 			}
+
+			app.triggerUpdate();
+			updateLock.release();
 		}
 
 		@Override

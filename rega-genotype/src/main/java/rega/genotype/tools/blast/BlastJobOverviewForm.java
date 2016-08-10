@@ -291,7 +291,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		private WApplication app;
 
 		public BlastResultParser() {
-			app = WApplication.getInstance();
+			this.app = WApplication.getInstance();
 			setReaderBlocksOnEof(true);
 		}
 
