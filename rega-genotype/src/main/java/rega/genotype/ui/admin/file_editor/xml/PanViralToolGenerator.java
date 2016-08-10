@@ -214,12 +214,12 @@ public class PanViralToolGenerator {
 				+ efetch + " -db nuccore -format docsum | " 
 				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + taxonomyOut.getAbsolutePath() + "\n" 
 				// query fasta
-				+ "cat " + query.getAbsolutePath() + "|" 
+				+ " cat " + query.getAbsolutePath() + "|" 
 				+ epost + " -db nuccore -format acc|" 
 				+ efetch + " -db nuccore -format fasta > " + fastaOut.getAbsolutePath();
 
 		String[] shellCmd = {"/bin/sh", "-c", cmd};
-		System.err.println(shellCmd);
+		System.err.println(cmd);
 
 		Process fetchFasta = null;
 		fetchFasta = Runtime.getRuntime().exec(shellCmd);
@@ -301,6 +301,7 @@ public class PanViralToolGenerator {
 				cluster.setId(id);
 				cluster.setName(data.organizedName);
 				cluster.setTaxonomyId(data.taxonomyId);
+				cluster.setDescription(TaxonomyModel.getInstance().getHirarchy(data.taxonomyId));
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 

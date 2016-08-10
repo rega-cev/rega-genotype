@@ -89,6 +89,21 @@ public class TaxonomyModel extends WStandardItemModel {
 		 return item == null ? null : item.getData(MNEMENIC_ROLE).toString();
 	}
 
+	public String getHirarchy(String taxonomyId) {
+		String ans = "";
+		 WStandardItem item = items.get(taxonomyId);
+		 if (item == null)
+			 return null;
+
+		 while (item.getParent() != null) {
+			 item = item.getParent();
+			 String name = (String) item.getData(SCIENTIFIC_NAME_ROLE);
+			 if (name != null)
+				 ans += "__" + name.replace(" ", "_").replace(",", "_");
+		 }
+		 return ans;
+	}
+
 	public void read(File csvFile) {
 		clear();
 		taxons.clear();
