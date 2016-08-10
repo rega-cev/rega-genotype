@@ -265,9 +265,9 @@ public class ToolConfigForm extends FormTemplate {
 						+ "<div>The tool will contain all viruses that have accession number in ICTV Master Species List.</div>"
 						+ "<div>This will overwrite your blast configuration.</div>"
 						+ "<div>Note: accession numbers that are not properly formatted will be ignored. </div>"
-						+ "<div>Upload ICTV Master Species List in csv separated by ; format.</div>"));
+						+ "<div>Upload ICTV Master Species List in xlsx format.</div>"));
 				final WFileUpload upload = new WFileUpload(d.getContents());
-				upload.setFilters(".csv");
+				upload.setFilters(".xlsx");
 
 				final WPushButton createB = new WPushButton("Create", d.getContents());
 				final WText info = new WText(d.getContents());
