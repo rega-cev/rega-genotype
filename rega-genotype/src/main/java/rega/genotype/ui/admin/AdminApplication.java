@@ -35,6 +35,7 @@ public class AdminApplication extends WApplication{
 
 		setTheme(new WCssTheme("polished"));
 
+		enableUpdates();
 		// auth
 		
 		final Config config = Settings.getInstance().getConfig();

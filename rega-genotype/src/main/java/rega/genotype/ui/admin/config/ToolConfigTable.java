@@ -13,6 +13,8 @@ import rega.genotype.config.ToolUpdateService;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.service.ToolRepoServiceRequests.ToolRepoServiceExeption;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.TaxonomyModel;
+import rega.genotype.taxonomy.UpdateTaxonomyFileService;
 import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
@@ -34,6 +36,8 @@ import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.SortOrder;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
@@ -104,7 +108,8 @@ public class ToolConfigTable extends Template{
 		final WPushButton uninstallB = new WPushButton("Uninstall");
 		final WPushButton updateB = new WPushButton("Update");
 		final WPushButton importB = new WPushButton("Import");
-		
+		final WPushButton updateTaxonomyB = new WPushButton("Update taxonomy");
+
 		// downloadB
 		final DownloadResource downloadR = new DownloadResource("", "") {
 			@Override
@@ -400,6 +405,39 @@ public class ToolConfigTable extends Template{
 		remoteChB.setToolTip("Show tool from remote repository and synchronize the state existing tools with the remote repository.");
 		proxyModel.setFilterNotRemote(true);
 
+		updateTaxonomyB.clicked().addListener(updateTaxonomyB, new Signal.Listener() {
+			public void trigger() {
+				final StandardDialog d = new StandardDialog("Update taxonomy", false);
+				d.show();
+				d.setWidth(new WLength(300));
+
+				final WText info = new WText("Download taxonomy file from uniprot and update all tools to use it.");
+				d.getContents().addWidget(info);
+				d.getOkB().clicked().addListener(d, new Signal.Listener() {
+					public void trigger() {
+						d.getOkB().disable();
+						d.getCancelB().disable();
+						info.setText("Downloading taxonomy file, this can take some time..");
+						
+						final WApplication app = WApplication.getInstance();
+						
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								UpdateTaxonomyFileService.download();
+								UpdateLock updateLock = app.getUpdateLock();
+								TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
+								info.setText("Update finished");
+								d.getCancelB().enable();
+								app.triggerUpdate();
+								updateLock.release();
+							}
+						});
+						t.start();
+					}
+				});
+			}
+		});
+
 		bindWidget("version-chb", versionChB);
 		bindWidget("remote-chb", remoteChB);
 		bindWidget("table", table);
@@ -411,7 +449,7 @@ public class ToolConfigTable extends Template{
 		bindWidget("update", updateB);
 		bindWidget("import", importB);
 		bindWidget("export", downloadB);
-
+		bindWidget("update-taxonomy", updateTaxonomyB);
 	}
 
 	private void importTool(ToolManifest manifest, File f, ToolConfigForm.Mode mode) {

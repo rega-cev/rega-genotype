@@ -90,6 +90,9 @@ table.reftable td, table.reftable th,
 	text-align: left;
 }
 
+.blastResultsTable table th .headerrh {
+    height: initial !important;
+}
 table.jobTable col,
 table.reftable col,
 .blastResultsTable table col {

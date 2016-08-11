@@ -69,7 +69,7 @@
 	
 	<message id="detailsForm.summary.title"><h2><i>Summary</i></h2></message>
 	<message id="detailsForm.summary.assignment">Rega Assignment</message>
-	<message id="detailsForm.summary.numberSeqs">Number of sequences</message>
+	<message id="detailsForm.summary.numberSeqs">sequences #</message>
 	<message id="detailsForm.summary.percentage">Percentage</message>
 	<message id="detailsForm.summary.legend">Legend</message>
 	<message id="detailsForm.summary.total"><i>Total</i></message>
@@ -162,6 +162,7 @@
 		<div>${version-chb}${remote-chb}</div>
 		${table}
 		<div class="action-buttons">${add}${import}${export}${new-version}${edit}${update}${install}${uninstall}</div>
+		<div class="action-buttons">${update-taxonomy}</div>
 		<div>${info}</div>
 	</message>
 
@@ -170,8 +171,8 @@
 		  <tr><td class="form-table-name-td">Name</td><td class="form-table-name-td">${name}</td><td>${name-info}</td></tr>
 		  <tr><td class="form-table-name-td">ID</td><td class="form-table-name-td">${id}</td><td>${id-info}</td></tr>
 		  <tr><td class="form-table-name-td">Version</td><td class="form-table-name-td">${version}</td><td>${version-info}</td></tr>
-		  <tr><td class="form-table-name-td">Blast</td><td class="form-table-name-td">${blast}</td></tr>
-		  <tr><td class="form-table-name-td">HIV Tool</td><td class="form-table-name-td">${hiv}</td><td>${hiv-info}</td></tr>
+		  <tr><td class="form-table-name-td">Taxonomy ID</td><td class="form-table-name-td">${taxonomy-text}</td></tr>
+		  <tr><td class="form-table-name-td">Tool type</td><td class="form-table-name-td">${tool-type}</td></tr>
 		</table>
 	</message>
 
@@ -232,7 +233,7 @@
 		  <tr><td>ID</td><td>${id}</td><td>${id-info}</td></tr>
   		  <tr><td>Name</td><td>${name}</td><td>${name-info}</td></tr>
   		  <tr><td>Description</td><td>${description}</td><td>${description-info}</td></tr>
-  		  <tr><td>Tool ID</td><td>${tool-id}</td><td>${tool-id-info}</td></tr>
+  		  <tr><td>Taxonomy ID</td><td>${taxonomy-id}</td></tr>
 		</table>
 		${fasta}
 		<div>${add-sequence}${remove-sequence}</div>
@@ -243,7 +244,7 @@
 		${analysis}
 		${ref-taxa}
 		${cluster-table}
-		${add-sequences}
+		<div>${add-sequences}${auto-create-pan-viral}</div>
 	</message>
 
 	<message id="admin.config.cluster-table">

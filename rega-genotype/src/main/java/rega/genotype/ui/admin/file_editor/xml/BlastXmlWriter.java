@@ -44,7 +44,7 @@ public class BlastXmlWriter {
 				attributes.add(new Attribute("name", cluster.getName()));
 				clusterE.setAttributes(attributes);
 				add(clusterE, "description", cluster.getDescription());
-				add(clusterE, "tool-id", cluster.getToolId());
+				add(clusterE, "taxonomy-id", cluster.getTaxonomyId());
 				for (String taxaId: cluster.getTaxaIds()){
 					Element taxusE = new Element("taxus");
 					taxusE.setAttribute(new Attribute("name", taxaId));

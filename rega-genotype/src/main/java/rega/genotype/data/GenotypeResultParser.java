@@ -44,7 +44,7 @@ public class GenotypeResultParser extends DefaultHandler
 	private int filteredSequences;
 	private boolean readerBlocksOnEof = false;
 
-	private boolean stop = false;
+	private volatile boolean stop = false;
 
 	public GenotypeResultParser() {
 		this(-1);
@@ -231,7 +231,7 @@ public class GenotypeResultParser extends DefaultHandler
 					int ans = super.read(cbuf, off, len);
 					if (ans != -1) 
 						return ans;
-					if (stack.size() == 0)
+					if (stop || stack.size() == 0)
 						return -1; // end;
 
 					updateUi();
@@ -287,7 +287,8 @@ public class GenotypeResultParser extends DefaultHandler
 				InputSource inputSource = new InputSource(reader);
 				parse(inputSource);
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				if(!stop)
+					throw new RuntimeException(e);
 			}
 		}
 	}

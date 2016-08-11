@@ -47,7 +47,6 @@ import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableCell;
 import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WTimer;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
@@ -83,7 +82,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	 * in the parserThread that adds the existing results to the view widget waits (5s the
 	 * updater is responsible for that) and checks for new results in the results.xml file.
 	 */
-	private Thread parserThread;
+	private ParserRunnable parserRunnable;
 	private GenotypeResultParser parser;
 
 	protected File jobDir;
@@ -91,7 +90,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private JobOverviewSummary summary;
 	private SequenceFilter filter;
 	
-	private Template template;
+	protected Template template;
 	
 	private boolean hasRecombinationResults;
 
@@ -423,54 +422,62 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public void stop() {
+		parserRunnable.stop();
 		parser.stopParsing();
 		parser = null;
-		parserThread = null;
+		parserRunnable = null;
 	}
 
 	private void startParserThread() {
-		if (parserThread == null) {
-			final int interval = getMain().getOrganismDefinition().getUpdateInterval();
-			final Object lock = new Object();
-
-			parserThread = new Thread(new Runnable() {
-				boolean stop = false;
-				public void run() {
-					final File resultFile = new File(getJobdir().getAbsolutePath()
-							+ File.separatorChar + "result.xml");
-					// wait till result.xml is ready
-					while (!stop && !resultFile.exists()){
-						synchronized (lock) {
-							try {
-								lock.wait(interval);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								assert (false);
-							}
-						}
-					}
-
-					parser.parseFile(getJobdir());
-
-					while (!stop && !jobDone()){
-						parser.updateUi();
-						synchronized (lock) {
-							try {
-								lock.wait(interval);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								assert (false);
-							}
-						}
-					}
-				}
-			});
-
-			parserThread.setName("parserThread");
-			parserThread.start();
-		}
+		final int interval = getMain().getOrganismDefinition().getUpdateInterval();
+		parserRunnable = new ParserRunnable(interval);
+		Thread parserThread = new Thread(parserRunnable);
+		parserThread.setName("parserThread");
+		parserThread.start();
 	}
 
+	private class ParserRunnable implements Runnable {
+		final Object lock = new Object();
+		volatile boolean stop = false;
+		private int interval;
+		ParserRunnable(int interval) {
+			this.interval = interval;
+		}
+		public void run() {
+			final File resultFile = new File(getJobdir().getAbsolutePath()
+					+ File.separatorChar + "result.xml");
+			// wait till result.xml is ready
+			while (!stop && !resultFile.exists()){
+				synchronized (lock) {
+					try {
+						lock.wait(interval);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						assert (false);
+					}
+				}
+			}
+
+			if (!stop)
+				parser.parseFile(getJobdir());
+
+			while (!stop && !jobDone()){
+				parser.updateUi();
+				synchronized (lock) {
+					try {
+						lock.wait(interval);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						assert (false);
+					}
+				}
+			}
+		}
+
+		void stop(){
+			stop = true;
+		}
+	}
 	/**
 	 * re implement if you need to use a different parser.
 	 * 
@@ -484,7 +491,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		private WApplication app;
 
 		Parser() {
-			app = WApplication.getInstance();
+			this.app = WApplication.getInstance();
 			setReaderBlocksOnEof(true);
 		}
 		@Override
@@ -537,9 +544,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				if (summary != null) 
 					summary.update(this, getMain().getOrganismDefinition());
 
-				app.triggerUpdate();
-				updateLock.release();
 			}
+
+			app.triggerUpdate();
+			updateLock.release();
 		}
 
 		@Override
@@ -599,9 +607,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			@Override
 			public void handleRequest(WebRequest request, WebResponse response) {
 				String typeVirusImage = "0";
-				File f = new File(getMain().getOrganismDefinition().getXmlPath()+"/genome_"+myTypeGenome.replaceAll("\\d", "")+".png");
+				File f = myTypeGenome == null ? null :
+						new File(getMain().getOrganismDefinition().getXmlPath()+"/genome_"+myTypeGenome.replaceAll("\\d", "")+".png");
 				try {
-					if (f.exists()){
+					if (myTypeGenome != null && f.exists()){
 						typeVirusImage = myTypeGenome.replaceAll("\\d", "");
 					}
 					if (getFileName().isEmpty()) {
@@ -611,7 +620,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 					super.handleRequest(request, response);
 				} catch (IOException e) {
-					throw new RuntimeException(e);
+					e.printStackTrace(); // some times the images dont exist.
 				}
 			}				
 		});
