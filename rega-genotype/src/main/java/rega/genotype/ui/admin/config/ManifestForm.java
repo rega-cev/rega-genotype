@@ -10,11 +10,14 @@ import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyButton;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.framework.widgets.ObjectListModel;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
+import eu.webtoolkit.jwt.WComboBox;
 import eu.webtoolkit.jwt.WDate;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WValidator;
 
 /**
@@ -27,24 +30,46 @@ public class ManifestForm extends FormTemplate{
 	private final WLineEdit idLE = initLineEdit();
 	private final WLineEdit versionLE = initLineEdit();
 	private final TaxonomyButton taxonomyT = new TaxonomyButton();
-	private final WCheckBox blastChB = new WCheckBox();
-	private final WCheckBox hivChB = new WCheckBox();
+	private final WComboBox toolTypeCB = new WComboBox();
+	ObjectListModel<ToolType> toolTypeModel;
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
 	private ToolManifest oldManifest;
 	private File toolDir; // used for id, version validator.
+	
+	public enum ToolType {VirusTool, PanViralTool, HivTool}
 
 	public ManifestForm(final ToolManifest manifest, File toolDir, Mode mode) {
 		super(tr("admin.config.tool-config-dialog.manifest"));
 		this.oldManifest = manifest;
 		this.toolDir = toolDir;
 
+		toolTypeModel = new ObjectListModel<ManifestForm.ToolType>(ToolType.values()) {
+			@Override
+			public WString render(ToolType t) {
+				switch (t) {
+				case HivTool:
+					return new WString("HIV tool");
+				case PanViralTool:
+					return new WString("Pan-viral tool");
+				case VirusTool:
+					return new WString("Virus tool (standard)");
+				}
+				return null;
+			}
+		};
+		toolTypeCB.setModel(toolTypeModel);
+		
 		// read
 
 		if (manifest != null) {
 			nameLE.setText(manifest.getName());
 			idLE.setText(manifest.getId());
-			blastChB.setChecked(manifest.isBlastTool());
-			hivChB.setChecked(manifest.isHivTool());
+			if (manifest.isBlastTool()) 
+				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.PanViralTool));
+			else if (manifest.isHivTool())
+				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.HivTool));
+			else
+				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.VirusTool));
 			versionLE.setText(manifest.getVersion());
 			taxonomyT.setTaxonomyIdText(manifest.getTaxonomyId());
 		}
@@ -59,7 +84,7 @@ public class ManifestForm extends FormTemplate{
 
 		// info
 		
-		hivChB.setToolTip("HIV Tool has special functionality and it must be deployed at URL = hiv.");
+		//hivChB.setToolTip("HIV Tool has special functionality and it must be deployed at URL = hiv.");
 		
 		// signal
 
@@ -75,8 +100,7 @@ public class ManifestForm extends FormTemplate{
 		bindWidget("name", nameLE);
 		bindWidget("id", idLE);
 		bindWidget("version", versionLE);
-		bindWidget("blast", blastChB);
-		bindWidget("hiv", hivChB);
+		bindWidget("tool-type", toolTypeCB);
 		bindWidget("taxonomy-text", taxonomyT);
 
 		init();
@@ -89,8 +113,9 @@ public class ManifestForm extends FormTemplate{
 		Config config = Settings.getInstance().getConfig();
 
 		ToolManifest manifest = new ToolManifest();
-		manifest.setHivTool(hivChB.isChecked());
-		manifest.setBlastTool(blastChB.isChecked());
+		ToolType toolType = toolTypeModel.getObject(toolTypeCB.getCurrentIndex());
+		manifest.setHivTool(toolType == ToolType.HivTool);
+		manifest.setBlastTool(toolType == ToolType.PanViralTool);
 		manifest.setName(nameLE.getText());
 		manifest.setId(idLE.getText());
 		manifest.setVersion(versionLE.getText());
@@ -148,7 +173,8 @@ public class ManifestForm extends FormTemplate{
 	}
 
 	public boolean isHivTool() {
-		return hivChB.isChecked();
+		ToolType toolType = toolTypeModel.getObject(toolTypeCB.getCurrentIndex());
+		return toolType == ToolType.HivTool;
 	}
 
 	public File getToolDir() {
