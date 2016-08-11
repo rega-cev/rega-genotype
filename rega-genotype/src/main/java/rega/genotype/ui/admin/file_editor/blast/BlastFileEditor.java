@@ -155,7 +155,7 @@ public class BlastFileEditor extends WContainerWidget{
 						if (upload.getUploadedFiles().size() == 0) 
 							info.setText("Upload file first.");
 						else {
-							info.setText("Crating Pan-viral tool please wait...");
+							info.setText("Creating Pan-viral tool please wait...");
 							close.disable();
 						}
 
