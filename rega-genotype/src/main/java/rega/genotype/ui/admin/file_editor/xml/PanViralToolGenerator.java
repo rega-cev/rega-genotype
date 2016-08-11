@@ -283,8 +283,12 @@ public class PanViralToolGenerator {
 			Data data = accessionNumMap.get(accessionNumber);
 
 			// sequence 
+<<<<<<< HEAD
 			s.setName(accessionNumber + " " 
 					+ data.taxonomyId + FASTA_DESCRIPTION_SEPARATOR + data.description);
+=======
+			s.setName(accessionNumber);
+>>>>>>> rega-cev/master
 
 			// cluster
 			Cluster cluster = alignmentAnalyses.findCluster(data.taxonomyId);
