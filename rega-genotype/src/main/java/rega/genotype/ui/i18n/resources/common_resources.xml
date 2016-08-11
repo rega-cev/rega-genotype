@@ -191,7 +191,7 @@
 		${manifest}
 		${config}
 		${upload}
-		<div class="action-buttons">${publish}${retract}${auto-create-pan-viral}${save}${cancel}</div>
+		<div class="action-buttons">${publish}${retract}${save}${cancel}</div>
 		${info}
 	</message>
 	
@@ -245,7 +245,7 @@
 		${analysis}
 		${ref-taxa}
 		${cluster-table}
-		${add-sequences}
+		<div>${add-sequences}${auto-create-pan-viral}</div>
 	</message>
 
 	<message id="admin.config.cluster-table">

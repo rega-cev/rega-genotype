@@ -12,6 +12,7 @@ import java.util.Map;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
@@ -20,6 +21,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
+import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.StandardTableView;
@@ -36,7 +38,10 @@ import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WModelIndex;
@@ -62,11 +67,12 @@ public class BlastFileEditor extends WContainerWidget{
 	private DirtyHandler dirtyHandler;
 	private ReferenceTaxaTable referenceTaxaTable;
 
-	public BlastFileEditor(final File workDir, DirtyHandler dirtyHandler) {
+	public BlastFileEditor(final File workDir, final DirtyHandler dirtyHandler) {
 		this.workDir = workDir;
 		this.dirtyHandler = dirtyHandler;
 
-		WPushButton addSequencesB = new WPushButton("Add sequences");
+		final WPushButton addSequencesB = new WPushButton("Add sequences");
+		final WPushButton autoCreatePanViralToolB = new WPushButton("Auto create pav-viral tool");
 
 		alignmentAnalyses = readBlastXml(workDir);
 
@@ -93,6 +99,7 @@ public class BlastFileEditor extends WContainerWidget{
 		layout.bindWidget("analysis", analysisPanel);
 		layout.bindWidget("ref-taxa", refTaxaPanel);
 		layout.bindWidget("add-sequences", addSequencesB);
+		layout.bindWidget("auto-create-pan-viral", autoCreatePanViralToolB);
 
 		addSequencesB.clicked().addListener(addSequencesB, new Signal.Listener() {
 			public void trigger() {
@@ -109,6 +116,98 @@ public class BlastFileEditor extends WContainerWidget{
 								alignmentAnalyses.getAlignment().addSequence(sequence);
 							}
 						}
+					}
+				});
+			}
+		});
+
+		autoCreatePanViralToolB.clicked().addListener(autoCreatePanViralToolB, new Signal.Listener() {
+			public void trigger() {
+				final WDialog d = new WDialog("Auto create pan-viral tool");
+				d.show();
+				final WPushButton close = new WPushButton("Close", d.getFooter());
+				close.clicked().addListener(close, new Signal.Listener() {
+					public void trigger() {
+						d.reject();
+					}
+				});
+				d.getContents().addWidget(new WText("<div>A new pan-viral tool will be auto created.</div>"
+						+ "<div>The tool will contain all viruses that have accession number in ICTV Master Species List.</div>"
+						+ "<div>This will overwrite your blast configuration.</div>"
+						+ "<div>Note: accession numbers that are not properly formatted will be ignored. </div>"
+						+ "<div>Upload ICTV Master Species List in xlsx format.</div>"));
+				final WFileUpload upload = new WFileUpload(d.getContents());
+				upload.setFilters(".xlsx");
+
+				final WPushButton createB = new WPushButton("Create", d.getContents());
+				final WText info = new WText(d.getContents());
+				info.addStyleClass("auto-form-info");
+				info.setInline(false);
+				createB.clicked().addListener(createB, new Signal.Listener() {
+					public void trigger() {
+						upload.upload();
+					}
+				});
+				createB.setMargin(10);
+
+				upload.uploaded().addListener(upload, new Signal.Listener() {
+					public void trigger() {
+						if (upload.getUploadedFiles().size() == 0) 
+							info.setText("Upload file first.");
+						else {
+							info.setText("Crating Pan-viral tool please wait...");
+							close.disable();
+						}
+
+						final WApplication app = WApplication.getInstance();
+
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								try {
+									PanViralToolGenerator autoCreatePanViral = new PanViralToolGenerator();
+									AlignmentAnalyses alignmentAnalyses = autoCreatePanViral.createAlignmentAnalyses(
+											new File(upload.getSpoolFileName()));
+
+									new BlastXmlWriter(BlastFileEditor.blastFile(BlastFileEditor.this.workDir), alignmentAnalyses);
+									alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(BlastFileEditor.fastaFile(BlastFileEditor.this.workDir)),
+											SequenceAlignment.FILETYPE_FASTA);
+
+									UpdateLock lock = app.getUpdateLock();
+									rereadFiles();
+									info.setText("Pan viral tool was auto created. You can still make some modifications from the editor.");
+									close.enable();
+									dirtyHandler.increaseDirty();
+									app.triggerUpdate();
+									lock.release();
+
+								} catch (ApplicationException e) {
+									e.printStackTrace();
+									updateInfo("Error: " + e.getMessage());
+								} catch (IOException e) {
+									e.printStackTrace();
+									updateInfo("Error: " + e.getMessage());
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+									updateInfo("Error: " + e.getMessage());
+								} catch (ParameterProblemException e) {
+									e.printStackTrace();
+									updateInfo("Error: " + e.getMessage());
+								} catch (FileFormatException e) {
+									e.printStackTrace();
+									updateInfo("Error: " + e.getMessage());
+								}
+
+							}
+
+							private void updateInfo(String text) {
+								UpdateLock lock = app.getUpdateLock();
+								info.setText(text);
+								app.triggerUpdate();
+								lock.release();
+							}
+						});
+						t.start();
+
 					}
 				});
 			}
