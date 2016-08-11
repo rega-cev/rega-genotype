@@ -47,6 +47,12 @@ public class TaxonomyModel {
 	}
 
 	public static WStandardItemModel createModel() {
+		if (root.getRowCount() == 0) {
+			// make sure that if taxonomy file exists it was read (can happen if the server failed)
+			File taxonomyFile = UpdateTaxonomyFileService.taxonomyFile();
+			if (taxonomyFile.exists())
+				read(taxonomyFile);
+		}
 		WStandardItemModel ans = new WStandardItemModel();
 		List<WStandardItem> rootItems = new ArrayList<WStandardItem>();
 		for (int i = 0; i < root.getRowCount(); ++i)
