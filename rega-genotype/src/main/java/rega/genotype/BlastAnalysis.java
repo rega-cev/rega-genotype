@@ -27,9 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.sun.org.apache.bcel.internal.generic.GETFIELD;
-
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.singletons.Settings;
 import rega.genotype.utils.StreamReaderRuntime;
 
 /**
@@ -38,8 +37,6 @@ import rega.genotype.utils.StreamReaderRuntime;
  * @author koen
  */
 public class BlastAnalysis extends AbstractAnalysis {
-	public static String blastPath = "";
-	public static String diamondPath = "";
     public static String formatDbCommand = "formatdb";
     public static String blastCommand = "blastall";
 
@@ -285,7 +282,8 @@ public class BlastAnalysis extends AbstractAnalysis {
 			tracer.add("reverse-compliment", String.valueOf(reverseComplement));
 			tracer.add("concluded-id", haveSupport() ? cluster.getId() : "Unassigned");
 			tracer.add("concluded-name", haveSupport() ? cluster.getName() : "Unassigned");
-			tracer.add("tool-id", cluster != null ? cluster.getToolId() : "none");
+			tracer.add("concluded-description", haveSupport() && cluster.getDescription() != null ? cluster.getDescription() : "");
+			tracer.add("taxonomy-id", cluster != null ? cluster.getTaxonomyId() : "none");
 
 			tracer.printlnClose("</cluster>");
 		}
@@ -492,6 +490,10 @@ public class BlastAnalysis extends AbstractAnalysis {
 			//dbFile.flush();
 			//fd.sync();
 			dbFile.close();
+
+			String blastPath = Settings.getInstance().getBlastPathStr();
+			String diamondPath = Settings.getInstance().getDiamondPath().getAbsolutePath();
+
 			String cmd = "";
 			if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA){
 				File query = getTempFile("sequences.fasta");
@@ -503,6 +505,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 			}else{
 				cmd = blastPath + formatDbCommand + " " + formatDbOptions() + " -o T -i " + db.getAbsolutePath();
 			}
+
 			System.err.println(cmd);
 
 
@@ -533,6 +536,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 			throws ApplicationException {
         
         Process blast = null;
+		String blastPath = Settings.getInstance().getBlastPathStr();
 
         try {
             if (sequence.getLength() != 0) {
@@ -547,6 +551,7 @@ public class BlastAnalysis extends AbstractAnalysis {
         		File db = getTempFile("db.fasta");
         		String cmd = "";
         		if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA){
+        			String diamondPath = Settings.getInstance().getDiamondPath().getAbsolutePath();
         			cmd = diamondPath + blastCommand + blastProgramOption() + blastOptions
     	                	+ " -i " + query.getAbsolutePath()
     	                    + " -m 8 -d " + db.getAbsolutePath();
@@ -757,7 +762,8 @@ public class BlastAnalysis extends AbstractAnalysis {
 	}
 
     private String collectDetails(File query, File db) throws IOException, InterruptedException, ApplicationException {
-        String cmd = blastPath + blastCommand + blastProgramOption() + detailsOptions
+		String blastPath = Settings.getInstance().getBlastPathStr();
+    	String cmd = blastPath + blastCommand + blastProgramOption() + detailsOptions
             	+ " -i " + query.getAbsolutePath()
                 + " -T -d " + db.getAbsolutePath();
         System.err.println(cmd);

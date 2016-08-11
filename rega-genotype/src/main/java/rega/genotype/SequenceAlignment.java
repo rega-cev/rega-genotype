@@ -186,10 +186,6 @@ public class SequenceAlignment
         if (header.charAt(0) != '>')
             throw new FileFormatException("Expecting a '>'",
                                           reader.getLineNumber());
-        
-        if (!header.substring(1).matches("[^!@#$%^&\\*()+=]*"))
-            throw new FileFormatException("Illegal character (one of '!@#$%^&\\*()+=')",
-                    reader.getLineNumber());
 
         // eat '>'
         header = header.substring(1);
@@ -318,7 +314,8 @@ public class SequenceAlignment
      * symbols that they cannot handle or too long sequence names.
      */
     private static String makeLegalName(String name) {
-    	String sane = name.replaceAll("/|\\+|\\(|\\)", "");
+		// Some programs are crashing with this charecters.
+		String sane = name.replaceAll("/|\\+|\\(|\\)\\^\\!@\\#\\$\\%\\^\\&\\*\\=", "");
 		try {
 			sane = new String(sane.getBytes("ASCII"));
 		} catch (UnsupportedEncodingException e) {

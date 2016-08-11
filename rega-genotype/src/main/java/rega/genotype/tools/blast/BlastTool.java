@@ -54,7 +54,8 @@ public class BlastTool extends GenotypeTool {
 			String fasta = ">" + s.getName() + "\n" + s.getSequence() + "\n";
 
 			if (c != null) {
-				File f = new File(getWorkingDir().getAbsolutePath(), c.getToolId() + ".fasta");
+				String toolId = Settings.getInstance().getConfig().getToolId(c.getTaxonomyId());
+				File f = new File(getWorkingDir().getAbsolutePath(), toolId + ".fasta");
 				FileUtil.writeStringToFile(f, fasta, true);
 			}
 		} catch (IOException e1) {

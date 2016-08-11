@@ -96,7 +96,23 @@ public class Config {
 		return ans;
 	}
 
+	public String getToolId(String taxonomyId) {
+		if (taxonomyId == null)
+			return null;
+
+		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
+			ToolManifest m = c.getToolMenifest();
+			if (m.getTaxonomyId() != null && m.getTaxonomyId().equals(taxonomyId))
+				return m.getId();
+		}
+
+		return null;
+	}
+
 	public ToolConfig getCurrentVersion(String toolId) {
+		if (toolId == null)
+			return null;
+
 		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
 			ToolManifest m = c.getToolMenifest();
 			if (c.isCurrentUsedVersion() && m != null 
@@ -217,6 +233,7 @@ public class Config {
 		private String cutAdaptCmd = "cutadapt";
 		private int maxAllowedSeqs = 2000;
 		private String inkscapeCmd = "inkscape";
+		private String edirectPath = "/usr/bin/edirect/";
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.
@@ -338,6 +355,12 @@ public class Config {
 		}
 		public void setTaxonamyDiamondPath(String taxonamyDiamondPath) {
 			this.taxonamyDiamondPath = taxonamyDiamondPath;
+		}
+		public String getEdirectPath() {
+			return edirectPath;
+		}
+		public void setEdirectPath(String edirectPath) {
+			this.edirectPath = edirectPath;
 		}
 	}
 

@@ -187,3 +187,13 @@ body {
     text-align: right;
     padding-right: 5px;
 }
+
+.hoverable:hover {
+  color: blueviolet;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.standard-margin {
+  margin: 5px;
+}

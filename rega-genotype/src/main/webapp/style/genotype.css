@@ -99,7 +99,9 @@ table.reftable td, table.reftable th,
 	border-left: 1px outset gray;
 	border-right: 1px outset gray;
 }
-
+.blastResultsTable table th .headerrh {
+    height: initial !important;
+}
 table.jobTable tr > td {
 	border-left-width: inherit;
 	border-right-width: inherit;	

@@ -10,8 +10,8 @@ import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.file_editor.FileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
-import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.Dialogs;
+import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Signal;
@@ -108,6 +108,7 @@ public class ToolConfigForm extends FormTemplate {
 			public void trigger(File arg) {
 				toolConfig.invalidateToolManifest();
 				localConfigForm.getToolConfig().invalidateToolManifest();
+				toolDir = manifestForm.getToolDir();
 			}
 		});
 

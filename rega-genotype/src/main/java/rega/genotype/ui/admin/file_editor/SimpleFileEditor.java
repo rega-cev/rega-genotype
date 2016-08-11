@@ -25,6 +25,7 @@ import eu.webtoolkit.jwt.WTextArea;
  * @author michael
  */
 public class SimpleFileEditor extends WContainerWidget {
+	private static final int MAX_DISPLAY_FILE_SIZE = 5000000; //5MB
 	public enum Mode {TextEditor, ImageViewer}
 	private Mode mode;
 
@@ -73,7 +74,7 @@ public class SimpleFileEditor extends WContainerWidget {
 	}
 
 	public void save() {
-		if (mode != Mode.ImageViewer)
+		if (mode != Mode.ImageViewer && file.length() <= MAX_DISPLAY_FILE_SIZE)
 			try {
 				file.delete();
 				FileUtil.writeStringToFile(file, edit.getText());
@@ -90,6 +91,12 @@ public class SimpleFileEditor extends WContainerWidget {
 	public void rereadFile() {
 		if (mode != Mode.TextEditor)
 			return;
+
+		if (file.length() > MAX_DISPLAY_FILE_SIZE) {
+			edit.setText("");
+			infoT.setText("Large file, content is not displayed.");
+			return;
+		}
 
 		String fileText = FileUtil.readFile(file);
 

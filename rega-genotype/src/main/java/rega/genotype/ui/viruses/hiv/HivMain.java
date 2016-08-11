@@ -75,7 +75,7 @@ public class HivMain extends GenotypeMain {
 			e.printStackTrace();
 			fileManifests = new ArrayList<FileManifest>();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace(); use default css.
 			fileManifests = new ArrayList<FileManifest>();
 		}
 		if (!fileManifests.isEmpty()) {

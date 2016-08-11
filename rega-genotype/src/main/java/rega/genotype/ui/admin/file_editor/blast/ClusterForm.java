@@ -2,19 +2,14 @@ package rega.genotype.ui.admin.file_editor.blast;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.config.Config.ToolConfig;
-import rega.genotype.config.ToolManifest;
-import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.widgets.FormTemplate;
-import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.framework.widgets.StandardTableView;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.SelectionBehavior;
@@ -32,7 +27,6 @@ import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
-import eu.webtoolkit.jwt.WString;
 
 /**
  * Editing of cluster from blast.xml file.
@@ -41,6 +35,7 @@ import eu.webtoolkit.jwt.WString;
  */
 public class ClusterForm extends FormTemplate{
 
+	private TaxonomyButton taxonomyW = new TaxonomyButton();
 	private WLineEdit idLE = new WLineEdit();
 	private WLineEdit nameLE = new WLineEdit();
 	private WLineEdit descriptionLE = new WLineEdit();
@@ -65,30 +60,17 @@ public class ClusterForm extends FormTemplate{
 		
 		// read 
 
+		taxonomyW.setTaxonomyIdText(cluster.getTaxonomyId());
+		taxonomyW.finished().addListener(taxonomyW, new Signal1.Listener<String>() {
+			public void trigger(String selectedTaxonomyId) {
+				taxonomyW.setTaxonomyIdText(selectedTaxonomyId);
+				dirtyHandler.increaseDirty();
+			}
+		});
+
 		setValue(idLE, cluster.getId());
 		setValue(nameLE, cluster.getName());
 		setValue(descriptionLE, cluster.getDescription());
-
-		Set<String> toolIds = new HashSet<String>();
-		for(ToolConfig tool : Settings.getInstance().getConfig().getTools())
-			if (tool.getId() != null)
-				toolIds.add(tool.getId()); 
-		ArrayList<String> toolIdsList = new ArrayList<String>(toolIds);
-		toolIdsList.add(0, "(Empty)");
-		final ObjectListComboBox<String> toolIdCB = new ObjectListComboBox<String>(new ArrayList<String>(toolIds)) {
-			@Override
-			protected WString render(String t) {
-				return new WString(t);
-			}
-		};
-		ToolManifest manifest = toolConfig != null ? toolConfig.getToolMenifest() : null;
-		if (cluster.getToolId() == null)
-			if (manifest == null || manifest.getId() == null)
-				toolIdCB.setCurrentIndex(0);
-			else
-				setValue(toolIdCB, manifest.getId());
-		else
-			setValue(toolIdCB, cluster.getToolId());
 
 		// taxus model
 
@@ -115,14 +97,15 @@ public class ClusterForm extends FormTemplate{
 
 		bindString("cluster-name", cluster.getName() == null ? "" : cluster.getName());
 		bindWidget("id", idLE);
+		bindWidget("taxonomy-id", taxonomyW);
 		bindWidget("name", nameLE);
 		bindWidget("description", descriptionLE);
-		bindWidget("tool-id", toolIdCB);
 		bindWidget("fasta", taxuesTable);
 		bindWidget("add-sequence", addSequenceB);
 		bindWidget("remove-sequence", removeSequenceB);
 		bindWidget("ok", okB);
 		bindWidget("cancel", cancelB);
+		bindEmpty("id-info");
 
 		init();
 
@@ -183,7 +166,7 @@ public class ClusterForm extends FormTemplate{
 				cluster.setName(nameLE.getText());
 				cluster.setDescription(descriptionLE.getText());
 				cluster.setId(idLE.getText());
-				cluster.setTooId(toolIdCB.getCurrentObject());
+				cluster.setTaxonomyId(taxonomyW.getValue());
 
 				for(AbstractSequence s: addedSequences){
 					alignmentAnalyses.getAlignment().addSequence(s);

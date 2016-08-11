@@ -191,8 +191,8 @@ public class StartForm extends AbstractForm {
 			List<Cluster> allClusters = alignmentAnalyses.getAllClusters();
 			Set<String> tools = new HashSet<String>();
 			for (Cluster c:allClusters) {
-				if(c.getToolId() != null && !c.getToolId().isEmpty())
-					tools.add(c.getToolId());
+				if(c.getTaxonomyId() != null && !c.getTaxonomyId().isEmpty())
+					tools.add(c.getTaxonomyId());
 			}
 
 			t.bindString("count_virus_from_blast.xml", allClusters.size() + "");

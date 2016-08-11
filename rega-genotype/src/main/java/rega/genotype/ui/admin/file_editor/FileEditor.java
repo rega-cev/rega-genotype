@@ -81,4 +81,8 @@ public class FileEditor extends WTabWidget {
 		// copy the changes back to tool dir.
 		return ToolEditingSynchronizer.getInstance().saveTool(workDir, toolDir);
 	}
+
+	public File getWorkDir() {
+		return workDir;
+	}
 }

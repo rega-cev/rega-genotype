@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -58,26 +59,14 @@ public class FileUtil {
 	}
 	
 	public static String readFile(File path){
-		BufferedReader buffReader = null;
-		String ans = "";
-		try{
-			buffReader = new BufferedReader (new FileReader(path));
-			String line = buffReader.readLine();
-			while(line != null) {
-				ans += line + "\n";
-				line = buffReader.readLine();
-			}
-		}catch(IOException ioe){
-			ioe.printStackTrace();
-		}finally{
-			try{
-				if (buffReader != null)
-					buffReader.close();
-			}catch(IOException ioe1){
-				//Leave It
-			}
+		String fileText = null;
+		try {
+			byte[] encoded = Files.readAllBytes(path.toPath());
+			fileText = new String(encoded, StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return ans;
+		return fileText;
 	}
 
 	public static String toString(BufferedReader reader) {
