@@ -411,13 +411,13 @@ public class ToolConfigTable extends Template{
 				d.show();
 				d.setWidth(new WLength(300));
 
-				final WText info = new WText("Download taxonomy file from unipro and update all tool to use it.");
+				final WText info = new WText("Download taxonomy file from uniprot and update all tools to use it.");
 				d.getContents().addWidget(info);
 				d.getOkB().clicked().addListener(d, new Signal.Listener() {
 					public void trigger() {
 						d.getOkB().disable();
 						d.getCancelB().disable();
-						info.setText("Downloading taxonomy file, this can take some..");
+						info.setText("Downloading taxonomy file, this can take some time..");
 						
 						final WApplication app = WApplication.getInstance();
 						
@@ -425,7 +425,7 @@ public class ToolConfigTable extends Template{
 							public void run() {
 								UpdateTaxonomyFileService.download();
 								UpdateLock updateLock = app.getUpdateLock();
-								TaxonomyModel.getInstance().read(UpdateTaxonomyFileService.taxonomyFile());
+								TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
 								info.setText("Update finished");
 								d.getCancelB().enable();
 								app.triggerUpdate();

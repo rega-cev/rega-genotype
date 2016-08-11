@@ -44,7 +44,8 @@ public class StandardItemModelSearchProxy extends WSortFilterProxyModel {
 			if (!visibleLeafs.contains(taxonomyId))
 				return false;
 		}
-		return getSourceModel().getData(index).toString().toUpperCase().
+		return getSourceModel().getData(index) != null 
+				&& getSourceModel().getData(index).toString().toUpperCase().
 				contains(searchText.toUpperCase());
 	}
 

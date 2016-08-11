@@ -15,6 +15,7 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTreeView;
 
@@ -43,7 +44,7 @@ public class TaxonomyWidget extends WContainerWidget {
 		expandAllB.addStyleClass("standard-margin");
 		searchLE.addStyleClass("standard-margin");
 
-		TaxonomyModel taxonomyModel = TaxonomyModel.getInstance();
+		WStandardItemModel taxonomyModel = TaxonomyModel.createModel();
 		searchProxy = new StandardItemModelSearchProxy(taxonomyModel);
 		searchProxy.setVisibleLeafs(getTaxonomyIds(toolConfig));
 		searchProxy.setFilterRole(TaxonomyModel.TAXONOMY_ID_ROLE);
@@ -98,9 +99,8 @@ public class TaxonomyWidget extends WContainerWidget {
 
 	private void printWrongTaxons(Set<String> taxonomyIds) {
 		// debug: some taxonomy ids are not found in uniprot file. 
-		TaxonomyModel taxonomyModel = TaxonomyModel.getInstance();
 		for (String s: taxonomyIds) 
-			if (!taxonomyModel.getTaxons().containsKey(s))
+			if (!TaxonomyModel.getTaxons().containsKey(s))
 				System.err.println("Hirarchy for taxon " + s + " not found");
 	}
 	public String getSelectedTaxonomyId() {

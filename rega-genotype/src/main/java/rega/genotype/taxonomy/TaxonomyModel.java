@@ -20,7 +20,7 @@ import eu.webtoolkit.jwt.WStandardItemModel;
  * 
  * @author michael
  */
-public class TaxonomyModel extends WStandardItemModel {
+public class TaxonomyModel {
 	public static int SCIENTIFIC_NAME_ROLE = ItemDataRole.UserRole;
 	public static int TAXONOMY_ID_ROLE = ItemDataRole.UserRole + 1;
 	public static int MNEMENIC_ROLE = ItemDataRole.UserRole + 2;
@@ -38,27 +38,30 @@ public class TaxonomyModel extends WStandardItemModel {
 	public static int PARENT_COL = 9;
 	public static int VIRUS_HOST_COL = 10;
 
-	private static TaxonomyModel instance = null;
-
 	// cache for improving read speed.
-	private Map<String, String[]> taxons = new HashMap<String, String[]>();
-	private Map<String, WStandardItem> items = new HashMap<String, WStandardItem>();
+	private static Map<String, String[]> taxons = new HashMap<String, String[]>();
+	private static WStandardItem root = new WStandardItem();
+	private static Map<String, WStandardItem> items = new HashMap<String, WStandardItem>();
 
 	private TaxonomyModel(){
 	}
-	public static synchronized TaxonomyModel getInstance() {
-		if (instance == null) {
-			instance = new TaxonomyModel();
 
-			File taxonomyFile = UpdateTaxonomyFileService.taxonomyFile();
-			if (taxonomyFile.exists())
-				instance.read(taxonomyFile);
-		}
+	public static WStandardItemModel createModel() {
+		WStandardItemModel ans = new WStandardItemModel();
+		List<WStandardItem> rootItems = new ArrayList<WStandardItem>();
+		for (int i = 0; i < root.getRowCount(); ++i)
+			rootItems.add(root.getChild(i));
 
-		return instance;
+		if (rootItems.size() > 0)
+			ans.getInvisibleRootItem().appendRows(rootItems);
+
+		if (root.getColumnCount() > 0)
+			ans.setHeaderData(0, "Taxonomy");
+
+		return ans;
 	}
-
-	private WStandardItem findChild(WStandardItem parent, String taxonomyId) {
+	
+	private static WStandardItem findChild(WStandardItem parent, String taxonomyId) {
 		for (int i = 0; i < parent.getRowCount(); ++i) {
 			if (parent.getChild(i).getData(TAXONOMY_ID_ROLE).equals(taxonomyId))
 				return parent.getChild(i);
@@ -67,13 +70,13 @@ public class TaxonomyModel extends WStandardItemModel {
 		return null;
 	}
 
-	private void append(WStandardItem parent, WStandardItem child) {
+	private static void append(WStandardItem parent, WStandardItem child) {
 		List<WStandardItem> items = new ArrayList<WStandardItem>();
 		items.add(child);
 		parent.appendRow(items);
 	}
 
-	private WStandardItem createItem(String[] row) {
+	private static WStandardItem createItem(String[] row) {
 		WStandardItem item = new WStandardItem(
 				row[SCIENTIFIC_NAME_COL] + " (" + row[TAXON_COL] + ")");
 		item.setData(row[SCIENTIFIC_NAME_COL], SCIENTIFIC_NAME_ROLE);
@@ -84,12 +87,12 @@ public class TaxonomyModel extends WStandardItemModel {
 
 		return item;
 	}
-	public String getMnemenic(String taxonomyId) {
+	public static String getMnemenic(String taxonomyId) {
 		 WStandardItem item = items.get(taxonomyId);
 		 return item == null ? null : item.getData(MNEMENIC_ROLE).toString();
 	}
 
-	public String getHirarchy(String taxonomyId) {
+	public static String getHirarchy(String taxonomyId) {
 		String ans = "";
 		 WStandardItem item = items.get(taxonomyId);
 		 if (item == null)
@@ -106,8 +109,8 @@ public class TaxonomyModel extends WStandardItemModel {
 		 return ans;
 	}
 
-	public void read(File csvFile) {
-		clear();
+	public static void read(File csvFile) {
+		//clear();
 		taxons.clear();
 		items.clear();
 
@@ -148,12 +151,9 @@ public class TaxonomyModel extends WStandardItemModel {
 				}
 			}
 		}
-
-		if (getColumnCount() > 0)
-			setHeaderData(0, "Taxonomy");
 	} 
 
-	private void addItem(String[] row) {
+	private static void addItem(String[] row) {
 		if (row == null)
 			assert(false);
 
@@ -161,8 +161,8 @@ public class TaxonomyModel extends WStandardItemModel {
 			return;
 
 		if (row.length <= PARENT_COL) {
-			if (findChild(getInvisibleRootItem(), row[TAXON_COL]) == null)
-				append(getInvisibleRootItem(), createItem(row)); // add viruses item
+			if (findChild(root, row[TAXON_COL]) == null)
+				append(root, createItem(row)); // add viruses item
 			return;
 		}
 
@@ -174,7 +174,7 @@ public class TaxonomyModel extends WStandardItemModel {
 			if (parentRow == null) {
 				System.err.println(row[SCIENTIFIC_NAME_COL] + " parent not found !!");
 				System.err.println(row[LINEAGE_COL]); 
-				append(getInvisibleRootItem(), createItem(row)); // add viruses item
+				append(root, createItem(row)); // add viruses item
 				return; 
 			} else {
 				addItem(parentRow);
@@ -187,7 +187,7 @@ public class TaxonomyModel extends WStandardItemModel {
 			}
 		}
 	}
-	public Map<String, String[]> getTaxons() {
+	public static Map<String, String[]> getTaxons() {
 		return taxons;
 	}
 }

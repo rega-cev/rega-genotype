@@ -289,14 +289,14 @@ public class PanViralToolGenerator {
 					System.err.println("taxonomyId == null : " + accessionNumber);
 					continue; // should not get here
 				}
-				String mnemenic = TaxonomyModel.getInstance().getMnemenic(data.taxonomyId);
+				String mnemenic = TaxonomyModel.getMnemenic(data.taxonomyId);
 				String id = data.taxonomyId;
 				if (mnemenic != null && !mnemenic.isEmpty())
 					id += "_" + mnemenic;
 				cluster.setId(id);
 				cluster.setName(data.organizedName);
 				cluster.setTaxonomyId(data.taxonomyId);
-				cluster.setDescription(TaxonomyModel.getInstance().getHirarchy(data.taxonomyId));
+				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 
