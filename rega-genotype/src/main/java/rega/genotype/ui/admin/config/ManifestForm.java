@@ -12,7 +12,6 @@ import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListModel;
 import eu.webtoolkit.jwt.Signal1;
-import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WComboBox;
 import eu.webtoolkit.jwt.WDate;
 import eu.webtoolkit.jwt.WLength;
