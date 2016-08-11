@@ -33,6 +33,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
+import rega.genotype.taxonomy.UpdateTaxonomyFileService;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal1;
@@ -257,6 +258,10 @@ public class PanViralToolGenerator {
 		fastaBr.close();
 		fastaWriter.close();
 
+		// make sure that taxonomy is ready
+		if (TaxonomyModel.getTaxons().isEmpty())
+			TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
+		
 		// create blast.xml
 
 		final File jobDir = GenotypeLib.createJobDir(workDir + File.separator + "tmp");
