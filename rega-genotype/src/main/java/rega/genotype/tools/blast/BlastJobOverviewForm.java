@@ -226,6 +226,12 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 			i++;
 		}
+		int row = blastResultModel.getRowCount();
+		blastResultModel.insertRows(row, 1);
+		blastResultModel.setData(row, ASSINGMENT_COLUMN, "Totals");
+		blastResultModel.setData(row, DATA_COLUMN, total); // percentage
+		blastResultModel.setData(row, PERCENTAGE_COLUMN, 100.0);
+
 		chart.setModel(blastResultModel);
 		table.setModel(blastResultModel);
 
