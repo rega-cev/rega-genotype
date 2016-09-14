@@ -38,7 +38,12 @@ public class GenericDetailsTemplate extends WTemplate {
 				@Override
 				public void handleRequest(WebRequest request, WebResponse response) {
 					String typeVirusImage = "0";
-					File f = new File(od.getXmlPath()+"/genome_"+parser.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id").replaceAll("\\d", "")+".png");
+					String concludedId = parser.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
+					if (concludedId == null)
+						concludedId = parser.getValue("/genotype_result/sequence/result[@id='blast']/clusters/cluster/concluded-id");
+
+					File f = new File(od.getXmlPath()
+							+"/genome_"+concludedId.replaceAll("\\d", "")+".png");
 					try {
 						if (f.exists()){
 							typeVirusImage = parser.getValue("/genotype_result/sequence/result[@id='blast']/cluster/concluded-id").replaceAll("\\d", "").replaceAll("\\d", "");
