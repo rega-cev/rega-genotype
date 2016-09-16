@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -829,7 +828,7 @@ public class BlastAnalysis extends AbstractAnalysis {
     public List<Result> analyze(AlignmentAnalyses alignmentAnalyses, String fasta) {
     	List<Result> ans = new ArrayList<BlastAnalysis.Result>();
 		try {
-			InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
+			InputStream stream = new ByteArrayInputStream(fasta.getBytes());
 	        LineNumberReader reader = 
 	        		new LineNumberReader(new InputStreamReader(stream));
 

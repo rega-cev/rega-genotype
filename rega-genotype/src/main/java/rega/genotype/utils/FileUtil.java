@@ -12,14 +12,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 public class FileUtil {
@@ -43,8 +42,8 @@ public class FileUtil {
 	public static String readFile(File path){
 		String fileText = null;
 		try {
-			byte[] encoded = Files.readAllBytes(path.toPath());
-			fileText = new String(encoded, StandardCharsets.UTF_8);
+			byte[] encoded = IOUtils.toByteArray(new FileInputStream(path));
+			fileText = new String(encoded, "UTF-8");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -104,7 +103,7 @@ public class FileUtil {
 		    		moveDirContentRecorsively(f, destFile);
 		    	} else {
 		    		try {
-						Files.move(f.toPath(), destFile.toPath());
+		    			FileUtils.moveFile(f, destFile);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -122,7 +121,7 @@ public class FileUtil {
 		    		destFile.mkdirs();
 		    		copyDirContentRecorsively(f, destFile);
 		    	} else {
-		    		Files.copy(f.toPath(), destFile.toPath());
+		    		FileUtils.copyFile(f, destFile);
 		    	}
 		    		
 		    }
