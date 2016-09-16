@@ -37,6 +37,9 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 
+/**
+ * Auto create phylo- and blast xmls from fasta alignment file.
+ */
 public class FastaToRega {
 
 	private static class Sequence {
