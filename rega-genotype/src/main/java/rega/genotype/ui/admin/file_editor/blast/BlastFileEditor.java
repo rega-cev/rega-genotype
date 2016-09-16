@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +17,12 @@ import javax.xml.transform.TransformerException;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
@@ -249,6 +252,41 @@ public class BlastFileEditor extends WContainerWidget{
 									AlignmentAnalyses alignmentAnalyses = autoCreatePanViral.createAlignmentAnalyses(
 											new File(upload.getSpoolFileName()));
 
+									// Add taxa that are not present in old file.
+									
+									Map<String, Cluster> newClusterMap = new HashMap<String, AlignmentAnalyses.Cluster>();
+									Map<String, Taxus> newTaxaMap = new HashMap<String, AlignmentAnalyses.Taxus>();
+									for (Cluster c: alignmentAnalyses.getAllClusters()) {
+										newClusterMap.put(c.getId(), c);
+										for (Taxus t:c.getTaxa()){
+											newTaxaMap.put(t.getId(), t);
+										}
+									}
+
+									List<Cluster> oldClusters = BlastFileEditor.this.alignmentAnalyses.getAllClusters();
+									for(Cluster c:oldClusters) {
+										for (Taxus t:c.getTaxa()){
+											if(!newTaxaMap.containsKey(t.getId())) {
+												Cluster newCluster = newClusterMap.get(c.getId());
+												if (newCluster == null){
+													// Note cluster parent is not important for pan-viral tool since it is used only in phylogeny
+													newCluster = new Cluster(
+															c.getId(), c.getName(), c.getDescription(), 
+															c.getTags(), c.getTaxonomyId());
+													newClusterMap.put(c.getId(), newCluster);
+													alignmentAnalyses.addCluster(newCluster);
+												} 
+												newCluster.addTaxus(new Taxus(t.getId()));
+												// assume that we do not get here a lot.
+												AbstractSequence sequence = BlastFileEditor.this.alignmentAnalyses.getAlignment().getSequence(t.getId());
+												alignmentAnalyses.getAlignment().addSequence(new Sequence(
+														sequence.getName(), sequence.isNameCapped(), 
+														sequence.getDescription(), sequence.getSequence()));
+											}
+										}
+									}
+
+									// write the results.
 									new BlastXmlWriter(BlastFileEditor.blastFile(BlastFileEditor.this.workDir), alignmentAnalyses);
 									alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(BlastFileEditor.fastaFile(BlastFileEditor.this.workDir)),
 											SequenceAlignment.FILETYPE_FASTA);

@@ -46,7 +46,7 @@ public class TaxonomyModel {
 	private TaxonomyModel(){
 	}
 
-	public static WStandardItemModel createModel() {
+	public static synchronized WStandardItemModel createModel() {
 		if (root.getRowCount() == 0) {
 			// make sure that if taxonomy file exists it was read (can happen if the server failed)
 			File taxonomyFile = UpdateTaxonomyFileService.taxonomyFile();
