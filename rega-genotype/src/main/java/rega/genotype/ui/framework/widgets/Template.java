@@ -2,14 +2,8 @@ package rega.genotype.ui.framework.widgets;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import rega.genotype.AlignmentAnalyses;
-import rega.genotype.AlignmentAnalyses.Cluster;
-import rega.genotype.taxonomy.TaxonomyModel;
-import rega.genotype.ui.admin.file_editor.blast.BlastFileEditor;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyWidget;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.util.FileServlet;
@@ -50,8 +44,14 @@ public class Template extends WTemplate{
 		if (app != null && varName.equals("resource-file"))
 			bindString(varName, FileServlet.getFileUrl(app.getToolConfig().getPath()));
 		else if(app != null && varName.equals("taxonomy-widget")) {
-			bindWidget("taxonomy-widget", new TaxonomyWidget(app.getToolConfig()));
-		}
+			bindWidget(varName, new TaxonomyWidget(app.getToolConfig()));
+		} else if(app != null && varName.equals("global-variable.tool-name")) 
+			bindString(varName, app.getToolConfig().getToolMenifest().getName());
+		else if(app != null && varName.equals("global-variable.tool-version")) 
+			bindString(varName, app.getToolConfig().getToolMenifest().getVersion());
+		else if(app != null && varName.equals("global-variable.virus-name")) 
+			bindString(varName, app.getToolConfig().getToolMenifest().getTaxonomyId());
+			
 
 		super.resolveString(varName, args, result);
 	}
