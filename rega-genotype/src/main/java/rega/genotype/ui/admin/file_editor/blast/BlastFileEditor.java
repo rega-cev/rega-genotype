@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
@@ -20,6 +24,7 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
+import rega.genotype.tools.FastaToRega;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
 import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.widgets.Dialogs;
@@ -43,6 +48,7 @@ import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
@@ -73,6 +79,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 		final WPushButton addSequencesB = new WPushButton("Add sequences");
 		final WPushButton autoCreatePanViralToolB = new WPushButton("Auto create pav-viral tool");
+		final WPushButton autoCreateVirusToolB = new WPushButton("Auto create virus tool");
 
 		alignmentAnalyses = readBlastXml(workDir);
 
@@ -100,6 +107,7 @@ public class BlastFileEditor extends WContainerWidget{
 		layout.bindWidget("ref-taxa", refTaxaPanel);
 		layout.bindWidget("add-sequences", addSequencesB);
 		layout.bindWidget("auto-create-pan-viral", autoCreatePanViralToolB);
+		layout.bindWidget("auto-create-virus-tool", autoCreateVirusToolB);
 
 		addSequencesB.clicked().addListener(addSequencesB, new Signal.Listener() {
 			public void trigger() {
@@ -115,6 +123,79 @@ public class BlastFileEditor extends WContainerWidget{
 								cluster.addTaxus(sequence.getName());
 								alignmentAnalyses.getAlignment().addSequence(sequence);
 							}
+						}
+					}
+				});
+			}
+		});
+
+		autoCreateVirusToolB.clicked().addListener(autoCreateVirusToolB, new Signal.Listener() {
+			public void trigger() {
+				final WDialog d = new WDialog("Auto create virus tool");
+				d.show();
+				final WPushButton close = new WPushButton("Close", d.getFooter());
+				close.clicked().addListener(close, new Signal.Listener() {
+					public void trigger() {
+						d.reject();
+					}
+				});
+
+				d.getContents().addWidget(new WText("TaxonomyId "));
+				final WLineEdit taxonomyLE = new WLineEdit(d.getContents());
+
+				d.getContents().addWidget(new WText("<div>Upload alingment FASTA</div>" +
+						"<div>Sequene name format: 'genotype''subtype'_name</div>" +
+						"<div>Example: 1a_AF009606</div>" +
+						"<div>genotype = 1, subtype = a, name = AF009606</div>"));
+				final WFileUpload upload = new WFileUpload(d.getContents());
+				upload.setFilters(".fasta");
+
+				final WPushButton createB = new WPushButton("Create", d.getContents());
+				final WText info = new WText(d.getContents());
+				info.addStyleClass("auto-form-info");
+				info.setInline(false);
+				createB.clicked().addListener(createB, new Signal.Listener() {
+					public void trigger() {
+						upload.upload();
+					}
+				});
+				createB.setMargin(10);
+
+				upload.uploaded().addListener(upload, new Signal.Listener() {
+					public void trigger() {
+						if (upload.getUploadedFiles().size() == 0) 
+							info.setText("Upload file first.");
+
+						try {
+							File fastaAlingmentFile = new File(BlastFileEditor.this.workDir, upload.getClientFileName());
+							fastaAlingmentFile.delete();
+							Files.copy(new File(upload.getSpoolFileName()).toPath(),
+									fastaAlingmentFile.toPath());
+
+							FastaToRega.createTool(taxonomyLE.getText(),
+									fastaAlingmentFile.getAbsolutePath(),
+									BlastFileEditor.this.workDir.getAbsolutePath());
+							info.setText("Tool created.");
+							rereadFiles();
+							dirtyHandler.increaseDirty();
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (ParameterProblemException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (IOException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (FileFormatException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (ParserConfigurationException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (TransformerException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
 						}
 					}
 				});

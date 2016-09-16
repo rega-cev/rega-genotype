@@ -244,7 +244,7 @@
 		${analysis}
 		${ref-taxa}
 		${cluster-table}
-		<div>${add-sequences}${auto-create-pan-viral}</div>
+		<div>${add-sequences}${auto-create-pan-viral}${auto-create-virus-tool}</div>
 	</message>
 
 	<message id="admin.config.cluster-table">
