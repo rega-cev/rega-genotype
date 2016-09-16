@@ -2,15 +2,16 @@ package rega.genotype.ui.admin.file_editor;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
 import rega.genotype.config.ToolManifest;
-import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.Dialogs;
+import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
@@ -122,7 +123,7 @@ public class SimpleFileEditorView extends WContainerWidget{
 								if (destFile.exists())
 									destFile.delete();
 								try {
-									Files.copy(new File(f.getSpoolFileName()).toPath(), destFile.toPath());
+									FileUtils.copyFile(new File(f.getSpoolFileName()), destFile);
 								} catch (IOException e) {
 									e.printStackTrace();
 									Dialogs.infoDialog("Error", "<div>Some files could not be copied (maybe they already exist).</div>" +

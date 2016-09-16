@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +24,7 @@ import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
+import sun.nio.cs.StandardCharsets;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
@@ -200,7 +200,7 @@ public class AddSequencesDialog extends WDialog{
 
 		private SequenceAlignment parseFasta(String fasta, int sequenceType) {
 			try {
-				InputStream stream = new ByteArrayInputStream(fasta.getBytes(StandardCharsets.UTF_8));
+				InputStream stream = new ByteArrayInputStream(fasta.getBytes());
 				SequenceAlignment alignment = new SequenceAlignment(stream,
 						SequenceAlignment.FILETYPE_FASTA, sequenceType);
 				return alignment;
