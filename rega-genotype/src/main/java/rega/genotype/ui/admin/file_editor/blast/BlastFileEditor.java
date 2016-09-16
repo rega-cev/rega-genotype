@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -12,6 +11,8 @@ import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import org.apache.commons.io.FileUtils;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
@@ -41,11 +42,11 @@ import eu.webtoolkit.jwt.Signal.Listener;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.StandardButton;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
-import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
-import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
@@ -169,8 +170,8 @@ public class BlastFileEditor extends WContainerWidget{
 						try {
 							File fastaAlingmentFile = new File(BlastFileEditor.this.workDir, upload.getClientFileName());
 							fastaAlingmentFile.delete();
-							Files.copy(new File(upload.getSpoolFileName()).toPath(),
-									fastaAlingmentFile.toPath());
+							FileUtils.copyFile(new File(upload.getSpoolFileName()),
+									fastaAlingmentFile);
 
 							FastaToRega.createTool(taxonomyLE.getText(),
 									fastaAlingmentFile.getAbsolutePath(),
