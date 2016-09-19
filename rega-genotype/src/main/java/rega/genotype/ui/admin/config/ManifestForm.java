@@ -35,7 +35,7 @@ public class ManifestForm extends FormTemplate{
 	private ToolManifest oldManifest;
 	private File toolDir; // used for id, version validator.
 	
-	public enum ToolType {VirusTool, PanViralTool, HivTool}
+	public enum ToolType {VirusTool, PanViralTool, HivTool, Template}
 
 	public ManifestForm(final ToolManifest manifest, File toolDir, Mode mode) {
 		super(tr("admin.config.tool-config-dialog.manifest"));
@@ -52,6 +52,8 @@ public class ManifestForm extends FormTemplate{
 					return new WString("Pan-viral tool");
 				case VirusTool:
 					return new WString("Virus tool (standard)");
+				case Template:
+					return new WString("Template (contains data to auto create other tools)");
 				}
 				return null;
 			}
@@ -113,8 +115,10 @@ public class ManifestForm extends FormTemplate{
 
 		ToolManifest manifest = new ToolManifest();
 		ToolType toolType = toolTypeModel.getObject(toolTypeCB.getCurrentIndex());
+
 		manifest.setHivTool(toolType == ToolType.HivTool);
 		manifest.setBlastTool(toolType == ToolType.PanViralTool);
+		manifest.setTemplate(toolType == ToolType.Template);
 		manifest.setName(nameLE.getText());
 		manifest.setId(idLE.getText());
 		manifest.setVersion(versionLE.getText());

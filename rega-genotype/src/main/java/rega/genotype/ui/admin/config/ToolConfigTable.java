@@ -105,6 +105,7 @@ public class ToolConfigTable extends Template{
 		final WPushButton editB = new WPushButton("Edit");
 		final WPushButton installB = new WPushButton("Install");
 		final WPushButton newVersionB = new WPushButton("Create new version");
+		final WPushButton autoCreateB = new WPushButton("Auto create");
 		final WPushButton uninstallB = new WPushButton("Uninstall");
 		final WPushButton updateB = new WPushButton("Update");
 		final WPushButton importB = new WPushButton("Import");
@@ -274,38 +275,13 @@ public class ToolConfigTable extends Template{
 
 		newVersionB.clicked().addListener(newVersionB, new Signal.Listener() {
 			public void trigger() {
-				if (table.getSelectedIndexes().size() == 1) {
-					ToolInfo info = proxyModel.getToolInfo(table.getSelectedIndexes().first());
+				createNewersion(table, false);
+			}
+		});
 
-					ToolConfig config = info.getConfig().copy();
-					config.genetareJobDir();
-					config.genetareConfigurationDir(
-							info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1));
-					Settings.getInstance().getConfig().putTool(config);
-					try {
-						Settings.getInstance().getConfig().save();
-						String oldVersionDir = info.getConfig().getConfiguration();
-						FileUtil.copyDirContentRecorsively(new File(oldVersionDir), 
-								config.getConfigurationFile());
-					} catch (IOException e) {
-						e.printStackTrace();
-						assert(false); // coping to new dir should always work.
-					}
-
-					// the manifest was also copied
-					if (config.getToolMenifest() != null) {
-						config.getToolMenifest().setVersion(suggestNewVersion(config, 1));
-						config.getToolMenifest().setPublicationDate(null);
-						config.getToolMenifest().setPublisherName(null);
-						config.getToolMenifest().save(config.getConfiguration());
-					}
-
-					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
-
-					AdminNavigation.setEditToolUrl(
-							config.getToolMenifest().getId(),
-							config.getToolMenifest().getVersion());
-				}
+		autoCreateB.clicked().addListener(autoCreateB, new Signal.Listener() {
+			public void trigger() {
+				createNewersion(table, true);
 			}
 		});
 
@@ -344,6 +320,7 @@ public class ToolConfigTable extends Template{
 
 					editB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
 					newVersionB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
+					autoCreateB.setEnabled(toolInfo.getManifest().isTemplate());
 
 					// only the last version can be updated 
 					updateB.setEnabled(!proxyModel.getToolConfigTableModel().isUpToDate(
@@ -355,7 +332,7 @@ public class ToolConfigTable extends Template{
 						uninstallB.setText("Remove");
 					else
 						uninstallB.setText("Uninstall");
-
+					
 					if (toolInfo.getManifest() != null && toolInfo.getConfig() != null){
 						File zip = new File(Settings.getInstance().getBasePackagedToolsDir() 
 								+ File.separator + toolInfo.getManifest().getUniqueToolId() + ".zip");
@@ -378,6 +355,7 @@ public class ToolConfigTable extends Template{
 					uninstallB.disable();
 					updateB.disable();
 					downloadB.disable();
+					autoCreateB.disable();
 				}
 			}
 		});
@@ -445,6 +423,7 @@ public class ToolConfigTable extends Template{
 		bindWidget("edit", editB);
 		bindWidget("install", installB);
 		bindWidget("new-version", newVersionB);
+		bindWidget("auto-create", autoCreateB);
 		bindWidget("uninstall", uninstallB);
 		bindWidget("update", updateB);
 		bindWidget("import", importB);
@@ -587,5 +566,46 @@ public class ToolConfigTable extends Template{
 		}
 
 		return ans;
+	}
+
+	private void createNewersion(final StandardTableView table, boolean fromTemplate) {
+		if (table.getSelectedIndexes().size() == 1) {
+			ToolInfo info = proxyModel.getToolInfo(table.getSelectedIndexes().first());
+
+			ToolConfig config = info.getConfig().copy();
+			config.genetareJobDir();
+			config.genetareConfigurationDir(
+					info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1));
+			Settings.getInstance().getConfig().putTool(config);
+			try {
+				Settings.getInstance().getConfig().save();
+				String oldVersionDir = info.getConfig().getConfiguration();
+				FileUtil.copyDirContentRecorsively(new File(oldVersionDir), 
+						config.getConfigurationFile());
+			} catch (IOException e) {
+				e.printStackTrace();
+				assert(false); // coping to new dir should always work.
+			}
+
+			// the manifest was also copied
+			if (config.getToolMenifest() != null) {
+				config.getToolMenifest().setVersion(suggestNewVersion(config, 1));
+				config.getToolMenifest().setPublicationDate(null);
+				config.getToolMenifest().setPublisherName(null);
+				if (fromTemplate) {
+					config.getToolMenifest().setName("");
+					config.getToolMenifest().setId("");
+					config.getToolMenifest().setTemplate(false);
+				}
+
+				config.getToolMenifest().save(config.getConfiguration());
+			}
+
+			proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+
+			AdminNavigation.setEditToolUrl(
+					config.getToolMenifest().getId(),
+					config.getToolMenifest().getVersion());
+		}
 	}
 }
