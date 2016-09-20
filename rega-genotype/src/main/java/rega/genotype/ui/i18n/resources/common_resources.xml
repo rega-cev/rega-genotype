@@ -247,6 +247,33 @@
 		<div>${add-sequences}${auto-create-pan-viral}${auto-create-virus-tool}</div>
 	</message>
 
+	<message id="admin.config.ui-file-editor">
+		<h4>Genome File</h4>
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>Upload genome file</td><td>${file-upload}</td></tr>
+		</table>
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>All uploaded genomes</td><td>${uploaded-genomes}</td></tr>
+		</table>
+		${image}
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>Image start</td><td>${image-start}</td></tr>
+  		  <tr><td>Image end</td><td>${image-end}</td></tr>
+  		  <tr><td>Genome start</td><td>${genome-start}</td></tr>
+  		  <tr><td>Genome end</td><td>${genome-end}</td></tr>
+		</table>
+		<h4>Transtalable text</h4>
+		<div>A set of variables that will be presented on the screen and can be different in every tool.</div>
+		<div>messages from resources.xml will be replaced by the given values</div>
+		<div>Example: if variable name = global.authors and value="me" </div>
+		<div>the message &lt;message id=global.authors &gt; &lt;/message&gt;  will be replaced be "me"</div>
+		
+		${placeholders}
+	</message>
+
 	<message id="admin.config.cluster-table">
 		${cluster-table}
 		<div>${add}${edit}${remove}</div>

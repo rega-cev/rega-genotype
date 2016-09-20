@@ -11,6 +11,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest.FileType;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.Genome;
 
 /**
  * Utility class to read config.xml
@@ -41,6 +42,47 @@ public class ConfigXmlReader {
 			}
 
 		return ans;
+	}
+
+	public static Genome readGenome(File xmlDir) {
+		SAXBuilder builder = new SAXBuilder();
+		Document document;
+		try {
+			document = builder.build(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+			return null;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+		Element root = document.getRootElement();
+		Element genomeE = root.getChild("genome");
+		Genome genome = new Genome();
+		if (genomeE != null) {
+			try {
+				Element start = genomeE.getChild("start");
+				if (start != null)
+					genome.genomeStart = Integer.valueOf(start.getValue());
+
+				Element end = genomeE.getChild("end");
+				if (end != null)
+					genome.genomeEnd = Integer.valueOf(end.getValue());
+
+				Element imageStart = genomeE.getChild("image-start");
+				if (imageStart != null)
+					genome.imageStart = Integer.valueOf(imageStart.getValue());
+
+				Element imageEnd = genomeE.getChild("image-end");
+				if (imageEnd != null)
+					genome.imageEnd = Integer.valueOf(imageEnd.getValue());
+
+			} catch (NumberFormatException e) {
+				return null;
+			}
+		}
+
+		return genome;
 	}
 
 	// classes

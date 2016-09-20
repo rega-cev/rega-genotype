@@ -144,7 +144,7 @@ public class BlastFileEditor extends WContainerWidget{
 					}
 				});
 
-				d.getContents().addWidget(new WText("TaxonomyId "));
+				d.getContents().addWidget(new WText("Scientific name "));
 				final WLineEdit taxonomyLE = new WLineEdit(d.getContents());
 
 				d.getContents().addWidget(new WText("<div>Upload alingment FASTA</div>" +

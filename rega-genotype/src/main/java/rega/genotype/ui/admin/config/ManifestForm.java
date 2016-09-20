@@ -69,7 +69,9 @@ public class ManifestForm extends FormTemplate{
 				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.PanViralTool));
 			else if (manifest.isHivTool())
 				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.HivTool));
-			else
+			else if (manifest.isTemplate())
+				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.Template));
+			else 
 				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.VirusTool));
 			versionLE.setText(manifest.getVersion());
 			taxonomyT.setTaxonomyIdText(manifest.getTaxonomyId());

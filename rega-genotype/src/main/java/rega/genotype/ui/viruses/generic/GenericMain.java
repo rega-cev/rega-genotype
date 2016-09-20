@@ -21,10 +21,12 @@ import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.RegaLocalizedString;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.util.FileServlet;
 import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WCombinedLocalizedStrings;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
@@ -95,10 +97,15 @@ public class GenericMain extends GenotypeMain {
 			return app;
 		}
 		
+		WCombinedLocalizedStrings combined = new WCombinedLocalizedStrings();
+
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
 		resources.use(definition.getXmlPath() + File.separator + "resources");
-		app.setLocalizedStrings(resources);
+
+		combined.add(new RegaLocalizedString());
+		combined.add(resources);
+		app.setLocalizedStrings(combined);
 		
 		app.setTitle(WString.tr("tool.title"));
 

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import rega.genotype.singletons.Settings;
-import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 
 /**
  * Serve files on a url.
@@ -24,14 +23,20 @@ public class FileServlet extends HttpServlet {
 	private static String SERVLET_PATH;
 	private static String TOOL_URL_PARAM = "toolUrl";
 	private static String IMAGE_NAME_PARAM = "id";
+	private static String FILE_EDITOR_PARAM = "file-editor";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String id = req.getParameter(IMAGE_NAME_PARAM);
 		String toolUrl = req.getParameter(TOOL_URL_PARAM);
+		String fileEditorUrl = req.getParameter(FILE_EDITOR_PARAM);
 
-		File file = getFilePath(toolUrl, id);
+		File file;
+		if (fileEditorUrl != null) 
+			file = new File("./base-work-dir/job/file_editor/" + fileEditorUrl, id);
+		else
+			file = getFilePath(toolUrl, id);
 
 		if (file == null || !file.exists()) {
 			resp.setStatus(404);
@@ -57,6 +62,11 @@ public class FileServlet extends HttpServlet {
 	public static String getFileUrl(String toolUrl) {
 		// Organism dir.
 		return SERVLET_PATH + "?" + TOOL_URL_PARAM + "=" + toolUrl + "&" + IMAGE_NAME_PARAM + "=";
+	}
+
+	public static String getFileEditorUrl(String workDir) {
+		// Organism dir.
+		return SERVLET_PATH + "?" + FILE_EDITOR_PARAM + "=" + workDir + "&" + IMAGE_NAME_PARAM + "=";
 	}
 
 	private boolean isInDir(File file, File dir) {

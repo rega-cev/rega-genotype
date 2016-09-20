@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
+import rega.genotype.config.XmlPlaceholders;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyWidget;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.util.FileServlet;
@@ -43,15 +44,8 @@ public class Template extends WTemplate{
 		GenotypeApplication app = GenotypeApplication.getGenotypeApplication();
 		if (app != null && varName.equals("resource-file"))
 			bindString(varName, FileServlet.getFileUrl(app.getToolConfig().getPath()));
-		else if(app != null && varName.equals("taxonomy-widget")) {
+		else if(app != null && varName.equals("taxonomy-widget"))
 			bindWidget(varName, new TaxonomyWidget(app.getToolConfig()));
-		} else if(app != null && varName.equals("global-variable.tool-name")) 
-			bindString(varName, app.getToolConfig().getToolMenifest().getName());
-		else if(app != null && varName.equals("global-variable.tool-version")) 
-			bindString(varName, app.getToolConfig().getToolMenifest().getVersion());
-		else if(app != null && varName.equals("global-variable.virus-name")) 
-			bindString(varName, app.getToolConfig().getToolMenifest().getTaxonomyId());
-			
 
 		super.resolveString(varName, args, result);
 	}
