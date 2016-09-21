@@ -45,10 +45,14 @@ public class ConfigXmlReader {
 	}
 
 	public static Genome readGenome(File xmlDir) {
+		File configFile = new File(xmlDir.getAbsolutePath(), "config.xml");
+		if (!configFile.exists())
+			return null;
+
 		SAXBuilder builder = new SAXBuilder();
 		Document document;
-		try {
-			document = builder.build(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+		try {			
+			document = builder.build(configFile);
 		} catch (JDOMException e1) {
 			e1.printStackTrace();
 			return null;

@@ -334,13 +334,14 @@ public class UiFileEditor extends FormTemplate{
 		protected void paintEvent(WPaintDevice paintDevice) {
 			WPainter painter = new WPainter(paintDevice);
 
-			String url = FileServlet.getFileEditorUrl(
-					workDir.getName()) + imageFile.getName() 
-					+ "&" + "counter=" + counter;
-			counter++;
-			Image image = new Image(url, imageFile.getAbsolutePath());
-			painter.drawImage(0.0, 0.0, image);
-
+			if (imageFile != null) {
+				String url = FileServlet.getFileEditorUrl(
+						workDir.getName()) + imageFile.getName() 
+						+ "&" + "counter=" + counter;
+				counter++;
+				Image image = new Image(url, imageFile.getAbsolutePath());
+				painter.drawImage(0.0, 0.0, image);
+			}
 			painter.setBrush(new WBrush(new WColor(50, 150, 50, 50)));
 			painter.drawPath(path);
 
