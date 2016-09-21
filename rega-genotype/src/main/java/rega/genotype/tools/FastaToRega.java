@@ -42,6 +42,30 @@ import rega.genotype.SequenceAlignment;
  */
 public class FastaToRega {
 
+	public enum AnalysisType {
+		Major, Minor;
+
+		private int analysisNumber = 0;
+
+		public String analysisName() {
+			switch (this) {
+			case Major: return "phylo-major";
+			case Minor: 
+				return "phylo-minor-" + analysisNumber;
+			}
+			return "";
+		}
+
+		public int getAnalysisNumber() {
+			return analysisNumber;
+		}
+
+		public void setAnalysisNumber(int analysisNumber) {
+			this.analysisNumber = analysisNumber;
+		}
+
+	}
+
 	private static class Sequence {
 		String genotype = null;
 		String subtype = null;
@@ -110,7 +134,7 @@ public class FastaToRega {
 		Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences = new LinkedHashMap<String, Map<String, List<Sequence>>>();
 		for (Entry<String, List<Sequence>> a : genotypeToSequences.entrySet()) {
 			Map<String, List<Sequence>> subtypeMap = new HashMap<String, List<Sequence>>();
-			
+
 			for (Sequence seq : a.getValue()) {
 				if (subtypeMap.get(seq.subtype) == null)
 					subtypeMap.put(seq.subtype, new ArrayList<Sequence>());
@@ -192,7 +216,7 @@ public class FastaToRega {
 					throws ParserConfigurationException {
 		Document doc = newDocument();
 		List<String> clusterIds = new ArrayList<String>();
-		
+
 		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, filename);
 		Element clustersElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
 		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
@@ -225,7 +249,7 @@ public class FastaToRega {
 				clusterIds.add(subtypeClusterId);
 				subtypeClusterElem.setAttribute("id", subtypeClusterId);
 				subtypeClusterElem.setAttribute("name", subtypeDesc);
-				
+
 				for (Sequence seq : subtypeSeqs) {
 					Element taxusElem = (Element) subtypeClusterElem.appendChild(doc.createElement("taxus"));
 					taxusElem.setAttribute("name", seq.id);
@@ -233,12 +257,37 @@ public class FastaToRega {
 			};
 		};
 
+		createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, AnalysisType.Major);
+
+		int n = 1;
+		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
+			clusterIds.clear();
+			Map<String, List<Sequence>> subtypeToSequences = i.getValue();
+			for (Entry<String, List<Sequence>> j : subtypeToSequences.entrySet()) {
+				if (!j.getKey().isEmpty()) {
+					clusterIds.add(i.getKey() + j.getKey());
+					AnalysisType minor = AnalysisType.Minor;
+					minor.setAnalysisNumber(n);
+					n++;
+					createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, minor);
+				}
+			}
+		}
+
+
+		return doc;
+	}
+
+	private static Element createAnalysisElement(Document doc,
+			List<String> clusterIds, Element genotypeAnalysesElem,
+			AnalysisType analysisType) {
+
 		Element analysisElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("analysis"));
-		analysisElem.setAttribute("id", "phylo-major");
+		analysisElem.setAttribute("id", analysisType.analysisName());
 		analysisElem.setAttribute("type", "paup");
 
 		Element identifyElem = (Element) analysisElem.appendChild(doc.createElement("identify"));
-		
+
 		String identifyStr = "";
 		for (String s : clusterIds) {
 			if (!identifyStr.isEmpty())
@@ -269,9 +318,8 @@ public class FastaToRega {
 		Element optionsElem = (Element) analysisElem.appendChild(doc.createElement("options"));
 		optionsElem.appendChild(doc.createTextNode("\n          log,alignment,tree\n        "));
 
-		return doc;
+		return analysisElem;
 	}
-
 
 	private static Document newDocument() throws ParserConfigurationException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
