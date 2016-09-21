@@ -41,6 +41,7 @@ import rega.genotype.SequenceAlignment;
  * Auto create phylo- and blast xmls from fasta alignment file.
  */
 public class FastaToRega {
+	private static final String OUT_GROUP_NAME = "X";
 
 	public enum AnalysisType {
 		Major, Minor;
@@ -90,7 +91,7 @@ public class FastaToRega {
 
 	public static void createTool(String taxonomyId, String fastaAlingmentFile, String toolDir) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ParserConfigurationException, TransformerException {
 		// may need to update pattern to extract genotype string from FASTA seq id
-		Pattern pattern = Pattern.compile("(\\d)([^_]*)\\??_.*");;
+		Pattern pattern = Pattern.compile("(\\d[^_]*)\\??_.*");;
 
 		List<Sequence> sequences = new ArrayList<Sequence>();
 
@@ -105,6 +106,13 @@ public class FastaToRega {
 				String genotypeSubtype = matcher.group(1);
 				sequence.genotype = genotypeSubtype.substring(0, 1);
 				sequence.subtype = genotypeSubtype.substring(1);
+				sequence.data = seq.getSequence();
+				sequences.add(sequence);
+			} else if (seq.getName().startsWith(OUT_GROUP_NAME)) {
+				Sequence sequence = new Sequence();
+				sequence.id = seq.getName();
+				sequence.genotype = OUT_GROUP_NAME;
+				sequence.subtype = "";
 				sequence.data = seq.getSequence();
 				sequences.add(sequence);
 			}
@@ -216,26 +224,36 @@ public class FastaToRega {
 					throws ParserConfigurationException {
 		Document doc = newDocument();
 		List<String> clusterIds = new ArrayList<String>();
+		Map<String, List<Sequence>> majorList = new HashMap<String, List<Sequence>>();
 
+		String outgroupName = null;
 		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, filename);
 		Element clustersElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
 		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
 			String genotype = i.getKey();
 			Map<String, List<Sequence>> subtypeToSequences = i.getValue();
 			Element parentElem = clustersElem;
-			if(subtypeToSequences.size() > 1) {
-				Element genotypeClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
-				String genotypeClusterId = "Geno_"+genotype;
-				clusterIds.add(genotypeClusterId);
-				genotypeClusterElem.setAttribute("id", genotypeClusterId);
-				genotypeClusterElem.setAttribute("name", "Genotype "+genotype);
-				parentElem = genotypeClusterElem;
-			}
+			clusterIds.add(genotype);
+//			if(subtypeToSequences.size() > 1) {
+//				Element genotypeClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
+//				String genotypeClusterId = "Geno_"+genotype;
+//				clusterIds.add(genotypeClusterId);
+//				genotypeClusterElem.setAttribute("id", genotypeClusterId);
+//				genotypeClusterElem.setAttribute("name", "Genotype "+genotype);
+//				parentElem = genotypeClusterElem;
+//			}
 			final Element subtypeParentElem = parentElem;
 
 			for (Entry<String, List<Sequence>> j : subtypeToSequences.entrySet()) {
 				String subtype = j.getKey();
 				List<Sequence> subtypeSeqs = j.getValue();
+				if (genotype.equals(OUT_GROUP_NAME) && subtypeSeqs.size() > 0)
+					outgroupName = subtypeSeqs.get(0).id; // save out group name
+
+				if (!majorList.containsKey(genotype)) 
+					majorList.put(genotype, new ArrayList<Sequence>());
+				majorList.get(genotype).add(subtypeSeqs.get(0));
+				
 				Element subtypeClusterElem = (Element) subtypeParentElem.appendChild(doc.createElement("cluster"));
 				String subtypeClusterId;
 				String subtypeDesc;
@@ -246,7 +264,7 @@ public class FastaToRega {
 					subtypeDesc = "Genotype "+genotype+" subtype "+subtype;
 					subtypeClusterId = genotype+subtype;
 				}
-				clusterIds.add(subtypeClusterId);
+				//clusterIds.add(subtypeClusterId);
 				subtypeClusterElem.setAttribute("id", subtypeClusterId);
 				subtypeClusterElem.setAttribute("name", subtypeDesc);
 
@@ -257,30 +275,43 @@ public class FastaToRega {
 			};
 		};
 
-		createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, AnalysisType.Major);
+		for (Map.Entry<String, List<Sequence>> e: majorList.entrySet()) {
+			String genotype  = e.getKey();
+			List<Sequence> sequences = e.getValue();
+			Element majorClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
+			majorClusterElem.setAttribute("id", genotype);
+			majorClusterElem.setAttribute("name", "Genotype " + genotype);
+			for (Sequence seq : sequences) {
+				Element taxusElem = (Element) majorClusterElem.appendChild(doc.createElement("taxus"));
+				taxusElem.setAttribute("name", seq.id);
+			};
+		}
+		
+
+		createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, AnalysisType.Major, outgroupName);
 
 		int n = 1;
 		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
 			clusterIds.clear();
 			Map<String, List<Sequence>> subtypeToSequences = i.getValue();
-			for (Entry<String, List<Sequence>> j : subtypeToSequences.entrySet()) {
-				if (!j.getKey().isEmpty()) {
-					clusterIds.add(i.getKey() + j.getKey());
-					AnalysisType minor = AnalysisType.Minor;
-					minor.setAnalysisNumber(n);
-					n++;
-					createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, minor);
+			if (!i.getKey().equals(OUT_GROUP_NAME))
+				for (Entry<String, List<Sequence>> j : subtypeToSequences.entrySet()) {
+					if (!j.getKey().isEmpty()) { 
+						clusterIds.add(i.getKey() + j.getKey());
+					}
 				}
-			}
+			AnalysisType minor = AnalysisType.Minor;
+			minor.setAnalysisNumber(n);
+			n++;
+			createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, minor, outgroupName);
 		}
-
 
 		return doc;
 	}
 
 	private static Element createAnalysisElement(Document doc,
 			List<String> clusterIds, Element genotypeAnalysesElem,
-			AnalysisType analysisType) {
+			AnalysisType analysisType, String outgroupName) {
 
 		Element analysisElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("analysis"));
 		analysisElem.setAttribute("id", analysisType.analysisName());
@@ -299,14 +330,16 @@ public class FastaToRega {
 		Element cutoffElem = (Element) analysisElem.appendChild(doc.createElement("cutoff"));
 		cutoffElem.appendChild(doc.createTextNode("\n          70\n        "));
 
+		String outgroup = (outgroupName == null) ? "" : "              outgroup " + outgroupName + ";\n";
+
 		Element blockElem = (Element) analysisElem.appendChild(doc.createElement("block"));
 		blockElem.appendChild(doc.createTextNode("\n"+
 				"              begin paup;\n"+
 				"              log file=paup.log replace=yes;\n"+
 				"              exclude gapped;\n"+
 				"              export format=nexus file=paup.nex replace=yes;\n"+
-				//				"              outgroup 4a.ED43;\n"+ // need a different outgroup?
-				"              set criterion=distance outroot=monophyl;\n"+
+				outgroup +
+				"              set criterion=distance outroot=monophyl;\n" +
 				"              dset distance=HKY NegBrLen=Prohibit;\n"+
 				"              NJ;\n"+
 				"              savetree format=nexus brlens=yes file=paup.tre replace=yes;\n"+
@@ -316,7 +349,7 @@ public class FastaToRega {
 				"        "));
 
 		Element optionsElem = (Element) analysisElem.appendChild(doc.createElement("options"));
-		optionsElem.appendChild(doc.createTextNode("\n          log,alignment,tree\n        "));
+		optionsElem.appendChild(doc.createTextNode("\n          log,alignment,tree,inner,outer\n        "));
 
 		return analysisElem;
 	}

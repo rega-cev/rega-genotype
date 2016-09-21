@@ -150,7 +150,8 @@ public class BlastFileEditor extends WContainerWidget{
 				d.getContents().addWidget(new WText("<div>Upload alingment FASTA</div>" +
 						"<div>Sequene name format: 'genotype''subtype'_name</div>" +
 						"<div>Example: 1a_AF009606</div>" +
-						"<div>genotype = 1, subtype = a, name = AF009606</div>"));
+						"<div>genotype = 1, subtype = a, name = AF009606</div>" +
+						"<div>Out group is marked by 'X' so out group sequence name can be >X or >X_AF009606</div>"));
 				final WFileUpload upload = new WFileUpload(d.getContents());
 				upload.setFilters(".fasta");
 
