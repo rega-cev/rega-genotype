@@ -21,8 +21,6 @@ import eu.webtoolkit.jwt.WtServlet;
 @SuppressWarnings("serial")
 public abstract class GenotypeMain extends WtServlet
 {
-	protected Settings settings;
-
 	public GenotypeMain() {
 		super();		
 		// progressive bootstrap is broken because Wt is not aware of image URLs in documentation forms 
@@ -35,12 +33,12 @@ public abstract class GenotypeMain extends WtServlet
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		Settings.initSettings(this.settings = Settings.getInstance(config.getServletContext()));
+		Settings.initSettings(Settings.getInstance(config.getServletContext()));
 		
 		super.init(config);
 	}	
 
 	public Settings getSettings() {
-		return settings;
+		return Settings.getInstance();
 	}
 }

@@ -57,14 +57,14 @@ public class GenericMain extends GenotypeMain {
 		getConfiguration().setFavicon("/"+deploymentPath[1]+"/pics/favicon1.ico");
 		ToolConfig toolConfig;
 
-		if (settings.getConfig() == null 
-				|| settings.getConfig().getToolConfigByUrlPath(url) == null
-				|| settings.getConfig().getToolConfigByUrlPath(url).getUniqueToolId() == null) {			
+		if (getSettings().getConfig() == null 
+				|| getSettings().getConfig().getToolConfigByUrlPath(url) == null
+				|| getSettings().getConfig().getToolConfigByUrlPath(url).getUniqueToolId() == null) {			
 			WApplication app = new WApplication(env);
 			app.getRoot().addWidget(new WText("Typing tool for organism " + url + " was not found."));
 			return app;
 		} else 
-			toolConfig = settings.getConfig().getToolConfigByUrlPath(url);
+			toolConfig = getSettings().getConfig().getToolConfigByUrlPath(url);
 
 		if (!toolConfig.isUi()) {
 			WApplication app = new WApplication(env);
@@ -76,7 +76,7 @@ public class GenericMain extends GenotypeMain {
 		GenotypeApplication app;
 		try {
 			app = new GenotypeApplication(env, 
-					this.getServletContext(), settings, urlComponent);
+					this.getServletContext(), getSettings(), urlComponent);
 		} catch (RegaGenotypeExeption e1) {
 			e1.printStackTrace();
 			WApplication a = new WApplication(env);

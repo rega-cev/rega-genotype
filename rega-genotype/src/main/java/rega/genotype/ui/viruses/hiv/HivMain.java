@@ -43,7 +43,7 @@ public class HivMain extends GenotypeMain {
 	@Override
 	public WApplication createApplication(WEnvironment env) {
 		
-		if (settings.getConfig().getToolConfigByUrlPath(HIV_TOOL_ID) == null) {
+		if (getSettings().getConfig().getToolConfigByUrlPath(HIV_TOOL_ID) == null) {
 			WApplication app = new WApplication(env);
 			app.getRoot().addWidget(
 					new WText("Typing tool for " + HIV_TOOL_ID
@@ -53,7 +53,7 @@ public class HivMain extends GenotypeMain {
 
 		GenotypeApplication app;
 		try {
-			app = new GenotypeApplication(env, this.getServletContext(), settings, HIV_TOOL_ID);
+			app = new GenotypeApplication(env, this.getServletContext(), getSettings(), HIV_TOOL_ID);
 		} catch (RegaGenotypeExeption e) {
 			e.printStackTrace();
 			WApplication a = new WApplication(env);
@@ -61,7 +61,7 @@ public class HivMain extends GenotypeMain {
 			return a;
 		}
 
-		ToolConfig toolConfig = settings.getConfig().getToolConfigByUrlPath(HIV_TOOL_ID);
+		ToolConfig toolConfig = getSettings().getConfig().getToolConfigByUrlPath(HIV_TOOL_ID);
 		
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
