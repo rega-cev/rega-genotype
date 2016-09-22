@@ -729,6 +729,9 @@ public class BlastAnalysis extends AbstractAnalysis {
 			if (start == Integer.MAX_VALUE)
 				start = -1;
 
+			if (refseq == null)
+				refseq = new ReferenceTaxus(best[BLAST_RESULT_SUBJECT_ID_IDX], 1);
+
 			Result result = ba.createResult(sequence, bestClusters, refseq,
 					absScore, relativeScore, similarity, relativeSimilarity, length, diffs, start, end, reverseCompliment);
 
