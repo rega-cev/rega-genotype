@@ -39,6 +39,22 @@ import rega.genotype.SequenceAlignment;
 
 /**
  * Auto create phylo- and blast xmls from fasta alignment file.
+ * Syntax: {genotype}{sub-type}_{sequence name}
+ * example:1a_AF123456
+ * genotype = 1
+ * sub-type = a
+ * 
+ * phylo-major: identify genotype -> 1 cluster per genotype
+ * phylo-minor: identify sub-type -> 1 cluster per sub-type
+ * example: fasta names
+ * >1a_AF111111
+ * >1a_AF123456
+ * >1b_
+ * >2a_
+ * 
+ * That will auto generate:
+ * 2 clusters for phylo major: 1,2
+ * 3 clusters for phylo minor: 1a,1b,2a
  */
 public class FastaToRega {
 	private static final String OUT_GROUP_NAME = "X";
@@ -226,6 +242,8 @@ public class FastaToRega {
 		List<String> clusterIds = new ArrayList<String>();
 		Map<String, List<Sequence>> majorList = new HashMap<String, List<Sequence>>();
 
+		// Add sub type clusters, needed for phylo minor. (<identify> 1a,1b,1c,... )
+
 		String outgroupName = null;
 		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, filename);
 		Element clustersElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
@@ -234,14 +252,6 @@ public class FastaToRega {
 			Map<String, List<Sequence>> subtypeToSequences = i.getValue();
 			Element parentElem = clustersElem;
 			clusterIds.add(genotype);
-//			if(subtypeToSequences.size() > 1) {
-//				Element genotypeClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
-//				String genotypeClusterId = "Geno_"+genotype;
-//				clusterIds.add(genotypeClusterId);
-//				genotypeClusterElem.setAttribute("id", genotypeClusterId);
-//				genotypeClusterElem.setAttribute("name", "Genotype "+genotype);
-//				parentElem = genotypeClusterElem;
-//			}
 			final Element subtypeParentElem = parentElem;
 
 			for (Entry<String, List<Sequence>> j : subtypeToSequences.entrySet()) {
@@ -266,7 +276,6 @@ public class FastaToRega {
 					subtypeDesc = "Genotype "+genotype+" subtype "+subtype;
 					subtypeClusterId = genotype+subtype;
 				}
-				//clusterIds.add(subtypeClusterId);
 				subtypeClusterElem.setAttribute("id", subtypeClusterId);
 				subtypeClusterElem.setAttribute("name", subtypeDesc);
 
@@ -276,6 +285,8 @@ public class FastaToRega {
 				};
 			};
 		};
+
+		// Add genotype clusters, needed for phylo major. (<identify> 1,2,3,... )
 
 		for (Map.Entry<String, List<Sequence>> e: majorList.entrySet()) {
 			String genotype  = e.getKey();
@@ -337,6 +348,7 @@ public class FastaToRega {
 		String outgroup = "";
 		String method = "outroot=monophyl";
 
+		//Note: paup crashes when adding outgroup to phylo-minor.
 		if (outgroupName != null && analysisType == AnalysisType.Major){
 			outgroup = "              outgroup " + outgroupName + ";\n";
 			method = "rootmethod=midpoint";
