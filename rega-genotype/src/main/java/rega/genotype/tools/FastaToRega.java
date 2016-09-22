@@ -250,10 +250,12 @@ public class FastaToRega {
 				if (genotype.equals(OUT_GROUP_NAME) && subtypeSeqs.size() > 0)
 					outgroupName = subtypeSeqs.get(0).id; // save out group name
 
-				if (!majorList.containsKey(genotype)) 
-					majorList.put(genotype, new ArrayList<Sequence>());
-				majorList.get(genotype).add(subtypeSeqs.get(0));
-				
+				if (!subtype.isEmpty()) {
+					if (!majorList.containsKey(genotype)) 
+						majorList.put(genotype, new ArrayList<Sequence>());
+					majorList.get(genotype).add(subtypeSeqs.get(0));
+				}
+
 				Element subtypeClusterElem = (Element) subtypeParentElem.appendChild(doc.createElement("cluster"));
 				String subtypeClusterId;
 				String subtypeDesc;
@@ -300,10 +302,12 @@ public class FastaToRega {
 						clusterIds.add(i.getKey() + j.getKey());
 					}
 				}
-			AnalysisType minor = AnalysisType.Minor;
-			minor.setAnalysisNumber(n);
-			n++;
-			createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, minor, outgroupName);
+			if (!clusterIds.isEmpty()) {
+				AnalysisType minor = AnalysisType.Minor;
+				minor.setAnalysisNumber(n);
+				n++;
+				createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, minor, outgroupName);
+			}
 		}
 
 		return doc;
