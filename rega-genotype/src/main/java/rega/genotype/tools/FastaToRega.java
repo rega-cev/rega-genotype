@@ -334,8 +334,13 @@ public class FastaToRega {
 		Element cutoffElem = (Element) analysisElem.appendChild(doc.createElement("cutoff"));
 		cutoffElem.appendChild(doc.createTextNode("\n          70\n        "));
 
-		String outgroup = (outgroupName == null) ? "" : "              outgroup " + outgroupName + ";\n";
-		String method = (outgroupName == null) ? "outroot=monophyl" : "rootmethod=midpoint";
+		String outgroup = "";
+		String method = "outroot=monophyl";
+
+		if (outgroupName != null && analysisType == AnalysisType.Major){
+			outgroup = "              outgroup " + outgroupName + ";\n";
+			method = "rootmethod=midpoint";
+		}
 
 		Element blockElem = (Element) analysisElem.appendChild(doc.createElement("block"));
 		blockElem.appendChild(doc.createTextNode("\n"+
