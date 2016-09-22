@@ -335,6 +335,7 @@ public class FastaToRega {
 		cutoffElem.appendChild(doc.createTextNode("\n          70\n        "));
 
 		String outgroup = (outgroupName == null) ? "" : "              outgroup " + outgroupName + ";\n";
+		String method = (outgroupName == null) ? "outroot=monophyl" : "rootmethod=midpoint";
 
 		Element blockElem = (Element) analysisElem.appendChild(doc.createElement("block"));
 		blockElem.appendChild(doc.createTextNode("\n"+
@@ -342,8 +343,8 @@ public class FastaToRega {
 				"              log file=paup.log replace=yes;\n"+
 				"              exclude gapped;\n"+
 				"              export format=nexus file=paup.nex replace=yes;\n"+
+				"              set criterion=distance " + method + ";\n" +
 				outgroup +
-				"              set criterion=distance outroot=monophyl;\n" +
 				"              dset distance=HKY NegBrLen=Prohibit;\n"+
 				"              NJ;\n"+
 				"              savetree format=nexus brlens=yes file=paup.tre replace=yes;\n"+
