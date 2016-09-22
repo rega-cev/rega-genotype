@@ -6,20 +6,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.apache.commons.io.FileUtils;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
+import rega.genotype.tools.FastaToRega;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
 import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.widgets.Dialogs;
@@ -36,13 +45,14 @@ import eu.webtoolkit.jwt.Signal.Listener;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.StandardButton;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
-import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
-import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
@@ -73,6 +83,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 		final WPushButton addSequencesB = new WPushButton("Add sequences");
 		final WPushButton autoCreatePanViralToolB = new WPushButton("Auto create pav-viral tool");
+		final WPushButton autoCreateVirusToolB = new WPushButton("Auto create virus tool");
 
 		alignmentAnalyses = readBlastXml(workDir);
 
@@ -100,6 +111,7 @@ public class BlastFileEditor extends WContainerWidget{
 		layout.bindWidget("ref-taxa", refTaxaPanel);
 		layout.bindWidget("add-sequences", addSequencesB);
 		layout.bindWidget("auto-create-pan-viral", autoCreatePanViralToolB);
+		layout.bindWidget("auto-create-virus-tool", autoCreateVirusToolB);
 
 		addSequencesB.clicked().addListener(addSequencesB, new Signal.Listener() {
 			public void trigger() {
@@ -115,6 +127,80 @@ public class BlastFileEditor extends WContainerWidget{
 								cluster.addTaxus(sequence.getName());
 								alignmentAnalyses.getAlignment().addSequence(sequence);
 							}
+						}
+					}
+				});
+			}
+		});
+
+		autoCreateVirusToolB.clicked().addListener(autoCreateVirusToolB, new Signal.Listener() {
+			public void trigger() {
+				final WDialog d = new WDialog("Auto create virus tool");
+				d.show();
+				final WPushButton close = new WPushButton("Close", d.getFooter());
+				close.clicked().addListener(close, new Signal.Listener() {
+					public void trigger() {
+						d.reject();
+					}
+				});
+
+				d.getContents().addWidget(new WText("Scientific name "));
+				final WLineEdit taxonomyLE = new WLineEdit(d.getContents());
+
+				d.getContents().addWidget(new WText("<div>Upload alingment FASTA</div>" +
+						"<div>Sequene name format: 'genotype''subtype'_name</div>" +
+						"<div>Example: 1a_AF009606</div>" +
+						"<div>genotype = 1, subtype = a, name = AF009606</div>" +
+						"<div>Out group is marked by 'X' so out group sequence name can be >X or >X_AF009606</div>"));
+				final WFileUpload upload = new WFileUpload(d.getContents());
+				upload.setFilters(".fasta");
+
+				final WPushButton createB = new WPushButton("Create", d.getContents());
+				final WText info = new WText(d.getContents());
+				info.addStyleClass("auto-form-info");
+				info.setInline(false);
+				createB.clicked().addListener(createB, new Signal.Listener() {
+					public void trigger() {
+						upload.upload();
+					}
+				});
+				createB.setMargin(10);
+
+				upload.uploaded().addListener(upload, new Signal.Listener() {
+					public void trigger() {
+						if (upload.getUploadedFiles().size() == 0) 
+							info.setText("Upload file first.");
+
+						try {
+							File fastaAlingmentFile = new File(BlastFileEditor.this.workDir, upload.getClientFileName());
+							fastaAlingmentFile.delete();
+							FileUtils.copyFile(new File(upload.getSpoolFileName()),
+									fastaAlingmentFile);
+
+							FastaToRega.createTool(taxonomyLE.getText(),
+									fastaAlingmentFile.getAbsolutePath(),
+									BlastFileEditor.this.workDir.getAbsolutePath());
+							info.setText("Tool created.");
+							rereadFiles();
+							dirtyHandler.increaseDirty();
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (ParameterProblemException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (IOException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (FileFormatException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (ParserConfigurationException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
+						} catch (TransformerException e) {
+							e.printStackTrace();
+							info.setText("Error: " + e.getMessage());
 						}
 					}
 				});
@@ -168,6 +254,41 @@ public class BlastFileEditor extends WContainerWidget{
 									AlignmentAnalyses alignmentAnalyses = autoCreatePanViral.createAlignmentAnalyses(
 											new File(upload.getSpoolFileName()));
 
+									// Add taxa that are not present in old file.
+									
+									Map<String, Cluster> newClusterMap = new HashMap<String, AlignmentAnalyses.Cluster>();
+									Map<String, Taxus> newTaxaMap = new HashMap<String, AlignmentAnalyses.Taxus>();
+									for (Cluster c: alignmentAnalyses.getAllClusters()) {
+										newClusterMap.put(c.getId(), c);
+										for (Taxus t:c.getTaxa()){
+											newTaxaMap.put(t.getId(), t);
+										}
+									}
+
+									List<Cluster> oldClusters = BlastFileEditor.this.alignmentAnalyses.getAllClusters();
+									for(Cluster c:oldClusters) {
+										for (Taxus t:c.getTaxa()){
+											if(!newTaxaMap.containsKey(t.getId())) {
+												Cluster newCluster = newClusterMap.get(c.getId());
+												if (newCluster == null){
+													// Note cluster parent is not important for pan-viral tool since it is used only in phylogeny
+													newCluster = new Cluster(
+															c.getId(), c.getName(), c.getDescription(), 
+															c.getTags(), c.getTaxonomyId());
+													newClusterMap.put(c.getId(), newCluster);
+													alignmentAnalyses.addCluster(newCluster);
+												} 
+												newCluster.addTaxus(new Taxus(t.getId()));
+												// assume that we do not get here a lot.
+												AbstractSequence sequence = BlastFileEditor.this.alignmentAnalyses.getAlignment().getSequence(t.getId());
+												alignmentAnalyses.getAlignment().addSequence(new Sequence(
+														sequence.getName(), sequence.isNameCapped(), 
+														sequence.getDescription(), sequence.getSequence(), null));
+											}
+										}
+									}
+
+									// write the results.
 									new BlastXmlWriter(BlastFileEditor.blastFile(BlastFileEditor.this.workDir), alignmentAnalyses);
 									alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(BlastFileEditor.fastaFile(BlastFileEditor.this.workDir)),
 											SequenceAlignment.FILETYPE_FASTA);

@@ -515,6 +515,7 @@ public class PhyloClusterAnalysis extends AbstractAnalysis {
             Map<String,Float> result = new HashMap<String, Float>();
 
             if (!finds1.isEmpty()) {
+                // If you see: "java.lang.ArithmeticException: / by zero" check that you are using the correct version of paup.
                 int r = finds1.size() / finds2.size();
                 
                 for (int i = 0; i < finds2.size(); ++i) {

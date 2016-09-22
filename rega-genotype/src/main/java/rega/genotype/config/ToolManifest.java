@@ -25,6 +25,7 @@ public class ToolManifest {
 	private String taxonomyId; // genus id from unirpot database, can be empty for pan-viral tools.
 	private boolean blastTool;
 	private boolean hivTool; //HIV tool is not generic and thus must have url = hiv.
+	private boolean template; //Contains data to auto create other tools
 	private String publisherName; // Copy from publisher Server global config publisherName, read only for users.
 	private Date publicationDate; // filled by Repo server, read only for users.
 	private String softwareVersion;
@@ -159,5 +160,13 @@ public class ToolManifest {
 
 	public void setTaxonomyId(String taxonomyId) {
 		this.taxonomyId = taxonomyId;
+	}
+
+	public boolean isTemplate() {
+		return template;
+	}
+
+	public void setTemplate(boolean template) {
+		this.template = template;
 	}
 }

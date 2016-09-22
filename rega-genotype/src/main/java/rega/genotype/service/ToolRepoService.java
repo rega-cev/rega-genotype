@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -191,7 +191,7 @@ public class ToolRepoService extends HttpServlet{
 		
 		toolDir.getParentFile().mkdirs();
 		try {
-			Files.copy(toolFile.toPath(), toolDir.toPath());
+			FileUtils.copyFile(toolFile, toolDir);
 		} catch (IOException e) {
 			errors.append("Server internal error.");
 			e.printStackTrace();

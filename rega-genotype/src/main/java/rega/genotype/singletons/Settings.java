@@ -9,9 +9,6 @@ import java.io.File;
 
 import javax.servlet.ServletContext;
 
-import rega.genotype.BlastAnalysis;
-import rega.genotype.DiamondAnalysis;
-import rega.genotype.SequenceAlign;
 import rega.genotype.config.Config;
 import rega.genotype.utils.FileUtil;
 

@@ -188,6 +188,10 @@ public class AlignmentAnalyses {
             return id;
         }
 
+        public String getTags() {
+        	return tags;
+        }
+
         /**
          * @return the cluster depth: for a top level cluster it is 1, for its sub clusters,
          * this is 2, etc...
@@ -615,6 +619,11 @@ public class AlignmentAnalyses {
     public boolean removeCluster(Cluster c){
     	return clusters.remove(c);
     }
+
+    public void addCluster(Cluster c) {
+    	clusters.add(c);
+    }
+
     /**
      * @return Returns the alignment.
      */

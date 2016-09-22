@@ -3,6 +3,7 @@ package rega.genotype.ui.admin.file_editor;
 import java.io.File;
 
 import rega.genotype.ui.admin.file_editor.blast.BlastFileEditor;
+import rega.genotype.ui.admin.file_editor.ui.UiFileEditor;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -11,6 +12,7 @@ import eu.webtoolkit.jwt.WPanel;
 public class SmartFileEditor extends WContainerWidget {
 	private File workDir;
 	private BlastFileEditor blastFileEditor;
+	private UiFileEditor uiFileEditor;
 	private DirtyHandler dirtyHandler = new DirtyHandler();
 
 	public SmartFileEditor(File workDir) {
@@ -22,10 +24,22 @@ public class SmartFileEditor extends WContainerWidget {
 		fileEditorPanel.setTitle("Blast");
 		fileEditorPanel.setCentralWidget(blastFileEditor);
 		fileEditorPanel.addStyleClass("admin-panel");
+
+		uiFileEditor = new UiFileEditor(workDir, dirtyHandler);
+		dirtyHandler.connect(uiFileEditor);
+		
+
+		WPanel uiFileEditorPanel = new WPanel(this);
+		uiFileEditorPanel.setCollapsible(true);
+		uiFileEditorPanel.setCollapsed(true);
+		uiFileEditorPanel.setTitle("UI");
+		uiFileEditorPanel.setCentralWidget(uiFileEditor);
+		uiFileEditorPanel.addStyleClass("admin-panel");
+		
 	}
 
 	public boolean saveAll() {
-		return blastFileEditor.save(workDir);
+		return blastFileEditor.save(workDir)&& uiFileEditor.save();
 	}
 
 	public boolean isDirty() {

@@ -31,7 +31,8 @@ public class FastaGenerator extends GenotypeResultParser {
 			writer.write(GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name"));
 			String description = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-description");
 			if (description != null) // support old result.xml files
-				writer.write(description);
+				writer.write(description.isEmpty() ? "__unassigned" : description);
+
 			writer.write("\n");
 			writer.write(GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/nucleotides"));
 			writer.write("\n");

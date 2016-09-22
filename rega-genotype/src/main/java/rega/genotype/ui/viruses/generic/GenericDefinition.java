@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -172,19 +174,12 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		String result = "/genotype_result/sequence/result";
 
 		List<Element> phyloMajorResults = p.getElements(result + "[@id='phylo-major']");
+		Set<Element> displayedMinorResults = new HashSet<Element>();
 
 		for (Element e : phyloMajorResults) {
 			String region = e.getAttributeValue("region");
-
-			String regionPredicate;
-			String regionDescription;
-			if (region != null) {
-				regionPredicate = " and @region='" + region + "'";
-				regionDescription = region;
-			} else {
-				regionPredicate = " and not(@region)";
-				regionDescription = "complete genome";
-			}
+			String regionPredicate = regionPredicate(region);
+			String regionDescription = regionDescription(region);
 
 			String phyloResult = result + "[@id='phylo-major'" + regionPredicate + "]";
 
@@ -195,6 +190,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 
 			String variantResult = result + "[@id='phylo-minor-" + bestGenotype + "'" + regionPredicate + "]";
 			if (p.elementExists(variantResult)) {
+				displayedMinorResults.add(p.getElement(variantResult));
 				WString variantTitle = WString.tr("details.phylo-minor.title").arg(bestGenotype).arg(regionDescription);
 				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle, true));
 			}
@@ -205,8 +201,30 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 				forms.add(new DefaultRecombinationDetailsForm(scanResult, "major", title));
 			}
 		}
+
+		List<Element> allResults = p.getElements(result);
+
+		for (Element e : allResults) {
+			if (e.getAttribute("id").getValue().startsWith("phylo-minor-") && !displayedMinorResults.contains(e)) {
+				String region = e.getAttributeValue("region");
+				String regionPredicate = regionPredicate(region);
+				String regionDescription = regionDescription(region);
+
+				String variantResult = result + "[@id='" + e.getAttribute("id").getValue() + "'" + regionPredicate + "]";
+				WString variantTitle = WString.tr("details.phylo-minor.title").arg("Unknown").arg(regionDescription);
+				forms.add(new DefaultPhylogeneticDetailsForm(variantResult, variantTitle, variantTitle, true));
+			}
+		}
 	}
-	
+
+	private String regionPredicate(String region) {
+		return (region != null) ? " and @region='" + region + "'" : " and not(@region)";
+	}
+
+	private String regionDescription(String region) {
+		return (region != null) ? region : "complete genome";
+	}
+
 	public List<IDetailsForm> getSupportingDetailsforms(GenotypeResultParser p) {
 		List<IDetailsForm> forms = new ArrayList<IDetailsForm>();
 		addPhyloDetailForms(p, forms);

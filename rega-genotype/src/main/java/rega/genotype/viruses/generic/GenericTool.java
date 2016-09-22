@@ -278,7 +278,7 @@ public class GenericTool extends GenotypeTool {
 		if (r == null
 			|| (scanResult != null && !scanResult.haveSupport())
 			|| r.getConcludedCluster() == null
-			|| !r.getConcludedCluster().getId().contains(typeCluster.getId())
+//			|| !r.getConcludedCluster().getId().contains(typeCluster.getId())
 			|| !r.haveSupport())
 			conclude("Could not assign", "Not supported by " + phyloName, "subtype", region);
 		else
