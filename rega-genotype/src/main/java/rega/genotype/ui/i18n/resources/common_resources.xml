@@ -273,6 +273,15 @@
 		
 		${placeholders}
 	</message>
+	
+	<message id="admin.config.ui-file-editor.placeholders">
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>Id</td><td>${id}</td><td>Message id in xml file</td></tr>
+  		  <tr><td>Info</td><td>${info}</td><td>Explain the user what value he is typing.</td></tr>
+		</table>
+		${value}
+	</message>
 
 	<message id="admin.config.cluster-table">
 		${cluster-table}

@@ -8,11 +8,17 @@ import java.util.TreeMap;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
 
+/**
+ * Allow saving variables that will be inserted to resources.xml outside the xml file.
+ * Used to be able to create tool templates.
+ * 
+ * @author michael
+ */
 public class XmlPlaceholders {
 	public static final String XML_VARIABLES_FILE_NAME = "xml_variables.json";
 
 	// var name, var content.
-	private Map<String, String> placeholders = new TreeMap<String, String>();
+	private Map<String, PlaceHolderData> placeholders = new TreeMap<String, PlaceHolderData>();
 
 	public XmlPlaceholders() {}
 
@@ -44,11 +50,48 @@ public class XmlPlaceholders {
 		}
 	}
 
-	public Map<String, String> getPlaceholders() {
+	public Map<String, PlaceHolderData> getPlaceholders() {
 		return placeholders;
 	}
 
-	public void setPlaceholders(Map<String, String> placeholders) {
+	public void setPlaceholders(Map<String, PlaceHolderData> placeholders) {
 		this.placeholders = placeholders;
+	}
+
+	public static class PlaceHolderData {
+		private String value = new String();
+		private String info = new String();
+		private String id = new String();
+
+		public PlaceHolderData() {}
+		public PlaceHolderData(String value, String info, String id) {
+			this.value = value;
+			this.id = id;
+			this.info = info;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		public String getInfo() {
+			return info;
+		}
+
+		public void setInfo(String info) {
+			this.info = info;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public void setId(String id) {
+			this.id = id;
+		}
 	}
 }

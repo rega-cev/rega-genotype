@@ -10,12 +10,14 @@ import org.apache.commons.io.FileUtils;
 import org.jdom.JDOMException;
 
 import rega.genotype.config.XmlPlaceholders;
+import rega.genotype.config.XmlPlaceholders.PlaceHolderData;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.Genome;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.StandardDialog;
+import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileServlet;
 import rega.genotype.ui.util.FileUpload;
 import eu.webtoolkit.jwt.Coordinates;
@@ -27,7 +29,6 @@ import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WIntValidator;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPaintDevice;
@@ -38,8 +39,8 @@ import eu.webtoolkit.jwt.WPainterPath;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableRow;
+import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
-import eu.webtoolkit.jwt.WValidator;
 
 /**
  * Smart Editor resources.xml and config.xml
@@ -200,13 +201,13 @@ public class UiFileEditor extends FormTemplate{
 
 			add.clicked().addListener(add, new Listener() {
 				public void trigger() {
-					addVaribale("", "");
+					addVaribale(new PlaceHolderData());
 					dirtyHandler.increaseDirty();
 				}
 			});
 
-			for (Map.Entry<String, String> e:xmlPlaceholders.getPlaceholders().entrySet()) {
-				addVaribale(e.getKey(), e.getValue());
+			for (Map.Entry<String, PlaceHolderData> e:xmlPlaceholders.getPlaceholders().entrySet()) {
+				addVaribale(e.getValue());
 			}
 		}
 
@@ -216,7 +217,7 @@ public class UiFileEditor extends FormTemplate{
 
 			xmlPlaceholders.getPlaceholders().clear();
 			for (PlaceholderWidget pw: placeholderWidgets) {
-				xmlPlaceholders.getPlaceholders().put(pw.nameLE.getText(), pw.value);
+				xmlPlaceholders.getPlaceholders().put(pw.data.getId(), pw.data);
 			}
 			xmlPlaceholders.save(workDir.getAbsolutePath());
 
@@ -224,18 +225,13 @@ public class UiFileEditor extends FormTemplate{
 		}
 
 		public boolean validate() {
-			for (PlaceholderWidget pw: placeholderWidgets) {
-				if(pw.nameLE.validate() != WValidator.State.Valid)
-					return false;
-			}
-
 			return true;
 		}
 
-		private void addVaribale(String name, String value) {
+		private void addVaribale(final PlaceHolderData data) {
 			final WTableRow row = insertRow(getRowCount() - 1);
-			final PlaceholderWidget placeholder = new PlaceholderWidget(row, name, value);
-			dirtyHandler.connect(placeholder.nameLE);
+			final PlaceholderWidget placeholder = new PlaceholderWidget(row, data);
+			dirtyHandler.connect(placeholder.infoT);
 			placeholderWidgets.add(placeholder);
 
 			final WPushButton editB = new WPushButton("Edit", row.elementAt(1));
@@ -244,13 +240,26 @@ public class UiFileEditor extends FormTemplate{
 			editB.clicked().addListener(editB, new Signal.Listener() {
 				public void trigger() {
 					final StandardDialog d = new StandardDialog("Edit placeholder value", true);
-					final WTextArea valueT = new WTextArea(placeholder.value, d.getContents());
-					valueT.resize(400, 390);
-					d.resize(430, 460);
+					Template template = new Template(tr("admin.config.ui-file-editor.placeholders"), 
+							d.getContents());
+
+					final WTextArea valueT = new WTextArea(data.getValue());
+					final WLineEdit idLE = new WLineEdit(data.getId());
+					final WLineEdit infoLE = new WLineEdit(data.getInfo());
+
+					template.bindWidget("id", idLE);
+					template.bindWidget("info", infoLE);
+					template.bindWidget("value", valueT);
+
+					valueT.resize(600, 390);
+					d.resize(650, 550);
 					d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 						public void trigger(WDialog.DialogCode arg) {
 							if (arg == WDialog.DialogCode.Accepted) {
-								placeholder.value = valueT.getText();
+								placeholder.data.setValue(valueT.getText());
+								placeholder.data.setInfo(infoLE.getText());
+								placeholder.data.setId(idLE.getText());
+								placeholder.infoT.setText(infoLE.getText());
 								dirtyHandler.increaseDirty();
 							}
 						}
@@ -269,13 +278,12 @@ public class UiFileEditor extends FormTemplate{
 	}
 
 	private static class PlaceholderWidget {
-		WLineEdit nameLE;
-		String value;
-		public PlaceholderWidget(WTableRow row, String name, String value) {
-			this.value = value;
-			nameLE = new WLineEdit(name, row.elementAt(0));
-			nameLE.setValidator(new WValidator(true));
-			nameLE.setWidth(new WLength(300));
+		WText infoT;
+		PlaceHolderData data;
+		public PlaceholderWidget(WTableRow row, PlaceHolderData data) {
+			this.data = data;
+			infoT = new WText(data.getInfo().isEmpty() ? "(Empty)" : data.getInfo(), 
+					row.elementAt(0));
 		}
 	}
 

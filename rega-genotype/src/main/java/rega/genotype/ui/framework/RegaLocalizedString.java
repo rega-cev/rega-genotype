@@ -18,7 +18,7 @@ public class RegaLocalizedString extends WLocalizedStrings{
 		if (key.equals("sequenceInput.example"))
 			System.err.println();
 		if (placeHolders != null && placeHolders.getPlaceholders().containsKey(key))
-			return placeHolders.getPlaceholders().get(key);
+			return placeHolders.getPlaceholders().get(key).getValue();
 		else if(app != null && key.equals("global-variable.tool-name")) 
 			return app.getToolConfig().getToolMenifest().getName();
 		else if(app != null && key.equals("global-variable.tool-version")) 
