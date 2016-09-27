@@ -84,7 +84,7 @@ public class TaxonomyModel {
 
 	private static WStandardItem createItem(String[] row) {
 		WStandardItem item = new WStandardItem(
-				row[SCIENTIFIC_NAME_COL] + " (" + row[TAXON_COL] + ")");
+				row[SCIENTIFIC_NAME_COL] + ", " + row[TAXON_COL] + "");
 		item.setData(row[SCIENTIFIC_NAME_COL], SCIENTIFIC_NAME_ROLE);
 		item.setData(row[TAXON_COL], TAXONOMY_ID_ROLE);
 		item.setData(row[MNEMENIC_COL], MNEMENIC_ROLE);
