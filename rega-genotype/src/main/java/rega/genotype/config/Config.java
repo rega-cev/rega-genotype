@@ -40,10 +40,7 @@ public class Config {
 		save(Settings.getInstance().getBaseDir() + File.separator);
 	}
 
-	private void save(String externalDir) throws IOException {
-		// Note: no need to synchronize: The file is read only 1 time when setting
-		// is constructed. Setting config state is constantly updated by the UI.
-
+	private synchronized void save(String externalDir) throws IOException {
 		if (getGeneralConfig().getPublisherPassword() == null 
 				|| getGeneralConfig().getPublisherPassword().isEmpty()) 
 			getGeneralConfig().setPublisherPassword(

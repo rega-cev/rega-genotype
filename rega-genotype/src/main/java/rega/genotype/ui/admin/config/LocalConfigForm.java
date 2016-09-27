@@ -10,7 +10,6 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.utils.FileUtil;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
@@ -67,7 +66,9 @@ public class LocalConfigForm  extends FormTemplate {
 	public ToolConfig save(File toolDir) {
 		if (!validate())
 			return null;
-		
+
+		// TODO: protect against 2 users editing the tool at the same time.
+
 		Config config = Settings.getInstance().getConfig();
 
 		// save ToolConfig
