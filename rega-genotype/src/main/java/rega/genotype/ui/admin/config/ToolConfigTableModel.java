@@ -3,6 +3,7 @@ package rega.genotype.ui.admin.config;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import rega.genotype.config.Config;
@@ -10,6 +11,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import eu.webtoolkit.jwt.ItemDataRole;
+import eu.webtoolkit.jwt.ItemFlag;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
 import eu.webtoolkit.jwt.WLink;
@@ -152,6 +154,13 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 				return "tools-table-unistalled-raw";
 		}
 		return null;
+	}
+
+	@Override
+	public EnumSet<ItemFlag> getFlags(WModelIndex index) {
+		EnumSet<ItemFlag> flags = super.getFlags(index);
+		flags.add(ItemFlag.ItemIsXHTMLText);
+		return flags;
 	}
 
 	private String formtDate(Date date) {
