@@ -57,15 +57,15 @@ public class ToolConfigForm extends FormTemplate {
 			toolDir = new File(toolConfig.getConfiguration());
 		}
 
-		createFileEditors(toolDir);
-
 		// manifest 
 		manifestForm = new ManifestForm(toolConfig.getToolMenifest(), toolDir, mode);
-		
+
 		// local config
 
 		localConfigForm = new LocalConfigForm(toolConfig, manifestForm);
-		
+
+		createFileEditors(toolDir);
+
 		// disable 
 
 		if (toolConfig.isPublished()) {
@@ -254,7 +254,7 @@ public class ToolConfigForm extends FormTemplate {
 			// after tool manifest is saved for the first time.
 			bindEmpty("upload"); 
 		} else {
-			fileEditor = new FileEditor(toolDir);
+			fileEditor = new FileEditor(toolDir, manifestForm);
 
 			bindWidget("upload", fileEditor);
 

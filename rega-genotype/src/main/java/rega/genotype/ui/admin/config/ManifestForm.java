@@ -6,6 +6,7 @@ import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyButton;
 import rega.genotype.ui.framework.Global;
@@ -188,5 +189,9 @@ public class ManifestForm extends FormTemplate{
 
 	public void setToolDir(File toolDir) {
 		this.toolDir = toolDir;
+	}
+
+	public String getScientificName() {
+		return TaxonomyModel.getScientificName(taxonomyT.getText().toString());
 	}
 }

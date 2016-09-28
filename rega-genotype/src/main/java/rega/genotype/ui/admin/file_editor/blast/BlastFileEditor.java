@@ -29,6 +29,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import rega.genotype.tools.FastaToRega;
+import rega.genotype.ui.admin.config.ManifestForm;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
 import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.widgets.Dialogs;
@@ -77,7 +78,8 @@ public class BlastFileEditor extends WContainerWidget{
 	private DirtyHandler dirtyHandler;
 	private ReferenceTaxaTable referenceTaxaTable;
 
-	public BlastFileEditor(final File workDir, final DirtyHandler dirtyHandler) {
+	public BlastFileEditor(final File workDir, final ManifestForm manifestForm,
+			final DirtyHandler dirtyHandler) {
 		this.workDir = workDir;
 		this.dirtyHandler = dirtyHandler;
 
@@ -146,6 +148,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 				d.getContents().addWidget(new WText("Scientific name "));
 				final WLineEdit taxonomyLE = new WLineEdit(d.getContents());
+				taxonomyLE.setText(manifestForm.getScientificName() == null ? tr("empty").toString() : manifestForm.getScientificName());
 
 				d.getContents().addWidget(new WText("<div>Upload alingment FASTA</div>" +
 						"<div>Sequene name format: 'genotype''subtype'_name</div>" +

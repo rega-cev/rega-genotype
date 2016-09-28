@@ -347,6 +347,9 @@
 		<div>&lt;img src="$${resource-file}/imageName"&gt; &lt;/img&gt;</div>
 
 	</message>
+
+	<message id="empty">(Empty)</message>
+
 	<!-- blocks -->
 
 	<message id="form-field">

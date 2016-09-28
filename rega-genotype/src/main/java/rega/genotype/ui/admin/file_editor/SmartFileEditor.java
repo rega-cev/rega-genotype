@@ -2,6 +2,7 @@ package rega.genotype.ui.admin.file_editor;
 
 import java.io.File;
 
+import rega.genotype.ui.admin.config.ManifestForm;
 import rega.genotype.ui.admin.file_editor.blast.BlastFileEditor;
 import rega.genotype.ui.admin.file_editor.ui.UiFileEditor;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
@@ -15,10 +16,10 @@ public class SmartFileEditor extends WContainerWidget {
 	private UiFileEditor uiFileEditor;
 	private DirtyHandler dirtyHandler = new DirtyHandler();
 
-	public SmartFileEditor(File workDir) {
+	public SmartFileEditor(File workDir, ManifestForm manifestForm) {
 		this.workDir = workDir;
 
-		blastFileEditor = new BlastFileEditor(workDir, dirtyHandler);
+		blastFileEditor = new BlastFileEditor(workDir, manifestForm, dirtyHandler);
 
 		WPanel fileEditorPanel = new WPanel(this);
 		fileEditorPanel.setTitle("Blast");

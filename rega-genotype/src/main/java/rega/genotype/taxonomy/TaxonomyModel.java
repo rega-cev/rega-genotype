@@ -97,6 +97,11 @@ public class TaxonomyModel {
 		 WStandardItem item = items.get(taxonomyId);
 		 return item == null ? null : item.getData(MNEMENIC_ROLE).toString();
 	}
+	
+	public static String getScientificName(String taxonomyId) {
+		 WStandardItem item = items.get(taxonomyId);
+		 return item == null ? null : item.getData(SCIENTIFIC_NAME_ROLE).toString();
+	}
 
 	public static String getHirarchy(String taxonomyId) {
 		String ans = "";
