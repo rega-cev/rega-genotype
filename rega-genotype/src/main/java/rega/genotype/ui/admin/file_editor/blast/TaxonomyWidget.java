@@ -46,6 +46,7 @@ public class TaxonomyWidget extends WContainerWidget {
 
 		WStandardItemModel taxonomyModel = TaxonomyModel.createModel();
 		searchProxy = new StandardItemModelSearchProxy(taxonomyModel);
+		// Note: Optimization: getTaxonomyIds is slow because it has to read blast.xml, not sure if it is worth to add cache for that.
 		searchProxy.setVisibleLeafs(getTaxonomyIds(toolConfig));
 		searchProxy.setFilterRole(TaxonomyModel.TAXONOMY_ID_ROLE);
 
