@@ -41,6 +41,8 @@ import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableRow;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
+import eu.webtoolkit.jwt.WTextEdit;
+import eu.webtoolkit.jwt.WValidator;
 
 /**
  * Smart Editor resources.xml and config.xml
@@ -243,9 +245,13 @@ public class UiFileEditor extends FormTemplate{
 					Template template = new Template(tr("admin.config.ui-file-editor.placeholders"), 
 							d.getContents());
 
-					final WTextArea valueT = new WTextArea(data.getValue());
+					final WTextEdit valueT = new WTextEdit(data.getValue());
 					final WLineEdit idLE = new WLineEdit(data.getId());
 					final WLineEdit infoLE = new WLineEdit(data.getInfo());
+
+					valueT.setValidator(new WValidator(true));
+					idLE.setValidator(new WValidator(true));
+					infoLE.setValidator(new WValidator(true));
 
 					template.bindWidget("id", idLE);
 					template.bindWidget("info", infoLE);
