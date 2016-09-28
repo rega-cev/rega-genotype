@@ -42,6 +42,7 @@ import eu.webtoolkit.jwt.WValidator.State;
  * @author michael
  */
 public class ReferenceTaxaTable extends WTable {
+	private static final int MAX_REGIONS_FOR_UI = 10;
 	// model
 	// <column, regionId> horizontal header data
 	private Map<WTableColumn, String> regionHeaderMap = new HashMap<WTableColumn, String>();
@@ -60,6 +61,12 @@ public class ReferenceTaxaTable extends WTable {
 
 	public ReferenceTaxaTable(final BlastAnalysis analysis) {
 		this.analysis = analysis;
+
+		if (analysis.getSortedReferenceTaxus().size() > MAX_REGIONS_FOR_UI) {
+			int size = analysis.getSortedReferenceTaxus().size();
+			getElementAt(0, 0).addWidget(new WText("Blast.xml contains " + size + " regions. Isn't to much?"));
+			return;
+		}
 
 		setHeaderCount(1, Orientation.Horizontal);
 		setHeaderCount(1, Orientation.Vertical);
@@ -396,6 +403,9 @@ public class ReferenceTaxaTable extends WTable {
 	}
 
 	public void save() {
+		if (analysis.getSortedReferenceTaxus().size() > MAX_REGIONS_FOR_UI) 
+			return;
+
 		analysis.clearReferenceTaxus();
 
 		for (int r = 1; r < getRowCount() - 1; ++r) {
