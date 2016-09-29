@@ -46,6 +46,7 @@ import eu.webtoolkit.jwt.Signal.Listener;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.StandardButton;
+import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -211,6 +212,7 @@ public class BlastFileEditor extends WContainerWidget{
 		});
 
 		autoCreatePanViralToolB.clicked().addListener(autoCreatePanViralToolB, new Signal.Listener() {
+			Boolean isUpdateClicked = false;
 			public void trigger() {
 				final WDialog d = new WDialog("Auto create pan-viral tool");
 				d.show();
@@ -229,16 +231,30 @@ public class BlastFileEditor extends WContainerWidget{
 				upload.setFilters(".xlsx");
 
 				final WPushButton createB = new WPushButton("Create", d.getContents());
+				createB.setToolTip("<div>Replace current phylogeny with the content of ICTV Master Species List.</div>" +
+						"<div>Viruses that are not in the file will be removed.</div>", TextFormat.XHTMLText);
+
+				final WPushButton updateB = new WPushButton("Update", d.getContents());
+				updateB.setToolTip("<div>Update phylogeny with the content of ICTV Master Species List.</div>" +
+						"<div>Viruses that are not in the file will remain.</div>", TextFormat.XHTMLText);
+
 				final WText info = new WText(d.getContents());
 				info.addStyleClass("auto-form-info");
 				info.setInline(false);
 				createB.clicked().addListener(createB, new Signal.Listener() {
 					public void trigger() {
+						isUpdateClicked=false;
 						upload.upload();
 					}
 				});
 				createB.setMargin(10);
 
+				updateB.clicked().addListener(createB, new Signal.Listener() {
+					public void trigger() {
+						isUpdateClicked=true;
+						upload.upload();
+					}
+				});
 				upload.uploaded().addListener(upload, new Signal.Listener() {
 					public void trigger() {
 						if (upload.getUploadedFiles().size() == 0) 
@@ -258,35 +274,36 @@ public class BlastFileEditor extends WContainerWidget{
 											new File(upload.getSpoolFileName()));
 
 									// Add taxa that are not present in old file.
-									
-									Map<String, Cluster> newClusterMap = new HashMap<String, AlignmentAnalyses.Cluster>();
-									Map<String, Taxus> newTaxaMap = new HashMap<String, AlignmentAnalyses.Taxus>();
-									for (Cluster c: alignmentAnalyses.getAllClusters()) {
-										newClusterMap.put(c.getId(), c);
-										for (Taxus t:c.getTaxa()){
-											newTaxaMap.put(t.getId(), t);
+									if (isUpdateClicked) {
+										Map<String, Cluster> newClusterMap = new HashMap<String, AlignmentAnalyses.Cluster>();
+										Map<String, Taxus> newTaxaMap = new HashMap<String, AlignmentAnalyses.Taxus>();
+										for (Cluster c: alignmentAnalyses.getAllClusters()) {
+											newClusterMap.put(c.getId(), c);
+											for (Taxus t:c.getTaxa()){
+												newTaxaMap.put(t.getId(), t);
+											}
 										}
-									}
 
-									List<Cluster> oldClusters = BlastFileEditor.this.alignmentAnalyses.getAllClusters();
-									for(Cluster c:oldClusters) {
-										for (Taxus t:c.getTaxa()){
-											if(!newTaxaMap.containsKey(t.getId())) {
-												Cluster newCluster = newClusterMap.get(c.getId());
-												if (newCluster == null){
-													// Note cluster parent is not important for pan-viral tool since it is used only in phylogeny
-													newCluster = new Cluster(
-															c.getId(), c.getName(), c.getDescription(), 
-															c.getTags(), c.getTaxonomyId());
-													newClusterMap.put(c.getId(), newCluster);
-													alignmentAnalyses.addCluster(newCluster);
-												} 
-												newCluster.addTaxus(new Taxus(t.getId()));
-												// assume that we do not get here a lot.
-												AbstractSequence sequence = BlastFileEditor.this.alignmentAnalyses.getAlignment().getSequence(t.getId());
-												alignmentAnalyses.getAlignment().addSequence(new Sequence(
-														sequence.getName(), sequence.isNameCapped(), 
-														sequence.getDescription(), sequence.getSequence()));
+										List<Cluster> oldClusters = BlastFileEditor.this.alignmentAnalyses.getAllClusters();
+										for(Cluster c:oldClusters) {
+											for (Taxus t:c.getTaxa()){
+												if(!newTaxaMap.containsKey(t.getId())) {
+													Cluster newCluster = newClusterMap.get(c.getId());
+													if (newCluster == null){
+														// Note cluster parent is not important for pan-viral tool since it is used only in phylogeny
+														newCluster = new Cluster(
+																c.getId(), c.getName(), c.getDescription(), 
+																c.getTags(), c.getTaxonomyId());
+														newClusterMap.put(c.getId(), newCluster);
+														alignmentAnalyses.addCluster(newCluster);
+													} 
+													newCluster.addTaxus(new Taxus(t.getId()));
+													// assume that we do not get here a lot.
+													AbstractSequence sequence = BlastFileEditor.this.alignmentAnalyses.getAlignment().getSequence(t.getId());
+													alignmentAnalyses.getAlignment().addSequence(new Sequence(
+															sequence.getName(), sequence.isNameCapped(), 
+															sequence.getDescription(), sequence.getSequence()));
+												}
 											}
 										}
 									}
