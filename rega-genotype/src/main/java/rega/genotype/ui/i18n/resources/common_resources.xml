@@ -265,7 +265,7 @@
   		  <tr><td>Genome start</td><td>${genome-start}</td></tr>
   		  <tr><td>Genome end</td><td>${genome-end}</td></tr>
 		</table>
-		<h4>Transtalable text</h4>
+		<h4>Text</h4>
 		<div>A set of variables that will be presented on the screen and can be different in every tool.</div>
 		<div>messages from resources.xml will be replaced by the given values</div>
 		<div>Example: if variable name = global.authors and value="me" </div>
@@ -278,8 +278,8 @@
 		<table class="form-table">
 	    <col width="200"><col width="200"></col></col>
 		  <tr><td>Id</td><td>${id}</td><td>Message id in xml file</td></tr>
-  		  <tr><td>Info</td><td>${info}</td><td>Explain the user what value he is typing.</td></tr>
 		</table>
+		<div>XML editor is manipulating your text. Use the correct editor for the input.</div>
 		${value}
 	</message>
 

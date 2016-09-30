@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 
-import rega.genotype.config.XmlPlaceholders;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyWidget;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.util.FileServlet;
