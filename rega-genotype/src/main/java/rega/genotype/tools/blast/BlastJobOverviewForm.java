@@ -176,6 +176,60 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		return blastResultParser;
 	}
 
+	private double totalSequences() {
+		Map<String, ClusterData> clusterDataMap = blastResultParser.clusterDataMap;
+		double total = 0;
+		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
+			ClusterData toolData = e.getValue();
+			total += toolData.sequenceNames.size();
+		}
+
+		return total;
+	}
+	private WStandardItemModel createBlastModel() {
+		WStandardItemModel blastModel = new WStandardItemModel();
+
+		Map<String, ClusterData> clusterDataMap = blastResultParser.clusterDataMap;
+
+		// create blastResultModel
+		blastModel = new WStandardItemModel();
+		blastModel.insertColumns(blastModel.getColumnCount(), 5);
+
+		blastModel.setHeaderData(ASSINGMENT_COLUMN, tr("detailsForm.summary.assignment"));
+		blastModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.numberSeqs"));
+		blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.percentage"));
+		blastModel.setHeaderData(COLOR_COLUMN, tr("detailsForm.summary.legend"));
+
+		// find total 
+		double total = totalSequences();
+		Config config = Settings.getInstance().getConfig();
+		int i = 0;
+		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
+			ClusterData toolData = e.getValue();
+			int row = blastModel.getRowCount();
+			blastModel.insertRows(row, 1);
+			blastModel.setData(row, ASSINGMENT_COLUMN, toolData.concludedName);
+			String toolId = config.getToolId(toolData.taxonomyId);
+			ToolConfig toolConfig = toolId == null ? null : config.getCurrentVersion(toolId);
+			if (toolConfig != null) {
+				blastModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
+				blastModel.setData(row, DATA_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
+			}
+			blastModel.setData(row, DATA_COLUMN, toolData.sequenceNames.size()); // percentage
+			blastModel.setData(row, CHART_DISPLAY_COLUMN, 
+					toolData.concludedName + " (" + toolData.sequenceNames.size() + ")");
+
+			WColor color = chart.getPalette().getBrush(i).getColor();
+			blastModel.setData(row, COLOR_COLUMN, color, 
+					ItemDataRole.UserRole + 1);
+
+			blastModel.setData(row, PERCENTAGE_COLUMN, 
+					(double)toolData.sequenceNames.size() / total * 100.0);
+
+			i++;
+		}
+		return blastModel;
+	}
 	@Override
 	public void fillResultsWidget() {
 		createChart();
@@ -183,68 +237,19 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		if (blastResultParser == null || blastResultParser.clusterDataMap.isEmpty())
 			return;
 
-		Map<String, ClusterData> clusterDataMap = blastResultParser.clusterDataMap;
-		
-		// create blastResultModel
-		blastResultModel = new WStandardItemModel();
-		blastResultModel.insertColumns(blastResultModel.getColumnCount(), 5);
-		
-		blastResultModel.setHeaderData(ASSINGMENT_COLUMN, tr("detailsForm.summary.assignment"));
-		blastResultModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.numberSeqs"));
-		blastResultModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.percentage"));
-		blastResultModel.setHeaderData(COLOR_COLUMN, tr("detailsForm.summary.legend"));
-
-		// find total 
-		double total = 0;
-		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
-			ClusterData toolData = e.getValue();
-			total += toolData.sequenceNames.size();
-		}
-
-		Config config = Settings.getInstance().getConfig();
-		int i = 0;
-		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
-			ClusterData toolData = e.getValue();
-			int row = blastResultModel.getRowCount();
-			blastResultModel.insertRows(row, 1);
-			blastResultModel.setData(row, ASSINGMENT_COLUMN, toolData.concludedName);
-			String toolId = config.getToolId(toolData.taxonomyId);
-			ToolConfig toolConfig = toolId == null ? null : config.getCurrentVersion(toolId);
-			if (toolConfig != null) {
-				blastResultModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
-				blastResultModel.setData(row, DATA_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
-			}
-			blastResultModel.setData(row, DATA_COLUMN, toolData.sequenceNames.size()); // percentage
-			blastResultModel.setData(row, CHART_DISPLAY_COLUMN, 
-					toolData.concludedName + " (" + toolData.sequenceNames.size() + ")");
-
-			WColor color = chart.getPalette().getBrush(i).getColor();
-			blastResultModel.setData(row, COLOR_COLUMN, color, 
-					ItemDataRole.UserRole + 1);
-
-			blastResultModel.setData(row, PERCENTAGE_COLUMN, 
-					(double)toolData.sequenceNames.size() / total * 100.0);
-
-			i++;
-		}
+		blastResultModel = createBlastModel();
 
 		chart.setModel(blastResultModel);
 
 		// copy model to table model
 
-		WStandardItemModel tableModel = new WStandardItemModel();
-		for (int r = 0; r < blastResultModel.getRowCount(); r++){
-			List<WStandardItem> items = new ArrayList<WStandardItem>();
-			for (int c = 0; c < blastResultModel.getColumnCount(); c++)
-				items.add(blastResultModel.getItem(r, c));
-			tableModel.appendRow(items);
-		}
+		WStandardItemModel tableModel = createBlastModel();
 
 		// Add totals only to table model.
 		int row = tableModel.getRowCount();
 		tableModel.insertRows(row, 1);
 		tableModel.setData(row, ASSINGMENT_COLUMN, "Totals");
-		tableModel.setData(row, DATA_COLUMN, total); // percentage
+		tableModel.setData(row, DATA_COLUMN, totalSequences()); // percentage
 		tableModel.setData(row, PERCENTAGE_COLUMN, 100.0);
 
 		table.setModel(tableModel);
