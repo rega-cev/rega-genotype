@@ -32,6 +32,7 @@ import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
+import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
@@ -226,14 +227,27 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 			i++;
 		}
-		int row = blastResultModel.getRowCount();
-		blastResultModel.insertRows(row, 1);
-		blastResultModel.setData(row, ASSINGMENT_COLUMN, "Totals");
-		blastResultModel.setData(row, DATA_COLUMN, total); // percentage
-		blastResultModel.setData(row, PERCENTAGE_COLUMN, 100.0);
 
 		chart.setModel(blastResultModel);
-		table.setModel(blastResultModel);
+
+		// copy model to table model
+
+		WStandardItemModel tableModel = new WStandardItemModel();
+		for (int r = 0; r < blastResultModel.getRowCount(); r++){
+			List<WStandardItem> items = new ArrayList<WStandardItem>();
+			for (int c = 0; c < blastResultModel.getColumnCount(); c++)
+				items.add(blastResultModel.getItem(r, c));
+			tableModel.appendRow(items);
+		}
+
+		// Add totals only to table model.
+		int row = tableModel.getRowCount();
+		tableModel.insertRows(row, 1);
+		tableModel.setData(row, ASSINGMENT_COLUMN, "Totals");
+		tableModel.setData(row, DATA_COLUMN, total); // percentage
+		tableModel.setData(row, PERCENTAGE_COLUMN, 100.0);
+
+		table.setModel(tableModel);
 
 		chartContainer.show();
 		table.show();
