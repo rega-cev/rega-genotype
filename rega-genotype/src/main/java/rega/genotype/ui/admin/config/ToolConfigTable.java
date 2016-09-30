@@ -401,10 +401,11 @@ public class ToolConfigTable extends Template{
 						
 						Thread t = new Thread(new Runnable() {
 							public void run() {
-								UpdateTaxonomyFileService.download();
+								File file = UpdateTaxonomyFileService.download();
+								String infoText = file == null ? "Could not downlod taxonomy file" : "Update finished";
 								UpdateLock updateLock = app.getUpdateLock();
 								TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
-								info.setText("Update finished");
+								info.setText(infoText);
 								d.getCancelB().enable();
 								app.triggerUpdate();
 								updateLock.release();
