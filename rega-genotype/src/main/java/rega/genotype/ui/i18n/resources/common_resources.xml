@@ -190,7 +190,7 @@
 		${manifest}
 		${config}
 		${upload}
-		<div class="action-buttons">${publish}${retract}${save}${cancel}</div>
+		<div class="action-buttons">${validate-tool}${publish}${retract}${save}${cancel}</div>
 		${info}
 	</message>
 	
@@ -282,6 +282,18 @@
 		<div>XML editor is manipulating your text. Use the correct editor for the input.</div>
 		${value}
 	</message>
+
+	<message id="admin.config.self-scan-widget">
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>Window</td><td>${window}</td></tr>
+		  <tr><td>Step size</td><td>${step-size}</td></tr>
+		  <tr><td>Top cluster id</td><td>${cluster-id}</td></tr>
+		</table>
+		<div>${run}${run-default}</div>
+		${report}
+	</message>
+
 
 	<message id="admin.config.cluster-table">
 		${cluster-table}

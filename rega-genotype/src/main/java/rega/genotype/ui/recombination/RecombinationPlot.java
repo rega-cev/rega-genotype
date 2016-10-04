@@ -15,6 +15,7 @@ import java.io.OutputStreamWriter;
 import java.util.Map;
 
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.recombination.CsvModel.Mode;
 import rega.genotype.utils.Table;
 
 import com.pdfjet.Letter;
@@ -48,12 +49,13 @@ public class RecombinationPlot extends WCartesianChart {
 	private OrganismDefinition od;
 	private int cutoff;
 	
-	public RecombinationPlot(String csvData, OrganismDefinition od) {
+	public RecombinationPlot(String csvData, OrganismDefinition od, Mode mode) {
 		this.csvData = csvData;
 		this.od = od;
 		this.cutoff = 70;
 		
-		CsvModel model = new CsvModel(new Table(new ByteArrayInputStream(csvData.getBytes()), false, '\t'));
+		CsvModel model = new CsvModel(new Table(new ByteArrayInputStream(csvData.getBytes()), false, '\t'),
+				mode);
         this.setModel(model);
         this.setXSeriesColumn(0);
         this.setLegendEnabled(true);
@@ -75,6 +77,9 @@ public class RecombinationPlot extends WCartesianChart {
         this.setTitle("Bootscan analysis");
 
         Map<String, Color> genomeColors = od.getGenome().getAttributes().getColors();
+        
+        System.err.println(model.getColumnCount());
+        
         for (int i = 1; i < model.getColumnCount(); i++) {
         	Color c = genomeColors.get(model.getHeaderData(i));
         	if (c == null)

@@ -197,3 +197,16 @@ body {
 .standard-margin {
   margin: 5px;
 }
+
+.stack {
+	overflow-y:auto;
+}
+
+.detailsForm img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+.detailsForm .recombinationDetails{
+	text-align: center;
+}

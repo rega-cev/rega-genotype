@@ -64,6 +64,7 @@ public class ToolConfigTable extends Template{
 	public ToolConfigTable(WStackedWidget stack) {
 		super(tr("admin.config.tool-config-table"));
 		this.stack = stack;
+		stack.addStyleClass("stack");
 
 		bindWidget("info", infoT);
 		
@@ -529,7 +530,7 @@ public class ToolConfigTable extends Template{
 			break;
 		}
 
-		final ToolConfigForm d = new ToolConfigForm(config, mode);
+		final ToolConfigForm d = new ToolConfigForm(config, mode, stack);
 		stack.addWidget(d);
 		stack.setCurrentWidget(d);
 		d.done().addListener(d, new Signal.Listener() {

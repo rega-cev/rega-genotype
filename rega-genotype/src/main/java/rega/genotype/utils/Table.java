@@ -181,9 +181,11 @@ public class Table {
 			sout = new PrintStream(output);
 		}
 
+		int numColumns = numColumns();
 		try {
 			for (String s = reader.readLine(); s != null; s = reader.readLine()) {
 				ArrayList values = splitHandleQuotes(s, delimiter, '"', '\\');
+				
 				ArrayList<String> row = new ArrayList<String>(numColumns());
 
 				for (int i = 0; i < values.size(); ++i) {

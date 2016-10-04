@@ -303,7 +303,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 					response.setContentType("text/plain");
 					FastaGenerator generateFasta = new FastaGenerator(filter, response.getOutputStream());
-					generateFasta.parseFile(new File(jobDir.getAbsolutePath()));
+					generateFasta.parseResultFile(new File(jobDir.getAbsolutePath()));
 				}
 			};
 		} else {
@@ -351,7 +351,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 								if (this.elementExists(recombinationPath)) {
 									if (p == null) {
 										p = new GenotypeResultParser(this.getSequenceIndex());
-										p.parseFile(jobDir);
+										p.parseResultFile(jobDir);
 									}
 									
 									Element recombination = p.getElement(recombinationPath);
@@ -382,7 +382,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				    	return filter.excludeSequence(this);
 				    }
 				};
-				grp.parseFile(jobDir);
+				grp.parseResultFile(jobDir);
 
 				try {
 					t.flush();
@@ -410,7 +410,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ',', '"') : new XlsDataTable(response.getOutputStream());
 				AbstractDataTableGenerator acsvgen = 
 					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this.getFilter(), t);
-				acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
+				acsvgen.parseResultFile(new File(jobDir.getAbsolutePath()));
 			}
 			
 		};
@@ -459,7 +459,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			}
 
 			if (!stop)
-				parser.parseFile(getJobdir());
+				parser.parseResultFile(getJobdir());
 
 			while (!stop && !jobDone()){
 				parser.updateUi();

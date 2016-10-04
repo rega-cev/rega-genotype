@@ -271,9 +271,12 @@ public class GenotypeResultParser extends DefaultHandler
 		}
 	}
 
-	public void parseFile(File jobDir) {
+	public void parseResultFile(File jobDir) {
 		File resultFile = new File(jobDir.getAbsolutePath()+File.separatorChar+"result.xml");
+		parseFile(resultFile);
+	}
 
+	public void parseFile(File resultFile) {
 		if(resultFile.exists()) {
 			try {
 				InputStreamReader streamReader = new InputStreamReader(
@@ -292,7 +295,6 @@ public class GenotypeResultParser extends DefaultHandler
 			}
 		}
 	}
-	
     private void reset() {
      	sequenceIndex = -1;
     	filteredSequences = 0;
@@ -315,7 +317,7 @@ public class GenotypeResultParser extends DefaultHandler
 
 	public static GenotypeResultParser parseFile(File jobDir, int selectedSequenceIndex) {
 		GenotypeResultParser p = new GenotypeResultParser(selectedSequenceIndex);
-		p.parseFile(jobDir);
+		p.parseResultFile(jobDir);
 
 		if (!p.indexOutOfBounds())
 			return p;

@@ -12,15 +12,12 @@ import java.io.UnsupportedEncodingException;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.IDetailsForm;
-import rega.genotype.ui.forms.RecombinationForm;
-import rega.genotype.ui.framework.widgets.WListContainerWidget;
+import rega.genotype.ui.recombination.CsvModel.Mode;
 import rega.genotype.ui.recombination.RecombinationPlot;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
-import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WBreak;
-import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WResource.DispositionType;
@@ -36,11 +33,17 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 	private String path;
 	private String type;
 	private WString title;
+	private Mode mode;
 	
 	public DefaultRecombinationDetailsForm(String path, String type, WString title){
+		this(path, type, title, Mode.Recombination);
+	}
+
+	public DefaultRecombinationDetailsForm(String path, String type, WString title, Mode mode){
 		this.path = path;
 		this.type = type;
 		this.title = title;
+		this.mode = mode;
 		setStyleClass("recombinationDetails");
 	}
 	@Override
@@ -69,7 +72,7 @@ public class DefaultRecombinationDetailsForm extends IDetailsForm {
 			addWidget(new WBreak());
 		}*/
 
-		final RecombinationPlot plot = new RecombinationPlot(p.getValue(path+"/data"), od);
+		final RecombinationPlot plot = new RecombinationPlot(p.getValue(path+"/data"), od, mode);
 		addWidget(plot);
 		addWidget(new WText(tr("defaultRecombinationAnalyses.bootscanClusterSupport")));
 		addWidget(new WText(GenotypeLib.getEscapedValue(p, path+"/support[@id='best']")));

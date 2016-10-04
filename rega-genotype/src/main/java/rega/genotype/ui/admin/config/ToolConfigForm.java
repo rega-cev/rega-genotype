@@ -9,6 +9,7 @@ import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.file_editor.FileEditor;
+import rega.genotype.ui.admin.file_editor.ui.ToolVerificationWidget;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.FormTemplate;
@@ -21,6 +22,7 @@ import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -38,9 +40,10 @@ public class ToolConfigForm extends FormTemplate {
 
 	private Signal done = new Signal();
 
-	public ToolConfigForm(final ToolConfig toolConfig, Mode mode) {
+	public ToolConfigForm(final ToolConfig toolConfig, Mode mode, final WStackedWidget stack) {
 		super(tr("admin.config.tool-config-dialog"));
-		
+
+		final WPushButton verifyToolB = new WPushButton("Verify tool");
 		final WPushButton publishB = new WPushButton("Publish");
 		final WPushButton retractB = new WPushButton("Retract");
 		final WPushButton saveB = new WPushButton("Save");
@@ -95,6 +98,7 @@ public class ToolConfigForm extends FormTemplate {
 		bindWidget("manifest", mamifestPanel);
 		bindWidget("config", configPanel);
 		bindWidget("info", infoT);
+		bindWidget("validate-tool", verifyToolB);
 		bindWidget("publish", publishB);
 		bindWidget("retract", retractB);
 		bindWidget("save", saveB);
@@ -112,6 +116,14 @@ public class ToolConfigForm extends FormTemplate {
 			}
 		});
 
+		verifyToolB.clicked().addListener(verifyToolB, new Signal.Listener() {
+			public void trigger() {
+				ToolVerificationWidget verificationWidget = new ToolVerificationWidget(toolConfig);
+				stack.addWidget(verificationWidget);
+				stack.setCurrentWidget(verificationWidget);
+			}
+		});
+		
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
 				ToolConfig savedToolConfig = save(false);
