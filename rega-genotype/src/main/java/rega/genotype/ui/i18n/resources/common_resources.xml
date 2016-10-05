@@ -286,11 +286,10 @@
 	<message id="admin.config.self-scan-widget">
 		<table class="form-table">
 	    <col width="200"><col width="200"></col></col>
-		  <tr><td>Window</td><td>${window}</td></tr>
-		  <tr><td>Step size</td><td>${step-size}</td></tr>
-		  <tr><td>Top cluster id</td><td>${cluster-id}</td></tr>
+		  <tr><td>Window</td><td>${window}</td><td>Enter window sizes separated by ,</td></tr>
+		  <tr><td>Step</td><td>${step-size}</td></tr>
 		</table>
-		<div>${run}${run-default}</div>
+		<div>${run}</div>
 		${report}
 	</message>
 	
