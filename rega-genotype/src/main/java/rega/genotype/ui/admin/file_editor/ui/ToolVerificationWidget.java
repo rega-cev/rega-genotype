@@ -56,7 +56,8 @@ public class ToolVerificationWidget extends WContainerWidget{
 		editB.addStyleClass("float-right");
 		close.addStyleClass("float-right");
 
-		new WText("<h3>Verify "+ toolConfig.getToolMenifest().getName() + " typing tool </h3>", this);
+		new WText("<h3 style=\"color: darkblue;margin-top: 0px;\">" +
+				"Verify "+ toolConfig.getToolMenifest().getName() + " typing tool </h3>", this);
 
 		close.clicked().addListener(close, new Signal.Listener() {
 			public void trigger() {
