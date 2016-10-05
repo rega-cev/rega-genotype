@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.jdom.JDOMException;
 
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
@@ -59,18 +58,8 @@ public class GoldenSequencesTestWidget extends Template {
 	public GoldenSequencesTestWidget(final ToolConfig toolConfig, final File workDir) {
 		super(tr("admin.config.golden-sequences-test-widget"));
 		this.workDir = workDir;
-		final List<VerificationTableItem> verificationTable;
-		try {
-			verificationTable = ConfigXmlReader.readVerificationTable(toolConfig.getConfigurationFile());
-		} catch (JDOMException e) {
-			e.printStackTrace();
-			//setTemplateText(tr("Error in config.xml: " + e.getMessage()));
-			return;
-		} catch (IOException e) {
-			e.printStackTrace();
-			//infoT.setText()tr("Error in config.xml: " + e.getMessage()));
-			return;
-		}
+		final List<VerificationTableItem> verificationTable =
+				ConfigXmlReader.readVerificationTable(toolConfig.getConfigurationFile());
 
 		if (verificationTable.isEmpty()) {
 			setTemplateText(tr("admin.config.golden-sequences-test-widget.empty-table"));

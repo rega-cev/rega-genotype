@@ -89,11 +89,20 @@ public class ConfigXmlReader {
 		return genome;
 	}
 
-	public static List<VerificationTableItem> readVerificationTable(File xmlDir) throws JDOMException, IOException {
+	public static List<VerificationTableItem> readVerificationTable(File xmlDir) {
 		List<VerificationTableItem> ans = new ArrayList<VerificationTableItem>();
 
 		SAXBuilder builder = new SAXBuilder();
-		Document document = builder.build(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+		Document document;
+		try {
+			document = builder.build(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			return defaultVerificationTable();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return defaultVerificationTable();
+		}
 		Element root = document.getRootElement();
 		Element tableE = root.getChild("verification-table");
 		if (tableE != null)
@@ -109,11 +118,23 @@ public class ConfigXmlReader {
 				ans.add(new VerificationTableItem(description, value));
 			}
 
+		if (ans.isEmpty())
+			return defaultVerificationTable();
+
+		return ans;
+	}
+	public static List<VerificationTableItem> defaultVerificationTable() {
+		List<VerificationTableItem> ans = new ArrayList<VerificationTableItem>();
+
+		ans.add(new VerificationTableItem("Sequence name", "/genotype_result/sequence/@name"));
+		ans.add(new VerificationTableItem("Type ID", "/genotype_result/sequence/conclusion[@id='type']/assigned/id"));
+		ans.add(new VerificationTableItem("Subtype ID", "/genotype_result/sequence/conclusion[@id='subtype']/assigned/name"));
+
 		return ans;
 	}
 
 	// classes
-	
+
 	public static class VerificationTableItem {
 		private String description;
 		private String resultsXmlVariable;
