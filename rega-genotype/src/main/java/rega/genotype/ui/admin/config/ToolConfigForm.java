@@ -8,11 +8,12 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.file_editor.FileEditor;
-import rega.genotype.ui.admin.file_editor.ui.ToolVerificationWidget;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Signal;
@@ -22,7 +23,6 @@ import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
-import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -40,7 +40,7 @@ public class ToolConfigForm extends FormTemplate {
 
 	private Signal done = new Signal();
 
-	public ToolConfigForm(final ToolConfig toolConfig, Mode mode, final WStackedWidget stack) {
+	public ToolConfigForm(final ToolConfig toolConfig, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
 
 		final WPushButton verifyToolB = new WPushButton("Verify tool");
@@ -118,9 +118,29 @@ public class ToolConfigForm extends FormTemplate {
 
 		verifyToolB.clicked().addListener(verifyToolB, new Signal.Listener() {
 			public void trigger() {
-				ToolVerificationWidget verificationWidget = new ToolVerificationWidget(toolConfig);
-				stack.addWidget(verificationWidget);
-				stack.setCurrentWidget(verificationWidget);
+				if (dirtyHandler.isDirty()){
+					final WMessageBox d = new WMessageBox("Warning",
+							"There are some unsaved changes. The saved tool will be used. Verfiy anyway?", Icon.NoIcon,
+							EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
+					d.show();
+					d.setWidth(new WLength(300));
+					d.buttonClicked().addListener(d,
+							new Signal1.Listener<StandardButton>() {
+						public void trigger(StandardButton e1) {
+							if(e1 == StandardButton.Ok){
+								File verificationWorkDir = GenotypeLib.createJobDir(toolConfig.getVerificationDir());
+								AdminNavigation.setVerifyToolUrl(toolConfig.getToolMenifest().getId(), 
+										toolConfig.getToolMenifest().getVersion(), verificationWorkDir.getName());
+							}
+							d.remove();
+						}
+					});
+
+				} else {
+					File verificationWorkDir = GenotypeLib.createJobDir(toolConfig.getVerificationDir());
+					AdminNavigation.setVerifyToolUrl(toolConfig.getToolMenifest().getId(), 
+							toolConfig.getToolMenifest().getVersion(), verificationWorkDir.getName());
+				}
 			}
 		});
 		

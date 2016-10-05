@@ -16,6 +16,7 @@ import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.file_editor.blast.BlastFileEditor;
 import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
 import rega.genotype.ui.framework.widgets.Template;
@@ -24,7 +25,6 @@ import rega.genotype.ui.viruses.generic.GenericDefinition;
 import rega.genotype.viruses.generic.GenericTool;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WContainerWidget.Overflow;
 import eu.webtoolkit.jwt.WIntValidator;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WPushButton;
@@ -33,18 +33,58 @@ import eu.webtoolkit.jwt.WTabWidget;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WValidator;
 
-public class ToolVerificationWidget extends WTabWidget{
+/**
+ * Verification framework for typing tools. 
+ * Contains self scan (bootstrap) analysis and golden sequences test.
+ * 
+ * @author michael
+ */
+public class ToolVerificationWidget extends WContainerWidget{
 	public static final String SELF_SCAN_RESULT_FILE = "self-scan-result.xml";
+	public static final String EXPECTED_RESULTS_FILE = "expected-results.xlsx";
+	public static final String GOLDEN_SEQUENCES_RESULTS_FILE = "golden-sequences-result.xlsx";
 
-	public ToolVerificationWidget(final ToolConfig toolConfig) {
-		SelfScanWidget selfScanWidget = new SelfScanWidget(toolConfig);
-		addTab(selfScanWidget, "Self Scan");
+	private Signal done = new Signal();
+
+	public ToolVerificationWidget(final ToolConfig toolConfig, final File workDir) {
+		WPushButton close = new WPushButton("Close", this);
+		WPushButton editB = new WPushButton("Edit tool", this);
+		editB.addStyleClass("float-right");
+		close.addStyleClass("float-right");
+
+		new WText("<h3>Verify "+ toolConfig.getToolMenifest().getName() + " typing tool </h3>", this);
+
+		close.clicked().addListener(close, new Signal.Listener() {
+			public void trigger() {
+				done.trigger();
+			}
+		});
+		editB.clicked().addListener(editB, new Signal.Listener() {
+			public void trigger() {
+				AdminNavigation.setEditToolUrl(
+						toolConfig.getToolMenifest().getId(),
+						toolConfig.getToolMenifest().getVersion());
+			}
+		});
+		WTabWidget tabs = new WTabWidget(this);
+		SelfScanWidget selfScanWidget = new SelfScanWidget(toolConfig, workDir);
+		tabs.addTab(selfScanWidget, "Self Scan");
+
+		GoldenSequencesTestWidget goldenSequencesTestWidget = new GoldenSequencesTestWidget(toolConfig, workDir);
+		tabs.addTab(goldenSequencesTestWidget, "Golden sequences test");
+	}
+
+	public Signal done() {
+		return done;
 	}
 
 	// classes
 
+	/**
+	 * Test bootstrap values for every cluster.
+	 */
 	public static class SelfScanWidget extends Template {
-		public SelfScanWidget(final ToolConfig toolConfig) {
+		public SelfScanWidget(final ToolConfig toolConfig, final File workDir) {
 			super(tr("admin.config.self-scan-widget"));
 
 			final WPushButton runB = new WPushButton("Run self scan");
@@ -68,9 +108,6 @@ public class ToolVerificationWidget extends WTabWidget{
 
 					reportContainer.clear();
 
-					File workDir = new File(toolConfig.getJobDir());
-					workDir.mkdirs();
-
 					String traceFile = workDir.getAbsolutePath() + File.separator + SELF_SCAN_RESULT_FILE;
 
 					GenotypeTool genotypeTool;
@@ -87,7 +124,7 @@ public class ToolVerificationWidget extends WTabWidget{
 						return;
 					}
 
-					AlignmentAnalyses blastAnalysis = BlastFileEditor.readBlastXml(workDir);
+					AlignmentAnalyses blastAnalysis = BlastFileEditor.readBlastXml(toolConfig.getConfigurationFile());
 					for (Cluster c: blastAnalysis.getAllClusters()) {
 						String analysisFile = toolConfig.getConfiguration() 
 								+ "phylo-" + c.getId() + ".xml";
@@ -146,10 +183,5 @@ public class ToolVerificationWidget extends WTabWidget{
 				}
 			});
 		}
-
-	}
-
-	public static class GoldenSequencesTestWidget extends Template {
-
 	}
 }

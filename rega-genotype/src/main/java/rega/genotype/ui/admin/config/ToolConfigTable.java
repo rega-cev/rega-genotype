@@ -20,12 +20,14 @@ import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
+import rega.genotype.ui.admin.file_editor.ui.ToolVerificationWidget;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.DownloadResource;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.CheckState;
@@ -483,29 +485,60 @@ public class ToolConfigTable extends Template{
 		edit(null, ToolConfigForm.Mode.Add);
 	}
 
+	public void showToolNotFound(String toolId, String toolVersion) {
+		WContainerWidget c = new WContainerWidget();
+		c.addWidget(new WText("Tool: id = " + toolId +
+				", version = " + toolVersion + "does not exist."));
+		WPushButton back = new WPushButton("Back", c);
+		stack.addWidget(c);
+		stack.setCurrentWidget(c);
+		back.clicked().addListener(back, new Signal.Listener() {
+			public void trigger() {
+				showTable();
+			}
+		});
+	}
 	public void showEditTool(String toolId, String toolVersion, ToolConfigForm.Mode mode) {
 		showTable(); // remove prev shown tool		
 
 		ToolInfo toolInfo = proxyModel.getToolConfigTableModel().
 				getToolInfo(toolId, toolVersion);
 
-		if (toolInfo == null) {
-			WContainerWidget c = new WContainerWidget();
-			c.addWidget(new WText("Tool: id = " + toolId +
-					", version = " + toolVersion + "does not exist."));
-			WPushButton back = new WPushButton("Back", c);
-			stack.addWidget(c);
-			stack.setCurrentWidget(c);
-			back.clicked().addListener(back, new Signal.Listener() {
+		if (toolInfo == null) 
+			showToolNotFound(toolId, toolVersion);
+		else
+			edit(toolInfo, mode);
+	}
+
+	public void showToolVerify(String toolId, String toolVersion, String jobId) {
+		ToolInfo toolInfo = proxyModel.getToolConfigTableModel().
+				getToolInfo(toolId, toolVersion);
+		if (toolInfo == null) 
+			showToolNotFound(toolId, toolVersion);
+		else {
+			File verificationWorkDir;
+			if (jobId == null) 
+				verificationWorkDir = GenotypeLib.createJobDir(toolInfo.getConfig().getVerificationDir());
+			else 
+				verificationWorkDir = new File(toolInfo.getConfig().getVerificationDir(), jobId);
+
+			if (!verificationWorkDir.exists())
+				verificationWorkDir.mkdirs();
+			ToolVerificationWidget verificationWidget = new ToolVerificationWidget(
+					toolInfo.getConfig(), verificationWorkDir);
+			
+			stack.addWidget(verificationWidget);
+			stack.setCurrentWidget(verificationWidget);
+			verificationWidget.done().addListener(verificationWidget, new Signal.Listener() {
 				public void trigger() {
-					showTable();
+					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+					AdminNavigation.setToolsTableUrl();
+					showTable(); // in case that the url did not change (add tool)
 				}
 			});
-		} else {
-			edit(toolInfo, mode);
 		}
 	}
-	
+
 	public void showTable() {
 		while (stack.getChildren().size() > 1) {
 			stack.removeWidget(stack.getWidget(1));
@@ -530,7 +563,7 @@ public class ToolConfigTable extends Template{
 			break;
 		}
 
-		final ToolConfigForm d = new ToolConfigForm(config, mode, stack);
+		final ToolConfigForm d = new ToolConfigForm(config, mode);
 		stack.addWidget(d);
 		stack.setCurrentWidget(d);
 		d.done().addListener(d, new Signal.Listener() {

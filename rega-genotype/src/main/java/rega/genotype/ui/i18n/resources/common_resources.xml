@@ -293,6 +293,19 @@
 		<div>${run}${run-default}</div>
 		${report}
 	</message>
+	
+	<message id="admin.config.golden-sequences-test-widget">
+		<div style="margin-top: 15px;">Enter golden sequences fasta.</div>
+		${fasta-upload}
+		${results-table-format}
+		${results-table-upload}
+		<div style="margin-top: 15px;">${run} ${download} ${info}</div>
+		${report}
+	</message>
+
+	<message id="admin.config.golden-sequences-test-widget.empty-table">
+		<div>Error: table variables are specified in config.xml</div>
+	</message>
 
 
 	<message id="admin.config.cluster-table">

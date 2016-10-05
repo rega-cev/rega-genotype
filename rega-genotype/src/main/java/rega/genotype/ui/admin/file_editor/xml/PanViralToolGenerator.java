@@ -35,6 +35,7 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.taxonomy.UpdateTaxonomyFileService;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.utils.ExcelUtils;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal1;
 
@@ -107,7 +108,7 @@ public class PanViralToolGenerator {
 
 			Row row = rowIterator.next();
 
-			String accessionNumberField = readCell(row.getCell(ExemplarAccessionNumberCol));
+			String accessionNumberField = ExcelUtils.readCell(row.getCell(ExemplarAccessionNumberCol));
 			if (accessionNumberField.isEmpty())
 				continue;
 
@@ -349,11 +350,11 @@ public class PanViralToolGenerator {
 		String ds = FASTA_DESCRIPTION_SEPARATOR;
 
 		String description = accessionNum + ds
-				+ readCell(row.getCell(OrderCol)) + ds 
-				+ readCell(row.getCell(FamilyCol)) + ds 
-				+ readCell(row.getCell(SubfamilyCol)) + ds 
-				+ readCell(row.getCell(GenusCol)) + ds 
-				+ readCell(row.getCell(SpeciesCol)) + ds;
+				+ ExcelUtils.readCell(row.getCell(OrderCol)) + ds 
+				+ ExcelUtils.readCell(row.getCell(FamilyCol)) + ds 
+				+ ExcelUtils.readCell(row.getCell(SubfamilyCol)) + ds 
+				+ ExcelUtils.readCell(row.getCell(GenusCol)) + ds 
+				+ ExcelUtils.readCell(row.getCell(SpeciesCol)) + ds;
 		
 		description.replace(" ", "_");
 
@@ -363,76 +364,5 @@ public class PanViralToolGenerator {
 
 	public Signal1<AlignmentAnalyses> finished() {
 		return finished;
-	}
-
-	// trim that also discards unicode whitespace
-    private static String unicodeTrim(String str) {
-        int len = str.length();
-        int st = 0;
-        char[] val = str.toCharArray();
-
-        while ((st < len) && (val[st] <= ' ' || Character.isSpaceChar(val[st]))) {
-            st++;
-        }
-        while ((st < len) && (val[len - 1] <= ' ' || Character.isSpaceChar(val[len - 1]))) {
-            len--;
-        }
-        return ((st > 0) || (len < val.length)) ? str.substring(st, len) : str;
-    }
-   
-	private final String readCell(Cell cell) {
-		if(cell == null) {
-			return "";
-		} else {
-			switch(cell.getCellType()) {
-			case Cell.CELL_TYPE_STRING 	:
-				// string
-				return unicodeTrim(cell.getRichStringCellValue().getString());
-			case Cell.CELL_TYPE_NUMERIC :
-			{
-				double r = cell.getNumericCellValue();
-				int i = (int) r;
-				if ((double)i == r) {
-					return String.valueOf(i);
-				} else {
-					return String.valueOf(r);
-				}
-			}
-			case Cell.CELL_TYPE_BLANK 	:
-				// empty
-				return "";
-			case Cell.CELL_TYPE_BOOLEAN:
-				boolean booleanCellValue = cell.getBooleanCellValue();
-				return String.valueOf(booleanCellValue);
-			case Cell.CELL_TYPE_FORMULA:
-			{
-				FormulaEvaluator evaluator = cell.getSheet().getWorkbook().getCreationHelper().createFormulaEvaluator();
-				CellValue cellValue = evaluator.evaluate(cell);
-				switch (cellValue.getCellType()) {
-				case Cell.CELL_TYPE_BOOLEAN:
-					return String.valueOf(cellValue.getBooleanValue());
-				case Cell.CELL_TYPE_NUMERIC:
-					double r = cellValue.getNumberValue();
-					int i = (int) r;
-					if ((double)i == r) {
-						return String.valueOf(i);
-					} else {
-						return String.valueOf(r);
-					}
-				case Cell.CELL_TYPE_STRING:
-					return unicodeTrim(cellValue.getStringValue());
-				case Cell.CELL_TYPE_BLANK:
-					return "";
-				case Cell.CELL_TYPE_ERROR:
-					break;
-					// CELL_TYPE_FORMULA will never happen
-				case Cell.CELL_TYPE_FORMULA: 
-					break;
-				}
-			}
-			}
-			// error
-			return null;
-		}
 	}
 }

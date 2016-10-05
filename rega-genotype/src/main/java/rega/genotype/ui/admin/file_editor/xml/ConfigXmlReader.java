@@ -89,7 +89,51 @@ public class ConfigXmlReader {
 		return genome;
 	}
 
+	public static List<VerificationTableItem> readVerificationTable(File xmlDir) throws JDOMException, IOException {
+		List<VerificationTableItem> ans = new ArrayList<VerificationTableItem>();
+
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+		Element root = document.getRootElement();
+		Element tableE = root.getChild("verification-table");
+		if (tableE != null)
+			for (Object o : tableE.getChildren("column")) {
+				Element columnE = (Element) o;
+
+				Element descriptionE = columnE.getChild("description");
+				String description = descriptionE == null ? "(Empty)" :  descriptionE.getValue();
+
+				Element valueE = columnE.getChild("value");
+				String value = valueE == null ? "(Empty)" :  valueE.getValue();
+
+				ans.add(new VerificationTableItem(description, value));
+			}
+
+		return ans;
+	}
+
 	// classes
+	
+	public static class VerificationTableItem {
+		private String description;
+		private String resultsXmlVariable;
+		public VerificationTableItem(String description, String resultsXmlVariable) {
+			this.description = description;
+			this.resultsXmlVariable = resultsXmlVariable;
+		}
+		public String getDescription() {
+			return description;
+		}
+		public void setDescription(String description) {
+			this.description = description;
+		}
+		public String getResultsXmlVariable() {
+			return resultsXmlVariable;
+		}
+		public void setResultsXmlVariable(String resultsXmlVariable) {
+			this.resultsXmlVariable = resultsXmlVariable;
+		}
+	}
 	public static class FileManifest {
 		public enum FileType {
 			CSS,

@@ -202,6 +202,10 @@ body {
 	overflow-y:auto;
 }
 
+.float-right{
+    float: right;
+}
+
 .detailsForm img {
 	display: block;
 	margin-left: auto;
@@ -209,4 +213,8 @@ body {
 }
 .detailsForm .recombinationDetails{
 	text-align: center;
+}
+
+.error-text {
+     color: red;
 }

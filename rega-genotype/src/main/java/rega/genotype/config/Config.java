@@ -431,6 +431,9 @@ public class Config {
 		public void setAutoUpdate(boolean autoUpdate) {
 			this.autoUpdate = autoUpdate;
 		}
+		public String getVerificationDir() {
+			return jobDir + File.separator + "verification";
+		}
 		public String getJobDir() {
 			return jobDir;
 		}
