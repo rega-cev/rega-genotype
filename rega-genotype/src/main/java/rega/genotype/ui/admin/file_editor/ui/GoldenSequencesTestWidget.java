@@ -33,7 +33,6 @@ import rega.genotype.utils.Utils;
 import rega.genotype.viruses.generic.GenericTool;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
-import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WContainerWidget;
@@ -130,14 +129,6 @@ public class GoldenSequencesTestWidget extends Template {
 				
 				analyze(traceFile, toolConfig);
 				showResults(verificationTable, traceFile);
-
-				
-				// Create report table 
-//				WTable reportTable = new WTable(reportC);
-//				for (int i = 0; i < totals.length; ++i) {
-//					reportTable.getElementAt(0, i).addWidget(new WText(verificationTable.get(i).getDescription()));
-//					reportTable.getElementAt(1, i).addWidget(new WText(totals[i]+""));
-//				}
 			}
 		});
 	}
