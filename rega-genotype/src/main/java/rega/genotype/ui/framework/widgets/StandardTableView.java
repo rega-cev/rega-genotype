@@ -25,7 +25,7 @@ public class StandardTableView extends WTableView{
 	 */
 	public void setTableWidth() {
 		// set table widths
-		double tableWidth = 0;
+		double tableWidth = 2;
 		for(int i=0; i < getModel().getColumnCount(); i++) {
 			tableWidth += getColumnWidth(i).getValue() + COLUMN_PADDING;
 		}
