@@ -23,6 +23,7 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.VerificationTableItem;
 import rega.genotype.ui.framework.widgets.FastaUploadWidget;
+import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
@@ -31,13 +32,15 @@ import rega.genotype.utils.FileUtil;
 import rega.genotype.viruses.generic.GenericTool;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.TextFormat;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
-import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -100,6 +103,7 @@ public class GoldenSequencesTestWidget extends Template {
 			public void trigger() {
 				reportC.clear();
 				infoT.setText("");
+				infoT.addStyleClass("info-text");
 
 				if (fastaUpload.getText().isEmpty()) {
 					infoT.setText("Fasta file is empty");
@@ -119,7 +123,26 @@ public class GoldenSequencesTestWidget extends Template {
 					infoT.setText("Internal error could not copy expected results.");
 					return;
 				}
+				
+				traceFile.delete();
+				
+				analyze(traceFile, toolConfig);
+				showResults(verificationTable, traceFile);
 
+				
+				// Create report table 
+//				WTable reportTable = new WTable(reportC);
+//				for (int i = 0; i < totals.length; ++i) {
+//					reportTable.getElementAt(0, i).addWidget(new WText(verificationTable.get(i).getDescription()));
+//					reportTable.getElementAt(1, i).addWidget(new WText(totals[i]+""));
+//				}
+			}
+		});
+	}
+
+	private void analyze(final File traceFile, final ToolConfig toolConfig) {
+		Thread t = new Thread(new Runnable() {
+			public void run() {
 				// run analysis
 				final File sequenceFile = new File(workDir, "in.fasta");
 				try {
@@ -147,18 +170,12 @@ public class GoldenSequencesTestWidget extends Template {
 					infoT.setText("Analysis failed: " + e.getMessage());
 					return;
 				}
-
-				showResults(verificationTable, traceFile);
-				// Create report table 
-//				WTable reportTable = new WTable(reportC);
-//				for (int i = 0; i < totals.length; ++i) {
-//					reportTable.getElementAt(0, i).addWidget(new WText(verificationTable.get(i).getDescription()));
-//					reportTable.getElementAt(1, i).addWidget(new WText(totals[i]+""));
-//				}
 			}
 		});
+		t.setName("analysis_thread");
+		t.start();
 	}
-
+	
 	private Map<String, List<String>> createExpectedResultsMap() {
 		final Map<String, List<String>> expectedResultsMap = new HashMap<String, List<String>>();
 		
@@ -197,12 +214,7 @@ public class GoldenSequencesTestWidget extends Template {
 		return expectedResultsMap;
 	}
 
-	private WStandardItemModel createResultsModel(final List<VerificationTableItem> verificationTable,
-			final File traceFile) {
-		final Map<String, List<String>> expectedResultsMap = createExpectedResultsMap();
-
-		if (expectedResultsMap == null)
-			return null;
+	private WStandardItemModel createResultsModel(final List<VerificationTableItem> verificationTable) {
 
 		// report table
 		final WStandardItemModel resultsModel = new WStandardItemModel(0, verificationTable.size() * 2 - 1);
@@ -214,8 +226,17 @@ public class GoldenSequencesTestWidget extends Template {
 			else
 				resultsModel.setHeaderData(c - 1, "Calculated " + verificationTable.get(c / 2).getDescription());
 		}
+		return resultsModel;
+	}
 
-		
+	private void fillResultsModel(final List<VerificationTableItem> verificationTable,
+			final File traceFile, final WStandardItemModel resultsModel, final WApplication app) {
+
+		final Map<String, List<String>> expectedResultsMap = createExpectedResultsMap();
+
+		if (expectedResultsMap == null)
+			return;
+
 		final int[] totals = new int[verificationTable.size()];
 		// parse analysis results.
 		GenotypeResultParser parser = new GenotypeResultParser() {
@@ -231,6 +252,8 @@ public class GoldenSequencesTestWidget extends Template {
 					return; 
 				}
 
+				UpdateLock updateLock = app.getUpdateLock();
+
 				int row = Math.max(resultsModel.getRowCount() -1, 0);
 				resultsModel.insertRow(row, new WStandardItem(seqName));
 				for (int i = 1; i < verificationTable.size(); ++i) {
@@ -240,8 +263,6 @@ public class GoldenSequencesTestWidget extends Template {
 						
 						resultsModel.setData(row, i * 2 -1, expectedList.get(i));
 						resultsModel.setData(row, i * 2, value);
-						//resultsModel.layoutAboutToBeChanged().trigger();
-						//resultsModel.layoutChanged().trigger();
 
 						if (value == null)
 							info += "<div> Sequence " + seqName + " column " + i + " value not found in results list.</div>";
@@ -250,27 +271,67 @@ public class GoldenSequencesTestWidget extends Template {
 						}
 					}
 				}
+
+				resultsModel.layoutAboutToBeChanged().trigger();
+				resultsModel.layoutChanged().trigger();
+
+				app.triggerUpdate();
+				updateLock.release();
+				
 			}
 		};
+		parser.setReaderBlocksOnEof(true);
 		parser.parseFile(traceFile);
-
-		return resultsModel;
 	}
 
 	private void showResults(final List<VerificationTableItem> verificationTable,
 			final File traceFile) {
-		WStandardItemModel resultsModel = createResultsModel(verificationTable, traceFile);
+		final WStandardItemModel resultsModel = createResultsModel(verificationTable);
 		if (resultsModel == null)
 			return;
 
-		WTableView reportTable = new WTableView(reportC);
-		reportTable.setModel(resultsModel);
+		final WApplication app = WApplication.getInstance();
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				UpdateLock updateLock = app.getUpdateLock();
 
-		File file = ExcelUtils.write(resultsModel, 
-				new File(workDir, ToolVerificationWidget.GOLDEN_SEQUENCES_RESULTS_FILE));
+				reportC.clear();
+				StandardTableView reportTable = new StandardTableView(reportC);
+				reportTable.setModel(resultsModel);
+				reportTable.setTableWidth();
+				infoT.setText("Analysis start, it can take some time ...");
 
-		WFileResource r = new WFileResource("text", file.getAbsolutePath());
-		r.suggestFileName("golden_sequences_analysys_result.xlsx");
-		downloadB.setLink(new WLink(r));
+				app.triggerUpdate();
+				updateLock.release();
+
+				// wait till result.xml is ready
+				while (!traceFile.exists()){
+					synchronized (this) {
+						try {
+							wait(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+							assert (false);
+						}
+					}
+				}
+				
+				fillResultsModel(verificationTable, traceFile, resultsModel, app);
+
+				File file = ExcelUtils.write(resultsModel, 
+						new File(workDir, ToolVerificationWidget.GOLDEN_SEQUENCES_RESULTS_FILE));
+
+				updateLock = app.getUpdateLock();
+				WFileResource r = new WFileResource("text", file.getAbsolutePath());
+				r.suggestFileName("golden_sequences_analysys_result.xlsx");
+				downloadB.setLink(new WLink(r));
+				infoT.setText("Analysis finished.");
+
+				app.triggerUpdate();
+				updateLock.release();
+			}
+		});
+		t.setName("parserThread");
+		t.start();
 	}
 }
