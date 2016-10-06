@@ -29,6 +29,7 @@ import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.ExcelUtils;
 import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.Utils;
 import rega.genotype.viruses.generic.GenericTool;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
@@ -41,6 +42,7 @@ import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
+import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -322,10 +324,32 @@ public class GoldenSequencesTestWidget extends Template {
 						new File(workDir, ToolVerificationWidget.GOLDEN_SEQUENCES_RESULTS_FILE));
 
 				updateLock = app.getUpdateLock();
-				WFileResource r = new WFileResource("text", file.getAbsolutePath());
-				r.suggestFileName("golden_sequences_analysys_result.xlsx");
-				downloadB.setLink(new WLink(r));
+				WFileResource resource = new WFileResource("text", file.getAbsolutePath());
+				resource.suggestFileName("golden_sequences_analysys_result.xlsx");
+				downloadB.setLink(new WLink(resource));
 				infoT.setText("Analysis finished.");
+
+				// show totals
+				String totalsText = "<div style=\"margin-top:5px;\">Totals</div>";
+				WTable totalsTable = new WTable();
+				totalsTable.addStyleClass("golden-sequences-totals-table");
+				final int[] totals = new int[verificationTable.size()];
+				for (int r =0; r < resultsModel.getRowCount(); r++)
+					for (int c = 1; c < resultsModel.getColumnCount(); c+=2) {
+						Object d1 = resultsModel.getData(r, c);
+						Object d2 = resultsModel.getData(r, c +1);
+						if (Utils.equal(d1, d2))
+							totals[c/2 + 1]++;
+					}
+				int sum = resultsModel.getRowCount();
+				for (int i = 1; i < verificationTable.size(); ++i) {
+					totalsTable.getElementAt(i, 0).addWidget(
+							new WText( verificationTable.get(i).getDescription() ));
+					totalsTable.getElementAt(i, 1).addWidget(
+							new WText(totals[i] + "/" + sum));
+				}
+				reportC.addWidget(new WText(totalsText));
+				reportC.addWidget(totalsTable);
 
 				app.triggerUpdate();
 				updateLock.release();
