@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.config.ToolUpdateService;
@@ -251,13 +252,26 @@ public class ToolConfigTable extends Template{
 					public void trigger(DialogCode arg) {
 						if (arg == DialogCode.Accepted) {
 							if (fileUpload.getWFileUpload().getUploadedFiles().size() == 1) {
-								UploadedFile f = fileUpload.getWFileUpload().getUploadedFiles().get(0);
+								final UploadedFile f = fileUpload.getWFileUpload().getUploadedFiles().get(0);
 								
-								String manifestJson = FileUtil.getFileContent(new File(f.getSpoolFileName()), 
+								final String manifestJson = FileUtil.getFileContent(new File(f.getSpoolFileName()), 
 										ToolManifest.MANIFEST_FILE_NAME);
-								ToolManifest manifest = ToolManifest.parseJson(manifestJson);
+								final ToolManifest manifest = ToolManifest.parseJson(manifestJson);
 								if (manifest != null) {
-									importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
+									Config config = Settings.getInstance().getConfig();
+									if (config.getToolConfigById(manifest.getId(), manifest.getVersion()) != null) {
+										StandardDialog d = new StandardDialog("Warning");
+										d.getContents().addWidget(new WText("Tool id: " + manifest.getId() + ", version: " + manifest.getVersion() 
+												+ " already exists. Replace existing tool?"));
+										d.setWidth(new WLength(300));
+										d.finished().addListener(d, new Signal1.Listener<DialogCode>() {
+											public void trigger(DialogCode arg) {
+												if (arg == DialogCode.Accepted)
+													importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
+											}
+										});
+									} else
+										importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
 								} else {
 									Dialogs.infoDialog("Error", "Invalid tool file: No manifest");
 								}
