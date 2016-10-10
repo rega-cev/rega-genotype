@@ -215,6 +215,9 @@ body {
 	text-align: center;
 }
 
+.margin10 {
+    margin: 10px;
+}
 .error-text {
      color: red;
 }

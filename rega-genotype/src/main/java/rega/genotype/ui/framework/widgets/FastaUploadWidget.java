@@ -28,6 +28,8 @@ public class FastaUploadWidget extends WContainerWidget{
 	private WText errorText;
 
 	public FastaUploadWidget() {
+		new WText("<div>A) Paste nucleotide sequence(s) in FASTA format:</div>", this);
+		
 		sequenceTA = new WTextArea(this);
 		sequenceTA.setObjectName("seq-input-fasta");
 		sequenceTA.setRows(15);
@@ -37,6 +39,7 @@ public class FastaUploadWidget extends WContainerWidget{
 
 		Utils.removeSpellCheck(sequenceTA);
 
+		new WText("<div>B) Or, upload a FASTA with nucleotide sequences:</div>", this);
 		fileUpload = new FileUpload();
 		addWidget(fileUpload);
 

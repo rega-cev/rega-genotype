@@ -70,7 +70,7 @@ public class GoldenSequencesTestWidget extends Template {
 			return;
 		}
 
-		String infoText = "<div>Upload expected results in excel format.</div> <div>Table columns: ";
+		String infoText = "<div><b>Upload expected results in excel format.</b></div> <div>Table columns: ";
 
 		for (int i = 0; i < verificationTable.size(); ++i) {
 			if (i != 0)

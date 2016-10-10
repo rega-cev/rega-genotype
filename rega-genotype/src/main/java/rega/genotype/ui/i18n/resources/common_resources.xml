@@ -284,7 +284,7 @@
 	</message>
 
 	<message id="admin.config.self-scan-widget">
-		<table class="form-table">
+		<table class="form-table margin10">
 	    <col width="200"><col width="200"></col></col>
 		  <tr><td>Window</td><td>${window}</td><td>Enter window sizes separated by ,</td></tr>
 		  <tr><td>Step</td><td>${step-size}</td></tr>
@@ -294,7 +294,7 @@
 	</message>
 	
 	<message id="admin.config.golden-sequences-test-widget">
-		<div style="margin-top: 15px;">Enter golden sequences fasta.</div>
+		<div style="margin-top: 15px;"><b>Enter golden sequences fasta.</b></div>
 		${fasta-upload}
 		${results-table-format}
 		${results-table-upload}
