@@ -213,6 +213,8 @@ public class ReferenceTaxaTable extends WTable {
 	private void createRegionWidget(int row, int column, final Region region) {
 		final WText text = new WText(
 				region.getBegin() + " -> " + region.getEnd());
+		if (region.getBegin() == 0 && region.getEnd() == 0)
+			text.setText(tr("empty").toString());
 
 		final WTableCell cell = getElementAt(row, column);
 		regionMap.put(cell, region);
@@ -386,7 +388,8 @@ public class ReferenceTaxaTable extends WTable {
 				String regionId = regionHeaderMap.get(getColumnAt(c));
 				Region region = regionMap.get(getElementAt(r, c));
 				region.setName(regionId);
-				referenceTaxus.addRegion(region);
+				if (region.getBegin() != 0 && region.getEnd() != 0) // dont save empty regions.
+					referenceTaxus.addRegion(region);
 			}
 			referenceTaxus.setPriority(r); // priority is determined by the order of reference taxa in blast.xml
 			analysis.addReferenceTaxus(referenceTaxus);
