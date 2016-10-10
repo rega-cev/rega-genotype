@@ -15,9 +15,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellValue;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -46,6 +43,11 @@ import eu.webtoolkit.jwt.Signal1;
  * accession numbers in the list.
  * 
  * Note you can use  http://www.ncbi.nlm.nih.gov/sites/batchentrez to create the fasta file.
+ * 
+ * The pan-viral tool can be auto created/updated from ICTV master list using the next steps:
+ * - Query all the sequences by accession numbers from NCBI.
+ * - Create a cluster per organism. (Organism taxonomy id is also queried from NCBI)
+ * - Annotate hierarchy (family__genus__species) as specified in ICTV master list.
  * 
  * @author michael
  */
