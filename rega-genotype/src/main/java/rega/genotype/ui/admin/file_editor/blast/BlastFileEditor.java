@@ -104,6 +104,7 @@ public class BlastFileEditor extends WContainerWidget{
 		refTaxaPanel.setCentralWidget(referenceTaxaTable);
 		refTaxaPanel.setCollapsible(true);
 		refTaxaPanel.setCollapsed(blastAnalysis.getReferenceTaxus().isEmpty());
+		refTaxaPanel.addStyleClass("ref-taxa-table");
 
 		createClustersTable(alignmentAnalyses);
 
