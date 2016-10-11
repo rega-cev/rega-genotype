@@ -59,6 +59,7 @@ public class UiFileEditor extends FormTemplate{
 
 	private FileUpload fileUpload = new FileUpload();
 	private File workDir;
+	private WLineEdit genomeColor = new WLineEdit("#53b808");;
 	private WLineEdit imageStartLE = new WLineEdit();
 	private WLineEdit imageEndLE = new WLineEdit();
 	private WLineEdit genomeStartLE = new WLineEdit();
@@ -99,6 +100,7 @@ public class UiFileEditor extends FormTemplate{
 
 		Genome genome = ConfigXmlReader.readGenome(workDir);
 		if (genome != null) {
+			setValue(genomeColor, genome.color);
 			setValue(genomeStartLE, genome.genomeStart);
 			setValue(genomeEndLE, genome.genomeEnd);
 			setValue(imageStartLE, genome.imageStart);
@@ -146,6 +148,7 @@ public class UiFileEditor extends FormTemplate{
 		bindWidget("image-end", imageEndLE);
 		bindWidget("genome-start", genomeStartLE);
 		bindWidget("genome-end", genomeEndLE);
+		bindWidget("genome-color", genomeColor);
 		bindWidget("example-sequence", exapmleSequenceT);
 		bindWidget("authors", authorsT);
 		bindWidget("introduction", introductionT);
@@ -180,6 +183,7 @@ public class UiFileEditor extends FormTemplate{
 			genome.imageEnd = Integer.valueOf(imageEndLE.getText());
 			genome.genomeStart = Integer.valueOf(genomeStartLE.getText());
 			genome.genomeEnd = Integer.valueOf(genomeEndLE.getText());
+			genome.color = genomeColor.getText();
 
 			try {
 				ConfigXmlWriter.writeGenome(workDir, genome);

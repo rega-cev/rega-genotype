@@ -23,7 +23,7 @@ public class ConfigXmlWriter {
 			root.removeChildren("genome");
 
 			Element genomeE = new Element("genome");
-			add(genomeE, "color", "#53b808");
+			add(genomeE, "color", genome.color);
 			genomeE.getChild("color").setAttribute("assignment", "-");
 			add(genomeE, "start", genome.genomeStart);
 			add(genomeE, "end", genome.genomeEnd);
@@ -55,5 +55,6 @@ public class ConfigXmlWriter {
 		public int imageEnd;
 		public int genomeStart;
 		public int genomeEnd;
+		public String color;
 	}
 }

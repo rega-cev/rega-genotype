@@ -81,6 +81,10 @@ public class ConfigXmlReader {
 				if (imageEnd != null)
 					genome.imageEnd = Integer.valueOf(imageEnd.getValue());
 
+				Element color = genomeE.getChild("color");
+				if (color != null)
+					genome.color = color.getValue();
+
 			} catch (NumberFormatException e) {
 				return null;
 			}

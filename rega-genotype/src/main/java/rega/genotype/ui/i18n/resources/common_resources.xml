@@ -264,6 +264,7 @@
   		  <tr><td>Image end</td><td>${image-end}</td></tr>
   		  <tr><td>Genome start</td><td>${genome-start}</td></tr>
   		  <tr><td>Genome end</td><td>${genome-end}</td></tr>
+  		  <tr><td>Genome color</td><td>${genome-color}</td></tr>
 		</table>
 		<h4>Text</h4>
 		<div>A set of variables that will be presented on the screen and can be different in every tool.</div>
