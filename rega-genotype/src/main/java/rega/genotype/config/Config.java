@@ -36,6 +36,10 @@ public class Config {
 		return GsonUtil.toJson(this);
 	}
 
+	public Config copy() {
+		return parseJson(toJson());
+	}
+
 	public void save() throws IOException {
 		save(Settings.getInstance().getBaseDir() + File.separator);
 	}
@@ -47,6 +51,7 @@ public class Config {
 					new BigInteger(130, new SecureRandom()).toString(32));
 
 		FileUtil.writeStringToFile(new File(externalDir + CONFIG_FILE_NAME), toJson());
+		Settings.getInstance().setConfig(this);
 	}
 
 	public GeneralConfig getGeneralConfig() {

@@ -67,9 +67,8 @@ public class LocalConfigForm  extends FormTemplate {
 		if (!validate())
 			return null;
 
-		// TODO: protect against 2 users editing the tool at the same time.
-
-		Config config = Settings.getInstance().getConfig();
+		// make sure that all the changes are saved at 1 go.
+		Config config = Settings.getInstance().getConfig().copy();
 
 		// save ToolConfig
 		if (toolConfig == null) {
@@ -81,6 +80,9 @@ public class LocalConfigForm  extends FormTemplate {
 				e.printStackTrace();
 				return null;
 			}
+		} else {
+			toolConfig = config.getToolConfigById(toolConfig.getToolMenifest().getId(),
+					toolConfig.getToolMenifest().getVersion());
 		}
 
 		toolConfig.genetareConfigurationDir(toolDir.getName());
@@ -93,7 +95,7 @@ public class LocalConfigForm  extends FormTemplate {
 		toolConfig.setCurrentUsedVersion(currentVesionChB.isChecked());
 
 		// make sure that current version is unique.
-		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
+		for (ToolConfig c :config.getTools()) {
 			ToolManifest m = c.getToolMenifest();
 			if (c.isCurrentUsedVersion() && m != null 
 					&& m.getId().equals(toolConfig.getId()) 
