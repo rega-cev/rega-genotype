@@ -632,6 +632,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		final int end = unassigned || endV == null ? -1 : Integer.parseInt(endV);
 		final int sequenceIndex = p.getSequenceIndex();
 	
+		if (start < 1 && end < 1)
+			return null; // Do not show genome image if the sequence could not be aligned.
+
 		return GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
 			@Override
 			public void handleRequest(WebRequest request, WebResponse response) {
