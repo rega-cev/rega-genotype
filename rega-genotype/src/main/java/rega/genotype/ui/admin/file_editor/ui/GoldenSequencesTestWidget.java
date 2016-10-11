@@ -150,15 +150,7 @@ public class GoldenSequencesTestWidget extends Template {
 				try {
 					genotypeTool = new GenericTool(toolConfig, workDir);
 					genotypeTool.analyze(sequenceFile.getAbsolutePath(), traceFile.getAbsolutePath());
-				} catch (IOException e) {
-					e.printStackTrace();
-					infoT.setText("Analysis failed: " + e.getMessage());
-					return;
-				} catch (ParameterProblemException e) {
-					e.printStackTrace();
-					infoT.setText("Analysis failed: " + e.getMessage());
-					return;
-				} catch (FileFormatException e) {
+				} catch (Exception e) { // Show the tool admin every error in analysis (if it is xml error he can fix it)
 					e.printStackTrace();
 					infoT.setText("Analysis failed: " + e.getMessage());
 					return;
