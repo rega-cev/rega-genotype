@@ -29,6 +29,7 @@ public class ManifestForm extends FormTemplate{
 	private final WLineEdit nameLE = initLineEdit();
 	private final WLineEdit idLE = initLineEdit();
 	private final WLineEdit versionLE = initLineEdit();
+	private final WLineEdit commitLE = initLineEdit();
 	private final TaxonomyButton taxonomyT = new TaxonomyButton();
 	private final WComboBox toolTypeCB = new WComboBox();
 	ObjectListModel<ToolType> toolTypeModel;
@@ -54,7 +55,7 @@ public class ManifestForm extends FormTemplate{
 				case VirusTool:
 					return new WString("Virus tool (standard)");
 				case Template:
-					return new WString("Template (contains data to auto create other tools)");
+					return new WString("Template (for other tools)");
 				}
 				return null;
 			}
@@ -76,6 +77,7 @@ public class ManifestForm extends FormTemplate{
 				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.VirusTool));
 			versionLE.setText(manifest.getVersion());
 			taxonomyT.setTaxonomyIdText(manifest.getTaxonomyId());
+			commitLE.setText(manifest.getCommitMessage());
 		}
 
 		idLE.setDisabled(mode == Mode.NewVersion);
@@ -104,6 +106,7 @@ public class ManifestForm extends FormTemplate{
 		bindWidget("name", nameLE);
 		bindWidget("id", idLE);
 		bindWidget("version", versionLE);
+		bindWidget("commit", commitLE);
 		bindWidget("tool-type", toolTypeCB);
 		bindWidget("taxonomy-text", taxonomyT);
 
@@ -125,6 +128,7 @@ public class ManifestForm extends FormTemplate{
 		manifest.setName(nameLE.getText());
 		manifest.setId(idLE.getText());
 		manifest.setVersion(versionLE.getText());
+		manifest.setCommitMessage(commitLE.getText());
 		manifest.setTaxonomyId(taxonomyT.getValue());
 		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
 		if (publishing) {
