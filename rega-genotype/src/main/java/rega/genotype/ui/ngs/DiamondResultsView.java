@@ -5,12 +5,19 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import rega.genotype.ngs.NgsAnalysis;
+import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.PositionScheme;
 import eu.webtoolkit.jwt.Side;
+import eu.webtoolkit.jwt.ViewItemRenderFlag;
+import eu.webtoolkit.jwt.WAbstractItemDelegate;
+import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WStandardItemModel;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WTableView;
+import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
 
@@ -18,23 +25,73 @@ public class DiamondResultsView extends WContainerWidget{
 	private static final int ASSINGMENT_COLUMN = 0;
 	private static final int DATA_COLUMN = 1; // sequence count column. percentages of the chart.
 	private static final int CHART_DISPLAY_COLUMN = 2;
+	private static final int COLOR_COLUMN =         3;
 
 	private WStandardItemModel blastResultModel = new WStandardItemModel();
 	private WPieChart chart;
 	private WTableView table;
-	private File workDir;
 
 	public DiamondResultsView(File workDir) {
-		this.workDir = workDir;
 
 		// create blastResultModel
 		blastResultModel = new WStandardItemModel();
-		blastResultModel.insertColumns(blastResultModel.getColumnCount(), 3);
-		blastResultModel.setHeaderData(ASSINGMENT_COLUMN, "Assignment");
+		blastResultModel.insertColumns(blastResultModel.getColumnCount(), 4);
+
+		// chart
+		chart = new WPieChart();
+		addWidget(chart);
+		setPositionScheme(PositionScheme.Relative);
+
+		setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
+		setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+
+		chart.resize(550, 300);
+		//chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
+		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+
+		chart.setModel(blastResultModel);
+		//chart.setLabelsColumn(CHART_DISPLAY_COLUMN);    
+		chart.setDataColumn(DATA_COLUMN);
+		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
+		chart.setPlotAreaPadding(30);
+
+		// table
+		table = new WTableView(this);
+		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+		table.setWidth(new WLength(520));
+		table.setStyleClass("blastResultsTable");
+		table.setHeaderHeight(new WLength(20));
+		table.hideColumn(CHART_DISPLAY_COLUMN);
+		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
+		table.setColumnWidth(DATA_COLUMN, new WLength(80));
+		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
+
+		table.setItemDelegateForColumn(COLOR_COLUMN, new WAbstractItemDelegate() {
+			@Override
+			public WWidget update(WWidget widget, WModelIndex index, EnumSet<ViewItemRenderFlag> flags) {
+				WContainerWidget w = new WContainerWidget();
+				w.setStyleClass("legend-item");
+				WColor c = (WColor)index.getData(ItemDataRole.UserRole + 1);
+				if (c != null)
+					w.getDecorationStyle().setBackgroundColor(c);
+
+				w.setMargin(WLength.Auto, Side.Left, Side.Right);
+
+				return w;
+			}
+		});
+
+		table.setModel(blastResultModel);
+
+		// fill model
+
+		blastResultModel.setHeaderData(ASSINGMENT_COLUMN, new WString("Assignment"));
 		blastResultModel.setHeaderData(DATA_COLUMN, "Sequence count");
+		blastResultModel.setHeaderData(COLOR_COLUMN, "Legend");
 
 		Map<String, Integer> countDiamondREsults = NgsAnalysis.countDiamondREsults(workDir);
 
+		int i = 0;
 		for (Map.Entry<String, Integer> e: countDiamondREsults.entrySet()) {
 			int sequenceCount = e.getValue();
 			String taxonNmae = e.getKey();
@@ -45,35 +102,11 @@ public class DiamondResultsView extends WContainerWidget{
 			blastResultModel.setData(row, DATA_COLUMN, sequenceCount); // percentage
 			blastResultModel.setData(row, CHART_DISPLAY_COLUMN, 
 					taxonNmae + " (" + sequenceCount + ")");
+
+			WColor color = chart.getPalette().getBrush(i).getColor();
+			blastResultModel.setData(row, COLOR_COLUMN, color, 
+					ItemDataRole.UserRole + 1);
+			i++;
 		}
-
-		// chart
-		chart = new WPieChart();
-		addWidget(chart);
-		setPositionScheme(PositionScheme.Relative);
-
-		setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
-		setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-
-		chart.resize(800, 300);
-		//chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
-		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-
-		chart.setModel(blastResultModel);
-		chart.setLabelsColumn(CHART_DISPLAY_COLUMN);    
-		chart.setDataColumn(DATA_COLUMN);
-		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
-		chart.setPlotAreaPadding(30);
-
-		// table
-		table = new WTableView(this);
-		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		table.setWidth(new WLength(500));
-		table.setHeight(new WLength(200));
-		table.setStyleClass("blastResultsTable");
-		table.hideColumn(CHART_DISPLAY_COLUMN);
-		table.setColumnWidth(0, new WLength(340));
-		table.setColumnWidth(1, new WLength(60));
-		table.setModel(blastResultModel);
 	}
 }
