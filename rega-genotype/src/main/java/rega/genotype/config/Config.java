@@ -36,20 +36,22 @@ public class Config {
 		return GsonUtil.toJson(this);
 	}
 
+	public Config copy() {
+		return parseJson(toJson());
+	}
+
 	public void save() throws IOException {
 		save(Settings.getInstance().getBaseDir() + File.separator);
 	}
 
-	private void save(String externalDir) throws IOException {
-		// Note: no need to synchronize: The file is read only 1 time when setting
-		// is constructed. Setting config state is constantly updated by the UI.
-
+	private synchronized void save(String externalDir) throws IOException {
 		if (getGeneralConfig().getPublisherPassword() == null 
 				|| getGeneralConfig().getPublisherPassword().isEmpty()) 
 			getGeneralConfig().setPublisherPassword(
 					new BigInteger(130, new SecureRandom()).toString(32));
 
 		FileUtil.writeStringToFile(new File(externalDir + CONFIG_FILE_NAME), toJson());
+		Settings.getInstance().setConfig(this);
 	}
 
 	public GeneralConfig getGeneralConfig() {
@@ -399,39 +401,29 @@ public class Config {
 			genetareConfigurationDir(null);
 		}
 
-		public void genetareConfigurationDir(String suggestDirName) {
+		public String genetareDir(String parentDir, String suggestDirName) {
+			String toolDir = null;
 			try {
-				File toolDir;
 				if (suggestDirName == null)
 					toolDir = FileUtil.createTempDirectory("tool-dir", 
-							new File(Settings.getInstance().getBaseXmlDir()));
+							new File(parentDir)).getAbsolutePath();
 				else {
-					toolDir = new File(new File(Settings.getInstance().getBaseXmlDir()), suggestDirName);
-					toolDir.mkdirs();
+					toolDir = parentDir + File.separator + suggestDirName;
+					new File(toolDir).mkdirs();
 				}
-				setConfiguration(toolDir + File.separator);
 			} catch (IOException e) {
 				e.printStackTrace();
 				assert(false); 
 			}
+			return toolDir;
+		}
+
+		public void genetareConfigurationDir(String suggestDirName) {
+			setConfiguration(genetareDir(Settings.getInstance().getBaseXmlDir(), suggestDirName) + File.separator);
 		}
 		
 		public void genetareJobDir(String suggestDirName) {
-			try {
-				File toolDir;
-				if (suggestDirName == null)
-					toolDir = FileUtil.createTempDirectory("tool-dir", 
-							new File(Settings.getInstance().getBaseJobDir()));
-				else {
-					toolDir = new File(new File(Settings.getInstance().getBaseJobDir()), suggestDirName);
-					toolDir.mkdirs();
-				}
-				setJobDir(toolDir + File.separator);
-			} catch (IOException e) {
-				e.printStackTrace();
-				assert(false); 
-			}
-
+			setJobDir(genetareDir(Settings.getInstance().getBaseJobDir(), suggestDirName) + File.separator);
 		}
 
 		public ToolManifest getToolMenifest() {
@@ -485,6 +477,9 @@ public class Config {
 		}
 		public void setAutoUpdate(boolean autoUpdate) {
 			this.autoUpdate = autoUpdate;
+		}
+		public String getVerificationDir() {
+			return jobDir + File.separator + "verification";
 		}
 		public String getJobDir() {
 			return jobDir;

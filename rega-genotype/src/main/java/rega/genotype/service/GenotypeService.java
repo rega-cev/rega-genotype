@@ -116,7 +116,7 @@ public class GenotypeService extends HttpServlet {
 					};
 					
 					AbstractDataTableGenerator tg = tableGenerator.getConstructor(SequenceFilter.class, DataTable.class).newInstance(passAll, dt);
-					tg.parseFile(traceFile.getParentFile());
+					tg.parseResultFile(traceFile.getParentFile());
 				}
 			}
 		} catch (IllegalArgumentException e) {

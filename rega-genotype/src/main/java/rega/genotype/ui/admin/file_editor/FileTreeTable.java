@@ -127,7 +127,7 @@ public class FileTreeTable extends WTreeTable {
 
 			getLabel().setTextFormat(TextFormat.PlainText);
 			getLabel().setText(path_.getName());
-
+			getLabel().setToolTip(path_.getName());
 			
 			if (path.exists()) {
 				if (!path.isDirectory()) {

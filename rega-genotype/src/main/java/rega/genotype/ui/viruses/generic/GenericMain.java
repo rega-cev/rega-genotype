@@ -102,6 +102,7 @@ public class GenericMain extends GenotypeMain {
 		WXmlLocalizedStrings resources = new WXmlLocalizedStrings();
 		resources.use("/rega/genotype/ui/i18n/resources/common_resources");
 		resources.use(definition.getXmlPath() + File.separator + "resources");
+		resources.use(definition.getXmlPath() + File.separator + "strings");
 
 		combined.add(new RegaLocalizedString());
 		combined.add(resources);

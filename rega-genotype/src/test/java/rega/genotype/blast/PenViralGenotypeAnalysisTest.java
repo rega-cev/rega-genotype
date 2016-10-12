@@ -192,7 +192,7 @@ public class PenViralGenotypeAnalysisTest extends TestCase{
 				return false;
 			}    		
     	};
-    	p.parseFile(jobDir);
+    	p.parseResultFile(jobDir);
 	}
 
 	/**

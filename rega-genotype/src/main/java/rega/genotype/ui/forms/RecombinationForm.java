@@ -46,7 +46,7 @@ public class RecombinationForm extends AbstractForm{
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		
 		p = new GenotypeResultParser(selectedSequenceIndex);
-		p.parseFile(jobDir);
+		p.parseResultFile(jobDir);
 		
 		final String id;
 		if (!p.elementExists("/genotype_result/sequence/conclusion")) {

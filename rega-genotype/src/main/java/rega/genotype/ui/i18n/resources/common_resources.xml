@@ -177,6 +177,7 @@
 		  <tr><td class="form-table-name-td">Name</td><td class="form-table-name-td">${name}</td><td>${name-info}</td></tr>
 		  <tr><td class="form-table-name-td">ID</td><td class="form-table-name-td">${id}</td><td>${id-info}</td></tr>
 		  <tr><td class="form-table-name-td">Version</td><td class="form-table-name-td">${version}</td><td>${version-info}</td></tr>
+		  <tr><td class="form-table-name-td">Changes</td><td class="form-table-name-td">${commit}</td><td class="auto-form-info">What is new in this version.</td></tr>
 		  <tr><td class="form-table-name-td">Taxonomy ID</td><td class="form-table-name-td">${taxonomy-text}</td></tr>
 		  <tr><td class="form-table-name-td">Tool type</td><td class="form-table-name-td">${tool-type}</td></tr>
 		</table>
@@ -196,7 +197,7 @@
 		${manifest}
 		${config}
 		${upload}
-		<div class="action-buttons">${publish}${retract}${save}${cancel}</div>
+		<div class="action-buttons">${validate-tool}${publish}${retract}${save}${cancel}</div>
 		${info}
 	</message>
 	
@@ -270,8 +271,9 @@
   		  <tr><td>Image end</td><td>${image-end}</td></tr>
   		  <tr><td>Genome start</td><td>${genome-start}</td></tr>
   		  <tr><td>Genome end</td><td>${genome-end}</td></tr>
+  		  <tr><td>Genome color</td><td>${genome-color}</td></tr>
 		</table>
-		<h4>Transtalable text</h4>
+		<h4>Text</h4>
 		<div>A set of variables that will be presented on the screen and can be different in every tool.</div>
 		<div>messages from resources.xml will be replaced by the given values</div>
 		<div>Example: if variable name = global.authors and value="me" </div>
@@ -279,6 +281,39 @@
 		
 		${placeholders}
 	</message>
+	
+	<message id="admin.config.ui-file-editor.placeholders">
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>Id</td><td>${id}</td><td>Message id in xml file</td></tr>
+		</table>
+		<div>XML editor is manipulating your text. Use the correct editor for the input.</div>
+		${value}
+	</message>
+
+	<message id="admin.config.self-scan-widget">
+		<table class="form-table margin10">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>Window</td><td>${window}</td><td>Enter window sizes separated by ,</td></tr>
+		  <tr><td>Step</td><td>${step-size}</td></tr>
+		</table>
+		<div>${run}</div>
+		${report}
+	</message>
+	
+	<message id="admin.config.golden-sequences-test-widget">
+		<div style="margin-top: 15px;"><b>Enter golden sequences fasta.</b></div>
+		${fasta-upload}
+		${results-table-format}
+		${results-table-upload}
+		<div style="margin-top: 15px;">${run} ${download} ${info}</div>
+		${report}
+	</message>
+
+	<message id="admin.config.golden-sequences-test-widget.empty-table">
+		<div>Error: table variables are specified in config.xml</div>
+	</message>
+
 
 	<message id="admin.config.cluster-table">
 		${cluster-table}
@@ -344,6 +379,9 @@
 		<div>&lt;img src="$${resource-file}/imageName"&gt; &lt;/img&gt;</div>
 
 	</message>
+
+	<message id="empty">(Empty)</message>
+
 	<!-- blocks -->
 
 	<message id="form-field">

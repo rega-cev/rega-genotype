@@ -190,11 +190,11 @@ public abstract class GenotypeTool {
 		}
     }
 
-    protected void stopTracer() {
+    public void stopTracer() {
         getTracer().finish();
     }
 
-    protected void startTracer(String traceFile) throws FileNotFoundException {
+    public void startTracer(String traceFile) throws FileNotFoundException {
         tracer = new ResultTracer(new File(traceFile));
     }
 

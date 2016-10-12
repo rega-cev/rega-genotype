@@ -60,15 +60,16 @@ public class FastaToRega {
 	private static final String OUT_GROUP_NAME = "X";
 
 	public enum AnalysisType {
-		Major, Minor;
+		Major, Minor, MajorSelfScan, Empty;
 
 		private int analysisNumber = 0;
 
 		public String analysisName() {
 			switch (this) {
 			case Major: return "phylo-major";
-			case Minor: 
-				return "phylo-minor-" + analysisNumber;
+			case Minor: return "phylo-minor-" + analysisNumber;
+			case MajorSelfScan: return "phylo-major-" + "self-scan";
+			case Empty: return "Error= this analysis should not have an id";
 			}
 			return "";
 		}
@@ -302,6 +303,8 @@ public class FastaToRega {
 		
 
 		createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, AnalysisType.Major, outgroupName);
+		clusterIds.remove(OUT_GROUP_NAME);
+		createSelfScanElement(doc, clusterIds, genotypeAnalysesElem);
 
 		int n = 1;
 		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
@@ -324,12 +327,30 @@ public class FastaToRega {
 		return doc;
 	}
 
+	private static Element createSelfScanElement(Document doc,
+			List<String> clusterIds, Element genotypeAnalysesElem) {
+		Element analysisElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("analysis"));
+		analysisElem.setAttribute("id", AnalysisType.MajorSelfScan.analysisName());
+		analysisElem.setAttribute("type", "scan");
+
+		Element windowElem = (Element) analysisElem.appendChild(doc.createElement("window"));
+		Element stepElem = (Element) analysisElem.appendChild(doc.createElement("step"));
+
+		windowElem.setTextContent("500");
+		stepElem.setTextContent("100");
+
+		createAnalysisElement(doc, clusterIds, analysisElem, AnalysisType.Empty, null);
+
+		return analysisElem;
+	}
+
 	private static Element createAnalysisElement(Document doc,
 			List<String> clusterIds, Element genotypeAnalysesElem,
 			AnalysisType analysisType, String outgroupName) {
 
 		Element analysisElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("analysis"));
-		analysisElem.setAttribute("id", analysisType.analysisName());
+		if (analysisType != AnalysisType.Empty)
+			analysisElem.setAttribute("id", analysisType.analysisName());
 		analysisElem.setAttribute("type", "paup");
 
 		Element identifyElem = (Element) analysisElem.appendChild(doc.createElement("identify"));

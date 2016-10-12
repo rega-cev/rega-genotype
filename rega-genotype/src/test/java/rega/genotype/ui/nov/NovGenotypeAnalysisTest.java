@@ -77,7 +77,7 @@ public class NovGenotypeAnalysisTest extends TestCase {
 				return false;
 			}    		
 		};
-		p.parseFile(jobDir);
+		p.parseResultFile(jobDir);
 	}
 
 	public void testAnalysisRuntime() {
@@ -110,7 +110,7 @@ public class NovGenotypeAnalysisTest extends TestCase {
 				return false;
 			}    		
 		};
-		p.parseFile(jobDir);
+		p.parseResultFile(jobDir);
 	}
 
 	public void testAsciiFastaIds() {
@@ -152,7 +152,7 @@ public class NovGenotypeAnalysisTest extends TestCase {
 			}    		
 		};
 		try {
-			p.parseFile(jobDir);
+			p.parseResultFile(jobDir);
 		} catch (Exception e) {
 			/* That's alright, we expected an exception */
 			return;

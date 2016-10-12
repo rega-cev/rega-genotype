@@ -84,7 +84,7 @@ public class TaxonomyModel {
 
 	private static WStandardItem createItem(String[] row) {
 		WStandardItem item = new WStandardItem(
-				row[SCIENTIFIC_NAME_COL] + " (" + row[TAXON_COL] + ")");
+				row[SCIENTIFIC_NAME_COL] + ", " + row[TAXON_COL] + "");
 		item.setData(row[SCIENTIFIC_NAME_COL], SCIENTIFIC_NAME_ROLE);
 		item.setData(row[TAXON_COL], TAXONOMY_ID_ROLE);
 		item.setData(row[MNEMENIC_COL], MNEMENIC_ROLE);
@@ -96,6 +96,11 @@ public class TaxonomyModel {
 	public static String getMnemenic(String taxonomyId) {
 		 WStandardItem item = items.get(taxonomyId);
 		 return item == null ? null : item.getData(MNEMENIC_ROLE).toString();
+	}
+	
+	public static String getScientificName(String taxonomyId) {
+		 WStandardItem item = items.get(taxonomyId);
+		 return item == null ? null : item.getData(SCIENTIFIC_NAME_ROLE).toString();
 	}
 
 	public static String getHirarchy(String taxonomyId) {

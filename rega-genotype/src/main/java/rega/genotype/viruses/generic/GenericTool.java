@@ -143,7 +143,7 @@ public class GenericTool extends GenotypeTool {
        			else if (blastAnalysis.getAbsCutoff() != null)
        				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
        			else if (blastAnalysis.getRelativeCutoff() != null)
-       				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
+       				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getRelativeCutoff(), null);
         } else {
         	if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
    				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
@@ -151,7 +151,7 @@ public class GenericTool extends GenotypeTool {
    			else if (blastAnalysis.getAbsCutoff() != null)
    				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
    			else if (blastAnalysis.getRelativeCutoff() != null)
-   				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
+   				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getRelativeCutoff(), null);
         }
     }
 

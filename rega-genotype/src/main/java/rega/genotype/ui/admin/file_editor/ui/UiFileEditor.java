@@ -3,19 +3,24 @@ package rega.genotype.ui.admin.file_editor.ui;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.jdom.JDOMException;
+import org.jdom.output.XMLOutputter;
 
-import rega.genotype.config.XmlPlaceholders;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.Genome;
+import rega.genotype.ui.admin.file_editor.xml.XmlUtils;
+import rega.genotype.ui.admin.file_editor.xml.XmlUtils.ValueType;
+import rega.genotype.ui.admin.file_editor.xml.XmlUtils.XmlMsgNode;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.StandardDialog;
+import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileServlet;
 import rega.genotype.ui.util.FileUpload;
 import eu.webtoolkit.jwt.Coordinates;
@@ -25,9 +30,9 @@ import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
+import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WIntValidator;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPaintDevice;
@@ -36,9 +41,12 @@ import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WPainter.Image;
 import eu.webtoolkit.jwt.WPainterPath;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WTabWidget;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableRow;
+import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
+import eu.webtoolkit.jwt.WTextEdit;
 import eu.webtoolkit.jwt.WValidator;
 
 /**
@@ -51,6 +59,7 @@ public class UiFileEditor extends FormTemplate{
 
 	private FileUpload fileUpload = new FileUpload();
 	private File workDir;
+	private WLineEdit genomeColor = new WLineEdit("#53b808");;
 	private WLineEdit imageStartLE = new WLineEdit();
 	private WLineEdit imageEndLE = new WLineEdit();
 	private WLineEdit genomeStartLE = new WLineEdit();
@@ -91,6 +100,7 @@ public class UiFileEditor extends FormTemplate{
 
 		Genome genome = ConfigXmlReader.readGenome(workDir);
 		if (genome != null) {
+			setValue(genomeColor, genome.color);
 			setValue(genomeStartLE, genome.genomeStart);
 			setValue(genomeEndLE, genome.genomeEnd);
 			setValue(imageStartLE, genome.imageStart);
@@ -122,16 +132,23 @@ public class UiFileEditor extends FormTemplate{
 			}
 		});
 
-		XmlPlaceholders xmlPlaceholders = XmlPlaceholders.read(workDir);
-		if (xmlPlaceholders == null)
-			xmlPlaceholders = new XmlPlaceholders();
-		placeholdersWidget = new PlaceholdersWidget(xmlPlaceholders, dirtyHandler);
+		Map<String, XmlMsgNode> messages = new HashMap<String, XmlUtils.XmlMsgNode>();
+		try {
+			messages = XmlUtils.readMessages(new File(workDir, XmlUtils.STRINGS_XML_FILE_NAME));
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// file not always there.
+			//e.printStackTrace(); 
+		}
+		placeholdersWidget = new PlaceholdersWidget(messages, dirtyHandler);
 
 		bindWidget("image", painterImage);
 		bindWidget("image-start", imageStartLE);
 		bindWidget("image-end", imageEndLE);
 		bindWidget("genome-start", genomeStartLE);
 		bindWidget("genome-end", genomeEndLE);
+		bindWidget("genome-color", genomeColor);
 		bindWidget("example-sequence", exapmleSequenceT);
 		bindWidget("authors", authorsT);
 		bindWidget("introduction", introductionT);
@@ -166,6 +183,7 @@ public class UiFileEditor extends FormTemplate{
 			genome.imageEnd = Integer.valueOf(imageEndLE.getText());
 			genome.genomeStart = Integer.valueOf(genomeStartLE.getText());
 			genome.genomeEnd = Integer.valueOf(genomeEndLE.getText());
+			genome.color = genomeColor.getText();
 
 			try {
 				ConfigXmlWriter.writeGenome(workDir, genome);
@@ -188,25 +206,23 @@ public class UiFileEditor extends FormTemplate{
 	// Classes:
 
 	private static class PlaceholdersWidget extends WTable {
-		private XmlPlaceholders xmlPlaceholders;
 		private List<PlaceholderWidget> placeholderWidgets = new ArrayList<UiFileEditor.PlaceholderWidget>();
 		private DirtyHandler dirtyHandler;
 
-		public PlaceholdersWidget(final XmlPlaceholders xmlPlaceholders, final DirtyHandler dirtyHandler) {
-			this.xmlPlaceholders = xmlPlaceholders;
+		public PlaceholdersWidget(final Map<String, XmlMsgNode> messages, final DirtyHandler dirtyHandler) {
 			this.dirtyHandler = dirtyHandler;
 
 			WPushButton add = new WPushButton("Add", getElementAt(0, 0));
 
 			add.clicked().addListener(add, new Listener() {
 				public void trigger() {
-					addVaribale("", "");
+					addVaribale(new XmlMsgNode());
 					dirtyHandler.increaseDirty();
 				}
 			});
 
-			for (Map.Entry<String, String> e:xmlPlaceholders.getPlaceholders().entrySet()) {
-				addVaribale(e.getKey(), e.getValue());
+			for (XmlMsgNode m: messages.values()) {
+				addVaribale(m);
 			}
 		}
 
@@ -214,43 +230,60 @@ public class UiFileEditor extends FormTemplate{
 			if(!validate())
 				return false;
 
-			xmlPlaceholders.getPlaceholders().clear();
-			for (PlaceholderWidget pw: placeholderWidgets) {
-				xmlPlaceholders.getPlaceholders().put(pw.nameLE.getText(), pw.value);
-			}
-			xmlPlaceholders.save(workDir.getAbsolutePath());
+			Map<String, XmlMsgNode> messages = new HashMap<String, XmlUtils.XmlMsgNode>();
+			for (PlaceholderWidget pw: placeholderWidgets) 
+				messages.put(pw.node.id, pw.node);
 
+			try {
+				XmlUtils.writeMessages(new File(workDir, XmlUtils.STRINGS_XML_FILE_NAME),
+						messages);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			} catch (JDOMException e) {
+				e.printStackTrace();
+				return false;
+			}
+			
 			return true;
 		}
 
 		public boolean validate() {
-			for (PlaceholderWidget pw: placeholderWidgets) {
-				if(pw.nameLE.validate() != WValidator.State.Valid)
-					return false;
-			}
-
 			return true;
 		}
 
-		private void addVaribale(String name, String value) {
+		private void addVaribale(final XmlMsgNode node) {
 			final WTableRow row = insertRow(getRowCount() - 1);
-			final PlaceholderWidget placeholder = new PlaceholderWidget(row, name, value);
-			dirtyHandler.connect(placeholder.nameLE);
+			final PlaceholderWidget placeholder = new PlaceholderWidget(row, node);
+			dirtyHandler.connect(placeholder.infoT);
 			placeholderWidgets.add(placeholder);
 
 			final WPushButton editB = new WPushButton("Edit", row.elementAt(1));
 			final WPushButton removeB = new WPushButton("X", row.elementAt(2));
 
-			editB.clicked().addListener(editB, new Signal.Listener() {
+			editB.clicked().addListener(editB, new Signal.Listener() {				
 				public void trigger() {
 					final StandardDialog d = new StandardDialog("Edit placeholder value", true);
-					final WTextArea valueT = new WTextArea(placeholder.value, d.getContents());
-					valueT.resize(400, 390);
-					d.resize(430, 460);
+					Template template = new Template(tr("admin.config.ui-file-editor.placeholders"), 
+							d.getContents());
+
+					final NodeValueEditor valueT = new NodeValueEditor(node);
+					final WLineEdit idLE = new WLineEdit(node.id);
+
+					idLE.setValidator(new WValidator(true));
+
+					template.bindWidget("id", idLE);
+					template.bindWidget("value", valueT);
+
+					valueT.resize(600, 390);
+					d.resize(650, 550);
 					d.finished().addListener(d, new Signal1.Listener<WDialog.DialogCode>() {
 						public void trigger(WDialog.DialogCode arg) {
 							if (arg == WDialog.DialogCode.Accepted) {
-								placeholder.value = valueT.getText();
+								placeholder.node.value = valueT.getText();
+								placeholder.node.id = idLE.getText();
+								placeholder.node.valueType = valueT.getValueType();
+								placeholder.infoT.setText(idLE.getText());
 								dirtyHandler.increaseDirty();
 							}
 						}
@@ -269,16 +302,67 @@ public class UiFileEditor extends FormTemplate{
 	}
 
 	private static class PlaceholderWidget {
-		WLineEdit nameLE;
-		String value;
-		public PlaceholderWidget(WTableRow row, String name, String value) {
-			this.value = value;
-			nameLE = new WLineEdit(name, row.elementAt(0));
-			nameLE.setValidator(new WValidator(true));
-			nameLE.setWidth(new WLength(300));
+		WText infoT;
+		XmlMsgNode node;
+		public PlaceholderWidget(WTableRow row, XmlMsgNode node) {
+			this.node = node;
+			infoT = new WText(node.id.isEmpty() ? "(Empty)" : node.id, 
+					row.elementAt(0));
 		}
 	}
 
+	private static class NodeValueEditor extends WTabWidget {
+		WTextEdit xmlEditor = new WTextEdit();
+		WTextArea fastaEditor = new WTextArea();
+		public NodeValueEditor(XmlMsgNode node) {
+			WContainerWidget fastaEditorC = new WContainerWidget();
+			fastaEditorC.addWidget(fastaEditor);
+			fastaEditorC.addWidget(new WText("Fasta sequences are automatically html encoded, do not warry about that. " +
+					"You can not use xml editor for fasta file because it will replace \\n to <p>"));
+			
+			xmlEditor.setText(node.value);
+			fastaEditor.setText(node.value);
+
+			addTab(xmlEditor, "XML Editor");
+			addTab(fastaEditorC, "FASTA Editor");
+
+			setCurrentIndex(node.valueType.getCode());
+
+			xmlEditor.resize(600, 380);
+			fastaEditor.resize(600, 380);
+
+			currentChanged().addListener(this, new Signal1.Listener<Integer>() {
+				public void trigger(Integer tab) {
+					if (tab == 0) // move from fasta to xml
+						xmlEditor.setText(fastaEditor.getText());
+					else if (tab == 1)
+						fastaEditor.setText(xmlEditor.getText());
+				}
+			});
+
+			fastaEditor.changed().addListener(fastaEditor, new Signal.Listener() {
+				public void trigger() {
+					XMLOutputter xmlOutput = new XMLOutputter();
+					fastaEditor.setText(xmlOutput.
+							escapeElementEntities(fastaEditor.getText()));
+				}
+			});
+		}
+
+		String getText() {
+			int tab = getCurrentIndex();
+			if (tab == 0)
+				return xmlEditor.getText();
+			else if (tab == 1) 
+				return fastaEditor.getText();
+			else
+				return null;
+		}
+
+		ValueType getValueType() {
+			return ValueType.fromCode(getCurrentIndex());
+		}
+	}
 	private static class PainterImage extends WPaintedWidget {
 		private File imageFile;
 		private WPainterPath path = new WPainterPath();

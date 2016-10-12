@@ -8,10 +8,12 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.admin.AdminNavigation;
 import rega.genotype.ui.admin.file_editor.FileEditor;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Signal;
@@ -40,7 +42,8 @@ public class ToolConfigForm extends FormTemplate {
 
 	public ToolConfigForm(final ToolConfig toolConfig, Mode mode) {
 		super(tr("admin.config.tool-config-dialog"));
-		
+
+		final WPushButton verifyToolB = new WPushButton("Verify tool");
 		final WPushButton publishB = new WPushButton("Publish");
 		final WPushButton retractB = new WPushButton("Retract");
 		final WPushButton saveB = new WPushButton("Save");
@@ -57,15 +60,15 @@ public class ToolConfigForm extends FormTemplate {
 			toolDir = new File(toolConfig.getConfiguration());
 		}
 
-		createFileEditors(toolDir);
-
 		// manifest 
 		manifestForm = new ManifestForm(toolConfig.getToolMenifest(), toolDir, mode);
-		
+
 		// local config
 
 		localConfigForm = new LocalConfigForm(toolConfig, manifestForm);
-		
+
+		createFileEditors(toolDir);
+
 		// disable 
 
 		if (toolConfig.isPublished()) {
@@ -95,6 +98,7 @@ public class ToolConfigForm extends FormTemplate {
 		bindWidget("manifest", mamifestPanel);
 		bindWidget("config", configPanel);
 		bindWidget("info", infoT);
+		bindWidget("validate-tool", verifyToolB);
 		bindWidget("publish", publishB);
 		bindWidget("retract", retractB);
 		bindWidget("save", saveB);
@@ -112,6 +116,34 @@ public class ToolConfigForm extends FormTemplate {
 			}
 		});
 
+		verifyToolB.clicked().addListener(verifyToolB, new Signal.Listener() {
+			public void trigger() {
+				if (dirtyHandler.isDirty()){
+					final WMessageBox d = new WMessageBox("Warning",
+							"There are some unsaved changes. The saved tool will be used. Verfiy anyway?", Icon.NoIcon,
+							EnumSet.of(StandardButton.Ok, StandardButton.Cancel));
+					d.show();
+					d.setWidth(new WLength(300));
+					d.buttonClicked().addListener(d,
+							new Signal1.Listener<StandardButton>() {
+						public void trigger(StandardButton e1) {
+							if(e1 == StandardButton.Ok){
+								File verificationWorkDir = GenotypeLib.createJobDir(toolConfig.getVerificationDir());
+								AdminNavigation.setVerifyToolUrl(toolConfig.getToolMenifest().getId(), 
+										toolConfig.getToolMenifest().getVersion(), verificationWorkDir.getName());
+							}
+							d.remove();
+						}
+					});
+
+				} else {
+					File verificationWorkDir = GenotypeLib.createJobDir(toolConfig.getVerificationDir());
+					AdminNavigation.setVerifyToolUrl(toolConfig.getToolMenifest().getId(), 
+							toolConfig.getToolMenifest().getVersion(), verificationWorkDir.getName());
+				}
+			}
+		});
+		
 		saveB.clicked().addListener(saveB, new Signal.Listener() {
 			public void trigger() {
 				ToolConfig savedToolConfig = save(false);
@@ -254,7 +286,7 @@ public class ToolConfigForm extends FormTemplate {
 			// after tool manifest is saved for the first time.
 			bindEmpty("upload"); 
 		} else {
-			fileEditor = new FileEditor(toolDir);
+			fileEditor = new FileEditor(toolDir, manifestForm);
 
 			bindWidget("upload", fileEditor);
 

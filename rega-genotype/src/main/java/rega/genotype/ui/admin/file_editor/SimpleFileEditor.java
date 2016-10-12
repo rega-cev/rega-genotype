@@ -63,7 +63,7 @@ public class SimpleFileEditor extends WContainerWidget {
 
 			rereadFile();
 
-			edit.changed().addListener(edit, new Signal.Listener() {
+			edit.keyWentUp().addListener(edit, new Signal.Listener() {
 				public void trigger() {
 					save();
 					changed.trigger();

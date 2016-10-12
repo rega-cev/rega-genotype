@@ -4,6 +4,7 @@ import java.io.File;
 
 import rega.genotype.singletons.Settings;
 import rega.genotype.singletons.ToolEditingSynchronizer;
+import rega.genotype.ui.admin.config.ManifestForm;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WTabWidget;
@@ -24,7 +25,7 @@ public class FileEditor extends WTabWidget {
 	private SmartFileEditor smartFileEditor;
 	private File workDir; // tmp dir with tool copy for coordination between smart and simple editors. 
 
-	public FileEditor(File toolDir) {
+	public FileEditor(File toolDir, ManifestForm manifestForm) {
 		
 		workDir = GenotypeLib.createJobDir(
 				Settings.getInstance().getBaseJobDir() + File.separator + "file_editor");
@@ -34,7 +35,7 @@ public class FileEditor extends WTabWidget {
 		// view
 
 		simpleFileEditor = new SimpleFileEditorView(workDir);
-		smartFileEditor = new SmartFileEditor(workDir);
+		smartFileEditor = new SmartFileEditor(workDir, manifestForm);
 
 		addTab(smartFileEditor, "Tool editor");
 		addTab(simpleFileEditor, "Simple file editor");

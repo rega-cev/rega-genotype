@@ -6,10 +6,13 @@ import eu.webtoolkit.jwt.WAbstractTableModel;
 import eu.webtoolkit.jwt.WModelIndex;
 
 public class CsvModel extends WAbstractTableModel {
+	public enum Mode {Recombination, SelfScan}
 	private Table table;
+	private Mode mode;
 
-	public CsvModel(Table table) {
+	public CsvModel(Table table, Mode mode) {
 		this.table = table;
+		this.mode = mode;
 	}
 
 	public Object getHeaderData(int section, Orientation orientation, int role) {
@@ -18,7 +21,7 @@ public class CsvModel extends WAbstractTableModel {
 	
 	public int getColumnCount(WModelIndex parent) {
 		if (parent == null)
-			return table.numColumns() - 2;
+			return mode == Mode.SelfScan ?  table.numColumns() : table.numColumns() - 2;
 		else 
 			return 0;
 	}

@@ -150,6 +150,8 @@ public class Settings {
 
 		String baseDir = isUnitTest ? "base-unit-test-work-dir/" : getBaseDir(context);
 		instance = new Settings(new File(baseDir + "config.json"));
+		if (!baseDir.endsWith("/"))
+			baseDir += "/";
 		instance.baseDir =  baseDir;
 
         return instance;

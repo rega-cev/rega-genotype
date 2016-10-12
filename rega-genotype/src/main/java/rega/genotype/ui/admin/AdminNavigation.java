@@ -23,6 +23,7 @@ public class AdminNavigation extends WContainerWidget {
 	public static String URL_PATH_ADMIN = "amdin";
 	public static String URL_PATH_TOOLS = "tools";
 	public static String URL_PATH_EDIT = "edit";
+	public static String URL_PATH_VERIFY = "verify";
 
 	public static String URL_PARAM_ID = "id";
 	public static String URL_PARAM_VERSION = "version";
@@ -72,12 +73,16 @@ public class AdminNavigation extends WContainerWidget {
 		if (path.length >= 1 && path[0].equals("tools")) {//http://localhost:8080/rega-genotype/admin/tools
 			if (path.length == 1)
 				toolConfigTable.showTable();
-			else if (path.length == 4){ 
+			else if (path.length >= 4){ 
 				String id = path[1];
 				String version = path[2];
 				String action = path[3];
-				if (action.equals(URL_PATH_EDIT)) //http://localhost:8080/rega-genotype/admin/tools/edit/{id}/{version}
+				if (action.equals(URL_PATH_EDIT)) //http://localhost:8080/rega-genotype/admin/tools/{id}/{version}/edit
 					toolConfigTable.showEditTool(id, version, Mode.Edit);
+				else if (action.equals(URL_PATH_VERIFY)) {//http://localhost:8080/rega-genotype/admin/tools/{id}/{version}/verify/{job}
+					String job = (path.length == 5) ? path[4] : null;
+					toolConfigTable.showToolVerify(id, version, job);
+				}
 			} else
 				toolConfigTable.showTable();
 		} else {
@@ -87,6 +92,14 @@ public class AdminNavigation extends WContainerWidget {
 
 	public static void setEditToolUrl(String toolId, String toolVersion) {
 		String path = "/" + URL_PATH_TOOLS + "/" + toolId + "/" + toolVersion + "/" + URL_PATH_EDIT;
+		if (!WApplication.getInstance().getInternalPath().equals(path)) {
+			WApplication.getInstance().setInternalPath(path);
+			WApplication.getInstance().internalPathChanged().trigger(path);
+		}
+	}
+
+	public static void setVerifyToolUrl(String toolId, String toolVersion, String jobId) {
+		String path = "/" + URL_PATH_TOOLS + "/" + toolId + "/" + toolVersion + "/" + URL_PATH_VERIFY + "/" + jobId;
 		if (!WApplication.getInstance().getInternalPath().equals(path)) {
 			WApplication.getInstance().setInternalPath(path);
 			WApplication.getInstance().internalPathChanged().trigger(path);

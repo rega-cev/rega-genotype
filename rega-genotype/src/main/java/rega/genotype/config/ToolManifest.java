@@ -22,6 +22,7 @@ public class ToolManifest {
 	private String name;
 	private String id; // part of the tool signature {id, version}
 	private String version;// part of the tool signature {id, version}
+	private String commitMessage = ""; // describe the new version.
 	private String taxonomyId; // genus id from unirpot database, can be empty for pan-viral tools.
 	private boolean blastTool;
 	private boolean hivTool; //HIV tool is not generic and thus must have url = hiv.
@@ -168,5 +169,13 @@ public class ToolManifest {
 
 	public void setTemplate(boolean template) {
 		this.template = template;
+	}
+
+	public String getCommitMessage() {
+		return commitMessage;
+	}
+
+	public void setCommitMessage(String commitMessage) {
+		this.commitMessage = commitMessage;
 	}
 }

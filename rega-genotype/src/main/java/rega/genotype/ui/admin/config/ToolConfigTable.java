@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.config.ToolUpdateService;
@@ -20,12 +21,14 @@ import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolConfigTableModelSortProxy;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolInfo;
 import rega.genotype.ui.admin.config.ToolConfigTableModel.ToolState;
+import rega.genotype.ui.admin.file_editor.ui.ToolVerificationWidget;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.DownloadResource;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.CheckState;
@@ -64,6 +67,7 @@ public class ToolConfigTable extends Template{
 	public ToolConfigTable(WStackedWidget stack) {
 		super(tr("admin.config.tool-config-table"));
 		this.stack = stack;
+		stack.addStyleClass("stack");
 
 		bindWidget("info", infoT);
 		
@@ -248,13 +252,26 @@ public class ToolConfigTable extends Template{
 					public void trigger(DialogCode arg) {
 						if (arg == DialogCode.Accepted) {
 							if (fileUpload.getWFileUpload().getUploadedFiles().size() == 1) {
-								UploadedFile f = fileUpload.getWFileUpload().getUploadedFiles().get(0);
+								final UploadedFile f = fileUpload.getWFileUpload().getUploadedFiles().get(0);
 								
-								String manifestJson = FileUtil.getFileContent(new File(f.getSpoolFileName()), 
+								final String manifestJson = FileUtil.getFileContent(new File(f.getSpoolFileName()), 
 										ToolManifest.MANIFEST_FILE_NAME);
-								ToolManifest manifest = ToolManifest.parseJson(manifestJson);
+								final ToolManifest manifest = ToolManifest.parseJson(manifestJson);
 								if (manifest != null) {
-									importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
+									Config config = Settings.getInstance().getConfig();
+									if (config.getToolConfigById(manifest.getId(), manifest.getVersion()) != null) {
+										StandardDialog d = new StandardDialog("Warning");
+										d.getContents().addWidget(new WText("Tool id: " + manifest.getId() + ", version: " + manifest.getVersion() 
+												+ " already exists. Replace existing tool?"));
+										d.setWidth(new WLength(300));
+										d.finished().addListener(d, new Signal1.Listener<DialogCode>() {
+											public void trigger(DialogCode arg) {
+												if (arg == DialogCode.Accepted)
+													importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
+											}
+										});
+									} else
+										importTool(manifest, new File(f.getSpoolFileName()), Mode.Import);
 								} else {
 									Dialogs.infoDialog("Error", "Invalid tool file: No manifest");
 								}
@@ -401,10 +418,11 @@ public class ToolConfigTable extends Template{
 						
 						Thread t = new Thread(new Runnable() {
 							public void run() {
-								UpdateTaxonomyFileService.download();
+								File file = UpdateTaxonomyFileService.download();
+								String infoText = file == null ? "Could not downlod taxonomy file" : "Update finished";
 								UpdateLock updateLock = app.getUpdateLock();
 								TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
-								info.setText("Update finished");
+								info.setText(infoText);
 								d.getCancelB().enable();
 								app.triggerUpdate();
 								updateLock.release();
@@ -481,29 +499,60 @@ public class ToolConfigTable extends Template{
 		edit(null, ToolConfigForm.Mode.Add);
 	}
 
+	public void showToolNotFound(String toolId, String toolVersion) {
+		WContainerWidget c = new WContainerWidget();
+		c.addWidget(new WText("Tool: id = " + toolId +
+				", version = " + toolVersion + "does not exist."));
+		WPushButton back = new WPushButton("Back", c);
+		stack.addWidget(c);
+		stack.setCurrentWidget(c);
+		back.clicked().addListener(back, new Signal.Listener() {
+			public void trigger() {
+				showTable();
+			}
+		});
+	}
 	public void showEditTool(String toolId, String toolVersion, ToolConfigForm.Mode mode) {
 		showTable(); // remove prev shown tool		
 
 		ToolInfo toolInfo = proxyModel.getToolConfigTableModel().
 				getToolInfo(toolId, toolVersion);
 
-		if (toolInfo == null) {
-			WContainerWidget c = new WContainerWidget();
-			c.addWidget(new WText("Tool: id = " + toolId +
-					", version = " + toolVersion + "does not exist."));
-			WPushButton back = new WPushButton("Back", c);
-			stack.addWidget(c);
-			stack.setCurrentWidget(c);
-			back.clicked().addListener(back, new Signal.Listener() {
+		if (toolInfo == null) 
+			showToolNotFound(toolId, toolVersion);
+		else
+			edit(toolInfo, mode);
+	}
+
+	public void showToolVerify(String toolId, String toolVersion, String jobId) {
+		ToolInfo toolInfo = proxyModel.getToolConfigTableModel().
+				getToolInfo(toolId, toolVersion);
+		if (toolInfo == null) 
+			showToolNotFound(toolId, toolVersion);
+		else {
+			File verificationWorkDir;
+			if (jobId == null) 
+				verificationWorkDir = GenotypeLib.createJobDir(toolInfo.getConfig().getVerificationDir());
+			else 
+				verificationWorkDir = new File(toolInfo.getConfig().getVerificationDir(), jobId);
+
+			if (!verificationWorkDir.exists())
+				verificationWorkDir.mkdirs();
+			ToolVerificationWidget verificationWidget = new ToolVerificationWidget(
+					toolInfo.getConfig(), verificationWorkDir);
+			
+			stack.addWidget(verificationWidget);
+			stack.setCurrentWidget(verificationWidget);
+			verificationWidget.done().addListener(verificationWidget, new Signal.Listener() {
 				public void trigger() {
-					showTable();
+					proxyModel.refresh(getLocalManifests(), getRemoteManifests());
+					AdminNavigation.setToolsTableUrl();
+					showTable(); // in case that the url did not change (add tool)
 				}
 			});
-		} else {
-			edit(toolInfo, mode);
 		}
 	}
-	
+
 	public void showTable() {
 		while (stack.getChildren().size() > 1) {
 			stack.removeWidget(stack.getWidget(1));
@@ -573,9 +622,11 @@ public class ToolConfigTable extends Template{
 			ToolInfo info = proxyModel.getToolInfo(table.getSelectedIndexes().first());
 
 			ToolConfig config = info.getConfig().copy();
-			//config.genetareJobDir();
-			config.genetareConfigurationDir(
-					info.getConfig().getToolMenifest().getId() + suggestNewVersion(info.getConfig(), 1));
+			String suggestedDirName = info.getConfig().getToolMenifest().getId() +
+					suggestNewVersion(info.getConfig(), 1);
+			config.genetareJobDir(suggestedDirName);
+			config.genetareConfigurationDir(suggestedDirName);
+
 			Settings.getInstance().getConfig().putTool(config);
 			try {
 				Settings.getInstance().getConfig().save();

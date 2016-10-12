@@ -51,15 +51,21 @@ public class ReferenceTaxaTable extends WTable {
 	private BlastAnalysis analysis;
 
 	// view
-	private Map<WTableRow, ObjectListComboBox<Taxus>> taxusWidgetMap =
-			new HashMap<WTableRow, ObjectListComboBox<Taxus>>();
-
+	private ObjectListComboBox<Taxus> taxusCB;
 	private WPushButton addTaxusB = new WPushButton("+");
 	private WPushButton addRegionB = new WPushButton("+");
 	private DirtyHandler dirtyHandler = new DirtyHandler();
 
 	public ReferenceTaxaTable(final BlastAnalysis analysis) {
 		this.analysis = analysis;
+
+		List<Taxus> taxa = analysis.getOwner().getAllTaxa();
+		taxusCB = new ObjectListComboBox<Taxus>(taxa) {
+			@Override
+			protected WString render(Taxus t) {
+				return new WString(t.getId());
+			}
+		};
 
 		setHeaderCount(1, Orientation.Horizontal);
 		setHeaderCount(1, Orientation.Vertical);
@@ -69,6 +75,7 @@ public class ReferenceTaxaTable extends WTable {
 		getElementAt(0, 0).addWidget(new WText());
 
 		getElementAt(0, 1).addWidget(addRegionB);
+		getElementAt(1, 0).addWidget(taxusCB);
 		getElementAt(1, 0).addWidget(addTaxusB);
 
 		// read
@@ -89,12 +96,15 @@ public class ReferenceTaxaTable extends WTable {
 				createRegionWidget(row.getRowNum(), column.getColumnNum(), region);
 			}
 		}
+
 		// fill empty cells
 		for (int r = 1; r < getRowCount() - 1; ++r)
 			for (int c = 1; c < getColumnCount() -1; ++c)
 				if (!regionMap.containsKey(getElementAt(r, c)))
 					createRegionWidget(r, c, 
 							new Region(regionHeaderMap.get(getColumnAt(c)), 0, 0));
+
+		updateTaxaCB(taxusCB);
 
 		//signals
 		addRegionB.clicked().addListener(addRegionB, new Signal.Listener() {
@@ -117,12 +127,15 @@ public class ReferenceTaxaTable extends WTable {
 							"There is no taxa in current tool. Add taxa before creating reference taxus.");
 					return;
 				}
-				ReferenceTaxus refTaxus = new ReferenceTaxus(nextTaxus(), taxusHeaderMap.size());
+				ReferenceTaxus refTaxus = new ReferenceTaxus(
+						taxusCB.getCurrentObject().getId(), taxusHeaderMap.size());
 				WTableRow row = createRowHeader(refTaxus);
 				for (int c = 1; c < getColumnCount() -1; ++c){
 					createRegionWidget(row.getRowNum(), c,
 							new Region(regionHeaderMap.get(getColumnAt(c)), 0, 0));
 				}
+
+				updateTaxaCB(taxusCB);
 
 				if(nextTaxus() == null) // all taxa has ref taxus.
 					addTaxusB.disable();
@@ -200,6 +213,8 @@ public class ReferenceTaxaTable extends WTable {
 	private void createRegionWidget(int row, int column, final Region region) {
 		final WText text = new WText(
 				region.getBegin() + " -> " + region.getEnd());
+		if (region.getBegin() == 0 && region.getEnd() == 0)
+			text.setText(tr("empty").toString());
 
 		final WTableCell cell = getElementAt(row, column);
 		regionMap.put(cell, region);
@@ -297,37 +312,12 @@ public class ReferenceTaxaTable extends WTable {
 	private WTableRow createRowHeader(final ReferenceTaxus refTaxus) {
 		final WTableRow row = insertRow(getRowCount() - 1);
 
-		// taxusCB
-		Taxus currentSelectedTaxus = null;
-		List<Taxus> taxa = analysis.getOwner().getAllTaxa();
-		for (Taxus t: taxa) 
-			if (refTaxus != null && t.getId().equals(refTaxus.getTaxus()))
-				currentSelectedTaxus = t;
-
-		final ObjectListComboBox<Taxus> taxusCB = new ObjectListComboBox<Taxus>(taxa) {
-			@Override
-			protected WString render(Taxus t) {
-				return new WString(t.getId());
-			}
-		};
-		if (currentSelectedTaxus != null) 
-			taxusCB.setCurrentObject(currentSelectedTaxus);
-		else 
-			taxusCB.setCurrentIndex(0);
-
-		taxusCB.changed().addListener(taxusCB, new Signal.Listener() {
-			public void trigger() {
-				Taxus selectedTaxus = taxusCB.getCurrentObject();
-				refTaxus.setTaxus(selectedTaxus.getId());
-				updateTaxaCBs();
-				dirtyHandler.increaseDirty();
-			}
-		});
-		updateTaxaCBs();
-
 		// layout
 		WContainerWidget c = new WContainerWidget();
-		c.addWidget(taxusCB);
+		WText taxusText = new WText(refTaxus.getTaxus());
+		c.addWidget(taxusText);
+		c.addStyleClass("float-right");
+
 		// remove row
 		WPushButton removeB = new WPushButton("-" ,c);
 		removeB.clicked().addListener(removeB, new Signal.Listener() {
@@ -343,7 +333,6 @@ public class ReferenceTaxaTable extends WTable {
 
 		getElementAt(row.getRowNum(), 0).addWidget(c);
 		taxusHeaderMap.put(row, refTaxus);
-		taxusWidgetMap.put(row, taxusCB);
 
 		return row;
 	}
@@ -368,12 +357,6 @@ public class ReferenceTaxaTable extends WTable {
 			if (!contains(referenceTaxa, t.getId()))
 				return t.getId();
 		return null;
-	}
-
-	private void updateTaxaCBs() {
-		for (ObjectListComboBox<Taxus> cb: taxusWidgetMap.values()) {
-			updateTaxaCB(cb);
-		}
 	}
 
 	void updateTaxaCB(ObjectListComboBox<Taxus> taxusCB) {
@@ -405,7 +388,8 @@ public class ReferenceTaxaTable extends WTable {
 				String regionId = regionHeaderMap.get(getColumnAt(c));
 				Region region = regionMap.get(getElementAt(r, c));
 				region.setName(regionId);
-				referenceTaxus.addRegion(region);
+				if (region.getBegin() != 0 && region.getEnd() != 0) // dont save empty regions.
+					referenceTaxus.addRegion(region);
 			}
 			referenceTaxus.setPriority(r); // priority is determined by the order of reference taxa in blast.xml
 			analysis.addReferenceTaxus(referenceTaxus);

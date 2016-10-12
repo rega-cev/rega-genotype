@@ -197,3 +197,40 @@ body {
 .standard-margin {
   margin: 5px;
 }
+
+.stack {
+	overflow-y:auto;
+}
+
+.float-right{
+    float: right;
+}
+
+.detailsForm img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+.detailsForm .recombinationDetails{
+	text-align: center;
+}
+
+.margin10 {
+    margin: 10px;
+}
+.error-text {
+     color: red;
+}
+.info-text {
+     color: #489cdf;
+}
+
+.golden-sequences-totals-table td {
+    padding-right: 10px;
+    padding-top: 1px;
+}
+
+.ref-taxa-table {
+  overflow:auto;
+  max-height: 220px;
+}

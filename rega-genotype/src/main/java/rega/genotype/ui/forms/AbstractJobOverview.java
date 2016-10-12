@@ -31,6 +31,8 @@ import rega.genotype.viruses.recombination.RegionUtils;
 import rega.genotype.viruses.recombination.RegionUtils.Region;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Orientation;
+import eu.webtoolkit.jwt.Side;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WAnchor;
@@ -92,6 +94,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	private WTable jobTable;
 	private JobOverviewSummary summary;
 	private SequenceFilter filter;
+	private boolean scrollingEnabled = false;
 	
 	protected Template template;
 	
@@ -120,6 +123,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		template.bindEmpty("downloads");
 		template.bindEmpty("recombination-fragment-downloads");
 		template.bindEmpty("analysis-in-progress");
+		template.bindEmpty("scroll");
 	}
 
 	public void init(final String jobId, final String filter) {
@@ -141,7 +145,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		jobTable.clear();
 
 		template.bindWidget("downloads", createDownloadsWidget(filter));
-		
+		template.bindWidget("scroll", createScrollButton());
+
 		if (hasRecombinationResults)
 			template.bindWidget("recombination-fragment-downloads", createRecombinationFragmentDownloadsWidget(filter));
 		else
@@ -223,8 +228,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public void updateView() {
 		fillResultsWidget();
 		updateInfo();
-		if (jobDone())
+		if (jobDone()) {
 			showDownloads();
+			template.bindEmpty("scroll");
+		}
 	}
 
 	protected void updateNgsView() {
@@ -269,6 +276,24 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return t;
 	}
 	
+	private WWidget createScrollButton() {
+		final WPushButton scroll = new WPushButton();
+		scroll.setFloatSide(Side.Right);
+		scroll.setText("Enable auto scroll");
+		scroll.clicked().addListener(scroll, new Signal.Listener() {
+			public void trigger() {
+				if (scrollingEnabled) {
+					scroll.setText("Enable auto scroll");
+					scrollingEnabled = false;
+				} else {
+					scroll.setText("Disable auto scroll");
+					scrollingEnabled = true;
+				}
+			}
+		});
+
+		return scroll;
+	}
 	private WWidget createDownloadsWidget(final String filter) {
 		WTemplate t = new WTemplate(tr("job-overview-downloads"));
 		
@@ -311,7 +336,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
 					response.setContentType("text/plain");
 					FastaGenerator generateFasta = new FastaGenerator(filter, response.getOutputStream());
-					generateFasta.parseFile(new File(jobDir.getAbsolutePath()));
+					generateFasta.parseResultFile(new File(jobDir.getAbsolutePath()));
 				}
 			};
 		} else {
@@ -359,7 +384,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 								if (this.elementExists(recombinationPath)) {
 									if (p == null) {
 										p = new GenotypeResultParser(this.getSequenceIndex());
-										p.parseFile(jobDir);
+										p.parseResultFile(jobDir);
 									}
 									
 									Element recombination = p.getElement(recombinationPath);
@@ -390,7 +415,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				    	return filter.excludeSequence(this);
 				    }
 				};
-				grp.parseFile(jobDir);
+				grp.parseResultFile(jobDir);
 
 				try {
 					t.flush();
@@ -418,7 +443,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ',', '"') : new XlsDataTable(response.getOutputStream());
 				AbstractDataTableGenerator acsvgen = 
 					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this.getFilter(), t);
-				acsvgen.parseFile(new File(jobDir.getAbsolutePath()));
+				acsvgen.parseResultFile(new File(jobDir.getAbsolutePath()));
 			}
 			
 		};
@@ -500,7 +525,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			}
 
 			if (!stop)
-				parser.parseFile(getJobdir());
+				parser.parseResultFile(getJobdir());
 
 			while (!stop && !jobDone()){
 				parser.updateUi();
@@ -574,8 +599,12 @@ public abstract class AbstractJobOverview extends AbstractForm {
 						if (WApplication.getInstance().getEnvironment().getUserAgent().indexOf("MSIE") != -1)
 							cell.setStyleClass(jobTable.getColumnAt(i).getStyleClass());
 					}
-	
+
 					jobTable.getRowAt(jobTable.getRowCount() - 1).setId("");
+
+					if (scrollingEnabled)
+						doJavaScript("window.scrollTo(0,document.body.scrollHeight - 500);");
+
 				} else if (jobTable.getRowCount() == 1000) {
 					WTableCell cell = jobTable.getElementAt(1000, 0);
 					cell.setColumnSpan(jobTable.getColumnCount());
@@ -644,6 +673,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		final int end = unassigned || endV == null ? -1 : Integer.parseInt(endV);
 		final int sequenceIndex = p.getSequenceIndex();
 	
+		if (start < 1 && end < 1)
+			return null; // Do not show genome image if the sequence could not be aligned.
+
 		return GenotypeLib.getWImageFromResource(new WFileResource("image/png", "") {
 			@Override
 			public void handleRequest(WebRequest request, WebResponse response) {
