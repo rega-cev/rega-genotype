@@ -219,22 +219,27 @@ public class GenotypeResultParser extends DefaultHandler
 	 * paused()
 	 */
 	private class GenotypeResultReader extends BufferedReader {
+		int prevAns = -1;
 		public GenotypeResultReader(java.io.Reader in) {
 			super(in);
 		}
 
 		@Override
 		public int read(char[] cbuf, int off, int len) throws IOException {
-
 			while (true) {
 				synchronized (this) {
 					int ans = super.read(cbuf, off, len);
-					if (ans != -1) 
+					if (ans != -1) {
+						prevAns = ans;
 						return ans;
-					if (stop || stack.size() == 0)
+					} if (stop || stack.size() == 0)
 						return -1; // end;
 
-					updateUi();
+					if (prevAns != -1)
+						updateUi();
+
+					prevAns = ans;
+
  					try {
 						wait(1000);
 					} catch (InterruptedException e) {
