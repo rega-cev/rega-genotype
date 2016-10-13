@@ -69,6 +69,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	private BlastResultParser blastResultParser;
 
+	private WContainerWidget resultsContainer  = new WContainerWidget();
+
 	public BlastJobOverviewForm(GenotypeWindow main) {
 		super(main);
 
@@ -256,10 +258,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		chartContainer.show();
 		table.show();
-		WContainerWidget c = new WContainerWidget();
-		c.addWidget(chartContainer);
-		c.addWidget(table);
-		bindResults(c);
+		resultsContainer.addWidget(chartContainer);
+		resultsContainer.addWidget(table);
+		bindResults(resultsContainer);
 	}
 
 	public Signal1<String> jobIdChanged() {
