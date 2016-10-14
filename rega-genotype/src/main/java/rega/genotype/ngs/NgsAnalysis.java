@@ -2,6 +2,7 @@ package rega.genotype.ngs;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,13 +17,19 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 
+import rega.genotype.AlignmentAnalyses;
 import rega.genotype.ApplicationException;
+import rega.genotype.BlastAnalysis;
+import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.FileFormatException;
+import rega.genotype.GenotypeTool;
+import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.GeneralConfig;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
+import rega.genotype.utils.BlastUtil;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.StreamReaderRuntime;
 
@@ -40,13 +47,15 @@ public class NgsAnalysis {
 	public static final String ASSEMBALED_CONTIGS_DIR = "assembaled_contigs";
 	public static final String DIAMOND_BLAST_DIR = "diamond_blast";
 	public static final String DIAMOND_RESULT_DIR = "diamond_result";
+	public static final String CONSENSUS_DIR = "consensus";
 
 	public static final String PREPROCESSED_DIR = "preprocessed-fastq";
 	public static final String PREPROCESSED_FILE_NAMR_PAIRD = "paird_";
 	public static final String PREPROCESSED_FILE_NAMR_UNPAIRD = "unpaird_";
 	public static final String SEQUENCES_FILE = "sequences.fasta";
 	public static final String CUT_ADAPTER_FILE_END = "CA_";
-
+	public static final String CONSENSUS_FILE = "consensus.fasta";
+	public static final String CONSENSUS_INPUT_FILE = "consensus-input.fasta";
 
 	/**
 	 * Contract long virus contigs from ngs output. 
@@ -210,27 +219,30 @@ public class NgsAnalysis {
 				continue;
 
 			File sequenceFile1 = new File(d, fastqPE1.getName());
-			File sequenceFile2 = new File(d, fastqPE2.getName());;
+			File sequenceFile2 = new File(d, fastqPE2.getName());
 
-			File ca1 = null;
-			File ca2 = null;
-			// remove adapters:
-			try {
-				ca1 = new File(sequenceFile1.getParentFile(), CUT_ADAPTER_FILE_END + sequenceFile1.getName());
-				ca2 = new File(sequenceFile2.getParentFile(), CUT_ADAPTER_FILE_END + sequenceFile2.getName());
-
-				cutAdapters(sequenceFile1, ca1);
-				cutAdapters(sequenceFile2, ca2);
-
-			} catch (ApplicationException e2) {
-				e2.printStackTrace();
-				ngsProgress.getSpadesErrors().add("cut adpters failed." + e2.getMessage());
-				ngsProgress.save(workDir);
-				continue;
-			}
+			if (sequenceFile1.length() < 1000*1000)
+				continue; // no need to assemble if there is not enough reads.
+// does not make sense ? 
+//			File ca1 = null;
+//			File ca2 = null;
+//			// remove adapters:
+//			try {
+//				ca1 = new File(sequenceFile1.getParentFile(), CUT_ADAPTER_FILE_END + sequenceFile1.getName());
+//				ca2 = new File(sequenceFile2.getParentFile(), CUT_ADAPTER_FILE_END + sequenceFile2.getName());
+//
+//				cutAdapters(sequenceFile1, ca1);
+//				cutAdapters(sequenceFile2, ca2);
+//
+//			} catch (ApplicationException e2) {
+//				e2.printStackTrace();
+//				ngsProgress.getSpadesErrors().add("cut adpters failed." + e2.getMessage());
+//				ngsProgress.save(workDir);
+//				continue;
+//			}
 			
 			try {
-				File assemble = assemble(ca1, ca2, workDir, d.getName());
+				File assemble = assemble(sequenceFile1, sequenceFile2, workDir, d.getName());
 				if (assemble == null)
 					continue;
 
@@ -247,6 +259,9 @@ public class NgsAnalysis {
 					}
 
 				FileUtil.appendToFile(assemble, sequences);
+
+				makeConsensus(assemble, workDir, d.getName());
+
 			} catch (ApplicationException e) {
 				e.printStackTrace();
 				ngsProgress.getSpadesErrors().add("assemble failed." + e.getMessage());
@@ -255,6 +270,15 @@ public class NgsAnalysis {
 				e1.printStackTrace();
 				ngsProgress.getSpadesErrors().add("assemble failed." + e1.getMessage());
 				ngsProgress.save(workDir);
+			} catch (FileFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParameterProblemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 
@@ -265,6 +289,7 @@ public class NgsAnalysis {
 			ngsProgress.setState(State.FinishedAll);
 
 		ngsProgress.save(workDir);
+
 		return true; 
 	}
 
@@ -275,7 +300,7 @@ public class NgsAnalysis {
 			GeneralConfig gc = Settings.getInstance().getConfig().getGeneralConfig();
 			String cmd = gc.getDiamondPath() + " blastx -d "
 					+ gc.getDbDiamondPath() + " -q " + query.getAbsolutePath()
-					+ " -a " + matches + " -k 1  --quiet";
+					+ " -a " + matches + " -k 1  --quiet"; // TODO: use k 10 to check the best 2 results and choose 1 with existing basket.
 			System.err.println(cmd);
 			blastx = StreamReaderRuntime.exec(cmd, null, workDir);
 			int exitResult = blastx.waitFor();
@@ -531,6 +556,18 @@ public class NgsAnalysis {
 		return ASSEMBALED_CONTIGS_DIR + "_" + virusName;
 	}
 
+	public static String consensusDir(String virusName) {
+		return CONSENSUS_DIR + "_" + virusName;
+	}
+
+	public static File consensusFile(File workDir, String virusName) {
+		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_FILE);
+	}
+
+	public static File consensusInputFile(File workDir, String virusName) {
+		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_INPUT_FILE);
+	}
+
 	/**
 	 * Assemble many shot reads fastq to long contigs.
 	 * 
@@ -543,6 +580,8 @@ public class NgsAnalysis {
 	 */
 	public static File assemble(File sequenceFile1, File sequenceFile2,
 			File workDir, String virusName) throws ApplicationException {
+
+		long startTime = System.currentTimeMillis();
 
 		File contigsDir = new File(workDir, contigsDir(virusName));
 		contigsDir.mkdirs();
@@ -577,6 +616,72 @@ public class NgsAnalysis {
 		if (!ans.exists())
 			throw new ApplicationException("Spades did not create contigs file.");
 
+		System.err.println("Assembly time for: " + sequenceFile1.getName() + " is: " + (startTime - System.currentTimeMillis()));
+		
 		return ans;
+	}
+
+	//TODO 
+	private static String toFasta(Sequence s) {
+//		String ans = new String();
+//		OutputStream f = new ByteArrayOutputStream();
+//		try {
+//			s.writeFastaOutput(f);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		ans = f.toString();
+		return ">" + s.getName() + " \n" + s.getSequence();
+	}
+	
+	public static File makeConsensus(File assembledContigs,
+			File workDir, String virusName) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+
+		// Create make contigs in. format: first refseq then all the contigs. 
+
+		// find nucleotide reference sequence for the basket.
+		// TODO:find the species for the largest contigs.
+		FileReader fileReader = new FileReader(assembledContigs.getAbsolutePath());
+		LineNumberReader lnr = new LineNumberReader(fileReader);
+		// Note: Spades orders results by length.
+		Sequence longestContig = SequenceAlignment.readFastaFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
+		fileReader.close();
+		lnr.close();
+		if (longestContig == null)
+			return null;
+
+		File ncbiVirusesFasta = new File(
+				"/home/michael/projects/rega-genotype-extenal2/ngs-databases/ncbi-viruses.fasta");
+		File in = consensusInputFile(workDir, virusName);
+		File consensusDir = new File(workDir, consensusDir(virusName));
+		consensusDir.mkdirs();
+
+		//BlastUtil.formatDB(ncbiVirusesFasta, consensusDir);
+		BlastUtil.computeBestRefSeq(longestContig, consensusDir, in, ncbiVirusesFasta);
+
+		FileUtil.appendToFile(assembledContigs, in);
+
+		// make Consensus
+
+		//TODO
+		String sequencetoolPath = "/home/michael/projects/mpf-sequencetool/build/src/mpf-sequencetool";
+		File out = consensusFile(workDir, virusName);
+		out.getParentFile().mkdirs();
+
+		String cmd = sequencetoolPath + "make-consensus"
+		+ " --input " + in.getAbsolutePath()
+		+ " --output " + out.getAbsolutePath()
+		+ " --max-gap 10 --max-missing 100 --min-count 0.25 ";
+
+		System.err.println(cmd);
+
+		Process p = Runtime.getRuntime().exec(cmd, null, workDir);
+		int exitResult = p.waitFor();
+
+		if (exitResult != 0)
+			throw new ApplicationException("blast exited with error: " + exitResult);
+
+		return out;
 	}
 }
