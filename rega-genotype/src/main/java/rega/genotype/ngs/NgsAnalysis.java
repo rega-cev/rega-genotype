@@ -2,7 +2,6 @@ package rega.genotype.ngs;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,12 +16,8 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 
-import rega.genotype.AlignmentAnalyses;
 import rega.genotype.ApplicationException;
-import rega.genotype.BlastAnalysis;
-import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.FileFormatException;
-import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
@@ -262,24 +257,11 @@ public class NgsAnalysis {
 
 				makeConsensus(assemble, workDir, d.getName());
 
-			} catch (ApplicationException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				ngsProgress.getSpadesErrors().add("assemble failed." + e.getMessage());
 				ngsProgress.save(workDir);
-			} catch (IOException e1) {
-				e1.printStackTrace();
-				ngsProgress.getSpadesErrors().add("assemble failed." + e1.getMessage());
-				ngsProgress.save(workDir);
-			} catch (FileFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParameterProblemException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} 
 		}
 
 		File sequences = new File(workDir, SEQUENCES_FILE);
@@ -311,13 +293,9 @@ public class NgsAnalysis {
 			}
 			return matches;
 		} catch (FileNotFoundException e) {
-			if (blastx != null)
-				blastx.destroy();
 			throw new ApplicationException("blastx failed error: "
 					+ e.getMessage(), e);
 		} catch (IOException e) {
-			if (blastx != null)
-				blastx.destroy();
 			throw new ApplicationException("blastx failed error: "
 					+ e.getMessage(), e);
 		} catch (InterruptedException e) {
@@ -344,8 +322,6 @@ public class NgsAnalysis {
 			}
 			return matches;
 		} catch (IOException e) {
-			if (diamond != null)
-				diamond.destroy();
 			throw new ApplicationException(
 					": " + e.getMessage());
 		} catch (InterruptedException e) {
