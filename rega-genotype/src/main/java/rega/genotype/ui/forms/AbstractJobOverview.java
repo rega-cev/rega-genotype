@@ -498,8 +498,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 								updateLock.release();
 
 								ngsProgress = NgsProgress.read(jobDir);
-								if (ngsProgress.getState() == State.FinishedAll
-										|| !ngsProgress.getErrors().isEmpty())
+								if (ngsProgress != null 
+										&& (ngsProgress.getState() == State.FinishedAll
+											|| !ngsProgress.getErrors().isEmpty()))
 									break;
 								lock.wait(interval);
 							} catch (InterruptedException e) {
