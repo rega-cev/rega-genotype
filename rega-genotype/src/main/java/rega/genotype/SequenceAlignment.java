@@ -187,6 +187,10 @@ public class SequenceAlignment
             throw new FileFormatException("Expecting a '>'",
                                           reader.getLineNumber());
 
+        if (header.length() < 2)
+        	throw new FileFormatException("Sequence must have a name",
+                    reader.getLineNumber());
+
         // eat '>'
         header = header.substring(1);
         while (header.charAt(0) == ' ')
