@@ -45,7 +45,7 @@ public class DiamondResultsView extends WContainerWidget{
 		setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
 		setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 
-		chart.resize(500, 300);
+		chart.resize(500, 260);
 		//chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
 		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 
@@ -59,6 +59,7 @@ public class DiamondResultsView extends WContainerWidget{
 		table = new WTableView(this);
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 		table.setWidth(new WLength(520));
+		table.setHeight(new WLength(220));
 		//table.setStyleClass("blastResultsTable");
 		table.setHeaderHeight(new WLength(20));
 		table.hideColumn(CHART_DISPLAY_COLUMN);
