@@ -375,23 +375,95 @@ public class NgsAnalysis {
 		return null;
 	}
 
-	private static void creatDiamondResults(File workDir, File view, File[] files) throws FileFormatException, IOException {
+	/**
+	 * Order all the sequence by taxonomy id. 
+	 * The algorithm favors creating big baskets, so if 1 taxon appears many times 
+	 * a new sequence would rather go to its basket then to a new taxon basket
+	 * even if the new 1 has slightly better score.
+	 * @param workDir
+	 * @param view
+	 * @param fastqFiles
+	 * @throws FileFormatException
+	 * @throws IOException
+	 */
+	private static void creatDiamondResults(File workDir, File view, File[] fastqFiles) throws FileFormatException, IOException {
 		String line = "";
 
+		class SequenceData {
+			String taxon;
+			double score;
+		}
 		BufferedReader bf;
 		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
-		Map<String, String> taxoNameId = new HashMap<String, String>();
+		// sequences with best score per taxon counters.
+		Map<String, Integer> taxonCounters = new HashMap<String, Integer>();
+		// All the data per sequence
+		Map<String, List<SequenceData>> sequenceNameData = new HashMap<String, List<SequenceData>>();
+
+		String prevName = null;
+		String prevBestTaxon = null;
+		Double prevBestScore = null;
 		while ((line = bf.readLine()) != null)  {
 			String[] name = line.split("\\t");
 			String[] taxon = name[1].split("_");
-			taxoNameId.put(name[0], taxon[0]);
+
+			String score = name[2];
+
+			SequenceData data = new SequenceData();
+			data.score = Double.parseDouble(score);
+			data.taxon = taxon[0];
+
+			List<SequenceData> sequenceDataList = sequenceNameData.get(name[0]);
+			if (sequenceDataList == null) {
+				sequenceDataList = new ArrayList<SequenceData>();
+				sequenceNameData.put(name[0], sequenceDataList);
+			}
+			sequenceDataList.add(data);
+
+			if (prevName == null || !prevName.equals(name[0])) {
+				if (prevName != null) { // not first time.
+					Integer counter = taxonCounters.get(prevBestTaxon);
+					if (counter == null)
+						counter = 0;
+					counter++;
+					taxonCounters.put(prevBestTaxon, counter);
+				}
+
+				prevName = name[0];
+				prevBestTaxon = data.taxon;
+				prevBestScore = data.score;
+			} else {
+				if (data.score > prevBestScore) {
+					prevBestTaxon = data.taxon;
+					prevBestScore = data.score;
+				}
+			}
 		}
 		bf.close();
 
-		for (Map.Entry<String, String> s: taxoNameId.entrySet())
-			System.err.println(s.getKey() + " = " + s.getValue());
+		// find genus taxonomy for every sequence. 
+		Map<String, String> taxoNameId = new HashMap<String, String>();
+		for (Map.Entry<String, List<SequenceData>> s: sequenceNameData.entrySet()) {
+			SequenceData bestScore = s.getValue().get(0);
+			for (SequenceData d: s.getValue()) {
+				if (d.score > bestScore.score)
+					bestScore = d;
+			}
 
-		for(File f : files){
+			SequenceData best = s.getValue().get(0);
+			Integer bestScoreTaxonCounter = taxonCounters.get(bestScore.taxon);
+			for (SequenceData d: s.getValue()) {
+				Integer currentTaxonCounter = taxonCounters.get(d.taxon);
+				if (currentTaxonCounter != null 
+						&& bestScore.score - d.score < 5 
+						&& currentTaxonCounter > bestScoreTaxonCounter + 10000)
+					best = d;// big basket gets priority.
+			}
+			taxoNameId.put(s.getKey(), best.taxon);
+		}
+
+		// Order fastq sequences in basket per taxon.
+		for(File f : fastqFiles){
 			FileReader fileReader = new FileReader(f.getAbsolutePath());
 			LineNumberReader lnr = new LineNumberReader(fileReader);
 			while(true){
