@@ -671,9 +671,10 @@ public class NgsAnalysis {
 
 		workDir.mkdirs();
 
-		//TODO
-		File ncbiVirusesFasta = new File(
-				"/home/michael/projects/rega-genotype-extenal2/ngs-databases/ncbi-viruses.fasta");
+		String ncbiVirusesDbPath = Settings.getInstance().getConfig().getGeneralConfig().getNcbiVirusesDbPath();
+		if (ncbiVirusesDbPath == null)
+			throw new ApplicationException("Ncbi Viruses Db Path needs to be set in global settings");
+		File ncbiVirusesFasta = new File(ncbiVirusesDbPath);
 		File refrence = consensusRefFile(workDir, virusName);
 		File consensusDir = new File(workDir, consensusDir(virusName));
 		consensusDir.mkdirs();
@@ -683,9 +684,8 @@ public class NgsAnalysis {
 
 		// make Consensus
 
-		//TODO
-		String sequencetoolPath = 
-				"/home/michael/projects/mpf-sequencetool/build/src/mpf-sequencetool";
+		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetoolPath();
+
 		File alingment = consensusAlingmentFile(workDir, virusName);
 		alingment.getParentFile().mkdirs();
 
@@ -709,9 +709,7 @@ public class NgsAnalysis {
 	public static File makeConsensus(File assembledContigs,
 			File workDir, String virusName) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
-		//TODO
-		String sequencetoolPath = //Settings.getInstance().getConfig().getGeneralConfig().getSequenceToolDbPath();
-				"/home/michael/projects/mpf-sequencetool/build/src/mpf-sequencetool";
+		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetoolPath();
 		File out = consensusFile(workDir, virusName);
 		out.getParentFile().mkdirs();
 

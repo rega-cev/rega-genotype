@@ -225,6 +225,8 @@ public class Config {
 		private String blastPath = "/usr/bin/";
 		private String diamondPath = "diamond";
 		private String dbDiamondPath = "db.dmnd";
+		private String ncbiVirusesDbPath = "ncbi-viruses.fasta";
+		private String sequencetoolPath = "sequencetool";
 		private String taxonamyDiamondPath = "taxonamy.fasta";
 		private String treePuzzleCmd = "puzzle";
 		private String treeGraphCmd = "tgf";
@@ -363,6 +365,18 @@ public class Config {
 		}
 		public void setEdirectPath(String edirectPath) {
 			this.edirectPath = edirectPath;
+		}
+		public String getNcbiVirusesDbPath() {
+			return ncbiVirusesDbPath;
+		}
+		public void setNcbiVirusesDbPath(String ncbiVirusesDbPath) {
+			this.ncbiVirusesDbPath = ncbiVirusesDbPath;
+		}
+		public String getSequencetoolPath() {
+			return sequencetoolPath;
+		}
+		public void setSequencetoolPath(String sequencetoolPath) {
+			this.sequencetoolPath = sequencetoolPath;
 		}
 	}
 
