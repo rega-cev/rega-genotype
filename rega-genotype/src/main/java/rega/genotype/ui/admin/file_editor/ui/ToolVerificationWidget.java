@@ -49,7 +49,7 @@ public class ToolVerificationWidget extends WContainerWidget{
 		tabs.addTab(selfScanWidget, "Self Scan");
 
 		GoldenSequencesTestWidget goldenSequencesTestWidget = new GoldenSequencesTestWidget(toolConfig, workDir);
-		tabs.addTab(goldenSequencesTestWidget, "Golden sequences test");
+		tabs.addTab(goldenSequencesTestWidget, "Golden standard sequences test");
 	}
 
 	public Signal done() {

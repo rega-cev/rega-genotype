@@ -329,8 +329,26 @@
 		Admin UI
 		</h2>
 		<p>
-		UI for creating and publishing new typing tools.
-		published tools are stored on a remote server (currently http://typingtools.emweb.be/repository/repo-service)
+		Managment framework for typing tools:<br></br>
+		 - UI for easy creation and mangment of tools.<br></br>
+		 - Communication through a public repository on a remote server (currently http://typingtools.emweb.be/repository/repo-service)<br></br>
+		 - Tool verification, with bootscan analysis and golden standard sequences test<br></br>
+		</p>
+
+		<h3>Tool types</h3>
+		<p>
+		<div>
+		<b>Virus sub typing tool:</b> Identify for input sequence to what sub type of the virus it belongs.<br></br>
+		Can be created from UI or Auto created from a Template.
+		</div>
+		<div>
+		<b>Template:</b> Contains General UI content for a Virus sub typing tool.
+		</div>
+		<div>
+		<b>Pan-viral tool:</b>The pan-viral typing tool uses blast to cluster long DNA sequences against a comprehensive and curated reference database. If there is a specific tool for the pathogen on the server, the user will have the ability to redirect to this tool and perform a full phylogenetic analysis of all the sequences that belong to the pathogen cluster. 
+		<br></br>
+		The tool data base can be auto generated from ICTV master list.
+		</div>
 		</p>
 
 		<h3>Tool states</h3>
@@ -351,7 +369,14 @@
 		<p>
 		Tools table contains remote and local tools. That can be identified by the tool state column. 
 		</p>
-		
+
+		<h4>Auto create tool from template and alingment file</h4>
+		<div>1. Choose template in tools table.</div>
+		<div>2. Press "auto create"</div>
+		<div>3. Fill the manifest. </div>
+		<div>4. Press auto create virus tool and use the alingment fasta file.</div>
+		<div>5. Some UI parts still need to be changed, but there is UI for that.</div>
+
 		<h4>Create a new tool from existing files</h4>
 		<div>1. Press add.</div>
 		<div>2. Fill in the manifest and local config data and press save.</div>
