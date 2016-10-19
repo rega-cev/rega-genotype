@@ -10,7 +10,6 @@ import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +49,8 @@ public class NgsAnalysis {
 	public static final String SEQUENCES_FILE = "sequences.fasta";
 	public static final String CUT_ADAPTER_FILE_END = "CA_";
 	public static final String CONSENSUS_FILE = "consensus.fasta";
-	public static final String CONSENSUS_INPUT_FILE = "consensus-input.fasta";
+	public static final String CONSENSUS_ALINGMENT_FILE = "consensus-alingemnt.fasta";
+	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
 
 	/**
 	 * Contract long virus contigs from ngs output. 
@@ -184,7 +184,7 @@ public class NgsAnalysis {
 				resultDiamondDir.mkdirs();
 			}
 			try {
-				creatDiamondResults(resultDiamondDir, view, fastqDir.listFiles()) ;
+				creatDiamondResults(resultDiamondDir, view, fastqDir.listFiles(), ngsProgress) ;
 			} catch (FileFormatException e) {
 				e.printStackTrace();
 				ngsProgress.setErrors("diamond files could not be merged." + e.getMessage());
@@ -255,7 +255,9 @@ public class NgsAnalysis {
 
 				FileUtil.appendToFile(assemble, sequences);
 
-				makeConsensus(assemble, workDir, d.getName());
+				File alingment = consensusAlign(assemble, workDir, d.getName());
+				makeConsensus(alingment, workDir, d.getName());
+
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -282,7 +284,7 @@ public class NgsAnalysis {
 			GeneralConfig gc = Settings.getInstance().getConfig().getGeneralConfig();
 			String cmd = gc.getDiamondPath() + " blastx -d "
 					+ gc.getDbDiamondPath() + " -q " + query.getAbsolutePath()
-					+ " -a " + matches + " -k 1  --quiet"; // TODO: use k 10 to check the best 2 results and choose 1 with existing basket.
+					+ " -a " + matches + " -k 1 --quiet";
 			System.err.println(cmd);
 			blastx = StreamReaderRuntime.exec(cmd, null, workDir);
 			int exitResult = blastx.waitFor();
@@ -365,16 +367,6 @@ public class NgsAnalysis {
 		return result;
 	}
 
-	// assume that the map is not very big.
-	private static String getTaxusId(Map<String, LinkedHashSet<String>> taxoId, String taxusName) {
-		for (Map.Entry<String, LinkedHashSet<String>> e: taxoId.entrySet()) {
-			if (e.getValue().contains(taxusName))
-				return e.getKey();
-		}
-
-		return null;
-	}
-
 	/**
 	 * Order all the sequence by taxonomy id. 
 	 * The algorithm favors creating big baskets, so if 1 taxon appears many times 
@@ -386,7 +378,7 @@ public class NgsAnalysis {
 	 * @throws FileFormatException
 	 * @throws IOException
 	 */
-	private static void creatDiamondResults(File workDir, File view, File[] fastqFiles) throws FileFormatException, IOException {
+	private static void creatDiamondResults(File workDir, File view, File[] fastqFiles, NgsProgress ngsProgress) throws FileFormatException, IOException {
 		String line = "";
 
 		class SequenceData {
@@ -411,7 +403,7 @@ public class NgsAnalysis {
 
 			SequenceData data = new SequenceData();
 			data.score = Double.parseDouble(score);
-			data.taxon = taxon[0];
+			data.taxon = taxon[0] + "_" + taxon[1];
 
 			List<SequenceData> sequenceDataList = sequenceNameData.get(name[0]);
 			if (sequenceDataList == null) {
@@ -440,6 +432,8 @@ public class NgsAnalysis {
 			}
 		}
 		bf.close();
+
+		ngsProgress.setDiamondBlastResults(taxonCounters);
 
 		// find genus taxonomy for every sequence. 
 		Map<String, String> taxoNameId = new HashMap<String, String>();
@@ -493,33 +487,6 @@ public class NgsAnalysis {
 			fileReader.close();
 			lnr.close();
 		}
-	}
-
-	public static Map<String, Integer> countDiamondREsults(File workDir) {
-		File view = new File(workDir + File.separator + DIAMOND_BLAST_DIR, "matches.fasta");
-		BufferedReader bf;
-		Map<String, Integer> taxoIdCount = new HashMap<String, Integer>();
-		try {
-			bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
-			String line;
-			while ((line = bf.readLine()) != null)  {
-				String[] name = line.split("\\t");
-				String[] taxon = name[1].split("_");
-				String key = taxon[0] + "_" + taxon[1];
-				if (!taxoIdCount.containsKey(key))
-					taxoIdCount.put(key, 0);
-				taxoIdCount.put(key, taxoIdCount.get(key) + 1);
-			}
-			bf.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return taxoIdCount;
 	}
 
 	/**
@@ -612,8 +579,12 @@ public class NgsAnalysis {
 		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_FILE);
 	}
 
-	public static File consensusInputFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_INPUT_FILE);
+	public static File consensusAlingmentFile(File workDir, String virusName) {
+		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_ALINGMENT_FILE);
+	}
+
+	public static File consensusRefFile(File workDir, String virusName) {
+		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_REF_FILE);
 	}
 
 	/**
@@ -669,21 +640,20 @@ public class NgsAnalysis {
 		return ans;
 	}
 
-	//TODO 
-	private static String toFasta(Sequence s) {
-//		String ans = new String();
-//		OutputStream f = new ByteArrayOutputStream();
-//		try {
-//			s.writeFastaOutput(f);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		ans = f.toString();
-		return ">" + s.getName() + " \n" + s.getSequence();
-	}
-	
-	public static File makeConsensus(File assembledContigs,
+	/**
+	 * Try to connect all the contigs.
+	 * Reference sequence: use blast on ncbi viruses db with query = longest contig  
+	 * @param assembledContigs: will be aligned
+	 * @param workDir
+	 * @param virusName
+	 * @return
+	 * @throws ApplicationException
+	 * @throws IOException
+	 * @throws FileFormatException
+	 * @throws ParameterProblemException
+	 * @throws InterruptedException
+	 */
+	public static File consensusAlign(File assembledContigs,
 			File workDir, String virusName) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
 		// Create make contigs in. format: first refseq then all the contigs. 
@@ -699,28 +669,56 @@ public class NgsAnalysis {
 		if (longestContig == null)
 			return null;
 
+		workDir.mkdirs();
+
+		//TODO
 		File ncbiVirusesFasta = new File(
 				"/home/michael/projects/rega-genotype-extenal2/ngs-databases/ncbi-viruses.fasta");
-		File in = consensusInputFile(workDir, virusName);
+		File refrence = consensusRefFile(workDir, virusName);
 		File consensusDir = new File(workDir, consensusDir(virusName));
 		consensusDir.mkdirs();
 
 		//BlastUtil.formatDB(ncbiVirusesFasta, consensusDir);
-		BlastUtil.computeBestRefSeq(longestContig, consensusDir, in, ncbiVirusesFasta);
-
-		FileUtil.appendToFile(assembledContigs, in);
+		BlastUtil.computeBestRefSeq(longestContig, consensusDir, refrence, ncbiVirusesFasta);
 
 		// make Consensus
 
 		//TODO
-		String sequencetoolPath = "/home/michael/projects/mpf-sequencetool/build/src/mpf-sequencetool";
+		String sequencetoolPath = 
+				"/home/michael/projects/mpf-sequencetool/build/src/mpf-sequencetool";
+		File alingment = consensusAlingmentFile(workDir, virusName);
+		alingment.getParentFile().mkdirs();
+
+		String cmd = sequencetoolPath + " consensus-align"
+		+ " --reference " + refrence.getAbsolutePath()
+		+ " --target " + assembledContigs.getAbsolutePath()
+		+ " --output " + alingment.getAbsolutePath()
+		+ " --cutoff 70 ";
+
+		System.err.println(cmd);
+
+		Process p = Runtime.getRuntime().exec(cmd, null, workDir);
+		int exitResult = p.waitFor();
+
+		if (exitResult != 0)
+			throw new ApplicationException("blast exited with error: " + exitResult);
+
+		return alingment;
+	}
+
+	public static File makeConsensus(File assembledContigs,
+			File workDir, String virusName) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+
+		//TODO
+		String sequencetoolPath = //Settings.getInstance().getConfig().getGeneralConfig().getSequenceToolDbPath();
+				"/home/michael/projects/mpf-sequencetool/build/src/mpf-sequencetool";
 		File out = consensusFile(workDir, virusName);
 		out.getParentFile().mkdirs();
 
-		String cmd = sequencetoolPath + "make-consensus"
-		+ " --input " + in.getAbsolutePath()
-		+ " --output " + out.getAbsolutePath()
-		+ " --max-gap 10 --max-missing 100 --min-count 0.25 ";
+		String cmd = sequencetoolPath + " make-consensus"
+				+ " --input " + assembledContigs.getAbsolutePath()
+				+ " --output " + out.getAbsolutePath()
+				+ " --max-gap 10 --max-missing 100 --min-count 0.25 ";
 
 		System.err.println(cmd);
 
