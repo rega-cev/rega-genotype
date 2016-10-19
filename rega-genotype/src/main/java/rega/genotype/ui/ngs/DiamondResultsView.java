@@ -2,9 +2,10 @@ package rega.genotype.ui.ngs;
 
 import java.io.File;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 
-import rega.genotype.ngs.NgsAnalysis;
+import rega.genotype.ngs.NgsProgress;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.PositionScheme;
 import eu.webtoolkit.jwt.Side;
@@ -89,11 +90,15 @@ public class DiamondResultsView extends WContainerWidget{
 		blastResultModel.setHeaderData(ASSINGMENT_COLUMN, new WString("Assignment"));
 		blastResultModel.setHeaderData(DATA_COLUMN, "Sequence count");
 		blastResultModel.setHeaderData(COLOR_COLUMN, "Legend");
+		
+		NgsProgress ngsProgress = NgsProgress.read(workDir);
 
-		Map<String, Integer> countDiamondREsults = NgsAnalysis.countDiamondREsults(workDir);
+		Map<String, Integer> countDiamondResults = ngsProgress.getDiamondBlastResults();
+		if (countDiamondResults == null)
+			countDiamondResults = new HashMap<String, Integer>();
 
 		int i = 0;
-		for (Map.Entry<String, Integer> e: countDiamondREsults.entrySet()) {
+		for (Map.Entry<String, Integer> e: countDiamondResults.entrySet()) {
 			int sequenceCount = e.getValue();
 			String taxonNmae = e.getKey();
 

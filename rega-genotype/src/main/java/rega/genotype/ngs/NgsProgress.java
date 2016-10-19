@@ -3,7 +3,9 @@ package rega.genotype.ngs;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
@@ -37,9 +39,10 @@ public class NgsProgress {
 	private State state = State.Uploading;
 	private String errors = new String();
 	private List<String> spadesErrors = new ArrayList<String>(); // spades can crash on files with small amount of sequences, in that case it is still good to check the other viruses.
- 	private String fastqPE1FileName;// File with forward reads.
+	private String fastqPE1FileName;// File with forward reads.
 	private String fastqPE2FileName;// File with reverse reads.
 	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
+	private Map<String, Integer> diamondBlastResults = new HashMap<String, Integer>();// count sequences per taxon.
 
 	public NgsProgress() {}
 
@@ -118,5 +121,13 @@ public class NgsProgress {
 
 	public void setSpadesErrors(List<String> spadesErrors) {
 		this.spadesErrors = spadesErrors;
+	}
+
+	public Map<String, Integer> getDiamondBlastResults() {
+		return diamondBlastResults;
+	}
+
+	public void setDiamondBlastResults(Map<String, Integer> diamondBlastResults) {
+		this.diamondBlastResults = diamondBlastResults;
 	}
 }
