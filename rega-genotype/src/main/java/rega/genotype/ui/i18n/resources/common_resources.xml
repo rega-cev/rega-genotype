@@ -159,10 +159,9 @@
 	
 	<!-- Admin config -->
 	<message id="admin.config.tool-config-table">
+		<div>${tools-menu}${repo-menu}</div>
 		<div>${version-chb}${remote-chb}</div>
 		${table}
-		<div class="action-buttons">${add}${import}${export}${new-version}${auto-create}${edit}${update}${install}${uninstall}</div>
-		<div class="action-buttons">${update-taxonomy}</div>
 		<div>${info}</div>
 	</message>
 

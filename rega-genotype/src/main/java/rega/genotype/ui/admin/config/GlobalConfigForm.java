@@ -1,5 +1,6 @@
 package rega.genotype.ui.admin.config;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,10 +10,19 @@ import java.util.Set;
 import rega.genotype.config.Config;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.TaxonomyModel;
+import rega.genotype.taxonomy.UpdateTaxonomyFileService;
 import rega.genotype.ui.framework.widgets.AutoForm;
 import rega.genotype.ui.framework.widgets.Dialogs;
+import rega.genotype.ui.framework.widgets.StandardDialog;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
+import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WTable;
+import eu.webtoolkit.jwt.WText;
 
 public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 	public GlobalConfigForm(final Config config) {
@@ -40,6 +50,50 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				} else {
 					Dialogs.infoDialog("Info", "Global config not save, see validation errors.");
 				}
+			}
+		});
+
+		// update taxonomy data base
+
+		WTable updateTaxonomyTable = new WTable(this);
+		updateTaxonomyTable.setMargin(15, Side.Top);
+		updateTaxonomyTable.addStyleClass("auto-form-table");
+		updateTaxonomyTable.getElementAt(0, 0).addWidget(
+				new WText("Download taxonomy "));
+
+		final WPushButton updateTaxonomyB = new WPushButton(
+				"Update taxonomy", updateTaxonomyTable.getElementAt(0, 1));
+		updateTaxonomyB.clicked().addListener(updateTaxonomyB, new Signal.Listener() {
+			public void trigger() {
+				final StandardDialog d = new StandardDialog("Update taxonomy", false);
+				d.show();
+				d.setWidth(new WLength(300));
+
+				final WText info = new WText("Download taxonomy file from uniprot and update all tools to use it.");
+				d.getContents().addWidget(info);
+				d.getOkB().clicked().addListener(d, new Signal.Listener() {
+					public void trigger() {
+						d.getOkB().disable();
+						d.getCancelB().disable();
+						info.setText("Downloading taxonomy file, this can take some time..");
+
+						final WApplication app = WApplication.getInstance();
+
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								File file = UpdateTaxonomyFileService.download();
+								String infoText = file == null ? "Could not downlod taxonomy file" : "Update finished";
+								UpdateLock updateLock = app.getUpdateLock();
+								TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
+								info.setText(infoText);
+								d.getCancelB().enable();
+								app.triggerUpdate();
+								updateLock.release();
+							}
+						});
+						t.start();
+					}
+				});
 			}
 		});
 	}
