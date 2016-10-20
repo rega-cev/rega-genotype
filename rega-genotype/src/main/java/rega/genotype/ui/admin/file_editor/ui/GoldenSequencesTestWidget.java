@@ -239,7 +239,6 @@ public class GoldenSequencesTestWidget extends Template {
 	}
 
 	private static class StatisticsData {
-		// Gold standard assignement	TP	TN	FP	FN	SENS	SPEC	PPV	NPV
 		int goldStandardAssignement = 0, tp = 0, tn = 0, fp = 0, fn = 0;
 	}
 
@@ -429,6 +428,7 @@ public class GoldenSequencesTestWidget extends Template {
 
 				// statistics model
 				StandardTableView statisticsTable = new StandardTableView(reportC);
+				statisticsTable.setMargin(10, Side.Top);
 				statisticsTable.setModel(statisticsModel);
 				// set the last 8 columns width.
 				for (int i = 1; i < 9; ++i)
