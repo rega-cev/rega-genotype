@@ -15,9 +15,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
-import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
@@ -29,19 +27,19 @@ import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.ExcelUtils;
 import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.Utils;
 import rega.genotype.viruses.generic.GenericTool;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.WAbstractItemModel;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
-import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -78,11 +76,12 @@ public class GoldenSequencesTestWidget extends Template {
 			infoText += verificationTable.get(i).getDescription();
 		}
 		infoText +="</div>";
+		infoText +="<div>Note: ? means that this data can not be calculateed by the tool.</div>";
 		resultsTableT.setText(infoText);
 		resultsTableT.setMargin(15, Side.Top);
 
 		resultsUpload.getWFileUpload().setFilters(".xlsx");
-		
+
 		runB.setMargin(15, Side.Top, Side.Bottom);
 
 		bindWidget("info", infoT);
@@ -214,6 +213,118 @@ public class GoldenSequencesTestWidget extends Template {
 		return resultsModel;
 	}
 
+
+	private static class StatisticsKey {
+		List<String> headers = new ArrayList<String>();
+
+		private void add(String header) {
+			headers.add(header);
+		}
+		private String combinHeaders() {
+			String ans = "";
+			for (String h: headers)
+				ans += h;
+			return ans;
+		}
+		@Override
+		public int hashCode() {
+			return combinHeaders().hashCode();
+		}
+		@Override
+		public boolean equals(Object obj) {
+			if (obj != null && obj instanceof StatisticsKey)
+				return ((StatisticsKey)obj).combinHeaders().equals(combinHeaders());
+			return false;
+		}
+	}
+
+	private static class StatisticsData {
+		// Gold standard assignement	TP	TN	FP	FN	SENS	SPEC	PPV	NPV
+		int goldStandardAssignement = 0, tp = 0, tn = 0, fp = 0, fn = 0;
+	}
+
+	private WStandardItemModel createStatisticsModel(final List<VerificationTableItem> verificationTable,
+			final WStandardItemModel resultsModel) {
+
+		int rowHeaderCount = (verificationTable.size() - 1) ;
+		String[] dataHeaders = {"Gold standard assignement","TP","TN","FP","FN","SENS","SPEC","PPV","NPV"};
+
+
+		final WStandardItemModel statisticsModel = new WStandardItemModel(0, rowHeaderCount + dataHeaders.length);
+
+		// headers
+		for (int i = 1; i < verificationTable.size(); ++i)
+			statisticsModel.setHeaderData(i - 1, 
+					verificationTable.get(i).getDescription());
+
+		for (int c = rowHeaderCount; c < dataHeaders.length + rowHeaderCount; ++c)
+			statisticsModel.setHeaderData(c, dataHeaders[c - rowHeaderCount]);
+
+		// data
+
+		int totalPositive = resultsModel.getRowCount(); // TODO check if they do negative tests
+		Map<StatisticsKey, StatisticsData> data = new HashMap<StatisticsKey, StatisticsData>();
+
+		// Compute row keys
+		for (int r =0; r < resultsModel.getRowCount(); r++) {
+			StatisticsKey expectedKey = new StatisticsKey();
+			StatisticsKey calculatedKey = new StatisticsKey();
+			for (int c = 1; c < resultsModel.getColumnCount(); c+=2) {
+				Object expected = resultsModel.getData(r, c);
+				Object calculated = resultsModel.getData(r, c +1);
+				String expectedStr = expected == null ? "?" : expected.toString();
+				String calculatedStr = calculated == null ? "?" : calculated.toString();
+				expectedKey.add(expectedStr);
+				calculatedKey.add(calculatedStr);
+			}
+
+			if (!data.containsKey(expectedKey))
+				data.put(expectedKey, new StatisticsData());
+
+			StatisticsData expectedStatisticsData = data.get(expectedKey);
+			expectedStatisticsData.goldStandardAssignement++;
+			if (expectedKey.equals(calculatedKey)) {
+				expectedStatisticsData.tp++;
+			} else {
+				if (!data.containsKey(calculatedKey))
+					data.put(calculatedKey, new StatisticsData());
+				StatisticsData calculatedStatisticsData = data.get(calculatedKey);
+				calculatedStatisticsData.fp++;
+			}
+
+			data.put(expectedKey, expectedStatisticsData);
+		}
+
+		for(Map.Entry<StatisticsKey, StatisticsData> e: data.entrySet()) {
+			final List<WStandardItem> items = new ArrayList<WStandardItem>();
+			for (String h: e.getKey().headers)
+				items.add(new WStandardItem(h));
+
+			StatisticsData sd = e.getValue();
+			sd.tn = totalPositive - sd.goldStandardAssignement - sd.fp;
+			sd.fn = sd.goldStandardAssignement - sd.tp;
+
+			String sensitivity = persentageStr(sd.tp,(sd.tp+sd.fn));
+			String specificity = persentageStr(sd.tn,(sd.fp+sd.tn));
+			String positivePredictiveValue = persentageStr(sd.tp,(sd.tp+sd.fp));
+			String negativePredictiveValue = persentageStr(sd.tn,(sd.fn+sd.tn));
+
+			items.add(new WStandardItem("" + sd.goldStandardAssignement));
+			items.add(new WStandardItem("" + sd.tp));
+			items.add(new WStandardItem("" + sd.tn));
+			items.add(new WStandardItem("" + sd.fp));
+			items.add(new WStandardItem("" + sd.fn));
+
+			items.add(new WStandardItem(sensitivity));
+			items.add(new WStandardItem(specificity));
+			items.add(new WStandardItem(positivePredictiveValue));
+			items.add(new WStandardItem(negativePredictiveValue));
+
+			statisticsModel.appendRow(items);
+		}
+		return statisticsModel;
+	}
+
 	private void fillResultsModel(final List<VerificationTableItem> verificationTable,
 			final File traceFile, final WStandardItemModel resultsModel, final WApplication app) {
 
@@ -300,10 +411,14 @@ public class GoldenSequencesTestWidget extends Template {
 						}
 					}
 				}
-				
-				fillResultsModel(verificationTable, traceFile, resultsModel, app);
 
-				File file = ExcelUtils.write(resultsModel, 
+				fillResultsModel(verificationTable, traceFile, resultsModel, app);
+				WStandardItemModel statisticsModel = createStatisticsModel(verificationTable, resultsModel);
+
+				List<WAbstractItemModel> models = new ArrayList<WAbstractItemModel>();
+				models.add(statisticsModel);
+				models.add(resultsModel);
+				File file = ExcelUtils.write(models, 
 						new File(workDir, ToolVerificationWidget.GOLDEN_SEQUENCES_RESULTS_FILE));
 
 				updateLock = app.getUpdateLock();
@@ -312,27 +427,13 @@ public class GoldenSequencesTestWidget extends Template {
 				downloadB.setLink(new WLink(resource));
 				infoT.setText("Analysis finished.");
 
-				// show totals
-				String totalsText = "<div style=\"margin-top:5px;\">Totals</div>";
-				WTable totalsTable = new WTable();
-				totalsTable.addStyleClass("golden-sequences-totals-table");
-				final int[] totals = new int[verificationTable.size()];
-				for (int r =0; r < resultsModel.getRowCount(); r++)
-					for (int c = 1; c < resultsModel.getColumnCount(); c+=2) {
-						Object d1 = resultsModel.getData(r, c);
-						Object d2 = resultsModel.getData(r, c +1);
-						if (Utils.equal(d1, d2))
-							totals[c/2 + 1]++;
-					}
-				int sum = resultsModel.getRowCount();
-				for (int i = 1; i < verificationTable.size(); ++i) {
-					totalsTable.getElementAt(i, 0).addWidget(
-							new WText( verificationTable.get(i).getDescription() ));
-					totalsTable.getElementAt(i, 1).addWidget(
-							new WText(totals[i] + "/" + sum));
-				}
-				reportC.addWidget(new WText(totalsText));
-				reportC.addWidget(totalsTable);
+				// statistics model
+				StandardTableView statisticsTable = new StandardTableView(reportC);
+				statisticsTable.setModel(statisticsModel);
+				// set the last 8 columns width.
+				for (int i = 1; i < 9; ++i)
+					statisticsTable.setColumnWidth(statisticsModel.getColumnCount() - i, new WLength(60));
+				statisticsTable.setTableWidth();
 
 				app.triggerUpdate();
 				updateLock.release();
@@ -340,5 +441,9 @@ public class GoldenSequencesTestWidget extends Template {
 		});
 		t.setName("parserThread");
 		t.start();
+	}
+
+	private String persentageStr(int a, int b) {
+		return (b == 0) ? "ERR: /0" : (a/b * 100) + "%";
 	}
 }
