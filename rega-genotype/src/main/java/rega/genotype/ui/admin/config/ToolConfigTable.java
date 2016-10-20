@@ -47,8 +47,10 @@ import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WMenuItem;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WPopupMenu;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WText;
@@ -87,7 +89,6 @@ public class ToolConfigTable extends Template{
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
 		table.setHeight(new WLength(400));
 
-
 		proxyModel = new ToolConfigTableModelSortProxy(model);
 		table.setModel(proxyModel);
 		table.sortByColumn(2, SortOrder.AscendingOrder);
@@ -105,15 +106,47 @@ public class ToolConfigTable extends Template{
 		table.setTableWidth();
 		setMaximumSize(table.getWidth(), WLength.Auto);
 
-		final WPushButton addB = new WPushButton("Add");
-		final WPushButton editB = new WPushButton("Edit");
-		final WPushButton installB = new WPushButton("Install");
-		final WPushButton newVersionB = new WPushButton("Create new version");
-		final WPushButton autoCreateB = new WPushButton("Auto create");
-		final WPushButton uninstallB = new WPushButton("Uninstall");
-		final WPushButton updateB = new WPushButton("Update");
-		final WPushButton importB = new WPushButton("Import");
-		final WPushButton updateTaxonomyB = new WPushButton("Update taxonomy");
+		// tools menu
+
+		final WContainerWidget toolsMenuC = new WContainerWidget();
+		toolsMenuC.setInline(true);
+		final WPopupMenu toolsPopup = new WPopupMenu();
+		final WPushButton toolB = new WPushButton("Tools", toolsMenuC);
+		//toolB.setIcon(new WLink("pics/suggest-dropdown.png"));
+		toolB.setMenu(toolsPopup);
+
+		final WMenuItem create = toolsPopup.addItem("Create new tool");
+		final WMenuItem newVersion = toolsPopup.addItem("Create new version");
+		final WMenuItem autoCreate = toolsPopup.addItem("Auto create");
+		toolsPopup.addSeparator();
+		final WMenuItem edit = toolsPopup.addItem("Edit");
+		toolsPopup.addSeparator();
+		final WMenuItem importItem = toolsPopup.addItem("Import");
+		final WMenuItem export = toolsPopup.addItem("Export");
+
+
+		newVersion.setToolTip("Create new version of selected tool");
+		autoCreate.setToolTip("Auto create a tool from selected template");
+		edit.setToolTip("Edit currently selected tools.");
+		importItem.setToolTip("Import a new tool.");
+		export.setToolTip("Export selected tool. Can be used to send a tool by email.");
+
+		// repo menu
+
+		final WContainerWidget repoMenuC = new WContainerWidget();
+		repoMenuC.setInline(true);
+		final WPopupMenu repoPopup = new WPopupMenu();
+		final WPushButton repoB = new WPushButton("Repository", repoMenuC);
+		//toolB.setIcon(new WLink("pics/suggest-dropdown.png"));
+		repoB.setMenu(repoPopup);
+
+		final WMenuItem install = repoPopup.addItem("Install");
+		final WMenuItem uninstall = repoPopup.addItem("Uninstall");
+		final WMenuItem update = repoPopup.addItem("Update");
+
+		install.setToolTip("Download selected tool from remote repository to local server.");
+		uninstall.setToolTip("Delete selected tool from local server.");
+		update.setToolTip("Download the latest version of selected tool to local server.");
 
 		// downloadB
 		final DownloadResource downloadR = new DownloadResource("", "") {
@@ -147,16 +180,15 @@ public class ToolConfigTable extends Template{
 				return null;
 			}
 		};
-		final WAnchor downloadB = new WAnchor();
-		downloadB.setTarget(AnchorTarget.TargetDownload);
-		downloadB.setText("Export");
-		downloadB.setStyleClass("like-button");
-		downloadB.setLink(new WLink(downloadR));
-		downloadB.disable();
 
-		installB.disable();
+		export.getAnchor().setTarget(AnchorTarget.TargetDownload);
+		export.getAnchor().setLink(new WLink(downloadR));
+		export.getAnchor().addStyleClass("standard-text", true);
+		export.disable();
 
-		installB.clicked().addListener(installB, new Signal.Listener() {
+		install.disable();
+
+		install.clicked().addListener(install, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
 					ToolInfo toolInfo = proxyModel.getToolInfo(
@@ -187,7 +219,7 @@ public class ToolConfigTable extends Template{
 			}
 		});
 
-		uninstallB.clicked().addListener(uninstallB, new Signal.Listener() {
+		uninstall.clicked().addListener(uninstall, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() > 0) {
 					String toolsStr = "";
@@ -230,7 +262,7 @@ public class ToolConfigTable extends Template{
 			}
 		});
 
-		updateB.clicked().addListener(updateB, new Signal.Listener() {
+		update.clicked().addListener(update, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
 					ToolInfo toolInfo = proxyModel.getToolInfo(
@@ -241,7 +273,7 @@ public class ToolConfigTable extends Template{
 			}
 		});
 
-		importB.clicked().addListener(importB, new Signal.Listener() {
+		importItem.clicked().addListener(importItem, new Signal.Listener() {
 			public void trigger() {
 				StandardDialog d= new StandardDialog("Import");
 				final FileUpload fileUpload = new FileUpload();
@@ -284,19 +316,19 @@ public class ToolConfigTable extends Template{
 			}
 		});
 
-		addB.clicked().addListener(addB, new Signal.Listener() {
+		create.clicked().addListener(create, new Signal.Listener() {
 			public void trigger() {
 				edit(null, Mode.Add);
 			}
 		});
 
-		newVersionB.clicked().addListener(newVersionB, new Signal.Listener() {
+		newVersion.clicked().addListener(newVersion, new Signal.Listener() {
 			public void trigger() {
 				createNewersion(table, false);
 			}
 		});
 
-		autoCreateB.clicked().addListener(autoCreateB, new Signal.Listener() {
+		autoCreate.clicked().addListener(autoCreate, new Signal.Listener() {
 			public void trigger() {
 				createNewersion(table, true);
 			}
@@ -317,7 +349,7 @@ public class ToolConfigTable extends Template{
 			}
 		});
 
-		editB.clicked().addListener(editB, new Signal.Listener() {
+		edit.clicked().addListener(edit, new Signal.Listener() {
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1) {
 					ToolInfo toolInfo = proxyModel.getToolInfo(table.getSelectedIndexes().first());
@@ -333,46 +365,45 @@ public class ToolConfigTable extends Template{
 				if (table.getSelectedIndexes().size() == 1) {
 					ToolInfo toolInfo = proxyModel.getToolInfo(
 							table.getSelectedIndexes().first());
-					installB.setEnabled(toolInfo.getState() == ToolState.RemoteNotSync);
-
-					editB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
-					newVersionB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
-					autoCreateB.setEnabled(toolInfo.getManifest().isTemplate());
+					install.setDisabled(toolInfo.getState() != ToolState.RemoteNotSync);
+					edit.setDisabled(toolInfo.getState() == ToolState.RemoteNotSync);
+					newVersion.setDisabled(toolInfo.getState() == ToolState.RemoteNotSync);
+					autoCreate.setDisabled(!toolInfo.getManifest().isTemplate());
 
 					// only the last version can be updated 
-					updateB.setEnabled(!proxyModel.getToolConfigTableModel().isUpToDate(
+					update.setDisabled(proxyModel.getToolConfigTableModel().isUpToDate(
 							toolInfo.getManifest().getId()));
 
 					// uninstall
-					uninstallB.setEnabled(toolInfo.getState() != ToolState.RemoteNotSync);
+					uninstall.setDisabled(toolInfo.getState() == ToolState.RemoteNotSync);
 					if (toolInfo.getState() == ToolState.Local || toolInfo.getState() == ToolState.Retracted)
-						uninstallB.setText("Remove");
+						uninstall.setText("Remove");
 					else
-						uninstallB.setText("Uninstall");
+						uninstall.setText("Uninstall");
 					
 					if (toolInfo.getManifest() != null && toolInfo.getConfig() != null){
 						File zip = new File(Settings.getInstance().getBasePackagedToolsDir() 
 								+ File.separator + toolInfo.getManifest().getUniqueToolId() + ".zip");
 						downloadR.setFileName(zip.getAbsolutePath());
 						downloadR.suggestFileName(toolInfo.getManifest().getUniqueToolId() + ".zip");
-						downloadB.enable();
+						export.enable();
 					}
 				} else if (table.getSelectedIndexes().size() > 1) {
-					uninstallB.enable();
-					uninstallB.setText("Remove/Uninstall");
+					uninstall.enable();
+					uninstall.setText("Remove/Uninstall");
 					for (WModelIndex index: table.getSelectedIndexes()){
 						final ToolInfo toolInfo = proxyModel.getToolInfo(index);
 						if (toolInfo.getState() == ToolState.RemoteNotSync)
-							uninstallB.disable();
+							uninstall.disable();
 					}
 				} else {
-					installB.disable();
-					editB.disable();
-					newVersionB.disable();
-					uninstallB.disable();
-					updateB.disable();
-					downloadB.disable();
-					autoCreateB.disable();
+					install.disable();
+					edit.disable();
+					newVersion.disable();
+					uninstall.disable();
+					update.disable();
+					export.disable();
+					autoCreate.disable();
 				}
 			}
 		});
@@ -400,53 +431,11 @@ public class ToolConfigTable extends Template{
 		remoteChB.setToolTip("Show tool from remote repository and synchronize the state existing tools with the remote repository.");
 		proxyModel.setFilterNotRemote(true);
 
-		updateTaxonomyB.clicked().addListener(updateTaxonomyB, new Signal.Listener() {
-			public void trigger() {
-				final StandardDialog d = new StandardDialog("Update taxonomy", false);
-				d.show();
-				d.setWidth(new WLength(300));
-
-				final WText info = new WText("Download taxonomy file from uniprot and update all tools to use it.");
-				d.getContents().addWidget(info);
-				d.getOkB().clicked().addListener(d, new Signal.Listener() {
-					public void trigger() {
-						d.getOkB().disable();
-						d.getCancelB().disable();
-						info.setText("Downloading taxonomy file, this can take some time..");
-						
-						final WApplication app = WApplication.getInstance();
-						
-						Thread t = new Thread(new Runnable() {
-							public void run() {
-								File file = UpdateTaxonomyFileService.download();
-								String infoText = file == null ? "Could not downlod taxonomy file" : "Update finished";
-								UpdateLock updateLock = app.getUpdateLock();
-								TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
-								info.setText(infoText);
-								d.getCancelB().enable();
-								app.triggerUpdate();
-								updateLock.release();
-							}
-						});
-						t.start();
-					}
-				});
-			}
-		});
-
+		bindWidget("repo-menu", repoMenuC);
+		bindWidget("tools-menu", toolsMenuC);
 		bindWidget("version-chb", versionChB);
 		bindWidget("remote-chb", remoteChB);
 		bindWidget("table", table);
-		bindWidget("add", addB);
-		bindWidget("edit", editB);
-		bindWidget("install", installB);
-		bindWidget("new-version", newVersionB);
-		bindWidget("auto-create", autoCreateB);
-		bindWidget("uninstall", uninstallB);
-		bindWidget("update", updateB);
-		bindWidget("import", importB);
-		bindWidget("export", downloadB);
-		bindWidget("update-taxonomy", updateTaxonomyB);
 	}
 
 	private void importTool(ToolManifest manifest, File f, ToolConfigForm.Mode mode) {

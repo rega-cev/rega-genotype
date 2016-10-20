@@ -82,7 +82,7 @@ public class TaxonomyWidget extends WContainerWidget {
 		});
 
 		if (taxonomyModel.getRowCount() == 0)
-			info.setText("The taxonmy file is empty. Use the update taxonomy button (under the tools table) to download it from uniprot.");
+			info.setText("The taxonmy file is empty. Use the update taxonomy button (in Global config) to download it from uniprot.");
 	}
 
 	private Set<String> getTaxonomyIds(ToolConfig toolConfig) {

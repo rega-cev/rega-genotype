@@ -234,3 +234,8 @@ body {
   overflow:auto;
   max-height: 220px;
 }
+
+.standard-text {
+    text-decoration: inherit;
+    color: inherit;
+}

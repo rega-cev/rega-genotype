@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -89,7 +90,7 @@ public class ExcelUtils {
 		}
 	}
 
-	public static File write(WAbstractItemModel model, File file) {	
+	public static File write(List<WAbstractItemModel> models, File file) {	
 		FileOutputStream fileOut = null;
 		try {
 			fileOut = new FileOutputStream(file);
@@ -98,8 +99,24 @@ public class ExcelUtils {
 		}
 
 		HSSFWorkbook workbook = new HSSFWorkbook();
-		HSSFSheet worksheet = workbook.createSheet("sheet1");
+		int i = 1;
+		for (WAbstractItemModel model: models) {
+			HSSFSheet worksheet = workbook.createSheet("sheet"  +i);
+			write(model, worksheet);
+			i++;
+		}
+		try {
+			workbook.write(fileOut);
+			fileOut.flush();
+			fileOut.close();
+			workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return file;
+	}
 
+	private static void write(WAbstractItemModel model, HSSFSheet worksheet) {
 		//headers
 		HSSFRow headerRow = worksheet.createRow(0);
 		for(int column = 0; column < model.getColumnCount(); column++) {
@@ -118,14 +135,5 @@ public class ExcelUtils {
 				hssfcell.setCellValue(new HSSFRichTextString(text));
 			}
 		}
-		try {
-			workbook.write(fileOut);
-			fileOut.flush();
-			fileOut.close();
-			workbook.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return file;
 	}
 }
