@@ -253,11 +253,10 @@ public class NgsAnalysis {
 						return false;
 					}
 
-				FileUtil.appendToFile(assemble, sequences);
-
 				File alingment = consensusAlign(assemble, workDir, d.getName());
-				makeConsensus(alingment, workDir, d.getName());
+				File consensus = makeConsensus(alingment, workDir, d.getName());
 
+				FileUtil.appendToFile(consensus, sequences);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -466,7 +465,7 @@ public class NgsAnalysis {
 					break;
 				}
 
-				String[] name = s.getName().split(" "); // TODO was name ?
+				String[] name = s.getName().split(" ");
 
 				String taxosId = taxoNameId.get(name[0]);
 				if (taxosId == null)
