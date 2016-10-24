@@ -218,24 +218,7 @@ public class NgsAnalysis {
 
 			if (sequenceFile1.length() < 1000*1000)
 				continue; // no need to assemble if there is not enough reads.
-// does not make sense ? 
-//			File ca1 = null;
-//			File ca2 = null;
-//			// remove adapters:
-//			try {
-//				ca1 = new File(sequenceFile1.getParentFile(), CUT_ADAPTER_FILE_END + sequenceFile1.getName());
-//				ca2 = new File(sequenceFile2.getParentFile(), CUT_ADAPTER_FILE_END + sequenceFile2.getName());
-//
-//				cutAdapters(sequenceFile1, ca1);
-//				cutAdapters(sequenceFile2, ca2);
-//
-//			} catch (ApplicationException e2) {
-//				e2.printStackTrace();
-//				ngsProgress.getSpadesErrors().add("cut adpters failed." + e2.getMessage());
-//				ngsProgress.save(workDir);
-//				continue;
-//			}
-			
+
 			try {
 				File assemble = assemble(sequenceFile1, sequenceFile2, workDir, d.getName());
 				if (assemble == null)
