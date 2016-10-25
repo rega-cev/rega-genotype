@@ -49,6 +49,10 @@ public class AutoForm <T> extends WContainerWidget {
 		for (Field field : fields) {
 			WText info = new WText();
 			info.addStyleClass("auto-form-info ");
+			WText header = new WText();
+			layout.getElementAt(row, 0).addWidget(header);
+			layout.getElementAt(row, 0).setColumnSpan(5);
+			row++;
 
 			layout.getElementAt(row, 0).addWidget(new WText(styleFiledName(field.getName())));
 			if (field.getType() == String.class) {
@@ -57,13 +61,13 @@ public class AutoForm <T> extends WContainerWidget {
 				le.setValidator(new WValidator(true));
 				le.setWidth(new WLength(300));
 				layout.getElementAt(row, 1).addWidget(le);
-				widgetMap.put(field, new WidgetContainer(le, info));
+				widgetMap.put(field, new WidgetContainer(le, info, header));
 			} else if (field.getType() == boolean.class){
 				Boolean value = (Boolean)doGet(field, t);
 				WCheckBox chb = new WCheckBox();
 				chb.setChecked(value);
 				layout.getElementAt(row, 1).addWidget(chb);
-				widgetMap.put(field, new WidgetContainer(chb, info));
+				widgetMap.put(field, new WidgetContainer(chb, info, header));
 			} else if (field.getType() == int.class){
 				Integer value = (Integer)doGet(field, t);
 				WLineEdit le = new WLineEdit(value == null ? "" : value.toString());
@@ -72,7 +76,7 @@ public class AutoForm <T> extends WContainerWidget {
 				v.setMandatory(true);
 				le.setValidator(v);
 				layout.getElementAt(row, 1).addWidget(le);
-				widgetMap.put(field, new WidgetContainer(le, info));
+				widgetMap.put(field, new WidgetContainer(le, info, header));
 			} else 
 				System.err.println("WARNING: AutoForm encountered new field type: " + field.getType());
 
@@ -114,6 +118,15 @@ public class AutoForm <T> extends WContainerWidget {
  			return false;
  		else
  			widgetMap.get(getField(fieldName)).info.setText(text);
+
+ 		return true;
+ 	}
+
+ 	protected boolean setHeader(String fieldName, String text) {
+ 		if (widgetMap.get(getField(fieldName)) == null)
+ 			return false;
+ 		else
+ 			widgetMap.get(getField(fieldName)).header.setText(text);
 
  		return true;
  	}
@@ -240,9 +253,11 @@ public class AutoForm <T> extends WContainerWidget {
 	private static class WidgetContainer {
 		WFormWidget widget;
 		WText info;
-		public WidgetContainer(WFormWidget widget, WText info) {
+		WText header;
+		public WidgetContainer(WFormWidget widget, WText info, WText header) {
 			this.widget = widget;
 			this.info = info;
+			this.header = header;
 		}
 	}
 }

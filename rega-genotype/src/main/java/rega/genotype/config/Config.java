@@ -223,21 +223,23 @@ public class Config {
 		private String paupCmd = "paup4b10";
 		private String clustalWCmd = "clustalW";
 		private String blastPath = "/usr/bin/";
+		private String treePuzzleCmd = "puzzle";
+		private String treeGraphCmd = "tgf";
+		private String epsToPdfCmd = "epstopdf";
+		private String imageMagickConvertCmd = "convert";
+		private int maxAllowedSeqs = 2000;
+		private String inkscapeCmd = "inkscape";
+		private String edirectPath = "/usr/bin/edirect/";
+		//NGS
 		private String diamondPath = "diamond";
 		private String dbDiamondPath = "db.dmnd";
 		private String ncbiVirusesDbPath = "ncbi-viruses.fasta";
 		private String sequencetoolPath = "sequencetool";
 		private String taxonamyDiamondPath = "taxonamy.fasta";
-		private String treePuzzleCmd = "puzzle";
-		private String treeGraphCmd = "tgf";
-		private String epsToPdfCmd = "epstopdf";
-		private String imageMagickConvertCmd = "convert";
 		private String fastqcCmd = "fastqc";
 		private String spadesCmd = "spades";
 		private String cutAdaptCmd = "cutadapt";
-		private int maxAllowedSeqs = 2000;
-		private String inkscapeCmd = "inkscape";
-		private String edirectPath = "/usr/bin/edirect/";
+
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
 		private String repoUrl; // url of repository server.

@@ -120,6 +120,9 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 	}
 	
 	private void setInfo() {
+		setHeader("diamondPath", "<h3> NGS </h3>");
+		setHeader("publisherName", "<h3> Local server configuration.</h3>");
+
 		setFieldInfo("paupCmd", "<div>Paup* 4 beta10</div>" 
 				+ "<div>Can be purchased from http://paup.csit.fsu.edu/</div>"
 				+ "<div>Make sure to install this version, since older versions can give problems!</div>");
