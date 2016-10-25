@@ -330,76 +330,76 @@
 		<div>Upload fasta file ${upload}</div>
 	</message>
 
+	
 	<message id="admin.help">
 		<h2>
 		Admin UI
 		</h2>
 		<p>
-		Managment framework for typing tools:<br></br>
-		 - UI for easy creation and mangment of tools.<br></br>
-		 - Communication through a public repository on a remote server (currently http://typingtools.emweb.be/repository/repo-service)<br></br>
-		 - Tool verification, with bootscan analysis and golden standard sequences test<br></br>
+		This is a framework to facilitate creation, editing and management of virus typing tools.<br></br>
+		<br></br>Features include:<br></br>
+		 - GUI for easy creation and management of tools<br></br>
+		 - Tool validation, with selfscan analysis and comparison with manually assigned sequences (gold standard)<br></br>
+		 - Linking to a public repository on a remote server (currently http://typingtools.emweb.be/repository/repo-service)<br></br>
 		</p>
 
 		<h3>Tool types</h3>
 		<p>
 		<div>
-		<b>Virus sub typing tool:</b> Identify for input sequence to what sub type of the virus it belongs.<br></br>
-		Can be created from UI or Auto created from a Template.
+		<b>Virus (sub)typing tool:</b> For a viral input sequence, this tool identifies the viral (sub)type.<br></br>
+		It can be created manually (through the UI) or automatically created from a template. 
 		</div>
 		<div>
-		<b>Template:</b> Contains General UI content for a Virus sub typing tool.
+		<b>Template:</b> Contains General UI content for a Virus (sub)typing tool. 
 		</div>
 		<div>
-		<b>Pan-viral tool:</b>The pan-viral typing tool uses blast to cluster long DNA sequences against a comprehensive and curated reference database. If there is a specific tool for the pathogen on the server, the user will have the ability to redirect to this tool and perform a full phylogenetic analysis of all the sequences that belong to the pathogen cluster. 
+		<b>Pan-viral tool:</b>The pan-viral typing tool uses blast to cluster long DNA sequences against a comprehensive and curated reference database. If there is a specific (sub)typing tool for the virus on the server, the user can redirect to this tool and perform a full phylogenetic analysis of all the sequences that belong to the viral cluster. 
 		<br></br>
-		The tool data base can be auto generated from ICTV master list.
+		The pan-viral reference database can be auto-generated from ICTV master list. 
 		</div>
 		</p>
 
 		<h3>Tool states</h3>
 		<p>
 		<div>
-		Remote (published) not installed: 
+		<b>Remote (published), not installed:</b> 
 		Tool data is stored on a remote server and not on local server.
 		</div>
 		<div>
-		Remote (published) installed: 
+		<b>Remote (published), installed:</b> 
 		Tool data is stored on a remote server and on local server.
-		The tool can be served locally. 
+		The tool can be hosted locally. 
 		</div>
 		<div>
-		Local tool: A tool that was created on local server and was not yet published.
+		<b>Local (unpublished):</b> A tool that was created on local server and is not yet published.
 		</div>
 		</p>
-		<p>
-		Tools table contains remote and local tools. That can be identified by the tool state column. 
-		</p>
 
-		<h4>Auto create tool from template and alingment file</h4>
-		<div>1. Choose template in tools table.</div>
-		<div>2. Press "auto create"</div>
-		<div>3. Fill the manifest. </div>
-		<div>4. Press auto create virus tool and use the alingment fasta file.</div>
+		<h4>Create new tool</h4>
+		<div>1. Select <i>Tools</i> -> <i>Create new tool</i>.</div>
+		<div>2. Fill in the manifest and local config data and click <i>Save</i>.</div>
+		<div>3. In the <i>Simple File Editor</i> tab, add all necessary files and then click <i>Save</i>.</div>
+		<div>	Note: display images in resources.xml </div>
+		<div>4. If you are responsible for the tool you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service).</div>
+		
+		<h4>Auto create tool</h4>
+		<div>1. Select template in tools table.</div>
+		<div>2. Select <i>Tools</i> -> <i>Auto create</i></div>
+		<div>3. Fill in the manifest. </div>
+		<div>4. Click <i>Auto create virus tool</i> and upload the alignment fasta file.</div>
 		<div>5. Some UI parts still need to be changed, but there is UI for that.</div>
 
-		<h4>Create a new tool from existing files</h4>
-		<div>1. Press add.</div>
-		<div>2. Fill in the manifest and local config data and press save.</div>
-		<div>3. Choose Simple File Editor -> add file (all the files) -> save</div>
-		<div>	Note: display images in resources.xml </div>
-		<div>4. If you are the tool maintainer you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service)</div>
 		
 		<h4>Edit existing tool</h4>
-		<div>1. Press install the tool.</div>
-		<div>2. Press create new version </div>
-		<div>3. Fill in the manifest and local config data and press save.</div>
-		<div>4. Edit</div>
-		<div>5. If you are the tool maintainer you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service)</div>
+		<div>1. Select tool in tools table. Select <i>Repository</i> -> <i>Install</i> if it is not already installed.</div>
+		<div>2. Select <i>Tools</i> -> <i>Create new version</i> </div>
+		<div>3. Fill in the manifest and local config data and click <i>Save</i>.</div>
+		<div>4. Edit the relevant files.</div>
+		<div>5. If you are responsible for the tool you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service).</div>
 		
 		<h4>Display images in resources.xml</h4>
-		<div>1. add the image files: Simple File Editor -> add files.</div>
-		<div>2. add to resources.xml:</div>
+		<div>1. Add the image files using the <i>Simple File Editor</i> tab.</div>
+		<div>2. Add to resources.xml:</div>
 		<div>&lt;img src="$${resource-file}/imageName"&gt; &lt;/img&gt;</div>
 
 	</message>
