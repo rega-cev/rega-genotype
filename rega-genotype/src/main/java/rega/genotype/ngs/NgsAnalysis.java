@@ -23,6 +23,8 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.GeneralConfig;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.framework.async.LongJobsScheduler;
+import rega.genotype.ui.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.utils.BlastUtil;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.StreamReaderRuntime;
@@ -177,8 +179,11 @@ public class NgsAnalysis {
 		File matches = null;
 		File view = null;
 		try {
+			Lock jobLock = LongJobsScheduler.getInstance().getJobLock();
 			matches = diamondBlastX(diamondDir, fastqMerge);
 			view = diamondView(diamondDir, matches);
+			jobLock.release();
+
 			File resultDiamondDir = new File(workDir, NgsAnalysis.DIAMOND_RESULT_DIR);
 			if (!(resultDiamondDir.exists())){
 				resultDiamondDir.mkdirs();
@@ -220,7 +225,9 @@ public class NgsAnalysis {
 				continue; // no need to assemble if there is not enough reads.
 
 			try {
+				Lock jobLock = LongJobsScheduler.getInstance().getJobLock();
 				File assemble = assemble(sequenceFile1, sequenceFile2, workDir, d.getName());
+				jobLock.release();
 				if (assemble == null)
 					continue;
 

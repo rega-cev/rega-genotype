@@ -10,6 +10,7 @@ import java.io.File;
 import javax.servlet.ServletContext;
 
 import rega.genotype.config.Config;
+import rega.genotype.ui.framework.async.LongJobsScheduler;
 import rega.genotype.utils.FileUtil;
 
 /**
@@ -36,6 +37,8 @@ public class Settings {
 	
 	public Settings(File file) {
 		System.err.println("Loading config file: " + file.getAbsolutePath());
+
+		new LongJobsScheduler(); // init Scheduler singleton.
 
 		if (file.exists()) {
 			String json = FileUtil.readFile(file);
