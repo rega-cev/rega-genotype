@@ -164,6 +164,6 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldInfo("ncbiVirusesDbPath", "<div>Can be obtained from https://www.ncbi.nlm.nih.gov/nuccore </div>" +
 				"<div> Select top combobox -> nucleotide, Left menu: Species -> Viruses; Source databases -> RefSeq </div>" +
 				"<div>download fasta</div>");
-		setFieldInfo("sequencetoolPath", "<div>Can be obtained from ??? </div>");
+		setFieldInfo("sequencetoolPath", "<div>Can be obtained from https://github.com/emweb/sequencetool.git, you will also need to install libseq: https://github.com/rega-cev/libseq </div>");
 	}
 }
