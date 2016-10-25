@@ -389,14 +389,20 @@
 		<div>4. Click <i>Auto create virus tool</i> and upload the alignment fasta file.</div>
 		<div>5. Some UI parts still need to be changed, but there is UI for that.</div>
 
-		
 		<h4>Edit existing tool</h4>
 		<div>1. Select tool in tools table. Select <i>Repository</i> -> <i>Install</i> if it is not already installed.</div>
 		<div>2. Select <i>Tools</i> -> <i>Create new version</i> </div>
 		<div>3. Fill in the manifest and local config data and click <i>Save</i>.</div>
 		<div>4. Edit the relevant files.</div>
 		<div>5. If you are responsible for the tool you can push it to the central repository (currently http://typingtools.emweb.be/repository/repo-service).</div>
-		
+
+		<h4>Add NGS analysis option to your tool</h4>
+		<div>NGS Analysis will look for a few place holders if they can be filled the analysis is enabled. (This can change in the near future)</div>
+		<div>The placeholders are:</div>
+		<div>Need to be place in &lt;message id="start-form"&gt;: $${fastq-upload1} $${fastq-upload2} $${fastq-start} </div>
+		<div>Need to be place in &lt;message id="job-overview-form"&gt;: $${ngs-results}</div>
+		<div>You can copy all that from resurces.xml of pan-viral 3.1 tool (from public repository).</div>
+
 		<h4>Display images in resources.xml</h4>
 		<div>1. Add the image files using the <i>Simple File Editor</i> tab.</div>
 		<div>2. Add to resources.xml:</div>
