@@ -48,6 +48,11 @@ public class LocalConfigForm  extends FormTemplate {
 			serviceChB.setChecked(toolConfig.isWebService());
 			uiChB.setChecked(toolConfig.isUi());
 			currentVesionChB.setChecked(toolConfig.isCurrentUsedVersion());
+		} else { // default checked
+			autoUpdateChB.setChecked(true);
+			serviceChB.setChecked(true);
+			uiChB.setChecked(true);
+			currentVesionChB.setChecked(true);
 		}
 
 		urlLE.setValidator(new ToolUrlValidator(false));
