@@ -7,9 +7,11 @@ import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.admin.config.ManifestForm.ToolType;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.utils.FileUtil;
+import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WCheckBox;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
@@ -48,6 +50,8 @@ public class LocalConfigForm  extends FormTemplate {
 			serviceChB.setChecked(toolConfig.isWebService());
 			uiChB.setChecked(toolConfig.isUi());
 			currentVesionChB.setChecked(toolConfig.isCurrentUsedVersion());
+			if (toolConfig.getToolMenifest() != null)
+				toolTypeChanged(ManifestForm.toolType(toolConfig.getToolMenifest()));
 		} else { // default checked
 			autoUpdateChB.setChecked(true);
 			serviceChB.setChecked(true);
@@ -66,6 +70,20 @@ public class LocalConfigForm  extends FormTemplate {
 		bindWidget("service", serviceChB);
 
 		init();
+
+		// signals
+
+		manifestForm.toolTypeChanged().addListener(manifestForm, new Signal1.Listener<ToolType>() {
+			public void trigger(ToolType toolType) {
+				toolTypeChanged(toolType);
+			}
+		});
+	}
+
+	private void toolTypeChanged(ToolType toolType) {
+		urlLE.setDisabled(toolType == ToolType.Ngs);
+		serviceChB.setDisabled(toolType == ToolType.Ngs);
+		uiChB.setDisabled(toolType == ToolType.Ngs);
 	}
 
 	public ToolConfig save(File toolDir) {
@@ -76,6 +94,10 @@ public class LocalConfigForm  extends FormTemplate {
 		Config config = Settings.getInstance().getConfig().copy();
 
 		// save ToolConfig
+		if (toolConfig != null) // find tool config copy and edit it.
+			toolConfig = config.getToolConfigByConfiguration(
+					toolConfig.getConfiguration());
+
 		if (toolConfig == null) {
 			toolConfig = new ToolConfig();
 			try {
@@ -85,10 +107,9 @@ public class LocalConfigForm  extends FormTemplate {
 				e.printStackTrace();
 				return null;
 			}
-		} else {
-			toolConfig = config.getToolConfigById(toolConfig.getToolMenifest().getId(),
-					toolConfig.getToolMenifest().getVersion());
 		}
+
+		config.putTool(toolConfig);
 
 		toolConfig.genetareConfigurationDir(toolDir.getName());
 		toolConfig.setAutoUpdate(autoUpdateChB.isChecked());
@@ -100,15 +121,14 @@ public class LocalConfigForm  extends FormTemplate {
 		toolConfig.setCurrentUsedVersion(currentVesionChB.isChecked());
 
 		// make sure that current version is unique.
-		for (ToolConfig c :config.getTools()) {
-			ToolManifest m = c.getToolMenifest();
-			if (c.isCurrentUsedVersion() && m != null 
-					&& m.getId().equals(toolConfig.getId()) 
-					&& !m.getVersion().equals(toolConfig.getVersion()))
-				c.setCurrentUsedVersion(false);
-		}
-
-		config.putTool(toolConfig);
+		if (toolConfig.isCurrentUsedVersion())
+			for (ToolConfig c :config.getTools()) {
+				ToolManifest m = c.getToolMenifest();
+				if (c.isCurrentUsedVersion() && m != null 
+						&& m.getId().equals(toolConfig.getId()) 
+						&& !m.getVersion().equals(toolConfig.getVersion()))
+					c.setCurrentUsedVersion(false);
+			}
 
 		try {
 			config.save();

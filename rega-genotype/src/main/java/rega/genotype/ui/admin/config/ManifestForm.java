@@ -12,6 +12,7 @@ import rega.genotype.ui.admin.file_editor.blast.TaxonomyButton;
 import rega.genotype.ui.framework.Global;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListModel;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WComboBox;
 import eu.webtoolkit.jwt.WDate;
@@ -36,8 +37,9 @@ public class ManifestForm extends FormTemplate{
 	private Signal1<File> saved = new Signal1<File>(); // The xml dir name may have to change
 	private ToolManifest oldManifest;
 	private File toolDir; // used for id, version validator.
-	
-	public enum ToolType {VirusTool, PanViralTool, HivTool, Template}
+	private Signal1<ToolType> toolTypeChanged = new Signal1<ManifestForm.ToolType>();
+
+	public enum ToolType {VirusTool, PanViralTool, HivTool, Template, Ngs}
 
 	public ManifestForm(final ToolManifest manifest, File toolDir, Mode mode) {
 		super(tr("admin.config.tool-config-dialog.manifest"));
@@ -56,25 +58,26 @@ public class ManifestForm extends FormTemplate{
 					return new WString("Virus tool (standard)");
 				case Template:
 					return new WString("Template (for other tools)");
+				case Ngs:
+					return new WString("NGS Module");
 				}
 				return null;
 			}
 		};
 		toolTypeCB.setModel(toolTypeModel);
+
+		toolTypeCB.changed().addListener(toolTypeCB, new Signal.Listener() {
+			public void trigger() {
+				toolTypeChanged.trigger(toolTypeModel.getObject(toolTypeCB.getCurrentIndex()));
+			}
+		});
 		
 		// read
 
 		if (manifest != null) {
 			nameLE.setText(manifest.getName());
 			idLE.setText(manifest.getId());
-			if (manifest.isBlastTool()) 
-				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.PanViralTool));
-			else if (manifest.isHivTool())
-				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.HivTool));
-			else if (manifest.isTemplate())
-				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.Template));
-			else 
-				toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(ToolType.VirusTool));
+			toolTypeCB.setCurrentIndex(toolTypeModel.indexOfObject(toolType(manifest)));
 			versionLE.setText(manifest.getVersion());
 			taxonomyT.setTaxonomyIdText(manifest.getTaxonomyId());
 			commitLE.setText(manifest.getCommitMessage());
@@ -113,6 +116,21 @@ public class ManifestForm extends FormTemplate{
 		init();
 	}
 
+	public static ToolType toolType(ToolManifest manifest) {
+		if (manifest == null)
+			return ToolType.VirusTool;
+		else if (manifest.isBlastTool()) 
+			return ToolType.PanViralTool;
+		else if (manifest.isHivTool())
+			return ToolType.HivTool;
+		else if (manifest.isTemplate())
+			return ToolType.Template;
+		else if (manifest.isNgsModule())
+			return ToolType.Ngs;
+		else 
+			return ToolType.VirusTool;
+	}
+
 	public ToolManifest save(boolean publishing) {
 		if (!validate())
 			return null;
@@ -122,6 +140,7 @@ public class ManifestForm extends FormTemplate{
 		ToolManifest manifest = new ToolManifest();
 		ToolType toolType = toolTypeModel.getObject(toolTypeCB.getCurrentIndex());
 
+		manifest.setNgsModule(toolType == ToolType.Ngs);
 		manifest.setHivTool(toolType == ToolType.HivTool);
 		manifest.setBlastTool(toolType == ToolType.PanViralTool);
 		manifest.setTemplate(toolType == ToolType.Template);
@@ -197,5 +216,13 @@ public class ManifestForm extends FormTemplate{
 
 	public String getScientificName() {
 		return TaxonomyModel.getScientificName(taxonomyT.getText().toString());
+	}
+
+	public Signal1<ToolType> toolTypeChanged() {
+		return toolTypeChanged;
+	}
+
+	public ToolType getToolType() {
+		return toolTypeModel.getObject(toolTypeCB.getCurrentIndex());
 	}
 }

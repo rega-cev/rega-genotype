@@ -182,15 +182,35 @@
 		</table>
 	</message>
 
+	<message id="admin.config.nsg-module">
+		<p>
+		<div>The NGS module is a group of files that are needed for NGS analysis and need to be updated from time to time.</div>
+		<div>All tools that support NGS will use the files from the NGS module with current version checked.</div>
+		</p>
+		<p>
+		<div>Uniprot 50% identity database for viruses. </div>
+		<div>Can be obtained in
+		http://www.uniprot.org/uniref/?query=uniprot%3A%28lineage%3A%22Viruses%22%29+AND+identity%3A0.5&amp;sort=score
+		</div>
+		${upload-aa-db}
+		</p>
+		<p>
+		<div>Virus taxonomy database</div>
+		<div>Can be obtained in http://www.uniprot.org/taxonomy/?query=Viruses&amp;sort=score</div>
+		</p>
+		${upload-taxonomy}
+		<div>${create-db}${info}</div>
+	</message>
+
 	<message id="admin.config.tool-config-dialog.config">
-		<table class="form-table">
+ 		<table class="form-table">
 		  <tr><td class="form-table-name-td">URL</td><td class="form-table-name-td">${url}</td><td>${url-info}</td></tr>
 		  <tr><td class="form-table-name-td">Auto update enabled</td><td class="form-table-name-td">${update}</td><td class="auto-form-info">A new version of the tool will be auto installed when it is available in repository.</td></tr>
 		  <tr><td class="form-table-name-td">Web service enabled</td><td class="form-table-name-td">${service}</td><td class="auto-form-info">Allow to send requests with curl</td></tr>
 		  <tr><td class="form-table-name-td">UI enabled</td><td class="form-table-name-td">${ui}</td><td class="auto-form-info">Allow users to surf to the tool url</td></tr>
 		  <tr><td class="form-table-name-td">Current version</td><td class="form-table-name-td">${current-version}</td><td class="auto-form-info">If true the pan-viral tool will choose this tool version for the virus. Note: there is 1 current version per tool id</td></tr>
-		</table>
-	</message>
+ 		</table>
+ 	</message>
 
 	<message id="admin.config.tool-config-dialog">
 		${manifest}

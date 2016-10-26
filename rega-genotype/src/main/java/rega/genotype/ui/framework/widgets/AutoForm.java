@@ -59,7 +59,7 @@ public class AutoForm <T> extends WContainerWidget {
 				String value = (String)doGet(field, t);
 				WLineEdit le = new WLineEdit(value == null ? "" : value);
 				le.setValidator(new WValidator(true));
-				le.setWidth(new WLength(300));
+				le.setWidth(new WLength(600));
 				layout.getElementAt(row, 1).addWidget(le);
 				widgetMap.put(field, new WidgetContainer(le, info, header));
 			} else if (field.getType() == boolean.class){

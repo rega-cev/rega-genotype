@@ -24,9 +24,11 @@ public class ToolManifest {
 	private String version;// part of the tool signature {id, version}
 	private String commitMessage = ""; // describe the new version.
 	private String taxonomyId; // genus id from unirpot database, can be empty for pan-viral tools.
+	// Note: can not replace the 4 booleans below by enums because of the old manifests.
 	private boolean blastTool;
 	private boolean hivTool; //HIV tool is not generic and thus must have url = hiv.
-	private boolean template; //Contains data to auto create other tools
+	private boolean template; // Contains data to auto create other tools
+	private boolean ngsModule;// Contains NGS databases.
 	private String publisherName; // Copy from publisher Server global config publisherName, read only for users.
 	private Date publicationDate; // filled by Repo server, read only for users.
 	private String softwareVersion;
@@ -177,5 +179,13 @@ public class ToolManifest {
 
 	public void setCommitMessage(String commitMessage) {
 		this.commitMessage = commitMessage;
+	}
+
+	public boolean isNgsModule() {
+		return ngsModule;
+	}
+
+	public void setNgsModule(boolean ngsModule) {
+		this.ngsModule = ngsModule;
 	}
 }
