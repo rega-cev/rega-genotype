@@ -92,6 +92,11 @@ public class FastaToRega {
 		public String toString() { return genotype+"-"+subtype+":"+id; }
 	}
 
+	/**
+	 * It is possible to run this as a java application.
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 
 		if (args.length < 2) {
@@ -106,6 +111,47 @@ public class FastaToRega {
 		createTool(taxonomyId, fastaAlingmentFile, toolDir);
 	}
 
+	/**
+	 * Create phylo-{taxonomyId}.xml xml File
+	 * @param taxonomyId - will be used in the name of the file and also in the cluster name of blast.xml
+	 * @param fastaAlingmentFile - all the fasta sequences for the analysis (must be formated as documeted on top)
+	 * @param toolDir - xml dir of the tool the new file will be stored there (same as in createTool)
+	 */
+	public static void addPhyloFile(String taxonomyId, String fastaAlingmentFile, String toolDir) {
+		// TODO: Hey Yum, this function will be very similar to createTool.
+		// There is 2 cases
+		// 1. blast.xml does not exist -> exactly the same as createTool
+		// 2. blast.xml exist -> you do not need to create it but only to add the correct clusters for this phylo analysis. 
+		//    use: addClustersToBlastDoc
+	}
+
+	/**
+	 * Add the clusters of a phylo- analysis to blast.xml
+	 * @param alingmentFile
+	 * @param taxonomyId - used for the cluster name.
+	 * @param genotypeToSubtypeToSequences - Map<genotype, Map<subType, all the sequences that belong to the subType> >
+	 * @return the new blast.xml Document
+	 */
+	private static void addClustersToBlastDoc(
+			String alingmentFile, String taxonomyId, 
+			Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences) {
+		// TODO: Hey Yum, this function will be very similar to blastDocument.
+		// you need to read blast Document, add the clusters and write it back to the file.
+	}
+
+	/**
+	 * Create blast.xml xml File
+	 * @param taxonomyId - will be used in the name of the file and also in the cluster name of blast.xml
+	 * @param fastaAlingmentFile - all the fasta sequences for the analysis (must be formated as documeted on top)
+	 * @param toolDir - xml dir of the tool the new file will be stored there (same as in createTool)
+	 */
+	public static void addBlastFile(String taxonomyId, String fastaAlingmentFile, String toolDir) {
+		// TODO: Hey Yum, this function will be very similar to createTool but does not need to create the phylo.xml file
+	}
+
+	/**
+	 * Main function: Create blast.xml and phylo xml files 
+	 */
 	public static void createTool(String taxonomyId, String fastaAlingmentFile, String toolDir) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ParserConfigurationException, TransformerException {
 		// may need to update pattern to extract genotype string from FASTA seq id
 		Pattern pattern = Pattern.compile("(\\d[^_]*)\\??_.*");;
@@ -149,6 +195,7 @@ public class FastaToRega {
 				writer.close();
 		}
 
+		// Map<genotype, all the sequences that belong to the genotype>
 		Map<String, List<Sequence>> genotypeToSequences = new HashMap<String, List<Sequence>>();		
 		for (Sequence seq : sequences) {
 			if (genotypeToSequences.get(seq.genotype) == null)
@@ -156,6 +203,7 @@ public class FastaToRega {
 			genotypeToSequences.get(seq.genotype).add(seq);
 		}
 
+		// Map<genotype, Map<subType, all the sequences that belong to the subType> >
 		Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences = new LinkedHashMap<String, Map<String, List<Sequence>>>();
 		for (Entry<String, List<Sequence>> a : genotypeToSequences.entrySet()) {
 			Map<String, List<Sequence>> subtypeMap = new HashMap<String, List<Sequence>>();
@@ -168,6 +216,7 @@ public class FastaToRega {
 			genotypeToSubtypeToSequences.put(a.getKey(), subtypeMap);
 		}
 
+		// create phylo-taxonomyId.xml file.
 		Document clustalDoc = clustersDoc(fastaAlingmentFile, genotypeToSubtypeToSequences);
 		FileOutputStream fos = null;
 		try {
@@ -178,6 +227,7 @@ public class FastaToRega {
 				fos.close();
 		}
 
+		// create blast.xml
 		Document blastDoc = blastDocument(
 				fastaAlingmentFile, taxonomyId, genotypeToSubtypeToSequences);
 		fos = null;
@@ -190,12 +240,20 @@ public class FastaToRega {
 		}
 	}
 
+	/**
+	 * Create blast.xml file
+	 * @param alingmentFile
+	 * @param taxonomyId - used for the cluster name.
+	 * @param genotypeToSubtypeToSequences - Map<genotype, Map<subType, all the sequences that belong to the subType> >
+	 * @return the new blast.xml Document
+	 * @throws ParserConfigurationException
+	 */
 	private static Document blastDocument(
-			String filename, String taxonomyId, 
+			String alingmentFile, String taxonomyId, 
 			Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences)
 					throws ParserConfigurationException {
 		Document doc = newDocument();
-		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, filename);
+		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, alingmentFile);
 		Node clustersElem = genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
 		Element toolClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
 		toolClusterElem.setAttribute("id", taxonomyId);
@@ -226,7 +284,12 @@ public class FastaToRega {
 		return doc;
 	}
 
-
+	/**
+	 * Add the genotype-analyses Element to the top of the file.
+	 * @param doc
+	 * @param filename
+	 * @return
+	 */
 	private static Element regaGenotypeAnalysesDoc(Document doc, String filename) {
 		Element genotypeAnalysesElem = (Element) doc.appendChild(doc.createElement("genotype-analyses"));
 		Element alignmentElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("alignment"));
@@ -236,8 +299,15 @@ public class FastaToRega {
 
 	}
 
+	/**
+	 * Create phylo-{taxonomyId}.xml xml Document
+	 * @param fastaAlingmentFile - all the fasta sequences for the analysis (must be formated as documeted on top)
+	 * @param genotypeToSubtypeToSequences  - Map<genotype, Map<subType, all the sequences that belong to the subType> >
+	 * @return the new phylo-{taxonomyId}.xml Document
+	 * @throws ParserConfigurationException
+	 */
 	private static Document clustersDoc(
-			String filename, Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences)
+			String fastaAlingmentFile, Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences)
 					throws ParserConfigurationException {
 		Document doc = newDocument();
 		List<String> clusterIds = new ArrayList<String>();
@@ -246,7 +316,7 @@ public class FastaToRega {
 		// Add sub type clusters, needed for phylo minor. (<identify> 1a,1b,1c,... )
 
 		String outgroupName = null;
-		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, filename);
+		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, fastaAlingmentFile);
 		Element clustersElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
 		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
 			String genotype = i.getKey();
@@ -327,6 +397,13 @@ public class FastaToRega {
 		return doc;
 	}
 
+	/**
+	 * Create self scan analysis xml Element that can be embedded in the phylo...xml document.
+	 * @param doc - The xml documnet that we are creating.
+	 * @param clusterIds the clusters that will be used in the scan analysis
+	 * @param genotypeAnalysesElem the element will be added to this element in the documnet.
+	 * @return
+	 */
 	private static Element createSelfScanElement(Document doc,
 			List<String> clusterIds, Element genotypeAnalysesElem) {
 		Element analysisElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("analysis"));
@@ -344,6 +421,15 @@ public class FastaToRega {
 		return analysisElem;
 	}
 
+	/**
+	 * 
+	 * @param doc - The xml documnet that we are creating.
+	 * @param clusterIds - the clusters that will be used in the scan analysis
+	 * @param genotypeAnalysesElem the element will be added to this element in the documnet.
+	 * @param analysisType - analysis type attribute for the analysis element example Major -> type="phylo-major"
+	 * @param outgroupName - taxon name of outgroup or null if there is no out group.
+	 * @return
+	 */
 	private static Element createAnalysisElement(Document doc,
 			List<String> clusterIds, Element genotypeAnalysesElem,
 			AnalysisType analysisType, String outgroupName) {
@@ -397,6 +483,11 @@ public class FastaToRega {
 		return analysisElem;
 	}
 
+	/**
+	 * Create xml Document
+	 * @return
+	 * @throws ParserConfigurationException
+	 */
 	private static Document newDocument() throws ParserConfigurationException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -404,7 +495,9 @@ public class FastaToRega {
 		return doc;
 	}
 
-
+	/**
+	 * Set some configuration so the xml file will human readable. 
+	 */
 	private static void prettyPrint(Document document, OutputStream outputStream, int indent) throws TransformerException {
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
