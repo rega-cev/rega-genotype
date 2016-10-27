@@ -9,6 +9,7 @@ import org.python.core.PyString;
 import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
 
+import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 
 public class PythonEnv {
@@ -22,9 +23,9 @@ public class PythonEnv {
 		number_fasta = FileUtil.toString(reader);
 
 		PySystemState sys = Py.getSystemState();
-
-        //TODO
-        sys.path.append(new PyString("/home/michael/Downloads/biopython-1.68/"));
+		String bioPythonPath = Settings.getInstance().getConfig().getGeneralConfig().getBioPythonPath();
+		if (!bioPythonPath.isEmpty())
+			sys.path.append(new PyString(bioPythonPath));
 
         for (String arg: args)
         	sys.argv.append(new PyString(arg));
