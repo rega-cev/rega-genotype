@@ -3,10 +3,14 @@
         "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
 
 <urlrewrite>
-
     <rule>
         <from>/(.*)/style(.*)</from>
         <to>/style$2</to>
+    </rule>
+
+	<rule>
+        <from>^/typingtool/([^/]+)$</from>
+        <to last="true" type="permanent-redirect">%{context-path}/typingtool/$1/</to>
     </rule>
 
 	<rule>
