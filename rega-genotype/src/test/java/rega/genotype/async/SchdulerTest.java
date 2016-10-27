@@ -1,5 +1,6 @@
 package rega.genotype.async;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class SchdulerTest  extends TestCase {
 	private Thread addThread(final String text, final LongJobsScheduler scheduler) {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
-				Lock jobLock = scheduler.getJobLock();
+				Lock jobLock = scheduler.getJobLock(new File("not important for test"));
 
 				assertNull(workingThreadName);
 				workingThreadName = text;

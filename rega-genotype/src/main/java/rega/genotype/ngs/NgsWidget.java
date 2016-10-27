@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ui.framework.async.LongJobsScheduler;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.ngs.DiamondResultsView;
 
@@ -48,6 +49,11 @@ public class NgsWidget extends WContainerWidget{
 			addQC(qcDir);
 		}
 
+		if (ngsProgress.getState().code == State.Diamond.code) {
+			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
+			new WText("<div> Diamond blast job state:" + jobState + "</div>", this);
+		}
+
 		if (ngsProgress.getState().code >= State.Spades.code) {
 			WPushButton diamondBlastB = new WPushButton("Diamond Blast results", this);
 			diamondBlastB.clicked().addListener(diamondBlastB, new Signal.Listener() {
@@ -56,6 +62,11 @@ public class NgsWidget extends WContainerWidget{
 					d.getContents().addWidget(new DiamondResultsView(workDir));
 				}
 			});
+		}
+
+		if (ngsProgress.getState().code == State.Spades.code) {
+			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
+			new WText("<div> Sapdes job state:" + jobState + "</div>", this);
 		}
 	}
 

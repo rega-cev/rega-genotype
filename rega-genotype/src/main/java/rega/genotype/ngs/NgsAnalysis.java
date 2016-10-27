@@ -143,9 +143,6 @@ public class NgsAnalysis {
 			return false;
 		}
 
-		ngsProgress.setState(State.Diamond);
-		ngsProgress.save(workDir);
-
 		// diamond blast
 
 		File diamondDir = new File(workDir, NgsAnalysis.DIAMOND_BLAST_DIR);
@@ -176,10 +173,13 @@ public class NgsAnalysis {
 			//continue;
 		}
 
+		ngsProgress.setState(State.Diamond);
+		ngsProgress.save(workDir);
+
 		File matches = null;
 		File view = null;
 		try {
-			Lock jobLock = LongJobsScheduler.getInstance().getJobLock();
+			Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
 			matches = diamondBlastX(diamondDir, fastqMerge);
 			view = diamondView(diamondDir, matches);
 			jobLock.release();
@@ -212,6 +212,7 @@ public class NgsAnalysis {
 		ngsProgress.save(workDir);
 
 		// spades
+		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
 
 		File dimondResultDir = new File(workDir, DIAMOND_RESULT_DIR);
 		for (File d: dimondResultDir.listFiles()){
@@ -225,9 +226,7 @@ public class NgsAnalysis {
 				continue; // no need to assemble if there is not enough reads.
 
 			try {
-				Lock jobLock = LongJobsScheduler.getInstance().getJobLock();
 				File assemble = assemble(sequenceFile1, sequenceFile2, workDir, d.getName());
-				jobLock.release();
 				if (assemble == null)
 					continue;
 
@@ -254,6 +253,8 @@ public class NgsAnalysis {
 				ngsProgress.save(workDir);
 			} 
 		}
+
+		jobLock.release();
 
 		File sequences = new File(workDir, SEQUENCES_FILE);
 		if (!sequences.exists())

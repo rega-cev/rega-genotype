@@ -1,5 +1,6 @@
 package rega.genotype.ui.framework.async;
 
+import java.io.File;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -16,12 +17,22 @@ public class LongJobsScheduler {
 
 	public static class Lock {
 		private LongJobsScheduler scheduler;
-		Lock(LongJobsScheduler scheduler) {
+		private File jobDir; // A unique identifier for the job. Used to tell the user where he is in queue.
+		Lock(LongJobsScheduler scheduler, File jobDir) {
 			this.scheduler = scheduler;
+			this.jobDir = jobDir;
 		}
 
 		public void release() {
 			scheduler.jobFinished(this);
+		}
+
+		public File getJobDir() {
+			return jobDir;
+		}
+
+		public void setJobDir(File jobDir) {
+			this.jobDir = jobDir;
 		}
 	}
 
@@ -38,8 +49,8 @@ public class LongJobsScheduler {
 		return instance;
 	}
 
-	public Lock getJobLock() {
-		Lock lock = new Lock(this);
+	public Lock getJobLock(File jobDir) {
+		Lock lock = new Lock(this, jobDir);
 
 		int queueSize;
 		synchronized (jobQueueLock) {
@@ -74,5 +85,19 @@ public class LongJobsScheduler {
 			jobQueue.remove(lock);
 			notifyNext();
 		}
+	}
+
+	public String getJobState(File jobDir) {
+		int i = 0;
+		for (Lock lock: jobQueue){
+			if (lock.getJobDir().getAbsolutePath().equals(
+					jobDir.getAbsolutePath()))
+				if (i == jobQueue.size() - 1)
+					return "Running.";
+				else
+					return "Witing for other jobs to finish. " + (jobQueue.size() - i -1) + " Jobs to go.";
+			i++;
+		}
+		return "Not in queue: processing results.";
 	}
 }

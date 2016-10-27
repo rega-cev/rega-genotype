@@ -422,6 +422,7 @@
 		<div>Need to be place in &lt;message id="start-form"&gt;: $${fastq-upload1} $${fastq-upload2} $${fastq-start} </div>
 		<div>Need to be place in &lt;message id="job-overview-form"&gt;: $${ngs-results}</div>
 		<div>You can copy all that from resurces.xml of pan-viral 3.1 tool (from public repository).</div>
+		<div>NGS Analysis has many depandances: most are configured in Global config, but some need to be updated from time to time (like diamond blast database) for this ones we created the <b>NGS module</b>. Make sure to import/ install this module in to your Tools Table.</div>
 
 		<h4>Display images in resources.xml</h4>
 		<div>1. Add the image files using the <i>Simple File Editor</i> tab.</div>
