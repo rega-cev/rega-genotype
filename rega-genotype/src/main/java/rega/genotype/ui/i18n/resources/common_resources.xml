@@ -199,7 +199,7 @@
 		<div>Can be obtained in http://www.uniprot.org/taxonomy/?query=Viruses&amp;sort=score</div>
 		</p>
 		${upload-taxonomy}
-		<div>${create-db}${info}</div>
+		<p>${create-db}${info}</p>
 	</message>
 
 	<message id="admin.config.tool-config-dialog.config">

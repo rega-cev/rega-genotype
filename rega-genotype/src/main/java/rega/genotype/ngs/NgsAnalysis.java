@@ -271,8 +271,11 @@ public class NgsAnalysis {
 		File matches = new File(workDir.getAbsolutePath() + File.separator + "matches.daa");
 		try {
 			GeneralConfig gc = Settings.getInstance().getConfig().getGeneralConfig();
+			File diamondDb = Settings.getInstance().getConfig().getDiamondBlastDb();
+			if (diamondDb == null)
+				throw new ApplicationException("Internal error: diamond blast db was not found. Ask your server admin to check that NGS Module is properlly configured.");
 			String cmd = gc.getDiamondPath() + " blastx -d "
-					+ gc.getDbDiamondPath() + " -q " + query.getAbsolutePath()
+					+ diamondDb.getAbsolutePath() + " -q " + query.getAbsolutePath()
 					+ " -a " + matches + " -k 1 --quiet";
 			System.err.println(cmd);
 			blastx = StreamReaderRuntime.exec(cmd, null, workDir);

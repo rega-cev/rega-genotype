@@ -51,11 +51,12 @@ public class FileEditor extends WTabWidget {
 			}
 		});
 
-		smartFileEditor.editingInnerXmlElement().addListener(this, new Signal1.Listener<Integer>() {
-			public void trigger(Integer arg) {
-				setTabEnabled(1, arg == 1);
-			}
-		});
+		if (smartFileEditor != null)
+			smartFileEditor.editingInnerXmlElement().addListener(this, new Signal1.Listener<Integer>() {
+				public void trigger(Integer arg) {
+					setTabEnabled(1, arg == 1);
+				}
+			});
 	}
 
 	public SimpleFileEditorView getSimpleFileEditor() {

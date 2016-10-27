@@ -23,6 +23,10 @@ import eu.webtoolkit.jwt.WApplication;
 public class Config {
 	public static final String CONFIG_FILE_NAME = "config.json";
 
+	public static final String NGS_MODULE_ID = "NGS_Module";
+	public static final String NGS_MODULE_UNIREF_VIRUSES_AA50 = "uniref-viruses-aa50.fasta";
+	public static final String NGS_MODULE_AA_VIRUSES_DB = "aa-virus.dmnd";
+
 	private GeneralConfig generalConfig = new GeneralConfig();
 	private List<ToolConfig> tools = new ArrayList<Config.ToolConfig>(); //TODO: use set 
 
@@ -138,6 +142,20 @@ public class Config {
 	}
 
 	/**
+	 * Query the diamond aa db file from ngs module.
+	 * This should be used by the diamond step of ngs analysis. 
+	 * @return the file or null if the file / module are not found.
+	 */
+	public File getDiamondBlastDb() {
+		ToolConfig ngsModule = getCurrentVersion(NGS_MODULE_ID);
+		if (ngsModule == null)
+			return null;
+
+		File ans = new File(ngsModule.getConfigurationFile(), NGS_MODULE_AA_VIRUSES_DB);
+		return ans.exists() ? ans : null;
+	}
+
+	/**
 	 * Set the published flag for every tool config.
 	 * @param remoteManifests the manifests from remote repository.
 	 */
@@ -232,13 +250,12 @@ public class Config {
 		private String edirectPath = "/usr/bin/edirect/";
 		//NGS
 		private String diamondPath = "diamond";
-		private String dbDiamondPath = "db.dmnd";
 		private String ncbiVirusesDbPath = "ncbi-viruses.fasta";
 		private String sequencetoolPath = "sequencetool";
-		private String taxonamyDiamondPath = "taxonamy.fasta";
 		private String fastqcCmd = "fastqc";
 		private String spadesCmd = "spades";
 		private String cutAdaptCmd = "cutadapt";
+		private String bioPythonPath = "";
 
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
@@ -305,12 +322,6 @@ public class Config {
 		public void setDiamondPath(String diamondPath) {
 			this.diamondPath = diamondPath;
 		}
-		public String getDbDiamondPath() {
-			return dbDiamondPath;
-		}
-		public void setDbDiamondPath(String dbDiamondPath) {
-			this.dbDiamondPath = dbDiamondPath;
-		}
 		public String getPublisherName() {
 			return publisherName;
 		}
@@ -356,12 +367,6 @@ public class Config {
 		public void setCutAdaptCmd(String cutAdaptCmd) {
 			this.cutAdaptCmd = cutAdaptCmd;
 		}
-		public String getTaxonamyDiamondPath() {
-			return taxonamyDiamondPath;
-		}
-		public void setTaxonamyDiamondPath(String taxonamyDiamondPath) {
-			this.taxonamyDiamondPath = taxonamyDiamondPath;
-		}
 		public String getEdirectPath() {
 			return edirectPath;
 		}
@@ -379,6 +384,12 @@ public class Config {
 		}
 		public void setSequencetoolPath(String sequencetoolPath) {
 			this.sequencetoolPath = sequencetoolPath;
+		}
+		public String getBioPythonPath() {
+			return bioPythonPath;
+		}
+		public void setBioPythonPath(String bioPythonPath) {
+			this.bioPythonPath = bioPythonPath;
 		}
 	}
 

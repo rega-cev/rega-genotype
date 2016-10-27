@@ -3,6 +3,8 @@ package rega.genotype.ui.admin.config;
 import java.io.File;
 import java.io.IOException;
 
+import rega.genotype.config.Config;
+import rega.genotype.python.PythonEnv;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.util.FileUpload;
@@ -13,8 +15,6 @@ import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 
 public class NgsModuleForm extends FormTemplate {
-	public static final String  UNIREF_VIRUSES_AA50 = "uniref-viruses-aa50.fasta";
-	public static final String  AA_VIRUSES_DB = "aa-virus.dmnd";
 	private File aaFile = null;
 	private File taxonomyFile = null;
 
@@ -50,41 +50,27 @@ public class NgsModuleForm extends FormTemplate {
 		});
 		createDb.clicked().addListener(createDb, new Signal.Listener() {
 			public void trigger() {
-				File unirefVirusesAA50 = new File(workDir, UNIREF_VIRUSES_AA50);
+				File unirefVirusesAA50 = new File(workDir, Config.NGS_MODULE_UNIREF_VIRUSES_AA50);
 
-				//python ./number_fasta_r.py uniref-uniprot-viruses-aa50.fasta taxonomy-uniprot.tab > uniref-viruses-aa50.fasta
-				// TODO
-				String number_fasta_r_path = "/home/michael/Downloads/number_fasta_r.py";
-				String cmd = "python " + number_fasta_r_path + " "
-						+ aaFile.getAbsolutePath() + " " + taxonomyFile.getAbsolutePath() 
-						+ " " + unirefVirusesAA50.getAbsolutePath();
-
-				System.err.println(cmd);
-				Process p = null;
-
+				String[] args = new String[3];
+				args[0] = aaFile.getAbsolutePath();
+				args[1] = taxonomyFile.getAbsolutePath();
+				args[2] = unirefVirusesAA50.getAbsolutePath(); // out
+				
 				try {
-					p = StreamReaderRuntime.exec(cmd, null, unirefVirusesAA50.getParentFile());
-					int exitResult = p.waitFor();
-
-					if (exitResult != 0) {
-						infoT.setText("Error: could not create " + UNIREF_VIRUSES_AA50);
-						return;
-					}
-				} catch (IOException e) {
-					infoT.setText("Error: could not create " + UNIREF_VIRUSES_AA50 + ". " + e.getMessage());
-					return;
-				} catch (InterruptedException e) {
-					if (p != null)
-						p.destroy();
-					infoT.setText("Error: could not create " + UNIREF_VIRUSES_AA50 + ". " + e.getMessage());
+					new PythonEnv().execPython("/rega/genotype/python/number_fasta_r.py", args);
+				} catch (Exception e1) {
+					e1.printStackTrace();
 					return;
 				}
 
 				// ./diamond makedb --in uniref-viruses-aa50.fa -d uniref-viruses-aa50
 
-				File aaVirusesDb = new File(workDir, AA_VIRUSES_DB);
+				Process p = null;
+
+				File aaVirusesDb = new File(workDir, Config.NGS_MODULE_AA_VIRUSES_DB);
 				String diamondPath = Settings.getInstance().getConfig().getGeneralConfig().getDiamondPath();
-				cmd = diamondPath + " makedb --in " + unirefVirusesAA50.getAbsolutePath() 
+				String cmd = diamondPath + " makedb --in " + unirefVirusesAA50.getAbsolutePath() 
 						+ " -d " + aaVirusesDb.getAbsolutePath();
 
 				try {
@@ -92,20 +78,21 @@ public class NgsModuleForm extends FormTemplate {
 					int exitResult = p.waitFor();
 
 					if (exitResult != 0) {
-						infoT.setText("Error: could not create " + AA_VIRUSES_DB);
+						infoT.setText("Error: could not create " + Config.NGS_MODULE_AA_VIRUSES_DB);
 						return;
 					}
 				} catch (IOException e) {
-					infoT.setText("Error: could not create " + AA_VIRUSES_DB + ". " + e.getMessage());
+					infoT.setText("Error: could not create " + Config.NGS_MODULE_AA_VIRUSES_DB + ". " + e.getMessage());
 					return;
 				} catch (InterruptedException e) {
 					if (p != null)
 						p.destroy();
-					infoT.setText("Error: could not create " + AA_VIRUSES_DB + ". " + e.getMessage());
+					infoT.setText("Error: could not create " + Config.NGS_MODULE_AA_VIRUSES_DB + ". " + e.getMessage());
 					return;
 				}
 
 				infoT.setText("Dimond database created.");
+				dirtyHandler.increaseDirty();
 			}
 		});
 

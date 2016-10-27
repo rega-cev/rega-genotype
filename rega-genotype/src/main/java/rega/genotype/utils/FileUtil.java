@@ -68,20 +68,8 @@ public class FileUtil {
 		return fileText;
 	}
 
-	public static String toString(BufferedReader reader) {
-		StringBuilder builder = new StringBuilder();
-		String aux = "";
-
-		try {
-			while ((aux = reader.readLine()) != null) {
-			    builder.append(aux);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-		return builder.toString();
+	public static String toString(BufferedReader reader) throws IOException {
+		return IOUtils.toString(reader);
 	}
 
 	public static String getFileExtension(File file) {

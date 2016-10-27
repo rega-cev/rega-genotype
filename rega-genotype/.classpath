@@ -32,5 +32,6 @@
 	<classpathentry kind="lib" path="lib/poi-3.14/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="lib/poi-3.14/ooxml-lib/curvesapi-1.03.jar"/>
 	<classpathentry kind="lib" path="lib/poi-3.14/ooxml-lib/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/jython-standalone-2.7.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

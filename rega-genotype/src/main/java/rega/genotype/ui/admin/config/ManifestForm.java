@@ -88,8 +88,8 @@ public class ManifestForm extends FormTemplate{
 		// validators
 
 		nameLE.setValidator(new WValidator(true));
-		idLE.setValidator(new ToolIdValidator(true));
-		versionLE.setValidator(new ToolIdValidator(true));
+		idLE.setValidator(new ToolIdValidator(true, ValidatorType.ID));
+		versionLE.setValidator(new ToolIdValidator(true, ValidatorType.Version));
 
 		// info
 		
@@ -183,9 +183,12 @@ public class ManifestForm extends FormTemplate{
 		return oldManifest;
 	}
 
+	enum ValidatorType {ID, Version};
 	private class ToolIdValidator extends WValidator {
-		ToolIdValidator(boolean isMandatory) {
+		private ValidatorType validatorType;
+		ToolIdValidator(boolean isMandatory, ValidatorType validatorType) {
 			super(isMandatory);
+			this.validatorType = validatorType;
 		}
 		@Override
 		public Result validate(String input) {
@@ -196,6 +199,11 @@ public class ManifestForm extends FormTemplate{
 					(toolDir == null // new tool.
 					|| !toolConfigById.getConfigurationFile().getAbsolutePath().equals(toolDir.getAbsolutePath())))
 				return new Result(State.Invalid, "A tool with same id and version already exist on local server.");
+
+			if (validatorType == ValidatorType.ID
+					&& getToolType() == ToolType.Ngs
+					&& !idLE.getText().equals(Config.NGS_MODULE_ID)) 
+				return new Result(State.Invalid, "NGS Module id must be \"NGS_Module\". Only 1 NGS module can be used in the system.");
 
 			return super.validate(input);
 		}
