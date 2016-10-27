@@ -1,6 +1,8 @@
 package rega.genotype.ngs;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -8,7 +10,6 @@ import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.ui.framework.async.LongJobsScheduler;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.ngs.DiamondResultsView;
-
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
@@ -73,7 +74,13 @@ public class NgsWidget extends WContainerWidget{
 	private void addQC(File qcDir) {
 		if (qcDir.listFiles() == null)
 			return;
-		for (File f: qcDir.listFiles()) {
+		File[] files = qcDir.listFiles();
+		Arrays.sort(files, new Comparator<File>() {
+			public int compare(File o1, File o2) {
+				return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
+			}
+		});
+		for (File f: files) {
 			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("html")){
 				WContainerWidget c = new WContainerWidget(this);
 				new WText("QC report for ", c);
