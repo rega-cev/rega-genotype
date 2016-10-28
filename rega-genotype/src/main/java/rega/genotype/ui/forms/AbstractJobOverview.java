@@ -502,7 +502,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 										&& (ngsProgress.getState() == State.FinishedAll
 											|| !ngsProgress.getErrors().isEmpty()))
 									break;
-								lock.wait(interval);
+								lock.wait(1000);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 								assert (false);
@@ -517,7 +517,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			while (!stop && !resultFile.exists()){
 				synchronized (lock) {
 					try {
-						lock.wait(interval);
+						lock.wait(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 						assert (false);
@@ -527,18 +527,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 			if (!stop)
 				parser.parseResultFile(getJobdir());
-
-			while (!stop && !jobDone()){
-				parser.updateUi();
-				synchronized (lock) {
-					try {
-						lock.wait(interval);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-						assert (false);
-					}
-				}
-			}
 		}
 
 		void stop(){
