@@ -41,7 +41,7 @@ public class GenericMain extends GenotypeMain {
 	public GenericMain() {
 		super();
 		getConfiguration().setInternalDeploymentSize(1);
-		getConfiguration().setMaximumRequestSize(1000000000);
+		getConfiguration().setMaximumRequestSize(Integer.MAX_VALUE-1);
 
 //		getConfiguration().setInlineCss(false);
 		getConfiguration().setProgressiveBootstrap(true);
