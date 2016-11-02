@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.FileFormatException;
@@ -37,6 +38,7 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WInteractWidget;
@@ -45,6 +47,7 @@ import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WProgressBar;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
@@ -201,9 +204,31 @@ public class StartForm extends AbstractForm {
 
 		// NGS
 
+		initNgs(t);
+	}
+
+	private void initNgs(final Template t) {
+		final Template ngsTemplate = new Template(tr("startForm.ngs-widget"));
+		t.bindWidget("start-form.ngs-widget", ngsTemplate);
 		fastqFileUpload1 = new WFileUpload();
+		fastqFileUpload1.setProgressBar(new WProgressBar());
 		fastqFileUpload2 = new WFileUpload();
+		fastqFileUpload2.setProgressBar(new WProgressBar());
 		fastqStart = new WPushButton("Start NGS analysis");
+
+		fastqFileUpload1.fileTooLarge().addListener(fastqFileUpload1, new Signal1.Listener<Long>() {
+			public void trigger(Long arg) {
+				long maxRequestSize = WApplication.getInstance().getEnvironment().getServer().getConfiguration().getMaxRequestSize() / (1000*1000*1000);
+				ngsTemplate.bindString("fastq-upload1-info", "File too large. Max file size = " + maxRequestSize + " GB");
+			}
+		});
+
+		fastqFileUpload2.fileTooLarge().addListener(fastqFileUpload2, new Signal1.Listener<Long>() {
+			public void trigger(Long arg) {
+				long maxRequestSize = WApplication.getInstance().getEnvironment().getServer().getConfiguration().getMaxRequestSize() / (1000*1000*1000);
+				ngsTemplate.bindString("fastq-upload2-info", "File too large. Max file size = " + maxRequestSize + " GB");
+			}
+		});
 
 		fastqStart.clicked().addListener(fastqStart, new Signal.Listener() {
 			public void trigger() {
@@ -264,13 +289,16 @@ public class StartForm extends AbstractForm {
 					}
 				});
 				ngsAnalysis.start();
+				initNgs(t);
 				getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(workDir) + "/");
 			}
 		});
 
-		t.bindWidget("fastq-start", fastqStart);
-		t.bindWidget("fastq-upload1", fastqFileUpload1);
-		t.bindWidget("fastq-upload2", fastqFileUpload2);
+		ngsTemplate.bindWidget("fastq-start", fastqStart);
+		ngsTemplate.bindWidget("fastq-upload1", fastqFileUpload1);
+		ngsTemplate.bindWidget("fastq-upload2", fastqFileUpload2);
+		ngsTemplate.bindEmpty("fastq-upload1-info");
+		ngsTemplate.bindEmpty("fastq-upload2-info");
 	}
 	
 	private WInteractWidget createButton(String textKey, String iconKey) {

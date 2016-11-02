@@ -48,6 +48,17 @@
   	<message id="startForm.noSequence">No sequences were provided.</message>
   	<message id="startForm.tooManySequences">Too many sequences were provided.</message>
   	<message id="startForm.ioError">I/O error reading the sequence.</message>
+ 
+ 
+  	<message id="startForm.ngs-widget">
+		<div>
+			${tr:startForm.ngs}
+
+			<div>${tr:startForm.upload-fastq-1}${fastq-upload1}${fastq-upload1-info}</div>
+			<div>${tr:startForm.upload-fastq-2}${fastq-upload2}${fastq-upload2-info}</div>
+			${fastq-start}
+		</div>
+  	</message>
 
 	<message id="monitorForm.cancelButton">Cancel job</message>
   	<message id="monitorForm.analysisInProgress">
@@ -419,7 +430,7 @@
 		<h4>Add NGS analysis option to your tool</h4>
 		<div>NGS Analysis will look for a few place holders if they can be filled the analysis is enabled. (This can change in the near future)</div>
 		<div>The placeholders are:</div>
-		<div>Need to be place in &lt;message id="start-form"&gt;: $${fastq-upload1} $${fastq-upload2} $${fastq-start} </div>
+		<div>Need to be place in &lt;message id="start-form"&gt;: $${startForm.ngs-widget} </div>
 		<div>Need to be place in &lt;message id="job-overview-form"&gt;: $${ngs-results}</div>
 		<div>You can copy all that from resurces.xml of pan-viral 3.1 tool (from public repository).</div>
 		<div>NGS Analysis has many depandances: most are configured in Global config, but some need to be updated from time to time (like diamond blast database) for this ones we created the <b>NGS module</b>. Make sure to import/ install this module in to your Tools Table.</div>
