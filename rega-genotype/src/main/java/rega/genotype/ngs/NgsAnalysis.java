@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.ApplicationException;
@@ -21,10 +22,10 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.GeneralConfig;
+import rega.genotype.framework.async.LongJobsScheduler;
+import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
-import rega.genotype.ui.framework.async.LongJobsScheduler;
-import rega.genotype.ui.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.utils.BlastUtil;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.StreamReaderRuntime;

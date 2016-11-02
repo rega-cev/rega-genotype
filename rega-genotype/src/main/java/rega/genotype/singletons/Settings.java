@@ -10,7 +10,7 @@ import java.io.File;
 import javax.servlet.ServletContext;
 
 import rega.genotype.config.Config;
-import rega.genotype.ui.framework.async.LongJobsScheduler;
+import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.utils.FileUtil;
 
 /**

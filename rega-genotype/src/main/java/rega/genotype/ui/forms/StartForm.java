@@ -38,7 +38,6 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WApplication;
-import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WInteractWidget;

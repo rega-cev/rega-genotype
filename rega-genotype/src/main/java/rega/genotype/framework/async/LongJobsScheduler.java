@@ -1,4 +1,4 @@
-package rega.genotype.ui.framework.async;
+package rega.genotype.framework.async;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentLinkedQueue;

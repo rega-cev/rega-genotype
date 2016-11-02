@@ -6,8 +6,8 @@ import java.util.Comparator;
 
 import org.apache.commons.io.FilenameUtils;
 
+import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.ngs.NgsProgress.State;
-import rega.genotype.ui.framework.async.LongJobsScheduler;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.ngs.DiamondResultsView;
 import eu.webtoolkit.jwt.AnchorTarget;
