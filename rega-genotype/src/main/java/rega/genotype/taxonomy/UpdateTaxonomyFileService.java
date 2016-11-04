@@ -1,6 +1,10 @@
 package rega.genotype.taxonomy;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import rega.genotype.singletons.Settings;
 
@@ -15,29 +19,39 @@ public class UpdateTaxonomyFileService {
 	private static String TAXONOMY_FILE_NAME = "taxonomy.tab";
 
 	public static File download() {
-		File taxonomyFile = taxonomyFile();
+		RandomAccessFile fos = null;
 
-		taxonomyFile.delete();
-
-		Process fetchFasta = null;
 		try {
-			String cmd = "wget '" + TAXONOMY_URL + "' -O " + taxonomyFile.getAbsolutePath();
-			String[] shellCmd = {"/bin/sh", "-c", cmd};
-			System.err.println(shellCmd);
-			fetchFasta = Runtime.getRuntime().exec(shellCmd);
+			HttpURLConnection conn = (HttpURLConnection) new URL(TAXONOMY_URL).openConnection();
 
-			int exitResult = fetchFasta.waitFor();
-			if (exitResult != 0)
-				return null;
+			File taxonomyFile = taxonomyFile();
+			taxonomyFile.delete();
+			taxonomyFile.createNewFile();
+
+			fos = new RandomAccessFile(taxonomyFile, "rw");
+
+			final int BUF_SIZE = 4 * 1024;
+			byte[] bytes = new byte[BUF_SIZE];
+			int read = 0;
+
+			BufferedInputStream binaryreader = new BufferedInputStream(conn.getInputStream());
+
+			while ((read = binaryreader.read(bytes)) > 0)
+				fos.write(bytes, 0, read);
+
+			binaryreader.close();
+			return taxonomyFile;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			return null;
+		} finally {
+			if (fos != null)
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
-
-		return taxonomyFile;
 	}
 
 	public static File taxonomyFile() {
