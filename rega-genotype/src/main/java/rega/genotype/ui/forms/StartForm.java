@@ -23,6 +23,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.ngs.NgsAnalysis;
+import rega.genotype.ngs.NgsFileSystem;
 import rega.genotype.ngs.NgsProgress;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.data.OrganismDefinition;
@@ -250,7 +251,7 @@ public class StartForm extends AbstractForm {
 				final File workDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getJobDir());
 
 				try {
-					File fastqDir = new File(workDir, NgsAnalysis.FASTQ_FILES_DIR);
+					File fastqDir = new File(workDir, NgsFileSystem.FASTQ_FILES_DIR);
 					fastqDir.mkdirs();
 					FileUtils.copyFile(fastqFile1, new File(fastqDir, fastqFileUpload1.getClientFileName()));
 					FileUtils.copyFile(fastqFile2, new File(fastqDir, fastqFileUpload2.getClientFileName()));
@@ -271,7 +272,8 @@ public class StartForm extends AbstractForm {
 				Thread ngsAnalysis = new Thread(new Runnable() {
 					public void run() {
 						try {
-							if (NgsAnalysis.analyze(workDir)) {
+							NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
+							if (ngsAnalysis.analyze()) {
 								// analyze assembled fasta files 
 								getMain().getOrganismDefinition().startAnalysis(workDir);
 								File done = new File(workDir.getAbsolutePath()+File.separatorChar+"DONE");
@@ -288,7 +290,7 @@ public class StartForm extends AbstractForm {
 					}
 				});
 				ngsAnalysis.start();
-				initNgs(t);
+				//initNgs(t);
 				getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(workDir) + "/");
 			}
 		});

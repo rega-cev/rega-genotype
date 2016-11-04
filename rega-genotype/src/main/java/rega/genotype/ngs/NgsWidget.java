@@ -40,13 +40,13 @@ public class NgsWidget extends WContainerWidget{
 
 		if (ngsProgress.getState().code >= State.Preprocessing.code) {
 			new WText("<div> QC before preprocessing</div>", this);
-			File qcDir = new File(workDir, NgsAnalysis.QC_REPORT_DIR);
+			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
 			addQC(qcDir);
 		}
 
 		if (ngsProgress.getState().code >= State.Diamond.code) {
 			new WText("<div> QC after preprocessing</div>", this);
-			File qcDir = new File(workDir, NgsAnalysis.QC_REPORT_AFTER_PREPROCESS_DIR);
+			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
 			addQC(qcDir);
 		}
 
