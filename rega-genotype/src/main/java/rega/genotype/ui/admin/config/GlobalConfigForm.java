@@ -170,6 +170,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldInfo("sequencetoolPath", "<div>Can be obtained from https://github.com/emweb/sequencetool.git, you will also need to install libseq: https://github.com/rega-cev/libseq </div>");
 		setFieldInfo("bioPythonPath", "<div>Bio python is used only to create the NGS Module. So most user do not need that.</div>" +
 				"<div>Can be obtained from http://biopython.org/</div>");
+		setFieldMandatory("bioPythonPath", false);
 
 	}
 }

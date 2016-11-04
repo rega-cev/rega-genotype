@@ -122,6 +122,15 @@ public class AutoForm <T> extends WContainerWidget {
  		return true;
  	}
 
+	protected boolean setFieldMandatory(String fieldName, boolean mandatory) {
+		if (widgetMap.get(getField(fieldName)) == null)
+			return false;
+		else
+			widgetMap.get(getField(fieldName)).widget.getValidator().setMandatory(mandatory);
+
+		return true;
+	}
+
  	protected boolean setHeader(String fieldName, String text) {
  		if (widgetMap.get(getField(fieldName)) == null)
  			return false;
