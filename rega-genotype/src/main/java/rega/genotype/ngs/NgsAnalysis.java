@@ -31,8 +31,7 @@ public class NgsAnalysis {
 	 * @throws ApplicationException
 	 */
 	protected void preprocess() throws ApplicationException {
-		//Preprocessing.cutadaptPreprocess(workDir);
-		Preprocessing.generalPreprocessing("java -Xmx1000m -jar trimomatic ..", workDir);
+		Preprocessing.cutadaptPreprocess(workDir);
 	}
 
 	/**
