@@ -23,10 +23,6 @@ import eu.webtoolkit.jwt.WApplication;
 public class Config {
 	public static final String CONFIG_FILE_NAME = "config.json";
 
-	public static final String NGS_MODULE_ID = "NGS_Module";
-	public static final String NGS_MODULE_UNIREF_VIRUSES_AA50 = "uniref-viruses-aa50.fasta";
-	public static final String NGS_MODULE_AA_VIRUSES_DB = "aa-virus.dmnd";
-
 	private GeneralConfig generalConfig = new GeneralConfig();
 	private List<ToolConfig> tools = new ArrayList<Config.ToolConfig>(); //TODO: use set 
 
@@ -147,11 +143,31 @@ public class Config {
 	 * @return the file or null if the file / module are not found.
 	 */
 	public File getDiamondBlastDb() {
-		ToolConfig ngsModule = getCurrentVersion(NGS_MODULE_ID);
-		if (ngsModule == null)
+		ToolConfig ngsModuleConfig = getCurrentVersion(NgsModule.NGS_MODULE_ID);
+		if (ngsModuleConfig == null)
 			return null;
 
-		File ans = new File(ngsModule.getConfigurationFile(), NGS_MODULE_AA_VIRUSES_DB);
+		NgsModule ngsModule = NgsModule.read(ngsModuleConfig.getConfigurationFile());
+		
+		File ans = new File(ngsModuleConfig.getConfigurationFile(),
+				ngsModule.getAADbFileName());
+		return ans.exists() ? ans : null;
+	}
+
+	/**
+	 * Query the dna database file of all viruses file from ngs module.
+	 * This should be used by contigs assembly step.
+	 * @return the file or null if the file / module are not found.
+	 */
+	public File getNcbiVirusesDb() {
+		ToolConfig ngsModuleConfig = getCurrentVersion(NgsModule.NGS_MODULE_ID);
+		if (ngsModuleConfig == null)
+			return null;
+
+		NgsModule ngsModule = NgsModule.read(ngsModuleConfig.getConfigurationFile());
+		
+		File ans = new File(ngsModuleConfig.getConfigurationFile(), 
+				ngsModule.getNcbiVirusesFileName());
 		return ans.exists() ? ans : null;
 	}
 
@@ -250,7 +266,6 @@ public class Config {
 		private String edirectPath = "/usr/bin/edirect/";
 		//NGS
 		private String diamondPath = "diamond";
-		private String ncbiVirusesDbPath = "ncbi-viruses.fasta";
 		private String sequencetoolPath = "sequencetool";
 		private String fastqcCmd = "fastqc";
 		private String spadesCmd = "spades";
@@ -372,12 +387,6 @@ public class Config {
 		}
 		public void setEdirectPath(String edirectPath) {
 			this.edirectPath = edirectPath;
-		}
-		public String getNcbiVirusesDbPath() {
-			return ncbiVirusesDbPath;
-		}
-		public void setNcbiVirusesDbPath(String ncbiVirusesDbPath) {
-			this.ncbiVirusesDbPath = ncbiVirusesDbPath;
 		}
 		public String getSequencetoolPath() {
 			return sequencetoolPath;

@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-import rega.genotype.ui.framework.async.LongJobsScheduler;
-import rega.genotype.ui.framework.async.LongJobsScheduler.Lock;
+import rega.genotype.framework.async.LongJobsScheduler;
+import rega.genotype.framework.async.LongJobsScheduler.Lock;
 
 public class SchdulerTest  extends TestCase {
 

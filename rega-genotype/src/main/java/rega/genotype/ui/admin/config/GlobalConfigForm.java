@@ -164,9 +164,6 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldInfo("spadesCmd", "<div>Can be obtained from http://bioinf.spbau.ru/spades</div>");
 		setFieldInfo("cutAdaptCmd", "<div>Can be obtained from https://cutadapt.readthedocs.io/en/stable/installation.html</div>");
 		setFieldInfo("edirectPath", "<div>Can be obtained from http://www.ncbi.nlm.nih.gov/books/NBK179288/</div>");
-		setFieldInfo("ncbiVirusesDbPath", "<div>Can be obtained from https://www.ncbi.nlm.nih.gov/nuccore </div>" +
-				"<div> Select top combobox -> nucleotide, Left menu: Species -> Viruses; Source databases -> RefSeq </div>" +
-				"<div>download fasta</div>");
 		setFieldInfo("sequencetoolPath", "<div>Can be obtained from https://github.com/emweb/sequencetool.git, you will also need to install libseq: https://github.com/rega-cev/libseq </div>");
 		setFieldInfo("bioPythonPath", "<div>Bio python is used only to create the NGS Module. So most user do not need that.</div>" +
 				"<div>Can be obtained from http://biopython.org/</div>");

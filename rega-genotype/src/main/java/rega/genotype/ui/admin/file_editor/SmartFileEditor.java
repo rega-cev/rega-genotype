@@ -82,6 +82,7 @@ public class SmartFileEditor extends WContainerWidget {
 		ngsPanel.setTitle("NGS Module configuration");
 		ngsPanel.setCentralWidget(ngsModuleForm);
 
+		dirtyHandler.connect(ngsModuleForm.getDirtyHandler(), this);
 		dirtyHandler.connect(ngsModuleForm);
 	}
 

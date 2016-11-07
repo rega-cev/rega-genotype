@@ -4,6 +4,7 @@ import java.io.File;
 
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.config.NgsModule;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
@@ -202,7 +203,7 @@ public class ManifestForm extends FormTemplate{
 
 			if (validatorType == ValidatorType.ID
 					&& getToolType() == ToolType.Ngs
-					&& !idLE.getText().equals(Config.NGS_MODULE_ID)) 
+					&& !idLE.getText().equals(NgsModule.NGS_MODULE_ID)) 
 				return new Result(State.Invalid, "NGS Module id must be \"NGS_Module\". Only 1 NGS module can be used in the system.");
 
 			return super.validate(input);

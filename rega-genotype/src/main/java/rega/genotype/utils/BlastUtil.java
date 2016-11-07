@@ -73,6 +73,8 @@ public class BlastUtil {
 
         	final LineNumberReader reader = new LineNumberReader(new InputStreamReader(inputStream));
         	String line = reader.readLine();
+        	if (line == null)
+        		throw new ApplicationException("blast results are empty.");
         	String[] values = line.split("\t");
 
         	int exitResult = blast.waitFor();

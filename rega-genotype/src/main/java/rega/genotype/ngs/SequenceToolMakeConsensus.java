@@ -45,10 +45,9 @@ public class SequenceToolMakeConsensus {
 
 		workDir.mkdirs();
 
-		String ncbiVirusesDbPath = Settings.getInstance().getConfig().getGeneralConfig().getNcbiVirusesDbPath();
-		if (ncbiVirusesDbPath == null)
+		File ncbiVirusesFasta = Settings.getInstance().getConfig().getNcbiVirusesDb();
+		if (ncbiVirusesFasta == null)
 			throw new ApplicationException("Ncbi Viruses Db Path needs to be set in global settings");
-		File ncbiVirusesFasta = new File(ncbiVirusesDbPath);
 		File refrence = NgsFileSystem.consensusRefFile(workDir, virusName);
 		File consensusDir = new File(workDir, NgsFileSystem.consensusDir(virusName));
 		consensusDir.mkdirs();

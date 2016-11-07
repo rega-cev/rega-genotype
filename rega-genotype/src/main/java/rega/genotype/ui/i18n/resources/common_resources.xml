@@ -199,17 +199,39 @@
 		<div>All tools that support NGS will use the files from the NGS module with current version checked.</div>
 		</p>
 		<p>
-		<div>Uniprot 50% identity database for viruses. </div>
+		<div><b>Uniprot 50% identity database for viruses.</b></div>
 		<div>Can be obtained in
 		http://www.uniprot.org/uniref/?query=uniprot%3A%28lineage%3A%22Viruses%22%29+AND+identity%3A0.5&amp;sort=score
 		</div>
-		${upload-aa-db}
+		<div>
+		Current file: ${current-aa-db}
+		</div>
+		<div>
+		Edit ${upload-aa-db}
+		</div>
 		</p>
 		<p>
-		<div>Virus taxonomy database</div>
+		<div><b>Virus taxonomy database</b></div>
 		<div>Can be obtained in http://www.uniprot.org/taxonomy/?query=Viruses&amp;sort=score</div>
 		</p>
-		${upload-taxonomy}
+		<div>
+		Current file: ${current-taxonomy}
+		</div>
+		<div>
+		Edit ${upload-taxonomy}
+		</div>
+		<p>
+		<div><b>Ncbi Viruses Db Path</b></div>
+		<div>Can be obtained from https://www.ncbi.nlm.nih.gov/nuccore</div>
+        <div>Select top combobox -&gt; nucleotide, Left menu: Species -&gt; Viruses; Source databases -&gt; RefSeq</div>
+        <div>download fasta</div>
+		</p>
+		<div>
+		Current file: ${current-ncbi-viruses}
+		</div>
+		<div>
+		Edit ${upload-ncbi-viruses}
+		</div>
 		<p>${create-db}${info}</p>
 	</message>
 
