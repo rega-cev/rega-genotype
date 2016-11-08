@@ -180,14 +180,14 @@ public class PrimarySearch{
 	 * The algorithm favors creating big baskets, so if 1 taxon appears many times 
 	 * a new sequence would rather go to its basket then to a new taxon basket
 	 * even if the new 1 has slightly better score.
-	 * @param workDir
+	 * @param diamondResultsDir
 	 * @param view
 	 * @param fastqFiles
 	 * @param ngsProgress 
 	 * @throws FileFormatException
 	 * @throws IOException
 	 */
-	private static void creatDiamondResults(File workDir, File view, File[] fastqFiles, NgsProgress ngsProgress) throws FileFormatException, IOException {
+	private static void creatDiamondResults(File diamondResultsDir, File view, File[] fastqFiles, NgsProgress ngsProgress) throws FileFormatException, IOException {
 		String line = "";
 
 		class SequenceData {
@@ -278,7 +278,7 @@ public class PrimarySearch{
 				String taxosId = taxoNameId.get(name[0]);
 				if (taxosId == null)
 					continue; // TODO ??
-				File taxonDir = new File(workDir, taxosId);
+				File taxonDir = new File(diamondResultsDir, taxosId);
 				taxonDir.mkdirs();
 
 				FileWriter fastq = new FileWriter(taxonDir.getAbsoluteFile() + File.separator + f.getName(), true);
@@ -296,6 +296,7 @@ public class PrimarySearch{
 		}
 
 		ngsProgress.setDiamondBlastResults(taxonCounters);
+		ngsProgress.save(diamondResultsDir.getParentFile());
 	}
 
 }

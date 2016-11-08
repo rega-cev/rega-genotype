@@ -126,6 +126,7 @@ public class NgsAnalysis {
 			return false;
 		}
 
+		ngsProgress = NgsProgress.read(workDir); // primarySearch may update NgsProgress with diamond results.
 		ngsProgress.setState(State.Spades);
 		ngsProgress.save(workDir);
 
