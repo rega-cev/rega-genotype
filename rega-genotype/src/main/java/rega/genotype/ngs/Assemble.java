@@ -33,7 +33,7 @@ public class Assemble {
 		cmd += " -2 " + sequenceFile2.getAbsolutePath();
 
 		cmd += " -o " + contigsDir.getAbsolutePath();
-		cmd += " --phred-offset 33 --threads 6";
+		cmd += " --threads 6";
 
 		System.err.println(cmd);
 		Process p = null;
