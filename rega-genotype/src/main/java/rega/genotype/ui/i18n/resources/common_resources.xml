@@ -204,35 +204,44 @@
 		http://www.uniprot.org/uniref/?query=uniprot%3A%28lineage%3A%22Viruses%22%29+AND+identity%3A0.5&amp;sort=score
 		</div>
 		<div>
-		Current file: ${current-aa-db}
+		<i>Current file: ${current-aa-db}</i>
 		</div>
 		<div>
 		Edit ${upload-aa-db}
 		</div>
 		</p>
+		
 		<p>
 		<div><b>Virus taxonomy database</b></div>
 		<div>Can be obtained in http://www.uniprot.org/taxonomy/?query=Viruses&amp;sort=score</div>
-		</p>
 		<div>
-		Current file: ${current-taxonomy}
+		<i>Current file: ${current-taxonomy}</i>
 		</div>
 		<div>
 		Edit ${upload-taxonomy}
 		</div>
+		</p>
+
+		<p>
+		<div><b>Create database for diamond blast.</b></div>
+		<div>Use Uniprot 50% identity database for viruses and Virus taxonomy database to create dmdb file that will be used by Diamond blast.</div>
+		<div>Note: the dmdb file is architecture specific and therefor it is recommended to create the database on every server, so click the button.</div>
+		<div>${create-db}${info}</div>
+		</p>
+
 		<p>
 		<div><b>Ncbi Viruses Db Path</b></div>
 		<div>Can be obtained from https://www.ncbi.nlm.nih.gov/nuccore</div>
         <div>Select top combobox -&gt; nucleotide, Left menu: Species -&gt; Viruses; Source databases -&gt; RefSeq</div>
         <div>download fasta</div>
-		</p>
 		<div>
-		Current file: ${current-ncbi-viruses}
+		<i>Current file: ${current-ncbi-viruses}</i>
 		</div>
 		<div>
 		Edit ${upload-ncbi-viruses}
 		</div>
-		<p>${create-db}${info}</p>
+		</p>
+
 	</message>
 
 	<message id="admin.config.tool-config-dialog.config">
