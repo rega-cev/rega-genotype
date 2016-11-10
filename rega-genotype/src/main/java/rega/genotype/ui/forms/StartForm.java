@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
@@ -29,6 +30,7 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
@@ -207,13 +209,22 @@ public class StartForm extends AbstractForm {
 		initNgs(t);
 	}
 
+	private String setFastqExtention(String fileName) {
+		return FilenameUtils.getBaseName(fileName) + ".fastq";
+	}
+
 	private void initNgs(final Template t) {
 		final Template ngsTemplate = new Template(tr("startForm.ngs-widget"));
 		t.bindWidget("start-form.ngs-widget", ngsTemplate);
+
 		fastqFileUpload1 = new WFileUpload();
 		fastqFileUpload1.setProgressBar(new WProgressBar());
+		fastqFileUpload1.setFilters(".fastq,.zip,.gz");
+
 		fastqFileUpload2 = new WFileUpload();
 		fastqFileUpload2.setProgressBar(new WProgressBar());
+		fastqFileUpload2.setFilters(".fastq,.zip,.gz");
+
 		fastqStart = new WPushButton("Start NGS analysis");
 
 		fastqFileUpload1.fileTooLarge().addListener(fastqFileUpload1, new Signal1.Listener<Long>() {
@@ -253,14 +264,37 @@ public class StartForm extends AbstractForm {
 				try {
 					File fastqDir = new File(workDir, NgsFileSystem.FASTQ_FILES_DIR);
 					fastqDir.mkdirs();
-					FileUtils.copyFile(fastqFile1, new File(fastqDir, fastqFileUpload1.getClientFileName()));
-					FileUtils.copyFile(fastqFile2, new File(fastqDir, fastqFileUpload2.getClientFileName()));
+
+					new File(fastqDir, fastqFileUpload1.getClientFileName());
+
+					File extructedFastqPE1 = new File(fastqDir, fastqFileUpload1.getClientFileName());
+					File extructedFastqPE2 = new File(fastqDir, fastqFileUpload2.getClientFileName());
+
+					if (!FilenameUtils.getExtension(fastqFile1.getName()).equals(
+							FilenameUtils.getExtension(fastqFile2.getName()))) {
+						StandardDialog d = new StandardDialog("Error");
+						d.getContents().addWidget(new WText("Error: the files are not of the same typr?"));
+						return;
+					} else if (FilenameUtils.getExtension(fastqFileUpload1.getClientFileName()).equals("gz")) {
+						extructedFastqPE1 = new File(fastqDir, setFastqExtention(fastqFileUpload1.getClientFileName()));
+						extructedFastqPE2 = new File(fastqDir, setFastqExtention(fastqFileUpload2.getClientFileName()));
+						FileUtil.unGzip1File(fastqFile1, extructedFastqPE1);
+						FileUtil.unGzip1File(fastqFile2, extructedFastqPE2);
+					} else if (FilenameUtils.getExtension(fastqFileUpload1.getClientFileName()).equals("zip")){ // compressed .zip
+						extructedFastqPE1 = new File(fastqDir, setFastqExtention(fastqFileUpload1.getClientFileName()));
+						extructedFastqPE2 = new File(fastqDir, setFastqExtention(fastqFileUpload2.getClientFileName()));
+						FileUtil.unzip1File(fastqFile1, extructedFastqPE1);
+						FileUtil.unzip1File(fastqFile2, extructedFastqPE2);
+					} else { // not compressed
+						FileUtils.copyFile(fastqFile1, extructedFastqPE1);
+						FileUtils.copyFile(fastqFile2, extructedFastqPE2);
+					}
 
 					NgsProgress ngsProgress = new NgsProgress();
 
 					//PE
-					ngsProgress.setFastqPE1FileName(fastqFileUpload1.getClientFileName());
-					ngsProgress.setFastqPE2FileName(fastqFileUpload2.getClientFileName());
+					ngsProgress.setFastqPE1FileName(extructedFastqPE1.getName());
+					ngsProgress.setFastqPE2FileName(extructedFastqPE2.getName());
 
 					// SE TODO
 					ngsProgress.save(workDir);

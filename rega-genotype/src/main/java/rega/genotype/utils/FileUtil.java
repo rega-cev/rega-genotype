@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -138,6 +139,34 @@ public class FileUtil {
 		return new File(path1).getAbsolutePath().equals(
 				new File(path2).getAbsolutePath());
 	}
+
+	// gzip
+    /**
+     * extract .gz file
+     */
+	public static boolean unGzip1File(File gzipFile, File destinationFile){
+		byte[] buffer = new byte[1024];
+		try{
+			GZIPInputStream gzis =
+					new GZIPInputStream(new FileInputStream(gzipFile));
+			FileOutputStream out =
+					new FileOutputStream(destinationFile);
+
+			int len;
+			while ((len = gzis.read(buffer)) > 0) {
+				out.write(buffer, 0, len);
+			}
+
+			gzis.close();
+			out.close();
+		}catch(IOException e){
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
 	// zip 
 
 	private static ZipFile toZipFile(final File zip) {
@@ -208,6 +237,37 @@ public class FileUtil {
 				// write the files to the disk
 				FileOutputStream fos = new FileOutputStream(
 						extructFolder.getAbsolutePath() + File.separator + entry.getName());
+				dest = new BufferedOutputStream(fos, BUFFER);
+				while ((count = zis.read(dataBytes, 0, BUFFER)) != -1) {
+					dest.write(dataBytes, 0, count);
+				}
+				dest.flush();
+				dest.close();
+			}
+			zis.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return true;
+		}
+
+		return false;
+	}
+
+	public static boolean unzip1File(File zipedFile, File destination) {
+		ZipFile zipFile = toZipFile(zipedFile);
+		if (zipFile.size() != 1)
+			return false;
+
+		try {
+			BufferedOutputStream dest = null;
+			FileInputStream fis = new FileInputStream(zipedFile);
+			ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
+			while((zis.getNextEntry()) != null) {
+				int count;
+				byte dataBytes[] = new byte[BUFFER];
+				// write the files to the disk
+				FileOutputStream fos = new FileOutputStream(
+						destination.getAbsolutePath());
 				dest = new BufferedOutputStream(fos, BUFFER);
 				while ((count = zis.read(dataBytes, 0, BUFFER)) != -1) {
 					dest.write(dataBytes, 0, count);
