@@ -290,15 +290,8 @@ public class StartForm extends AbstractForm {
 						FileUtils.copyFile(fastqFile2, extructedFastqPE2);
 					}
 
-					NgsProgress ngsProgress = new NgsProgress();
-
-					//PE
-					ngsProgress.setFastqPE1FileName(extructedFastqPE1.getName());
-					ngsProgress.setFastqPE2FileName(extructedFastqPE2.getName());
-
-					// SE TODO
-					ngsProgress.save(workDir);
-
+					NgsFileSystem.addFastqFiles(workDir, extructedFastqPE1, extructedFastqPE2);
+	
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

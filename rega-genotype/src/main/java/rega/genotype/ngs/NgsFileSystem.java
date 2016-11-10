@@ -3,6 +3,8 @@ package rega.genotype.ngs;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+
 import rega.genotype.ApplicationException;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.utils.StreamReaderRuntime;
@@ -45,12 +47,43 @@ public class NgsFileSystem {
 	public static final String CONSENSUS_ALINGMENT_FILE = "consensus-alingemnt.fasta";
 	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
 
+	public static boolean addFastqFiles(File workDir, File fastqPE1, File fastqPE2) {
+		if (!fastqPE1.exists() || !fastqPE2.exists()) 
+    		return false;
+
+		File fastqDir = new File(workDir, FASTQ_FILES_DIR);
+
+		NgsProgress ngsProgress = new NgsProgress();
+
+		//PE
+		ngsProgress.setFastqPE1FileName(fastqPE1.getName());
+		ngsProgress.setFastqPE2FileName(fastqPE2.getName());
+
+		// SE TODO
+		ngsProgress.save(workDir);
+
+		try {
+			File fastqPE1Copy = new File(fastqDir, fastqPE1.getName());
+			File fastqPE2Copy = new File(fastqDir, fastqPE2.getName());
+
+			if (!fastqPE1.getAbsolutePath().equals(fastqPE1Copy.getAbsolutePath()))
+				FileUtils.copyFile(fastqPE1, fastqPE1Copy);
+			if (!fastqPE2.getAbsolutePath().equals(fastqPE2Copy.getAbsolutePath()))
+				FileUtils.copyFile(fastqPE2, fastqPE2Copy);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
 	public static File fastqDir(File workDir) {
 		NgsProgress ngsProgress = NgsProgress.read(workDir);
 
 		File fastqDir = new File(workDir, FASTQ_FILES_DIR);
 		if (!fastqDir.exists()) {
-			ngsProgress.setState(State.Uploading);
+			ngsProgress.setState(State.Init);
 			ngsProgress.setErrors("no fastq files");
 			ngsProgress.save(workDir);
 			return null;
