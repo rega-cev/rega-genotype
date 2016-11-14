@@ -75,6 +75,7 @@ public abstract class GenotypeTool {
     	String workingDir;
     	String ngsPairedEndFile1 = null;
     	String ngsPairedEndFile2 = null;
+    	Boolean assembleOnly = false; 
     }
     
     private static ArgsParseResult parseArgs(String[] args) { 
@@ -84,6 +85,7 @@ public abstract class GenotypeTool {
         CmdLineParser.Option workingDirOption = parser.addStringOption('w', "workingDir");
         CmdLineParser.Option pe1Option = parser.addStringOption("paired-end-1");
         CmdLineParser.Option pe2Option = parser.addStringOption("paired-end-2");
+        CmdLineParser.Option assembleOnlyOption = parser.addStringOption("assemble-only");
 
         try {
         	parser.parse(args);
@@ -121,6 +123,10 @@ public abstract class GenotypeTool {
         if (pe2 != null)
         	result.ngsPairedEndFile2 = pe2;
 
+        String assembleOnly = (String) parser.getOptionValue(assembleOnlyOption);
+        if (assembleOnly != null && assembleOnly.equals("true"))
+        	result.assembleOnly = true;
+
         result.remainingArgs = parser.getRemainingArgs();
 
         return result;
@@ -140,8 +146,9 @@ public abstract class GenotypeTool {
 		System.err.println("\t-h,--help       print this text.");
 		System.err.println("\t-c,--config     specify path to config file");
         System.err.println("\t-w,--workingDir specify path to the working directory (default .)");
-        System.err.println("\t--paired-end-1 Analysis input NGS fastq paired-end 1 file absolute path (in that case paired-end-2 must not be empty) .)");
-        System.err.println("\t--paired-end-2 Analysis input NGS fastq paired-end 2 file absolute path (in that case paired-end-1 must not be empty) .)");
+        System.err.println("\t--paired-end-1  Analysis input NGS fastq paired-end 1 file absolute path, Only for NGS (in that case paired-end-2 must not be empty) .)");
+        System.err.println("\t--paired-end-2  Analysis input NGS fastq paired-end 2 file absolute path, Only for NGS (in that case paired-end-1 must not be empty) .)");
+        System.err.println("\t--assemble-only NGS: Do only the assembly step. All the previuse steps must be done in workingDir. This is useful only to test the assembly step.");
 	}
 
     public void analyze(String sequenceFile, String traceFile) throws IOException {
@@ -406,15 +413,17 @@ public abstract class GenotypeTool {
 
     	if (parseArgsResult.remainingArgs.length == 5) {
     		if (parseArgsResult.remainingArgs[3].equals("NGS")) {
-        		// GenotypeTool [...] className [-paired-end-1][-paired-end-2] result.xml
-    			if (parseArgsResult.ngsPairedEndFile1 == null
-    					|| parseArgsResult.ngsPairedEndFile2 == null){
+    			// GenotypeTool [...] className [-paired-end-1][-paired-end-2] result.xml
+    			if (!parseArgsResult.assembleOnly &&
+    					(parseArgsResult.ngsPairedEndFile1 == null
+    					|| parseArgsResult.ngsPairedEndFile2 == null)){
     				printUsage();
-    	    		return;
+    				return;
     			}
 
     			File workDir = new File(parseArgsResult.workingDir);
-    			if (!NgsFileSystem.addFastqFiles(workDir, 
+    			if (!parseArgsResult.assembleOnly &&
+    					!NgsFileSystem.addFastqFiles(workDir, 
     					new File(parseArgsResult.ngsPairedEndFile1), 
     					new File(parseArgsResult.ngsPairedEndFile2))){
     				System.err.println();
@@ -425,7 +434,11 @@ public abstract class GenotypeTool {
     			}
 
     			NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
-    			ngsAnalysis.analyze();
+    			if (parseArgsResult.assembleOnly)
+    				ngsAnalysis.assembleAll();
+    			else
+    				ngsAnalysis.analyze();
+
     			genotypeTool.analyze(
     					parseArgsResult.workingDir + File.separator + NgsFileSystem.SEQUENCES_FILE, 
     					traceFile);

@@ -66,10 +66,10 @@ public class NgsAnalysis {
 	public boolean analyze() {
 		NgsProgress ngsProgress = NgsProgress.read(workDir);
 
+		// QC
+
 		ngsProgress.setState(State.QC);
 		ngsProgress.save(workDir);
-
-		// QC
 
 		File fastqDir = NgsFileSystem.fastqDir(workDir);
 		try {
@@ -126,13 +126,17 @@ public class NgsAnalysis {
 			return false;
 		}
 
-		ngsProgress = NgsProgress.read(workDir); // primarySearch may update NgsProgress with diamond results.
+		return assembleAll();
+	}
+
+	public boolean assembleAll() {
+		NgsProgress ngsProgress = NgsProgress.read(workDir); // primarySearch may update NgsProgress with diamond results.
 		ngsProgress.setState(State.Spades);
 		ngsProgress.save(workDir);
 
 		// spades
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
-		
+
 		File fastqPE1 = NgsFileSystem.fastqPE1(workDir);
 		File fastqPE2 = NgsFileSystem.fastqPE2(workDir);
 
@@ -187,6 +191,6 @@ public class NgsAnalysis {
 
 		ngsProgress.save(workDir);
 
-		return true; 
+		return true;
 	}
 }
