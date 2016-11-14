@@ -68,14 +68,7 @@ public class SequenceToolMakeConsensus {
 		+ " --output " + alingment.getAbsolutePath()
 		+ " --cutoff 70 ";
 
-		System.err.println(cmd);
-
-		Process p = Runtime.getRuntime().exec(cmd, null, workDir);
-
-		int exitResult = p.waitFor();
-
-		if (exitResult != 0)
-			throw new ApplicationException("blast exited with error: " + exitResult);
+		NgsFileSystem.executeCmd(cmd, workDir);
 
 		return alingment;
 	}
@@ -86,19 +79,14 @@ public class SequenceToolMakeConsensus {
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetoolPath();
 		File out = NgsFileSystem.consensusFile(workDir, virusName);
 		out.getParentFile().mkdirs();
+		out.createNewFile();
 
 		String cmd = sequencetoolPath + " make-consensus"
 				+ " --input " + assembledContigs.getAbsolutePath()
 				+ " --output " + out.getAbsolutePath()
 				+ " --max-gap 10 --max-missing 100 --min-count 0.25 ";
 
-		System.err.println(cmd);
-
-		Process p = Runtime.getRuntime().exec(cmd, null, workDir);
-		int exitResult = p.waitFor();
-
-		if (exitResult != 0)
-			throw new ApplicationException("blast exited with error: " + exitResult);
+		NgsFileSystem.executeCmd(cmd, workDir);
 
 		return out;
 	}

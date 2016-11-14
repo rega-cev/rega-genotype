@@ -1,7 +1,9 @@
 package rega.genotype.ngs;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.apache.commons.io.FileUtils;
 
@@ -189,7 +191,7 @@ public class NgsFileSystem {
 			return null;
 		return preprocessedPE2Dir.listFiles()[0];
 	}
-	
+
 	public static void executeCmd(String cmd, File workDir) throws ApplicationException{
 		System.err.println(cmd);
 		Process p = null;
@@ -197,6 +199,17 @@ public class NgsFileSystem {
 		try {
 			p = StreamReaderRuntime.exec(cmd, null, workDir);
 			int exitResult = p.waitFor();
+
+			// Clear in buff to avoid dead lock in Java, see: http://www.javaworld.com/article/2071275/core-java/when-runtime-exec---won-t.html
+			BufferedReader inReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			String inLine;
+			while ((inLine = inReader.readLine()) != null)
+				System.out.println(inLine);
+
+			BufferedReader errReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			String errLine;
+			while ((errLine = errReader.readLine()) != null)
+				System.out.println(errLine);
 
 			if (exitResult != 0) {
 				throw new ApplicationException("process exited with error: " + exitResult);
