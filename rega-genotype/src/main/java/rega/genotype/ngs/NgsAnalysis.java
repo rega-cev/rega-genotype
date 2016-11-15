@@ -79,6 +79,7 @@ public class NgsAnalysis {
 			e1.printStackTrace();
 			ngsProgress.setErrors("QC failed: " + e1.getMessage());
 			ngsProgress.save(workDir);
+			cleanBigData();
 			return false;
 		}
 
@@ -93,6 +94,7 @@ public class NgsAnalysis {
 			e.printStackTrace();
 			ngsProgress.setErrors("Preprocessing failed: " + e.getMessage());
 			ngsProgress.save(workDir);
+			cleanBigData();
 			return false;
 		}
 
@@ -112,6 +114,7 @@ public class NgsAnalysis {
 			e1.printStackTrace();
 			ngsProgress.setErrors("QC failed: " + e1.getMessage());
 			ngsProgress.save(workDir);
+			cleanBigData();
 			return false;
 		}
 
@@ -123,10 +126,31 @@ public class NgsAnalysis {
 			e.printStackTrace();
 			ngsProgress.setErrors("primary search failed: " + e.getMessage());
 			ngsProgress.save(workDir);
+			cleanBigData();
 			return false;
 		}
 
-		return assembleAll();
+		boolean ans = assembleAll();
+
+		cleanBigData();
+		return ans;
+	}
+
+	/**
+	 * Delete large ngs files from work dir.
+	 */
+	private void cleanBigData() {
+		File preprocessedDir = NgsFileSystem.preprocessedDir(workDir);
+		File fastqDir = NgsFileSystem.fastqDir(workDir);
+		try {
+			if (fastqDir.exists())
+				FileUtils.deleteDirectory(fastqDir);
+			if (preprocessedDir.exists())
+				FileUtils.deleteDirectory(preprocessedDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+			// leave it
+		}
 	}
 
 	public boolean assembleAll() {

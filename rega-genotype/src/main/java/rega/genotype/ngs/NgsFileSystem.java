@@ -155,6 +155,10 @@ public class NgsFileSystem {
 		return null;
 	}
 
+	public static File preprocessedDir(File workDir) {
+		return new File(workDir, PREPROCESSED_DIR);
+	}
+
 	public static File preprocessedPE1Dir(File workDir) {
 		File ans = new File(workDir, PREPROCESSED_PE1_DIR);
 		if (!ans.exists())
