@@ -25,7 +25,6 @@ import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.ngs.NgsAnalysis;
 import rega.genotype.ngs.NgsFileSystem;
-import rega.genotype.ngs.NgsProgress;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;

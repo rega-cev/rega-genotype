@@ -226,6 +226,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	public void updateView() {
+		if (isNgsJob())
+			updateNgsView();
 		fillResultsWidget();
 		updateInfo();
 		if (jobDone()) {
@@ -454,6 +456,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return csvTableDownload;
 	}
 
+	protected boolean isNgsJob() {
+		return NgsProgress.read(jobDir) != null;
+	}
+
 	public void stop() {
 		parserRunnable.stop();
 		parser.stopParsing();
@@ -482,7 +488,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			// prepare NGS data
 			NgsProgress ngsProgress = NgsProgress.read(jobDir);
 			if (ngsProgress != null) {
-				if (ngsProgress.getState() == State.FinishedAll) {
+				if (ngsProgress.getState() == State.FinishedAll || stop) {
 					UpdateLock updateLock = app.getUpdateLock();
 					updateNgsView();
 					app.triggerUpdate();
