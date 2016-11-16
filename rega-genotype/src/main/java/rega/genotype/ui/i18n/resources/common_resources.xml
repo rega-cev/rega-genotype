@@ -461,7 +461,7 @@
 		<h4>Add NGS analysis option to your tool</h4>
 		<div>NGS Analysis will look for a few place holders if they can be filled the analysis is enabled. (This can change in the near future)</div>
 		<div>The placeholders are:</div>
-		<div>Need to be place in &lt;message id="start-form"&gt;: $${startForm.ngs-widget} </div>
+		<div>Need to be place in &lt;message id="start-form"&gt;: $${start-form.ngs-widget} </div>
 		<div>Need to be place in &lt;message id="job-overview-form"&gt;: $${ngs-results}</div>
 		<div>You can copy all that from resurces.xml of pan-viral 3.1 tool (from public repository).</div>
 		<div>NGS Analysis has many depandances: most are configured in Global config, but some need to be updated from time to time (like diamond blast database) for this ones we created the <b>NGS module</b>. Make sure to import/ install this module in to your Tools Table.</div>
