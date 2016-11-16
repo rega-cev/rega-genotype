@@ -3,6 +3,8 @@ package rega.genotype.ngs;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+
 import rega.genotype.ApplicationException;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
