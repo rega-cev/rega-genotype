@@ -1,11 +1,16 @@
 package rega.genotype.ui.admin.file_editor;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 import rega.genotype.singletons.Settings;
 import rega.genotype.singletons.ToolEditingSynchronizer;
+import rega.genotype.ui.admin.AdminApplication;
 import rega.genotype.ui.admin.config.ManifestForm;
 import rega.genotype.ui.util.GenotypeLib;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WTabWidget;
 
@@ -57,6 +62,29 @@ public class FileEditor extends WTabWidget {
 					setTabEnabled(1, arg == 1);
 				}
 			});
+
+		AdminApplication.getAppInstance().applicationDestroied().addListener(this, new Signal.Listener() {
+			public void trigger() {
+				cleanTmpDir();
+			}
+		});
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+
+		cleanTmpDir();
+	}
+
+	private void cleanTmpDir() {
+		if (workDir.exists())
+			try {
+				FileUtils.deleteDirectory(workDir);
+			} catch (IOException e) {
+				e.printStackTrace();
+				// leave it.
+			}
 	}
 
 	public SimpleFileEditorView getSimpleFileEditor() {
