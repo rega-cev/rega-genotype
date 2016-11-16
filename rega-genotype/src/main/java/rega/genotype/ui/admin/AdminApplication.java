@@ -23,6 +23,7 @@ import eu.webtoolkit.jwt.WXmlLocalizedStrings;
  */
 public class AdminApplication extends WApplication{
 	public static final String ADMIN_BASE_PATH = "admin";
+	private Signal applicationDestroied = new Signal();
 	
 	public AdminApplication(WEnvironment env) {
 		super(env);
@@ -81,5 +82,15 @@ public class AdminApplication extends WApplication{
 
 	public static AdminApplication getAppInstance() {
 		return (AdminApplication) WApplication.getInstance();
+	}
+
+	@Override
+	public void destroy() {
+		super.destroy();
+		applicationDestroied.trigger();
+	}
+
+	public Signal applicationDestroied() {
+		return applicationDestroied;
 	}
 }
