@@ -70,23 +70,24 @@ public class StartForm extends AbstractForm {
 	
 	private WText errorJobId, errorText;
 	private String msgUploadFile = "Successfully uploaded file! Click Start to process the file.";
+	private Template template;
 	
 	public StartForm(GenotypeWindow main) {
 		super(main);
 
-		Template t = new Template(tr("start-form"), this);
-		t.setInternalPathEncoding(true);
+		template = new Template(tr("start-form"), this);
+		template.setInternalPathEncoding(true);
 		
-		t.bindInt("maxAllowedSeqs", Settings.getInstance().getMaxAllowedSeqs());
-		t.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
-		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
+		template.bindInt("maxAllowedSeqs", Settings.getInstance().getMaxAllowedSeqs());
+		template.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
+		template.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		
 		errorText = new WText();
 		errorText.setStyleClass("error-text");
-		t.bindWidget("error-text", errorText);
+		template.bindWidget("error-text", errorText);
 		
 		sequenceTA = new WTextArea();
-		t.bindWidget("fasta-field", sequenceTA);
+		template.bindWidget("fasta-field", sequenceTA);
 		sequenceTA.setObjectName("seq-input-fasta");
 		sequenceTA.setRows(15);
 		sequenceTA.setColumns(83);
@@ -96,11 +97,11 @@ public class StartForm extends AbstractForm {
 		Utils.removeSpellCheck(sequenceTA);
 
 		WInteractWidget run = createButton("sequenceInput.run","sequenceInput.run.icon");
-		t.bindWidget("analyze-button", run);
+		template.bindWidget("analyze-button", run);
 		run.setObjectName("button-run");
 	
 		WInteractWidget clear = createButton("sequenceInput.clear","sequenceInput.clear.icon");
-		t.bindWidget("clear-button", clear);
+		template.bindWidget("clear-button", clear);
 		clear.setObjectName("button-clear");
 		clear.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
@@ -150,7 +151,7 @@ public class StartForm extends AbstractForm {
 		});
 
 		fileUpload = new FileUpload();
-		t.bindWidget("file-upload-button", fileUpload);
+		template.bindWidget("file-upload-button", fileUpload);
 		
 		fileUpload.uploadedFile().addListener(this, new Signal1.Listener<File>() {
             public void trigger(File f) {                
@@ -170,9 +171,9 @@ public class StartForm extends AbstractForm {
         });
 
 		jobIdTF = new WLineEdit();
-		t.bindWidget("job-id-field", jobIdTF);
+		template.bindWidget("job-id-field", jobIdTF);
 		WInteractWidget monitorButton = createButton("startForm.monitor","startForm.monitor.icon");
-		t.bindWidget("search-button", monitorButton);
+		template.bindWidget("search-button", monitorButton);
 		monitorButton.clicked().addListener(this, new Signal1.Listener<WMouseEvent>() {
 			public void trigger(WMouseEvent a) {
 				getMain().changeInternalPath(JobForm.JOB_URL+"/"+jobIdTF.getText());
@@ -184,13 +185,13 @@ public class StartForm extends AbstractForm {
 		errorJobId.setStyleClass("error");
 		errorJobId.hide();
 		
-		t.bindWidget("error-job", errorJobId);
+		template.bindWidget("error-job", errorJobId);
 
 		// blast.xml place holders
 		AlignmentAnalyses alignmentAnalyses = readBlastXml();
 		if(alignmentAnalyses == null) {
-			t.bindEmpty("count_virus_from_blast.xml");
-			t.bindEmpty("count_typing_tools");
+			template.bindEmpty("count_virus_from_blast.xml");
+			template.bindEmpty("count_typing_tools");
 		} else {
 			List<Cluster> allClusters = alignmentAnalyses.getAllClusters();
 			Set<String> tools = new HashSet<String>();
@@ -199,13 +200,13 @@ public class StartForm extends AbstractForm {
 					tools.add(c.getTaxonomyId());
 			}
 
-			t.bindString("count_virus_from_blast.xml", allClusters.size() + "");
-			t.bindString("count_typing_tools", tools.size() + "");
+			template.bindString("count_virus_from_blast.xml", allClusters.size() + "");
+			template.bindString("count_typing_tools", tools.size() + "");
 		}
 
 		// NGS
 
-		initNgs(t);
+		initNgs(template);
 	}
 
 	private String setFastqExtention(String fileName) {
@@ -456,7 +457,7 @@ public class StartForm extends AbstractForm {
 
 	@Override
 	public void handleInternalPath(String internalPath) {
-		
+		initNgs(template);
 	}
 
 	private void setFastaTextArea(String fileUploadFasta){
