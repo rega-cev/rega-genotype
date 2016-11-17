@@ -86,9 +86,13 @@
 	
 	<message id="detailsForm.summary.title"><h2><i>Summary</i></h2></message>
 	<message id="detailsForm.summary.assignment">Rega Assignment</message>
-	<message id="detailsForm.summary.numberSeqs">sequences #</message>
-	<message id="detailsForm.summary.percentage">Percentage</message>
+	<message id="detailsForm.summary.numberSeqs">Sequences Count</message>
+	<message id="detailsForm.summary.percentage">Chart Slice %</message>
 	<message id="detailsForm.summary.legend">Legend</message>
+	<message id="detailsForm.summary.cov-len">Coverage %</message>
+	<message id="detailsForm.summary.cov-map">Coverage map</message>
+	<message id="detailsForm.summary.avg-cov">Avg. Coverage %</message>
+	
 	<message id="detailsForm.summary.total"><i>Total</i></message>
 	
 	<message id="detailsForm.summary.filter.title"><h2>Phylogenetic statistics</h2></message>

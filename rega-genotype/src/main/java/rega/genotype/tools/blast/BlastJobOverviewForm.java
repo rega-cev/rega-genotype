@@ -14,30 +14,34 @@ import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.StandardDialog;
+import rega.genotype.ui.framework.widgets.StandardTableView;
+import rega.genotype.ui.ngs.CoverageWidget;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.PositionScheme;
 import eu.webtoolkit.jwt.Side;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.ViewItemRenderFlag;
 import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
+import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
-import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
-import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
-import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
 
@@ -56,7 +60,13 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	private static final int CHART_DISPLAY_COLUMN = 2;
 	private static final int PERCENTAGE_COLUMN =    3;
 	private static final int COLOR_COLUMN =         4;
+	// NGS
+	private static final int COV_LENGTH_COLUMN =    5;
+	private static final int COV_MAP_COLUMN =       6;
 
+	// model roles
+	private static final int COLOR_ROLE =     ItemDataRole.UserRole + 1;
+	private static final int TOOL_DATA_ROLE = ItemDataRole.UserRole + 2;
 
 	//private Template layout = new Template(tr("job-overview-form"), this);
 	private WStandardItemModel blastResultModel = new WStandardItemModel();
@@ -65,18 +75,23 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	private String jobId;
 	private WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
 	private WPieChart chart;
-	private WTableView table = new WTableView();
+	private StandardTableView table = new StandardTableView();
 
 	private BlastResultParser blastResultParser;
 
 	private WContainerWidget resultsContainer  = new WContainerWidget();
 
+	public enum JobType {Clasical, Ngs}
+
 	public BlastJobOverviewForm(GenotypeWindow main) {
 		super(main);
 
+		createTable(JobType.Clasical);
+	}
+
+	private void createTable(final JobType jobType) {
 		// table
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		table.setWidth(new WLength(500));
 		table.setStyleClass("blastResultsTable");
 		table.setHeaderHeight(new WLength(20));
 		table.hideColumn(CHART_DISPLAY_COLUMN);
@@ -89,16 +104,56 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			@Override
 			public WWidget update(WWidget widget, WModelIndex index, EnumSet<ViewItemRenderFlag> flags) {
 				WContainerWidget w = new WContainerWidget();
-				w.setStyleClass("legend-item");
+				WContainerWidget legend = new WContainerWidget(w);
+	
+				legend.setStyleClass("legend-item");
 				WColor c = (WColor)index.getData(ItemDataRole.UserRole + 1);
 				if (c != null)
-					w.getDecorationStyle().setBackgroundColor(c);
+					legend.getDecorationStyle().setBackgroundColor(c);
 
-				w.setMargin(WLength.Auto, Side.Left, Side.Right);
-
+				legend.setHeight(new WLength(20));
+				legend.setMargin(WLength.Auto, Side.All);
+				if (jobType == JobType.Ngs)
+					legend.setMargin(new WLength(30), Side.Top);
 				return w;
 			}
 		});
+
+		if (isNgsJob()) {
+			table.setRowHeight(new WLength(80));
+			table.setColumnWidth(COV_LENGTH_COLUMN, new WLength(80));			
+			table.setColumnWidth(COV_MAP_COLUMN, new WLength(220));
+			table.setItemDelegateForColumn(COV_MAP_COLUMN, new WAbstractItemDelegate() {
+				@Override
+				public WWidget update(WWidget widget, final WModelIndex index, EnumSet<ViewItemRenderFlag> flags) {
+					WContainerWidget w = new WContainerWidget();
+					w.setStyleClass("legend-item");
+
+					if(index.getRow() < index.getModel().getRowCount() - 1) { // ignore totals
+
+						// TODO temp stub remove before pushing to master !!!!!!!!!!!!!!!!!!
+						WImage covImage = new WImage(new WFileResource("image", 
+								"/home/michael/projects/rega-genotype-my-docs/ngs visualization/cov_img.png"),
+								"TEST Image");
+
+						covImage.resize(220, 80);
+						w.addWidget(covImage);
+
+						covImage.clicked().addListener(covImage, new Signal.Listener() {
+							public void trigger() {
+								ClusterData toolData = (ClusterData) index.getData(TOOL_DATA_ROLE);
+								StandardDialog d = new StandardDialog("Coverage Map");
+								d.getContents().addWidget(new CoverageWidget(getJobdir(), toolData.sequenceNames));
+							}
+						});
+					}
+
+					w.setMargin(WLength.Auto, Side.Left, Side.Right);
+
+					return w;
+				}
+			});
+		}
 	}
 
 	private void createChart() {
@@ -106,6 +161,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			chart.remove();
 		chartContainer.clear();
 
+		chartContainer.addWidget(new WText(
+				"<div><b>Sequence Coverage Chart</b></div>" +
+				"<div>Shows what virus has best coverage.</div>"));
 		chart = new WPieChart() {
 			@Override
 			protected void drawLabel(WPainter painter, WRectF rect,
@@ -124,11 +182,10 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		chartContainer.setPositionScheme(PositionScheme.Relative);
 
 		chartContainer.resize(800, 300);
-		chartContainer.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
+		chartContainer.setMargin(new WLength(10), EnumSet.of(Side.Top));
 		chartContainer.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 
 		chart.resize(800, 300);
-		chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
 		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 		chart.setStartAngle(90);
 
@@ -188,19 +245,25 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		return total;
 	}
-	private WStandardItemModel createBlastModel() {
+	private WStandardItemModel createBlastModel(JobType jobType) {
 		WStandardItemModel blastModel = new WStandardItemModel();
 
 		Map<String, ClusterData> clusterDataMap = blastResultParser.clusterDataMap;
 
 		// create blastResultModel
 		blastModel = new WStandardItemModel();
-		blastModel.insertColumns(blastModel.getColumnCount(), 5);
+		blastModel.insertColumns(blastModel.getColumnCount(), 7);
 
 		blastModel.setHeaderData(ASSINGMENT_COLUMN, tr("detailsForm.summary.assignment"));
 		blastModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.numberSeqs"));
 		blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.percentage"));
 		blastModel.setHeaderData(COLOR_COLUMN, tr("detailsForm.summary.legend"));
+
+		if (jobType == JobType.Ngs) {
+			blastModel.setHeaderData(COV_LENGTH_COLUMN, tr("detailsForm.summary.cov-len"));
+			blastModel.setHeaderData(COV_MAP_COLUMN, tr("detailsForm.summary.cov-map"));
+			//blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.avg-cov"));
+		}
 
 		// find total 
 		double total = totalSequences();
@@ -222,11 +285,16 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 					toolData.concludedName + " (" + toolData.sequenceNames.size() + ")");
 
 			WColor color = chart.getPalette().getBrush(i).getColor();
-			blastModel.setData(row, COLOR_COLUMN, color, 
-					ItemDataRole.UserRole + 1);
+			blastModel.setData(row, COLOR_COLUMN, color, COLOR_ROLE);
+
+			blastModel.setData(row, COV_MAP_COLUMN, toolData, TOOL_DATA_ROLE);
 
 			blastModel.setData(row, PERCENTAGE_COLUMN, 
 					(double)toolData.sequenceNames.size() / total * 100.0);
+
+			if (jobType == JobType.Ngs) {
+				//blastModel.setData(row, COV_LENGTH_COLUMN, );
+			}
 
 			i++;
 		}
@@ -234,18 +302,20 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 	@Override
 	public void fillResultsWidget() {
+		JobType jobType = isNgsJob() ? JobType.Ngs : JobType.Clasical;
 		createChart();
+		createTable(jobType);
 
 		if (blastResultParser == null || blastResultParser.clusterDataMap.isEmpty())
 			return;
 
-		blastResultModel = createBlastModel();
+		blastResultModel = createBlastModel(jobType);
 
 		chart.setModel(blastResultModel);
 
 		// copy model to table model
 
-		WStandardItemModel tableModel = createBlastModel();
+		WStandardItemModel tableModel = createBlastModel(jobType);
 
 		// Add totals only to table model.
 		int row = tableModel.getRowCount();
@@ -255,10 +325,13 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		tableModel.setData(row, PERCENTAGE_COLUMN, 100.0);
 
 		table.setModel(tableModel);
+		table.setTableWidth(tableModel.getColumnCount() - 1);
 
 		chartContainer.show();
 		table.show();
 		resultsContainer.addWidget(chartContainer);
+		resultsContainer.setWidth(table.getWidth());
+		resultsContainer.setMargin(WLength.Auto, Side.Left, Side.Right);
 		resultsContainer.addWidget(table);
 		bindResults(resultsContainer);
 	}

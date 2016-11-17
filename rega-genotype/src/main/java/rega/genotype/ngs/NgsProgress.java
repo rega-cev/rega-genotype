@@ -36,6 +36,19 @@ public class NgsProgress {
 		}
 	}
 
+	/**
+	 * NGS file for a final assembled sequence
+	 */
+	public static class SequenceMetadata {
+		public SequenceMetadata(String sequenceName, File contigsFile, File consensusFile) {
+			this.sequenceName = sequenceName;
+			this.contigsFile = contigsFile;
+			this.consensusFile = consensusFile;
+		}
+		public String sequenceName;
+		public File contigsFile;
+		public File consensusFile;
+	}
 	// Analysis variables.
 	private State state = State.Init;
 	private String errors = new String();
@@ -44,6 +57,7 @@ public class NgsProgress {
 	private String fastqPE2FileName;// File with reverse reads.
 	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
 	private Map<String, Integer> diamondBlastResults = new TreeMap<String, Integer>();// count sequences per taxon.
+	private Map<String, SequenceMetadata> sequenceMetadata = new TreeMap<String, NgsProgress.SequenceMetadata>();
 
 	public NgsProgress() {}
 
@@ -130,5 +144,9 @@ public class NgsProgress {
 
 	public void setDiamondBlastResults(Map<String, Integer> diamondBlastResults) {
 		this.diamondBlastResults = diamondBlastResults;
+	}
+
+	public Map<String, SequenceMetadata> getSequenceMetadata() {
+		return sequenceMetadata;
 	}
 }

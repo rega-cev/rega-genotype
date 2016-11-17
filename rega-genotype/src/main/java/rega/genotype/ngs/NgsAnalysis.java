@@ -1,13 +1,18 @@
 package rega.genotype.ngs;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
+import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
+import rega.genotype.SequenceAlignment;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
+import rega.genotype.ngs.NgsProgress.SequenceMetadata;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.utils.FileUtil;
 
@@ -195,9 +200,30 @@ public class NgsAnalysis {
 						return false;
 					}
 
-				File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, workDir, d.getName());
-				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, workDir, d.getName());
+				String virusName = d.getName();
+				File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, workDir, virusName);
+				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, workDir, virusName);
 
+				// add virus taxonomy id to every consensus sequence name, save sequence metadata.
+
+				SequenceAlignment sequenceAlignment = new SequenceAlignment(
+						new FileInputStream(consensus), 
+						SequenceAlignment.FILETYPE_FASTA, 
+						SequenceAlignment.SEQUENCE_DNA);
+
+				String taxonomyId = virusName.split("_")[0];
+				for (AbstractSequence s: sequenceAlignment.getSequences()) {
+					s.setName(taxonomyId + "__" + s.getName());
+					ngsProgress.getSequenceMetadata().put(s.getName(),
+							new SequenceMetadata(s.getName(), assembledFile, consensus));
+				}
+
+				ngsProgress.save(workDir);
+
+				consensus.delete();
+				sequenceAlignment.writeOutput(new FileOutputStream(consensus),
+						SequenceAlignment.FILETYPE_FASTA);
+				
 				FileUtil.appendToFile(consensus, sequences);
 
 			} catch (Exception e) {
