@@ -28,6 +28,7 @@ import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
+import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 
 /**
  * HIV implementation of the genotype application.
@@ -39,6 +40,14 @@ import eu.webtoolkit.jwt.WXmlLocalizedStrings;
 @SuppressWarnings("serial")
 public class HivMain extends GenotypeMain {
 	public static final String HIV_TOOL_ID = "hiv"; // TODO: Temporary till hiv becomes generic tool.
+
+	public HivMain() {
+		getConfiguration().setInternalDeploymentSize(1);
+		getConfiguration().setMaximumRequestSize(Integer.MAX_VALUE-1);
+
+		getConfiguration().setProgressiveBootstrap(true);
+		getConfiguration().setErrorReporting(ErrorReporting.NoErrors);
+	}
 
 	@Override
 	public WApplication createApplication(WEnvironment env) {
