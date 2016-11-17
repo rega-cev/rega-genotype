@@ -43,6 +43,8 @@ public class NgsProgress {
 	private String fastqPE1FileName;// File with forward reads.
 	private String fastqPE2FileName;// File with reverse reads.
 	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
+	private Boolean skipPreprocessing = false;
+
 	private Map<String, Integer> diamondBlastResults = new TreeMap<String, Integer>();// count sequences per taxon.
 
 	public NgsProgress() {}
@@ -130,5 +132,13 @@ public class NgsProgress {
 
 	public void setDiamondBlastResults(Map<String, Integer> diamondBlastResults) {
 		this.diamondBlastResults = diamondBlastResults;
+	}
+
+	public Boolean getSkipPreprocessing() {
+		return skipPreprocessing;
+	}
+
+	public void setSkipPreprocessing(Boolean skipPreprocessing) {
+		this.skipPreprocessing = skipPreprocessing;
 	}
 }

@@ -182,6 +182,9 @@ public class NgsFileSystem {
 	}
 
 	public static File preprocessedPE1(File workDir) {
+		if (NgsProgress.read(workDir).getSkipPreprocessing())
+			return fastqPE1(workDir);
+
 		File preprocessedPE1Dir = preprocessedPE1Dir(workDir);
 		if (preprocessedPE1Dir.listFiles().length != 1)
 			return null;
@@ -190,6 +193,9 @@ public class NgsFileSystem {
 	}
 
 	public static File preprocessedPE2(File workDir) {
+		if (NgsProgress.read(workDir).getSkipPreprocessing())
+			return fastqPE2(workDir);
+
 		File preprocessedPE2Dir = preprocessedPE2Dir(workDir);
 		if (preprocessedPE2Dir.listFiles().length != 1)
 			return null;

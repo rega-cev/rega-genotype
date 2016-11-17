@@ -2,6 +2,7 @@ package rega.genotype.ngs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -9,6 +10,8 @@ import rega.genotype.ApplicationException;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ngs.QC.QcResults;
+import rega.genotype.ngs.QC.QcResults.Result;
 import rega.genotype.utils.FileUtil;
 
 /**
@@ -73,10 +76,17 @@ public class NgsAnalysis {
 		ngsProgress.setState(State.QC);
 		ngsProgress.save(workDir);
 
+		boolean needPreprocessing = false; // for now we base it only on adapter content.
 		File fastqDir = NgsFileSystem.fastqDir(workDir);
 		try {
 			QC.qcReport(fastqDir.listFiles(),
 					new File(workDir, NgsFileSystem.QC_REPORT_DIR));
+
+			List<QcResults> qcresults = QC.getResults(new File(workDir, NgsFileSystem.QC_REPORT_DIR));
+			for (QcResults qcr: qcresults) {
+				if (qcr.adapterContent == Result.Fail)
+					needPreprocessing = true;
+			}
 		} catch (ApplicationException e1) {
 			e1.printStackTrace();
 			ngsProgress.setErrors("QC failed: " + e1.getMessage());
@@ -85,39 +95,41 @@ public class NgsAnalysis {
 			return false;
 		}
 
+		ngsProgress.setSkipPreprocessing(!needPreprocessing);
 		ngsProgress.setState(State.Preprocessing);
 		ngsProgress.save(workDir);
 
 		// pre-process
+		if (needPreprocessing) {
+			try {
+				preprocess();
+			} catch (ApplicationException e) {
+				e.printStackTrace();
+				ngsProgress.setErrors("Preprocessing failed: " + e.getMessage());
+				ngsProgress.save(workDir);
+				cleanBigData();
+				return false;
+			}
 
-		try {
-			preprocess();
-		} catch (ApplicationException e) {
-			e.printStackTrace();
-			ngsProgress.setErrors("Preprocessing failed: " + e.getMessage());
+			File preprocessed1 = NgsFileSystem.preprocessedPE1(workDir);
+			File preprocessed2 = NgsFileSystem.preprocessedPE2(workDir);
+
+			ngsProgress = NgsProgress.read(workDir);
+			ngsProgress.setState(State.QC2);
 			ngsProgress.save(workDir);
-			cleanBigData();
-			return false;
-		}
 
-		File preprocessed1 = NgsFileSystem.preprocessedPE1(workDir);
-		File preprocessed2 = NgsFileSystem.preprocessedPE2(workDir);
+			// QC 2
 
-		ngsProgress = NgsProgress.read(workDir);
-		ngsProgress.setState(State.QC2);
-		ngsProgress.save(workDir);
-
-		// QC 2
-
-		try {
-			QC.qcReport(new File[] {preprocessed1, preprocessed2}, 
-					new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR));
-		} catch (ApplicationException e1) {
-			e1.printStackTrace();
-			ngsProgress.setErrors("QC failed: " + e1.getMessage());
-			ngsProgress.save(workDir);
-			cleanBigData();
-			return false;
+			try {
+				QC.qcReport(new File[] {preprocessed1, preprocessed2}, 
+						new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR));
+			} catch (ApplicationException e1) {
+				e1.printStackTrace();
+				ngsProgress.setErrors("QC failed: " + e1.getMessage());
+				ngsProgress.save(workDir);
+				cleanBigData();
+				return false;
+			}
 		}
 
 		// diamond blast
