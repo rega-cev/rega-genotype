@@ -137,6 +137,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 								"TEST Image");
 
 						covImage.resize(220, 80);
+						w.addStyleClass("hover");
 						w.addWidget(covImage);
 
 						covImage.clicked().addListener(covImage, new Signal.Listener() {

@@ -578,3 +578,8 @@ table.reftable caption, .blastResultsTable table caption {
 	width: 44px;
 	margin-left: 50%;
 }
+
+.hover img:hover, .hover div:hover{
+  cursor: pointer;
+  cursor: hand;
+}
