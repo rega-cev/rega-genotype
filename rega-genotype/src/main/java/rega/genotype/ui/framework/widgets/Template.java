@@ -41,9 +41,11 @@ public class Template extends WTemplate{
 	public void resolveString(String varName, List<WString> args, Writer result)
 			throws IOException {
 		GenotypeApplication app = GenotypeApplication.getGenotypeApplication();
-		if (app != null && varName.equals("resource-file"))
+		if (app != null && varName.equals("resource-file")) {
+			// this creates XSSFilter - Error because file name is not valid xml. This is innocent.
+			System.err.println("INFO: next XSSFilter - Error is innocent.");
 			bindString(varName, FileServlet.getFileUrl(app.getToolConfig().getPath()));
-		else if(app != null && varName.equals("taxonomy-widget"))
+		} else if(app != null && varName.equals("taxonomy-widget"))
 			bindWidget(varName, new TaxonomyWidget(app.getToolConfig()));
 
 		super.resolveString(varName, args, result);
