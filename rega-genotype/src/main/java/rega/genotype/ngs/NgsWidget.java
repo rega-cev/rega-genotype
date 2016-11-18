@@ -13,9 +13,11 @@ import rega.genotype.ui.ngs.DiamondResultsView;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
@@ -46,7 +48,7 @@ public class NgsWidget extends WContainerWidget{
 
 		if (ngsProgress.getState().code >= State.Diamond.code) {
 			if (ngsProgress.getSkipPreprocessing())
-				new WText("<div> input sequence are OK -> skip  preprocessing.</div>", this);
+				new WText("<div>Input sequences are OK -> skip  preprocessing.</div>", this);
 			else {
 				new WText("<div> QC after preprocessing</div>", this);
 				File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
@@ -64,7 +66,9 @@ public class NgsWidget extends WContainerWidget{
 			diamondBlastB.clicked().addListener(diamondBlastB, new Signal.Listener() {
 				public void trigger() {
 					WDialog d = new StandardDialog("Diamond Balst results");
+					d.getDecorationStyle().setBackgroundColor(new WColor("#f5f5f5"));
 					d.getContents().addWidget(new DiamondResultsView(workDir));
+					d.setMaximumSize(WLength.Auto, new WLength("90%"));
 				}
 			});
 		}

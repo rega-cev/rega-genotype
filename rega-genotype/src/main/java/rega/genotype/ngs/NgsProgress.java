@@ -40,15 +40,19 @@ public class NgsProgress {
 	 * NGS file for a final assembled sequence
 	 */
 	public static class SequenceMetadata {
-		public SequenceMetadata(String sequenceName, File contigsFile, File consensusFile) {
+		public SequenceMetadata(String sequenceName, File contigsFile,
+				File consensusFile, File refseqFile) {
 			this.sequenceName = sequenceName;
 			this.contigsFile = contigsFile;
 			this.consensusFile = consensusFile;
+			this.refseqFile = refseqFile;
 		}
 		public String sequenceName;
 		public File contigsFile;
 		public File consensusFile;
+		public File refseqFile;
 	}
+
 	// Analysis variables.
 	private State state = State.Init;
 	private String errors = new String();

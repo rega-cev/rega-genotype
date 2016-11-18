@@ -223,11 +223,12 @@ public class NgsAnalysis {
 						SequenceAlignment.FILETYPE_FASTA, 
 						SequenceAlignment.SEQUENCE_DNA);
 
+				File refseqFile = NgsFileSystem.consensusRefFile(workDir, virusName);
 				String taxonomyId = virusName.split("_")[0];
 				for (AbstractSequence s: sequenceAlignment.getSequences()) {
 					s.setName(taxonomyId + "__" + s.getName());
 					ngsProgress.getSequenceMetadata().put(s.getName(),
-							new SequenceMetadata(s.getName(), assembledFile, consensus));
+							new SequenceMetadata(s.getName(), assembledFile, consensus, refseqFile));
 				}
 
 				ngsProgress.save(workDir);

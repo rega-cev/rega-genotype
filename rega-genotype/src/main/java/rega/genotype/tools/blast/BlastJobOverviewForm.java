@@ -9,6 +9,7 @@ import java.util.Map;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ngs.NgsProgress;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
@@ -288,13 +289,14 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			WColor color = chart.getPalette().getBrush(i).getColor();
 			blastModel.setData(row, COLOR_COLUMN, color, COLOR_ROLE);
 
-			blastModel.setData(row, COV_MAP_COLUMN, toolData, TOOL_DATA_ROLE);
-
 			blastModel.setData(row, PERCENTAGE_COLUMN, 
 					(double)toolData.sequenceNames.size() / total * 100.0);
 
 			if (jobType == JobType.Ngs) {
-				//blastModel.setData(row, COV_LENGTH_COLUMN, );
+				blastModel.setData(row, COV_MAP_COLUMN, toolData, TOOL_DATA_ROLE);
+
+				NgsProgress ngsProgress = NgsProgress.read(getJobdir());
+				blastModel.setData(row, COV_LENGTH_COLUMN, "TODO!");// TODO use refseq to calculate 
 			}
 
 			i++;
