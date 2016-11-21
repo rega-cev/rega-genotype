@@ -84,7 +84,7 @@ public class SequenceToolMakeConsensus {
 		String cmd = sequencetoolPath + " make-consensus"
 				+ " --input " + assembledContigs.getAbsolutePath()
 				+ " --output " + out.getAbsolutePath()
-				+ " --max-gap 10 --max-missing 100 --min-count 0.25 ";
+				+ " --max-gap 10 --max-missing 50 --min-count 0.25 ";
 
 		NgsFileSystem.executeCmd(cmd, workDir);
 
