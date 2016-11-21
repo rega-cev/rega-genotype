@@ -20,7 +20,7 @@ public class NgsProgress {
 	public static final String NGS_PROGRESS_FILL = "ngs_progress";
 
 	public enum State {
-		Init(0, "uploading"),
+		Init(0, "Init"),
 		QC(1, "runing QC"),
 		Preprocessing(2, "runing preprocessing"),
 		QC2(3, "runing QC of preprocessed."),
@@ -45,6 +45,7 @@ public class NgsProgress {
 	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
 	private Boolean skipPreprocessing = false;
 
+	private Map<State, Long> stateStartTimeInMiliseconds = new TreeMap<NgsProgress.State, Long>();
 	private Map<String, Integer> diamondBlastResults = new TreeMap<String, Integer>();// count sequences per taxon.
 
 	public NgsProgress() {}
@@ -84,6 +85,11 @@ public class NgsProgress {
 
 	public void setState(State state) {
 		this.state = state;
+		stateStartTimeInMiliseconds.put(state, System.currentTimeMillis());
+	}
+
+	public Long getStateStartTime(State state) {
+		return stateStartTimeInMiliseconds.get(state);
 	}
 
 	public String getErrors() {
