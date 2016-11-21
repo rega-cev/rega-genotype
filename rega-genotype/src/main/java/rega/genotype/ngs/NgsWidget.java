@@ -8,6 +8,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.ngs.DiamondResultsView;
 import eu.webtoolkit.jwt.AnchorTarget;
@@ -20,6 +21,8 @@ import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WString;
+import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -32,7 +35,7 @@ public class NgsWidget extends WContainerWidget{
 	public NgsWidget(final File workDir) {
 		super();
 
-		NgsProgress ngsProgress = NgsProgress.read(workDir);
+		final NgsProgress ngsProgress = NgsProgress.read(workDir);
 		if (ngsProgress == null)
 			return;
 
@@ -76,6 +79,82 @@ public class NgsWidget extends WContainerWidget{
 		if (ngsProgress.getState().code == State.Spades.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
 			new WText("<div> Sapdes job state:" + jobState + "</div>", this);
+		}
+
+
+		Long startTime = ngsProgress.getStateStartTime(State.Init);
+		Long endTime = System.currentTimeMillis();
+		if(ngsProgress.getState() == State.FinishedAll)
+			endTime = ngsProgress.getStateStartTime(State.FinishedAll);
+		if (startTime != null && endTime != null) {
+			WText timeT = new WText("<div> Time: " + formatTime(endTime - startTime) + " ms </div>", this);
+
+			timeT.clicked().addListener(timeT, new Signal.Listener() {
+				public void trigger() {
+					StandardDialog d = new StandardDialog("Time");
+					d.getOkB().hide();
+					WTable timeTable = new WTable(d.getContents());
+					timeTable.setMargin(WLength.Auto);
+					final ObjectListComboBox<NgsProgress.State> startStateTimeCB = new ObjectListComboBox<NgsProgress.State>(
+							Arrays.asList(NgsProgress.State.values())) {
+						@Override
+						protected WString render(State t) {
+							return new WString(t.text);
+						}
+					};
+
+					final ObjectListComboBox<NgsProgress.State> endStateTimeCB = new ObjectListComboBox<NgsProgress.State>(
+							Arrays.asList(NgsProgress.State.values())) {
+						@Override
+						protected WString render(State t) {
+							return new WString(t.text);
+						}
+					};
+
+					final WText timeText = new WText();
+					timeTable.getElementAt(0, 0).addWidget(startStateTimeCB);
+					timeTable.getElementAt(0, 1).addWidget(endStateTimeCB);
+					timeTable.getElementAt(0, 2).addWidget(timeText);
+					startStateTimeCB.setCurrentObject(NgsProgress.State.Init);
+					endStateTimeCB.setCurrentObject(NgsProgress.State.FinishedAll);
+
+					printTime(ngsProgress, startStateTimeCB, endStateTimeCB, timeText);
+
+					startStateTimeCB.changed().addListener(startStateTimeCB, new Signal.Listener() {
+						public void trigger() {
+							printTime(ngsProgress, startStateTimeCB, endStateTimeCB, timeText);
+						}
+					});
+
+					endStateTimeCB.changed().addListener(endStateTimeCB, new Signal.Listener() {
+						public void trigger() {
+							printTime(ngsProgress, startStateTimeCB, endStateTimeCB, timeText);
+						}
+					});
+				}
+			});
+		}
+	}
+
+	private String formatTime(long milliseconds) {
+		int seconds = (int) (milliseconds / 1000) % 60 ;
+		int minutes = (int) ((milliseconds / (1000*60)) % 60);
+		int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
+
+		return hours + ":" + minutes + ":" + seconds;
+	}
+	
+	private void printTime(
+			final NgsProgress ngsProgress,
+			final ObjectListComboBox<NgsProgress.State> startStateTimeCB,
+			final ObjectListComboBox<NgsProgress.State> endStateTimeCB,
+			final WText timeText) {
+		Long startTime = ngsProgress.getStateStartTime(startStateTimeCB.getCurrentObject());
+		Long endTime = ngsProgress.getStateStartTime(endStateTimeCB.getCurrentObject());
+		if (startTime != null && endTime != null) {
+			timeText.setText((endTime - startTime) + " ms");
+		} else {
+			timeText.setText("unknown");
 		}
 	}
 

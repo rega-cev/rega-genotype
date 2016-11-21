@@ -33,6 +33,7 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.ui.viruses.generic.GenericDefinition;
 import rega.genotype.util.CsvDataTable;
 import rega.genotype.util.DataTable;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.viruses.generic.GenericTool;
 
 /**
@@ -75,6 +76,7 @@ public abstract class GenotypeTool {
     	String workingDir;
     	String ngsPairedEndFile1 = null;
     	String ngsPairedEndFile2 = null;
+    	String ngsPairedEndFilesList = null;
     	Boolean assembleOnly = false; 
     }
     
@@ -86,6 +88,7 @@ public abstract class GenotypeTool {
         CmdLineParser.Option pe1Option = parser.addStringOption("paired-end-1");
         CmdLineParser.Option pe2Option = parser.addStringOption("paired-end-2");
         CmdLineParser.Option assembleOnlyOption = parser.addStringOption("assemble-only");
+        CmdLineParser.Option ngsFilesOption = parser.addStringOption("paired-end-files-list");
 
         try {
         	parser.parse(args);
@@ -123,6 +126,10 @@ public abstract class GenotypeTool {
         if (pe2 != null)
         	result.ngsPairedEndFile2 = pe2;
 
+        String ngsFiles = (String) parser.getOptionValue(ngsFilesOption);
+        if (ngsFiles != null)
+        	result.ngsPairedEndFilesList = ngsFiles;
+
         String assembleOnly = (String) parser.getOptionValue(assembleOnlyOption);
         if (assembleOnly != null && assembleOnly.equals("true"))
         	result.assembleOnly = true;
@@ -146,9 +153,16 @@ public abstract class GenotypeTool {
 		System.err.println("\t-h,--help       print this text.");
 		System.err.println("\t-c,--config     specify path to config file");
         System.err.println("\t-w,--workingDir specify path to the working directory (default .)");
+        System.err.println("\t NGS Options:");
         System.err.println("\t--paired-end-1  Analysis input NGS fastq paired-end 1 file absolute path, Only for NGS (in that case paired-end-2 must not be empty) .)");
         System.err.println("\t--paired-end-2  Analysis input NGS fastq paired-end 2 file absolute path, Only for NGS (in that case paired-end-1 must not be empty) .)");
         System.err.println("\t--assemble-only NGS: Do only the assembly step. All the previuse steps must be done in workingDir. This is useful only to test the assembly step.");
+        System.err.println("\t--paired-end-files-list File with many pair-end secunce files names. namescan be used to run many ngs analysis 1 after the other. " +
+        		"\tFormat: " +
+        		"\tDIR_NAME={this analysis dir relative to workingDir (will be auto created)}" +
+        		"\tPE1={paired-end-1 absolute path}" +
+        		"\tPE2={paired-end-2 absolute path}" +
+        		"..");
 	}
 
     public void analyze(String sequenceFile, String traceFile) throws IOException {
@@ -383,6 +397,37 @@ public abstract class GenotypeTool {
     public void setParent(GenotypeTool parent) {
         this.parent = parent;
     }
+
+    private static void analyzeNgs(ArgsParseResult parseArgsResult, String traceFile, GenotypeTool genotypeTool) throws IOException {
+		if (!parseArgsResult.assembleOnly &&
+				(parseArgsResult.ngsPairedEndFile1 == null
+				|| parseArgsResult.ngsPairedEndFile2 == null)){
+			printUsage();
+			return;
+		}
+
+		File workDir = new File(parseArgsResult.workingDir);
+		if (!parseArgsResult.assembleOnly &&
+				!NgsFileSystem.addFastqFiles(workDir, 
+				new File(parseArgsResult.ngsPairedEndFile1), 
+				new File(parseArgsResult.ngsPairedEndFile2))){
+			System.err.println();
+			System.err.println("Check that ngs paired end files are ok!");
+			System.err.println();
+			printUsage();
+    		return;
+		}
+
+		NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
+		if (parseArgsResult.assembleOnly)
+			ngsAnalysis.assembleAll();
+		else
+			ngsAnalysis.analyze();
+
+		genotypeTool.analyze(
+				parseArgsResult.workingDir + File.separator + NgsFileSystem.SEQUENCES_FILE, 
+				traceFile);
+    }
     
 	public static void main(String[] args)
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
@@ -401,9 +446,9 @@ public abstract class GenotypeTool {
     	
     	ToolConfig toolConfig = Settings.getInstance().getConfig().getToolConfigByUrlPath(url);
     	if (toolConfig == null) {
-			System.err.println("Tool with url path " + url
-					+ " could not be found.");
-			return;
+    		System.err.println("Tool with url path " + url
+    				+ " could not be found.");
+    		return;
     	}
 
     	String sequenceFile = toolConfig.getConfiguration() + parseArgsResult.remainingArgs[3];
@@ -413,35 +458,80 @@ public abstract class GenotypeTool {
 
     	if (parseArgsResult.remainingArgs.length == 5) {
     		if (parseArgsResult.remainingArgs[3].equals("NGS")) {
-    			// GenotypeTool [...] className [-paired-end-1][-paired-end-2] result.xml
-    			if (!parseArgsResult.assembleOnly &&
-    					(parseArgsResult.ngsPairedEndFile1 == null
-    					|| parseArgsResult.ngsPairedEndFile2 == null)){
-    				printUsage();
-    				return;
+    			if (parseArgsResult.ngsPairedEndFilesList != null) {
+    				// GenotypeTool [...] className [-paired-end-files-list] result.xml
+    				File workDir = new File(parseArgsResult.workingDir);
+    				File ngsPairedEndFilesList = new File(parseArgsResult.ngsPairedEndFilesList);
+    				if (!ngsPairedEndFilesList.exists()) {
+    					System.err.println();
+    					System.err.println("-paired-end-files-list file not found");
+    					System.err.println();
+    					printUsage();
+    					return;
+    				}
+
+    				int rowNum = 0;
+    				for (String[] row: FileUtil.readCSV(ngsPairedEndFilesList)){
+    					rowNum++;
+    					if (rowNum == 1)
+    						continue; // header.
+    					if (row.length != 3) {
+    						System.err.println();
+    						System.err.println("-paired-end-files-list file format error");
+    						System.err.println();
+    						printUsage();
+    						return;
+    					}
+    					File currentWorkDir = new File(workDir, row[0]);
+    					File pe1 = new File(row[1]);
+    					File pe2 = new File(row[2]);
+
+    					if (!NgsFileSystem.addFastqFiles(currentWorkDir, pe1, pe2)) {
+    						System.err.println();
+    						System.err.println("-paired-end-files-list pe file not found ");
+    						System.err.println();
+    						printUsage();
+    						return;
+    					}
+    					NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir);
+    					ngsAnalysis.analyze();
+
+    					genotypeTool.analyze(
+    							currentWorkDir.getAbsolutePath() + File.separator + NgsFileSystem.SEQUENCES_FILE, 
+    							traceFile);
+    				}
+    			} else {
+    				// GenotypeTool [...] className [-paired-end-1][-paired-end-2] result.xml
+    				if (!parseArgsResult.assembleOnly &&
+    						(parseArgsResult.ngsPairedEndFile1 == null
+    						|| parseArgsResult.ngsPairedEndFile2 == null)){
+    					printUsage();
+    					return;
+    				}
+
+    				File workDir = new File(parseArgsResult.workingDir);
+    				if (!parseArgsResult.assembleOnly &&
+    						!NgsFileSystem.addFastqFiles(workDir, 
+    								new File(parseArgsResult.ngsPairedEndFile1), 
+    								new File(parseArgsResult.ngsPairedEndFile2))){
+    					System.err.println();
+    					System.err.println("Check that ngs paired end files are ok!");
+    					System.err.println();
+    					printUsage();
+    					return;
+    				}
+
+    				NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
+    				if (parseArgsResult.assembleOnly)
+    					ngsAnalysis.assembleAll();
+    				else
+    					ngsAnalysis.analyze();
+
+    				genotypeTool.analyze(
+    						parseArgsResult.workingDir + File.separator + NgsFileSystem.SEQUENCES_FILE, 
+    						traceFile);
     			}
 
-    			File workDir = new File(parseArgsResult.workingDir);
-    			if (!parseArgsResult.assembleOnly &&
-    					!NgsFileSystem.addFastqFiles(workDir, 
-    					new File(parseArgsResult.ngsPairedEndFile1), 
-    					new File(parseArgsResult.ngsPairedEndFile2))){
-    				System.err.println();
-    				System.err.println("Check that ngs paired end files are ok!");
-    				System.err.println();
-    				printUsage();
-    	    		return;
-    			}
-
-    			NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
-    			if (parseArgsResult.assembleOnly)
-    				ngsAnalysis.assembleAll();
-    			else
-    				ngsAnalysis.analyze();
-
-    			genotypeTool.analyze(
-    					parseArgsResult.workingDir + File.separator + NgsFileSystem.SEQUENCES_FILE, 
-    					traceFile);
     		} else {
     			// GenotypeTool [...] className sequences.fasta result.xml
     			genotypeTool.analyze(sequenceFile, traceFile);
@@ -452,40 +542,40 @@ public abstract class GenotypeTool {
     		int windowSize = Integer.parseInt(parseArgsResult.remainingArgs[6]);
     		int stepSize = Integer.parseInt(parseArgsResult.remainingArgs[7]);
     		String analysisId = null;
-   			if (parseArgsResult.remainingArgs.length == 9)
-   				analysisId = parseArgsResult.remainingArgs[8];
-   	        genotypeTool.startTracer(traceFile);
-   	        try {
-   	    		genotypeTool.analyzeSelf(traceFile, analysisFile, windowSize, stepSize, analysisId);
-   			} catch (AnalysisException e) {
-   				e.printStackTrace();
-   				System.err.println(e.getMessage());
-   			}
-   	        genotypeTool.stopTracer();
+    		if (parseArgsResult.remainingArgs.length == 9)
+    			analysisId = parseArgsResult.remainingArgs[8];
+    		genotypeTool.startTracer(traceFile);
+    		try {
+    			genotypeTool.analyzeSelf(traceFile, analysisFile, windowSize, stepSize, analysisId);
+    		} catch (AnalysisException e) {
+    			e.printStackTrace();
+    			System.err.println(e.getMessage());
+    		}
+    		genotypeTool.stopTracer();
     	} else
     		printUsage();
-    	
+
     	if(csv.equalsIgnoreCase("csv") && (parseArgsResult.remainingArgs.length == 5 ||
-    		parseArgsResult.remainingArgs.length == 8 ||
-    		parseArgsResult.remainingArgs.length == 9)) {
-    		
+    			parseArgsResult.remainingArgs.length == 8 ||
+    			parseArgsResult.remainingArgs.length == 9)) {
+
     		if (!(genotypeTool instanceof GenericTool)) {
     			System.err.println("Not implemented: internal analysis is implemented only for generic tool.");
     			printUsage();
     			return;
     		}
-    			
-    		
+
+
     		DataTable t = new CsvDataTable(System.out, ',', '"');
-    		
+
     		GenericDefinition genericDefinition;
-			try {
-				genericDefinition = new GenericDefinition(toolConfig);
-			} catch (JDOMException e1) {
-				e1.printStackTrace();
-				return;
-			}
-    		
+    		try {
+    			genericDefinition = new GenericDefinition(toolConfig);
+    		} catch (JDOMException e1) {
+    			e1.printStackTrace();
+    			return;
+    		}
+
     		SequenceFilter sequenceFilter = new SequenceFilter() {
     			public boolean excludeSequence(GenotypeResultParser parser) {
     				return false;
@@ -493,14 +583,14 @@ public abstract class GenotypeTool {
     		};
     		AbstractDataTableGenerator acsvgen = genericDefinition.getDataTableGenerator(sequenceFilter , t);
     		try {
-				acsvgen.parse(new InputSource(new FileReader(traceFile)));
-			} catch (SAXException e) {
-				System.err.println(e.getMessage());
-			}
+    			acsvgen.parse(new InputSource(new FileReader(traceFile)));
+    		} catch (SAXException e) {
+    			System.err.println(e.getMessage());
+    		}
     	}
-    }
+	}
 
-	
+
 	public String getXmlPathAsString() {
 		return toolConfig.getConfiguration();
 	}

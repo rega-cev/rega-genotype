@@ -62,6 +62,8 @@ public class NgsFileSystem {
 		ngsProgress.setFastqPE2FileName(fastqPE2.getName());
 
 		// SE TODO
+
+		ngsProgress.setState(State.Init);
 		ngsProgress.save(workDir);
 
 		try {

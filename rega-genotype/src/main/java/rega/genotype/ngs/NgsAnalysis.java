@@ -161,11 +161,14 @@ public class NgsAnalysis {
 	private void cleanBigData() {
 		File preprocessedDir = NgsFileSystem.preprocessedDir(workDir);
 		File fastqDir = NgsFileSystem.fastqDir(workDir);
+		File diamondDBDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
 		try {
 			if (fastqDir.exists())
 				FileUtils.deleteDirectory(fastqDir);
 			if (preprocessedDir.exists())
 				FileUtils.deleteDirectory(preprocessedDir);
+			if (diamondDBDir.exists())
+				FileUtils.deleteDirectory(diamondDBDir);
 		} catch (IOException e) {
 			e.printStackTrace();
 			// leave it
