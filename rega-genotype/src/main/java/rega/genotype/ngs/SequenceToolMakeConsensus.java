@@ -66,7 +66,7 @@ public class SequenceToolMakeConsensus {
 		+ " --reference " + refrence.getAbsolutePath()
 		+ " --target " + assembledContigs.getAbsolutePath()
 		+ " --output " + alingment.getAbsolutePath()
-		+ " --cutoff 70 ";
+		+ " --cutoff 70 --min-single-seq-cov 4";
 
 		NgsFileSystem.executeCmd(cmd, workDir);
 
