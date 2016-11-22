@@ -452,6 +452,8 @@ public abstract class GenotypeTool {
     						return;
     					}
     					File currentWorkDir = new File(workDir, row[0]);
+    			    	traceFile = currentWorkDir.getAbsolutePath() + File.separator + parseArgsResult.remainingArgs[4];
+
     					File pe1 = new File(row[1]);
     					File pe2 = new File(row[2]);
 
