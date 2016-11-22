@@ -398,37 +398,6 @@ public abstract class GenotypeTool {
         this.parent = parent;
     }
 
-    private static void analyzeNgs(ArgsParseResult parseArgsResult, String traceFile, GenotypeTool genotypeTool) throws IOException {
-		if (!parseArgsResult.assembleOnly &&
-				(parseArgsResult.ngsPairedEndFile1 == null
-				|| parseArgsResult.ngsPairedEndFile2 == null)){
-			printUsage();
-			return;
-		}
-
-		File workDir = new File(parseArgsResult.workingDir);
-		if (!parseArgsResult.assembleOnly &&
-				!NgsFileSystem.addFastqFiles(workDir, 
-				new File(parseArgsResult.ngsPairedEndFile1), 
-				new File(parseArgsResult.ngsPairedEndFile2))){
-			System.err.println();
-			System.err.println("Check that ngs paired end files are ok!");
-			System.err.println();
-			printUsage();
-    		return;
-		}
-
-		NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
-		if (parseArgsResult.assembleOnly)
-			ngsAnalysis.assembleAll();
-		else
-			ngsAnalysis.analyze();
-
-		genotypeTool.analyze(
-				parseArgsResult.workingDir + File.separator + NgsFileSystem.SEQUENCES_FILE, 
-				traceFile);
-    }
-    
 	public static void main(String[] args)
     	throws IOException, ParameterProblemException, FileFormatException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, InvocationTargetException, NoSuchMethodException {
 		
