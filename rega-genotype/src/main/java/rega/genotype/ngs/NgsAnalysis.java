@@ -3,6 +3,7 @@ package rega.genotype.ngs;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 
@@ -13,6 +14,7 @@ import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.ngs.QC.QcResults;
 import rega.genotype.ngs.QC.QcResults.Result;
 import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.LogUtils;
 
 /**
  * Contract long virus contigs from ngs output. 
@@ -24,8 +26,11 @@ import rega.genotype.utils.FileUtil;
 public class NgsAnalysis {
 	private File workDir;
 
+	private Logger ngsLogger = null;
+
 	public NgsAnalysis(File workDir){
 		this.workDir = workDir;
+		ngsLogger = LogUtils.createLogger(new File(workDir, "ngs-log"), "ngsLogger");
 	}
 
 	/**
@@ -193,11 +198,16 @@ public class NgsAnalysis {
 				continue; // no need to assemble if there is not enough reads.
 
 			try {
+				long startAssembly = System.currentTimeMillis();
+
 				File assembledFile = assemble(
 						sequenceFile1, sequenceFile2, d.getName());
 				if (assembledFile == null)
 					continue;
 
+				long endAssembly =  System.currentTimeMillis();
+				ngsLogger.info("assembled " + d.getName() + " = " + (startAssembly - endAssembly) + " ms");
+				
 				// fill sequences.xml'
 				File sequences = new File(workDir, NgsFileSystem.SEQUENCES_FILE);
 				if (!sequences.exists())
@@ -212,6 +222,8 @@ public class NgsAnalysis {
 
 				File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, workDir, d.getName());
 				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, workDir, d.getName());
+
+				ngsLogger.info("consensus " + d.getName() + " = " + (endAssembly - System.currentTimeMillis()) + " ms");
 
 				FileUtil.appendToFile(consensus, sequences);
 

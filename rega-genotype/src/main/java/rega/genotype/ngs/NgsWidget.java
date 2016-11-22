@@ -136,7 +136,7 @@ public class NgsWidget extends WContainerWidget{
 	private String formatTime(long milliseconds) {
 		int seconds = (int) (milliseconds / 1000) % 60 ;
 		int minutes = (int) ((milliseconds / (1000*60)) % 60);
-		int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
+		int hours   = (int) ((milliseconds / (1000*60*60)));
 
 		return hours + ":" + minutes + ":" + seconds;
 	}
