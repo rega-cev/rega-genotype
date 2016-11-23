@@ -183,8 +183,11 @@ public class NgsAnalysis {
 		// spades
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
 
-		File fastqPE1 = NgsFileSystem.fastqPE1(workDir);
-		File fastqPE2 = NgsFileSystem.fastqPE2(workDir);
+//		File fastqPE1 = NgsFileSystem.fastqPE1(workDir);
+//		File fastqPE2 = NgsFileSystem.fastqPE2(workDir);
+
+		File fastqPE1 = NgsFileSystem.preprocessedPE1(workDir);
+		File fastqPE2 = NgsFileSystem.preprocessedPE2(workDir);
 
 		File dimondResultDir = new File(workDir, NgsFileSystem.DIAMOND_RESULT_DIR);
 		for (File d: dimondResultDir.listFiles()){
