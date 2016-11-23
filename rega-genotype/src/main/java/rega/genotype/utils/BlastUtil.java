@@ -1,5 +1,6 @@
 package rega.genotype.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,20 +29,8 @@ public class BlastUtil {
 	public static void formatDB(File db, File workDir) throws ApplicationException {
 		String blastPath = Settings.getInstance().getBlastPathStr();
 		String cmd = blastPath + "formatdb -p F -o T -i " + db.getAbsolutePath();
-		Process formatdb = null;
-		try {
-			formatdb = StreamReaderRuntime.exec(cmd, null, workDir);
-			int exitResult = formatdb.waitFor();
 
-			if (exitResult != 0)
-				throw new ApplicationException("formatdb exited with error: " + exitResult);
-		} catch (IOException e) {
-			throw new ApplicationException("formatdb failed error: " + e.getMessage(), e);
-		} catch (InterruptedException e) {
-			if (formatdb != null)
-                formatdb.destroy();
-			throw new ApplicationException("formatdb failed error: " + e.getMessage(), e);
-		}
+		Utils.executeCmd(cmd, workDir, "blast exited with error");
 	}
 
 	/**
