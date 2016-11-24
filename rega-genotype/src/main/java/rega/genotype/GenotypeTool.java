@@ -460,27 +460,34 @@ public abstract class GenotypeTool {
     					}
     				}
 
-    				for (Map.Entry<String, PeFiles> e: peFilesMap.entrySet()) {
-    					PeFiles peFiles = e.getValue();
-    					if (peFiles.pe1 != null && peFiles.pe2 != null) {
-        					File currentWorkDir = new File(workDir, e.getKey());
-        					traceFile = currentWorkDir.getAbsolutePath() + File.separator + parseArgsResult.remainingArgs[4];
+					for (Map.Entry<String, PeFiles> e : peFilesMap.entrySet()) {
+						PeFiles peFiles = e.getValue();
+						if (peFiles.pe1 != null && peFiles.pe2 != null) {
+							File currentWorkDir = new File(workDir, e.getKey());
+							traceFile = currentWorkDir.getAbsolutePath()
+									+ File.separator
+									+ parseArgsResult.remainingArgs[4];
 
-        					if (!NgsFileSystem.addFastqFiles(currentWorkDir, peFiles.pe1, peFiles.pe2)) {
-        						System.err.println();
-        						System.err.println("-paired-end-files-list pe file not found ");
-        						System.err.println();
-        						printUsage();
-        						return;
-        					}
-        					NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir);
-        					ngsAnalysis.analyze();
+							genotypeTool = (GenotypeTool) analyzerClass
+									.getConstructor(String.class, File.class)
+									.newInstance(url, currentWorkDir);
 
-        					genotypeTool.analyze(
-        							currentWorkDir.getAbsolutePath() + File.separator + NgsFileSystem.SEQUENCES_FILE, 
-        							traceFile);
-    					}
-    				}
+							if (!NgsFileSystem.addFastqFiles(currentWorkDir,
+									peFiles.pe1, peFiles.pe2)) {
+								System.err.println();
+								System.err.println("-paired-end-files-list pe file not found ");
+								System.err.println();
+								printUsage();
+								return;
+							}
+							NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir);
+							ngsAnalysis.analyze();
+
+							genotypeTool.analyze(currentWorkDir.getAbsolutePath()
+											+ File.separator
+											+ NgsFileSystem.SEQUENCES_FILE, traceFile);
+						}
+					}
     			} else {
     				// GenotypeTool [...] className [-paired-end-1][-paired-end-2] result.xml
     				if (!parseArgsResult.assembleOnly &&
