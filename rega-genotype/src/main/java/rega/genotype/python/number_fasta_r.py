@@ -43,7 +43,7 @@ for record in SeqIO.parse(handle, "fasta") :
         if m.group(1) in taxids:
             taxon = taxons[taxids[m.group(1)]]
             rank = taxon[Rank_col]
-            while rank not in ['Genus', 'Subfamily', 'Family', 'Order', 'Superkingdom']:
+            while rank not in ['Genus']:
                 taxon = taxons[int(taxon[Parent_col])]
                 rank = taxon[Rank_col]
             if rank != 'Superkingdom':
