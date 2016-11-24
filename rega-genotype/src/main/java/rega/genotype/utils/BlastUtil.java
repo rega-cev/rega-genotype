@@ -58,12 +58,15 @@ public class BlastUtil {
 
 			BufferedReader inReader = new BufferedReader(new InputStreamReader(blast.getInputStream()));
 			String inLine = inReader.readLine();
-			if (inLine == null)
-				throw new ApplicationException("blast results are empty.");
-			String[] values = inLine.split("\t");
+			String[] values = null;
+			if (inLine != null){
+				values = inLine.split("\t");
 
-			while ((inLine = inReader.readLine()) != null) // clear in buff so java dont dead lock
-				System.out.println(inLine);
+				while ((inLine = inReader.readLine()) != null) // clear in buff so java dont dead lock
+					System.out.println(inLine);
+			} else {
+				System.err.println("WARNING: computeBestRefSeq: ref seq not found for " + sequence.getName());
+			}
 
 			final BufferedReader errReader = new BufferedReader(new InputStreamReader(blast.getErrorStream()));
 			String errLine;
@@ -78,6 +81,9 @@ public class BlastUtil {
 
 			if (exitResult != 0)
 				throw new ApplicationException("blast exited with error: " + exitResult);
+
+			if (values == null)
+				return;
 
 			if (values.length != 12)
 				throw new ApplicationException("blast result format error");
