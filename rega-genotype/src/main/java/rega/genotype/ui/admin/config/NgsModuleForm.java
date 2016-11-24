@@ -157,12 +157,17 @@ public class NgsModuleForm extends FormTemplate {
 					return;
 				}
 
-				NgsModule ngsModule = new NgsModule();
-				ngsModule.setAaFileName(aaUpload.getWFileUpload().getClientFileName());
-				ngsModule.setNcbiVirusesFileName(ncbiVirusesUpload.getWFileUpload().getClientFileName());
-				ngsModule.setTaxonomyFileName(taxonomyUpload.getWFileUpload().getClientFileName());
+				NgsModule ngsModule = NgsModule.read(workDir);
+				if (ngsModule == null)
+					ngsModule = new NgsModule();
+				if (!aaUpload.getWFileUpload().isEmpty())
+					ngsModule.setAaFileName(aaUpload.getWFileUpload().getClientFileName());
+				if (!ncbiVirusesUpload.getWFileUpload().isEmpty())
+					ngsModule.setNcbiVirusesFileName(ncbiVirusesUpload.getWFileUpload().getClientFileName());
+				if (!taxonomyUpload.getWFileUpload().isEmpty())
+					ngsModule.setTaxonomyFileName(taxonomyUpload.getWFileUpload().getClientFileName());
 				ngsModule.save(workDir);
-				
+
 				infoT.setText("Dimond database created.");
 				dirtyHandler.increaseDirty();
 			}
