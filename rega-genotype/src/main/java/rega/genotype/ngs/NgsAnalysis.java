@@ -158,7 +158,7 @@ public class NgsAnalysis {
 	/**
 	 * Delete large ngs files from work dir.
 	 */
-	private void cleanBigData() {
+	public void cleanBigData() {
 		File preprocessedDir = NgsFileSystem.preprocessedDir(workDir);
 		File fastqDir = NgsFileSystem.fastqDir(workDir);
 		File diamondDBDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
@@ -183,58 +183,9 @@ public class NgsAnalysis {
 		// spades
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
 
-//		File fastqPE1 = NgsFileSystem.fastqPE1(workDir);
-//		File fastqPE2 = NgsFileSystem.fastqPE2(workDir);
-
-		File fastqPE1 = NgsFileSystem.preprocessedPE1(workDir);
-		File fastqPE2 = NgsFileSystem.preprocessedPE2(workDir);
-
 		File dimondResultDir = new File(workDir, NgsFileSystem.DIAMOND_RESULT_DIR);
 		for (File d: dimondResultDir.listFiles()){
-			if (!d.isDirectory())
-				continue;
-
-			File sequenceFile1 = new File(d, fastqPE1.getName());
-			File sequenceFile2 = new File(d, fastqPE2.getName());
-
-			if (sequenceFile1.length() < 1000*1000)
-				continue; // no need to assemble if there is not enough reads.
-
-			try {
-				long startAssembly = System.currentTimeMillis();
-
-				File assembledFile = assemble(
-						sequenceFile1, sequenceFile2, d.getName());
-				if (assembledFile == null)
-					continue;
-
-				long endAssembly =  System.currentTimeMillis();
-				ngsLogger.info("assembled " + d.getName() + " = " + (startAssembly - endAssembly) + " ms");
-				
-				// fill sequences.xml'
-				File sequences = new File(workDir, NgsFileSystem.SEQUENCES_FILE);
-				if (!sequences.exists())
-					try {
-						sequences.createNewFile();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-						ngsProgress.setErrors("assemble failed, could not create sequences.xml");
-						ngsProgress.save(workDir);
-						return false;
-					}
-
-				File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, workDir, d.getName());
-				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, workDir, d.getName());
-
-				ngsLogger.info("consensus " + d.getName() + " = " + (endAssembly - System.currentTimeMillis()) + " ms");
-
-				FileUtil.appendToFile(consensus, sequences);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				ngsProgress.getSpadesErrors().add("assemble failed." + e.getMessage());
-				ngsProgress.save(workDir);
-			}
+			assembleVirus(d);
 		}
 
 		jobLock.release();
@@ -246,6 +197,61 @@ public class NgsAnalysis {
 			ngsProgress.setState(State.FinishedAll);
 
 		ngsProgress.save(workDir);
+
+		return true;
+	}
+
+	public boolean assembleVirus(File virusDir) {
+		if (!virusDir.isDirectory())
+			return false;
+
+		NgsProgress ngsProgress = NgsProgress.read(workDir);
+
+		String fastqPE1FileName = NgsFileSystem.fastqPE1(workDir).getName();
+		String fastqPE2FileName = NgsFileSystem.fastqPE2(workDir).getName();
+
+		File sequenceFile1 = new File(virusDir, fastqPE1FileName);
+		File sequenceFile2 = new File(virusDir, fastqPE2FileName);
+
+		if (sequenceFile1.length() < 1000*1000)
+			return false; // no need to assemble if there is not enough reads.
+
+		try {
+			long startAssembly = System.currentTimeMillis();
+
+			File assembledFile = assemble(
+					sequenceFile1, sequenceFile2, virusDir.getName());
+			if (assembledFile == null)
+				return false;
+
+			long endAssembly =  System.currentTimeMillis();
+			ngsLogger.info("assembled " + virusDir.getName() + " = " + (endAssembly - startAssembly) + " ms");
+
+			// fill sequences.xml'
+			File sequences = new File(workDir, NgsFileSystem.SEQUENCES_FILE);
+			if (!sequences.exists())
+				try {
+					sequences.createNewFile();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					ngsProgress.setErrors("assemble failed, could not create sequences.xml");
+					ngsProgress.save(workDir);
+					return false;
+				}
+
+			File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, workDir, virusDir.getName());
+			File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, workDir, virusDir.getName());
+
+			ngsLogger.info("consensus " + virusDir.getName() + " = " + (System.currentTimeMillis() - endAssembly) + " ms");
+
+			FileUtil.appendToFile(consensus, sequences);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			ngsProgress.getSpadesErrors().add("assemble failed." + e.getMessage());
+			ngsProgress.save(workDir);
+			return false;
+		}
 
 		return true;
 	}
