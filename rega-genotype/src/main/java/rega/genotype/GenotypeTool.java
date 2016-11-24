@@ -422,14 +422,17 @@ public abstract class GenotypeTool {
 
     	String sequenceFile = toolConfig.getConfiguration() + parseArgsResult.remainingArgs[3];
     	String traceFile = parseArgsResult.workingDir + File.separator + parseArgsResult.remainingArgs[4];
+    	File workDir = new File(parseArgsResult.workingDir);
+    	if (!workDir.exists())
+    		workDir.mkdirs();
     	GenotypeTool genotypeTool = (GenotypeTool) analyzerClass.getConstructor(String.class, File.class).
-    			newInstance(url, new File(parseArgsResult.workingDir));
+    			newInstance(url, workDir);
+    	
 
     	if (parseArgsResult.remainingArgs.length == 5) {
     		if (parseArgsResult.remainingArgs[3].equals("NGS")) {
     			if (parseArgsResult.ngsPairedEndFilesList != null) {
     				// GenotypeTool [...] className [-paired-end-files-list] result.xml
-    				File workDir = new File(parseArgsResult.workingDir);
     				File ngsPairedEndFilesList = new File(parseArgsResult.ngsPairedEndFilesList);
     				if (!ngsPairedEndFilesList.exists()) {
     					System.err.println();
@@ -480,7 +483,6 @@ public abstract class GenotypeTool {
     					return;
     				}
 
-    				File workDir = new File(parseArgsResult.workingDir);
     				if (!parseArgsResult.assembleOnly &&
     						!NgsFileSystem.addFastqFiles(workDir, 
     								new File(parseArgsResult.ngsPairedEndFile1), 

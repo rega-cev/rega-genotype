@@ -51,6 +51,7 @@ public class NgsFileSystem {
     		return false;
 
 		File fastqDir = new File(workDir, FASTQ_FILES_DIR);
+		fastqDir.mkdirs();
 
 		NgsProgress ngsProgress = new NgsProgress();
 
