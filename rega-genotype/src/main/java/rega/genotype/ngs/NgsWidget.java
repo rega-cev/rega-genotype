@@ -40,7 +40,7 @@ public class NgsWidget extends WContainerWidget{
 
 		new WText("<b>NGS state is " + ngsProgress.getState().text + "</b>", this);
 		if (!ngsProgress.getErrors().isEmpty() )
-			new WText("<div>Error: " + ngsProgress.getErrors() + "</div>", this);
+			new WText("<div class=\"error\">Error: " + ngsProgress.getErrors() + "</div>", this);
 
 		if (ngsProgress.getState().code >= State.Preprocessing.code) {
 			new WText("<div> QC before preprocessing</div>", this);
@@ -84,7 +84,7 @@ public class NgsWidget extends WContainerWidget{
 		if(ngsProgress.getState() == State.FinishedAll)
 			endTime = ngsProgress.getStateStartTime(State.FinishedAll);
 		if (startTime != null && endTime != null) {
-			WText timeT = new WText("<div> Time: " + formatTime(endTime - startTime) + " ms </div>", this);
+			WText timeT = new WText("<div> Time: " + formatTime(endTime - startTime) + " </div>", this);
 
 			timeT.clicked().addListener(timeT, new Signal.Listener() {
 				public void trigger() {
