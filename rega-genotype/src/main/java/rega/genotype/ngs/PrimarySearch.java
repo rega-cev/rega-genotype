@@ -92,7 +92,8 @@ public class PrimarySearch{
 				throw new ApplicationException("Internal error: diamond blast db was not found. Ask your server admin to check that NGS Module is properlly configured.");
 			String cmd = gc.getDiamondPath() + " blastx -d "
 					+ diamondDb.getAbsolutePath() + " -q " + query.getAbsolutePath()
-					+ " -a " + matches + " -k 1 --quiet";
+					+ " -a " + matches + " -k 1 --quiet "
+					+ " --min-score 50";
 			System.err.println(cmd);
 			blastx = StreamReaderRuntime.exec(cmd, null, workDir);
 			int exitResult = blastx.waitFor();
