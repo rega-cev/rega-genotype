@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.jdom.JDOMException;
 import org.xml.sax.InputSource;
@@ -33,7 +35,6 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.ui.viruses.generic.GenericDefinition;
 import rega.genotype.util.CsvDataTable;
 import rega.genotype.util.DataTable;
-import rega.genotype.utils.FileUtil;
 import rega.genotype.viruses.generic.GenericTool;
 
 /**
@@ -76,7 +77,7 @@ public abstract class GenotypeTool {
     	String workingDir;
     	String ngsPairedEndFile1 = null;
     	String ngsPairedEndFile2 = null;
-    	String ngsPairedEndFilesList = null;
+    	boolean analyzeAllFastqFilesInWorkDir = false;
     	Boolean assembleOnly = false; 
     }
     
@@ -88,7 +89,8 @@ public abstract class GenotypeTool {
         CmdLineParser.Option pe1Option = parser.addStringOption("paired-end-1");
         CmdLineParser.Option pe2Option = parser.addStringOption("paired-end-2");
         CmdLineParser.Option assembleOnlyOption = parser.addStringOption("assemble-only");
-        CmdLineParser.Option ngsFilesOption = parser.addStringOption("paired-end-files-list");
+        CmdLineParser.Option analyzeAllFastqFilesInWorkDirOption = parser.addStringOption('a', "analyze-all-fastq-files-in-work-dir");
+
 
         try {
         	parser.parse(args);
@@ -126,10 +128,10 @@ public abstract class GenotypeTool {
         if (pe2 != null)
         	result.ngsPairedEndFile2 = pe2;
 
-        String ngsFiles = (String) parser.getOptionValue(ngsFilesOption);
-        if (ngsFiles != null)
-        	result.ngsPairedEndFilesList = ngsFiles;
-
+        String analyzeAllFastqFilesInWorkDir = (String) parser.getOptionValue(analyzeAllFastqFilesInWorkDirOption);
+        if (analyzeAllFastqFilesInWorkDir != null && analyzeAllFastqFilesInWorkDir.equals("true"))
+        	result.analyzeAllFastqFilesInWorkDir = true;
+  
         String assembleOnly = (String) parser.getOptionValue(assembleOnlyOption);
         if (assembleOnly != null && assembleOnly.equals("true"))
         	result.assembleOnly = true;
@@ -157,12 +159,7 @@ public abstract class GenotypeTool {
         System.err.println("\t--paired-end-1  Analysis input NGS fastq paired-end 1 file absolute path, Only for NGS (in that case paired-end-2 must not be empty) .)");
         System.err.println("\t--paired-end-2  Analysis input NGS fastq paired-end 2 file absolute path, Only for NGS (in that case paired-end-1 must not be empty) .)");
         System.err.println("\t--assemble-only NGS: Do only the assembly step. All the previuse steps must be done in workingDir. This is useful only to test the assembly step.");
-        System.err.println("\t--paired-end-files-list File with many pair-end secunce files names. namescan be used to run many ngs analysis 1 after the other. " +
-        		"\tFormat: " +
-        		"\tDIR_NAME={this analysis dir relative to workingDir (will be auto created)}" +
-        		"\tPE1={paired-end-1 absolute path}" +
-        		"\tPE2={paired-end-2 absolute path}" +
-        		"..");
+        System.err.println("\t--analyze-all-fastq-in-work-dir create new analysis per fastq pairs. Find all files that end with _1.fastq and _2.fastq and create analysis for them. ");
 	}
 
     public void analyze(String sequenceFile, String traceFile) throws IOException {
@@ -431,48 +428,58 @@ public abstract class GenotypeTool {
 
     	if (parseArgsResult.remainingArgs.length == 5) {
     		if (parseArgsResult.remainingArgs[3].equals("NGS")) {
-    			if (parseArgsResult.ngsPairedEndFilesList != null) {
-    				// GenotypeTool [...] className [-paired-end-files-list] result.xml
-    				File ngsPairedEndFilesList = new File(parseArgsResult.ngsPairedEndFilesList);
-    				if (!ngsPairedEndFilesList.exists()) {
-    					System.err.println();
-    					System.err.println("-paired-end-files-list file not found");
-    					System.err.println();
+    			if (parseArgsResult.analyzeAllFastqFilesInWorkDir) {
+    				// GenotypeTool [...] className [-analyze-all-fastq-in-work-dir] result.xml
+    				if (workDir.listFiles() == null) {
     					printUsage();
     					return;
     				}
 
-    				int rowNum = 0;
-    				for (String[] row: FileUtil.readCSV(ngsPairedEndFilesList)){
-    					rowNum++;
-    					if (rowNum == 1)
-    						continue; // header.
-    					if (row.length != 3) {
-    						System.err.println();
-    						System.err.println("-paired-end-files-list file format error");
-    						System.err.println();
-    						printUsage();
-    						return;
+    				class PeFiles{
+    					File pe1 = null;
+    					File pe2 = null;
+    				}
+
+    				Map<String, PeFiles> peFilesMap = new HashMap<String, PeFiles>();
+    				for (File f: workDir.listFiles()) {
+    					String fn = f.getName();
+    					String key = null;
+    					if (fn.endsWith("_1.fastq"))
+    						key = fn.substring(0, fn.indexOf("_1.fastq"));
+    					if (fn.endsWith("_2.fastq"))
+    						key = fn.substring(0, fn.indexOf("_2.fastq"));
+    					if (key != null){
+    						PeFiles peFiles = peFilesMap.get(key);
+    						if (peFiles == null)
+    							peFiles = new PeFiles();
+    						if (fn.endsWith("_1.fastq"))
+    							peFiles.pe1 = f;
+    						if (fn.endsWith("_2.fastq"))
+    							peFiles.pe2 = f;
+    						peFilesMap.put(key, peFiles);
     					}
-    					File currentWorkDir = new File(workDir, row[0]);
-    			    	traceFile = currentWorkDir.getAbsolutePath() + File.separator + parseArgsResult.remainingArgs[4];
+    				}
 
-    					File pe1 = new File(row[1]);
-    					File pe2 = new File(row[2]);
+    				for (Map.Entry<String, PeFiles> e: peFilesMap.entrySet()) {
+    					PeFiles peFiles = e.getValue();
+    					if (peFiles.pe1 != null && peFiles.pe2 != null) {
+        					File currentWorkDir = new File(workDir, e.getKey());
+        					traceFile = currentWorkDir.getAbsolutePath() + File.separator + parseArgsResult.remainingArgs[4];
 
-    					if (!NgsFileSystem.addFastqFiles(currentWorkDir, pe1, pe2)) {
-    						System.err.println();
-    						System.err.println("-paired-end-files-list pe file not found ");
-    						System.err.println();
-    						printUsage();
-    						return;
+        					if (!NgsFileSystem.addFastqFiles(currentWorkDir, peFiles.pe1, peFiles.pe2)) {
+        						System.err.println();
+        						System.err.println("-paired-end-files-list pe file not found ");
+        						System.err.println();
+        						printUsage();
+        						return;
+        					}
+        					NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir);
+        					ngsAnalysis.analyze();
+
+        					genotypeTool.analyze(
+        							currentWorkDir.getAbsolutePath() + File.separator + NgsFileSystem.SEQUENCES_FILE, 
+        							traceFile);
     					}
-    					NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir);
-    					ngsAnalysis.analyze();
-
-    					genotypeTool.analyze(
-    							currentWorkDir.getAbsolutePath() + File.separator + NgsFileSystem.SEQUENCES_FILE, 
-    							traceFile);
     				}
     			} else {
     				// GenotypeTool [...] className [-paired-end-1][-paired-end-2] result.xml
@@ -495,10 +502,14 @@ public abstract class GenotypeTool {
     				}
 
     				NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
-    				if (parseArgsResult.assembleOnly)
+    				if (parseArgsResult.assembleOnly) {    				
+    					// TODO : test do not commit !
+    					 //ngsAnalysis.assembleVirus(new File("/home/michael/tmp/fasta-examples/SRP074090__8_sequences/SRR3458562-results-assemble/diamond_result/10912_Rotavirus"));
     					ngsAnalysis.assembleAll();
-    				else
+    				} else
     					ngsAnalysis.analyze();
+
+					ngsAnalysis.cleanBigData();
 
     				genotypeTool.analyze(
     						parseArgsResult.workingDir + File.separator + NgsFileSystem.SEQUENCES_FILE, 
