@@ -184,6 +184,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	
 	protected void updateInfo() {
 		showWidget("analysis-in-progress", !jobDone());
+		if (jobCancelled())
+			template.bindString("analysis-in-progress", 
+					"The job was canceled.");
 		
 		if (jobDone() && jobCancelled())
 			template.bindString("analysis-cancelled", tr("monitorForm.analysisCancelled"));
