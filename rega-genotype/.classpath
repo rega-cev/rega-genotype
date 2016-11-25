@@ -21,7 +21,6 @@
 	<classpathentry kind="lib" path="lib/jwt/deps/pdfjet/pdfjet-4.75.jar"/>
 	<classpathentry kind="lib" path="lib/gson/gson-2.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/urlrewritefilter-4.0.3.jar"/>
-	<classpathentry kind="lib" path="lib/jwt/jwt-3.3.6.jar"/>
 	<classpathentry kind="lib" path="lib/poi-3.14/poi-3.14-20160307.jar"/>
 	<classpathentry kind="lib" path="lib/poi-3.14/poi-ooxml-schemas-3.14-20160307.jar"/>
 	<classpathentry kind="lib" path="lib/poi-3.14/poi-ooxml-3.14-20160307.jar"/>
@@ -33,5 +32,6 @@
 	<classpathentry kind="lib" path="lib/poi-3.14/ooxml-lib/curvesapi-1.03.jar"/>
 	<classpathentry kind="lib" path="lib/poi-3.14/ooxml-lib/xmlbeans-2.6.0.jar"/>
 	<classpathentry kind="lib" path="lib/jython-standalone-2.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/jwt/jwt-3.3.6.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
