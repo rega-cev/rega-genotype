@@ -40,7 +40,6 @@ public class PrimarySearch{
 	 * @throws ApplicationException
 	 */
 	public static void diamondSearch(File workDir) throws ApplicationException {
-		File fastqDir = new File(workDir, NgsFileSystem.FASTQ_FILES_DIR);
 		File preprocessedPE1 = NgsFileSystem.preprocessedPE1(workDir);
 		File preprocessedPE2 = NgsFileSystem.preprocessedPE2(workDir);
 
@@ -74,7 +73,8 @@ public class PrimarySearch{
 			resultDiamondDir.mkdirs();
 		}
 		try {
-			creatDiamondResults(resultDiamondDir, view, fastqDir.listFiles(), ngsProgress);
+			File[] preprocessedFiles = {preprocessedPE1, preprocessedPE2};
+			creatDiamondResults(resultDiamondDir, view,  preprocessedFiles, ngsProgress);
 		} catch (FileFormatException e) {
 			throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
 		} catch (IOException e) {
