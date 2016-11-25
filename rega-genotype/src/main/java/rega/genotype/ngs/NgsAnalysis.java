@@ -159,9 +159,16 @@ public class NgsAnalysis {
 	 * Delete large ngs files from work dir.
 	 */
 	public void cleanBigData() {
+		if (!workDir.exists() || workDir.listFiles() == null)
+			return;
 		File preprocessedDir = NgsFileSystem.preprocessedDir(workDir);
 		File fastqDir = NgsFileSystem.fastqDir(workDir);
 		File diamondDBDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
+		// delete all html files
+		for (File f: workDir.listFiles())
+			if (f.isFile() && f.getName().endsWith(".html"))
+				f.delete();
+
 		try {
 			if (fastqDir.exists())
 				FileUtils.deleteDirectory(fastqDir);
