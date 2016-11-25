@@ -43,15 +43,23 @@
          excludes="rega/genotype/ui/**" />
 
     <jar jarfile="${dist}/${proj.name}-cli-tool-${proj.version}.jar" 
-    	basedir="${build}/main/java">
-      <restrict>
-	<name name="**/*.class"/>
-	<archives>
-	  <zips>
-            <fileset dir="lib/" includes="**/*.jar"/>
-	  </zips>
-	</archives>
-      </restrict>
+    	basedir="${build}/main/java"
+    	excludes="rega/genotype/ui/**" >
+
+    	<restrict> 
+    		<name name="**/*.class"/>
+    		<archives>
+    		  <zips>
+    	            <fileset dir="lib/" includes="gson/*.jar"/>
+    		  	    <fileset dir="lib/" includes="jwt/*.jar"/>
+		  	        <fileset dir="lib/" includes="jwt/deps/*.jar"/>
+    		  	    <fileset dir="lib/" includes="jdom/*.jar"/>
+    		  	    <fileset dir="lib/" includes="jexcelapi/*.jar"/>
+    		  	    <fileset dir="lib/" includes="jargs/*.jar"/>
+    		  	    <fileset dir="lib/" includes="poi-3.14/*.jar"/>
+    		  </zips>
+    		</archives>
+    	</restrict>
       <manifest>
 	<attribute name="Main-Class"
 		   value="rega.genotype.GenotypeTool"/>
