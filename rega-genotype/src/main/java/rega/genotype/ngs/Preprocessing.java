@@ -5,25 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rega.genotype.ApplicationException;
-import rega.genotype.config.NgsModule;
 import rega.genotype.singletons.Settings;
 
 public class Preprocessing{
-	/**
-	 * cutadapt -b ADAPTER -o output.fastq ~/install/fasta-examples/hiv_1.fastq
-	 * @param fastqFile
-	 * @param workDir - the virus job dir
-	 * @param outFile - 
-	 * @throws ApplicationException
-	 */
-	public static void cutAdapters(File fastqFile, File outFile, File workDir) throws ApplicationException {
-		String cmd = Settings.getInstance().getConfig().getGeneralConfig().getCutAdaptCmd();
-		cmd += " -b ADAPTER -o " + outFile.getAbsolutePath() + " " + fastqFile.getAbsolutePath();
-
-		System.err.println(cmd);
-
-		NgsFileSystem.executeCmd(cmd, workDir);
-	}
 
 	/**
 	 * Execute pre-processing from command line. (Any pre-processing software can be used this way)
@@ -40,33 +24,6 @@ public class Preprocessing{
 	 */
 	public static void generalPreprocessing(String cmd, File workDir) throws ApplicationException {
 		NgsFileSystem.executeCmd(cmd, workDir);
-	}
-
-	/**
-	 * cutadapt -a ADAPTER_FWD -A ADAPTER_REV -o out.1.fastq -p out.2.fastq reads.1.fastq reads.2.fastq
-	 * @param workDir - the virus job dir
-	 * @throws ApplicationException
-	 */
-	public static void cutadaptPreprocess(File workDir) throws ApplicationException {
-		File fastqPE1 = NgsFileSystem.fastqPE1(workDir);
-		File fastqPE2 = NgsFileSystem.fastqPE2(workDir);
-		if (fastqPE1 == null || fastqPE2 == null)
-			return;
-
-		File preprocessed1 = NgsFileSystem.createPreprocessedPE1(workDir, fastqPE1.getName());
-		File preprocessed2 = NgsFileSystem.createPreprocessedPE2(workDir, fastqPE2.getName());
-
-		String cmd = Settings.getInstance().getConfig().getGeneralConfig().getCutAdaptCmd();
-		cmd += " -b ADAPTER_FWD -B ADAPTER_REV " 
-				+ " -o " + preprocessed1.getAbsolutePath()
-				+ " -p " + preprocessed2.getAbsolutePath()
-				+ " " + fastqPE2.getAbsolutePath() + " " + fastqPE2.getAbsolutePath();
-
-		NgsFileSystem.executeCmd(cmd, workDir);
-
-		if (NgsFileSystem.preprocessedPE1(workDir) == null
-				|| NgsFileSystem.preprocessedPE2(workDir) == null)
-			throw new ApplicationException("Cutadapt output was not saved.");
 	}
 
 	/**

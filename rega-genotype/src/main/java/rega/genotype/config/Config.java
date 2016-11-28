@@ -309,7 +309,6 @@ public class Config {
 		private String diamondPath = "diamond";
 		private String fastqcCmd = "fastqc";
 		private String spadesCmd = "spades";
-		private String cutAdaptCmd = "cutadapt";
 		private String bioPythonPath = "";
 
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
@@ -415,12 +414,6 @@ public class Config {
 		}
 		public void setSpadesCmd(String spadesCmd) {
 			this.spadesCmd = spadesCmd;
-		}
-		public String getCutAdaptCmd() {
-			return cutAdaptCmd;
-		}
-		public void setCutAdaptCmd(String cutAdaptCmd) {
-			this.cutAdaptCmd = cutAdaptCmd;
 		}
 		public String getEdirectPath() {
 			return edirectPath;
