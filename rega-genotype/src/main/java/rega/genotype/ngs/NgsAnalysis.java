@@ -41,7 +41,8 @@ public class NgsAnalysis {
 	 * @throws ApplicationException
 	 */
 	protected void preprocess() throws ApplicationException {
-		Preprocessing.cutadaptPreprocess(workDir);
+		// Preprocessing.cutadaptPreprocess(workDir);
+		Preprocessing.trimomatic(workDir);
 	}
 
 	/**

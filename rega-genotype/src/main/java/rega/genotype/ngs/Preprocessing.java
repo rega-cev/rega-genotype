@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rega.genotype.ApplicationException;
+import rega.genotype.config.NgsModule;
 import rega.genotype.singletons.Settings;
 
 public class Preprocessing{
@@ -77,11 +78,19 @@ public class Preprocessing{
 	 * @throws ApplicationException
 	 * TODO: delete - not used
 	 */
-	public static List<File> preprocessTrimomatic(File sequenceFile1, File sequenceFile2, File workDir) throws ApplicationException {
-		String trimmomaticPath = "TODO";//TODO
-		
+	public static List<File> trimomatic(File workDir) throws ApplicationException {
+		File sequenceFile1 = NgsFileSystem.fastqPE1(workDir);
+		File sequenceFile2 = NgsFileSystem.fastqPE2(workDir);
+
+		File ngsModulePath = Settings.getInstance().getConfig().trimomaticPath();
+		if (ngsModulePath == null)
+			throw new ApplicationException("NGS module is missing contact server admin.");
+
+		String trimmomaticPath = Settings.getInstance().getConfig().trimomaticPath().getAbsolutePath();
+		String adaptersFilePath = Settings.getInstance().getConfig().adaptersFilePath().getAbsolutePath();
+
 		String trimmomaticCmd = "java -Xmx1000m -jar " + trimmomaticPath + " PE -threads 1 ";
-		String trimmomaticOptions = " ILLUMINACLIP:TruSeq2-SE.fa:2:30:10 LEADING:10 TRAILING:10 SLIDINGWINDOW:4:20 MINLEN:50";
+		String trimmomaticOptions = " ILLUMINACLIP:" + adaptersFilePath + ":2:30:10 LEADING:10 TRAILING:10 SLIDINGWINDOW:4:20 MINLEN:50";
 
 		String inputFileNames = sequenceFile1.getAbsolutePath() + " " + sequenceFile2.getAbsolutePath();
 
@@ -90,7 +99,7 @@ public class Preprocessing{
 		NgsFileSystem.preprocessedPE1(workDir);
 		
 		File paired1 = NgsFileSystem.createPreprocessedPE1(workDir, sequenceFile1.getName());
-		File paired2 = NgsFileSystem.createPreprocessedPE1(workDir, sequenceFile2.getName());
+		File paired2 = NgsFileSystem.createPreprocessedPE2(workDir, sequenceFile2.getName());
 
 		File unpaired1 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile1.getName());
 		File unpaired2 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile2.getName());

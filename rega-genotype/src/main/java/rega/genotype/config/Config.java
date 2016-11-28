@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
+import rega.genotype.ApplicationException;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
@@ -171,6 +172,46 @@ public class Config {
 		return ans.exists() ? ans : null;
 	}
 
+	public NgsModule getNgsModule() {
+		ToolConfig ngsModuleConfig = getCurrentVersion(NgsModule.NGS_MODULE_ID);
+		if (ngsModuleConfig == null)
+			return null;
+
+		return NgsModule.read(ngsModuleConfig.getConfigurationFile());
+	}
+
+	public File getNgsModulePath() {
+		ToolConfig ngsModuleConfig = getCurrentVersion(NgsModule.NGS_MODULE_ID);
+		if (ngsModuleConfig == null)
+			return null;
+
+		return ngsModuleConfig.getConfigurationFile();
+	}
+
+	public File trimomaticPath() throws ApplicationException{
+		File ngsModulePath = Settings.getInstance().getConfig().getNgsModulePath();
+		if (ngsModulePath == null)
+			throw new ApplicationException("NGS module is missing contact server admin.");
+
+		return NgsModule.trimmomaticPath(ngsModulePath);
+	}
+
+	public File adaptersFilePath() throws ApplicationException{
+		File ngsModulePath = Settings.getInstance().getConfig().getNgsModulePath();
+		if (ngsModulePath == null)
+			throw new ApplicationException("NGS module is missing contact server admin.");
+
+		return NgsModule.adaptersFilePath(ngsModulePath);
+	}
+
+	public File seuencetoolPath() throws ApplicationException{
+		File ngsModulePath = Settings.getInstance().getConfig().getNgsModulePath();
+		if (ngsModulePath == null)
+			throw new ApplicationException("NGS module is missing contact server admin.");
+
+		return NgsModule.seuencetoolPath(ngsModulePath);
+	}
+
 	/**
 	 * Set the published flag for every tool config.
 	 * @param remoteManifests the manifests from remote repository.
@@ -266,7 +307,6 @@ public class Config {
 		private String edirectPath = "/usr/bin/edirect/";
 		//NGS
 		private String diamondPath = "diamond";
-		private String sequencetoolPath = "sequencetool";
 		private String fastqcCmd = "fastqc";
 		private String spadesCmd = "spades";
 		private String cutAdaptCmd = "cutadapt";
@@ -387,12 +427,6 @@ public class Config {
 		}
 		public void setEdirectPath(String edirectPath) {
 			this.edirectPath = edirectPath;
-		}
-		public String getSequencetoolPath() {
-			return sequencetoolPath;
-		}
-		public void setSequencetoolPath(String sequencetoolPath) {
-			this.sequencetoolPath = sequencetoolPath;
 		}
 		public String getBioPythonPath() {
 			return bioPythonPath;

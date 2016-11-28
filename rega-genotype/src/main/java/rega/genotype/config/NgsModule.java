@@ -18,6 +18,11 @@ public class NgsModule {
 	public static final String NGS_MODULE_AA_VIRUSES_DB = "aa-virus.dmnd";
 	public static final String NGS_MODULE_UNIREF_VIRUSES_AA50 = "uniref-viruses-aa50.fasta";
 
+	public static final String NGS_MODULE_TRIMMOMATIC_JAR = "trimmomatic.jar";
+	public static final String NGS_MODULE_FASTQC_FILE = "fastqc";
+	public static final String NGS_MODULE_ADAPTERS_FILE = "adapters.fasta";
+	public static final String NGS_MODULE_SEQUENCETOOL_FILE = "sequencetool";
+
 	// internal to ngs module, used to create AA database for diamond blast step (NGS_MODULE_AA_VIRUSES_DB)
 	private String aaFileName = null; 
 	private String taxonomyFileName = null;
@@ -80,5 +85,21 @@ public class NgsModule {
 
 	public void setNcbiVirusesFileName(String ncbiVirusesFileName) {
 		this.ncbiVirusesFileName = ncbiVirusesFileName;
+	}
+
+	public static File adaptersFilePath(File modulePath) {
+		return new File(modulePath, NGS_MODULE_ADAPTERS_FILE);
+	}
+
+	public static File trimmomaticPath(File modulePath) {
+		return new File(modulePath, NGS_MODULE_TRIMMOMATIC_JAR);
+	}
+
+	public static File fastQCpath(File modulePath) {
+		return new File(modulePath, NGS_MODULE_FASTQC_FILE);
+	}
+
+	public static File seuencetoolPath(File modulePath) {
+		return new File(modulePath, NGS_MODULE_SEQUENCETOOL_FILE);
 	}
 }
