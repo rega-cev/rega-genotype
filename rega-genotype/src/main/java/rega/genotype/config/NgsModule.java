@@ -28,7 +28,15 @@ public class NgsModule {
 	private String taxonomyFileName = null;
 
 	private String ncbiVirusesFileName = null;
-	
+
+	private String consensusToolMaxGap = "10";
+	private String consensusToolMaxMissing = "100";
+	private String consensusToolMinCount = "10";
+	private String consensusToolCutoff = "70";
+	private String consensusToolMinSingleSeqCov = "70";
+	private String diamondOptions = "";
+	private String spadesOptions = "";
+
 	public NgsModule() {}
 
 	public static NgsModule read(File xmlDir) {
@@ -101,5 +109,62 @@ public class NgsModule {
 
 	public static File seuencetoolPath(File modulePath) {
 		return new File(modulePath, NGS_MODULE_SEQUENCETOOL_FILE);
+	}
+
+	public String getConsensusToolMaxGap() {
+		return consensusToolMaxGap;
+	}
+
+	public void setConsensusToolMaxGap(String consensusToolMaxGap) {
+		this.consensusToolMaxGap = consensusToolMaxGap;
+	}
+
+	public String getConsensusToolMaxMissing() {
+		return consensusToolMaxMissing;
+	}
+
+	public void setConsensusToolMaxMissing(String consensusToolMaxMissing) {
+		this.consensusToolMaxMissing = consensusToolMaxMissing;
+	}
+
+	public String getConsensusToolMinCount() {
+		return consensusToolMinCount;
+	}
+
+	public void setConsensusToolMinCount(String consensusToolMinCount) {
+		this.consensusToolMinCount = consensusToolMinCount;
+	}
+
+	public String getConsensusToolCutoff() {
+		return consensusToolCutoff;
+	}
+
+	public void setConsensusToolCutoff(String consensusToolCutoff) {
+		this.consensusToolCutoff = consensusToolCutoff;
+	}
+
+	public String getConsensusToolMinSingleSeqCov() {
+		return consensusToolMinSingleSeqCov;
+	}
+
+	public void setConsensusToolMinSingleSeqCov(
+			String consensusToolMinSingleSeqCov) {
+		this.consensusToolMinSingleSeqCov = consensusToolMinSingleSeqCov;
+	}
+
+	public String getDiamondOptions() {
+		return diamondOptions;
+	}
+
+	public void setDiamondOptions(String diamondOptions) {
+		this.diamondOptions = diamondOptions;
+	}
+
+	public String getSpadesOptions() {
+		return spadesOptions;
+	}
+
+	public void setSpadesOptions(String spadesOptions) {
+		this.spadesOptions = spadesOptions;
 	}
 }
