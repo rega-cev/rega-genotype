@@ -10,6 +10,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.config.NgsModule;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.BlastUtil;
 
@@ -62,11 +63,14 @@ public class SequenceToolMakeConsensus {
 		File alingment = NgsFileSystem.consensusAlingmentFile(workDir, virusName);
 		alingment.getParentFile().mkdirs();
 
+		NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
+
 		String cmd = sequencetoolPath + " consensus-align"
 		+ " --reference " + refrence.getAbsolutePath()
 		+ " --target " + assembledContigs.getAbsolutePath()
 		+ " --output " + alingment.getAbsolutePath()
-		+ " --cutoff 70 --min-single-seq-cov 4";
+		+ " --cutoff " + ngsModule.getConsensusToolCutoff()
+		+ " --min-single-seq-cov 4" + ngsModule.getConsensusToolMinSingleSeqCov();
 
 		NgsFileSystem.executeCmd(cmd, workDir);
 
@@ -81,10 +85,15 @@ public class SequenceToolMakeConsensus {
 		out.getParentFile().mkdirs();
 		out.createNewFile();
 
+		
+		NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
+
 		String cmd = sequencetoolPath + " make-consensus"
 				+ " --input " + assembledContigs.getAbsolutePath()
 				+ " --output " + out.getAbsolutePath()
-				+ " --max-gap 10 --max-missing 100 --min-count 0.25 ";
+				+ " --max-gap " + ngsModule.getConsensusToolMaxGap()
+				+ " --max-missing " + ngsModule.getConsensusToolMaxMissing()
+				+ " --min-count 10 " + ngsModule.getConsensusToolMinCount();
 
 		NgsFileSystem.executeCmd(cmd, workDir);
 

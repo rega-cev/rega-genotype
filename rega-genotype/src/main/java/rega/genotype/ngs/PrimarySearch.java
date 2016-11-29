@@ -18,6 +18,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.GeneralConfig;
+import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.NgsProgress.State;
@@ -90,10 +91,14 @@ public class PrimarySearch{
 			File diamondDb = Settings.getInstance().getConfig().getDiamondBlastDb();
 			if (diamondDb == null)
 				throw new ApplicationException("Internal error: diamond blast db was not found. Ask your server admin to check that NGS Module is properlly configured.");
+
+			NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
+
 			String cmd = gc.getDiamondPath() + " blastx -d "
 					+ diamondDb.getAbsolutePath() + " -p 4 -q " + query.getAbsolutePath()
 					+ " -a " + matches + " -k 1 --quiet "
-					+ " --min-score 50";
+					+ ngsModule.getDiamondOptions();
+
 			System.err.println(cmd);
 			blastx = StreamReaderRuntime.exec(cmd, null, workDir);
 			int exitResult = blastx.waitFor();

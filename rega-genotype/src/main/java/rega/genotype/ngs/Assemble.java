@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import rega.genotype.ApplicationException;
+import rega.genotype.config.NgsModule;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.StreamReaderRuntime;
 
@@ -27,13 +28,15 @@ public class Assemble {
 		File contigsDir = new File(workDir, NgsFileSystem.contigsDir(virusName));
 		contigsDir.mkdirs();
 
+		NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
+
 		String cmd = Settings.getInstance().getConfig().getGeneralConfig().getSpadesCmd();
 		// TODO: now only pair-ends
 		cmd += " -1 " + sequenceFile1.getAbsolutePath();
 		cmd += " -2 " + sequenceFile2.getAbsolutePath();
 
 		cmd += " -o " + contigsDir.getAbsolutePath();
-		cmd += " --threads 6";
+		cmd += " --threads 6 " + ngsModule.getSpadesOptions();
 
 		System.err.println(cmd);
 		Process p = null;
