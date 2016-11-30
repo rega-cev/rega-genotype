@@ -231,8 +231,7 @@
 
 		<p>
 		<div><b>Ncbi Viruses Db Path</b></div>
-		<div>Can be obtained from https://www.ncbi.nlm.nih.gov/nuccore</div>
-        <div>Select top combobox -&gt; nucleotide, Left menu: Species -&gt; Viruses; Source databases -&gt; RefSeq</div>
+		<div>Can be obtained from ftp://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.1.1.genomic.fna.gz</div>
         <div>download fasta</div>
 		<div>
 		<i>Current file: ${current-ncbi-viruses}</i>
