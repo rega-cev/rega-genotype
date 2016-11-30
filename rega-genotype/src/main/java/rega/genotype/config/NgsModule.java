@@ -33,7 +33,7 @@ public class NgsModule {
 	private String consensusToolMaxMissing = "100";
 	private String consensusToolMinCount = "10";
 	private String consensusToolCutoff = "70";
-	private String consensusToolMinSingleSeqCov = "70";
+	private String consensusToolMinSingleSeqCov = "4";
 	private String diamondOptions = "";
 	private String spadesOptions = "";
 

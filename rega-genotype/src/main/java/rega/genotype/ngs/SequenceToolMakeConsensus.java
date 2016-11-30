@@ -68,7 +68,7 @@ public class SequenceToolMakeConsensus {
 		+ " --target " + assembledContigs.getAbsolutePath()
 		+ " --output " + alingment.getAbsolutePath()
 		+ " --cutoff " + ngsModule.getConsensusToolCutoff()
-		+ " --min-single-seq-cov 4" + ngsModule.getConsensusToolMinSingleSeqCov();
+		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov();
 
 		NgsFileSystem.executeCmd(cmd, workDir);
 
@@ -88,7 +88,7 @@ public class SequenceToolMakeConsensus {
 				+ " --output " + out.getAbsolutePath()
 				+ " --max-gap " + ngsModule.getConsensusToolMaxGap()
 				+ " --max-missing " + ngsModule.getConsensusToolMaxMissing()
-				+ " --min-count 10 " + ngsModule.getConsensusToolMinCount();
+				+ " --min-count " + ngsModule.getConsensusToolMinCount();
 
 		NgsFileSystem.executeCmd(cmd, workDir);
 

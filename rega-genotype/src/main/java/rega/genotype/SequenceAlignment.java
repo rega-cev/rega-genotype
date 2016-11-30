@@ -85,7 +85,7 @@ public class SequenceAlignment
 
 			for (int j = 0; j < sequences.size(); ++j) {
 				AbstractSequence s = sequences.get(j);
-				
+
 				if (s.getSequence().charAt(i) == '-') {
 					hasGap = true;
 					break;
