@@ -221,7 +221,7 @@ public class NgsAnalysis {
 		File sequenceFile1 = new File(virusDir, fastqPE1FileName);
 		File sequenceFile2 = new File(virusDir, fastqPE2FileName);
 
-		if (sequenceFile1.length() < 1000*1000)
+		if (sequenceFile1.length() < 1000*100)
 			return false; // no need to assemble if there is not enough reads.
 
 		try {

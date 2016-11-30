@@ -95,7 +95,7 @@ public class PrimarySearch{
 			NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
 
 			String cmd = gc.getDiamondPath() + " blastx -d "
-					+ diamondDb.getAbsolutePath() + " -p 4 -q " + query.getAbsolutePath()
+					+ diamondDb.getAbsolutePath() + " -q " + query.getAbsolutePath()
 					+ " -a " + matches + " -k 1 --quiet "
 					+ ngsModule.getDiamondOptions();
 
