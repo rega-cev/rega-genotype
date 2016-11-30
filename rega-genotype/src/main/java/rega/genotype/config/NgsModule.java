@@ -31,6 +31,7 @@ public class NgsModule {
 	private String consensusToolMaxGap = "10";
 	private String consensusToolMaxMissing = "100";
 	private String consensusToolMinCount = "10";
+	private String consensusToolMixtureMinPct = "20";
 	private String consensusToolCutoff = "70";
 	private String consensusToolMinSingleSeqCov = "4";
 	private String diamondOptions = "";
@@ -128,6 +129,14 @@ public class NgsModule {
 
 	public void setConsensusToolMinCount(String consensusToolMinCount) {
 		this.consensusToolMinCount = consensusToolMinCount;
+	}
+
+	public String getConsensusToolMixtureMinPct() {
+		return consensusToolMixtureMinPct;
+	}
+
+	public void setConsensusToolMixtureMinPct(String consensusToolMixtureMinPct) {
+		this.consensusToolMixtureMinPct = consensusToolMixtureMinPct;
 	}
 
 	public String getConsensusToolCutoff() {
