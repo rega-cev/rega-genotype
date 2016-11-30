@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.Utils;
 
 /**
@@ -203,6 +204,7 @@ public class NgsFileSystem {
 	}
 
 	public static void executeCmd(String cmd, File workDir) throws ApplicationException{
+		LogUtils.getLogger(workDir).info(cmd);
 		Utils.executeCmd(cmd, workDir);
 	}
 

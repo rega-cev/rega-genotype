@@ -32,7 +32,7 @@ public class NgsAnalysis {
 	public NgsAnalysis(File workDir, NgsModule ngsModule){
 		this.workDir = workDir;
 		this.ngsModule = ngsModule;
-		ngsLogger = LogUtils.createLogger(new File(workDir, "ngs-log"), "ngsLogger");
+		ngsLogger = LogUtils.createLogger(workDir);
 	}
 
 	/**
@@ -88,7 +88,8 @@ public class NgsAnalysis {
 		File fastqDir = NgsFileSystem.fastqDir(workDir);
 		try {
 			QC.qcReport(fastqDir.listFiles(),
-					new File(workDir, NgsFileSystem.QC_REPORT_DIR));
+					new File(workDir, NgsFileSystem.QC_REPORT_DIR),
+					workDir);
 
 			List<QcResults> qcresults = QC.getResults(new File(workDir, NgsFileSystem.QC_REPORT_DIR));
 			for (QcResults qcr: qcresults) {
@@ -130,7 +131,8 @@ public class NgsAnalysis {
 
 			try {
 				QC.qcReport(new File[] {preprocessed1, preprocessed2}, 
-						new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR));
+						new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR),
+						workDir);
 			} catch (ApplicationException e1) {
 				e1.printStackTrace();
 				ngsProgress.setErrors("QC failed: " + e1.getMessage());

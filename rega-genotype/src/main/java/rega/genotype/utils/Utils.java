@@ -33,7 +33,6 @@ public class Utils {
 	}
 
 	public static void executeCmd(String cmd, File workDir, String errorPrefix) throws ApplicationException{
-		System.err.println(cmd);
 		Process p = null;
 
 		try {

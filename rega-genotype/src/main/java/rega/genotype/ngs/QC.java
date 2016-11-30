@@ -10,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import rega.genotype.ApplicationException;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
+import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.StreamReaderRuntime;
 
 /**
@@ -105,7 +106,7 @@ public class QC {
 	 * @return a list of result html files.
 	 * @throws ApplicationException
 	 */
-	public static List<File> qcReport(File[] sequenceFiles, File reportDir) throws ApplicationException {		
+	public static List<File> qcReport(File[] sequenceFiles, File reportDir, File workDir) throws ApplicationException {		
 		reportDir.mkdirs();
 
 		String fastQCcmd = Settings.getInstance().getConfig().getGeneralConfig().getFastqcCmd();
@@ -118,7 +119,7 @@ public class QC {
 
 		cmd += " -outdir " + reportDir.getAbsolutePath();
 
-		System.err.println(cmd);
+		LogUtils.getLogger(workDir).info(cmd);
 		Process p = null;
 
 		try {

@@ -23,6 +23,7 @@ import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
+import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.StreamReaderRuntime;
 
 /**
@@ -97,7 +98,7 @@ public class PrimarySearch{
 					+ " -a " + matches + " -k 1 --quiet "
 					+ ngsModule.getDiamondOptions();
 
-			System.err.println(cmd);
+			LogUtils.getLogger(workDir).info(cmd);
 			blastx = StreamReaderRuntime.exec(cmd, null, workDir);
 			int exitResult = blastx.waitFor();
 
@@ -126,7 +127,7 @@ public class PrimarySearch{
 		try {
 			String cmd = Settings.getInstance().getConfig().getGeneralConfig().getDiamondPath() + " view -a " + query.getAbsolutePath()
 					+ " -o " + matches +" --quiet";
-			System.err.println(cmd);
+			LogUtils.getLogger(workDir).info(cmd);
 			diamond = StreamReaderRuntime.exec(cmd, null, workDir);
 			int exitResult = diamond.waitFor();
 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import rega.genotype.ApplicationException;
 import rega.genotype.config.NgsModule;
 import rega.genotype.singletons.Settings;
+import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.StreamReaderRuntime;
 
 public class Assemble {
@@ -36,7 +37,7 @@ public class Assemble {
 		cmd += " -o " + contigsDir.getAbsolutePath();
 		cmd += " --threads 6 " + ngsModule.getSpadesOptions();
 
-		System.err.println(cmd);
+		LogUtils.getLogger(workDir).info(cmd);
 		Process p = null;
 
 		try {
