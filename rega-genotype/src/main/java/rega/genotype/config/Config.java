@@ -204,14 +204,6 @@ public class Config {
 		return NgsModule.adaptersFilePath(ngsModulePath);
 	}
 
-	public File seuencetoolPath() throws ApplicationException{
-		File ngsModulePath = Settings.getInstance().getConfig().getNgsModulePath();
-		if (ngsModulePath == null)
-			throw new ApplicationException("NGS module is missing contact server admin.");
-
-		return NgsModule.seuencetoolPath(ngsModulePath);
-	}
-
 	/**
 	 * Set the published flag for every tool config.
 	 * @param remoteManifests the manifests from remote repository.
@@ -310,6 +302,7 @@ public class Config {
 		private String fastqcCmd = "fastqc";
 		private String spadesCmd = "spades";
 		private String bioPythonPath = "";
+		private String sequencetool = "";
 
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
@@ -426,6 +419,12 @@ public class Config {
 		}
 		public void setBioPythonPath(String bioPythonPath) {
 			this.bioPythonPath = bioPythonPath;
+		}
+		public String getSequencetool() {
+			return sequencetool;
+		}
+		public void setSequencetool(String sequencetool) {
+			this.sequencetool = sequencetool;
 		}
 	}
 

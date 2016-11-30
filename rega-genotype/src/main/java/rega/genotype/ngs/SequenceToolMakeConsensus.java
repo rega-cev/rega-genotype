@@ -58,7 +58,7 @@ public class SequenceToolMakeConsensus {
 
 		// make Consensus
 
-		String sequencetoolPath = Settings.getInstance().getConfig().seuencetoolPath().getAbsolutePath();
+		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
 
 		File alingment = NgsFileSystem.consensusAlingmentFile(workDir, virusName);
 		alingment.getParentFile().mkdirs();
@@ -78,7 +78,7 @@ public class SequenceToolMakeConsensus {
 	public static File makeConsensus(File assembledContigs,
 			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
-		String sequencetoolPath = Settings.getInstance().getConfig().seuencetoolPath().getAbsolutePath();
+		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
 		File out = NgsFileSystem.consensusFile(workDir, virusName);
 		out.getParentFile().mkdirs();
 		out.createNewFile();

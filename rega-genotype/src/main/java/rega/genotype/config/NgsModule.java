@@ -21,7 +21,6 @@ public class NgsModule {
 	public static final String NGS_MODULE_TRIMMOMATIC_JAR = "trimmomatic.jar";
 	public static final String NGS_MODULE_FASTQC_FILE = "fastqc";
 	public static final String NGS_MODULE_ADAPTERS_FILE = "adapters.fasta";
-	public static final String NGS_MODULE_SEQUENCETOOL_FILE = "sequencetool";
 
 	// internal to ngs module, used to create AA database for diamond blast step (NGS_MODULE_AA_VIRUSES_DB)
 	private String aaFileName = null; 
@@ -105,10 +104,6 @@ public class NgsModule {
 
 	public static File fastQCpath(File modulePath) {
 		return new File(modulePath, NGS_MODULE_FASTQC_FILE);
-	}
-
-	public static File seuencetoolPath(File modulePath) {
-		return new File(modulePath, NGS_MODULE_SEQUENCETOOL_FILE);
 	}
 
 	public String getConsensusToolMaxGap() {
