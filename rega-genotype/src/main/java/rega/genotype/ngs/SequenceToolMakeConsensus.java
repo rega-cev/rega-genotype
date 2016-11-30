@@ -29,7 +29,7 @@ public class SequenceToolMakeConsensus {
 	 * @throws InterruptedException
 	 */
 	public static File consensusAlign(File assembledContigs,
-			File workDir, String virusName) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
 		// Create make contigs in. format: first refseq then all the contigs. 
 
@@ -63,8 +63,6 @@ public class SequenceToolMakeConsensus {
 		File alingment = NgsFileSystem.consensusAlingmentFile(workDir, virusName);
 		alingment.getParentFile().mkdirs();
 
-		NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
-
 		String cmd = sequencetoolPath + " consensus-align"
 		+ " --reference " + refrence.getAbsolutePath()
 		+ " --target " + assembledContigs.getAbsolutePath()
@@ -78,15 +76,12 @@ public class SequenceToolMakeConsensus {
 	}
 
 	public static File makeConsensus(File assembledContigs,
-			File workDir, String virusName) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
 		String sequencetoolPath = Settings.getInstance().getConfig().seuencetoolPath().getAbsolutePath();
 		File out = NgsFileSystem.consensusFile(workDir, virusName);
 		out.getParentFile().mkdirs();
 		out.createNewFile();
-
-		
-		NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
 
 		String cmd = sequencetoolPath + " make-consensus"
 				+ " --input " + assembledContigs.getAbsolutePath()

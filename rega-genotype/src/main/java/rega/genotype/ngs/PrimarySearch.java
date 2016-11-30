@@ -40,7 +40,7 @@ public class PrimarySearch{
 	 * @return primary search results that will be used by NgsProgress
 	 * @throws ApplicationException
 	 */
-	public static void diamondSearch(File workDir) throws ApplicationException {
+	public static void diamondSearch(File workDir, NgsModule ngsModule) throws ApplicationException {
 		File preprocessedPE1 = NgsFileSystem.preprocessedPE1(workDir);
 		File preprocessedPE2 = NgsFileSystem.preprocessedPE2(workDir);
 
@@ -65,7 +65,7 @@ public class PrimarySearch{
 		File view = null;
 
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
-		matches = diamondBlastX(diamondDir, fastqMerge);
+		matches = diamondBlastX(diamondDir, fastqMerge, ngsModule);
 		view = diamondView(diamondDir, matches);
 		jobLock.release();
 
@@ -83,7 +83,7 @@ public class PrimarySearch{
 		}
 	}
 
-	private static File diamondBlastX(File workDir, File query) throws ApplicationException {
+	private static File diamondBlastX(File workDir, File query, NgsModule ngsModule) throws ApplicationException {
 		Process blastx = null;
 		File matches = new File(workDir.getAbsolutePath() + File.separator + "matches.daa");
 		try {
@@ -91,8 +91,6 @@ public class PrimarySearch{
 			File diamondDb = Settings.getInstance().getConfig().getDiamondBlastDb();
 			if (diamondDb == null)
 				throw new ApplicationException("Internal error: diamond blast db was not found. Ask your server admin to check that NGS Module is properlly configured.");
-
-			NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
 
 			String cmd = gc.getDiamondPath() + " blastx -d "
 					+ diamondDb.getAbsolutePath() + " -q " + query.getAbsolutePath()

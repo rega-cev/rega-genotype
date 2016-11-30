@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.ApplicationException;
+import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.NgsProgress.State;
@@ -24,12 +25,13 @@ import rega.genotype.utils.LogUtils;
  * @author michael
  */
 public class NgsAnalysis {
-	private File workDir;
-
 	private Logger ngsLogger = null;
+	private File workDir;
+	private NgsModule ngsModule;
 
-	public NgsAnalysis(File workDir){
+	public NgsAnalysis(File workDir, NgsModule ngsModule){
 		this.workDir = workDir;
+		this.ngsModule = ngsModule;
 		ngsLogger = LogUtils.createLogger(new File(workDir, "ngs-log"), "ngsLogger");
 	}
 
@@ -53,7 +55,7 @@ public class NgsAnalysis {
 	 * @throws ApplicationException
 	 */
 	protected void primarySearch() throws ApplicationException {
-		PrimarySearch.diamondSearch(workDir);
+		PrimarySearch.diamondSearch(workDir, ngsModule);
 	}
 
 	/**
@@ -65,7 +67,7 @@ public class NgsAnalysis {
 	 * @throws ApplicationException
 	 */
 	protected File assemble(File sequenceFile1, File sequenceFile2, String virusName) throws ApplicationException {
-		return Assemble.spadesAssemble(sequenceFile1, sequenceFile2, workDir, virusName);
+		return Assemble.spadesAssemble(sequenceFile1, sequenceFile2, workDir, virusName, ngsModule);
 	}
 
 	/**
@@ -247,8 +249,8 @@ public class NgsAnalysis {
 					return false;
 				}
 
-			File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, workDir, virusDir.getName());
-			File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, workDir, virusDir.getName());
+			File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, workDir, virusDir.getName(), ngsModule);
+			File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, workDir, virusDir.getName(), ngsModule);
 
 			ngsLogger.info("consensus " + virusDir.getName() + " = " + (System.currentTimeMillis() - endAssembly) + " ms");
 

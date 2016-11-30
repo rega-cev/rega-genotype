@@ -21,14 +21,12 @@ public class Assemble {
 	 * @throws ApplicationException
 	 */
 	public static File spadesAssemble(File sequenceFile1, File sequenceFile2,
-			File workDir, String virusName) throws ApplicationException {
+			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException {
 
 		long startTime = System.currentTimeMillis();
 
 		File contigsDir = new File(workDir, NgsFileSystem.contigsDir(virusName));
 		contigsDir.mkdirs();
-
-		NgsModule ngsModule = Settings.getInstance().getConfig().getNgsModule();
 
 		String cmd = Settings.getInstance().getConfig().getGeneralConfig().getSpadesCmd();
 		// TODO: now only pair-ends

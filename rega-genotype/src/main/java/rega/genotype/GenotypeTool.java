@@ -16,7 +16,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jdom.JDOMException;
@@ -26,6 +28,7 @@ import org.xml.sax.SAXException;
 import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.config.Config.ToolConfig;
+import rega.genotype.config.NgsModule;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
@@ -35,6 +38,7 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.ui.viruses.generic.GenericDefinition;
 import rega.genotype.util.CsvDataTable;
 import rega.genotype.util.DataTable;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.viruses.generic.GenericTool;
 
 /**
@@ -440,10 +444,19 @@ public abstract class GenotypeTool {
     					File pe2 = null;
     				}
 
+    				// the user can specify different settings for different tests.
+    				Map<String, NgsModule> ngsModules = new HashMap<String, NgsModule>();
     				Map<String, PeFiles> peFilesMap = new HashMap<String, PeFiles>();
     				for (File f: workDir.listFiles()) {
     					String fn = f.getName();
     					String key = null;
+    					if (fn.startsWith("ngs-module") && fn.endsWith(".json")){
+    						NgsModule ngsModule = NgsModule.parseJson(FileUtil.readFile(f));
+    						if (ngsModule != null)
+    							ngsModules.put(fn, ngsModule);
+    						else
+    							System.err.println("File " + fn + " is not valid NGS module.");
+    					}
     					if (fn.endsWith("_1.fastq"))
     						key = fn.substring(0, fn.indexOf("_1.fastq"));
     					if (fn.endsWith("_2.fastq"))
@@ -460,33 +473,40 @@ public abstract class GenotypeTool {
     					}
     				}
 
-					for (Map.Entry<String, PeFiles> e : peFilesMap.entrySet()) {
-						PeFiles peFiles = e.getValue();
-						if (peFiles.pe1 != null && peFiles.pe2 != null) {
-							File currentWorkDir = new File(workDir, e.getKey());
-							traceFile = currentWorkDir.getAbsolutePath()
-									+ File.separator
-									+ parseArgsResult.remainingArgs[4];
+    				if (ngsModules.isEmpty())
+    					ngsModules.put("", Settings.getInstance().getConfig().getNgsModule());
 
-							genotypeTool = (GenotypeTool) analyzerClass
-									.getConstructor(String.class, File.class)
-									.newInstance(url, currentWorkDir);
+    				for (Map.Entry<String, PeFiles> e : peFilesMap.entrySet()) {
+    					PeFiles peFiles = e.getValue();
+    					if (peFiles.pe1 != null && peFiles.pe2 != null) {
+    						for (Map.Entry<String, NgsModule> ngsModuleE: ngsModules.entrySet()) {
+    							File currentWorkDir = new File(workDir, e.getKey() + ngsModuleE.getKey());
+    							traceFile = currentWorkDir.getAbsolutePath()
+    									+ File.separator
+    									+ parseArgsResult.remainingArgs[4];
 
-							if (!NgsFileSystem.addFastqFiles(currentWorkDir,
-									peFiles.pe1, peFiles.pe2)) {
-								System.err.println();
-								System.err.println("-paired-end-files-list pe file not found ");
-								System.err.println();
-								printUsage();
-								return;
-							}
-							NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir);
-							ngsAnalysis.analyze();
+    							genotypeTool = (GenotypeTool) analyzerClass
+    									.getConstructor(String.class, File.class)
+    									.newInstance(url, currentWorkDir);
 
-							genotypeTool.analyze(currentWorkDir.getAbsolutePath()
-											+ File.separator
-											+ NgsFileSystem.SEQUENCES_FILE, traceFile);
-						}
+    							if (!NgsFileSystem.addFastqFiles(currentWorkDir,
+    									peFiles.pe1, peFiles.pe2)) {
+    								System.err.println();
+    								System.err.println("-paired-end-files-list pe file not found ");
+    								System.err.println();
+    								printUsage();
+    								return;
+    							}
+
+    							NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir,  
+    									ngsModuleE.getValue());
+    							ngsAnalysis.analyze();
+
+    							genotypeTool.analyze(currentWorkDir.getAbsolutePath()
+    									+ File.separator
+    									+ NgsFileSystem.SEQUENCES_FILE, traceFile);
+    						}
+    					}
 					}
     			} else {
     				// GenotypeTool [...] className [-paired-end-1][-paired-end-2] result.xml
@@ -508,7 +528,9 @@ public abstract class GenotypeTool {
     					return;
     				}
 
-    				NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
+    				
+    				NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir,
+    						 Settings.getInstance().getConfig().getNgsModule());
     				if (parseArgsResult.assembleOnly) {    				
     					// TODO : test do not commit !
     					 //ngsAnalysis.assembleVirus(new File("/home/michael/tmp/fasta-examples/SRP074090__8_sequences/SRR3458562-results-assemble/diamond_result/10912_Rotavirus"));

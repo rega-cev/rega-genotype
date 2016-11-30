@@ -299,7 +299,8 @@ public class StartForm extends AbstractForm {
 				Thread ngsAnalysis = new Thread(new Runnable() {
 					public void run() {
 						try {
-							NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir);
+							NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir,
+									Settings.getInstance().getConfig().getNgsModule());
 							if (ngsAnalysis.analyze()) {
 								// analyze assembled fasta files 
 								getMain().getOrganismDefinition().startAnalysis(workDir);
