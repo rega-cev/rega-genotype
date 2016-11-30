@@ -88,7 +88,8 @@ public class SequenceToolMakeConsensus {
 				+ " --output " + out.getAbsolutePath()
 				+ " --max-gap " + ngsModule.getConsensusToolMaxGap()
 				+ " --max-missing " + ngsModule.getConsensusToolMaxMissing()
-				+ " --min-count " + ngsModule.getConsensusToolMinCount();
+				+ " --min-count " + ngsModule.getConsensusToolMinCount()
+				+ " --mixture-min-pct " + ngsModule.getConsensusToolMixtureMinPct();
 
 		NgsFileSystem.executeCmd(cmd, workDir);
 
