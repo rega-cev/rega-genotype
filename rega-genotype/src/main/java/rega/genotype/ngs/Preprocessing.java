@@ -47,7 +47,7 @@ public class Preprocessing{
 		String adaptersFilePath = Settings.getInstance().getConfig().adaptersFilePath().getAbsolutePath();
 
 		String trimmomaticCmd = "java -Xmx1000m -jar " + trimmomaticPath + " PE -threads 1 ";
-		String trimmomaticOptions = " ILLUMINACLIP:" + adaptersFilePath + ":2:30:10 LEADING:10 TRAILING:10 SLIDINGWINDOW:4:20 MINLEN:50";
+		String trimmomaticOptions = " ILLUMINACLIP:" + adaptersFilePath + ":2:30:10 HEADCROP:15 LEADING:10 TRAILING:10 SLIDINGWINDOW:4:20 MINLEN:50";
 
 		String inputFileNames = sequenceFile1.getAbsolutePath() + " " + sequenceFile2.getAbsolutePath();
 
