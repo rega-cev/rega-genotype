@@ -8,6 +8,13 @@
     "epsToPdfCmd": "?",
     "imageMagickConvertCmd": "convert",
     "maxAllowedSeqs": 20001,
+    "inkscapeCmd": "inkscape",
+    "edirectPath": "/home/michael/install/edirect/",
+    "diamondPath": "/home/michael/install/diamond",
+    "fastqcCmd": "/local/home/michael/projects/rega-genotype-extenal2/FastQC/fastqc",
+    "spadesCmd": "python /local/home/michael/install/spades/SPAdes-3.8.1-Linux/bin/spades.py",
+    "bioPythonPath": "/home/michael/Downloads/biopython-1.68/",
+    "sequencetool": "/home/michael/projects/sequencetool/build/src/sequencetool",
     "inkscapeCmd": "?",
     "publisherName": "EMWEB",
     "publisherPassword": "60tjpp2ukvfcudojpoek872idr"
@@ -36,6 +43,17 @@
       "autoUpdate": true,
       "webService": true,
       "ui": true
+    },
+    {
+      "path": "",
+      "configuration": "base-unit-test-work-dir/xml/NGS_Module6/",
+      "jobDir": "./base-work-dir//job/NGS_Module6/",
+      "autoUpdate": true,
+      "webService": false,
+      "ui": false,
+      "published": true,
+      "retracted": false,
+      "currentUsedVersion": true
     }
   ]
 }

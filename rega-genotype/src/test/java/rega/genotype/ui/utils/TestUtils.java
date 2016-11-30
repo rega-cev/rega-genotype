@@ -32,11 +32,24 @@ public class TestUtils {
 		
 		return jobDir;
 	}
-	
+
+	public static File setup() {
+		File jobDir;
+		do {
+			jobDir = new File(System.getProperty("java.io.tmpdir") + File.separatorChar +"jobDir" + File.separatorChar + System.currentTimeMillis());
+			System.err.println(jobDir.getAbsolutePath());
+		} while (jobDir.exists());
+		jobDir.mkdirs();
+
+		Settings.initSettings(Settings.getInstance(null, true));
+
+		return jobDir;
+	}
+
 	public static File getFastaFile(File jobDir) {
 		return new File(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta");
 	}
-	
+
 	public static File getResultFile(File jobDir) {
 		return new File(jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
 	}
