@@ -16,9 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.jdom.JDOMException;
@@ -82,6 +80,8 @@ public abstract class GenotypeTool {
     	String ngsPairedEndFile1 = null;
     	String ngsPairedEndFile2 = null;
     	boolean analyzeAllFastqFilesInWorkDir = false;
+    	String ngsPairedEndSuffix1 = null;
+    	String ngsPairedEndSuffix2 = null;
     	Boolean assembleOnly = false; 
     }
     
@@ -94,7 +94,8 @@ public abstract class GenotypeTool {
         CmdLineParser.Option pe2Option = parser.addStringOption("paired-end-2");
         CmdLineParser.Option assembleOnlyOption = parser.addStringOption("assemble-only");
         CmdLineParser.Option analyzeAllFastqFilesInWorkDirOption = parser.addStringOption('a', "analyze-all-fastq-files-in-work-dir");
-
+        CmdLineParser.Option pe1SuffixOption = parser.addStringOption("paired-end-1-suffix");
+        CmdLineParser.Option pe2SuffixOption = parser.addStringOption("paired-end-2-suffix");
 
         try {
         	parser.parse(args);
@@ -132,10 +133,22 @@ public abstract class GenotypeTool {
         if (pe2 != null)
         	result.ngsPairedEndFile2 = pe2;
 
+        String pe1Suffix = (String) parser.getOptionValue(pe1SuffixOption);
+        if (pe1Suffix != null)
+        	result.ngsPairedEndSuffix1 = pe1Suffix;
+        else
+        	result.ngsPairedEndSuffix1 = "_1.fastq";
+
+        String pe2Suffix = (String) parser.getOptionValue(pe2SuffixOption);
+        if (pe2Suffix != null)
+        	result.ngsPairedEndSuffix2 = pe2Suffix;
+        else
+        	result.ngsPairedEndSuffix2 = "_2.fastq";
+
         String analyzeAllFastqFilesInWorkDir = (String) parser.getOptionValue(analyzeAllFastqFilesInWorkDirOption);
         if (analyzeAllFastqFilesInWorkDir != null && analyzeAllFastqFilesInWorkDir.equals("true"))
         	result.analyzeAllFastqFilesInWorkDir = true;
-  
+
         String assembleOnly = (String) parser.getOptionValue(assembleOnlyOption);
         if (assembleOnly != null && assembleOnly.equals("true"))
         	result.assembleOnly = true;
@@ -457,17 +470,19 @@ public abstract class GenotypeTool {
     						else
     							System.err.println("File " + fn + " is not valid NGS module.");
     					}
-    					if (fn.endsWith("_1.fastq"))
-    						key = fn.substring(0, fn.indexOf("_1.fastq"));
-    					if (fn.endsWith("_2.fastq"))
-    						key = fn.substring(0, fn.indexOf("_2.fastq"));
+    					String fastqPE1Suffix = parseArgsResult.ngsPairedEndSuffix1;
+    					String fastqPE2Suffix = parseArgsResult.ngsPairedEndSuffix2;
+    					if (fn.endsWith(fastqPE1Suffix))
+    						key = fn.substring(0, fn.indexOf(fastqPE1Suffix));
+    					if (fn.endsWith(fastqPE2Suffix))
+    						key = fn.substring(0, fn.indexOf(fastqPE2Suffix));
     					if (key != null){
     						PeFiles peFiles = peFilesMap.get(key);
     						if (peFiles == null)
     							peFiles = new PeFiles();
-    						if (fn.endsWith("_1.fastq"))
+    						if (fn.endsWith(fastqPE1Suffix))
     							peFiles.pe1 = f;
-    						if (fn.endsWith("_2.fastq"))
+    						if (fn.endsWith(fastqPE2Suffix))
     							peFiles.pe2 = f;
     						peFilesMap.put(key, peFiles);
     					}
