@@ -42,7 +42,7 @@ public class NgsModuleForm extends FormTemplate {
 		bindEmpty("current-taxonomy");
 		bindEmpty("current-ncbi-viruses");
 
-		NgsModule ngsModule = NgsModule.read(workDir);
+		final NgsModule ngsModule = NgsModule.read(workDir);
 		if (ngsModule != null) {
 			if (ngsModule.getAaFileName() != null) {
 				aaFile = new File(workDir, ngsModule.getAaFileName());
@@ -111,7 +111,10 @@ public class NgsModuleForm extends FormTemplate {
 							+ " <div>Error format bd did not work!</div>");
 
 				}
+				ngsModule.setNcbiVirusesFileName(ncbiVirusesUpload.getWFileUpload().getClientFileName());
+				ngsModule.save(workDir);
 				createDb.setEnabled(isReady());
+				dirtyHandler.increaseDirty();
 			}
 		});
 		createDb.clicked().addListener(createDb, new Signal.Listener() {
