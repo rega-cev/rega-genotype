@@ -72,6 +72,8 @@ public class NgsTest  extends TestCase{
     	GenotypeResultParser p = new GenotypeResultParser(){
 			@Override
 			public void endSequence() {
+				//String seqName = getValue("/genotype_result/@name");
+				String seqLen = getValue("/genotype_result/@length");
 				String assignment = getValue("/genotype_result/sequence/conclusion/assigned/id");
 				String absoluteStr = getValue("/genotype_result/sequence/result[@id='blast']/cluster/absolute-score");
 
@@ -79,6 +81,7 @@ public class NgsTest  extends TestCase{
 
 				assertEquals("Retroviridae Lentivirus", assignment);
 				assertTrue(Math.abs(absolute - 4231.0) < DELTA);
+				assertEquals(seqLen, "4758"); // Note: if the sequence is longed it is probably good and we only need to change the test.
 			}
 
 			@Override
