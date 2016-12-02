@@ -51,14 +51,25 @@ public class AlignmentAnalyses {
      * A taxus corresponds to a sequence in the alignment
      */
     public static class Taxus {
+    	public static final String SOURCE_ICTV = "ICTV";
+    	public static final String SOURCE_NCBI = "NCBI";
+    	public static final String SOURCE_UNKNOWN = "Unknown";
+    	public static final String SOURCE_TOOL_ADMIN= "Tool admin";
+
     	private String id;
+    	private String source;
     	
-    	public Taxus(String id) {
+    	public Taxus(String id, String source) {
     		this.id = id;
+    		this.source = source;
     	}
 
 		public String getId() {
 			return id;
+		}
+
+		public String getSource() {
+			return source;
 		}
     }
 
@@ -113,8 +124,8 @@ public class AlignmentAnalyses {
             this.name = name;
         }
         
-        public void addTaxus(String taxusName) {
-            taxa.add(new Taxus(taxusName));
+        public void addTaxus(String taxusName, String src) {
+            taxa.add(new Taxus(taxusName, src));
         }
         
         public void addTaxus(Taxus taxus) {
@@ -318,7 +329,7 @@ public class AlignmentAnalyses {
             	for (int i = 0; i < alignment.getSequences().size(); ++i) {
             		AbstractSequence seq = alignment.getSequences().get(i);
             		Cluster c = new Cluster(seq.getName(), seq.getName(), seq.getDescription(), null, null);
-            		c.addTaxus(seq.getName());
+            		c.addTaxus(seq.getName(), Taxus.SOURCE_UNKNOWN); //TODO SRC?
             		clusters.add(c);
             	}
             } else {
@@ -582,8 +593,11 @@ public class AlignmentAnalyses {
         
         List taxusEs = element.getChildren("taxus");        
         for (Iterator i = taxusEs.iterator(); i.hasNext();) {
-            Element taxusE = (Element) i.next(); 
-            Taxus taxus = new Taxus(taxusE.getAttributeValue("name"));
+            Element taxusE = (Element) i.next();
+            String source = taxusE.getAttributeValue("source");
+            if (source == null || source.isEmpty())
+            	source = Taxus.SOURCE_UNKNOWN;
+            Taxus taxus = new Taxus(taxusE.getAttributeValue("name"), source);
             result.addTaxus(taxus);
         }
 
