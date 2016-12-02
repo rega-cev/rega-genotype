@@ -79,13 +79,18 @@ public class SequenceToolMakeConsensus {
 			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
+		File outContigs = NgsFileSystem.consensusContigsFile(workDir, virusName);
+		outContigs.getParentFile().mkdirs();
+		outContigs.createNewFile();
+
 		File out = NgsFileSystem.consensusFile(workDir, virusName);
 		out.getParentFile().mkdirs();
 		out.createNewFile();
-
+		
 		String cmd = sequencetoolPath + " make-consensus"
 				+ " --input " + assembledContigs.getAbsolutePath()
 				+ " --output " + out.getAbsolutePath()
+				+ " --output-contigs " + outContigs.getAbsolutePath()
 				+ " --max-gap " + ngsModule.getConsensusToolMaxGap()
 				+ " --max-missing " + ngsModule.getConsensusToolMaxMissing()
 				+ " --min-count " + ngsModule.getConsensusToolMinCount()
@@ -93,6 +98,6 @@ public class SequenceToolMakeConsensus {
 
 		NgsFileSystem.executeCmd(cmd, workDir);
 
-		return out;
+		return outContigs;
 	}
 }

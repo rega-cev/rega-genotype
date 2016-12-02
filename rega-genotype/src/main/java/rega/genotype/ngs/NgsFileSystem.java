@@ -43,6 +43,7 @@ public class NgsFileSystem {
 	public static final String PREPROCESSED_FILE_NAMR_UNPAIRD = "unpaird_";
 	public static final String SEQUENCES_FILE = "sequences.fasta";
 
+	public static final String CONSENSUS_CONTIGS_FILE = "consensus-contigs.fasta";
 	public static final String CONSENSUS_FILE = "consensus.fasta";
 	public static final String CONSENSUS_ALINGMENT_FILE = "consensus-alingemnt.fasta";
 	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
@@ -216,6 +217,10 @@ public class NgsFileSystem {
 		return CONSENSUS_DIR + File.separator + virusName;
 	}
 
+	public static File consensusContigsFile(File workDir, String virusName) {
+		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_CONTIGS_FILE);
+	}
+	
 	public static File consensusFile(File workDir, String virusName) {
 		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_FILE);
 	}
