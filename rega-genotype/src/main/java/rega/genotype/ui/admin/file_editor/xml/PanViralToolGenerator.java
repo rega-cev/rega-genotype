@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -116,6 +117,7 @@ public class PanViralToolGenerator {
 		
 		// create blast.xml
 
+		List<AbstractSequence> badSequences = new ArrayList<AbstractSequence>();
 		AlignmentAnalyses alignmentAnalyses = createAlignmentAnalyses(workDir, fastaOut);
 		for (AbstractSequence s: alignmentAnalyses.getAlignment().getSequences()) {
 			String accessionNumber = findAccessionNumber(getAccessionNumber(s.getName()), accessionNumMapICTV);
@@ -133,6 +135,7 @@ public class PanViralToolGenerator {
 				cluster = new Cluster();
 				if (data.taxonomyId == null) {
 					System.err.println("taxonomyId == null : " + accessionNumber);
+					badSequences.add(s);
 					continue; // should not get here
 				}
 				String mnemenic = TaxonomyModel.getMnemenic(data.taxonomyId);
@@ -149,16 +152,23 @@ public class PanViralToolGenerator {
 			cluster.addTaxus(new Taxus(accessionNumber, Taxus.SOURCE_ICTV));	
 		}
 
+		for (AbstractSequence s:badSequences) {
+			alignmentAnalyses.getAlignment().getSequences().remove(s);
+		}
+		
 		// Add NCBI refseq
 
 		File ncbiAccQuery = createNcbiAccQuery(workDir, ncbiVirusesDb);
 		
 		File ncbiTaxonomyIdsFile = new File(workDir, "ncbi-taxonomy.fasta");
+		
 		queryNcbi(ncbiAccQuery, workDir, null, ncbiTaxonomyIdsFile);
 		//querytaxonomyIds(ncbiAccQuery, workDir);
 
+		File fastaNcbiPreprocessed = new File(workDir, "ncbi-preprocessed.fasta");
+		preprocessFasta(ncbiTaxonomyIdsFile, fastaNcbiPreprocessed);
 		Map<String, Data> ncbiAccMap = new HashMap<String, PanViralToolGenerator.Data>();
-		fillData(ncbiAccMap, ncbiTaxonomyIdsFile, false);
+		fillData(ncbiAccMap, fastaNcbiPreprocessed, false);
 
 		AlignmentAnalyses ncbiAlignmentAnalyses = createAlignmentAnalyses(workDir, ncbiVirusesDb);
 		for (AbstractSequence s: ncbiAlignmentAnalyses.getAlignment().getSequences()) {
@@ -169,10 +179,10 @@ public class PanViralToolGenerator {
 			Data data = ncbiAccMap.get(accessionNumber);
 
 			if (data == null) {
-				System.err.println("data for " + accessionNumber + " not found.");
+				System.err.println("data for " + accessionNumber + " not found.");// the acc num is not in taxonomy file.
 				continue;
 			}
-				
+
 			// sequence 
 			s.setName(accessionNumber);
 
@@ -193,10 +203,10 @@ public class PanViralToolGenerator {
 				cluster.setTaxonomyId(data.taxonomyId);
 				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));
 				alignmentAnalyses.getAllClusters().add(cluster);
-				alignmentAnalyses.getAlignment().addSequence(s);
 			}
 
-			cluster.addTaxus(new Taxus(accessionNumber, Taxus.SOURCE_NCBI));	
+			cluster.addTaxus(new Taxus(accessionNumber, Taxus.SOURCE_NCBI));
+			alignmentAnalyses.getAlignment().addSequence(s);
 		}
 		
 		return alignmentAnalyses;
