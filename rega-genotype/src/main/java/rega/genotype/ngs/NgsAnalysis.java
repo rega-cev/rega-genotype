@@ -2,15 +2,23 @@ package rega.genotype.ngs;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
+import rega.genotype.FileFormatException;
+import rega.genotype.ParameterProblemException;
+import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
@@ -18,6 +26,8 @@ import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.ngs.QC.QcResults;
 import rega.genotype.ngs.QC.QcResults.Result;
+import rega.genotype.singletons.Settings;
+import rega.genotype.utils.BlastUtil;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
 
@@ -229,7 +239,7 @@ public class NgsAnalysis {
 		File sequenceFile1 = new File(virusDir, fastqPE1FileName);
 		File sequenceFile2 = new File(virusDir, fastqPE2FileName);
 
-		if (sequenceFile1.length() < 1000*100)
+		if (sequenceFile1.length() < 1000*10)
 			return false; // no need to assemble if there is not enough reads.
 
 		try {
@@ -240,7 +250,7 @@ public class NgsAnalysis {
 			if (assembledFile == null)
 				return false;
 
-			long endAssembly =  System.currentTimeMillis();
+			long endAssembly = System.currentTimeMillis();
 			ngsLogger.info("assembled " + virusDir.getName() + " = " + (endAssembly - startAssembly) + " ms");
 
 			// fill sequences.xml'
@@ -255,34 +265,55 @@ public class NgsAnalysis {
 					return false;
 				}
 
+			SequenceAlignment contigs = new SequenceAlignment(new FileInputStream(assembledFile), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+
+			File ncbiVirusesFasta = Settings.getInstance().getConfig().getNcbiVirusesDb();
+			if (ncbiVirusesFasta == null)
+				throw new ApplicationException("Ncbi Viruses Db Path needs to be set in global settings");
+
+			workDir.mkdirs();
+			SequenceAlignment refs = detectRefs(virusDir, contigs, ncbiVirusesFasta);
+
+			// FIXME:
+			//  - probably should change the cutoff for the alignment, relative to length?
+
 			String virusName = virusDir.getName();
-			File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, workDir, virusName, ngsModule);
-			File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, workDir, virusName, ngsModule);
 
-			// add virus taxonomy id to every consensus sequence name, save sequence metadata.
-
-			SequenceAlignment sequenceAlignment = new SequenceAlignment(
-					new FileInputStream(consensus), 
-					SequenceAlignment.FILETYPE_FASTA, 
-					SequenceAlignment.SEQUENCE_DNA);
-
-			String taxonomyId = virusName.split("_")[0];
-			for (AbstractSequence s: sequenceAlignment.getSequences()) {
-				String[] split = fastqPE1FileName.split("_");
-				String fastqFileId = (split.length > 0) ? split[0] : fastqPE1FileName;
-				s.setName(taxonomyId + "__" + s.getName() + " " + fastqFileId);
+			for (AbstractSequence ref : refs.getSequences()) {
+				System.out.println("Trying with " + ref.getName() + " " + ref.getDescription());
+				
+				String name = ref.getName().replaceAll("\\|", "_");
+				
+				File refWorkDir = workDir.toPath().resolve(name).toFile();
+				File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, ref, refWorkDir, virusName, ngsModule);
+				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, refWorkDir, virusName, ngsModule);
+	
+				// add virus taxonomy id to every consensus contig name, save sequence metadata.
+	
+				SequenceAlignment sequenceAlignment = new SequenceAlignment(
+						new FileInputStream(consensus), 
+						SequenceAlignment.FILETYPE_FASTA, 
+						SequenceAlignment.SEQUENCE_DNA);
+	
+				String taxonomyId = virusName.split("_")[0];
+				for (AbstractSequence s: sequenceAlignment.getSequences()) {
+					String[] split = fastqPE1FileName.split("_");
+					String fastqFileId = (split.length > 0) ? split[0] : fastqPE1FileName;
+					s.setName(taxonomyId + "__" + s.getName() + " " + fastqFileId);
+				}
+				
+				System.out.println("Created " + sequenceAlignment.getSequences().size() + " contigs");
+	
+				ngsProgress.save(workDir);
+	
+				consensus.delete();
+				sequenceAlignment.writeOutput(new FileOutputStream(consensus),
+						SequenceAlignment.FILETYPE_FASTA);
+	
+				ngsLogger.info("consensus " + virusDir.getName() + " = " + (System.currentTimeMillis() - endAssembly) + " ms");
+	
+				FileUtil.appendToFile(consensus, sequences);
 			}
-
-			ngsProgress.save(workDir);
-
-			consensus.delete();
-			sequenceAlignment.writeOutput(new FileOutputStream(consensus),
-					SequenceAlignment.FILETYPE_FASTA);
-
-			ngsLogger.info("consensus " + virusDir.getName() + " = " + (System.currentTimeMillis() - endAssembly) + " ms");
-
-			FileUtil.appendToFile(consensus, sequences);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			ngsProgress.getSpadesErrors().add("assemble failed." + e.getMessage());
@@ -291,5 +322,37 @@ public class NgsAnalysis {
 		}
 
 		return true;
+	}
+
+	private SequenceAlignment detectRefs(File virusDir,
+			SequenceAlignment contigs, File ncbiVirusesFasta)
+			throws ApplicationException, IOException, InterruptedException,
+			ParameterProblemException, FileFormatException,
+			FileNotFoundException {
+		String virusName = virusDir.getName();
+
+		SequenceAlignment refs = new SequenceAlignment();
+		Set<String> refNames = new HashSet<String>();
+
+		for (AbstractSequence contig : contigs.getSequences()) {
+			if (contig.getLength() < ngsModule.getRefMinContigLength())
+				break;
+			
+			File reference = NgsFileSystem.consensusRefFile(workDir, virusName);
+			File consensusDir = new File(workDir, NgsFileSystem.consensusDir(virusName));
+			consensusDir.mkdirs();
+
+			boolean match = BlastUtil.computeBestRefSeq(contig, consensusDir, reference, ncbiVirusesFasta, ngsModule.getRefMaxBlastEValue(), ngsModule.getRefMinBlastBitScore());
+
+			if (match) {
+				SequenceAlignment ref = new SequenceAlignment(new FileInputStream(reference), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+				AbstractSequence as = ref.getSequences().get(0);
+				if (!refNames.contains(as.getName())) {
+					refs.addSequence(as);
+					refNames.add(as.getName());
+				}
+			}
+		}
+		return refs;
 	}
 }

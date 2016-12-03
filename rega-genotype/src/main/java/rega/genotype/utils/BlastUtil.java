@@ -36,7 +36,7 @@ public class BlastUtil {
 	 * Write the result refseq with best score in out.
 	 * Note: formatDB must be called inthe same workDir before.
 	 */
-	public static void computeBestRefSeq(AbstractSequence sequence, File workDir, File out, File blastdb)
+	public static boolean computeBestRefSeq(AbstractSequence sequence, File workDir, File out, File blastdb, double maxEValue, double minBitScore)
 			throws ApplicationException, IOException, InterruptedException {
 
 		Process blast = null;
@@ -83,14 +83,22 @@ public class BlastUtil {
 				throw new ApplicationException("blast exited with error: " + exitResult);
 
 			if (values == null)
-				return;
+				return false;
 
 			if (values.length != 12)
 				throw new ApplicationException("blast result format error");
 
-			findSequence(values[BlastAnalysis.BLAST_RESULT_SUBJECT_ID_IDX],
-					blastdb, out);
-		}
+			double eVal = Double.valueOf(values[BlastAnalysis.BLAST_RESULT_E_VALUE_IDX]);
+			double bitScore = Double.valueOf(values[BlastAnalysis.BLAST_RESULT_BIT_SCORE_IDX]);
+
+			if (eVal < maxEValue && bitScore > minBitScore) {
+				findSequence(values[BlastAnalysis.BLAST_RESULT_SUBJECT_ID_IDX],
+						blastdb, out);
+				return true;
+			} else
+				return false;
+		} else
+			return false;
 	}
 
 	public static void findSequence(String sequenceId, File blastdb, File out) throws IOException, ApplicationException, InterruptedException {

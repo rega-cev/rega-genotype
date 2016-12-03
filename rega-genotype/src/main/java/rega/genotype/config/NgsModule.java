@@ -32,10 +32,14 @@ public class NgsModule {
 	private String consensusToolMaxMissing = "100";
 	private String consensusToolMinCount = "10";
 	private String consensusToolMixtureMinPct = "20";
-	private String consensusToolCutoff = "70";
+	private String consensusToolAbsoluteCutoff = "70";
 	private String consensusToolMinSingleSeqCov = "4";
-	private String diamondOptions = "";
+	private String diamondOptions = "-e 0.01";
 	private String spadesOptions = "";
+	private int minRefContigLength = 400;
+	private double refMaxBlastEValue = 1E-5;
+	private double refMinBlastBitScore = 50;
+	private String consensusToolRelativeCutoff = "1";
 
 	public NgsModule() {}
 
@@ -139,12 +143,20 @@ public class NgsModule {
 		this.consensusToolMixtureMinPct = consensusToolMixtureMinPct;
 	}
 
-	public String getConsensusToolCutoff() {
-		return consensusToolCutoff;
+	public void setConsensusToolAbsoluteCutoff(String consensusToolAbsoluteCutoff) {
+		this.consensusToolAbsoluteCutoff = consensusToolAbsoluteCutoff;
 	}
 
-	public void setConsensusToolCutoff(String consensusToolCutoff) {
-		this.consensusToolCutoff = consensusToolCutoff;
+	public String getConsensusToolAbsoluteCutoff() {
+		return consensusToolAbsoluteCutoff;
+	}
+
+	public void setConsensusToolRelativeCutoff(String consensusToolRelativeCutoff) {
+		this.consensusToolRelativeCutoff = consensusToolRelativeCutoff;
+	}
+
+	public String getConsensusToolRelativeCutoff() {
+		return consensusToolRelativeCutoff;
 	}
 
 	public String getConsensusToolMinSingleSeqCov() {
@@ -170,5 +182,29 @@ public class NgsModule {
 
 	public void setSpadesOptions(String spadesOptions) {
 		this.spadesOptions = spadesOptions;
+	}
+
+	public int getRefMinContigLength() {
+		return minRefContigLength;
+	}
+	
+	public void setRefMinContigLength(int minRefContigLength) {
+		this.minRefContigLength = minRefContigLength;
+	}
+
+	public double getRefMaxBlastEValue() {
+		return refMaxBlastEValue;
+	}
+	
+	public void setRefMaxBlastEValue(double refMaxBlastEValue) {
+		this.refMaxBlastEValue = refMaxBlastEValue;
+	}
+
+	public double getRefMinBlastBitScore() {
+		return refMinBlastBitScore;
+	}
+	
+	public void setRefMinBlastBitScore(double refMinBlastBitScore) {
+		this.refMinBlastBitScore = refMinBlastBitScore;
 	}
 }
