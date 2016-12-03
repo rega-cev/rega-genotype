@@ -170,7 +170,7 @@ public class ClusterForm extends FormTemplate{
 
 				for(AbstractSequence s: addedSequences){
 					alignmentAnalyses.getAlignment().addSequence(s);
-					cluster.addTaxus(s.getName());
+					cluster.addTaxus(s.getName(), Taxus.SOURCE_TOOL_ADMIN);
 				}
 
 				for(String sequenceName: removedSequenceNames){

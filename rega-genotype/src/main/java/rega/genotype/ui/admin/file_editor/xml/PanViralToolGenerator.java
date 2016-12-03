@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -82,10 +84,168 @@ public class PanViralToolGenerator {
 	}
 
 	// <AccessionNumber, data (description)> 
-	private Map<String, Data> accessionNumMap = new HashMap<String, Data>(); 
+	private Map<String, Data> accessionNumMapICTV = new HashMap<String, Data>(); 
 	private Signal1<AlignmentAnalyses> finished = new Signal1<AlignmentAnalyses>();
 	
 	public AlignmentAnalyses createAlignmentAnalyses(File ictvMasterSpeciesListFile) throws ApplicationException, IOException, InterruptedException, ParameterProblemException, FileFormatException {
+
+		File ncbiVirusesDb = Settings.getInstance().getConfig().getNcbiVirusesDb();
+		if (ncbiVirusesDb == null)
+			throw new ApplicationException("NGS Module does not contain ncbi batabase.");
+
+		File workDir = FileUtil.createTempDirectory("tool-dir", 
+				new File(Settings.getInstance().getBaseDir(), AUTO_CREATE_BLAST_XML_DIR));
+		workDir.mkdirs();
+
+		File query = createICTVQueryFile(workDir, ictvMasterSpeciesListFile);
+
+		// Query from NCBI
+		File fastaOut = new File(workDir, "fasta-out");
+		File taxonomyOut = new File(workDir, "taxonomy-out");
+		
+		queryNcbi(query, workDir, fastaOut, taxonomyOut);
+
+		// Add taxonomy id data		
+		fillData(accessionNumMapICTV, taxonomyOut, true);
+
+		// preprocess fasta: remove the description.
+		//File fastaOutPreprocessed = preprocessFasta(workDir, fastaOut);
+
+		// make sure that taxonomy is ready
+		if (TaxonomyModel.getTaxons().isEmpty())
+			TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
+		
+		// create blast.xml
+
+		List<AbstractSequence> badSequences = new ArrayList<AbstractSequence>();
+		AlignmentAnalyses alignmentAnalyses = createAlignmentAnalyses(workDir, fastaOut);
+		for (AbstractSequence s: alignmentAnalyses.getAlignment().getSequences()) {
+			String accessionNumber = findAccessionNumber(getAccessionNumber(s.getName()), accessionNumMapICTV);
+			if (accessionNumber == null)
+				continue;
+
+			Data data = accessionNumMapICTV.get(accessionNumber);
+
+			// sequence 
+			s.setName(accessionNumber);
+
+			// cluster
+			Cluster cluster = alignmentAnalyses.findCluster(data.taxonomyId);
+			if(cluster == null) {
+				cluster = new Cluster();
+				if (data.taxonomyId == null) {
+					System.err.println("taxonomyId == null : " + accessionNumber);
+					badSequences.add(s);
+					continue; // should not get here
+				}
+				String mnemenic = TaxonomyModel.getMnemenic(data.taxonomyId);
+				String id = data.taxonomyId;
+				if (mnemenic != null && !mnemenic.isEmpty())
+					id += "_" + mnemenic;
+				cluster.setId(id);
+				cluster.setName(data.organizedName);
+				cluster.setTaxonomyId(data.taxonomyId);
+				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));// TODO: this should come from ICTV?
+				alignmentAnalyses.getAllClusters().add(cluster);
+			}
+
+			cluster.addTaxus(new Taxus(accessionNumber, Taxus.SOURCE_ICTV));	
+		}
+
+		for (AbstractSequence s:badSequences) {
+			alignmentAnalyses.getAlignment().getSequences().remove(s);
+		}
+		
+		// Add NCBI refseq
+
+		File ncbiAccQuery = createNcbiAccQuery(workDir, ncbiVirusesDb);
+		
+		File ncbiTaxonomyIdsFile = new File(workDir, "ncbi-taxonomy.fasta");
+		
+		queryNcbi(ncbiAccQuery, workDir, null, ncbiTaxonomyIdsFile);
+		//querytaxonomyIds(ncbiAccQuery, workDir);
+
+		File fastaNcbiPreprocessed = new File(workDir, "ncbi-preprocessed.fasta");
+		preprocessFasta(ncbiTaxonomyIdsFile, fastaNcbiPreprocessed);
+		Map<String, Data> ncbiAccMap = new HashMap<String, PanViralToolGenerator.Data>();
+		fillData(ncbiAccMap, fastaNcbiPreprocessed, false);
+
+		AlignmentAnalyses ncbiAlignmentAnalyses = createAlignmentAnalyses(workDir, ncbiVirusesDb);
+		for (AbstractSequence s: ncbiAlignmentAnalyses.getAlignment().getSequences()) {
+			String accessionNumber = getAccessionNumber(s.getName());
+			if (accessionNumber == null)
+				continue;
+
+			Data data = ncbiAccMap.get(accessionNumber);
+
+			if (data == null) {
+				System.err.println("data for " + accessionNumber + " not found.");// the acc num is not in taxonomy file.
+				continue;
+			}
+
+			// sequence 
+			s.setName(accessionNumber);
+
+			// cluster
+			Cluster cluster = alignmentAnalyses.findCluster(data.taxonomyId);
+			if(cluster == null) {
+				cluster = new Cluster();
+				if (data.taxonomyId == null) {
+					System.err.println("taxonomyId == null : " + accessionNumber);
+					continue; // should not get here
+				}
+				String mnemenic = TaxonomyModel.getMnemenic(data.taxonomyId);
+				String id = data.taxonomyId;
+				if (mnemenic != null && !mnemenic.isEmpty())
+					id += "_" + mnemenic;
+				cluster.setId(id);
+				cluster.setName(data.organizedName);
+				cluster.setTaxonomyId(data.taxonomyId);
+				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));
+				alignmentAnalyses.getAllClusters().add(cluster);
+			}
+
+			cluster.addTaxus(new Taxus(accessionNumber, Taxus.SOURCE_NCBI));
+			alignmentAnalyses.getAlignment().addSequence(s);
+		}
+		
+		return alignmentAnalyses;
+	}
+
+	private AlignmentAnalyses createAlignmentAnalyses(File workDir, File fastaOutPreprocessed) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException {
+		final File jobDir = GenotypeLib.createJobDir(workDir + File.separator + "tmp");
+		jobDir.mkdirs();
+
+		AlignmentAnalyses alignmentAnalyses = new AlignmentAnalyses();
+		SequenceAlignment sequenceAlignment = new SequenceAlignment(new FileInputStream(fastaOutPreprocessed),
+				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+		alignmentAnalyses.setAlignment(sequenceAlignment);
+		BlastAnalysis blastAnalysis = new BlastAnalysis(alignmentAnalyses,
+				"", new ArrayList<AlignmentAnalyses.Cluster>(),
+				50.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, "-q -1 -r 1", "", jobDir);
+		alignmentAnalyses.putAnalysis("blast", blastAnalysis);
+
+		return alignmentAnalyses;
+	}
+	
+	private void preprocessFasta(File fastaOut, File fastaOutPreprocessed) throws IOException {
+		BufferedReader fastaBr = new BufferedReader(new FileReader(fastaOut));
+		PrintWriter fastaWriter = new PrintWriter(new BufferedWriter(
+				new FileWriter(fastaOutPreprocessed.getAbsolutePath(), true)));
+		String fastaLine = null;
+		while ((fastaLine = fastaBr.readLine()) != null) {
+			if (fastaLine.length() > 0 && fastaLine.charAt(0) == '>'){
+				//fastaWriter.println(">" + fastaLine.split(" ")[0]);
+				fastaWriter.println(fastaLine.split(" ")[0]);
+			} else {
+				fastaWriter.println(fastaLine);
+			}
+		}
+		fastaBr.close();
+		fastaWriter.close();
+	}
+
+	private File createICTVQueryFile(File workDir, File ictvMasterSpeciesListFile) throws IOException {
 		StringBuilder accessionNumbers = new StringBuilder();
 
 		// parse ICTV Master Species List
@@ -188,144 +348,35 @@ public class PanViralToolGenerator {
 
 		// create query file
 
-		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
-		File workDir = FileUtil.createTempDirectory("tool-dir", 
-				new File(Settings.getInstance().getBaseDir(), AUTO_CREATE_BLAST_XML_DIR));
-		workDir.mkdirs();
-
 		File query = new File(workDir, "query");
 		FileUtil.writeStringToFile(query, accessionNumbers.toString());
 
-		// Query from NCBI
-		
-		File fastaOut = new File(workDir, "fasta-out");
-		File fastaOutPreprocessed = new File(workDir, "fasta-out-preprocessed");
-		File taxonomyOut = new File(workDir, "taxonomy-out");
-		
-		String epost = edirectPath + "epost";
-		String efetch = edirectPath + "efetch";
-		String xtract = edirectPath + "xtract";
-
-		String cmd = 
-				// query taxonomy ids
-				"cat " + query.getAbsolutePath() + "|" 
-				+ epost + " -db nuccore -format acc|"
-				+ efetch + " -db nuccore -format docsum | " 
-				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + taxonomyOut.getAbsolutePath() + "\n" 
-				// query fasta
-				+ " cat " + query.getAbsolutePath() + "|" 
-				+ epost + " -db nuccore -format acc|" 
-				+ efetch + " -db nuccore -format fasta > " + fastaOut.getAbsolutePath();
-
-		String[] shellCmd = {"/bin/sh", "-c", cmd};
-		System.err.println(cmd);
-
-		Process fetchFasta = null;
-		fetchFasta = Runtime.getRuntime().exec(shellCmd);
-		int exitResult = fetchFasta.waitFor();
-		if (exitResult != 0){
-			throw new ApplicationException("fetchFasta exited with error: " + exitResult);
-		}
-
-		// Add taxonomy id data
-
-		BufferedReader taxonomyBr = new BufferedReader(new FileReader(taxonomyOut));
-
-		String l = null;
-		while ((l = taxonomyBr.readLine()) != null) {
-			String[] row = l.split("\t");
-			String accessionNumber = getAccessionNumber(row[0]);
-			if (accessionNumber == null)
-				continue;
-
-			String taxonomyId = row[1];
-			String organizedName = row[2];
-			Data data = accessionNumMap.get(accessionNumber);
-			accessionNumMap.put(accessionNumber, new Data(data.description, taxonomyId, organizedName));
-		}
-		taxonomyBr.close();
-
-		// preprocess fasta: remove the description.
-
-		BufferedReader fastaBr = new BufferedReader(new FileReader(fastaOut));
-		PrintWriter fastaWriter = new PrintWriter(new BufferedWriter(
-				new FileWriter(fastaOutPreprocessed.getAbsolutePath(), true)));
-		String fastaLine = null;
-		while ((fastaLine = fastaBr.readLine()) != null) {
-			if (fastaLine.length() > 0 && fastaLine.charAt(0) == '>'){
-				fastaWriter.println(">" + fastaLine.split(" ")[0]);
-			} else {
-				fastaWriter.println(fastaLine);
-			}
-		}
-		fastaBr.close();
-		fastaWriter.close();
-
-		// make sure that taxonomy is ready
-		if (TaxonomyModel.getTaxons().isEmpty())
-			TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
-		
-		// create blast.xml
-
-		final File jobDir = GenotypeLib.createJobDir(workDir + File.separator + "tmp");
-		jobDir.mkdirs();
-		AlignmentAnalyses alignmentAnalyses = new AlignmentAnalyses();
-		SequenceAlignment sequenceAlignment = new SequenceAlignment(new FileInputStream(fastaOutPreprocessed),
-				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
-		alignmentAnalyses.setAlignment(sequenceAlignment);
-		BlastAnalysis blastAnalysis = new BlastAnalysis(alignmentAnalyses,
-				"", new ArrayList<AlignmentAnalyses.Cluster>(),
-				50.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, "-q -1 -r 1", "", jobDir);
-		alignmentAnalyses.putAnalysis("blast", blastAnalysis);
-
-		for (AbstractSequence s: alignmentAnalyses.getAlignment().getSequences()) {
-			String accessionNumber = getAccessionNumber(s.getName());
-			if (accessionNumber == null)
-				continue;
-
-			Data data = accessionNumMap.get(accessionNumber);
-
-			// sequence 
-			s.setName(accessionNumber);
-
-			// cluster
-			Cluster cluster = alignmentAnalyses.findCluster(data.taxonomyId);
-			if(cluster == null) {
-				cluster = new Cluster();
-				if (data.taxonomyId == null) {
-					System.err.println("taxonomyId == null : " + accessionNumber);
-					continue; // should not get here
-				}
-				String mnemenic = TaxonomyModel.getMnemenic(data.taxonomyId);
-				String id = data.taxonomyId;
-				if (mnemenic != null && !mnemenic.isEmpty())
-					id += "_" + mnemenic;
-				cluster.setId(id);
-				cluster.setName(data.organizedName);
-				cluster.setTaxonomyId(data.taxonomyId);
-				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));
-				alignmentAnalyses.getAllClusters().add(cluster);
-			}
-
-			cluster.addTaxus(new Taxus(accessionNumber));	
-		}
-
-		return alignmentAnalyses;
+		return query;
 	}
 
 	private String getAccessionNumber(String fastaName) {
 		String accessionNumber = null;
-		String[] split = fastaName.split("\\|");
-		for(int i = 0; i < split.length - 1; ++i){
-			String s = split[i];
-			if (s.equals("gb") || s.equals("emb") || s.equals("dbj")
-					|| s.equals("tpe") || s.equals("ref"))
-				accessionNumber = split[i + 1];
-		}
-		if (accessionNumber == null) {
-			System.err.println("bad accession numebr regex " + fastaName);
+		if (fastaName.contains("|")){
+			String[] split = fastaName.split("\\|");
+			for(int i = 0; i < split.length - 1; ++i){
+				String s = split[i];
+				if (s.equals("gb") || s.equals("emb") || s.equals("dbj")
+						|| s.equals("tpe") || s.equals("ref"))
+					accessionNumber = split[i + 1];
+			}
+			if (accessionNumber == null) {
+				System.err.println("bad accession numebr regex " + fastaName);
+				return null;
+			}
+		} else 
+			accessionNumber = fastaName;
+
+		return accessionNumber;
+	}
+	
+	private String findAccessionNumber(String accessionNumber, Map<String, Data> accessionNumMap) {
+		if (accessionNumber == null)
 			return null;
-		}
 
 		Data data = accessionNumMap.get(accessionNumber);
 		if (data == null) {
@@ -333,7 +384,7 @@ public class PanViralToolGenerator {
 				accessionNumber = accessionNumber.split("\\.")[0];
 			data = accessionNumMap.get(accessionNumber);
 			if (data == null) {
-				System.err.println("bad accession numebr " + accessionNumber + " from: " + fastaName );
+				System.err.println("bad accession numebr " + accessionNumber);
 				return null; // it is possible that the accession number in ictv master list contains error; 
 			}
 		}
@@ -360,9 +411,138 @@ public class PanViralToolGenerator {
 		
 		description.replace(" ", "_");
 
-		accessionNumMap.put(accessionNum, new Data(description, null, null));
+		accessionNumMapICTV.put(accessionNum, new Data(description, null, null));
 	}
 
+	private File createNcbiAccQuery(File workDir, File ncbiVirusesDb) throws IOException, ParameterProblemException, FileFormatException {
+//		File preprocessNcbiDbFasta = new File(workDir, "ncbi-preprocesses-sequences");
+//				preprocessFasta(ncbiVirusesDb);
+		AlignmentAnalyses ncbiSequences = createAlignmentAnalyses(workDir, ncbiVirusesDb);
+
+		StringBuilder accessionBuild = new StringBuilder();
+		
+		for (AbstractSequence s: ncbiSequences.getAlignment().getSequences()) {
+			String accessionNumber = getAccessionNumber(s.getName());
+			if (accessionNumber == null)
+				continue;
+
+			Data data = accessionNumMapICTV.get(accessionNumber);
+
+			if (data != null)
+				continue; // the accession number was added from ICTV is more accurate.
+
+			accessionBuild.append(accessionNumber);
+			accessionBuild.append(System.getProperty("line.separator"));
+		}
+
+		File ans = new File(workDir, "ncbi-query");
+		FileUtil.writeStringToFile(ans, accessionBuild.toString());
+		return ans;
+	}
+
+	private void fillData(Map<String, Data> accessionNumMap, File taxonomyOut, boolean ictvData) throws IOException {
+		BufferedReader taxonomyBr = new BufferedReader(new FileReader(taxonomyOut));
+
+		String l = null;
+		while ((l = taxonomyBr.readLine()) != null) {
+			String[] row = l.split("\t");
+
+			String accessionNumber = ictvData ? 
+					findAccessionNumber(getAccessionNumber(row[0]), accessionNumMap) : 
+						getAccessionNumber(getAccessionNumber(row[0]));
+			if (accessionNumber == null)
+				continue;
+
+			String taxonomyId = row[1];
+			String organizedName = row[2];
+			String description = ictvData ? accessionNumMap.get(accessionNumber).description : "TODO";
+			accessionNumMap.put(accessionNumber, new Data(description, taxonomyId, organizedName));
+		}
+		taxonomyBr.close();
+	}
+
+	//TODO!
+//	private File querytaxonomyIds(File accessionNumbersQuery, File workDir) throws ApplicationException, IOException, InterruptedException {
+//		// Query from NCBI
+//		
+//		File taxonomyOut = new File(workDir, "taxonomy-out");
+//
+//		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
+//
+//		String epost = edirectPath + "epost";
+//		String efetch = edirectPath + "efetch";
+//		String xtract = edirectPath + "xtract";
+//
+//		String cmd = 
+//				// query taxonomy ids
+//				"cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
+//				+ epost + " -db nuccore -format acc|"
+//				+ efetch + " -db nuccore -format docsum | " 
+//				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + taxonomyOut.getAbsolutePath();
+//		execShellCmd(cmd);
+//
+//		return taxonomyOut;
+//	}
+//
+//	private File queryFasta(File accessionNumbersQuery, File workDir) throws ApplicationException, IOException, InterruptedException {
+//		// Query from NCBI
+//		
+//		File fastaOut = new File(workDir, "fasta-out");
+//
+//		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
+//
+//		String epost = edirectPath + "epost";
+//		String efetch = edirectPath + "efetch";
+//
+//		String cmd = 
+//				// query fasta
+//				" cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
+//				+ epost + " -db nuccore -format acc|" 
+//				+ efetch + " -db nuccore -format fasta > " + fastaOut.getAbsolutePath();
+//
+//		execShellCmd(cmd);
+//
+//		return fastaOut;
+//	}
+
+	private void queryNcbi(File accessionNumbersQuery, File workDir, File fastaOut, File taxonomyOut) throws IOException, InterruptedException, ApplicationException {
+		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
+
+		String epost = edirectPath + "epost";
+		String efetch = edirectPath + "efetch";
+		String xtract = edirectPath + "xtract";
+
+		String cmd = 
+				// query taxonomy ids
+				"cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
+				+ epost + " -db nuccore -format acc|"
+				+ efetch + " -db nuccore -format docsum | " 
+				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + taxonomyOut.getAbsolutePath();
+
+		if (fastaOut != null) {
+			cmd += 
+					// query fasta
+					"\n" 
+					+ " cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
+					+ epost + " -db nuccore -format acc|" 
+					+ efetch + " -db nuccore -format fasta > " + fastaOut.getAbsolutePath();
+
+		}
+
+		execShellCmd(cmd);
+	}
+
+	private void execShellCmd(String cmd) throws IOException, InterruptedException, ApplicationException {
+		String[] shellCmd = {"/bin/sh", "-c", cmd};
+		System.err.println(cmd);
+
+		Process fetchFasta = null;
+		fetchFasta = Runtime.getRuntime().exec(shellCmd);
+		int exitResult = fetchFasta.waitFor();
+		if (exitResult != 0){
+			throw new ApplicationException("fetchFasta exited with error: " + exitResult);
+		}
+	}
 
 	public Signal1<AlignmentAnalyses> finished() {
 		return finished;

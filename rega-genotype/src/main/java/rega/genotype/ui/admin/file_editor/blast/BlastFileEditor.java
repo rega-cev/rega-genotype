@@ -128,7 +128,7 @@ public class BlastFileEditor extends WContainerWidget{
 							for (Map.Entry<AbstractSequence, Cluster> e: selectedSequences.entrySet()){
 								AbstractSequence sequence = e.getKey();
 								Cluster cluster = e.getValue();
-								cluster.addTaxus(sequence.getName());
+								cluster.addTaxus(sequence.getName(), Taxus.SOURCE_TOOL_ADMIN);
 								alignmentAnalyses.getAlignment().addSequence(sequence);
 							}
 						}
@@ -297,7 +297,7 @@ public class BlastFileEditor extends WContainerWidget{
 														newClusterMap.put(c.getId(), newCluster);
 														alignmentAnalyses.addCluster(newCluster);
 													} 
-													newCluster.addTaxus(new Taxus(t.getId()));
+													newCluster.addTaxus(new Taxus(t.getId(), t.getSource()));
 													// assume that we do not get here a lot.
 													AbstractSequence sequence = BlastFileEditor.this.alignmentAnalyses.getAlignment().getSequence(t.getId());
 													alignmentAnalyses.getAlignment().addSequence(new Sequence(
