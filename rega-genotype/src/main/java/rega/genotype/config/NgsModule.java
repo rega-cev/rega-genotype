@@ -34,7 +34,7 @@ public class NgsModule {
 	private String consensusToolMixtureMinPct = "20";
 	private String consensusToolAbsoluteCutoff = "70";
 	private String consensusToolMinSingleSeqCov = "4";
-	private String diamondOptions = "-e 0.01";
+	private String diamondOptions = "-e 0.001";
 	private String spadesOptions = "";
 	private int minRefContigLength = 400;
 	private double refMaxBlastEValue = 1E-5;
