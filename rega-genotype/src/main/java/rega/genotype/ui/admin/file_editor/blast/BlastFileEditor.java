@@ -225,6 +225,7 @@ public class BlastFileEditor extends WContainerWidget{
 				});
 				d.getContents().addWidget(new WText("<div>A new pan-viral tool will be auto created.</div>"
 						+ "<div>The tool will contain all viruses that have accession number in ICTV Master Species List.</div>"
+						+ "<div>Viruses that are not in ICTV list will be downloaded from NCBI. The source of the vires ref seq will be presented to the user.</div>"
 						+ "<div>This will overwrite your blast configuration.</div>"
 						+ "<div>Note: accession numbers that are not properly formatted will be ignored. </div>"
 						+ "<div>Upload ICTV Master Species List in xlsx format.</div>"));
