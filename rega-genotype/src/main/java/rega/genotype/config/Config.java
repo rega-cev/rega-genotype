@@ -23,6 +23,9 @@ import eu.webtoolkit.jwt.WApplication;
  */
 public class Config {
 	public static final String CONFIG_FILE_NAME = "config.json";
+	// To improve performance every tool can have some preprocessed databases a transient. That will not be sent to 
+	// the central repo because this files are architecture specific.
+	public static final String TRANSIENT_DATABASES_FOLDER_NAME = "transient-databases";
 
 	private GeneralConfig generalConfig = new GeneralConfig();
 	private List<ToolConfig> tools = new ArrayList<Config.ToolConfig>(); //TODO: use set 
@@ -152,23 +155,6 @@ public class Config {
 		
 		File ans = new File(ngsModuleConfig.getConfigurationFile(),
 				ngsModule.getAADbFileName());
-		return ans.exists() ? ans : null;
-	}
-
-	/**
-	 * Query the dna database file of all viruses file from ngs module.
-	 * This should be used by contigs assembly step.
-	 * @return the file or null if the file / module are not found.
-	 */
-	public File getNcbiVirusesDb() {
-		ToolConfig ngsModuleConfig = getCurrentVersion(NgsModule.NGS_MODULE_ID);
-		if (ngsModuleConfig == null)
-			return null;
-
-		NgsModule ngsModule = NgsModule.read(ngsModuleConfig.getConfigurationFile());
-		
-		File ans = new File(ngsModuleConfig.getConfigurationFile(), 
-				ngsModule.getNcbiVirusesFileName());
 		return ans.exists() ? ans : null;
 	}
 

@@ -28,6 +28,8 @@ public class BlastUtil {
 		String blastPath = Settings.getInstance().getBlastPathStr();
 		String cmd = blastPath + "formatdb -p F -o T -i " + db.getAbsolutePath();
 
+		System.err.println(cmd);
+		
 		Utils.executeCmd(cmd, workDir, "blast exited with error");
 	}
 

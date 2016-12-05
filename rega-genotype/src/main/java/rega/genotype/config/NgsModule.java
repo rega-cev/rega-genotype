@@ -15,8 +15,8 @@ import rega.genotype.utils.GsonUtil;
 public class NgsModule {
 	public static final String NGS_MODULE_ID = "NGS_Module";
 	public static final String NGS_MODULE_FILE_NAME = "ngs-module.json";
-	public static final String NGS_MODULE_AA_VIRUSES_DB = "aa-virus.dmnd";
-	public static final String NGS_MODULE_UNIREF_VIRUSES_AA50 = "uniref-viruses-aa50.fasta";
+	public static final String NGS_MODULE_AA_VIRUSES_DB = Config.TRANSIENT_DATABASES_FOLDER_NAME + File.separator + "aa-virus.dmnd";
+	public static final String NGS_MODULE_AA_VIRUSES_FASTA = Config.TRANSIENT_DATABASES_FOLDER_NAME + File.separator + "aa-viruses.fasta";
 
 	public static final String NGS_MODULE_TRIMMOMATIC_JAR = "trimmomatic.jar";
 	public static final String NGS_MODULE_FASTQC_FILE = "fastqc";
@@ -24,22 +24,19 @@ public class NgsModule {
 
 	// internal to ngs module, used to create AA database for diamond blast step (NGS_MODULE_AA_VIRUSES_DB)
 	private String aaFileName = null; 
-	private String taxonomyFileName = null;
 
-	private String ncbiVirusesFileName = null;
-
-	private String consensusToolMaxGap = "10";
-	private String consensusToolMaxMissing = "100";
-	private String consensusToolMinCount = "10";
-	private String consensusToolMixtureMinPct = "20";
-	private String consensusToolAbsoluteCutoff = "70";
-	private String consensusToolMinSingleSeqCov = "4";
+	private int consensusToolMaxGap = 10;
+	private int consensusToolMaxMissing = 100;
+	private int consensusToolMinCount = 10;
+	private int consensusToolMixtureMinPct = 20;
+	private int consensusToolAbsoluteCutoff = 70;
+	private int consensusToolMinSingleSeqCov = 4;
+	private int consensusToolRelativeCutoff = 1;
 	private String diamondOptions = "-e 0.001";
 	private String spadesOptions = "";
 	private int minRefContigLength = 400;
 	private double refMaxBlastEValue = 1E-5;
 	private double refMinBlastBitScore = 50;
-	private String consensusToolRelativeCutoff = "1";
 
 	public NgsModule() {}
 
@@ -83,22 +80,6 @@ public class NgsModule {
 		this.aaFileName = aaFileName;
 	}
 
-	public String getTaxonomyFileName() {
-		return taxonomyFileName;
-	}
-
-	public void setTaxonomyFileName(String taxonomyFileName) {
-		this.taxonomyFileName = taxonomyFileName;
-	}
-
-	public String getNcbiVirusesFileName() {
-		return ncbiVirusesFileName;
-	}
-
-	public void setNcbiVirusesFileName(String ncbiVirusesFileName) {
-		this.ncbiVirusesFileName = ncbiVirusesFileName;
-	}
-
 	public static File adaptersFilePath(File modulePath) {
 		return new File(modulePath, NGS_MODULE_ADAPTERS_FILE);
 	}
@@ -109,63 +90,6 @@ public class NgsModule {
 
 	public static File fastQCpath(File modulePath) {
 		return new File(modulePath, NGS_MODULE_FASTQC_FILE);
-	}
-
-	public String getConsensusToolMaxGap() {
-		return consensusToolMaxGap;
-	}
-
-	public void setConsensusToolMaxGap(String consensusToolMaxGap) {
-		this.consensusToolMaxGap = consensusToolMaxGap;
-	}
-
-	public String getConsensusToolMaxMissing() {
-		return consensusToolMaxMissing;
-	}
-
-	public void setConsensusToolMaxMissing(String consensusToolMaxMissing) {
-		this.consensusToolMaxMissing = consensusToolMaxMissing;
-	}
-
-	public String getConsensusToolMinCount() {
-		return consensusToolMinCount;
-	}
-
-	public void setConsensusToolMinCount(String consensusToolMinCount) {
-		this.consensusToolMinCount = consensusToolMinCount;
-	}
-
-	public String getConsensusToolMixtureMinPct() {
-		return consensusToolMixtureMinPct;
-	}
-
-	public void setConsensusToolMixtureMinPct(String consensusToolMixtureMinPct) {
-		this.consensusToolMixtureMinPct = consensusToolMixtureMinPct;
-	}
-
-	public void setConsensusToolAbsoluteCutoff(String consensusToolAbsoluteCutoff) {
-		this.consensusToolAbsoluteCutoff = consensusToolAbsoluteCutoff;
-	}
-
-	public String getConsensusToolAbsoluteCutoff() {
-		return consensusToolAbsoluteCutoff;
-	}
-
-	public void setConsensusToolRelativeCutoff(String consensusToolRelativeCutoff) {
-		this.consensusToolRelativeCutoff = consensusToolRelativeCutoff;
-	}
-
-	public String getConsensusToolRelativeCutoff() {
-		return consensusToolRelativeCutoff;
-	}
-
-	public String getConsensusToolMinSingleSeqCov() {
-		return consensusToolMinSingleSeqCov;
-	}
-
-	public void setConsensusToolMinSingleSeqCov(
-			String consensusToolMinSingleSeqCov) {
-		this.consensusToolMinSingleSeqCov = consensusToolMinSingleSeqCov;
 	}
 
 	public String getDiamondOptions() {
@@ -206,5 +130,61 @@ public class NgsModule {
 	
 	public void setRefMinBlastBitScore(double refMinBlastBitScore) {
 		this.refMinBlastBitScore = refMinBlastBitScore;
+	}
+
+	public int getConsensusToolMaxGap() {
+		return consensusToolMaxGap;
+	}
+
+	public void setConsensusToolMaxGap(int consensusToolMaxGap) {
+		this.consensusToolMaxGap = consensusToolMaxGap;
+	}
+
+	public int getConsensusToolMaxMissing() {
+		return consensusToolMaxMissing;
+	}
+
+	public void setConsensusToolMaxMissing(int consensusToolMaxMissing) {
+		this.consensusToolMaxMissing = consensusToolMaxMissing;
+	}
+
+	public int getConsensusToolMinCount() {
+		return consensusToolMinCount;
+	}
+
+	public void setConsensusToolMinCount(int consensusToolMinCount) {
+		this.consensusToolMinCount = consensusToolMinCount;
+	}
+
+	public int getConsensusToolMixtureMinPct() {
+		return consensusToolMixtureMinPct;
+	}
+
+	public void setConsensusToolMixtureMinPct(int consensusToolMixtureMinPct) {
+		this.consensusToolMixtureMinPct = consensusToolMixtureMinPct;
+	}
+
+	public int getConsensusToolAbsoluteCutoff() {
+		return consensusToolAbsoluteCutoff;
+	}
+
+	public void setConsensusToolAbsoluteCutoff(int consensusToolAbsoluteCutoff) {
+		this.consensusToolAbsoluteCutoff = consensusToolAbsoluteCutoff;
+	}
+
+	public int getConsensusToolMinSingleSeqCov() {
+		return consensusToolMinSingleSeqCov;
+	}
+
+	public void setConsensusToolMinSingleSeqCov(int consensusToolMinSingleSeqCov) {
+		this.consensusToolMinSingleSeqCov = consensusToolMinSingleSeqCov;
+	}
+
+	public int getConsensusToolRelativeCutoff() {
+		return consensusToolRelativeCutoff;
+	}
+
+	public void setConsensusToolRelativeCutoff(int consensusToolRelativeCutoff) {
+		this.consensusToolRelativeCutoff = consensusToolRelativeCutoff;
 	}
 }

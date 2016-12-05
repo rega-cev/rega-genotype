@@ -31,8 +31,8 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.taxonomy.TaxonomyModel;
-import rega.genotype.taxonomy.UpdateTaxonomyFileService;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.ExcelUtils;
 import rega.genotype.utils.FileUtil;
@@ -89,9 +89,9 @@ public class PanViralToolGenerator {
 	
 	public AlignmentAnalyses createAlignmentAnalyses(File ictvMasterSpeciesListFile) throws ApplicationException, IOException, InterruptedException, ParameterProblemException, FileFormatException {
 
-		File ncbiVirusesDb = Settings.getInstance().getConfig().getNcbiVirusesDb();
-		if (ncbiVirusesDb == null)
-			throw new ApplicationException("NGS Module does not contain ncbi batabase.");
+		File ncbiVirusesDb = RegaSystemFiles.ncbiVirusesFile();
+		if (!ncbiVirusesDb.exists())
+			throw new ApplicationException("NCBI viruses file was not found. Ask admin to update global config.");
 
 		File workDir = FileUtil.createTempDirectory("tool-dir", 
 				new File(Settings.getInstance().getBaseDir(), AUTO_CREATE_BLAST_XML_DIR));
@@ -114,7 +114,7 @@ public class PanViralToolGenerator {
 
 		// make sure that taxonomy is ready
 		if (TaxonomyModel.getTaxons().isEmpty())
-			TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
+			TaxonomyModel.read(RegaSystemFiles.taxonomyFile());
 		
 		// create blast.xml
 

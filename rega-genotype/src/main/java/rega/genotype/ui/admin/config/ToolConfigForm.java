@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.EnumSet;
 
+import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.service.ToolRepoServiceRequests;
@@ -213,7 +214,8 @@ public class ToolConfigForm extends FormTemplate {
 						infoT.setText("Error could publish.");
 						publishFailed = true;
 					} 
-					if (!publishFailed && FileUtil.zip(new File(tool.getConfiguration()), zip)){
+					if (!publishFailed && FileUtil.zip(new File(tool.getConfiguration()),
+							zip, Config.TRANSIENT_DATABASES_FOLDER_NAME)){
 						try {
 							ToolRepoServiceRequests.publish(zip);
 							tool.setPublished(true);

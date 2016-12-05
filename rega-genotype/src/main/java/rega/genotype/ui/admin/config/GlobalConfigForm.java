@@ -7,14 +7,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import rega.genotype.ApplicationException;
 import rega.genotype.config.Config;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
-import rega.genotype.taxonomy.UpdateTaxonomyFileService;
+import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.ui.framework.widgets.AutoForm;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.StandardDialog;
+import rega.genotype.utils.BlastUtil;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;
@@ -81,10 +83,64 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 
 						Thread t = new Thread(new Runnable() {
 							public void run() {
-								File file = UpdateTaxonomyFileService.download();
+								File file = RegaSystemFiles.downloadTaxonomyFile();
 								String infoText = file == null ? "Could not downlod taxonomy file" : "Update finished";
 								UpdateLock updateLock = app.getUpdateLock();
-								TaxonomyModel.read(UpdateTaxonomyFileService.taxonomyFile());
+								TaxonomyModel.read(RegaSystemFiles.taxonomyFile());
+								info.setText(infoText);
+								d.getCancelB().enable();
+								app.triggerUpdate();
+								updateLock.release();
+							}
+						});
+						t.start();
+					}
+				});
+			}
+		});
+
+		// update NCBI viruses DNA data base
+
+		WTable updateNcbiVirusesTable = new WTable(this);
+		updateNcbiVirusesTable.setMargin(15, Side.Top);
+		updateNcbiVirusesTable.addStyleClass("auto-form-table");
+		updateNcbiVirusesTable.getElementAt(0, 0).addWidget(
+				new WText("Download NCBI Viruses "));
+
+		final WPushButton updateNcbiVirusesB = new WPushButton(
+				"Update NCBI Viruses file", updateNcbiVirusesTable.getElementAt(0, 1));
+		updateNcbiVirusesB.clicked().addListener(updateNcbiVirusesB, new Signal.Listener() {
+			public void trigger() {
+				final StandardDialog d = new StandardDialog("Update NCBI virueses", false);
+				d.show();
+				d.setWidth(new WLength(300));
+
+				final WText info = new WText("Download NCBI viruses file from NCBI and update all tools to use it. This is used by NGS module and to auto genrate pan viral tool.");
+				d.getContents().addWidget(info);
+				d.getOkB().clicked().addListener(d, new Signal.Listener() {
+					public void trigger() {
+						d.getOkB().disable();
+						d.getCancelB().disable();
+						info.setText("Downloading ncbi viruses file, this can take some time..");
+						final WApplication app = WApplication.getInstance();
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								File file = RegaSystemFiles.downloadNcbiViruses();
+								String infoText =  "Update finished";
+								if (file == null)
+									infoText = "Could not downlod NCBI viruses file" ;
+								else {
+									File ncbiVirusesFile = RegaSystemFiles.ncbiVirusesFile();
+									try {
+										final File baseDir = new File(Settings.getInstance().getBaseDir());
+										BlastUtil.formatDB(ncbiVirusesFile,
+												new File(baseDir, RegaSystemFiles.SYSTEM_FILES_DIR));
+									} catch (ApplicationException e) {
+										e.printStackTrace();
+										infoText = "Error: format db did not work. " + e.getMessage();
+									}
+								}
+								UpdateLock updateLock = app.getUpdateLock();
 								info.setText(infoText);
 								d.getCancelB().enable();
 								app.triggerUpdate();

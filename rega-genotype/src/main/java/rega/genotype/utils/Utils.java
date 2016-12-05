@@ -1,9 +1,13 @@
 package rega.genotype.utils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
+import java.net.URL;
+import java.net.URLConnection;
 
 import rega.genotype.ApplicationException;
 import eu.webtoolkit.jwt.WWidget;
@@ -59,6 +63,46 @@ public class Utils {
 			if (p != null)
 				p.destroy();
 			throw new ApplicationException(errorPrefix + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Download from url and save result in file same as linox wget.
+	 * return true if file was downloaded
+	 */
+	public static boolean wget(String url, File out) {
+		RandomAccessFile fos = null;
+
+		try {
+			URLConnection conn = new URL(url).openConnection();
+
+			out.getParentFile().mkdirs();
+			out.delete();
+			out.createNewFile();
+
+			fos = new RandomAccessFile(out, "rw");
+
+			final int BUF_SIZE = 4 * 1024;
+			byte[] bytes = new byte[BUF_SIZE];
+			int read = 0;
+
+			BufferedInputStream binaryreader = new BufferedInputStream(conn.getInputStream());
+
+			while ((read = binaryreader.read(bytes)) > 0)
+				fos.write(bytes, 0, read);
+
+			binaryreader.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (fos != null)
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 }

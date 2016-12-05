@@ -5,13 +5,13 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
-import rega.genotype.ApplicationException;
+import rega.genotype.config.Config;
 import rega.genotype.config.NgsModule;
 import rega.genotype.python.PythonEnv;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.util.FileUpload;
-import rega.genotype.utils.BlastUtil;
 import rega.genotype.utils.StreamReaderRuntime;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
@@ -20,8 +20,6 @@ import eu.webtoolkit.jwt.WText;
 
 public class NgsModuleForm extends FormTemplate {
 	private File aaFile = null;
-	private File taxonomyFile = null;
-	private File ncbiVirusesFile = null;
 
 	public NgsModuleForm(final File workDir) {
 		super(tr("admin.config.nsg-module"));
@@ -30,17 +28,11 @@ public class NgsModuleForm extends FormTemplate {
 		createDb.disable();
 
 		final FileUpload aaUpload = new FileUpload();
-		final FileUpload taxonomyUpload = new FileUpload();
-		final FileUpload ncbiVirusesUpload = new FileUpload();
 		final WText infoT = new WText();
 
 		aaUpload.setInline(true);
-		taxonomyUpload.setInline(true);
-		ncbiVirusesUpload.setInline(true);
 
 		bindEmpty("current-aa-db");
-		bindEmpty("current-taxonomy");
-		bindEmpty("current-ncbi-viruses");
 
 		final NgsModule ngsModule = NgsModule.read(workDir);
 		if (ngsModule != null) {
@@ -48,25 +40,14 @@ public class NgsModuleForm extends FormTemplate {
 				aaFile = new File(workDir, ngsModule.getAaFileName());
 				bindString("current-aa-db", aaFile.getName());
 			}
-			if (ngsModule.getTaxonomyFileName() != null) {
-				taxonomyFile = new File(workDir, ngsModule.getTaxonomyFileName());
-				bindString("current-taxonomy", taxonomyFile.getName());
-			}
-			if (ngsModule.getNcbiVirusesFileName() != null) {
-				ncbiVirusesFile = new File(workDir, ngsModule.getNcbiVirusesFileName());
-				bindString("current-ncbi-viruses", ncbiVirusesFile.getName());
-			}
 
 			createDb.setEnabled(isReady());
 		}
 
 
 		aaUpload.getWFileUpload().setFilters(".fasta");
-		taxonomyUpload.getWFileUpload().setFilters(".tab");
 
-		bindWidget("upload-ncbi-viruses", ncbiVirusesUpload);
 		bindWidget("upload-aa-db", aaUpload);
-		bindWidget("upload-taxonomy", taxonomyUpload);
 		bindWidget("create-db", createDb);
 		bindWidget("info", infoT);
 
@@ -82,50 +63,18 @@ public class NgsModuleForm extends FormTemplate {
 				createDb.setEnabled(isReady());
 			}
 		});
-		taxonomyUpload.uploadedFile().addListener(taxonomyUpload, new Signal1.Listener<File>() {
-			public void trigger(File arg) {
-				taxonomyFile = new File(workDir, taxonomyUpload.getWFileUpload().getClientFileName());
-				try {
-					FileUtils.copyFile(arg, taxonomyFile);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				bindString("current-taxonomy", taxonomyUpload.getWFileUpload().getClientFileName());
-				createDb.setEnabled(isReady());
-			}
-		});
-		ncbiVirusesUpload.uploadedFile().addListener(ncbiVirusesUpload, new Signal1.Listener<File>() {
-			public void trigger(File arg) {
-				ncbiVirusesFile = new File(workDir, ncbiVirusesUpload.getWFileUpload().getClientFileName());
-				try {
-					FileUtils.copyFile(arg, ncbiVirusesFile);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				bindString("current-ncbi-viruses", ncbiVirusesUpload.getWFileUpload().getClientFileName());
-				try {
-					BlastUtil.formatDB(ncbiVirusesFile, workDir);
-				} catch (ApplicationException e) {
-					e.printStackTrace();
-					bindString("current-ncbi-viruses", ncbiVirusesUpload.getWFileUpload().getClientFileName()
-							+ " <div>Error format bd did not work!</div>");
 
-				}
-				ngsModule.setNcbiVirusesFileName(ncbiVirusesUpload.getWFileUpload().getClientFileName());
-				ngsModule.save(workDir);
-				createDb.setEnabled(isReady());
-				dirtyHandler.increaseDirty();
-			}
-		});
 		createDb.clicked().addListener(createDb, new Signal.Listener() {
 			public void trigger() {
-				File unirefVirusesAA50 = new File(workDir, NgsModule.NGS_MODULE_UNIREF_VIRUSES_AA50);
+				new File(workDir, Config.TRANSIENT_DATABASES_FOLDER_NAME).mkdirs();
+
+				File unirefVirusesAA50 = new File(workDir, NgsModule.NGS_MODULE_AA_VIRUSES_FASTA);
 
 				String[] args = new String[3];
 				args[0] = aaFile.getAbsolutePath();
-				args[1] = taxonomyFile.getAbsolutePath();
+				args[1] = RegaSystemFiles.taxonomyFile().getAbsolutePath();
 				args[2] = unirefVirusesAA50.getAbsolutePath(); // out
-				
+
 				try {
 					new PythonEnv().execPython("/rega/genotype/python/number_fasta_r.py", args);
 				} catch (Exception e1) {
@@ -142,6 +91,8 @@ public class NgsModuleForm extends FormTemplate {
 				String cmd = diamondPath + " makedb --in " + unirefVirusesAA50.getAbsolutePath() 
 						+ " -d " + aaVirusesDb.getAbsolutePath();
 
+				System.err.println(cmd);
+				
 				try {
 					p = StreamReaderRuntime.exec(cmd, null, unirefVirusesAA50.getParentFile());
 					int exitResult = p.waitFor();
@@ -165,10 +116,6 @@ public class NgsModuleForm extends FormTemplate {
 					ngsModule = new NgsModule();
 				if (!aaUpload.getWFileUpload().isEmpty())
 					ngsModule.setAaFileName(aaUpload.getWFileUpload().getClientFileName());
-				if (!ncbiVirusesUpload.getWFileUpload().isEmpty())
-					ngsModule.setNcbiVirusesFileName(ncbiVirusesUpload.getWFileUpload().getClientFileName());
-				if (!taxonomyUpload.getWFileUpload().isEmpty())
-					ngsModule.setTaxonomyFileName(taxonomyUpload.getWFileUpload().getClientFileName());
 				ngsModule.save(workDir);
 
 				infoT.setText("Dimond database created.");
@@ -178,6 +125,6 @@ public class NgsModuleForm extends FormTemplate {
 	}
 
 	private boolean isReady() { 
-		return aaFile != null && taxonomyFile != null && ncbiVirusesFile != null;
+		return aaFile != null;
 	}
 }

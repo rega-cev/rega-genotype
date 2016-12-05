@@ -315,17 +315,18 @@ public class FileUtil {
 		return false;
 	}
 
-	public static boolean zip(File srcDir, File destDir) {
+	public static boolean zip(File srcDir, File destDir, String ignoreFile) {
 		try {
 			BufferedInputStream origin = null;
 			FileOutputStream dest = new FileOutputStream(destDir);
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			//out.setMethod(ZipOutputStream.DEFLATED);
 			byte data[] = new byte[BUFFER];
-			// get a list of files from current directory
 			String files[] = srcDir.list();
 
 			for (int i=0; i<files.length; i++) {
+				if (files[i].equals(ignoreFile))
+					continue;
 				FileInputStream fi = new FileInputStream(
 						srcDir.getAbsolutePath() + File.separator + files[i]);
 				origin = new BufferedInputStream(fi, BUFFER);

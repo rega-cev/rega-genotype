@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +16,6 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
@@ -26,7 +23,7 @@ import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.ngs.QC.QcResults;
 import rega.genotype.ngs.QC.QcResults.Result;
-import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.utils.BlastUtil;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
@@ -267,8 +264,8 @@ public class NgsAnalysis {
 
 			SequenceAlignment contigs = new SequenceAlignment(new FileInputStream(assembledFile), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
-			File ncbiVirusesFasta = Settings.getInstance().getConfig().getNcbiVirusesDb();
-			if (ncbiVirusesFasta == null)
+			File ncbiVirusesFasta = RegaSystemFiles.ncbiVirusesFile();
+			if (!ncbiVirusesFasta.exists())
 				throw new ApplicationException("Ncbi Viruses Db Path needs to be set in global settings");
 
 			workDir.mkdirs();

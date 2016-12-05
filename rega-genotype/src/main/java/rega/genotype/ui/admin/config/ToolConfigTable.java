@@ -170,7 +170,8 @@ public class ToolConfigTable extends Template{
 						return null;
 					}
 
-					FileUtil.zip(toolFile, zip);
+					FileUtil.zip(toolFile, zip, 
+							Config.TRANSIENT_DATABASES_FOLDER_NAME);
 					return zip;
 				}
 
