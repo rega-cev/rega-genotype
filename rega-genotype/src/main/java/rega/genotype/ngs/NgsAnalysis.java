@@ -321,6 +321,10 @@ public class NgsAnalysis {
 		return true;
 	}
 
+	/**
+	 * Detect for given genus a list of reference sequences based on long contigs.
+	 * The sequences are stored in the consensus dir.
+	 */
 	private SequenceAlignment detectRefs(File virusDir,
 			SequenceAlignment contigs, File ncbiVirusesFasta)
 			throws ApplicationException, IOException, InterruptedException,
@@ -333,7 +337,7 @@ public class NgsAnalysis {
 
 		for (AbstractSequence contig : contigs.getSequences()) {
 			if (contig.getLength() < ngsModule.getRefMinContigLength())
-				break;
+				continue;
 			
 			File reference = NgsFileSystem.consensusRefFile(workDir, virusName);
 			File consensusDir = new File(workDir, NgsFileSystem.consensusDir(virusName));
