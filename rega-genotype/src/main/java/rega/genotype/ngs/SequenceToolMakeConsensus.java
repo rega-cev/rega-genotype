@@ -1,10 +1,12 @@
 package rega.genotype.ngs;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 
+import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
@@ -28,34 +30,8 @@ public class SequenceToolMakeConsensus {
 	 * @throws ParameterProblemException
 	 * @throws InterruptedException
 	 */
-	public static File consensusAlign(File assembledContigs,
+	public static File consensusAlign(File assembledContigs, AbstractSequence reference,
 			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
-
-		// Create make contigs in. format: first refseq then all the contigs. 
-
-		// find nucleotide reference sequence for the basket.
-		// TODO:find the species for the largest contigs.
-		FileReader fileReader = new FileReader(assembledContigs.getAbsolutePath());
-		LineNumberReader lnr = new LineNumberReader(fileReader);
-		// Note: Spades orders results by length.
-		Sequence longestContig = SequenceAlignment.readFastaFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
-		fileReader.close();
-		lnr.close();
-		if (longestContig == null)
-			return null;
-
-		workDir.mkdirs();
-
-		File ncbiVirusesFasta = Settings.getInstance().getConfig().getNcbiVirusesDb();
-		if (ncbiVirusesFasta == null)
-			throw new ApplicationException("Ncbi Viruses Db Path needs to be set in global settings");
-		File refrence = NgsFileSystem.consensusRefFile(workDir, virusName);
-		File consensusDir = new File(workDir, NgsFileSystem.consensusDir(virusName));
-		consensusDir.mkdirs();
-
-		//BlastUtil.formatDB(ncbiVirusesFasta, consensusDir);
-		BlastUtil.computeBestRefSeq(longestContig, consensusDir, refrence, ncbiVirusesFasta);
-
 		// make Consensus
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
@@ -63,11 +39,17 @@ public class SequenceToolMakeConsensus {
 		File alingment = NgsFileSystem.consensusAlingmentFile(workDir, virusName);
 		alingment.getParentFile().mkdirs();
 
+		File referenceFile = NgsFileSystem.consensusRefFile(workDir, virusName);
+		FileOutputStream fos = new FileOutputStream(referenceFile);
+		reference.writeFastaOutput(fos);
+		fos.close();
+
 		String cmd = sequencetoolPath + " consensus-align"
-		+ " --reference " + refrence.getAbsolutePath()
+		+ " --reference " + referenceFile.getAbsolutePath()
 		+ " --target " + assembledContigs.getAbsolutePath()
 		+ " --output " + alingment.getAbsolutePath()
-		+ " --cutoff " + ngsModule.getConsensusToolCutoff()
+		+ " --absolute-cutoff " + ngsModule.getConsensusToolAbsoluteCutoff()
+		+ " --relative-cutoff " + ngsModule.getConsensusToolRelativeCutoff()
 		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov();
 
 		NgsFileSystem.executeCmd(cmd, workDir);
