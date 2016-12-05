@@ -102,14 +102,15 @@ public class PanViralToolGenerator {
 		// Query from NCBI
 		File fastaOut = new File(workDir, "fasta-out");
 		File taxonomyOut = new File(workDir, "taxonomy-out");
-		
-		queryNcbi(query, workDir, fastaOut, taxonomyOut);
+
+		queryFasta(query, workDir, fastaOut);
+		querytaxonomyIds(query, workDir, taxonomyOut);
 
 		// Add taxonomy id data		
 		fillData(accessionNumMapICTV, taxonomyOut, true);
 
 		// preprocess fasta: remove the description.
-		//File fastaOutPreprocessed = preprocessFasta(workDir, fastaOut);
+		//File fastaOutPreprocessed = preprocessFasta(workDir, fastaOut); removed because the format of the files from NCBI was changed.
 
 		// make sure that taxonomy is ready
 		if (TaxonomyModel.getTaxons().isEmpty())
@@ -162,11 +163,12 @@ public class PanViralToolGenerator {
 		
 		File ncbiTaxonomyIdsFile = new File(workDir, "ncbi-taxonomy.fasta");
 		
-		queryNcbi(ncbiAccQuery, workDir, null, ncbiTaxonomyIdsFile);
-		//querytaxonomyIds(ncbiAccQuery, workDir);
+		querytaxonomyIds(ncbiAccQuery, workDir, ncbiTaxonomyIdsFile);
 
 		File fastaNcbiPreprocessed = new File(workDir, "ncbi-preprocessed.fasta");
+		
 		preprocessFasta(ncbiTaxonomyIdsFile, fastaNcbiPreprocessed);
+
 		Map<String, Data> ncbiAccMap = new HashMap<String, PanViralToolGenerator.Data>();
 		fillData(ncbiAccMap, fastaNcbiPreprocessed, false);
 
@@ -461,51 +463,7 @@ public class PanViralToolGenerator {
 		taxonomyBr.close();
 	}
 
-	//TODO!
-//	private File querytaxonomyIds(File accessionNumbersQuery, File workDir) throws ApplicationException, IOException, InterruptedException {
-//		// Query from NCBI
-//		
-//		File taxonomyOut = new File(workDir, "taxonomy-out");
-//
-//		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
-//
-//		String epost = edirectPath + "epost";
-//		String efetch = edirectPath + "efetch";
-//		String xtract = edirectPath + "xtract";
-//
-//		String cmd = 
-//				// query taxonomy ids
-//				"cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
-//				+ epost + " -db nuccore -format acc|"
-//				+ efetch + " -db nuccore -format docsum | " 
-//				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + taxonomyOut.getAbsolutePath();
-//		execShellCmd(cmd);
-//
-//		return taxonomyOut;
-//	}
-//
-//	private File queryFasta(File accessionNumbersQuery, File workDir) throws ApplicationException, IOException, InterruptedException {
-//		// Query from NCBI
-//		
-//		File fastaOut = new File(workDir, "fasta-out");
-//
-//		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
-//
-//		String epost = edirectPath + "epost";
-//		String efetch = edirectPath + "efetch";
-//
-//		String cmd = 
-//				// query fasta
-//				" cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
-//				+ epost + " -db nuccore -format acc|" 
-//				+ efetch + " -db nuccore -format fasta > " + fastaOut.getAbsolutePath();
-//
-//		execShellCmd(cmd);
-//
-//		return fastaOut;
-//	}
-
-	private void queryNcbi(File accessionNumbersQuery, File workDir, File fastaOut, File taxonomyOut) throws IOException, InterruptedException, ApplicationException {
+	private void querytaxonomyIds(File accessionNumbersQuery, File workDir, File out) throws ApplicationException, IOException, InterruptedException {
 		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
 
 		String epost = edirectPath + "epost";
@@ -513,21 +471,25 @@ public class PanViralToolGenerator {
 		String xtract = edirectPath + "xtract";
 
 		String cmd = 
-				// query taxonomy ids
+				// query taxonomy ids from NCBI
 				"cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
 				+ epost + " -db nuccore -format acc|"
 				+ efetch + " -db nuccore -format docsum | " 
-				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + taxonomyOut.getAbsolutePath();
+				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + out.getAbsolutePath();
+		execShellCmd(cmd);
+	}
 
-		if (fastaOut != null) {
-			cmd += 
-					// query fasta
-					"\n" 
-					+ " cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
-					+ epost + " -db nuccore -format acc|" 
-					+ efetch + " -db nuccore -format fasta > " + fastaOut.getAbsolutePath();
+	private void queryFasta(File accessionNumbersQuery, File workDir, File out) throws ApplicationException, IOException, InterruptedException {
+		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
 
-		}
+		String epost = edirectPath + "epost";
+		String efetch = edirectPath + "efetch";
+
+		String cmd = 
+				// query fasta ids from NCBI
+				" cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
+				+ epost + " -db nuccore -format acc|" 
+				+ efetch + " -db nuccore -format fasta > " + out.getAbsolutePath();
 
 		execShellCmd(cmd);
 	}
