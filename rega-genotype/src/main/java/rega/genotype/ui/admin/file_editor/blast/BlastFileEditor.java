@@ -85,7 +85,7 @@ public class BlastFileEditor extends WContainerWidget{
 		this.dirtyHandler = dirtyHandler;
 
 		final WPushButton addSequencesB = new WPushButton("Add sequences");
-		final WPushButton autoCreatePanViralToolB = new WPushButton("Auto create pav-viral tool");
+		final WPushButton autoCreatePanViralToolB = new WPushButton("Auto create pan-viral tool");
 		final WPushButton autoCreateVirusToolB = new WPushButton("Auto create virus tool");
 
 		alignmentAnalyses = readBlastXml(workDir);
