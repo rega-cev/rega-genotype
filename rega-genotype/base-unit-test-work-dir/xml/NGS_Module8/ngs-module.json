@@ -1,0 +1,15 @@
+{
+  "aaFileName": "uniref-uniprot%3A%28lineage%3A-Viruses-%29+AND+identity%3A0.5.fasta",
+  "consensusToolMaxGap": 10,
+  "consensusToolMaxMissing": 100,
+  "consensusToolMinCount": 10,
+  "consensusToolMixtureMinPct": 20,
+  "consensusToolAbsoluteCutoff": 70,
+  "consensusToolMinSingleSeqCov": 70,
+  "consensusToolRelativeCutoff": 1,
+  "diamondOptions": "",
+  "spadesOptions": "",
+  "minRefContigLength": 400,
+  "refMaxBlastEValue": 1.0E-5,
+  "refMinBlastBitScore": 50.0
+}

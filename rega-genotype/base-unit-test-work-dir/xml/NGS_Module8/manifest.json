@@ -1,0 +1,13 @@
+{
+  "name": "ngs module",
+  "id": "NGS_Module",
+  "version": "8",
+  "commitMessage": "change ncbi viruses db",
+  "blastTool": false,
+  "hivTool": false,
+  "template": false,
+  "ngsModule": true,
+  "publisherName": "EMWEB",
+  "publicationDate": "Dec 5, 2016 6:48:51 PM",
+  "softwareVersion": "0"
+}

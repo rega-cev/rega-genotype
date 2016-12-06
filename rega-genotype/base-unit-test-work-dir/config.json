@@ -46,8 +46,8 @@
     },
     {
       "path": "",
-      "configuration": "base-unit-test-work-dir/xml/NGS_Module6/",
-      "jobDir": "./base-work-dir//job/NGS_Module6/",
+      "configuration": "base-unit-test-work-dir/xml/NGS_Module8/",
+      "jobDir": "./base-work-dir//job/NGS_Module8/",
       "autoUpdate": true,
       "webService": false,
       "ui": false,
