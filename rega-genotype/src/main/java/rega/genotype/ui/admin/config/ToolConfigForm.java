@@ -66,7 +66,7 @@ public class ToolConfigForm extends FormTemplate {
 
 		// local config
 
-		localConfigForm = new LocalConfigForm(toolConfig, manifestForm);
+		localConfigForm = new LocalConfigForm(toolConfig, manifestForm, mode);
 
 		createFileEditors(toolDir);
 

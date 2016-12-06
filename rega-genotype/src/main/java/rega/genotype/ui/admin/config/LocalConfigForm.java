@@ -8,6 +8,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.config.ManifestForm.ToolType;
+import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.viruses.hiv.HivMain;
 import rega.genotype.utils.FileUtil;
@@ -37,7 +38,7 @@ public class LocalConfigForm  extends FormTemplate {
 	private ManifestForm manifestForm;
 
 	public LocalConfigForm(final ToolConfig toolConfig, 
-			ManifestForm manifestForm) {
+			ManifestForm manifestForm, Mode mode) {
 		super(tr("admin.config.tool-config-dialog.config"));
 		this.toolConfig = toolConfig;
 		this.manifestForm = manifestForm;
@@ -52,7 +53,9 @@ public class LocalConfigForm  extends FormTemplate {
 			currentVesionChB.setChecked(toolConfig.isCurrentUsedVersion());
 			if (toolConfig.getToolMenifest() != null)
 				toolTypeChanged(ManifestForm.toolType(toolConfig.getToolMenifest()));
-		} else { // default checked
+		} 
+
+		if (toolConfig == null || mode == Mode.Import || mode == Mode.Install){ // default checked
 			autoUpdateChB.setChecked(true);
 			serviceChB.setChecked(true);
 			uiChB.setChecked(true);
