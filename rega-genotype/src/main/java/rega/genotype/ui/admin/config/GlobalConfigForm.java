@@ -118,6 +118,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				final WText info = new WText();
 				d.setWidth(new WLength(500));
 				d.getContents().addWidget(info);
+				d.getCancelB().setText("Close");
 
 				info.setText("<div>Download NCBI viruses file from NCBI and update all tools to use it. This is used by NGS module and to auto genrate pan viral tool.</div>");
 				new WText("<p>You can choose to upload the file or let the system do that for you.</p>", d.getContents());
