@@ -109,8 +109,8 @@ public class BlastUtil {
 			out.delete();
 
 		String blastPath = Settings.getInstance().getBlastPathStr();
-		String cmd = blastPath + "blastdbcmd -db  "  + blastdb.getAbsolutePath()
-				+ " -entry '" + sequenceId + "' -out " + out.getAbsolutePath();
+		String cmd = blastPath + "fastacmd -s '" + sequenceId + "' -d " + blastdb.getAbsolutePath() 
+				+ " -o " + out.getAbsolutePath();
 
 		System.err.println(cmd);
 
