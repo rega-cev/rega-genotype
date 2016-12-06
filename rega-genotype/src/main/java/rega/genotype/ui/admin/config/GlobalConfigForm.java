@@ -121,7 +121,8 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				d.getCancelB().setText("Close");
 
 				info.setText("<div>Download NCBI viruses file from NCBI and update all tools to use it. This is used by NGS module and to auto genrate pan viral tool.</div>");
-				new WText("<p>You can choose to upload the file or let the system do that for you.</p>", d.getContents());
+				new WText("<p><div>You can choose to upload the file or let the system do that for you.</div></p>" +
+						"<div>Can be obtained from: ftp://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.1.1.genomic.fna.gz</div>", d.getContents());
 
 				FileUpload upload = new FileUpload();
 				d.getContents().addWidget(upload);

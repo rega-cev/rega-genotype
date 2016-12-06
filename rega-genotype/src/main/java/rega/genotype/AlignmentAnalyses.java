@@ -21,6 +21,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import rega.genotype.AlignmentAnalyses.Cluster.Source;
 import rega.genotype.BlastAnalysis.ReferenceTaxus;
 import rega.genotype.BlastAnalysis.Region;
 
@@ -51,25 +52,14 @@ public class AlignmentAnalyses {
      * A taxus corresponds to a sequence in the alignment
      */
     public static class Taxus {
-    	public static final String SOURCE_ICTV = "ICTV";
-    	public static final String SOURCE_NCBI = "NCBI";
-    	public static final String SOURCE_UNKNOWN = "Unknown";
-    	public static final String SOURCE_TOOL_ADMIN= "Tool admin";
-
     	private String id;
-    	private String source;
     	
-    	public Taxus(String id, String source) {
+    	public Taxus(String id) {
     		this.id = id;
-    		this.source = source;
     	}
 
 		public String getId() {
 			return id;
-		}
-
-		public String getSource() {
-			return source;
 		}
     }
 
@@ -86,6 +76,17 @@ public class AlignmentAnalyses {
      * is reported to the user.
      */
     public static class Cluster {
+    	public enum Source {
+    		ICTV, NCBI, Unkown, Admin;
+    		public static Source fromString(String str) {
+    			try {
+    				return valueOf(str);
+    			} catch (Exception e) {
+    				return Unkown;
+    			}
+    		}
+    	}
+    	
         private String        id;
         private String        name;
         private String        description;
@@ -94,8 +95,9 @@ public class AlignmentAnalyses {
         private Cluster       parent;
         private String        tags;
 		private String        taxonomyId;
+    	private Source        source;
 
-        public Cluster(String id, String name, String description, String tags, String taxonomyId) {
+        public Cluster(String id, String name, String description, String tags, String taxonomyId, Source src) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -104,6 +106,7 @@ public class AlignmentAnalyses {
             this.taxa = new ArrayList<Taxus>();
             this.clusters = new ArrayList<Cluster>();
             this.parent = null;
+            this.source = src;
         }
 
         public Cluster() {
@@ -115,6 +118,7 @@ public class AlignmentAnalyses {
             this.taxa = new ArrayList<Taxus>();
             this.clusters = new ArrayList<Cluster>();
             this.parent = null;
+            this.source = null;
         }
         public String getName() {
             return name;
@@ -123,11 +127,11 @@ public class AlignmentAnalyses {
         public void setName(String name) {
             this.name = name;
         }
-        
-        public void addTaxus(String taxusName, String src) {
-            taxa.add(new Taxus(taxusName, src));
+
+        public void addTaxus(String id) {
+            taxa.add(new Taxus(id));
         }
-        
+
         public void addTaxus(Taxus taxus) {
             taxa.add(taxus);
         }
@@ -249,6 +253,14 @@ public class AlignmentAnalyses {
 		public void setTaxonomyId(String taxonomyId) {
 			this.taxonomyId = taxonomyId;
 		}
+
+		public Source getSource() {
+			return source;
+		}
+
+		public void setSource(Source source) {
+			this.source = source;
+		}
     }
 
     public AlignmentAnalyses() {
@@ -328,8 +340,8 @@ public class AlignmentAnalyses {
             if (sequenceIdsE != null) {
             	for (int i = 0; i < alignment.getSequences().size(); ++i) {
             		AbstractSequence seq = alignment.getSequences().get(i);
-            		Cluster c = new Cluster(seq.getName(), seq.getName(), seq.getDescription(), null, null);
-            		c.addTaxus(seq.getName(), Taxus.SOURCE_UNKNOWN); //TODO SRC?
+            		Cluster c = new Cluster(seq.getName(), seq.getName(), seq.getDescription(), null, null, null);
+            		c.addTaxus(seq.getName()); //TODO SRC?
             		clusters.add(c);
             	}
             } else {
@@ -549,7 +561,7 @@ public class AlignmentAnalyses {
         
         Cluster c = clusterMap.get(name);
         if (c != null && taxalist != null) {
-            Cluster result = new Cluster(c.getId(), c.getName(), c.getDescription(), c.tags, c.getTaxonomyId());
+            Cluster result = new Cluster(c.getId(), c.getName(), c.getDescription(), c.tags, c.getTaxonomyId(), c.getSource());
             
             List<Taxus> taxa = c.getTaxa();
 
@@ -588,16 +600,15 @@ public class AlignmentAnalyses {
         if (taxonomyIdE != null)
         	taxonomyId = taxonomyIdE.getText();
 
-        Cluster result = new Cluster(id, name, description, tags, taxonomyId);
+        Source source = Source.fromString(element.getAttributeValue("src"));
+
+        Cluster result = new Cluster(id, name, description, tags, taxonomyId, source);
         clusterMap.put(id, result);
         
         List taxusEs = element.getChildren("taxus");        
         for (Iterator i = taxusEs.iterator(); i.hasNext();) {
             Element taxusE = (Element) i.next();
-            String source = taxusE.getAttributeValue("source");
-            if (source == null || source.isEmpty())
-            	source = Taxus.SOURCE_UNKNOWN;
-            Taxus taxus = new Taxus(taxusE.getAttributeValue("name"), source);
+            Taxus taxus = new Taxus(taxusE.getAttributeValue("name"));
             result.addTaxus(taxus);
         }
 

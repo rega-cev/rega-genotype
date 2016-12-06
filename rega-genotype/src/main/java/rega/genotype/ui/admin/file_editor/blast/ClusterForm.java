@@ -1,15 +1,18 @@
 package rega.genotype.ui.admin.file_editor.blast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.AlignmentAnalyses.Cluster.Source;
 import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.framework.widgets.StandardTableView;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.SelectionBehavior;
@@ -27,6 +30,7 @@ import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
+import eu.webtoolkit.jwt.WString;
 
 /**
  * Editing of cluster from blast.xml file.
@@ -42,6 +46,7 @@ public class ClusterForm extends FormTemplate{
 	private StandardTableView taxuesTable = new StandardTableView();
 	private WPushButton addSequenceB = new WPushButton("Add sequences");
 	private WPushButton removeSequenceB= new WPushButton("Remove sequences");
+	private ObjectListComboBox<Source> srcCB;
 
 	private List<AbstractSequence> addedSequences = new ArrayList<AbstractSequence>();
 	private List<String> removedSequenceNames = new ArrayList<String>();
@@ -57,8 +62,19 @@ public class ClusterForm extends FormTemplate{
 
 		WPushButton okB = new WPushButton("OK");
 		WPushButton cancelB = new WPushButton("Cancel");
-		
+
+		srcCB = new ObjectListComboBox<AlignmentAnalyses.Cluster.Source>(
+				Arrays.asList(Source.values())) {
+			@Override
+			protected WString render(Source t) {
+				return new WString(t.toString());
+			}
+		};
+
 		// read 
+
+		Source source = cluster.getSource() == null ? Source.Unkown : cluster.getSource();
+		srcCB.setCurrentObject(source);
 
 		taxonomyW.setTaxonomyIdText(cluster.getTaxonomyId());
 		taxonomyW.finished().addListener(taxonomyW, new Signal1.Listener<String>() {
@@ -103,6 +119,7 @@ public class ClusterForm extends FormTemplate{
 		bindWidget("fasta", taxuesTable);
 		bindWidget("add-sequence", addSequenceB);
 		bindWidget("remove-sequence", removeSequenceB);
+		bindWidget("src", srcCB);
 		bindWidget("ok", okB);
 		bindWidget("cancel", cancelB);
 		bindEmpty("id-info");
@@ -167,10 +184,11 @@ public class ClusterForm extends FormTemplate{
 				cluster.setDescription(descriptionLE.getText());
 				cluster.setId(idLE.getText());
 				cluster.setTaxonomyId(taxonomyW.getValue());
+				cluster.setSource(srcCB.getCurrentObject());
 
 				for(AbstractSequence s: addedSequences){
 					alignmentAnalyses.getAlignment().addSequence(s);
-					cluster.addTaxus(s.getName(), Taxus.SOURCE_TOOL_ADMIN);
+					cluster.addTaxus(s.getName());
 				}
 
 				for(String sequenceName: removedSequenceNames){

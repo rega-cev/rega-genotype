@@ -88,6 +88,7 @@
 	<message id="detailsForm.summary.assignment">Rega Assignment</message>
 	<message id="detailsForm.summary.numberSeqs">sequences #</message>
 	<message id="detailsForm.summary.percentage">Percentage</message>
+	<message id="detailsForm.summary.src">Source</message>
 	<message id="detailsForm.summary.legend">Legend</message>
 	<message id="detailsForm.summary.total"><i>Total</i></message>
 	
@@ -279,6 +280,7 @@
   		  <tr><td>Name</td><td>${name}</td><td>${name-info}</td></tr>
   		  <tr><td>Description</td><td>${description}</td><td>${description-info}</td></tr>
   		  <tr><td>Taxonomy ID</td><td>${taxonomy-id}</td></tr>
+  		  <tr><td>Source</td><td>${src}</td></tr>
 		</table>
 		${fasta}
 		<div>${add-sequence}${remove-sequence}</div>

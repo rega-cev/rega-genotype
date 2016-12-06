@@ -13,8 +13,9 @@ public class ClusterTableModel extends WAbstractTableModel{
 	public static final int CLUSTER_ID_COLUMN = 0;
 	public static final int NAME_COLUMN = 1;
 	public static final int TOOL_ID_COLUMN = 2;
+	public static final int SRC_ID_COLUMN = 3;
 
-	String[] headers = { "Cluster ID", "Name", "Taxonomy ID"};
+	String[] headers = { "Cluster ID", "Name", "Taxonomy ID", "Source"};
 
 	private List<Cluster> clusters;
 
@@ -57,6 +58,8 @@ public class ClusterTableModel extends WAbstractTableModel{
 				return cluster.getName();
 			case TOOL_ID_COLUMN:					
 				return cluster.getTaxonomyId();
+			case SRC_ID_COLUMN:
+				return cluster.getSource();
 			default:
 				break;
 			}

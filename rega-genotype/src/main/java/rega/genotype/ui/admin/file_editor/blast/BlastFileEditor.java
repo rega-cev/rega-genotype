@@ -128,7 +128,7 @@ public class BlastFileEditor extends WContainerWidget{
 							for (Map.Entry<AbstractSequence, Cluster> e: selectedSequences.entrySet()){
 								AbstractSequence sequence = e.getKey();
 								Cluster cluster = e.getValue();
-								cluster.addTaxus(sequence.getName(), Taxus.SOURCE_TOOL_ADMIN);
+								cluster.addTaxus(sequence.getName());
 								alignmentAnalyses.getAlignment().addSequence(sequence);
 							}
 						}
@@ -294,11 +294,11 @@ public class BlastFileEditor extends WContainerWidget{
 														// Note cluster parent is not important for pan-viral tool since it is used only in phylogeny
 														newCluster = new Cluster(
 																c.getId(), c.getName(), c.getDescription(), 
-																c.getTags(), c.getTaxonomyId());
+																c.getTags(), c.getTaxonomyId(), c.getSource());
 														newClusterMap.put(c.getId(), newCluster);
 														alignmentAnalyses.addCluster(newCluster);
 													} 
-													newCluster.addTaxus(new Taxus(t.getId(), t.getSource()));
+													newCluster.addTaxus(new Taxus(t.getId()));
 													// assume that we do not get here a lot.
 													AbstractSequence sequence = BlastFileEditor.this.alignmentAnalyses.getAlignment().getSequence(t.getId());
 													alignmentAnalyses.getAlignment().addSequence(new Sequence(

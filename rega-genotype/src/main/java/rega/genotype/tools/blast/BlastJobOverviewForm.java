@@ -25,6 +25,7 @@ import eu.webtoolkit.jwt.ViewItemRenderFlag;
 import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
@@ -32,12 +33,10 @@ import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
-import eu.webtoolkit.jwt.WStandardItem;
 import eu.webtoolkit.jwt.WStandardItemModel;
 import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
-import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WPieChart;
 
@@ -55,7 +54,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	private static final int DATA_COLUMN =          1; // sequence count column. percentages of the chart.
 	private static final int CHART_DISPLAY_COLUMN = 2;
 	private static final int PERCENTAGE_COLUMN =    3;
-	private static final int COLOR_COLUMN =         4;
+	private static final int SRC_COLUMN =    4;
+	private static final int COLOR_COLUMN =         5;
 
 
 	//private Template layout = new Template(tr("job-overview-form"), this);
@@ -83,6 +83,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
 		table.setColumnWidth(DATA_COLUMN, new WLength(80));
 		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(60));
+		table.setColumnWidth(SRC_COLUMN, new WLength(60));
 		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
 
 		table.setItemDelegateForColumn(COLOR_COLUMN, new WAbstractItemDelegate() {
@@ -195,11 +196,12 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		// create blastResultModel
 		blastModel = new WStandardItemModel();
-		blastModel.insertColumns(blastModel.getColumnCount(), 5);
+		blastModel.insertColumns(blastModel.getColumnCount(), 6);
 
 		blastModel.setHeaderData(ASSINGMENT_COLUMN, tr("detailsForm.summary.assignment"));
 		blastModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.numberSeqs"));
 		blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.percentage"));
+		blastModel.setHeaderData(SRC_COLUMN, tr("detailsForm.summary.src"));
 		blastModel.setHeaderData(COLOR_COLUMN, tr("detailsForm.summary.legend"));
 
 		// find total 
@@ -227,6 +229,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 			blastModel.setData(row, PERCENTAGE_COLUMN, 
 					(double)toolData.sequenceNames.size() / total * 100.0);
+
+			blastModel.setData(row, SRC_COLUMN, toolData.src);
 
 			i++;
 		}
@@ -289,6 +293,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		String taxonomyId = new String();
 		String concludedName = new String();
 		String concludedId = new String();
+		String src = new String();
 		List<String> sequenceNames = new ArrayList<String>();
 	}
 
@@ -338,6 +343,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 							"/genotype_result/sequence/result[@id='blast']/cluster/taxonomy-id");
 			String seqName = GenotypeLib.getEscapedValue(this,
 					"/genotype_result/sequence/@name");
+			String clusterSrc = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/result[@id='blast']/cluster/src");
 			String concludedId = GenotypeLib
 					.getEscapedValue(this,
 							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
@@ -356,6 +363,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			toolData.concludedName = concludedName;
 			toolData.sequenceNames.add(seqName);
 			toolData.concludedId = concludedId;
+			toolData.src = clusterSrc;
 			clusterDataMap.put(concludedId, toolData);
 		}
 	}

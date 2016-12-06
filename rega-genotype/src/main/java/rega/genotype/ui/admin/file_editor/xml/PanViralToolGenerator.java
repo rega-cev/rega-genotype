@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
+import rega.genotype.AlignmentAnalyses.Cluster.Source;
 import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
@@ -144,13 +145,14 @@ public class PanViralToolGenerator {
 				if (mnemenic != null && !mnemenic.isEmpty())
 					id += "_" + mnemenic;
 				cluster.setId(id);
+				cluster.setSource(Source.ICTV);
 				cluster.setName(data.organizedName);
 				cluster.setTaxonomyId(data.taxonomyId);
 				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));// TODO: this should come from ICTV?
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 
-			cluster.addTaxus(new Taxus(accessionNumber, Taxus.SOURCE_ICTV));	
+			cluster.addTaxus(new Taxus(accessionNumber));	
 		}
 
 		for (AbstractSequence s:badSequences) {
@@ -201,13 +203,17 @@ public class PanViralToolGenerator {
 				if (mnemenic != null && !mnemenic.isEmpty())
 					id += "_" + mnemenic;
 				cluster.setId(id);
+				cluster.setSource(Source.NCBI);
 				cluster.setName(data.organizedName);
 				cluster.setTaxonomyId(data.taxonomyId);
 				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 
-			cluster.addTaxus(new Taxus(accessionNumber, Taxus.SOURCE_NCBI));
+			if (cluster.getSource() == Source.ICTV)
+				continue; // If the cluster was created by ICTV we do not mix it with NCBI. 
+
+			cluster.addTaxus(new Taxus(accessionNumber));
 			alignmentAnalyses.getAlignment().addSequence(s);
 		}
 		
