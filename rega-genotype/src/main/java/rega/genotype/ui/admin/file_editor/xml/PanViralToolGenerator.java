@@ -148,7 +148,7 @@ public class PanViralToolGenerator {
 				cluster.setSource(Source.ICTV);
 				cluster.setName(data.organizedName);
 				cluster.setTaxonomyId(data.taxonomyId);
-				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));// TODO: this should come from ICTV?
+				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId, 3));// TODO: this should come from ICTV?
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 
@@ -206,7 +206,7 @@ public class PanViralToolGenerator {
 				cluster.setSource(Source.NCBI);
 				cluster.setName(data.organizedName);
 				cluster.setTaxonomyId(data.taxonomyId);
-				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId));
+				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId, 3));
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 

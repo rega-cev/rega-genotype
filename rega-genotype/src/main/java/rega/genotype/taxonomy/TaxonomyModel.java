@@ -47,12 +47,7 @@ public class TaxonomyModel {
 	}
 
 	public static synchronized WStandardItemModel createModel() {
-		if (root.getRowCount() == 0) {
-			// make sure that if taxonomy file exists it was read (can happen if the server failed)
-			File taxonomyFile = RegaSystemFiles.taxonomyFile();
-			if (taxonomyFile.exists())
-				read(taxonomyFile);
-		}
+		refreshCache();
 		WStandardItemModel ans = new WStandardItemModel();
 		List<WStandardItem> rootItems = new ArrayList<WStandardItem>();
 		for (int i = 0; i < root.getRowCount(); ++i)
@@ -66,7 +61,17 @@ public class TaxonomyModel {
 
 		return ans;
 	}
-	
+
+	// TODO change it to singleton. 
+	private static void refreshCache() {
+		if (root.getRowCount() == 0) {
+			// make sure that if taxonomy file exists it was read (can happen if the server failed)
+			File taxonomyFile = RegaSystemFiles.taxonomyFile();
+			if (taxonomyFile.exists())
+				read(taxonomyFile);
+		}
+	}
+
 	private static WStandardItem findChild(WStandardItem parent, String taxonomyId) {
 		for (int i = 0; i < parent.getRowCount(); ++i) {
 			if (parent.getChild(i).getData(TAXONOMY_ID_ROLE).equals(taxonomyId))
@@ -103,7 +108,7 @@ public class TaxonomyModel {
 		 return item == null ? null : item.getData(SCIENTIFIC_NAME_ROLE).toString();
 	}
 
-	public static String getHirarchy(String taxonomyId) {
+	public static String getHirarchy(String taxonomyId, int howFar) {		
 		String ans = "";
 		 WStandardItem item = items.get(taxonomyId);
 		 if (item == null)
@@ -118,6 +123,45 @@ public class TaxonomyModel {
 			 i++;
 		 }
 		 return ans;
+	}
+
+	public static List<String> getHirarchyTaxonomyIds(String taxonomyId) {
+		refreshCache();
+
+		List<String> ans = new ArrayList<String>();
+		WStandardItem item = items.get(taxonomyId);
+		if (item == null)
+			return ans;
+
+		while (item.getParent() != null) {
+			ans.add((String) item.getData(TAXONOMY_ID_ROLE));
+			item = item.getParent();
+		}
+		return ans;
+	}
+
+	public static List<String> getAllChildrenTaxonomy(String parentTaxonomyId){
+		List<String> ans = new ArrayList<String>();
+		WStandardItem item = items.get(parentTaxonomyId);
+		if (item == null)
+			return ans;
+
+		getAllChildrenTaxonomy(item);
+
+		return ans;
+	}
+
+	private static List<String> getAllChildrenTaxonomy(WStandardItem parentItem){
+		List<String> ans = new ArrayList<String>();
+
+		ans.add((String) parentItem.getData(TAXONOMY_ID_ROLE));
+
+		for (int i = 0; i < parentItem.getRowCount(); ++i) {
+			WStandardItem child = parentItem.getChild(i);
+			ans.add((String) child.getData(TAXONOMY_ID_ROLE));
+			ans.addAll(getAllChildrenTaxonomy(child));
+		}
+		return ans;
 	}
 
 	public static void read(File csvFile) {

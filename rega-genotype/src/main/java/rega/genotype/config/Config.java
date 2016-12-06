@@ -9,6 +9,7 @@ import java.util.List;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
 import eu.webtoolkit.jwt.WApplication;
@@ -102,14 +103,22 @@ public class Config {
 		return ans;
 	}
 
+	/**
+	 * Check if taxonomyId is a child (low rank) of any tool taxonomy id 
+	 * @param taxonomyId
+	 * @return
+	 */
 	public String getToolId(String taxonomyId) {
 		if (taxonomyId == null)
 			return null;
 
 		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
 			ToolManifest m = c.getToolMenifest();
-			if (m.getTaxonomyId() != null && m.getTaxonomyId().equals(taxonomyId))
-				return m.getId();
+			if (m.getTaxonomyId() != null){
+				List<String> taxonomyIds = TaxonomyModel.getHirarchyTaxonomyIds(taxonomyId);
+				if (taxonomyIds.contains(m.getTaxonomyId()))
+					return m.getId();
+			}
 		}
 
 		return null;
