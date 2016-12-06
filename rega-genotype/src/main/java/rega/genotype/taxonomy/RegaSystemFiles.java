@@ -51,7 +51,13 @@ public class RegaSystemFiles {
 	}
 
 	public static File ncbiVirusesFile() {
-		final File baseDir = new File(Settings.getInstance().getBaseDir());
-		return new File(baseDir, NCBI_VIRUSES_DB_FILE_NAME);
+		String ncbiVirusesFile = Settings.getInstance().getConfig().getGeneralConfig().getNcbiVirusesFile();
+		if (ncbiVirusesFile.isEmpty()) {
+			// support old systems.
+			final File baseDir = new File(Settings.getInstance().getBaseDir());
+			return new File(baseDir, NCBI_VIRUSES_DB_FILE_NAME);
+		} else {
+			return new File(ncbiVirusesFile);
+		}
 	}
 }

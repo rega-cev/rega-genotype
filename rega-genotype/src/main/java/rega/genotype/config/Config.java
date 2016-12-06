@@ -298,6 +298,7 @@ public class Config {
 		private String spadesCmd = "spades";
 		private String bioPythonPath = "";
 		private String sequencetool = "";
+		private String ncbiVirusesFile = "";
 
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
@@ -420,6 +421,12 @@ public class Config {
 		}
 		public void setSequencetool(String sequencetool) {
 			this.sequencetool = sequencetool;
+		}
+		public String getNcbiVirusesFile() {
+			return ncbiVirusesFile;
+		}
+		public void setNcbiVirusesFile(String ncbiVirusesFile) {
+			this.ncbiVirusesFile = ncbiVirusesFile;
 		}
 	}
 
