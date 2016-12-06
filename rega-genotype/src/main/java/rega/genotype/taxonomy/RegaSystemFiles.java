@@ -31,6 +31,14 @@ public class RegaSystemFiles {
 		return new File(baseDir, TAXONOMY_FILE_NAME);
 	}
 
+	public static File unzipNcbiViruses(File ncbiFileGz) {
+		File ncbiVirusesFile = ncbiVirusesFile();
+		if (FileUtil.unGzip1File(ncbiFileGz, ncbiVirusesFile))
+			return ncbiVirusesFile;
+
+		return null;
+	}
+	
 	public static File downloadNcbiViruses(){
 		final File baseDir = new File(Settings.getInstance().getBaseDir());
 		File ncbiVirusesFile = ncbiVirusesFile();

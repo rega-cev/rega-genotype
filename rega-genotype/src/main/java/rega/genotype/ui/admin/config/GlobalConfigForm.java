@@ -16,11 +16,13 @@ import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.ui.framework.widgets.AutoForm;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.StandardDialog;
+import rega.genotype.ui.util.FileUpload;
 import rega.genotype.utils.BlastUtil;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
+import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTable;
@@ -110,46 +112,66 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		final WPushButton updateNcbiVirusesB = new WPushButton(
 				"Update NCBI Viruses file", updateNcbiVirusesTable.getElementAt(0, 1));
 		updateNcbiVirusesB.clicked().addListener(updateNcbiVirusesB, new Signal.Listener() {
+			final WApplication app = WApplication.getInstance();
 			public void trigger() {
 				final StandardDialog d = new StandardDialog("Update NCBI virueses", false);
-				d.show();
-				d.setWidth(new WLength(300));
-
-				final WText info = new WText("Download NCBI viruses file from NCBI and update all tools to use it. This is used by NGS module and to auto genrate pan viral tool.");
+				final WText info = new WText();
+				d.setWidth(new WLength(500));
 				d.getContents().addWidget(info);
-				d.getOkB().clicked().addListener(d, new Signal.Listener() {
+
+				info.setText("<div>Download NCBI viruses file from NCBI and update all tools to use it. This is used by NGS module and to auto genrate pan viral tool.</div>");
+				new WText("<p>You can choose to upload the file or let the system do that for you.</p>", d.getContents());
+
+				FileUpload upload = new FileUpload();
+				d.getContents().addWidget(upload);
+				upload.setInline(true);
+				upload.getWFileUpload().setFilters(".gz");
+
+				upload.uploadedFile().addListener(upload, new Signal1.Listener<File>() {
+					public void trigger(File arg) {
+						File unzipNcbiViruses = RegaSystemFiles.unzipNcbiViruses(arg);
+						createDB(unzipNcbiViruses, d, info);
+					}
+				});
+
+				WPushButton downlodAutomatically = new WPushButton("Download automaticaly.", d.getContents());
+				downlodAutomatically.setInline(true);
+				downlodAutomatically.clicked().addListener(downlodAutomatically, new Signal.Listener() {
 					public void trigger() {
 						d.getOkB().disable();
 						d.getCancelB().disable();
 						info.setText("Downloading ncbi viruses file, this can take some time..");
-						final WApplication app = WApplication.getInstance();
 						Thread t = new Thread(new Runnable() {
 							public void run() {
-								File file = RegaSystemFiles.downloadNcbiViruses();
-								String infoText =  "Update finished";
-								if (file == null)
-									infoText = "Could not downlod NCBI viruses file" ;
-								else {
-									File ncbiVirusesFile = RegaSystemFiles.ncbiVirusesFile();
-									try {
-										final File baseDir = new File(Settings.getInstance().getBaseDir());
-										BlastUtil.formatDB(ncbiVirusesFile,
-												new File(baseDir, RegaSystemFiles.SYSTEM_FILES_DIR));
-									} catch (ApplicationException e) {
-										e.printStackTrace();
-										infoText = "Error: format db did not work. " + e.getMessage();
-									}
-								}
-								UpdateLock updateLock = app.getUpdateLock();
-								info.setText(infoText);
-								d.getCancelB().enable();
-								app.triggerUpdate();
-								updateLock.release();
+								createDB(RegaSystemFiles.downloadNcbiViruses(), d, info);
 							}
 						});
 						t.start();
 					}
 				});
+				d.getOkB().hide();
+			}
+
+			private void createDB(File zipedNcbiViruses, StandardDialog d, WText info) {
+				String infoText =  "Update finished";
+				if (zipedNcbiViruses == null)
+					infoText = "Could not downlod NCBI viruses file" ;
+				else {
+					File ncbiVirusesFile = RegaSystemFiles.ncbiVirusesFile();
+					try {
+						final File baseDir = new File(Settings.getInstance().getBaseDir());
+						BlastUtil.formatDB(ncbiVirusesFile,
+								new File(baseDir, RegaSystemFiles.SYSTEM_FILES_DIR));
+					} catch (ApplicationException e) {
+						e.printStackTrace();
+						infoText = "Error: format db did not work. " + e.getMessage();
+					}
+				}
+				UpdateLock updateLock = app.getUpdateLock();
+				info.setText(infoText);
+				d.getCancelB().enable();
+				app.triggerUpdate();
+				updateLock.release();
 			}
 		});
 	}
