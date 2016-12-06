@@ -3,6 +3,7 @@ package rega.genotype.ui.framework.widgets;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WText;
 
 /**
  * Standard dialog with OK button.
@@ -42,5 +43,9 @@ public class StandardDialog extends WDialog{
 
 	public WPushButton getCancelB() {
 		return cancelB;
+	}
+
+	public void addText(String text) {
+		new WText(text, getContents());
 	}
 }

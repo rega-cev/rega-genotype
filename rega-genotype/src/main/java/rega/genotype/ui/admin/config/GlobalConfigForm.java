@@ -86,7 +86,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 						Thread t = new Thread(new Runnable() {
 							public void run() {
 								File file = RegaSystemFiles.downloadTaxonomyFile();
-								String infoText = file == null ? "Could not downlod taxonomy file" : "Update finished";
+								String infoText = file == null ? "Could not downlod taxonomy file" : "Update finished successfully";
 								UpdateLock updateLock = app.getUpdateLock();
 								TaxonomyModel.read(RegaSystemFiles.taxonomyFile());
 								info.setText(infoText);
@@ -130,7 +130,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				upload.uploadedFile().addListener(upload, new Signal1.Listener<File>() {
 					public void trigger(File arg) {
 						File unzipNcbiViruses = RegaSystemFiles.unzipNcbiViruses(arg);
-						createDB(unzipNcbiViruses, d, info);
+						createDB(unzipNcbiViruses, d);
 					}
 				});
 
@@ -143,7 +143,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 						info.setText("Downloading ncbi viruses file, this can take some time..");
 						Thread t = new Thread(new Runnable() {
 							public void run() {
-								createDB(RegaSystemFiles.downloadNcbiViruses(), d, info);
+								createDB(RegaSystemFiles.downloadNcbiViruses(), d);
 							}
 						});
 						t.start();
@@ -152,8 +152,8 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				d.getOkB().hide();
 			}
 
-			private void createDB(File zipedNcbiViruses, StandardDialog d, WText info) {
-				String infoText =  "Update finished";
+			private void createDB(File zipedNcbiViruses, StandardDialog d) {
+				String infoText =  "Update finished successfully";
 				if (zipedNcbiViruses == null)
 					infoText = "Could not downlod NCBI viruses file" ;
 				else {
@@ -168,7 +168,8 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 					}
 				}
 				UpdateLock updateLock = app.getUpdateLock();
-				info.setText(infoText);
+				d.getContents().clear();
+				d.addText(infoText);
 				d.getCancelB().enable();
 				app.triggerUpdate();
 				updateLock.release();
