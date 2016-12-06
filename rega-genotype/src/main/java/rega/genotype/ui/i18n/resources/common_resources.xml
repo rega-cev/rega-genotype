@@ -199,10 +199,11 @@
 		<div>All tools that support NGS will use the files from the NGS module with current version checked.</div>
 		</p>
 		<p>
-		<div><b>Uniprot 50% identity database for viruses.</b></div>
-		<div>Can be obtained in
-		http://www.uniprot.org/uniref/?query=uniprot%3A%28lineage%3A%22Viruses%22%29+AND+identity%3A0.5&amp;sort=score
-		</div>
+		<div><b>Protein database file.</b></div>
+		<div> Currently we use unipro 50%. </div>
+		<div> The file is included in the module and you do not need to download it again unless the included file is old.</div>
+		<div> Can be obtained from</div>
+		http://www.uniprot.org/uniref/?query=uniprot%3A%28lineage%3A%22Viruses%22%29+AND+identity%3A0.5&amp;amp;sort=score
 		<div>
 		<i>Current file: ${current-aa-db}</i>
 		</div>
