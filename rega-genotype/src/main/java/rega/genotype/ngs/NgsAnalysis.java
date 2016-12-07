@@ -179,7 +179,8 @@ public class NgsAnalysis {
 			return;
 		File preprocessedDir = NgsFileSystem.preprocessedDir(workDir);
 		File fastqDir = NgsFileSystem.fastqDir(workDir);
-		File diamondDBDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
+		// TODO: diamond results are useful only for testing 
+		//File diamondDBDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
 		// delete all html files
 		for (File f: workDir.listFiles())
 			if (f.isFile() && f.getName().endsWith(".html"))
@@ -190,8 +191,8 @@ public class NgsAnalysis {
 				FileUtils.deleteDirectory(fastqDir);
 			if (preprocessedDir.exists())
 				FileUtils.deleteDirectory(preprocessedDir);
-			if (diamondDBDir.exists())
-				FileUtils.deleteDirectory(diamondDBDir);
+//			if (diamondDBDir.exists())
+//				FileUtils.deleteDirectory(diamondDBDir);
 		} catch (IOException e) {
 			e.printStackTrace();
 			// leave it
