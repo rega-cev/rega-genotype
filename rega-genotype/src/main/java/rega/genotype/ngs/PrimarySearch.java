@@ -122,7 +122,7 @@ public class PrimarySearch{
 	}
 
 	private static File diamondView(File workDir, File query) throws ApplicationException {
-		File matches = new File(workDir.getAbsolutePath() + File.separator + "matches.fasta");
+		File matches = new File(workDir.getAbsolutePath() + File.separator + "matches.view");
 		Process diamond = null;
 		try {
 			String cmd = Settings.getInstance().getConfig().getGeneralConfig().getDiamondPath() + " view -a " + query.getAbsolutePath()
