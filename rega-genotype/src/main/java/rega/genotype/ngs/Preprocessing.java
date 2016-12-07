@@ -3,6 +3,7 @@ package rega.genotype.ngs;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.singletons.Settings;
@@ -22,8 +23,8 @@ public class Preprocessing{
 	 * @param workDir - the virus job dir
 	 * @throws ApplicationException
 	 */
-	public static void generalPreprocessing(String cmd, File workDir) throws ApplicationException {
-		NgsFileSystem.executeCmd(cmd, workDir);
+	public static void generalPreprocessing(String cmd, File workDir, Logger logger) throws ApplicationException {
+		NgsFileSystem.executeCmd(cmd, workDir, logger);
 	}
 
 	/**
@@ -35,7 +36,7 @@ public class Preprocessing{
 	 * @throws ApplicationException
 	 * TODO: delete - not used
 	 */
-	public static List<File> trimomatic(File workDir) throws ApplicationException {
+	public static List<File> trimomatic(File workDir, Logger logger) throws ApplicationException {
 		File sequenceFile1 = NgsFileSystem.fastqPE1(workDir);
 		File sequenceFile2 = NgsFileSystem.fastqPE2(workDir);
 
@@ -68,7 +69,7 @@ public class Preprocessing{
 
 		String cmd = trimmomaticCmd + " " + inputFileNames + " " + outoutFileNames + " " + trimmomaticOptions;
 
-		NgsFileSystem.executeCmd(cmd, workDir);
+		NgsFileSystem.executeCmd(cmd, workDir, logger);
 
 		List<File> ans = new ArrayList<File>();
 		ans.add(paired1);

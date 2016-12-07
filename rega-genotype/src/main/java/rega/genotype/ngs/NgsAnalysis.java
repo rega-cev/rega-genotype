@@ -55,7 +55,7 @@ public class NgsAnalysis {
 	 */
 	protected void preprocess() throws ApplicationException {
 		// Preprocessing.cutadaptPreprocess(workDir);
-		Preprocessing.trimomatic(workDir);
+		Preprocessing.trimomatic(workDir, ngsLogger);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class NgsAnalysis {
 	 * @throws ApplicationException
 	 */
 	protected void primarySearch() throws ApplicationException {
-		PrimarySearch.diamondSearch(workDir, ngsModule);
+		PrimarySearch.diamondSearch(workDir, ngsModule, ngsLogger);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class NgsAnalysis {
 	 * @throws ApplicationException
 	 */
 	protected File assemble(File sequenceFile1, File sequenceFile2, String virusName) throws ApplicationException {
-		return Assemble.spadesAssemble(sequenceFile1, sequenceFile2, workDir, virusName, ngsModule);
+		return Assemble.spadesAssemble(sequenceFile1, sequenceFile2, workDir, virusName, ngsModule, ngsLogger);
 	}
 
 	/**
@@ -282,8 +282,8 @@ public class NgsAnalysis {
 				String name = ref.getName().replaceAll("\\|", "_");
 				
 				File refWorkDir = workDir.toPath().resolve(name).toFile();
-				File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, ref, refWorkDir, virusName, ngsModule);
-				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, refWorkDir, virusName, ngsModule);
+				File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, ref, refWorkDir, virusName, ngsModule, ngsLogger);
+				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, refWorkDir, virusName, ngsModule, ngsLogger);
 	
 				// add virus taxonomy id to every consensus contig name, save sequence metadata.
 	

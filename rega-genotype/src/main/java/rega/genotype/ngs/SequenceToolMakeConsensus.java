@@ -2,19 +2,15 @@ package rega.genotype.ngs;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
+import java.util.logging.Logger;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.Sequence;
-import rega.genotype.SequenceAlignment;
 import rega.genotype.config.NgsModule;
 import rega.genotype.singletons.Settings;
-import rega.genotype.utils.BlastUtil;
 
 public class SequenceToolMakeConsensus {
 	/**
@@ -31,7 +27,7 @@ public class SequenceToolMakeConsensus {
 	 * @throws InterruptedException
 	 */
 	public static File consensusAlign(File assembledContigs, AbstractSequence reference,
-			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+			File workDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 		// make Consensus
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
@@ -52,13 +48,13 @@ public class SequenceToolMakeConsensus {
 		+ " --relative-cutoff " + ngsModule.getConsensusToolRelativeCutoff()
 		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov();
 
-		NgsFileSystem.executeCmd(cmd, workDir);
+		NgsFileSystem.executeCmd(cmd, workDir, logger);
 
 		return alingment;
 	}
 
 	public static File makeConsensus(File assembledContigs,
-			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+			File workDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
 		File outContigs = NgsFileSystem.consensusContigsFile(workDir, virusName);
@@ -78,7 +74,7 @@ public class SequenceToolMakeConsensus {
 				+ " --min-count " + ngsModule.getConsensusToolMinCount()
 				+ " --mixture-min-pct " + ngsModule.getConsensusToolMixtureMinPct();
 
-		NgsFileSystem.executeCmd(cmd, workDir);
+		NgsFileSystem.executeCmd(cmd, workDir, logger);
 
 		return outContigs;
 	}

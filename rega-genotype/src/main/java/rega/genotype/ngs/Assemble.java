@@ -2,11 +2,11 @@ package rega.genotype.ngs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.config.NgsModule;
 import rega.genotype.singletons.Settings;
-import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.StreamReaderRuntime;
 
 public class Assemble {
@@ -22,7 +22,7 @@ public class Assemble {
 	 * @throws ApplicationException
 	 */
 	public static File spadesAssemble(File sequenceFile1, File sequenceFile2,
-			File workDir, String virusName, NgsModule ngsModule) throws ApplicationException {
+			File workDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException {
 
 		long startTime = System.currentTimeMillis();
 
@@ -37,7 +37,7 @@ public class Assemble {
 		cmd += " -o " + contigsDir.getAbsolutePath();
 		cmd += " --threads 6 " + ngsModule.getSpadesOptions();
 
-		LogUtils.getLogger(workDir).info(cmd);
+		logger.info(cmd);
 		Process p = null;
 
 		try {

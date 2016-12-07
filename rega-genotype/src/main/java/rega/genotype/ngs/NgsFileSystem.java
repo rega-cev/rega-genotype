@@ -1,12 +1,12 @@
 package rega.genotype.ngs;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.ngs.NgsProgress.State;
-import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.Utils;
 
 /**
@@ -204,8 +204,8 @@ public class NgsFileSystem {
 		return preprocessedPE2Dir.listFiles()[0];
 	}
 
-	public static void executeCmd(String cmd, File workDir) throws ApplicationException{
-		LogUtils.getLogger(workDir).info(cmd);
+	public static void executeCmd(String cmd, File workDir, Logger logger) throws ApplicationException{
+		logger.info(cmd);
 		Utils.executeCmd(cmd, workDir);
 	}
 
