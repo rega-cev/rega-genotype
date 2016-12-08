@@ -320,28 +320,40 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 						}
 					}
 
+					if (refLen == null && lenErrors == null)
+						lenErrors = "refseq length is emplty";
+
 					if (lenErrors == null) {
 						double readCount = contigsLen * totalCov / readLen;
 
-						blastModel.setData(row, TOTAL_LENGTH_COLUMN,  contigsLen / refLen  * 100);
+						setDisplayData(blastModel, row, TOTAL_LENGTH_COLUMN,  contigsLen / refLen  * 100);
+
 						if (covErrors == null)
-							blastModel.setData(row, READ_COUNT_COLUMN, (int)readCount);
+							setDisplayData(blastModel, row, READ_COUNT_COLUMN, (int)readCount);
 						else
-							blastModel.setData(row, READ_COUNT_COLUMN, "Error: " + covErrors);
+							setDisplayData(blastModel, row, READ_COUNT_COLUMN, "Error: " + covErrors);
+
 
 						double deepCov = readCount * readLen / refLen;
-						blastModel.setData(row, PERCENTAGE_COLUMN, deepCov);
+						setDisplayData(blastModel, row, PERCENTAGE_COLUMN, deepCov);
+
 					} else {
-						blastModel.setData(row, TOTAL_LENGTH_COLUMN, "Error: " + lenErrors);
-						blastModel.setData(row, READ_COUNT_COLUMN,  "Error: " + lenErrors);
+						setDisplayData(blastModel, row, TOTAL_LENGTH_COLUMN, "Error: " + lenErrors);
+						setDisplayData(blastModel, row, READ_COUNT_COLUMN, "Error: " + lenErrors);
 					}
 				}
-				blastModel.setData(row, IMAGE_COLUMN, "todo");
+				setDisplayData(blastModel, row, IMAGE_COLUMN, "todo");
 			}
 			i++;
 		}
 		return blastModel;
 	}
+
+	private void setDisplayData(WStandardItemModel blastModel, int row, int col, Object value) {
+		blastModel.setData(row, col, value);
+		blastModel.setData(row, col, value, ItemDataRole.ToolTipRole);
+	}
+
 	@Override
 	public void fillResultsWidget() {
 		createChart();
