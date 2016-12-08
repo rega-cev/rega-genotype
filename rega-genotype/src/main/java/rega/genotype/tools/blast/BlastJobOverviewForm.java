@@ -55,7 +55,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	public static final String BLAST_JOB_ID_PATH = "blast-job";
 
 	private int ASSINGMENT_COLUMN =    0;
-	private int DATA_COLUMN =          1; // sequence count column. percentages of the chart.
+	private int SEQUENCE_COUNT_COLUMN =1; // sequence count column. percentages of the chart.
 	private int CHART_DISPLAY_COLUMN = 2;
 	private int PERCENTAGE_COLUMN =    3; // deep cov for ngs
 	private int TOTAL_LENGTH_COLUMN =  4; // % of Genome
@@ -117,7 +117,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		chart.setModel(blastResultModel);
 		//chart.setLabelsColumn(CHART_DISPLAY_COLUMN);
-		chart.setDataColumn(DATA_COLUMN);
+		chart.setDataColumn(PERCENTAGE_COLUMN);
 		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
 		chart.setPlotAreaPadding(30);
 	}
@@ -136,7 +136,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.setHeaderHeight(new WLength(20));
 		table.hideColumn(CHART_DISPLAY_COLUMN);
 		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
-		table.setColumnWidth(DATA_COLUMN, new WLength(80));
+		table.setColumnWidth(SEQUENCE_COUNT_COLUMN, new WLength(80));
 		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(80));
 		table.setColumnWidth(SRC_COLUMN, new WLength(60));
 		table.setColumnWidth(TOTAL_LENGTH_COLUMN, new WLength(90));
@@ -224,7 +224,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		blastModel.insertColumns(blastModel.getColumnCount(), 9);
 
 		blastModel.setHeaderData(ASSINGMENT_COLUMN, tr("detailsForm.summary.assignment"));
-		blastModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.numberSeqs"));
+		blastModel.setHeaderData(SEQUENCE_COUNT_COLUMN, tr("detailsForm.summary.numberSeqs"));
 		blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.percentage"));
 		blastModel.setHeaderData(SRC_COLUMN, tr("detailsForm.summary.src"));
 		blastModel.setHeaderData(COLOR_COLUMN, tr("detailsForm.summary.legend"));
@@ -233,7 +233,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		// NGS
 		if (mode == Mode.Ngs) {
 			blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.deep-cov"));
-			blastModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.contig-count"));
+			blastModel.setHeaderData(SEQUENCE_COUNT_COLUMN, tr("detailsForm.summary.contig-count"));
 			blastModel.setHeaderData(TOTAL_LENGTH_COLUMN, tr("detailsForm.summary.total-len"));
 			blastModel.setHeaderData(READ_COUNT_COLUMN, tr("detailsForm.summary.read-cunt"));
 			blastModel.setHeaderData(IMAGE_COLUMN, tr("detailsForm.summary.image"));
@@ -263,9 +263,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			ToolConfig toolConfig = toolId == null ? null : config.getCurrentVersion(toolId);
 			if (toolConfig != null) {
 				blastModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
-				blastModel.setData(row, DATA_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
+				blastModel.setData(row, SEQUENCE_COUNT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
 			}
-			blastModel.setData(row, DATA_COLUMN, toolData.sequenceNames.size()); // percentage
+			blastModel.setData(row, SEQUENCE_COUNT_COLUMN, toolData.sequenceNames.size()); // percentage
 			blastModel.setData(row, CHART_DISPLAY_COLUMN, 
 					toolData.concludedName + " (" + toolData.sequenceNames.size() + ")");
 
@@ -373,7 +373,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		int row = tableModel.getRowCount();
 		tableModel.insertRows(row, 1);
 		tableModel.setData(row, ASSINGMENT_COLUMN, "Totals");
-		tableModel.setData(row, DATA_COLUMN, totalSequences()); // percentage
+		tableModel.setData(row, SEQUENCE_COUNT_COLUMN, totalSequences()); // percentage
 		if (mode != Mode.Ngs)
 			tableModel.setData(row, PERCENTAGE_COLUMN, 100.0);
 
