@@ -60,7 +60,7 @@ public class ResultTracer {
     private void startNewSequence(AbstractSequence sequence) {
     	if (sequence != null) {
             w.println("  <sequence name=\"" + escapeXml(sequence.getName()) + "\" length=\""
-                    + sequence.getLength() + "\">");
+                    + sequence.getLength() + "\" description=\"" + escapeXml(sequence.getDescription()) +"\">");
           w.println("    <nucleotides>");
           w.println("      " + sequence.getSequence());
           w.println("    </nucleotides>");

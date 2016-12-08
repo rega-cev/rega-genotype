@@ -23,12 +23,17 @@ public class StandardTableView extends WTableView{
 	/**
 	 * calculate and set table width, considering the existing columns.
 	 */
-	public void setTableWidth() {
+	public void setTableWidth(boolean ignoreHidden) {
 		// set table widths
 		double tableWidth = 2;
 		for(int i=0; i < getModel().getColumnCount(); i++) {
-			tableWidth += getColumnWidth(i).getValue() + COLUMN_PADDING;
+			if (!ignoreHidden || (ignoreHidden && !isColumnHidden(i)))
+				tableWidth += getColumnWidth(i).getValue() + COLUMN_PADDING;
 		}
 		setWidth(new WLength(tableWidth + SCROLL_SIZE));
+	}
+
+	public void setTableWidth() {
+		setTableWidth(true);
 	}
 }

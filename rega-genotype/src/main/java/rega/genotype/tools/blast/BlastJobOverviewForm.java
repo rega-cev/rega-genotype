@@ -1,19 +1,24 @@
 package rega.genotype.tools.blast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import rega.genotype.ApplicationException;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ngs.QC;
+import rega.genotype.ngs.QC.QcData;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.util.GenotypeLib;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.AnchorTarget;
@@ -34,7 +39,6 @@ import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
 import eu.webtoolkit.jwt.WStandardItemModel;
-import eu.webtoolkit.jwt.WTableView;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.chart.LabelOption;
@@ -50,56 +54,34 @@ import eu.webtoolkit.jwt.chart.WPieChart;
 public class BlastJobOverviewForm extends AbstractJobOverview {
 	public static final String BLAST_JOB_ID_PATH = "blast-job";
 
-	private static final int ASSINGMENT_COLUMN =    0;
-	private static final int DATA_COLUMN =          1; // sequence count column. percentages of the chart.
-	private static final int CHART_DISPLAY_COLUMN = 2;
-	private static final int PERCENTAGE_COLUMN =    3;
-	private static final int SRC_COLUMN =    4;
-	private static final int COLOR_COLUMN =         5;
-
+	private int ASSINGMENT_COLUMN =    0;
+	private int DATA_COLUMN =          1; // sequence count column. percentages of the chart.
+	private int CHART_DISPLAY_COLUMN = 2;
+	private int PERCENTAGE_COLUMN =    3; // deep cov for ngs
+	private int TOTAL_LENGTH_COLUMN =  4; // % of Genome
+	private int READ_COUNT_COLUMN =    5;
+	private int SRC_COLUMN =           6;
+	private int COLOR_COLUMN =         7;
+	private int IMAGE_COLUMN =         8;
 
 	//private Template layout = new Template(tr("job-overview-form"), this);
 	private WStandardItemModel blastResultModel = new WStandardItemModel();
 	// <concludedId (cluster id), cluster data>
 	private Signal1<String> jobIdChanged = new Signal1<String>();
 	private String jobId;
-	private WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
-	private WPieChart chart;
-	private WTableView table = new WTableView();
+	protected WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
+	protected WPieChart chart;
+	protected StandardTableView table = new StandardTableView();
 
-	private BlastResultParser blastResultParser;
+	protected BlastResultParser blastResultParser;
 
 	private WContainerWidget resultsContainer  = new WContainerWidget();
 
+	public enum Mode {Ngs, Classic}
+	protected Mode mode;
+
 	public BlastJobOverviewForm(GenotypeWindow main) {
 		super(main);
-
-		// table
-		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		table.setWidth(new WLength(500));
-		table.setStyleClass("blastResultsTable");
-		table.setHeaderHeight(new WLength(20));
-		table.hideColumn(CHART_DISPLAY_COLUMN);
-		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
-		table.setColumnWidth(DATA_COLUMN, new WLength(80));
-		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(60));
-		table.setColumnWidth(SRC_COLUMN, new WLength(60));
-		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
-
-		table.setItemDelegateForColumn(COLOR_COLUMN, new WAbstractItemDelegate() {
-			@Override
-			public WWidget update(WWidget widget, WModelIndex index, EnumSet<ViewItemRenderFlag> flags) {
-				WContainerWidget w = new WContainerWidget();
-				w.setStyleClass("legend-item");
-				WColor c = (WColor)index.getData(ItemDataRole.UserRole + 1);
-				if (c != null)
-					w.getDecorationStyle().setBackgroundColor(c);
-
-				w.setMargin(WLength.Auto, Side.Left, Side.Right);
-
-				return w;
-			}
-		});
 	}
 
 	private void createChart() {
@@ -141,6 +123,49 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	}
 
 	@Override
+	public void init(String jobId, String filter) {
+		super.init(jobId, filter);
+
+		this.mode = isNgsJob() ? Mode.Ngs : Mode.Classic;
+
+		// table
+		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+		table.setSortingEnabled(false);
+		table.setWidth(new WLength(500));
+		table.setStyleClass("blastResultsTable");
+		table.setHeaderHeight(new WLength(20));
+		table.hideColumn(CHART_DISPLAY_COLUMN);
+		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
+		table.setColumnWidth(DATA_COLUMN, new WLength(80));
+		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(80));
+		table.setColumnWidth(SRC_COLUMN, new WLength(60));
+		table.setColumnWidth(TOTAL_LENGTH_COLUMN, new WLength(90));
+		table.setColumnWidth(READ_COUNT_COLUMN, new WLength(60));
+		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
+
+		table.setItemDelegateForColumn(COLOR_COLUMN, new WAbstractItemDelegate() {
+			@Override
+			public WWidget update(WWidget widget, WModelIndex index, EnumSet<ViewItemRenderFlag> flags) {
+				WContainerWidget w = new WContainerWidget();
+				w.setStyleClass("legend-item");
+				WColor c = (WColor)index.getData(ItemDataRole.UserRole + 1);
+				if (c != null)
+					w.getDecorationStyle().setBackgroundColor(c);
+
+				w.setMargin(WLength.Auto, Side.Left, Side.Right);
+
+				return w;
+			}
+		});
+
+		if (mode != Mode.Ngs) {
+			table.hideColumn(TOTAL_LENGTH_COLUMN);
+			table.hideColumn(READ_COUNT_COLUMN);
+			table.hideColumn(IMAGE_COLUMN);
+		}
+	}
+	
+	@Override
 	public void handleInternalPath(String internalPath) {
 		createChart();
 		blastResultParser = null;
@@ -179,7 +204,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		return blastResultParser;
 	}
 
-	private double totalSequences() {
+	protected double totalSequences() {
 		Map<String, ClusterData> clusterDataMap = blastResultParser.clusterDataMap;
 		double total = 0;
 		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
@@ -196,13 +221,34 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		// create blastResultModel
 		blastModel = new WStandardItemModel();
-		blastModel.insertColumns(blastModel.getColumnCount(), 6);
+		blastModel.insertColumns(blastModel.getColumnCount(), 9);
 
 		blastModel.setHeaderData(ASSINGMENT_COLUMN, tr("detailsForm.summary.assignment"));
 		blastModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.numberSeqs"));
 		blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.percentage"));
 		blastModel.setHeaderData(SRC_COLUMN, tr("detailsForm.summary.src"));
 		blastModel.setHeaderData(COLOR_COLUMN, tr("detailsForm.summary.legend"));
+
+		Integer readLen = null;
+		// NGS
+		if (mode == Mode.Ngs) {
+			blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.deep-cov"));
+			blastModel.setHeaderData(DATA_COLUMN, tr("detailsForm.summary.contig-count"));
+			blastModel.setHeaderData(TOTAL_LENGTH_COLUMN, tr("detailsForm.summary.total-len"));
+			blastModel.setHeaderData(READ_COUNT_COLUMN, tr("detailsForm.summary.read-cunt"));
+			blastModel.setHeaderData(IMAGE_COLUMN, tr("detailsForm.summary.image"));
+
+			try {
+				File qcReportFile = QC.qcReportFile(jobDir);
+				if (qcReportFile != null) {
+					QcData qcData = new QC.QcData(QC.qcReportFile(jobDir));
+					readLen = qcData.getReadLength();
+				}
+			} catch (ApplicationException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 
 		// find total 
 		double total = totalSequences();
@@ -227,11 +273,71 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			blastModel.setData(row, COLOR_COLUMN, color, 
 					ItemDataRole.UserRole + 1);
 
-			blastModel.setData(row, PERCENTAGE_COLUMN, 
-					(double)toolData.sequenceNames.size() / total * 100.0);
+			if (mode != Mode.Ngs)
+				blastModel.setData(row, PERCENTAGE_COLUMN, 
+						(double)toolData.sequenceNames.size() / total * 100.0);
 
 			blastModel.setData(row, SRC_COLUMN, toolData.src);
 
+			if (mode == Mode.Ngs) {
+				if (readLen == null) {
+					String readLenError = "Error: read length is missing from QC report.";
+					blastModel.setData(row, READ_COUNT_COLUMN, readLenError);
+					blastModel.setData(row, TOTAL_LENGTH_COLUMN, readLenError);
+					blastModel.setData(row, READ_COUNT_COLUMN, readLenError);
+				} else {
+					double contigsLen = 0;
+					double totalCov = 0;
+					Integer refLen = null;
+					String lenErrors = null;
+					String covErrors = null;
+
+					for (SequenceData seq: toolData.sequenceNames) {
+						//11051__contig_1_len_10306_cov_950.489 vip
+						// currently cov is encoded in description
+						// # reads as Sum of (contig length * coverage / read length)
+						if (seq.description == null)
+							continue; // old format.
+						if (seq.length == null)
+							lenErrors = "seq len not found";
+						else
+							contigsLen += seq.length;
+						String[] seqParts = seq.description.split("_");
+						for (int j = 0; j < seqParts.length - 1; ++j) {
+							if (seqParts[j].equals("reflen")) {
+								try {
+									refLen = Integer.parseInt(seqParts[j + 1]);
+								} catch (NumberFormatException e2) {
+									lenErrors = "ref len not found";
+								}
+							} else if (seqParts[j].equals("cov")) {
+								try {
+									totalCov += Double.parseDouble(seqParts[j + 1]);
+								} catch (NumberFormatException e2) {
+									covErrors = "cov not found";
+								}
+							}
+						}
+					}
+
+					if (lenErrors == null) {
+						double readCount = contigsLen * totalCov / readLen;
+
+						blastModel.setData(row, TOTAL_LENGTH_COLUMN,  contigsLen / refLen  * 100);
+						if (covErrors == null)
+							blastModel.setData(row, READ_COUNT_COLUMN, (int)readCount);
+						else
+							blastModel.setData(row, READ_COUNT_COLUMN, "Error: " + covErrors);
+
+						double deepCov = readCount * readLen / refLen;
+						blastModel.setData(row, PERCENTAGE_COLUMN, deepCov);
+					} else {
+						blastModel.setData(row, TOTAL_LENGTH_COLUMN, "Error: " + lenErrors);
+						blastModel.setData(row, READ_COUNT_COLUMN,  "Error: " + lenErrors);
+					}
+				}
+				blastModel.setData(row, IMAGE_COLUMN, "todo");
+			}
 			i++;
 		}
 		return blastModel;
@@ -256,14 +362,18 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		tableModel.insertRows(row, 1);
 		tableModel.setData(row, ASSINGMENT_COLUMN, "Totals");
 		tableModel.setData(row, DATA_COLUMN, totalSequences()); // percentage
-		tableModel.setData(row, PERCENTAGE_COLUMN, 100.0);
+		if (mode != Mode.Ngs)
+			tableModel.setData(row, PERCENTAGE_COLUMN, 100.0);
 
 		table.setModel(tableModel);
+		table.setTableWidth(true);
 
 		chartContainer.show();
 		table.show();
 		resultsContainer.addWidget(chartContainer);
 		resultsContainer.addWidget(table);
+		resultsContainer.setWidth(table.getWidth());
+		resultsContainer.setMargin(WLength.Auto, Side.Left, Side.Right);
 		bindResults(resultsContainer);
 	}
 
@@ -294,9 +404,15 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		String concludedName = new String();
 		String concludedId = new String();
 		String src = new String();
-		List<String> sequenceNames = new ArrayList<String>();
+		List<SequenceData> sequenceNames = new ArrayList<SequenceData>();
 	}
 
+	public static class SequenceData {
+		String name = new String();
+		String description = new String();
+		Integer length;
+	}
+	
 	// unused 
 	@Override
 	public List<Header> getHeaders() {
@@ -320,7 +436,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	 * blastResultModel.
 	 */
 	public class BlastResultParser extends GenotypeResultParser {
-		private Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
+		protected Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
 		private WApplication app;
 
 		public BlastResultParser() {
@@ -343,6 +459,10 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 							"/genotype_result/sequence/result[@id='blast']/cluster/taxonomy-id");
 			String seqName = GenotypeLib.getEscapedValue(this,
 					"/genotype_result/sequence/@name");
+			String seqDesc = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/@description");
+			String seqLength = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/@length");
 			String clusterSrc = GenotypeLib.getEscapedValue(this,
 					"/genotype_result/sequence/result[@id='blast']/cluster/src");
 			String concludedId = GenotypeLib
@@ -360,8 +480,17 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (concludedId != null && !concludedId.equals("Unassigned"))
 				toolData.taxonomyId = taxonomyId;
 
+			SequenceData sequenceData = new SequenceData();
+			sequenceData.name = seqName;
+			sequenceData.description = seqDesc;
+			try {
+				sequenceData.length = Integer.parseInt(seqLength);
+			} catch (NumberFormatException e){
+				sequenceData.length = null;
+			}
+			
 			toolData.concludedName = concludedName;
-			toolData.sequenceNames.add(seqName);
+			toolData.sequenceNames.add(sequenceData);
 			toolData.concludedId = concludedId;
 			toolData.src = clusterSrc;
 			clusterDataMap.put(concludedId, toolData);

@@ -293,13 +293,17 @@ public class NgsAnalysis {
 						SequenceAlignment.FILETYPE_FASTA, 
 						SequenceAlignment.SEQUENCE_DNA);
 	
-				String taxonomyId = virusName.split("_")[0];
+				int i = 0;
 				for (AbstractSequence s: sequenceAlignment.getSequences()) {
 					String[] split = fastqPE1FileName.split("_");
 					String fastqFileId = (split.length > 0) ? split[0] : fastqPE1FileName;
-					s.setName(taxonomyId + "__" + s.getName() + " " + fastqFileId);
+					String refAC = "AC";
+					if (name.contains("_ref_"))
+						refAC = name.split("_ref_")[0];
+					s.setName(refAC + "_" + i + " " + s.getName() + "_reflen_" + ref.getLength() + "_" + fastqFileId);
+					i++;
 				}
-				
+
 				System.out.println("Created " + sequenceAlignment.getSequences().size() + " contigs");
 	
 				ngsProgress.save(workDir);

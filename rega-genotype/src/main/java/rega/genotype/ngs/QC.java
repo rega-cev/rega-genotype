@@ -99,6 +99,34 @@ public class QC {
 		}
 	}
 
+	public static class QcData {
+		private Integer readLength = null;
+
+		public QcData(File fastqcFile) throws ApplicationException {
+			String fileContent = FileUtil.getFileContent(fastqcFile, "fastqc_data.txt");
+			if (fileContent == null)
+				throw new ApplicationException("File to read FastQC report.");		
+
+			String[] lines = fileContent.split("\n");
+
+			for(String line: lines) {
+				String[] parts = line.split("\t");
+				if (parts.length == 2 && parts[0].equals("Sequence length")) {
+					try {
+						readLength = Integer.parseInt(parts[1]);
+					} catch (NumberFormatException e) {
+						readLength = null;
+					}
+					break; // for now we do not need more data.
+				}
+			}
+		}
+
+		public Integer getReadLength() {
+			return readLength;
+		}
+	}
+
 	/**
 	 * Use FastQC to generate quality control reports
 	 * @param sequenceFiles
@@ -148,6 +176,17 @@ public class QC {
 		}
 
 		return ans;
+	}
+
+	public static File qcReportFile(File workDir) {
+		File reportDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
+		for(File reportFile: reportDir.listFiles()) {
+			if (FilenameUtils.getExtension(reportFile.getAbsolutePath()).equals("zip")){
+				return reportFile;
+			}
+		}
+
+		return null;
 	}
 
 	public static List<QcResults> getResults(File reportDir) throws ApplicationException {
