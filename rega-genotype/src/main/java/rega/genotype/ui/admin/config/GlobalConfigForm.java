@@ -88,7 +88,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 								File file = RegaSystemFiles.downloadTaxonomyFile();
 								String infoText = file == null ? "Could not downlod taxonomy file" : "Update finished successfully";
 								UpdateLock updateLock = app.getUpdateLock();
-								TaxonomyModel.read(RegaSystemFiles.taxonomyFile());
+								TaxonomyModel.getInstance().read(RegaSystemFiles.taxonomyFile());
 								info.setText(infoText);
 								d.getCancelB().enable();
 								app.triggerUpdate();

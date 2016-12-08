@@ -39,14 +39,25 @@ public class TaxonomyModel {
 	public static int VIRUS_HOST_COL = 10;
 
 	// cache for improving read speed.
-	private static Map<String, String[]> taxons = new HashMap<String, String[]>();
-	private static WStandardItem root = new WStandardItem();
-	private static Map<String, WStandardItem> items = new HashMap<String, WStandardItem>();
+	private Map<String, String[]> taxons = new HashMap<String, String[]>();
+	private WStandardItem root = new WStandardItem();
+	private Map<String, WStandardItem> items = new HashMap<String, WStandardItem>();
 
+	private static TaxonomyModel instance = null;
+	
 	private TaxonomyModel(){
 	}
 
-	public static synchronized WStandardItemModel createModel() {
+	public static synchronized TaxonomyModel getInstance() {
+		if (instance == null) {
+			instance = new TaxonomyModel();
+			instance.refreshCache();
+		}
+
+		return instance;
+	}
+
+	public WStandardItemModel createModel() {
 		refreshCache();
 		WStandardItemModel ans = new WStandardItemModel();
 		List<WStandardItem> rootItems = new ArrayList<WStandardItem>();
@@ -62,8 +73,7 @@ public class TaxonomyModel {
 		return ans;
 	}
 
-	// TODO change it to singleton. 
-	private static void refreshCache() {
+	private void refreshCache() {
 		if (root.getRowCount() == 0) {
 			// make sure that if taxonomy file exists it was read (can happen if the server failed)
 			File taxonomyFile = RegaSystemFiles.taxonomyFile();
@@ -72,7 +82,7 @@ public class TaxonomyModel {
 		}
 	}
 
-	private static WStandardItem findChild(WStandardItem parent, String taxonomyId) {
+	private WStandardItem findChild(WStandardItem parent, String taxonomyId) {
 		for (int i = 0; i < parent.getRowCount(); ++i) {
 			if (parent.getChild(i).getData(TAXONOMY_ID_ROLE).equals(taxonomyId))
 				return parent.getChild(i);
@@ -81,13 +91,13 @@ public class TaxonomyModel {
 		return null;
 	}
 
-	private static void append(WStandardItem parent, WStandardItem child) {
+	private void append(WStandardItem parent, WStandardItem child) {
 		List<WStandardItem> items = new ArrayList<WStandardItem>();
 		items.add(child);
 		parent.appendRow(items);
 	}
 
-	private static WStandardItem createItem(String[] row) {
+	private WStandardItem createItem(String[] row) {
 		WStandardItem item = new WStandardItem(
 				row[SCIENTIFIC_NAME_COL] + ", " + row[TAXON_COL] + "");
 		item.setData(row[SCIENTIFIC_NAME_COL], SCIENTIFIC_NAME_ROLE);
@@ -98,17 +108,17 @@ public class TaxonomyModel {
 
 		return item;
 	}
-	public static String getMnemenic(String taxonomyId) {
+	public String getMnemenic(String taxonomyId) {
 		 WStandardItem item = items.get(taxonomyId);
 		 return item == null ? null : item.getData(MNEMENIC_ROLE).toString();
 	}
 	
-	public static String getScientificName(String taxonomyId) {
+	public String getScientificName(String taxonomyId) {
 		 WStandardItem item = items.get(taxonomyId);
 		 return item == null ? null : item.getData(SCIENTIFIC_NAME_ROLE).toString();
 	}
 
-	public static String getHirarchy(String taxonomyId, int howFar) {		
+	public String getHirarchy(String taxonomyId, int howFar) {		
 		String ans = "";
 		 WStandardItem item = items.get(taxonomyId);
 		 if (item == null)
@@ -125,9 +135,7 @@ public class TaxonomyModel {
 		 return ans;
 	}
 
-	public static List<String> getHirarchyTaxonomyIds(String taxonomyId) {
-		refreshCache();
-
+	public List<String> getHirarchyTaxonomyIds(String taxonomyId) {
 		List<String> ans = new ArrayList<String>();
 		WStandardItem item = items.get(taxonomyId);
 		if (item == null)
@@ -140,7 +148,7 @@ public class TaxonomyModel {
 		return ans;
 	}
 
-	public static List<String> getAllChildrenTaxonomy(String parentTaxonomyId){
+	public List<String> getAllChildrenTaxonomy(String parentTaxonomyId){
 		List<String> ans = new ArrayList<String>();
 		WStandardItem item = items.get(parentTaxonomyId);
 		if (item == null)
@@ -164,7 +172,7 @@ public class TaxonomyModel {
 		return ans;
 	}
 
-	public static void read(File csvFile) {
+	public void read(File csvFile) {
 		//clear();
 		taxons.clear();
 		items.clear();
@@ -208,7 +216,7 @@ public class TaxonomyModel {
 		}
 	} 
 
-	private static void addItem(String[] row) {
+	private void addItem(String[] row) {
 		if (row == null)
 			assert(false);
 
@@ -242,7 +250,7 @@ public class TaxonomyModel {
 			}
 		}
 	}
-	public static Map<String, String[]> getTaxons() {
+	public Map<String, String[]> getTaxons() {
 		return taxons;
 	}
 }

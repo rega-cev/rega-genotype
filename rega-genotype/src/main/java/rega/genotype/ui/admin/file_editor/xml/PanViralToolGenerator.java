@@ -114,8 +114,8 @@ public class PanViralToolGenerator {
 		//File fastaOutPreprocessed = preprocessFasta(workDir, fastaOut); removed because the format of the files from NCBI was changed.
 
 		// make sure that taxonomy is ready
-		if (TaxonomyModel.getTaxons().isEmpty())
-			TaxonomyModel.read(RegaSystemFiles.taxonomyFile());
+		if (TaxonomyModel.getInstance().getTaxons().isEmpty())
+			TaxonomyModel.getInstance().read(RegaSystemFiles.taxonomyFile());
 		
 		// create blast.xml
 
@@ -140,7 +140,7 @@ public class PanViralToolGenerator {
 					badSequences.add(s);
 					continue; // should not get here
 				}
-				String mnemenic = TaxonomyModel.getMnemenic(data.taxonomyId);
+				String mnemenic = TaxonomyModel.getInstance().getMnemenic(data.taxonomyId);
 				String id = data.taxonomyId;
 				if (mnemenic != null && !mnemenic.isEmpty())
 					id += "_" + mnemenic;
@@ -148,7 +148,7 @@ public class PanViralToolGenerator {
 				cluster.setSource(Source.ICTV);
 				cluster.setName(data.organizedName);
 				cluster.setTaxonomyId(data.taxonomyId);
-				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId, 3));// TODO: this should come from ICTV?
+				cluster.setDescription(TaxonomyModel.getInstance().getHirarchy(data.taxonomyId, 3));// TODO: this should come from ICTV?
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 
@@ -198,7 +198,7 @@ public class PanViralToolGenerator {
 					System.err.println("taxonomyId == null : " + accessionNumber);
 					continue; // should not get here
 				}
-				String mnemenic = TaxonomyModel.getMnemenic(data.taxonomyId);
+				String mnemenic = TaxonomyModel.getInstance().getMnemenic(data.taxonomyId);
 				String id = data.taxonomyId;
 				if (mnemenic != null && !mnemenic.isEmpty())
 					id += "_" + mnemenic;
@@ -206,7 +206,7 @@ public class PanViralToolGenerator {
 				cluster.setSource(Source.NCBI);
 				cluster.setName(data.organizedName);
 				cluster.setTaxonomyId(data.taxonomyId);
-				cluster.setDescription(TaxonomyModel.getHirarchy(data.taxonomyId, 3));
+				cluster.setDescription(TaxonomyModel.getInstance().getHirarchy(data.taxonomyId, 3));
 				alignmentAnalyses.getAllClusters().add(cluster);
 			}
 

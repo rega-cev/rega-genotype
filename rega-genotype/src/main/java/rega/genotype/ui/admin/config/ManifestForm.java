@@ -224,7 +224,7 @@ public class ManifestForm extends FormTemplate{
 	}
 
 	public String getScientificName() {
-		return TaxonomyModel.getScientificName(taxonomyT.getText().toString());
+		return TaxonomyModel.getInstance().getScientificName(taxonomyT.getText().toString());
 	}
 
 	public Signal1<ToolType> toolTypeChanged() {

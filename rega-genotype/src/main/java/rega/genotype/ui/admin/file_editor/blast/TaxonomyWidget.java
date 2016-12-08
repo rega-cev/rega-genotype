@@ -44,7 +44,7 @@ public class TaxonomyWidget extends WContainerWidget {
 		expandAllB.addStyleClass("standard-margin");
 		searchLE.addStyleClass("standard-margin");
 
-		WStandardItemModel taxonomyModel = TaxonomyModel.createModel();
+		WStandardItemModel taxonomyModel = TaxonomyModel.getInstance().createModel();
 		searchProxy = new StandardItemModelSearchProxy(taxonomyModel);
 		// Note: Optimization: getTaxonomyIds is slow because it has to read blast.xml, not sure if it is worth to add cache for that.
 		searchProxy.setVisibleLeafs(getTaxonomyIds(toolConfig));
@@ -101,7 +101,7 @@ public class TaxonomyWidget extends WContainerWidget {
 	private void printWrongTaxons(Set<String> taxonomyIds) {
 		// debug: some taxonomy ids are not found in uniprot file. 
 		for (String s: taxonomyIds) 
-			if (!TaxonomyModel.getTaxons().containsKey(s))
+			if (!TaxonomyModel.getInstance().getTaxons().containsKey(s))
 				System.err.println("Hirarchy for taxon " + s + " not found");
 	}
 	public String getSelectedTaxonomyId() {

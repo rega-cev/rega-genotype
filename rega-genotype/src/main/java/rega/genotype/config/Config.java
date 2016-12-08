@@ -115,7 +115,7 @@ public class Config {
 		for (ToolConfig c :Settings.getInstance().getConfig().getTools()) {
 			ToolManifest m = c.getToolMenifest();
 			if (m.getTaxonomyId() != null){
-				List<String> taxonomyIds = TaxonomyModel.getHirarchyTaxonomyIds(taxonomyId);
+				List<String> taxonomyIds = TaxonomyModel.getInstance().getHirarchyTaxonomyIds(taxonomyId);
 				if (taxonomyIds.contains(m.getTaxonomyId()))
 					return m.getId();
 			}
