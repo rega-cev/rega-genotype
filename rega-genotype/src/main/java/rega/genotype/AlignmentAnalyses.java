@@ -641,6 +641,14 @@ public class AlignmentAnalyses {
     	return null;
     }
 
+    public Cluster findClusterByTaxonomyId(String taxonomyId){
+    	for(Cluster c: clusters)
+    		if(c.getTaxonomyId().equals(taxonomyId))
+    			return c;
+
+    	return null;
+    }
+
     public boolean removeCluster(Cluster c){
     	return clusters.remove(c);
     }

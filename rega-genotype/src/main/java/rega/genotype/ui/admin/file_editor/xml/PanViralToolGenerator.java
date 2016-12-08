@@ -132,7 +132,7 @@ public class PanViralToolGenerator {
 			s.setName(accessionNumber);
 
 			// cluster
-			Cluster cluster = alignmentAnalyses.findCluster(data.taxonomyId);
+			Cluster cluster = alignmentAnalyses.findClusterByTaxonomyId(data.taxonomyId);
 			if(cluster == null) {
 				cluster = new Cluster();
 				if (data.taxonomyId == null) {
@@ -191,7 +191,7 @@ public class PanViralToolGenerator {
 			s.setName(accessionNumber);
 
 			// cluster
-			Cluster cluster = alignmentAnalyses.findCluster(data.taxonomyId);
+			Cluster cluster = alignmentAnalyses.findClusterByTaxonomyId(data.taxonomyId);
 			if(cluster == null) {
 				cluster = new Cluster();
 				if (data.taxonomyId == null) {

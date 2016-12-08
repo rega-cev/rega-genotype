@@ -40,6 +40,30 @@ public class ConfigXmlWriter {
 		}
 	}
 
+	public static void writeMetaData(File workdir, ToolMetadata metaData) throws JDOMException, IOException {
+		File configFile = new File(workdir, "config.xml");
+		if (configFile.exists()) {
+			SAXBuilder builder = new SAXBuilder();
+			Document document = builder.build(configFile);
+			Element root = document.getRootElement();
+
+			root.removeChildren("meta-data");
+
+			Element metaDataE = new Element("meta-data");
+			add(metaDataE, "cluster-count", metaData.clusterCount);
+			if (metaData.canAccess != null)
+				add(metaDataE, "access", metaData.canAccess);
+
+			root.addContent(metaDataE);
+
+			XMLOutputter xmlOutput = new XMLOutputter();
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.output(document, new FileWriter(configFile));
+		} else {
+			// TODO
+		}
+	}
+
     private static void add(Element e, String tag, String value) {
 		e.addContent(new Element(tag).setText(value));
     }
@@ -57,4 +81,14 @@ public class ConfigXmlWriter {
 		public int genomeEnd;
 		public String color;
 	}
+
+	/**
+	 * For some tool blast.xml can be very big. Some data that can describe the tool is
+	 * saved here. (because parsing blast.xml can take long)
+	 */
+	public static class ToolMetadata {
+		public Integer clusterCount = null;
+		public Integer canAccess = null; // pan-viral tool can redirect to other tools.
+	}
+
 }

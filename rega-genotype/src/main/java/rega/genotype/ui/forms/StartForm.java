@@ -26,6 +26,8 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.ngs.NgsAnalysis;
 import rega.genotype.ngs.NgsFileSystem;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
@@ -187,22 +189,16 @@ public class StartForm extends AbstractForm {
 		
 		template.bindWidget("error-job", errorJobId);
 
-		// blast.xml place holders
-		AlignmentAnalyses alignmentAnalyses = readBlastXml();
-		if(alignmentAnalyses == null) {
-			template.bindEmpty("count_virus_from_blast.xml");
-			template.bindEmpty("count_typing_tools");
-		} else {
-			List<Cluster> allClusters = alignmentAnalyses.getAllClusters();
-			Set<String> tools = new HashSet<String>();
-			for (Cluster c:allClusters) {
-				if(c.getTaxonomyId() != null && !c.getTaxonomyId().isEmpty())
-					tools.add(c.getTaxonomyId());
-			}
-
-			template.bindString("count_virus_from_blast.xml", allClusters.size() + "");
-			template.bindString("count_typing_tools", tools.size() + "");
-		}
+		ToolMetadata metadata = ConfigXmlReader.readMetadata(new File(
+				getMain().getOrganismDefinition().getXmlPath()));
+		template.bindEmpty("count_virus_from_blast.xml");
+		template.bindEmpty("count_typing_tools");
+		if (metadata != null) {
+			if (metadata.clusterCount != null)
+				template.bindString("count_virus_from_blast.xml",  metadata.clusterCount + "");
+			if (metadata.canAccess != null)
+				template.bindString("count_typing_tools",  metadata.canAccess + "");
+		} 
 
 		// NGS
 

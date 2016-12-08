@@ -12,6 +12,7 @@ import org.jdom.input.SAXBuilder;
 
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest.FileType;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.Genome;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 
 /**
  * Utility class to read config.xml
@@ -91,6 +92,34 @@ public class ConfigXmlReader {
 		}
 
 		return genome;
+	}
+
+	public static ToolMetadata readMetadata(File xmlDir) {
+		ToolMetadata ans = new ToolMetadata();
+
+		SAXBuilder builder = new SAXBuilder();
+		Document document;
+		try {
+			document = builder.build(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		Element root = document.getRootElement();
+		Element tableE = root.getChild("meta-data");
+		if (tableE != null){
+			Element clusterCountE = tableE.getChild("cluster-count");
+			Element accessE = tableE.getChild("access");
+
+			if (clusterCountE != null)
+				ans.clusterCount = Integer.parseInt(clusterCountE.getText());
+			if (accessE != null)
+				ans.canAccess = Integer.parseInt(accessE.getText());
+		}
+		return ans;
 	}
 
 	public static List<VerificationTableItem> readVerificationTable(File xmlDir) {

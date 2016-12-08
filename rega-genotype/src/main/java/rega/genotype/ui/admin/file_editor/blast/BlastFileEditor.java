@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.FileUtils;
+import org.jdom.JDOMException;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
@@ -31,6 +32,8 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.tools.FastaToRega;
 import rega.genotype.ui.admin.config.ManifestForm;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
@@ -361,6 +364,16 @@ public class BlastFileEditor extends WContainerWidget{
 		dirtyHandler.connect(referenceTaxaTable.getDirtyHandler(), this);
 	}
 
+	private void saveToolMetadata(File workDir,
+			AlignmentAnalyses alignmentAnalyses) throws JDOMException, IOException {
+		// TODO Auto-generated method stub
+		ToolMetadata metaData = new ToolMetadata();
+		metaData.clusterCount = alignmentAnalyses.getAllClusters().size();
+
+		
+		ConfigXmlWriter.writeMetaData(workDir, metaData);
+	}
+
 	public boolean save(File dir) {
 		try {
 			analysis.save();
@@ -371,6 +384,7 @@ public class BlastFileEditor extends WContainerWidget{
 
 			new BlastXmlWriter(blastFile(dir), alignmentAnalyses);
 			writeFastaFile(dir);
+			saveToolMetadata(dir, alignmentAnalyses);
 			return true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -379,6 +393,9 @@ public class BlastFileEditor extends WContainerWidget{
 			e.printStackTrace();
 			Dialogs.infoDialog("Error", "Could not save blast.fasta");
 		} catch (ParameterProblemException e) {
+			e.printStackTrace();
+			Dialogs.infoDialog("Error", "Could not save blast.fasta");
+		} catch (JDOMException e) {
 			e.printStackTrace();
 			Dialogs.infoDialog("Error", "Could not save blast.fasta");
 		} 
