@@ -109,7 +109,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		template.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		template.bindEmpty("analysis-cancelled");
 		
-		jobTable = new WTable(this);
+		jobTable = new WTable();
 		template.bindEmpty("ngs-results");
 		template.bindWidget("results", jobTable);
 		jobTable.setHeaderCount(1, Orientation.Horizontal);
