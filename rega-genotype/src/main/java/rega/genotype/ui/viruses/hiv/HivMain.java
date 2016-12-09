@@ -22,13 +22,13 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.exeptions.RegaGenotypeExeption;
 import rega.genotype.ui.util.FileServlet;
+import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WEnvironment;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WXmlLocalizedStrings;
-import eu.webtoolkit.jwt.Configuration.ErrorReporting;
 
 /**
  * HIV implementation of the genotype application.
@@ -42,7 +42,7 @@ public class HivMain extends GenotypeMain {
 	public static final String HIV_TOOL_ID = "hiv"; // TODO: Temporary till hiv becomes generic tool.
 
 	public HivMain() {
-		getConfiguration().setInternalDeploymentSize(1);
+		//getConfiguration().setInternalDeploymentSize(1);
 		getConfiguration().setMaximumRequestSize(Integer.MAX_VALUE-1);
 
 		getConfiguration().setProgressiveBootstrap(true);
