@@ -97,10 +97,13 @@ public class ConfigXmlReader {
 	public static ToolMetadata readMetadata(File xmlDir) {
 		ToolMetadata ans = new ToolMetadata();
 
+		File configxml = new File(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+		if (!configxml.exists())
+			return null;
 		SAXBuilder builder = new SAXBuilder();
 		Document document;
 		try {
-			document = builder.build(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+			document = builder.build(configxml);
 		} catch (JDOMException e) {
 			e.printStackTrace();
 			return null;
