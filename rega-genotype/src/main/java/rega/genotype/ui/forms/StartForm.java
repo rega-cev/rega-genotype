@@ -10,15 +10,11 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.AlignmentAnalyses;
-import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
@@ -252,6 +248,16 @@ public class StartForm extends AbstractForm {
 		fastqFileUpload2.uploaded().addListener(this, new Signal.Listener() {
 			public void trigger() {
 				//Start NGS analysis and send assembled sequences to normal analysis.
+
+				if (fastqFileUpload1.getSpoolFileName().isEmpty() 
+						|| fastqFileUpload2.getSpoolFileName().isEmpty()) {
+					StandardDialog d = new StandardDialog("Upload first");
+					d.setWidth(new WLength(200));
+					d.addText("Can not run NGS analysis on empty files.");
+					d.getOkB().hide();
+					return;
+				}
+
 				File fastqFile1 = new File(fastqFileUpload1.getSpoolFileName());
 				File fastqFile2 = new File(fastqFileUpload2.getSpoolFileName());
 
