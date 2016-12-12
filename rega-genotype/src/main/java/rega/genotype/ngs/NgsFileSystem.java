@@ -7,6 +7,8 @@ import org.apache.commons.io.FileUtils;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.singletons.Settings;
+import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.Utils;
 
 /**
@@ -49,6 +51,10 @@ public class NgsFileSystem {
 	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
 
 	public static boolean addFastqFiles(File workDir, File fastqPE1, File fastqPE2) {
+		return addFastqFiles(workDir, fastqPE1, fastqPE2, false);
+	}
+
+	public static boolean addFastqFiles(File workDir, File fastqPE1, File fastqPE2, boolean deleteOldFile) {
 		if (!fastqPE1.exists() || !fastqPE2.exists()) 
     		return false;
 
@@ -71,15 +77,33 @@ public class NgsFileSystem {
 			File fastqPE2Copy = new File(fastqDir, fastqPE2.getName());
 
 			if (!fastqPE1.getAbsolutePath().equals(fastqPE1Copy.getAbsolutePath()))
-				FileUtils.copyFile(fastqPE1, fastqPE1Copy);
+				if (deleteOldFile)
+					FileUtils.moveFile(fastqPE1, fastqPE1Copy);
+				else
+					FileUtils.copyFile(fastqPE1, fastqPE1Copy);
 			if (!fastqPE2.getAbsolutePath().equals(fastqPE2Copy.getAbsolutePath()))
-				FileUtils.copyFile(fastqPE2, fastqPE2Copy);
+				if (deleteOldFile)
+					FileUtils.moveFile(fastqPE2, fastqPE2Copy);
+				else
+					FileUtils.copyFile(fastqPE2, fastqPE2Copy);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 
 		return true;
+	}
+
+	public static boolean downloadSrrFile(String srrName, File workDir) throws ApplicationException {
+		String srrToolKitPath = Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath();
+		Logger logger = LogUtils.createLogger(workDir);
+		String cmd = srrToolKitPath + "fastq-dump --split-files " + srrName;
+		executeCmd(cmd, workDir, logger);
+
+		File fastqPE1 = new File(workDir, srrName + "_1.fastq");
+		File fastqPE2 = new File(workDir, srrName + "_2.fastq");
+
+		return addFastqFiles(workDir, fastqPE1, fastqPE2, true);
 	}
 
 	public static File fastqDir(File workDir) {

@@ -299,6 +299,7 @@ public class Config {
 		private String bioPythonPath = "";
 		private String sequencetool = "";
 		private String ncbiVirusesFile = "";
+		private String srrToolKitPath = "";
 
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
@@ -427,6 +428,12 @@ public class Config {
 		}
 		public void setNcbiVirusesFile(String ncbiVirusesFile) {
 			this.ncbiVirusesFile = ncbiVirusesFile;
+		}
+		public String getSrrToolKitPath() {
+			return srrToolKitPath;
+		}
+		public void setSrrToolKitPath(String srrToolKitPath) {
+			this.srrToolKitPath = srrToolKitPath;
 		}
 	}
 

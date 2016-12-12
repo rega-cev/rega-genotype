@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.AlignmentAnalyses;
+import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
@@ -63,7 +64,8 @@ public class StartForm extends AbstractForm {
 	private WFileUpload fastqFileUpload1;
 	private WFileUpload fastqFileUpload2;
 	private WPushButton fastqStart;
-	
+	private WLineEdit srr = new WLineEdit();
+
 	private WLineEdit jobIdTF;
 	
 	private WText errorJobId, errorText;
@@ -196,6 +198,7 @@ public class StartForm extends AbstractForm {
 				template.bindString("count_typing_tools",  metadata.canAccess + "");
 		} 
 
+
 		// NGS
 
 		initNgs(template);
@@ -235,7 +238,26 @@ public class StartForm extends AbstractForm {
 
 		fastqStart.clicked().addListener(fastqStart, new Signal.Listener() {
 			public void trigger() {
-				fastqFileUpload1.upload();
+				if (!srr.getText().isEmpty()) {
+					final File workDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getJobDir());
+
+					boolean downloaded = false;
+					String err = "";
+					try {
+						downloaded = NgsFileSystem.downloadSrrFile(srr.getText(), workDir);
+					} catch (ApplicationException e) {
+						e.printStackTrace();
+						err = e.getMessage();
+					}
+
+					if (!downloaded) {
+						StandardDialog d = new StandardDialog("Download error");
+						d.addText("Download srr file failed. " + err);
+					} else
+						startNgsAnalysis(workDir);
+				} else {
+					fastqFileUpload1.upload();
+				}
 			}
 		});
 
@@ -294,34 +316,10 @@ public class StartForm extends AbstractForm {
 
 					NgsFileSystem.addFastqFiles(workDir, extructedFastqPE1, extructedFastqPE2);
 	
+					startNgsAnalysis(workDir);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
-				Thread ngsAnalysis = new Thread(new Runnable() {
-					public void run() {
-						try {
-							NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir,
-									Settings.getInstance().getConfig().getNgsModule());
-							if (ngsAnalysis.analyze()) {
-								// analyze assembled fasta files 
-								getMain().getOrganismDefinition().startAnalysis(workDir);
-								File done = new File(workDir.getAbsolutePath()+File.separatorChar+"DONE");
-								FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-							assert(false);
-						} catch (ParameterProblemException e) {
-							e.printStackTrace();
-						} catch (FileFormatException e) {
-							e.printStackTrace();
-						}
-					}
-				});
-				ngsAnalysis.start();
-				//initNgs(t);
-				getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(workDir) + "/");
 			}
 		});
 
@@ -330,8 +328,42 @@ public class StartForm extends AbstractForm {
 		ngsTemplate.bindWidget("fastq-upload2", fastqFileUpload2);
 		ngsTemplate.bindEmpty("fastq-upload1-info");
 		ngsTemplate.bindEmpty("fastq-upload2-info");
+
+		if (Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath().isEmpty())
+			ngsTemplate.bindEmpty("srr");
+		else
+			ngsTemplate.bindWidget("srr", srr);
+
+		ngsTemplate.setCondition("if-download-srr", true);
 	}
-	
+
+	private void startNgsAnalysis(final File workDir) {
+		Thread ngsAnalysis = new Thread(new Runnable() {
+			public void run() {
+				try {
+					NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir,
+							Settings.getInstance().getConfig().getNgsModule());
+					if (ngsAnalysis.analyze()) {
+						// analyze assembled fasta files 
+						getMain().getOrganismDefinition().startAnalysis(workDir);
+						File done = new File(workDir.getAbsolutePath()+File.separatorChar+"DONE");
+						FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					assert(false);
+				} catch (ParameterProblemException e) {
+					e.printStackTrace();
+				} catch (FileFormatException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		ngsAnalysis.start();
+		//initNgs(t);
+		getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(workDir) + "/");
+	}
+
 	private WInteractWidget createButton(String textKey, String iconKey) {
 		WString text = tr(textKey);
 		if (hasKey(iconKey)) {
