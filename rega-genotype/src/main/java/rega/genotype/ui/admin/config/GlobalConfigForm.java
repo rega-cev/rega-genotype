@@ -184,6 +184,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 	protected Set<String> getIgnoredFields() {
 		Set<String> ignore = new HashSet<String>();
 		ignore.add("publisherPassword");
+		ignore.add("sequencetool");
 		return ignore;
 	}
 
@@ -197,6 +198,8 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		ans.put("epsToPdfCmd", "Eps To Pdf Command");
 		ans.put("imageMagickConvertCmd", "Image Magick Convert Command");
 		ans.put("inkscapeCmd", "Inkscape Command");
+		ans.put("sequencetool", "sequencetool Command");
+		ans.put("diamondPath", "Diamond Command");
 
 		return ans;
 	}
@@ -246,7 +249,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldInfo("spadesCmd", "<div>Can be obtained from http://bioinf.spbau.ru/spades</div>");
 		setFieldInfo("cutAdaptCmd", "<div>Can be obtained from https://cutadapt.readthedocs.io/en/stable/installation.html</div>");
 		setFieldInfo("edirectPath", "<div>Can be obtained from http://www.ncbi.nlm.nih.gov/books/NBK179288/</div>");
-		setFieldInfo("sequencetoolPath", "<div>Can be obtained from https://github.com/emweb/sequencetool.git. You download the release! </div>");
+		setFieldInfo("sequencetool", "<div>Can be obtained from https://github.com/emweb/sequencetool.git. You download the release! </div>");
 		setFieldInfo("bioPythonPath", "<div>Bio python is used only to create the NGS Module. So most user do not need that.</div>" +
 				"<div>Can be obtained from http://biopython.org/</div>");
 		setFieldInfo("srrToolKitPath", "<div>This is needed only to allow the users to analyze SRR files from the internet.</div>" +
@@ -254,6 +257,5 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				"<div>I advise to disable the option on most servers. To disable leave the field empty. </div>");
 		setFieldMandatory("bioPythonPath", false);
 		setFieldMandatory("srrToolKitPath", false);
-
 	}
 }
