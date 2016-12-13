@@ -135,6 +135,10 @@ public class TaxonomyModel {
 		 return ans;
 	}
 
+	/**
+	 * @param taxonomyId
+	 * @return all ancestors taxonomy ids ordered rank (viruses is first)
+	 */
 	public List<String> getHirarchyTaxonomyIds(String taxonomyId) {
 		List<String> ans = new ArrayList<String>();
 		WStandardItem item = items.get(taxonomyId);
@@ -142,10 +146,30 @@ public class TaxonomyModel {
 			return ans;
 
 		while (item.getParent() != null) {
-			ans.add((String) item.getData(TAXONOMY_ID_ROLE));
+			ans.add(0, (String) item.getData(TAXONOMY_ID_ROLE));
 			item = item.getParent();
 		}
 		return ans;
+	}
+
+	public String getLowesCommonAncestor(String taxonmyId1, String taxonmyId2) {
+		if (items.get(taxonmyId1) == null || items.get(taxonmyId2) == null)
+			return null;
+
+		if (taxonmyId1.equals(taxonmyId2))
+			return taxonmyId1;
+		List<String> hirarchyTaxonomyIds1 = getHirarchyTaxonomyIds(taxonmyId1);
+		List<String> hirarchyTaxonomyIds2 = getHirarchyTaxonomyIds(taxonmyId2);
+
+		hirarchyTaxonomyIds1.add(taxonmyId1);
+		hirarchyTaxonomyIds2.add(taxonmyId2);
+
+		int i = 1;
+		for (; i < Math.min(hirarchyTaxonomyIds1.size(), hirarchyTaxonomyIds2.size()); ++i)
+			if (!hirarchyTaxonomyIds1.get(i).equals(hirarchyTaxonomyIds2.get(i)))
+				return hirarchyTaxonomyIds1.get(i -1);
+
+		return hirarchyTaxonomyIds1.get(i);
 	}
 
 	public List<String> getAllChildrenTaxonomy(String parentTaxonomyId){

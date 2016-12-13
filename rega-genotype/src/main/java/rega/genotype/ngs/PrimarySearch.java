@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +26,7 @@ import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.utils.StreamReaderRuntime;
 
 /**
@@ -33,6 +36,118 @@ import rega.genotype.utils.StreamReaderRuntime;
  * @author michael and vagner
  */
 public class PrimarySearch{
+	private static class SequenceData {
+		SequenceData(){}
+		String taxon = null;
+		Double score = null;
+	}
+
+	private static class TaxonomyNode {
+		String taxonId = null;
+		List<String> readNames = new ArrayList<String>();
+
+		TaxonomyNode parentTaxon = null;
+		List<TaxonomyNode> children = new ArrayList<TaxonomyNode>();
+
+		TaxonomyNode(String taxonId) {
+			this.taxonId = taxonId;
+		}
+	}
+
+	/**
+	 * Order all the reads by taxonomy level. 
+	 */
+	private static class TaxonomyTree {
+		TaxonomyNode root;
+		Map<String, TaxonomyNode> taxonIdNodeMap = new HashMap<String, TaxonomyNode>();
+
+		Map<String, String> readNameTaxonIdMap = new HashMap<String, String>();
+
+		TaxonomyNode add(TaxonomyNode parentNode, String taxonId) {
+			TaxonomyNode taxonomyNode = new TaxonomyNode(taxonId);
+			taxonomyNode.parentTaxon = parentNode;
+			parentNode.children.add(taxonomyNode);
+			taxonIdNodeMap.put(taxonId, taxonomyNode);
+			return taxonomyNode;
+		}
+		void add(String taxonId, String readName) {
+			TaxonomyNode leafNode = taxonIdNodeMap.get(taxonId);
+			if (leafNode != null) {
+				leafNode.readNames.add(readName);
+				return;
+			}
+
+			List<String> hirarchyTaxonomyIds = TaxonomyModel.getInstance().getHirarchyTaxonomyIds(taxonId);
+			if (hirarchyTaxonomyIds.size() == 0)
+				return;
+
+			if (root == null) {
+				root = new TaxonomyNode(hirarchyTaxonomyIds.get(0));
+				taxonIdNodeMap.put(hirarchyTaxonomyIds.get(0), root);
+			}
+
+			TaxonomyNode parentNode = null;
+			// find lowest ancestor that is in the tree.
+			for (int i = hirarchyTaxonomyIds.size() -1; i > -1; --i) {
+				parentNode = taxonIdNodeMap.get(hirarchyTaxonomyIds.get(i));
+				if (parentNode != null) {
+					// go back and connect all nodes to parent.
+					for (i++;i < hirarchyTaxonomyIds.size(); ++i)
+						parentNode = add(parentNode, hirarchyTaxonomyIds.get(i));
+					break;
+				}
+			}
+
+			TaxonomyNode taxonomyNode = add(parentNode, taxonId);
+			taxonomyNode.readNames.add(readName);
+		}
+
+		Map<String, String> createReadNameTaxonIdMap() {
+			merge(root);
+			fillReadNameTaxonIdMap(root);
+			return readNameTaxonIdMap;
+		}
+
+		void fillReadNameTaxonIdMap(TaxonomyNode parentTaxon){
+			for (String read: parentTaxon.readNames)
+				readNameTaxonIdMap.put(read, parentTaxon.taxonId);
+
+			for (TaxonomyNode c: parentTaxon.children)
+				fillReadNameTaxonIdMap(c);
+		}
+
+		/**
+		 * - PS: parent basket size. 
+		 * Variables: (can be set by an expert user)
+		 * - E(pc): condition to merging parent child edge. 
+		 * Algorithm:
+		 * 1. Order results by taxonomy level.
+		 * 2. Run RBFS on taxonomy tree:
+		 *    2.1. Order children by basket size
+		 *    2.2. Iterate over ordered remaining children, do 
+		 *            if ( (min(PS, CS) / max(PS, CS)) < E(pc) ) => merge child to parent basket.
+		 */
+		private void merge(TaxonomyNode parentTaxon) {
+			for (TaxonomyNode c: parentTaxon.children) // TODO: change DFS to BFS
+				merge(c);
+
+			double MERGE_CONDITION = 0.5; //TODO
+			Collections.sort(parentTaxon.children, new Comparator<TaxonomyNode>() {
+				public int compare(TaxonomyNode n1, TaxonomyNode n2) {
+					return n1.taxonId.compareTo(n2.taxonId);
+				}
+			});
+			for (TaxonomyNode c: parentTaxon.children) {
+				int ps = parentTaxon.readNames.size();
+				int cs = c.readNames.size();
+				if (Math.min(ps, cs) / Math.max(ps, cs) < MERGE_CONDITION) {
+					// merge
+					parentTaxon.readNames.addAll(c.readNames);
+					c.readNames.clear();
+				}
+			}
+		}
+	}
 	/**
 	 * 
 	 * @param workDir
@@ -76,7 +191,7 @@ public class PrimarySearch{
 		}
 		try {
 			File[] preprocessedFiles = {preprocessedPE1, preprocessedPE2};
-			creatDiamondResults(resultDiamondDir, view,  preprocessedFiles, ngsProgress);
+			creatDiamondResults(resultDiamondDir, view,  preprocessedFiles, ngsProgress, logger);
 		} catch (FileFormatException e) {
 			throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
 		} catch (IOException e) {
@@ -95,7 +210,7 @@ public class PrimarySearch{
 
 			String cmd = gc.getDiamondPath() + " blastx -d "
 					+ diamondDb.getAbsolutePath() + " -q " + query.getAbsolutePath()
-					+ " -a " + matches + " -k 1 --quiet "
+					+ " -a " + matches + " --quiet "
 					+ ngsModule.getDiamondOptions();
 
 			logger.info(cmd);
@@ -181,25 +296,9 @@ public class PrimarySearch{
 		return result;
 	}
 
-	/**
-	 * Order all the sequence by taxonomy id. 
-	 * The algorithm favors creating big baskets, so if 1 taxon appears many times 
-	 * a new sequence would rather go to its basket then to a new taxon basket
-	 * even if the new 1 has slightly better score.
-	 * @param diamondResultsDir
-	 * @param view
-	 * @param fastqFiles
-	 * @param ngsProgress 
-	 * @throws FileFormatException
-	 * @throws IOException
-	 */
-	private static void creatDiamondResults(File diamondResultsDir, File view, File[] fastqFiles, NgsProgress ngsProgress) throws FileFormatException, IOException {
+	// TODO: we are still testing what will be the best way to basket.
+	private static Map<String, String> basketDiamondResultsBasedOnBestScore(File view, NgsProgress ngsProgress) throws NumberFormatException, IOException {
 		String line = "";
-
-		class SequenceData {
-			String taxon;
-			double score;
-		}
 		BufferedReader bf;
 		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
 		// sequences with best score per taxon counters.
@@ -248,14 +347,16 @@ public class PrimarySearch{
 		}
 		bf.close();
 
-		// find genus taxonomy for every sequence. 
+		ngsProgress.setDiamondBlastResults(taxonCounters);
+
+		// Step2: find genus taxonomy for every sequence. 
 		Map<String, String> taxoNameId = new HashMap<String, String>();
 		for (Map.Entry<String, List<SequenceData>> s: sequenceNameData.entrySet()) {
 			SequenceData bestScore = s.getValue().get(0);
-			for (SequenceData d: s.getValue()) {
+ 			for (SequenceData d: s.getValue()) {
 				if (d.score > bestScore.score)
 					bestScore = d;
-			}
+ 			}
 
 			SequenceData best = s.getValue().get(0);
 			Integer bestScoreTaxonCounter = taxonCounters.get(bestScore.taxon);
@@ -268,7 +369,69 @@ public class PrimarySearch{
 			}
 			taxoNameId.put(s.getKey(), best.taxon);
 		}
+		return taxoNameId;
+	}
 
+	/**
+	 * First step basket by the result of every read by lowest common ancestor.
+	 */
+	private static TaxonomyTree basketDiamondResultsLowCommonAncestor(File view) throws NumberFormatException, IOException {
+		String line = "";
+		BufferedReader bf;
+		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
+		// All the data per sequence
+		TaxonomyTree taxonomyTree = new TaxonomyTree();
+
+		String prevName = null;
+		String lowestCommonAncestor = null;
+		while ((line = bf.readLine()) != null)  {
+			String[] name = line.split("\\t");
+			String[] taxon = name[1].split("_");
+
+			String taxonId = taxon[0];
+
+			if (prevName == null || !prevName.equals(name[0])) { // new read
+				if (prevName != null) { // not first time.
+					taxonomyTree.add(taxonId, prevName);
+				}
+
+				prevName = name[0];
+				lowestCommonAncestor = taxonId;
+			} else { // continue analyzing more output for same read.
+				if (lowestCommonAncestor == null)
+					lowestCommonAncestor = taxonId;
+				lowestCommonAncestor = TaxonomyModel.getInstance().getLowesCommonAncestor(
+						taxonId, lowestCommonAncestor);
+			}
+		}
+		bf.close();
+
+		return taxonomyTree;
+	}
+
+	/**
+	 * Order all the sequence by taxonomy id. 
+	 * The algorithm favors creating big baskets, so if 1 taxon appears many times 
+	 * a new sequence would rather go to its basket then to a new taxon basket
+	 * even if the new 1 has slightly better score.
+	 * @param diamondResultsDir
+	 * @param view
+	 * @param fastqFiles
+	 * @param ngsProgress 
+	 * @throws FileFormatException
+	 * @throws IOException
+	 */
+	private static void creatDiamondResults(File diamondResultsDir, File view, File[] fastqFiles,
+			NgsProgress ngsProgress, Logger logger) throws FileFormatException, IOException {
+
+		//Map<String, String> readIdTaxonomyId = basketDiamondResultsBasedOnBestScore(view, ngsProgress);
+		
+		long start = System.currentTimeMillis();
+		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view);
+		Map<String, String> readIdTaxonomyId = taxonomyTree.createReadNameTaxonIdMap();
+		logger.info("Basket reads time = " + (System.currentTimeMillis() - start) + " ms");
+		// collapse small baskets. 
+		
 		// Order fastq sequences in basket per taxon.
 		for(File f : fastqFiles){
 			FileReader fileReader = new FileReader(f.getAbsolutePath());
@@ -281,7 +444,7 @@ public class PrimarySearch{
 
 				String[] name = s.getName().split(" ");
 
-				String taxosId = taxoNameId.get(name[0]);
+				String taxosId = readIdTaxonomyId.get(name[0]);
 				if (taxosId == null)
 					continue; // TODO ??
 				File taxonDir = new File(diamondResultsDir, taxosId);
@@ -301,8 +464,6 @@ public class PrimarySearch{
 			lnr.close();
 		}
 
-		ngsProgress.setDiamondBlastResults(taxonCounters);
 		ngsProgress.save(diamondResultsDir.getParentFile());
 	}
-
 }
