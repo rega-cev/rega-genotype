@@ -38,8 +38,8 @@
     <message id="startForm.ngs">
   		<h2>D) NGS upload FASTQ, assemble a contig from FASTQ files and analyze it. Supported formats: fastq, zip, gz </h2>
     </message> 	
-    <message id="startForm.upload-fastq-1">upload fastq pair end 1:</message>
-    <message id="startForm.upload-fastq-2">upload fastq pair end 2:</message>
+    <message id="startForm.upload-fastq-1">Upload fastq pair end 1:</message>
+    <message id="startForm.upload-fastq-2">Upload fastq pair end 2:</message>
 
   	<message id="startForm.labelJobId">Job-id:</message>
   	<message id="startForm.monitor">Retrieve results</message>
