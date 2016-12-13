@@ -85,67 +85,29 @@ public class PrimarySearch{
 	}
 
 	private static File diamondBlastX(File workDir, File query, NgsModule ngsModule, Logger logger) throws ApplicationException {
-		Process blastx = null;
 		File matches = new File(workDir.getAbsolutePath() + File.separator + "matches.daa");
-		try {
-			GeneralConfig gc = Settings.getInstance().getConfig().getGeneralConfig();
-			File diamondDb = Settings.getInstance().getConfig().getDiamondBlastDb();
-			if (diamondDb == null)
-				throw new ApplicationException("Internal error: diamond blast db was not found. Ask your server admin to check that NGS Module is properlly configured.");
+		GeneralConfig gc = Settings.getInstance().getConfig().getGeneralConfig();
+		File diamondDb = Settings.getInstance().getConfig().getDiamondBlastDb();
+		if (diamondDb == null)
+			throw new ApplicationException("Internal error: diamond blast db was not found. Ask your server admin to check that NGS Module is properlly configured.");
 
-			String cmd = gc.getDiamondPath() + " blastx -d "
-					+ diamondDb.getAbsolutePath() + " -q " + query.getAbsolutePath()
-					+ " -a " + matches + " -k 1 --quiet "
-					+ ngsModule.getDiamondOptions();
+		String cmd = gc.getDiamondPath() + " blastx -d "
+				+ diamondDb.getAbsolutePath() + " -q " + query.getAbsolutePath()
+				+ " -a " + matches + " -k 1 --quiet "
+				+ ngsModule.getDiamondOptions();
 
-			logger.info(cmd);
-			blastx = StreamReaderRuntime.exec(cmd, null, workDir);
-			int exitResult = blastx.waitFor();
+		NgsFileSystem.executeCmd(cmd, workDir, logger);
 
-			if (exitResult != 0) {
-				throw new ApplicationException("blastx exited with error: "
-						+ exitResult);
-			}
-			return matches;
-		} catch (FileNotFoundException e) {
-			throw new ApplicationException("blastx failed error: "
-					+ e.getMessage(), e);
-		} catch (IOException e) {
-			throw new ApplicationException("blastx failed error: "
-					+ e.getMessage(), e);
-		} catch (InterruptedException e) {
-			if (blastx != null)
-				blastx.destroy();
-			throw new ApplicationException("blastx failed error: "
-					+ e.getMessage(), e);
-		}
+		return matches;
 	}
 
-	private static File diamondView(File workDir, File query, Logger logger) throws ApplicationException {
+	private static File diamondView(File workDir, File query, Logger logger) throws ApplicationException  {
 		File matches = new File(workDir.getAbsolutePath() + File.separator + "matches.view");
-		Process diamond = null;
-		try {
-			String cmd = Settings.getInstance().getConfig().getGeneralConfig().getDiamondPath() + " view -a " + query.getAbsolutePath()
-					+ " -o " + matches +" --quiet";
+		String cmd = Settings.getInstance().getConfig().getGeneralConfig().getDiamondPath() + " view -a " + query.getAbsolutePath()
+				+ " -o " + matches +" --quiet";
 
-			logger.info(cmd);
-			diamond = StreamReaderRuntime.exec(cmd, null, workDir);
-			int exitResult = diamond.waitFor();
-
-			if (exitResult != 0) {
-				throw new ApplicationException("blastx exited with error: "
-						+ exitResult);
-			}
-			return matches;
-		} catch (IOException e) {
-			throw new ApplicationException(
-					": " + e.getMessage());
-		} catch (InterruptedException e) {
-			if (diamond != null)
-				diamond.destroy();
-			throw new ApplicationException(": "
-					+ e.getMessage(), e);
-		}
+		NgsFileSystem.executeCmd(cmd, workDir, logger);
+		return matches;
 	}
 
 	private static File megerFiles(File workDir, File pe1, File pe2) throws IOException, FileFormatException, ApplicationException {
