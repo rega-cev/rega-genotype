@@ -1,6 +1,7 @@
 package rega.genotype.taxonomy;
 import java.io.File;
 
+import rega.genotype.config.Config;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
@@ -51,13 +52,7 @@ public class RegaSystemFiles {
 	}
 
 	public static File ncbiVirusesFile() {
-		String ncbiVirusesFile = Settings.getInstance().getConfig().getGeneralConfig().getNcbiVirusesFile();
-		if (ncbiVirusesFile.isEmpty()) {
-			// support old systems.
-			final File baseDir = new File(Settings.getInstance().getBaseDir());
-			return new File(baseDir, NCBI_VIRUSES_DB_FILE_NAME);
-		} else {
-			return new File(ncbiVirusesFile);
-		}
+		final File baseDir = new File(Settings.getInstance().getBaseDir());
+		return new File(baseDir, NCBI_VIRUSES_DB_FILE_NAME);
 	}
 }

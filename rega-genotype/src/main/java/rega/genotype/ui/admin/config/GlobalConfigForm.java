@@ -168,7 +168,6 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 						e.printStackTrace();
 						infoText = "Error: format db did not work. " + e.getMessage();
 					}
-					config.getGeneralConfig().setNcbiVirusesFile(ncbiVirusesFile.getAbsolutePath());
 				}
 				UpdateLock updateLock = app.getUpdateLock();
 				d.getContents().clear();

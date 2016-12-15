@@ -298,7 +298,6 @@ public class Config {
 		private String spadesCmd = "spades";
 		private String bioPythonPath = "";
 		private String sequencetool = "";
-		private String ncbiVirusesFile = "";
 		private String srrToolKitPath = "";
 
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
@@ -422,12 +421,6 @@ public class Config {
 		}
 		public void setSequencetool(String sequencetool) {
 			this.sequencetool = sequencetool;
-		}
-		public String getNcbiVirusesFile() {
-			return ncbiVirusesFile;
-		}
-		public void setNcbiVirusesFile(String ncbiVirusesFile) {
-			this.ncbiVirusesFile = ncbiVirusesFile;
 		}
 		public String getSrrToolKitPath() {
 			return srrToolKitPath;
