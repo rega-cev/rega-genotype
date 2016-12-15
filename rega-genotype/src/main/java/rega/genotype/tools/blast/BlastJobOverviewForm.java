@@ -140,7 +140,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(80));
 		table.setColumnWidth(SRC_COLUMN, new WLength(60));
 		table.setColumnWidth(TOTAL_LENGTH_COLUMN, new WLength(90));
-		table.setColumnWidth(READ_COUNT_COLUMN, new WLength(60));
+		table.setColumnWidth(READ_COUNT_COLUMN, new WLength(90));
 		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
 
 		table.setItemDelegateForColumn(COLOR_COLUMN, new WAbstractItemDelegate() {
@@ -334,7 +334,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 							setDisplayData(blastModel, row, READ_COUNT_COLUMN, "Error: " + covErrors);
 
 
-						double deepCov = readCount * readLen / refLen;
+						double deepCov = readCount * readLen / contigsLen;
 						setDisplayData(blastModel, row, PERCENTAGE_COLUMN, deepCov);
 
 					} else {
@@ -487,7 +487,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (concludedName == null)
 				concludedName = "Unassigned";
 
-			ClusterData toolData = clusterDataMap.containsKey(concludedId) ? clusterDataMap.get(concludedId) : new ClusterData();
+			String key = (mode == Mode.Ngs) ? seqName.substring(0, seqName.lastIndexOf('_')) : concludedId;
+			
+			ClusterData toolData = clusterDataMap.containsKey(key) ? clusterDataMap.get(key) : new ClusterData();
 
 			if (concludedId != null && !concludedId.equals("Unassigned"))
 				toolData.taxonomyId = taxonomyId;
@@ -505,7 +507,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			toolData.sequenceNames.add(sequenceData);
 			toolData.concludedId = concludedId;
 			toolData.src = clusterSrc;
-			clusterDataMap.put(concludedId, toolData);
+
+			clusterDataMap.put(key, toolData);
 		}
 	}
 }

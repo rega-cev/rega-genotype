@@ -125,7 +125,7 @@ public class TaxonomyModel {
 			 return null;
 
 		 int i = 0;
-		 while (item.getParent() != null && i < 3) {
+		 while (item.getParent() != null && i < howFar) {
 			 String name = (String) item.getData(SCIENTIFIC_NAME_ROLE);
 			 if (name != null)
 				 ans = "__" + name.replace(" ", "_").replace(",", "_") + ans;

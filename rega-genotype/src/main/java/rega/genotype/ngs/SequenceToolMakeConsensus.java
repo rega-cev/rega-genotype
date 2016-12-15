@@ -27,15 +27,15 @@ public class SequenceToolMakeConsensus {
 	 * @throws InterruptedException
 	 */
 	public static File consensusAlign(File assembledContigs, AbstractSequence reference,
-			File workDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+			File consensusWorkDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 		// make Consensus
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
 
-		File alingment = NgsFileSystem.consensusAlingmentFile(workDir, virusName);
+		File alingment = NgsFileSystem.consensusAlingmentFile(consensusWorkDir);
 		alingment.getParentFile().mkdirs();
 
-		File referenceFile = NgsFileSystem.consensusRefFile(workDir, virusName);
+		File referenceFile = NgsFileSystem.consensusRefFile(consensusWorkDir);
 		FileOutputStream fos = new FileOutputStream(referenceFile);
 		reference.writeFastaOutput(fos);
 		fos.close();
@@ -48,20 +48,20 @@ public class SequenceToolMakeConsensus {
 		+ " --relative-cutoff " + ngsModule.getConsensusToolRelativeCutoff()
 		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov();
 
-		NgsFileSystem.executeCmd(cmd, workDir, logger);
+		NgsFileSystem.executeCmd(cmd, consensusWorkDir, logger);
 
 		return alingment;
 	}
 
 	public static File makeConsensus(File assembledContigs,
-			File workDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+			File consensusWorkDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
-		File outContigs = NgsFileSystem.consensusContigsFile(workDir, virusName);
+		File outContigs = NgsFileSystem.consensusContigsFile(consensusWorkDir);
 		outContigs.getParentFile().mkdirs();
 		outContigs.createNewFile();
 
-		File out = NgsFileSystem.consensusFile(workDir, virusName);
+		File out = NgsFileSystem.consensusFile(consensusWorkDir);
 		out.getParentFile().mkdirs();
 		out.createNewFile();
 		
@@ -74,7 +74,7 @@ public class SequenceToolMakeConsensus {
 				+ " --min-count " + ngsModule.getConsensusToolMinCount()
 				+ " --mixture-min-pct " + ngsModule.getConsensusToolMixtureMinPct();
 
-		NgsFileSystem.executeCmd(cmd, workDir, logger);
+		NgsFileSystem.executeCmd(cmd, consensusWorkDir, logger);
 
 		return outContigs;
 	}

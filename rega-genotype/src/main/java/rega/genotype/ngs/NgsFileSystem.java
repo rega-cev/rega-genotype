@@ -237,23 +237,31 @@ public class NgsFileSystem {
 		return ASSEMBALED_CONTIGS_DIR + File.separator + virusName;
 	}
 
-	public static String consensusDir(String virusName) {
-		return CONSENSUS_DIR + File.separator + virusName;
+	public static File consensusDir(File workDir, String virusName) {
+		return new File(new File(workDir, CONSENSUS_DIR), virusName) ;
 	}
 
-	public static File consensusContigsFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_CONTIGS_FILE);
+	public static File consensusContigDir(File virusDir, String contig) {
+		return new File(virusDir, contig);
+	}
+
+	public static File consensusRefSeqDir(File virusDir, String refseq) {
+		return new File(virusDir, refseq);
+	}
+
+	public static File consensusContigsFile(File workDir) {
+		return new File(workDir, CONSENSUS_CONTIGS_FILE);
 	}
 	
-	public static File consensusFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_FILE);
+	public static File consensusFile(File workDir) {
+		return new File(workDir, CONSENSUS_FILE);
 	}
 
-	public static File consensusAlingmentFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_ALINGMENT_FILE);
+	public static File consensusAlingmentFile(File workDir) {
+		return new File(workDir, CONSENSUS_ALINGMENT_FILE);
 	}
 
-	public static File consensusRefFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_REF_FILE);
+	public static File consensusRefFile(File workDir) {
+		return new File(workDir, CONSENSUS_REF_FILE);
 	}
 }

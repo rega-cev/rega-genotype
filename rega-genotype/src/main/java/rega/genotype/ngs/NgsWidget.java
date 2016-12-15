@@ -69,6 +69,7 @@ public class NgsWidget extends WContainerWidget{
 				public void trigger() {
 					WDialog d = new StandardDialog("Diamond Balst results");
 					d.getContents().addWidget(new DiamondResultsView(workDir));
+					d.setResizable(true);
 				}
 			});
 		}
