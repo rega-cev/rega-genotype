@@ -183,7 +183,6 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 	protected Set<String> getIgnoredFields() {
 		Set<String> ignore = new HashSet<String>();
 		ignore.add("publisherPassword");
-		ignore.add("sequencetool");
 		return ignore;
 	}
 
@@ -254,6 +253,9 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldInfo("srrToolKitPath", "<div>This is needed only to allow the users to analyze SRR files from the internet.</div>" +
 				"<div>Provide the pass to the bin folder of srrToolKit (check that fastq-dump is there).</div>" +
 				"<div>I advise to disable the option on most servers. To disable leave the field empty. </div>");
+		setFieldInfo("srrDatabasePath", "<div>Some maywant to save a database of NGS files so one does not need to upload the same files every time.</div>");
+
+		setFieldMandatory("srrDatabasePath", false);
 		setFieldMandatory("bioPythonPath", false);
 		setFieldMandatory("srrToolKitPath", false);
 	}

@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import rega.genotype.ApplicationException;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.Utils;
 
@@ -95,13 +96,37 @@ public class NgsFileSystem {
 	}
 
 	public static boolean downloadSrrFile(String srrName, File workDir) throws ApplicationException {
-		String srrToolKitPath = Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath();
-		Logger logger = LogUtils.createLogger(workDir);
-		String cmd = srrToolKitPath + "fastq-dump --split-files " + srrName;
-		executeCmd(cmd, workDir, logger);
+		String srrDatabase = Settings.getInstance().getConfig().getGeneralConfig().getSrrDatabasePath();
+		File fastqPE1 = null;
+		File fastqPE2 = null;
+		// find the file in local db
+		if (!srrDatabase.isEmpty()) {
+			File fastqDir = new File(workDir, FASTQ_FILES_DIR);
+			fastqDir.mkdirs();
+			File srrDatabaseDir = new File(srrDatabase);
+			if (srrDatabaseDir.listFiles() != null)
+				for (File f: srrDatabaseDir.listFiles()){
+					if (f.getName().equals(srrName + "_1.fastq.gz")){
+						fastqPE1 = new File(fastqDir, srrName + "_1.fastq");
+						FileUtil.unGzip1File(f, fastqPE1);
+					}
+					if (f.getName().equals(srrName + "_2.fastq.gz")){
+						fastqPE2 = new File(fastqDir, srrName + "_2.fastq");
+						FileUtil.unGzip1File(f, fastqPE2);
+					}
+				}
+		}
 
-		File fastqPE1 = new File(workDir, srrName + "_1.fastq");
-		File fastqPE2 = new File(workDir, srrName + "_2.fastq");
+		// if not found download them
+		if (fastqPE1 == null || fastqPE2 == null) {
+			String srrToolKitPath = Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath();
+			Logger logger = LogUtils.createLogger(workDir);
+			String cmd = srrToolKitPath + "fastq-dump --split-files " + srrName;
+			executeCmd(cmd, workDir, logger);
+
+			fastqPE1 = new File(workDir, srrName + "_1.fastq");
+			fastqPE2 = new File(workDir, srrName + "_2.fastq");
+		}
 
 		return addFastqFiles(workDir, fastqPE1, fastqPE2, true);
 	}

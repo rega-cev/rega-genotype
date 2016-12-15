@@ -57,7 +57,6 @@
 			<div>${tr:startForm.upload-fastq-1}${fastq-upload1}${fastq-upload1-info}</div>
 			<div>${tr:startForm.upload-fastq-2}${fastq-upload2}${fastq-upload2-info}</div>
 
-			<div>This option will only be allwed for testing (if not 1 can fill our server with srr files very fast)</div>
 			<div>Download srr file: ${srr}</div>
 			${fastq-start}
 		</div>

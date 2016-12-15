@@ -299,6 +299,7 @@ public class Config {
 		private String bioPythonPath = "";
 		private String sequencetool = "";
 		private String srrToolKitPath = "";
+		private String srrDatabasePath = "";
 
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
@@ -427,6 +428,12 @@ public class Config {
 		}
 		public void setSrrToolKitPath(String srrToolKitPath) {
 			this.srrToolKitPath = srrToolKitPath;
+		}
+		public String getSrrDatabasePath() {
+			return srrDatabasePath;
+		}
+		public void setSrrDatabasePath(String srrDatabasePath) {
+			this.srrDatabasePath = srrDatabasePath;
 		}
 	}
 
