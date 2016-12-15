@@ -9,11 +9,10 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import rega.genotype.ApplicationException;
@@ -24,6 +23,7 @@ import rega.genotype.config.Config.GeneralConfig;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
+import rega.genotype.ngs.NgsProgress.BasketData;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
@@ -59,19 +59,34 @@ public class PrimarySearch{
 	 */
 	private static class TaxonomyTree {
 		TaxonomyNode root;
-		Map<String, TaxonomyNode> taxonIdNodeMap = new HashMap<String, TaxonomyNode>();
+		TaxonomyNode find(String taxonId) {
+			if (root == null)
+				return null;
+			return find(root, taxonId);
+		}
 
-		Map<String, String> readNameTaxonIdMap = new HashMap<String, String>();
+		TaxonomyNode find(TaxonomyNode node, String taxonId) {
+			if (node.taxonId.equals(taxonId))
+				return node;
+
+			for (TaxonomyNode c: node.children) {
+				TaxonomyNode ans = find(c, taxonId);
+				if (ans != null)
+					return ans; 
+			}
+
+			return null;
+		}
 
 		TaxonomyNode add(TaxonomyNode parentNode, String taxonId) {
 			TaxonomyNode taxonomyNode = new TaxonomyNode(taxonId);
 			taxonomyNode.parentTaxon = parentNode;
 			parentNode.children.add(taxonomyNode);
-			taxonIdNodeMap.put(taxonId, taxonomyNode);
 			return taxonomyNode;
 		}
+
 		void add(String taxonId, String readName) {
-			TaxonomyNode leafNode = taxonIdNodeMap.get(taxonId);
+			TaxonomyNode leafNode = find(taxonId);
 			if (leafNode != null) {
 				leafNode.readNames.add(readName);
 				return;
@@ -83,13 +98,12 @@ public class PrimarySearch{
 
 			if (root == null) {
 				root = new TaxonomyNode(hirarchyTaxonomyIds.get(0));
-				taxonIdNodeMap.put(hirarchyTaxonomyIds.get(0), root);
 			}
 
 			TaxonomyNode parentNode = null;
 			// find lowest ancestor that is in the tree.
 			for (int i = hirarchyTaxonomyIds.size() -1; i > -1; --i) {
-				parentNode = taxonIdNodeMap.get(hirarchyTaxonomyIds.get(i));
+				parentNode = find(hirarchyTaxonomyIds.get(i));
 				if (parentNode != null) {
 					// go back and connect all nodes to parent.
 					for (i++;i < hirarchyTaxonomyIds.size(); ++i)
@@ -102,18 +116,51 @@ public class PrimarySearch{
 			taxonomyNode.readNames.add(readName);
 		}
 
+		void remove(TaxonomyNode node){
+			node.parentTaxon.children.remove(node);
+		}
+
 		Map<String, String> createReadNameTaxonIdMap() {
 			merge(root);
-			fillReadNameTaxonIdMap(root);
+			Map<String, String> readNameTaxonIdMap = new HashMap<String, String>();
+			fillReadNameTaxonIdMap(root, readNameTaxonIdMap);
 			return readNameTaxonIdMap;
 		}
 
-		void fillReadNameTaxonIdMap(TaxonomyNode parentTaxon){
+		void fillDiamondResults(Map<String, BasketData> diamonResults, StringBuilder newickTree) {
+			diamonResults.clear();
+			fillDiamondResults(root, diamonResults, newickTree );
+		}
+
+		void fillDiamondResults(TaxonomyNode node, Map<String, BasketData> diamonResults, StringBuilder newickTree) {
+			String scientificName = TaxonomyModel.getInstance().getScientificName(node.taxonId);
+			diamonResults.put(node.taxonId, new BasketData(
+					scientificName, node.readNames.size()));
+
+			for (TaxonomyNode c: node.children)
+				fillDiamondResults(c, diamonResults, newickTree);
+		}
+
+		void fillReadNameTaxonIdMap(TaxonomyNode parentTaxon, Map<String, String> readNameTaxonIdMap){
 			for (String read: parentTaxon.readNames)
 				readNameTaxonIdMap.put(read, parentTaxon.taxonId);
 
 			for (TaxonomyNode c: parentTaxon.children)
-				fillReadNameTaxonIdMap(c);
+				fillReadNameTaxonIdMap(c, readNameTaxonIdMap);
+		}
+
+		private int sumOfDescendants(TaxonomyNode node) {
+			int ans = node.readNames.size();
+			for(TaxonomyNode c: node.children)
+				ans += sumOfDescendants(c);
+			return ans;
+		}
+
+		private void collapse(TaxonomyNode node, List<String> reads) {
+			reads.addAll(node.readNames);
+			remove(node);
+			for(TaxonomyNode c: node.children)
+				collapse(c, reads);
 		}
 
 		/**
@@ -122,29 +169,33 @@ public class PrimarySearch{
 		 * - E(pc): condition to merging parent child edge. 
 		 * Algorithm:
 		 * 1. Order results by taxonomy level.
-		 * 2. Run RBFS on taxonomy tree:
+		 * 2. Run DFS on taxonomy tree:
 		 *    2.1. Order children by basket size
 		 *    2.2. Iterate over ordered remaining children, do 
 		 *            if ( (min(PS, CS) / max(PS, CS)) < E(pc) ) => merge child to parent basket.
 		 */
+		// input: diamond results: for every read find lowest common ancestor, add it to taxonomy tree.
 		private void merge(TaxonomyNode parentTaxon) {
-			for (TaxonomyNode c: parentTaxon.children) // TODO: change DFS to BFS
-				merge(c);
+			double MERGE_CONDITION = 0.05; //TODO
+			
+			int sumOfDescendants = sumOfDescendants(parentTaxon); // number of read for all the descendants together.
+			if (parentTaxon.readNames.size() / sumOfDescendants < MERGE_CONDITION) {
+				// re-sample parent randomly to all children.
+				for (String read: parentTaxon.readNames) {
+					Random rn = new Random();
+					int c = rn.nextInt(parentTaxon.children.size());
+					parentTaxon.children.get(c).readNames.add(read);
+				}
+				parentTaxon.readNames.clear();
 
-			double MERGE_CONDITION = 0.5; //TODO
-			Collections.sort(parentTaxon.children, new Comparator<TaxonomyNode>() {
-				public int compare(TaxonomyNode n1, TaxonomyNode n2) {
-					return n1.taxonId.compareTo(n2.taxonId);
-				}
-			});
-			for (TaxonomyNode c: parentTaxon.children) {
-				int ps = parentTaxon.readNames.size();
-				int cs = c.readNames.size();
-				if (Math.min(ps, cs) / Math.max(ps, cs) < MERGE_CONDITION) {
-					// merge
-					parentTaxon.readNames.addAll(c.readNames);
-					c.readNames.clear();
-				}
+				for (TaxonomyNode c: parentTaxon.children)
+					merge(c);
+			} else {
+				// combine all to parent
+				List<String> descendantsReads = new ArrayList<String>();
+				for (TaxonomyNode c: parentTaxon.children)
+					collapse(c, descendantsReads); // remove children and fill descendantsReads with there reads.
+				parentTaxon.readNames.addAll(descendantsReads);
 			}
 		}
 	}
@@ -302,7 +353,7 @@ public class PrimarySearch{
 		BufferedReader bf;
 		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
 		// sequences with best score per taxon counters.
-		Map<String, Integer> taxonCounters = new HashMap<String, Integer>();
+		Map<String, BasketData> taxonCounters = new HashMap<String, BasketData>();
 		// All the data per sequence
 		Map<String, List<SequenceData>> sequenceNameData = new HashMap<String, List<SequenceData>>();
 
@@ -328,11 +379,11 @@ public class PrimarySearch{
 
 			if (prevName == null || !prevName.equals(name[0])) {
 				if (prevName != null) { // not first time.
-					Integer counter = taxonCounters.get(prevBestTaxon);
+					Integer counter = taxonCounters.get(prevBestTaxon).getReadCountTotal();
 					if (counter == null)
 						counter = 0;
 					counter++;
-					taxonCounters.put(prevBestTaxon, counter);
+					taxonCounters.put(prevBestTaxon, new BasketData("", counter));
 				}
 
 				prevName = name[0];
@@ -359,9 +410,9 @@ public class PrimarySearch{
  			}
 
 			SequenceData best = s.getValue().get(0);
-			Integer bestScoreTaxonCounter = taxonCounters.get(bestScore.taxon);
+			Integer bestScoreTaxonCounter = taxonCounters.get(bestScore.taxon).getReadCountTotal();
 			for (SequenceData d: s.getValue()) {
-				Integer currentTaxonCounter = taxonCounters.get(d.taxon);
+				Integer currentTaxonCounter = taxonCounters.get(d.taxon).getReadCountTotal();
 				if (currentTaxonCounter != null 
 						&& bestScore.score - d.score < 5 
 						&& currentTaxonCounter > bestScoreTaxonCounter + 10000)
@@ -383,6 +434,7 @@ public class PrimarySearch{
 		TaxonomyTree taxonomyTree = new TaxonomyTree();
 
 		String prevName = null;
+		String prevTaxon = null;
 		String lowestCommonAncestor = null;
 		while ((line = bf.readLine()) != null)  {
 			String[] name = line.split("\\t");
@@ -392,7 +444,7 @@ public class PrimarySearch{
 
 			if (prevName == null || !prevName.equals(name[0])) { // new read
 				if (prevName != null) { // not first time.
-					taxonomyTree.add(taxonId, prevName);
+					taxonomyTree.add(prevTaxon, prevName);
 				}
 
 				prevName = name[0];
@@ -403,6 +455,7 @@ public class PrimarySearch{
 				lowestCommonAncestor = TaxonomyModel.getInstance().getLowesCommonAncestor(
 						taxonId, lowestCommonAncestor);
 			}
+			prevTaxon = taxonId;
 		}
 		bf.close();
 
@@ -424,14 +477,18 @@ public class PrimarySearch{
 	private static void creatDiamondResults(File diamondResultsDir, File view, File[] fastqFiles,
 			NgsProgress ngsProgress, Logger logger) throws FileFormatException, IOException {
 
-		//Map<String, String> readIdTaxonomyId = basketDiamondResultsBasedOnBestScore(view, ngsProgress);
-		
 		long start = System.currentTimeMillis();
 		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view);
-		Map<String, String> readIdTaxonomyId = taxonomyTree.createReadNameTaxonIdMap();
-		logger.info("Basket reads time = " + (System.currentTimeMillis() - start) + " ms");
-		// collapse small baskets. 
+		StringBuilder newickTreeBeforeMerge = new StringBuilder();
+		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResultsBeforeMerge(), newickTreeBeforeMerge);
 		
+		Map<String, String> readIdTaxonomyId = taxonomyTree.createReadNameTaxonIdMap();
+		StringBuilder newickTreeAfterMerge = new StringBuilder();
+		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResults(), newickTreeAfterMerge);
+
+//		Map<String, String> readIdTaxonomyId = basketDiamondResultsBasedOnBestScore(view, ngsProgress);
+		logger.info("Basket reads time = " + (System.currentTimeMillis() - start) + " ms");
+
 		// Order fastq sequences in basket per taxon.
 		for(File f : fastqFiles){
 			FileReader fileReader = new FileReader(f.getAbsolutePath());
