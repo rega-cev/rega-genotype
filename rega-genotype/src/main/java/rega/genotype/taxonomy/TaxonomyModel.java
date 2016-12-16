@@ -161,15 +161,12 @@ public class TaxonomyModel {
 		List<String> hirarchyTaxonomyIds1 = getHirarchyTaxonomyIds(taxonmyId1);
 		List<String> hirarchyTaxonomyIds2 = getHirarchyTaxonomyIds(taxonmyId2);
 
-		hirarchyTaxonomyIds1.add(taxonmyId1);
-		hirarchyTaxonomyIds2.add(taxonmyId2);
-
 		int i = 1;
 		for (; i < Math.min(hirarchyTaxonomyIds1.size(), hirarchyTaxonomyIds2.size()); ++i)
 			if (!hirarchyTaxonomyIds1.get(i).equals(hirarchyTaxonomyIds2.get(i)))
 				return hirarchyTaxonomyIds1.get(i -1);
 
-		return hirarchyTaxonomyIds1.get(i);
+		return hirarchyTaxonomyIds1.get(i -1);
 	}
 
 	public List<String> getAllChildrenTaxonomy(String parentTaxonomyId){

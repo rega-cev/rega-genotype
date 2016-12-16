@@ -38,10 +38,12 @@ public class NgsProgress {
 	}
 
 	public static class BasketData {
-		public BasketData(String scientificName, Integer readCountTotal) {
+		public BasketData(String scientificName, String ancestors, Integer readCountTotal) {
 			this.setReadCountTotal(readCountTotal);
 			this.setScientificName(scientificName);
+			this.setAncestors(ancestors);
 		}
+		private String ancestors = null;
 		private String scientificName = null;
 		private Integer readCountTotal = null;
 		private Integer readCountAfterMakeConsensus = null;
@@ -64,6 +66,12 @@ public class NgsProgress {
 		public void setReadCountAfterMakeConsensus(
 				Integer readCountAfterMakeConsensus) {
 			this.readCountAfterMakeConsensus = readCountAfterMakeConsensus;
+		}
+		public String getAncestors() {
+			return ancestors;
+		}
+		public void setAncestors(String ancestors) {
+			this.ancestors = ancestors;
 		}
 	}
 

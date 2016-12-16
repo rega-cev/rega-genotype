@@ -10,9 +10,10 @@ import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import rega.genotype.ApplicationException;
@@ -79,6 +80,8 @@ public class PrimarySearch{
 		}
 
 		TaxonomyNode add(TaxonomyNode parentNode, String taxonId) {
+			if (parentNode.taxonId.equals(taxonId))
+				System.err.println("ERROR parent child same !! " + taxonId);
 			TaxonomyNode taxonomyNode = new TaxonomyNode(taxonId);
 			taxonomyNode.parentTaxon = parentNode;
 			parentNode.children.add(taxonomyNode);
@@ -102,11 +105,13 @@ public class PrimarySearch{
 
 			TaxonomyNode parentNode = null;
 			// find lowest ancestor that is in the tree.
-			for (int i = hirarchyTaxonomyIds.size() -1; i > -1; --i) {
+			for (int i = hirarchyTaxonomyIds.size() -2; i > -1; --i) {
 				parentNode = find(hirarchyTaxonomyIds.get(i));
 				if (parentNode != null) {
+					if (parentNode.taxonId.equals(taxonId))
+						System.err.println("ERROR parent child same !! " + taxonId);
 					// go back and connect all nodes to parent.
-					for (i++;i < hirarchyTaxonomyIds.size(); ++i)
+					for (i++;i < hirarchyTaxonomyIds.size() - 1; ++i)
 						parentNode = add(parentNode, hirarchyTaxonomyIds.get(i));
 					break;
 				}
@@ -134,8 +139,10 @@ public class PrimarySearch{
 
 		void fillDiamondResults(TaxonomyNode node, Map<String, BasketData> diamonResults, StringBuilder newickTree) {
 			String scientificName = TaxonomyModel.getInstance().getScientificName(node.taxonId);
+			String ancestors = TaxonomyModel.getInstance().getHirarchy(node.taxonId, 100);
+
 			diamonResults.put(node.taxonId, new BasketData(
-					scientificName, node.readNames.size()));
+					scientificName, ancestors, node.readNames.size()));
 
 			for (TaxonomyNode c: node.children)
 				fillDiamondResults(c, diamonResults, newickTree);
@@ -157,10 +164,32 @@ public class PrimarySearch{
 		}
 
 		private void collapse(TaxonomyNode node, List<String> reads) {
+			while(!node.children.isEmpty())
+				collapse(node.children.get(0), reads);
+
 			reads.addAll(node.readNames);
 			remove(node);
-			for(TaxonomyNode c: node.children)
-				collapse(c, reads);
+		}
+
+		/**
+		 * @param items Weighted Items
+		 * @return random item with preference to the items with bigger weght
+		 */
+		private int chooseRandomallyFromWeightedItems(int[] itemWeights) {
+			double totalWeight = 0.0d;
+			for (int i : itemWeights)
+			    totalWeight += i;
+
+			int randomIndex = -1;
+			double random = Math.random() * totalWeight;
+			for (int i = 0; i < itemWeights.length; ++i){
+			    random -= itemWeights[i];
+			    if (random <= 0.0d){
+			        randomIndex = i;
+			        break;
+			    }
+			}
+			return randomIndex;
 		}
 
 		/**
@@ -179,11 +208,14 @@ public class PrimarySearch{
 			double MERGE_CONDITION = 0.05; //TODO
 			
 			int sumOfDescendants = sumOfDescendants(parentTaxon); // number of read for all the descendants together.
-			if (parentTaxon.readNames.size() / sumOfDescendants < MERGE_CONDITION) {
-				// re-sample parent randomly to all children.
+			double ratio = (double)parentTaxon.readNames.size() / (double)sumOfDescendants;
+			if (ratio < MERGE_CONDITION) {
+				// re-sample parent randomly to all children based on children size.
+				int[] childrenWeights = new int[parentTaxon.children.size()];
+				for (int i = 0; i < parentTaxon.children.size(); ++i)
+					childrenWeights[i] = sumOfDescendants(parentTaxon.children.get(i));
 				for (String read: parentTaxon.readNames) {
-					Random rn = new Random();
-					int c = rn.nextInt(parentTaxon.children.size());
+					int c = chooseRandomallyFromWeightedItems(childrenWeights);
 					parentTaxon.children.get(c).readNames.add(read);
 				}
 				parentTaxon.readNames.clear();
@@ -193,8 +225,9 @@ public class PrimarySearch{
 			} else {
 				// combine all to parent
 				List<String> descendantsReads = new ArrayList<String>();
-				for (TaxonomyNode c: parentTaxon.children)
-					collapse(c, descendantsReads); // remove children and fill descendantsReads with there reads.
+				while(!parentTaxon.children.isEmpty()){
+					collapse(parentTaxon.children.get(0), descendantsReads); // remove children and fill descendantsReads with there reads.
+				}
 				parentTaxon.readNames.addAll(descendantsReads);
 			}
 		}
@@ -261,7 +294,7 @@ public class PrimarySearch{
 
 			String cmd = gc.getDiamondPath() + " blastx -d "
 					+ diamondDb.getAbsolutePath() + " -q " + query.getAbsolutePath()
-					+ " -a " + matches + " --quiet "
+					+ " -a " + matches + " --quiet " // -k 1 "
 					+ ngsModule.getDiamondOptions();
 
 			logger.info(cmd);
@@ -347,7 +380,7 @@ public class PrimarySearch{
 		return result;
 	}
 
-	// TODO: we are still testing what will be the best way to basket.
+	// TODO: we are still testing what will be the best way to bucket.
 	private static Map<String, String> basketDiamondResultsBasedOnBestScore(File view, NgsProgress ngsProgress) throws NumberFormatException, IOException {
 		String line = "";
 		BufferedReader bf;
@@ -379,11 +412,12 @@ public class PrimarySearch{
 
 			if (prevName == null || !prevName.equals(name[0])) {
 				if (prevName != null) { // not first time.
-					Integer counter = taxonCounters.get(prevBestTaxon).getReadCountTotal();
+					Integer counter = taxonCounters.get(prevBestTaxon) == null ? null :
+							taxonCounters.get(prevBestTaxon).getReadCountTotal();
 					if (counter == null)
 						counter = 0;
 					counter++;
-					taxonCounters.put(prevBestTaxon, new BasketData("", counter));
+					taxonCounters.put(prevBestTaxon, new BasketData("", "", counter));
 				}
 
 				prevName = name[0];
@@ -426,7 +460,7 @@ public class PrimarySearch{
 	/**
 	 * First step basket by the result of every read by lowest common ancestor.
 	 */
-	private static TaxonomyTree basketDiamondResultsLowCommonAncestor(File view) throws NumberFormatException, IOException {
+	private static TaxonomyTree basketDiamondResultsLowCommonAncestorold(File view) throws NumberFormatException, IOException {
 		String line = "";
 		BufferedReader bf;
 		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
@@ -444,7 +478,7 @@ public class PrimarySearch{
 
 			if (prevName == null || !prevName.equals(name[0])) { // new read
 				if (prevName != null) { // not first time.
-					taxonomyTree.add(prevTaxon, prevName);
+					taxonomyTree.add(lowestCommonAncestor, prevName);
 				}
 
 				prevName = name[0];
@@ -460,6 +494,52 @@ public class PrimarySearch{
 		bf.close();
 
 		return taxonomyTree;
+	}
+
+	private static TaxonomyTree basketDiamondResultsLowCommonAncestor(File view) throws NumberFormatException, IOException {
+		String line = "";
+		BufferedReader bf;
+		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
+		// All the data per sequence
+		TaxonomyTree taxonomyTree = new TaxonomyTree();
+
+		String prevName = null;
+		Set<String> readTaxa = new HashSet<String>();
+		while ((line = bf.readLine()) != null)  {
+			String[] name = line.split("\\t");
+			String[] taxon = name[1].split("_");
+
+			String taxonId = taxon[0];
+			String readName = name[0];
+
+			if (prevName == null || prevName.equals(readName)) {
+				//add to set
+				readTaxa.add(taxonId);
+			} else {
+				// restart for next read.
+				String lowestAncestor = lowestAnsestor(readTaxa);
+				taxonomyTree.add(lowestAncestor, prevName);
+				readTaxa.clear();
+			}
+
+			prevName = readName;
+		}
+		bf.close();
+
+		return taxonomyTree;
+	}
+
+	private static String lowestAnsestor(Set<String> readTaxa) {
+		String lowestCommonAncestor = null;
+		for (String taxonId: readTaxa) {
+			if (lowestCommonAncestor == null)
+				lowestCommonAncestor = taxonId;
+			else
+				lowestCommonAncestor = TaxonomyModel.getInstance().getLowesCommonAncestor(
+						taxonId, lowestCommonAncestor);
+		}
+
+		return lowestCommonAncestor;
 	}
 
 	/**
@@ -479,7 +559,7 @@ public class PrimarySearch{
 
 		long start = System.currentTimeMillis();
 		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view);
-		StringBuilder newickTreeBeforeMerge = new StringBuilder();
+		StringBuilder newickTreeBeforeMerge = new StringBuilder(); // TODO ..
 		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResultsBeforeMerge(), newickTreeBeforeMerge);
 		
 		Map<String, String> readIdTaxonomyId = taxonomyTree.createReadNameTaxonIdMap();
