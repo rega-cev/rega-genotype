@@ -252,9 +252,6 @@ public class SequenceAlignment
 					if (line.charAt(0) != '@'){
 						throw new FileFormatException("Expecting a '@'", reader.getLineNumber());
 					}
-					if (!line.substring(1).matches("[^!#$%^&\\*()+]*")){
-						throw new FileFormatException("Illegal character (one of '!@#$%^&\\*()+=')",reader.getLineNumber());
-					}
 					name = line.substring(1).toString();
 				}
 				if (control > 0 && (control-1)%4 == 0){ //line 2
