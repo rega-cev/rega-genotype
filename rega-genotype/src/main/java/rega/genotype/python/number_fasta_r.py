@@ -46,6 +46,5 @@ for record in SeqIO.parse(handle, "fasta") :
             while rank not in ['Genus', 'Subfamily', 'Family', 'Order', 'Superkingdom']:
                 taxon = taxons[int(taxon[Parent_col])]
                 rank = taxon[Rank_col]
-            if rank != 'Superkingdom':
-                record.id = taxon[Taxon_col] + '_' + taxon[Scientific_name_col] + '_' + record.id
-                out.write(record.format('fasta')),
+            record.id = taxon[Taxon_col] + '_' + taxon[Scientific_name_col] + '_' + record.id
+            out.write(record.format('fasta')),
