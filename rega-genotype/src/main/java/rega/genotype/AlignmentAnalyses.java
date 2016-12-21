@@ -24,6 +24,7 @@ import org.jdom.input.SAXBuilder;
 import rega.genotype.AlignmentAnalyses.Cluster.Source;
 import rega.genotype.BlastAnalysis.ReferenceTaxus;
 import rega.genotype.BlastAnalysis.Region;
+import rega.genotype.ui.util.GenotypeLib;
 
 /**
  * Class that represents information contained in a a single analysis (XML file).
@@ -692,5 +693,21 @@ public class AlignmentAnalyses {
 
 	public static File blastFile(File dir) {
 		return new File(dir.getAbsolutePath(), "blast.xml");
+	}
+
+	public static AlignmentAnalyses readFastaToAlignmentAnalyses(File workDir, File fasta) throws ParameterProblemException, IOException, FileFormatException {
+		final File jobDir = GenotypeLib.createJobDir(workDir + File.separator + "tmp");
+		jobDir.mkdirs();
+
+		AlignmentAnalyses alignmentAnalyses = new AlignmentAnalyses();
+		SequenceAlignment sequenceAlignment = new SequenceAlignment(new FileInputStream(fasta),
+				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+		alignmentAnalyses.setAlignment(sequenceAlignment);
+		BlastAnalysis blastAnalysis = new BlastAnalysis(alignmentAnalyses,
+				"", new ArrayList<AlignmentAnalyses.Cluster>(),
+				50.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, "-q -1 -r 1", "", jobDir);
+		alignmentAnalyses.putAnalysis("blast", blastAnalysis);
+
+		return alignmentAnalyses;
 	}
 }

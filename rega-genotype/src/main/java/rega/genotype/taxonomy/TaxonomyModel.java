@@ -21,6 +21,8 @@ import eu.webtoolkit.jwt.WStandardItemModel;
  * @author michael
  */
 public class TaxonomyModel {
+	public static final String VIRUSES_TAXONOMY_ID = "10239";
+	
 	public static int SCIENTIFIC_NAME_ROLE = ItemDataRole.UserRole;
 	public static int TAXONOMY_ID_ROLE = ItemDataRole.UserRole + 1;
 	public static int MNEMENIC_ROLE = ItemDataRole.UserRole + 2;

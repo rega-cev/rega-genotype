@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
@@ -33,16 +35,10 @@ public class BlastUtil {
 		Utils.executeCmd(cmd, workDir, "blast exited with error");
 	}
 
-	/**
-	 * Run blastn on input sequence. 
-	 * Write the result refseq with best score in out.
-	 * Note: formatDB must be called inthe same workDir before.
-	 */
-	public static boolean computeBestRefSeq(AbstractSequence sequence, File workDir, File out, File blastdb, double maxEValue, double minBitScore)
-			throws ApplicationException, IOException, InterruptedException {
-
+	public static List<String[]> blastResults(AbstractSequence sequence, File workDir, File blastdb) throws IOException, InterruptedException, ApplicationException {
 		Process blast = null;
 		String blastPath = Settings.getInstance().getBlastPathStr();
+		List<String[]> ans = new ArrayList<String[]>();
 
 		if (sequence.getLength() != 0) {
 			File query = new File(workDir,"query.fasta");
@@ -60,15 +56,11 @@ public class BlastUtil {
 
 			BufferedReader inReader = new BufferedReader(new InputStreamReader(blast.getInputStream()));
 			String inLine = inReader.readLine();
-			String[] values = null;
-			if (inLine != null){
-				values = inLine.split("\t");
-
-				while ((inLine = inReader.readLine()) != null) // clear in buff so java dont dead lock
-					System.out.println(inLine);
-			} else {
-				System.err.println("WARNING: computeBestRefSeq: ref seq not found for " + sequence.getName());
+			while ((inLine = inReader.readLine()) != null) { // clear in buff so java dont dead lock
+				String[] values = inLine.split("\t");
+				ans.add(values);
 			}
+
 
 			final BufferedReader errReader = new BufferedReader(new InputStreamReader(blast.getErrorStream()));
 			String errLine;
@@ -83,10 +75,23 @@ public class BlastUtil {
 
 			if (exitResult != 0)
 				throw new ApplicationException("blast exited with error: " + exitResult);
+		} 
 
-			if (values == null)
-				return false;
+		return ans;			
+	}
 
+	/**
+	 * Run blastn on input sequence. 
+	 * Write the result refseq with best score in out.
+	 * Note: formatDB must be called inthe same workDir before.
+	 * @return the bit score of best mutch.
+	 */
+	public static Double computeBestRefSeq(AbstractSequence sequence, File workDir, File out, File blastdb, double maxEValue, double minBitScore)
+			throws ApplicationException, IOException, InterruptedException {
+
+		List<String[]> blastResults = blastResults(sequence, workDir, blastdb);
+		if (blastResults.size() > 0) {
+			String[] values = blastResults.get(0);
 			if (values.length != 12)
 				throw new ApplicationException("blast result format error");
 
@@ -96,11 +101,11 @@ public class BlastUtil {
 			if (eVal < maxEValue && bitScore > minBitScore) {
 				findSequence(values[BlastAnalysis.BLAST_RESULT_SUBJECT_ID_IDX],
 						blastdb, out);
-				return true;
-			} else
-				return false;
-		} else
-			return false;
+				return bitScore;
+			}
+		}
+
+		return null;
 	}
 
 	public static void findSequence(String sequenceId, File blastdb, File out) throws IOException, ApplicationException, InterruptedException {

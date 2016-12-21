@@ -66,6 +66,18 @@ public class Utils {
 		}
 	}
 
+	public static void execShellCmd(String cmd) throws IOException, InterruptedException, ApplicationException {
+		String[] shellCmd = {"/bin/sh", "-c", cmd};
+		System.err.println(cmd);
+
+		Process fetchFasta = null;
+		fetchFasta = Runtime.getRuntime().exec(shellCmd);
+		int exitResult = fetchFasta.waitFor();
+		if (exitResult != 0){
+			throw new ApplicationException("fetchFasta exited with error: " + exitResult);
+		}
+	}
+
 	/**
 	 * Download from url and save result in file same as linox wget.
 	 * return true if file was downloaded

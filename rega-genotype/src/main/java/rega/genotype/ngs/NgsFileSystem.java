@@ -50,6 +50,7 @@ public class NgsFileSystem {
 	public static final String CONSENSUS_FILE = "consensus.fasta";
 	public static final String CONSENSUS_ALINGMENT_FILE = "consensus-alingemnt.fasta";
 	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
+	public static final String CONSENSUS_UNUSED_CONTIGS_FILE = "consensus-unused-contigs.fasta";
 
 	public static boolean addFastqFiles(File workDir, File fastqPE1, File fastqPE2) {
 		return addFastqFiles(workDir, fastqPE1, fastqPE2, false);
@@ -272,6 +273,10 @@ public class NgsFileSystem {
 
 	public static File consensusRefSeqDir(File virusDir, String refseq) {
 		return new File(virusDir, refseq);
+	}
+
+	public static File consensusUnusedContigsFile(File workDir) {
+		return new File(workDir, CONSENSUS_UNUSED_CONTIGS_FILE);
 	}
 
 	public static File consensusContigsFile(File workDir) {

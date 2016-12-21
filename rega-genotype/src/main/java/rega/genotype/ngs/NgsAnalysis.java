@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
@@ -25,6 +27,7 @@ import rega.genotype.ngs.QC.QcData;
 import rega.genotype.ngs.QC.QcResults;
 import rega.genotype.ngs.QC.QcResults.Result;
 import rega.genotype.taxonomy.RegaSystemFiles;
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.utils.BlastUtil;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
@@ -274,7 +277,7 @@ public class NgsAnalysis {
 
 			SequenceAlignment contigs = new SequenceAlignment(new FileInputStream(assembledFile), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
-			File ncbiVirusesFasta = RegaSystemFiles.ncbiVirusesFile();
+			File ncbiVirusesFasta = RegaSystemFiles.ncbiVirusesFileAnnotated();
 			if (!ncbiVirusesFasta.exists())
 				throw new ApplicationException("Ncbi Viruses Db Path needs to be set in global settings");
 
@@ -286,18 +289,20 @@ public class NgsAnalysis {
 			// FIXME:
 			//  - probably should change the cutoff for the alignment, relative to length?
 
+			File consensusInputContigs = assembledFile;
 
 			for (AbstractSequence ref : refs.getSequences()) {
 				System.out.println("Trying with " + ref.getName() + " " + ref.getDescription());
-				
 				String refseqName = ref.getName().replaceAll("\\|", "_");
-				
 				File refWorkDir = NgsFileSystem.consensusRefSeqDir(virusConsensusDir, refseqName);
-				File alingment = SequenceToolMakeConsensus.consensusAlign(assembledFile, ref, refWorkDir, virusName, ngsModule, ngsLogger);
-				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, refWorkDir, virusName, ngsModule, ngsLogger);
-	
+				
+				File alingment = SequenceToolMakeConsensus.consensusAlign(consensusInputContigs, ref, refWorkDir, ngsModule, ngsLogger);
+				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, refWorkDir, ngsModule, ngsLogger);
+
+				consensusInputContigs = NgsFileSystem.consensusUnusedContigsFile(refWorkDir); // next time use only what was not used buy the first ref.
+
 				// add virus taxonomy id to every consensus contig name, save sequence metadata.
-	
+
 				SequenceAlignment sequenceAlignment = new SequenceAlignment(
 						new FileInputStream(consensus), 
 						SequenceAlignment.FILETYPE_FASTA, 
@@ -310,7 +315,7 @@ public class NgsAnalysis {
 					String refAC = "AC";
 					if (refseqName.contains("_ref_"))
 						refAC = refseqName.split("_ref_")[0];
-					s.setName(refAC + "_" + i + " " + s.getName() + "_reflen_" + ref.getLength() + "_" + fastqFileId);
+					s.setName(refAC + "__" + i + " " + s.getName() + "__refName__" + ref.getName() + " " + ref.getDescription() + "__reflen__" + ref.getLength() + "__" + fastqFileId);
 					i++;
 				}
 
@@ -347,7 +352,7 @@ public class NgsAnalysis {
 			FileNotFoundException {
 
 		SequenceAlignment refs = new SequenceAlignment();
-		Set<String> refNames = new HashSet<String>();
+		final Map<String, Double> refNameScoreMap = new HashMap<String, Double>(); // make sure not to add same seq 2 times.
 
 		for (AbstractSequence contig : contigs.getSequences()) {
 			if (contig.getLength() < ngsModule.getRefMinContigLength())
@@ -357,20 +362,44 @@ public class NgsAnalysis {
 			File reference = NgsFileSystem.consensusRefFile(virusDir);
 			virusDir.mkdirs();
 
-			boolean match = BlastUtil.computeBestRefSeq(contig, virusDir,
+			Double matchScore = BlastUtil.computeBestRefSeq(contig, virusDir,
 					reference, ncbiVirusesFasta, ngsModule.getRefMaxBlastEValue(),
 					ngsModule.getRefMinBlastBitScore());
 
-			if (match) {
+			if (matchScore != null) {
 				SequenceAlignment ref = new SequenceAlignment(new FileInputStream(reference),
 						SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 				AbstractSequence as = ref.getSequences().get(0);
-				if (!refNames.contains(as.getName())) {
+
+				String bucketTxId = virusDir.getName().split("_")[0];
+				String refTxId = RegaSystemFiles.taxonomyIdFromAnnotatedNcbiSeq(as.getDescription());
+
+				if (refTxId != null && !bucketTxId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID)) {
+					String lowesCommonAncestor = TaxonomyModel.getInstance().getLowesCommonAncestor(refTxId, bucketTxId);
+					if (lowesCommonAncestor == null)
+						throw new ApplicationException("Could not find LCA of " + refTxId + " and " + bucketTxId);
+					if (lowesCommonAncestor.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID))
+						continue;
+				}
+				Double prevScore = refNameScoreMap.get(as.getName());
+				if (prevScore != null)
+					refNameScoreMap.put(as.getName(), Math.max(prevScore, matchScore));
+				else {
 					refs.addSequence(as);
-					refNames.add(as.getName());
+					refNameScoreMap.put(as.getName(), matchScore);
 				}
 			}
 		}
+
+		// order by best score.
+		Collections.sort(refs.getSequences(), new Comparator<AbstractSequence>() {
+			public int compare(AbstractSequence as1, AbstractSequence as2) {
+				Double score1 = refNameScoreMap.get(as1.getName());
+				Double score2 = refNameScoreMap.get(as2.getName());
+				return -score1.compareTo(score2);
+			}
+		});
+
 		return refs;
 	}
 }

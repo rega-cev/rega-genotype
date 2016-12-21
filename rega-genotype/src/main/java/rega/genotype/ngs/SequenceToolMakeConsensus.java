@@ -27,7 +27,7 @@ public class SequenceToolMakeConsensus {
 	 * @throws InterruptedException
 	 */
 	public static File consensusAlign(File assembledContigs, AbstractSequence reference,
-			File consensusWorkDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+			File consensusWorkDir, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 		// make Consensus
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
@@ -40,13 +40,16 @@ public class SequenceToolMakeConsensus {
 		reference.writeFastaOutput(fos);
 		fos.close();
 
+		File consensusUnusedContigsFile = NgsFileSystem.consensusUnusedContigsFile(consensusWorkDir);
+		
 		String cmd = sequencetoolPath + " consensus-align"
 		+ " --reference " + referenceFile.getAbsolutePath()
 		+ " --target " + assembledContigs.getAbsolutePath()
 		+ " --output " + alingment.getAbsolutePath()
 		+ " --absolute-cutoff " + ngsModule.getConsensusToolAbsoluteCutoff()
 		+ " --relative-cutoff " + ngsModule.getConsensusToolRelativeCutoff()
-		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov();
+		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov()
+		+ " --export-unused " + consensusUnusedContigsFile.getAbsolutePath();
 
 		NgsFileSystem.executeCmd(cmd, consensusWorkDir, logger);
 
@@ -54,7 +57,7 @@ public class SequenceToolMakeConsensus {
 	}
 
 	public static File makeConsensus(File assembledContigs,
-			File consensusWorkDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
+			File consensusWorkDir, NgsModule ngsModule, Logger logger) throws ApplicationException, IOException, FileFormatException, ParameterProblemException, InterruptedException {
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
 		File outContigs = NgsFileSystem.consensusContigsFile(consensusWorkDir);

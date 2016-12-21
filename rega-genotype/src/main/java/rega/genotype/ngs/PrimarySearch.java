@@ -28,6 +28,7 @@ import rega.genotype.ngs.NgsProgress.BasketData;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
+import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.StreamReaderRuntime;
 
 /**
@@ -58,12 +59,28 @@ public class PrimarySearch{
 	/**
 	 * Order all the reads by taxonomy level. 
 	 */
-	private static class TaxonomyTree {
+	public static class TaxonomyTree {
 		TaxonomyNode root;
 		TaxonomyNode find(String taxonId) {
 			if (root == null)
 				return null;
 			return find(root, taxonId);
+		}
+
+		//Debug
+		void printTree(TaxonomyNode node) {
+			//if (node.children.size() > 0) TODO: fix to http://evolution.genetics.washington.edu/phylip/newicktree.html
+				System.out.print("(");
+			System.out.print(node.taxonId);
+			int i = 0;
+			for (TaxonomyNode c: node.children){
+				if (i != 0)
+					System.out.print(",");
+				printTree(c);
+				i++;
+			}
+			//if (node.children.size() > 0)
+				System.out.print(")");
 		}
 
 		TaxonomyNode find(TaxonomyNode node, String taxonId) {
@@ -103,9 +120,14 @@ public class PrimarySearch{
 				root = new TaxonomyNode(hirarchyTaxonomyIds.get(0));
 			}
 
+			if (taxonId.equals("10239")){ // viruses -> add to root.
+				root.readNames.add(readName);
+				return;
+			}
+
 			TaxonomyNode parentNode = null;
 			// find lowest ancestor that is in the tree.
-			for (int i = hirarchyTaxonomyIds.size() -2; i > -1; --i) {
+			for (int i = hirarchyTaxonomyIds.size() -1; i > -1; --i) {
 				parentNode = find(hirarchyTaxonomyIds.get(i));
 				if (parentNode != null) {
 					if (parentNode.taxonId.equals(taxonId))
@@ -193,19 +215,16 @@ public class PrimarySearch{
 		}
 
 		/**
-		 * - PS: parent basket size. 
-		 * Variables: (can be set by an expert user)
-		 * - E(pc): condition to merging parent child edge. 
 		 * Algorithm:
-		 * 1. Order results by taxonomy level.
-		 * 2. Run DFS on taxonomy tree:
-		 *    2.1. Order children by basket size
-		 *    2.2. Iterate over ordered remaining children, do 
-		 *            if ( (min(PS, CS) / max(PS, CS)) < E(pc) ) => merge child to parent basket.
+		 *    Run DFS on taxonomy tree:
+		 *    if (node reads/ sum(descendants reads) < MERGE_CONDITION)
+		 *    	re-sample parent randomly to all children based on children size.
+		 *    else
+		 *      combine all descendants reads to parent
 		 */
 		// input: diamond results: for every read find lowest common ancestor, add it to taxonomy tree.
-		private void merge(TaxonomyNode parentTaxon) {
-			double MERGE_CONDITION = 0.05; //TODO
+		public void merge(TaxonomyNode parentTaxon) {
+			double MERGE_CONDITION = 0.1; //TODO
 			
 			int sumOfDescendants = sumOfDescendants(parentTaxon); // number of read for all the descendants together.
 			double ratio = (double)parentTaxon.readNames.size() / (double)sumOfDescendants;
@@ -446,11 +465,13 @@ public class PrimarySearch{
 			SequenceData best = s.getValue().get(0);
 			Integer bestScoreTaxonCounter = taxonCounters.get(bestScore.taxon).getReadCountTotal();
 			for (SequenceData d: s.getValue()) {
-				Integer currentTaxonCounter = taxonCounters.get(d.taxon).getReadCountTotal();
-				if (currentTaxonCounter != null 
-						&& bestScore.score - d.score < 5 
-						&& currentTaxonCounter > bestScoreTaxonCounter + 10000)
-					best = d;// big basket gets priority.
+				if (taxonCounters.get(d.taxon) != null){
+					Integer currentTaxonCounter = taxonCounters.get(d.taxon).getReadCountTotal();
+					if (currentTaxonCounter != null 
+							&& bestScore.score - d.score < 5 
+							&& currentTaxonCounter > bestScoreTaxonCounter + 10000)
+						best = d;// big basket gets priority.
+				}
 			}
 			taxoNameId.put(s.getKey(), best.taxon);
 		}
@@ -496,13 +517,14 @@ public class PrimarySearch{
 		return taxonomyTree;
 	}
 
-	private static TaxonomyTree basketDiamondResultsLowCommonAncestor(File view) throws NumberFormatException, IOException {
+	public static TaxonomyTree basketDiamondResultsLowCommonAncestor(File view, File workDir) throws NumberFormatException, IOException {
 		String line = "";
 		BufferedReader bf;
 		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
 		// All the data per sequence
 		TaxonomyTree taxonomyTree = new TaxonomyTree();
 
+		Logger log = LogUtils.createDebugLogger(workDir);
 		String prevName = null;
 		Set<String> readTaxa = new HashSet<String>();
 		while ((line = bf.readLine()) != null)  {
@@ -512,15 +534,21 @@ public class PrimarySearch{
 			String taxonId = taxon[0];
 			String readName = name[0];
 
-			if (prevName == null || prevName.equals(readName)) {
-				//add to set
-				readTaxa.add(taxonId);
-			} else {
+			if (prevName != null && !prevName.equals(readName)) {
 				// restart for next read.
-				String lowestAncestor = lowestAnsestor(readTaxa);
+				String lowestAncestor = lowestAnsestorOnLinage(readTaxa);
+				StringBuilder readTaxaDebug = new StringBuilder();
+				for (String t:readTaxa){
+					readTaxaDebug.append(t + " " + TaxonomyModel.getInstance().getHirarchy(t, 100) + "\n");
+				}
+				//log.info("Set: " + Arrays.toString(readTaxa.toArray()));
+				log.info(readTaxaDebug.toString());
+				log.info("lowestAncestor = " + lowestAncestor + "\n");
 				taxonomyTree.add(lowestAncestor, prevName);
 				readTaxa.clear();
 			}
+
+			readTaxa.add(taxonId);
 
 			prevName = readName;
 		}
@@ -542,6 +570,51 @@ public class PrimarySearch{
 		return lowestCommonAncestor;
 	}
 
+	// TODO: document or rename
+	public static String lowestAnsestorOnLinage(Set<String> readTaxa) {
+		TaxonomyTree taxonomyTree = new TaxonomyTree();
+		for (String taxonId: readTaxa) 
+			taxonomyTree.add(taxonId, "");
+
+		//taxonomyTree.printTree(taxonomyTree.root);
+		removeUnclassifiedNode(taxonomyTree.root); // remove only top lovel unclassified.
+
+		//if (taxonomyTree.root.taxonId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID))
+		//	removeUnclassifiedNode(taxonomyTree.root); // remove only top lovel unclassified.
+
+		//return taxonomyTree.root.taxonId;
+		return removeTopLevel1ChildParent(taxonomyTree.root).taxonId;
+	}
+
+	private static boolean checkUnclassified(TaxonomyNode node) {
+		return TaxonomyModel.getInstance().getScientificName(node.taxonId).startsWith("unclassified")
+				|| TaxonomyModel.getInstance().getScientificName(node.taxonId).startsWith("unassigned");
+	}
+
+	private static void removeUnclassifiedNode(TaxonomyNode node) {
+		if (node.children.size() > 1){
+			List<TaxonomyNode> unclassified = new ArrayList<TaxonomyNode>();
+			for (TaxonomyNode c: node.children)
+				if(checkUnclassified(c))
+					unclassified.add(c);
+			if (unclassified.size() != node.children.size()) // all unclassified -> leave it
+				for (TaxonomyNode u: unclassified)
+					node.children.remove(u);
+		}
+
+		for (TaxonomyNode c: node.children)
+			removeUnclassifiedNode(c);
+	}
+
+	public static TaxonomyNode removeTopLevel1ChildParent(TaxonomyNode root) {
+		TaxonomyNode newRoot = root;
+		while(newRoot.children.size() == 1)
+			newRoot = newRoot.children.get(0);
+
+		return newRoot;
+		//return root.children.size() != 1 ? root : removeTopLevel1ChildParent(root.children.get(0));
+	}
+
 	/**
 	 * Order all the sequence by taxonomy id. 
 	 * The algorithm favors creating big baskets, so if 1 taxon appears many times 
@@ -556,9 +629,8 @@ public class PrimarySearch{
 	 */
 	private static void creatDiamondResults(File diamondResultsDir, File view, File[] fastqFiles,
 			NgsProgress ngsProgress, Logger logger) throws FileFormatException, IOException {
-
 		long start = System.currentTimeMillis();
-		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view);
+		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view, diamondResultsDir.getParentFile());
 		StringBuilder newickTreeBeforeMerge = new StringBuilder(); // TODO ..
 		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResultsBeforeMerge(), newickTreeBeforeMerge);
 		
@@ -567,6 +639,7 @@ public class PrimarySearch{
 		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResults(), newickTreeAfterMerge);
 
 //		Map<String, String> readIdTaxonomyId = basketDiamondResultsBasedOnBestScore(view, ngsProgress);
+
 		logger.info("Basket reads time = " + (System.currentTimeMillis() - start) + " ms");
 
 		// Order fastq sequences in basket per taxon.

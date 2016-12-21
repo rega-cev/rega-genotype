@@ -225,7 +225,7 @@
 		<div><b>Create database for diamond blast.</b></div>
 		<div>Use Uniprot 50% identity database for viruses and Virus taxonomy database to create dmdb file that will be used by Diamond blast.</div>
 		<div>Note: the dmdb file is architecture specific and therefor it is recommended to create the database on every server, so click the button.</div>
-		<div>${create-db}${info}</div>
+		<div>${create-db}<b>${info}</b></div>
 		</p>
 
 	</message>
