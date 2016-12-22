@@ -377,10 +377,8 @@ public class NgsAnalysis {
 				String refTxId = RegaSystemFiles.taxonomyIdFromAnnotatedNcbiSeq(as.getDescription());
 
 				if (refTxId != null && !bucketTxId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID)) {
-					String lowesCommonAncestor = TaxonomyModel.getInstance().getLowesCommonAncestor(refTxId, bucketTxId);
-					if (lowesCommonAncestor == null)
-						throw new ApplicationException("Could not find LCA of " + refTxId + " and " + bucketTxId);
-					if (lowesCommonAncestor.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID))
+					List<String> refAncestorTaxa = TaxonomyModel.getInstance().getHirarchyTaxonomyIds(refTxId);
+					if (refAncestorTaxa.contains(bucketTxId))
 						continue;
 				}
 				Double prevScore = refNameScoreMap.get(as.getName());

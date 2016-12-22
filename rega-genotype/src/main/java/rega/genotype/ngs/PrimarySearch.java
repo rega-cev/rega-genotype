@@ -58,7 +58,7 @@ public class PrimarySearch{
 		double level() {
 			double l = 1;
 			TaxonomyNode n = parentTaxon;
-			while (n.parentTaxon != null) {
+			while (n != null) {
 				l++;
 				n = n.parentTaxon;
 			}
