@@ -364,7 +364,7 @@ public class NgsAnalysis {
 
 			Double matchScore = BlastUtil.computeBestRefSeq(contig, virusDir,
 					reference, ncbiVirusesFasta, ngsModule.getRefMaxBlastEValue(),
-					ngsModule.getRefMinBlastBitScore());
+					ngsModule.getRefMinBlastBitScore(), ngsLogger);
 
 			if (matchScore != null) {
 				SequenceAlignment ref = new SequenceAlignment(new FileInputStream(reference),

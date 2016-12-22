@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
@@ -35,7 +36,7 @@ public class BlastUtil {
 		Utils.executeCmd(cmd, workDir, "blast exited with error");
 	}
 
-	public static List<String[]> blastResults(AbstractSequence sequence, File workDir, File blastdb) throws IOException, InterruptedException, ApplicationException {
+	public static List<String[]> blastResults(AbstractSequence sequence, File workDir, File blastdb, Logger logger) throws IOException, InterruptedException, ApplicationException {
 		Process blast = null;
 		String blastPath = Settings.getInstance().getBlastPathStr();
 		List<String[]> ans = new ArrayList<String[]>();
@@ -50,7 +51,7 @@ public class BlastUtil {
 					+ " -i " + query.getAbsolutePath()
 					+ " -m 8 -d " + blastdb.getAbsolutePath();
 
-			System.err.println(cmd);
+			logger.info(cmd);
 
 			blast = Runtime.getRuntime().exec(cmd, null, workDir);
 
@@ -86,10 +87,11 @@ public class BlastUtil {
 	 * Note: formatDB must be called inthe same workDir before.
 	 * @return the bit score of best mutch.
 	 */
-	public static Double computeBestRefSeq(AbstractSequence sequence, File workDir, File out, File blastdb, double maxEValue, double minBitScore)
+	public static Double computeBestRefSeq(AbstractSequence sequence, File workDir, File out, File blastdb, 
+			double maxEValue, double minBitScore, Logger logger)
 			throws ApplicationException, IOException, InterruptedException {
 
-		List<String[]> blastResults = blastResults(sequence, workDir, blastdb);
+		List<String[]> blastResults = blastResults(sequence, workDir, blastdb, logger);
 		if (blastResults.size() > 0) {
 			String[] values = blastResults.get(0);
 			if (values.length != 12)
@@ -100,7 +102,7 @@ public class BlastUtil {
 
 			if (eVal < maxEValue && bitScore > minBitScore) {
 				findSequence(values[BlastAnalysis.BLAST_RESULT_SUBJECT_ID_IDX],
-						blastdb, out);
+						blastdb, out, logger);
 				return bitScore;
 			}
 		}
@@ -108,7 +110,7 @@ public class BlastUtil {
 		return null;
 	}
 
-	public static void findSequence(String sequenceId, File blastdb, File out) throws IOException, ApplicationException, InterruptedException {
+	public static void findSequence(String sequenceId, File blastdb, File out, Logger logger) throws IOException, ApplicationException, InterruptedException {
 		out.getParentFile().mkdirs();
 		if (out.exists())
 			out.delete();
@@ -117,7 +119,7 @@ public class BlastUtil {
 		String cmd = blastPath + "fastacmd -s '" + sequenceId + "' -d " + blastdb.getAbsolutePath() 
 				+ " -o " + out.getAbsolutePath();
 
-		System.err.println(cmd);
+		logger.info(cmd);
 
 		String[] shellCmd = {"/bin/sh", "-c", cmd};
 
