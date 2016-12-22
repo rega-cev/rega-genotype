@@ -293,6 +293,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 					String refName = null;
 					String lenErrors = null;
 					String covErrors = null;
+					String bucket = null;
 
 					for (SequenceData seq: toolData.sequenceNames) {
 						//11051__contig_1_len_10306_cov_950.489 vip
@@ -328,13 +329,15 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 									refName = seqParts[j + 1];
 								else if (!refName.equals(seqParts[j + 1]))
 									System.err.println("ERROR: not same ref!");
+							} else if (seqParts[j].equals("bucket")) {
+								bucket = seqParts[j + 1];
 							}
 						}
 					}
 
 					// TODO: testing 
 					setDisplayData(blastModel, row, ASSINGMENT_COLUMN, toolData.concludedName 
-							+ " (" + refName + ")");
+							+ " (" + refName + " : " + bucket + ")");
 
 					if (refLen == null && lenErrors == null)
 						lenErrors = "refseq length is emplty";
@@ -505,7 +508,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (concludedName == null)
 				concludedName = "Unassigned";
 
-			String key = (mode == Mode.Ngs) ? seqName.substring(0, seqName.lastIndexOf('_')) : concludedId;
+			String bucket = findBucket(seqDesc);
+			String key = (mode == Mode.Ngs) ? seqName.substring(0, seqName.lastIndexOf('_')) + bucket : concludedId;
 			
 			ClusterData toolData = clusterDataMap.containsKey(key) ? clusterDataMap.get(key) : new ClusterData();
 
@@ -527,6 +531,15 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			toolData.src = clusterSrc;
 
 			clusterDataMap.put(key, toolData);
+		}
+
+		private String findBucket(String description) {
+			String[] parts = description.split("__");
+			for (int i = 0; i < parts.length - 1; ++i) {
+				if(parts[i].equals("bucket"))
+					return parts[i + 1];
+			}
+			return null;
 		}
 	}
 }

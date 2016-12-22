@@ -315,7 +315,9 @@ public class NgsAnalysis {
 					String refAC = "AC";
 					if (refseqName.contains("_ref_"))
 						refAC = refseqName.split("_ref_")[0];
-					s.setName(refAC + "__" + i + " " + s.getName() + "__refName__" + ref.getName() + " " + ref.getDescription() + "__reflen__" + ref.getLength() + "__" + fastqFileId);
+					String bucket = virusName;
+					s.setName(refAC + "__" + i + " " + s.getName() + "__refName__" + ref.getName() + " " + ref.getDescription() + "__reflen__" + ref.getLength() 
+							+ "__bucket__" + bucket + "__" + fastqFileId);
 					i++;
 				}
 
