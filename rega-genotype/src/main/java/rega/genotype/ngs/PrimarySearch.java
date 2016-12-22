@@ -54,6 +54,16 @@ public class PrimarySearch{
 		TaxonomyNode(String taxonId) {
 			this.taxonId = taxonId;
 		}
+
+		double level() {
+			double l = 1;
+			TaxonomyNode n = parentTaxon;
+			while (n.parentTaxon != null) {
+				l++;
+				n = n.parentTaxon;
+			}
+			return l;
+		}
 	}
 
 	/**
@@ -214,6 +224,14 @@ public class PrimarySearch{
 			return randomIndex;
 		}
 
+		private void combineAllToParent(TaxonomyNode parentTaxon) {
+			List<String> descendantsReads = new ArrayList<String>();
+			while(!parentTaxon.children.isEmpty()){
+				collapse(parentTaxon.children.get(0), descendantsReads); // remove children and fill descendantsReads with there reads.
+			}
+			parentTaxon.readNames.addAll(descendantsReads);
+		}
+
 		/**
 		 * Algorithm:
 		 *    Run DFS on taxonomy tree:
@@ -224,30 +242,29 @@ public class PrimarySearch{
 		 */
 		// input: diamond results: for every read find lowest common ancestor, add it to taxonomy tree.
 		public void merge(TaxonomyNode parentTaxon) {
-			double MERGE_CONDITION = 0.1; //TODO
-			
-			int sumOfDescendants = sumOfDescendants(parentTaxon); // number of read for all the descendants together.
-			double ratio = (double)parentTaxon.readNames.size() / (double)sumOfDescendants;
-			if (ratio < MERGE_CONDITION) {
-				// re-sample parent randomly to all children based on children size.
-				int[] childrenWeights = new int[parentTaxon.children.size()];
-				for (int i = 0; i < parentTaxon.children.size(); ++i)
-					childrenWeights[i] = sumOfDescendants(parentTaxon.children.get(i));
-				for (String read: parentTaxon.readNames) {
-					int c = chooseRandomallyFromWeightedItems(childrenWeights);
-					parentTaxon.children.get(c).readNames.add(read);
-				}
-				parentTaxon.readNames.clear();
+			double level = parentTaxon.level();
+			double MERGE_CONDITION = 0.1 / level; 
+			if (level >= 5) // dont split genus
+				combineAllToParent(parentTaxon);
+			else {
+				int sumOfDescendants = sumOfDescendants(parentTaxon); // number of read for all the descendants together.
+				double ratio = (double)parentTaxon.readNames.size() / (double)sumOfDescendants;
+				if (ratio < MERGE_CONDITION) {
+					// re-sample parent randomly to all children based on children size.
+					int[] childrenWeights = new int[parentTaxon.children.size()];
+					for (int i = 0; i < parentTaxon.children.size(); ++i)
+						childrenWeights[i] = sumOfDescendants(parentTaxon.children.get(i));
+					for (String read: parentTaxon.readNames) {
+						int c = chooseRandomallyFromWeightedItems(childrenWeights);
+						parentTaxon.children.get(c).readNames.add(read);
+					}
+					parentTaxon.readNames.clear();
 
-				for (TaxonomyNode c: parentTaxon.children)
-					merge(c);
-			} else {
-				// combine all to parent
-				List<String> descendantsReads = new ArrayList<String>();
-				while(!parentTaxon.children.isEmpty()){
-					collapse(parentTaxon.children.get(0), descendantsReads); // remove children and fill descendantsReads with there reads.
+					for (TaxonomyNode c: parentTaxon.children)
+						merge(c);
+				} else {
+					combineAllToParent(parentTaxon);
 				}
-				parentTaxon.readNames.addAll(descendantsReads);
 			}
 		}
 	}
