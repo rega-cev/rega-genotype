@@ -56,7 +56,7 @@ public class BlastUtil {
 			blast = Runtime.getRuntime().exec(cmd, null, workDir);
 
 			BufferedReader inReader = new BufferedReader(new InputStreamReader(blast.getInputStream()));
-			String inLine = inReader.readLine();
+			String inLine = null;
 			while ((inLine = inReader.readLine()) != null) { // clear in buff so java dont dead lock
 				String[] values = inLine.split("\t");
 				ans.add(values);
