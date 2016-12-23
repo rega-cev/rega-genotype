@@ -21,6 +21,8 @@ import eu.webtoolkit.jwt.WStandardItemModel;
  * @author michael
  */
 public class TaxonomyModel {
+	public static final String VIRUSES_TAXONOMY_ID = "10239";
+	
 	public static int SCIENTIFIC_NAME_ROLE = ItemDataRole.UserRole;
 	public static int TAXONOMY_ID_ROLE = ItemDataRole.UserRole + 1;
 	public static int MNEMENIC_ROLE = ItemDataRole.UserRole + 2;
@@ -125,7 +127,7 @@ public class TaxonomyModel {
 			 return null;
 
 		 int i = 0;
-		 while (item.getParent() != null && i < 3) {
+		 while (item.getParent() != null && i < howFar) {
 			 String name = (String) item.getData(SCIENTIFIC_NAME_ROLE);
 			 if (name != null)
 				 ans = "__" + name.replace(" ", "_").replace(",", "_") + ans;
@@ -135,6 +137,10 @@ public class TaxonomyModel {
 		 return ans;
 	}
 
+	/**
+	 * @param taxonomyId
+	 * @return all ancestors taxonomy ids ordered rank (viruses is first)
+	 */
 	public List<String> getHirarchyTaxonomyIds(String taxonomyId) {
 		List<String> ans = new ArrayList<String>();
 		WStandardItem item = items.get(taxonomyId);
@@ -142,10 +148,27 @@ public class TaxonomyModel {
 			return ans;
 
 		while (item.getParent() != null) {
-			ans.add((String) item.getData(TAXONOMY_ID_ROLE));
+			ans.add(0, (String) item.getData(TAXONOMY_ID_ROLE));
 			item = item.getParent();
 		}
 		return ans;
+	}
+
+	public String getLowesCommonAncestor(String taxonmyId1, String taxonmyId2) {
+		if (items.get(taxonmyId1) == null || items.get(taxonmyId2) == null)
+			return null;
+
+		if (taxonmyId1.equals(taxonmyId2))
+			return taxonmyId1;
+		List<String> hirarchyTaxonomyIds1 = getHirarchyTaxonomyIds(taxonmyId1);
+		List<String> hirarchyTaxonomyIds2 = getHirarchyTaxonomyIds(taxonmyId2);
+
+		int i = 1;
+		for (; i < Math.min(hirarchyTaxonomyIds1.size(), hirarchyTaxonomyIds2.size()); ++i)
+			if (!hirarchyTaxonomyIds1.get(i).equals(hirarchyTaxonomyIds2.get(i)))
+				return hirarchyTaxonomyIds1.get(i -1);
+
+		return hirarchyTaxonomyIds1.get(i -1);
 	}
 
 	public List<String> getAllChildrenTaxonomy(String parentTaxonomyId){

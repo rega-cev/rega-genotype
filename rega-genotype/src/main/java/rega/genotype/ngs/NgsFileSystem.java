@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import rega.genotype.ApplicationException;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.singletons.Settings;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.Utils;
 
@@ -49,6 +50,7 @@ public class NgsFileSystem {
 	public static final String CONSENSUS_FILE = "consensus.fasta";
 	public static final String CONSENSUS_ALINGMENT_FILE = "consensus-alingemnt.fasta";
 	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
+	public static final String CONSENSUS_UNUSED_CONTIGS_FILE = "consensus-unused-contigs.fasta";
 
 	public static boolean addFastqFiles(File workDir, File fastqPE1, File fastqPE2) {
 		return addFastqFiles(workDir, fastqPE1, fastqPE2, false);
@@ -95,13 +97,37 @@ public class NgsFileSystem {
 	}
 
 	public static boolean downloadSrrFile(String srrName, File workDir) throws ApplicationException {
-		String srrToolKitPath = Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath();
-		Logger logger = LogUtils.createLogger(workDir);
-		String cmd = srrToolKitPath + "fastq-dump --split-files " + srrName;
-		executeCmd(cmd, workDir, logger);
+		String srrDatabase = Settings.getInstance().getConfig().getGeneralConfig().getSrrDatabasePath();
+		File fastqPE1 = null;
+		File fastqPE2 = null;
+		// find the file in local db
+		if (!srrDatabase.isEmpty()) {
+			File fastqDir = new File(workDir, FASTQ_FILES_DIR);
+			fastqDir.mkdirs();
+			File srrDatabaseDir = new File(srrDatabase);
+			if (srrDatabaseDir.listFiles() != null)
+				for (File f: srrDatabaseDir.listFiles()){
+					if (f.getName().equals(srrName + "_1.fastq.gz")){
+						fastqPE1 = new File(fastqDir, srrName + "_1.fastq");
+						FileUtil.unGzip1File(f, fastqPE1);
+					}
+					if (f.getName().equals(srrName + "_2.fastq.gz")){
+						fastqPE2 = new File(fastqDir, srrName + "_2.fastq");
+						FileUtil.unGzip1File(f, fastqPE2);
+					}
+				}
+		}
 
-		File fastqPE1 = new File(workDir, srrName + "_1.fastq");
-		File fastqPE2 = new File(workDir, srrName + "_2.fastq");
+		// if not found download them
+		if (fastqPE1 == null || fastqPE2 == null) {
+			String srrToolKitPath = Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath();
+			Logger logger = LogUtils.createLogger(workDir);
+			String cmd = srrToolKitPath + "fastq-dump --split-files " + srrName;
+			executeCmd(cmd, workDir, logger);
+
+			fastqPE1 = new File(workDir, srrName + "_1.fastq");
+			fastqPE2 = new File(workDir, srrName + "_2.fastq");
+		}
 
 		return addFastqFiles(workDir, fastqPE1, fastqPE2, true);
 	}
@@ -237,23 +263,35 @@ public class NgsFileSystem {
 		return ASSEMBALED_CONTIGS_DIR + File.separator + virusName;
 	}
 
-	public static String consensusDir(String virusName) {
-		return CONSENSUS_DIR + File.separator + virusName;
+	public static File consensusDir(File workDir, String virusName) {
+		return new File(new File(workDir, CONSENSUS_DIR), virusName) ;
 	}
 
-	public static File consensusContigsFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_CONTIGS_FILE);
+	public static File consensusContigDir(File virusDir, String contig) {
+		return new File(virusDir, contig);
+	}
+
+	public static File consensusRefSeqDir(File virusDir, String refseq) {
+		return new File(virusDir, refseq);
+	}
+
+	public static File consensusUnusedContigsFile(File workDir) {
+		return new File(workDir, CONSENSUS_UNUSED_CONTIGS_FILE);
+	}
+
+	public static File consensusContigsFile(File workDir) {
+		return new File(workDir, CONSENSUS_CONTIGS_FILE);
 	}
 	
-	public static File consensusFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_FILE);
+	public static File consensusFile(File workDir) {
+		return new File(workDir, CONSENSUS_FILE);
 	}
 
-	public static File consensusAlingmentFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_ALINGMENT_FILE);
+	public static File consensusAlingmentFile(File workDir) {
+		return new File(workDir, CONSENSUS_ALINGMENT_FILE);
 	}
 
-	public static File consensusRefFile(File workDir, String virusName) {
-		return new File(new File(workDir, consensusDir(virusName)), CONSENSUS_REF_FILE);
+	public static File consensusRefFile(File workDir) {
+		return new File(workDir, CONSENSUS_REF_FILE);
 	}
 }

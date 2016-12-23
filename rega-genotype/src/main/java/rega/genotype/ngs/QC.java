@@ -112,8 +112,11 @@ public class QC {
 			for(String line: lines) {
 				String[] parts = line.split("\t");
 				if (parts.length == 2 && parts[0].equals("Sequence length")) {
+					String len = parts[1];
+					if (len.contains("-"))
+						len = len.split("-")[1];
 					try {
-						readLength = Integer.parseInt(parts[1]);
+						readLength = Integer.parseInt(len);
 					} catch (NumberFormatException e) {
 						readLength = null;
 					}

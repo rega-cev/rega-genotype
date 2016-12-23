@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rega.genotype.ngs.NgsProgress;
+import rega.genotype.ngs.NgsProgress.BasketData;
+import rega.genotype.taxonomy.TaxonomyModel;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.PositionScheme;
 import eu.webtoolkit.jwt.Side;
@@ -59,12 +61,12 @@ public class DiamondResultsView extends WContainerWidget{
 		// table
 		table = new WTableView(this);
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		table.setWidth(new WLength(520));
+		table.setWidth(new WLength(920));
 		table.setHeight(new WLength(220));
 		//table.setStyleClass("blastResultsTable");
 		table.setHeaderHeight(new WLength(20));
 		table.hideColumn(CHART_DISPLAY_COLUMN);
-		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
+		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(740));
 		table.setColumnWidth(DATA_COLUMN, new WLength(80));
 		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
 
@@ -93,21 +95,24 @@ public class DiamondResultsView extends WContainerWidget{
 		
 		NgsProgress ngsProgress = NgsProgress.read(workDir);
 
-		Map<String, Integer> countDiamondResults = ngsProgress.getDiamondBlastResults();
+		Map<String, BasketData> countDiamondResults = ngsProgress.getDiamondBlastResults();
 		if (countDiamondResults == null)
-			countDiamondResults = new HashMap<String, Integer>();
+			countDiamondResults = new HashMap<String, BasketData>();
 
 		int i = 0;
-		for (Map.Entry<String, Integer> e: countDiamondResults.entrySet()) {
-			int sequenceCount = e.getValue();
+		for (Map.Entry<String, BasketData> e: countDiamondResults.entrySet()) {
+			BasketData basketData = e.getValue();
+			int sequenceCount = basketData.getReadCountTotal();
 			String taxonNmae = e.getKey();
 
+			String hirarchy = TaxonomyModel.getInstance().getHirarchy(taxonNmae, 100);
 			int row = blastResultModel.getRowCount();
 			blastResultModel.insertRows(row, 1);
-			blastResultModel.setData(row, ASSINGMENT_COLUMN, taxonNmae);
+			blastResultModel.setData(row, ASSINGMENT_COLUMN,
+					taxonNmae + ": " + hirarchy);
 			blastResultModel.setData(row, DATA_COLUMN, sequenceCount); // percentage
 			blastResultModel.setData(row, CHART_DISPLAY_COLUMN, 
-					taxonNmae + " (" + sequenceCount + ")");
+					taxonNmae + "_" + basketData.getScientificName() + " (" + sequenceCount + ")");
 
 			WColor color = chart.getPalette().getBrush(i).getColor();
 			blastResultModel.setData(row, COLOR_COLUMN, color, 

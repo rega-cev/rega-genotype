@@ -135,13 +135,14 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.setStyleClass("blastResultsTable");
 		table.setHeaderHeight(new WLength(20));
 		table.hideColumn(CHART_DISPLAY_COLUMN);
-		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(340));
+		table.setColumnWidth(ASSINGMENT_COLUMN, new WLength(540));
 		table.setColumnWidth(SEQUENCE_COUNT_COLUMN, new WLength(80));
 		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(80));
 		table.setColumnWidth(SRC_COLUMN, new WLength(60));
 		table.setColumnWidth(TOTAL_LENGTH_COLUMN, new WLength(90));
-		table.setColumnWidth(READ_COUNT_COLUMN, new WLength(60));
+		table.setColumnWidth(READ_COUNT_COLUMN, new WLength(90));
 		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
+		//table.setRowHeight(new WLength(50));
 
 		table.setItemDelegateForColumn(COLOR_COLUMN, new WAbstractItemDelegate() {
 			@Override
@@ -289,36 +290,54 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 					double contigsLen = 0;
 					double totalCov = 0;
 					Integer refLen = null;
+					String refName = null;
 					String lenErrors = null;
 					String covErrors = null;
+					String bucket = null;
 
 					for (SequenceData seq: toolData.sequenceNames) {
 						//11051__contig_1_len_10306_cov_950.489 vip
 						// currently cov is encoded in description
 						// # reads as Sum of (contig length * coverage / read length)
+						refName = null;
 						if (seq.description == null)
 							continue; // old format.
 						if (seq.length == null)
 							lenErrors = "seq len not found";
 						else
 							contigsLen += seq.length;
-						String[] seqParts = seq.description.split("_");
-						for (int j = 0; j < seqParts.length - 1; ++j) {
+						String[] seqParts = seq.description.split("__");
+						String[] seqNameParts = seqParts[0].split("_");
+						for (int j = 1; j < seqNameParts.length - 1; ++j) {
+							if (seqNameParts[j].equals("cov")) {
+								try {
+									totalCov += Double.parseDouble(seqNameParts[j + 1]);
+								} catch (NumberFormatException e2) {
+									covErrors = "cov not found";
+								}
+							}
+						}
+						for (int j = 1; j < seqParts.length - 1; ++j) {
 							if (seqParts[j].equals("reflen")) {
 								try {
 									refLen = Integer.parseInt(seqParts[j + 1]);
 								} catch (NumberFormatException e2) {
 									lenErrors = "ref len not found";
 								}
-							} else if (seqParts[j].equals("cov")) {
-								try {
-									totalCov += Double.parseDouble(seqParts[j + 1]);
-								} catch (NumberFormatException e2) {
-									covErrors = "cov not found";
-								}
+							}  else if (seqParts[j].equals("refName")) {
+								if (refName == null)
+									refName = seqParts[j + 1];
+								else if (!refName.equals(seqParts[j + 1]))
+									System.err.println("ERROR: not same ref!");
+							} else if (seqParts[j].equals("bucket")) {
+								bucket = seqParts[j + 1];
 							}
 						}
 					}
+
+					// TODO: testing 
+					setDisplayData(blastModel, row, ASSINGMENT_COLUMN, toolData.concludedName 
+							+ " (" + refName + " : " + bucket + ")");
 
 					if (refLen == null && lenErrors == null)
 						lenErrors = "refseq length is emplty";
@@ -326,7 +345,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 					if (lenErrors == null) {
 						double readCount = contigsLen * totalCov / readLen;
 
-						setDisplayData(blastModel, row, TOTAL_LENGTH_COLUMN,  contigsLen / refLen  * 100);
+						setDisplayData(blastModel, row, TOTAL_LENGTH_COLUMN,  contigsLen / refLen  * 100
+								+ "% (" + contigsLen + " of " + refLen + ")");
 
 						if (covErrors == null)
 							setDisplayData(blastModel, row, READ_COUNT_COLUMN, (int)readCount);
@@ -334,7 +354,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 							setDisplayData(blastModel, row, READ_COUNT_COLUMN, "Error: " + covErrors);
 
 
-						double deepCov = readCount * readLen / refLen;
+						double deepCov = readCount * readLen / contigsLen;
 						setDisplayData(blastModel, row, PERCENTAGE_COLUMN, deepCov);
 
 					} else {
@@ -343,6 +363,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 					}
 				}
 				setDisplayData(blastModel, row, IMAGE_COLUMN, "todo");
+				blastModel.sort(0);
 			}
 			i++;
 		}
@@ -487,7 +508,10 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (concludedName == null)
 				concludedName = "Unassigned";
 
-			ClusterData toolData = clusterDataMap.containsKey(concludedId) ? clusterDataMap.get(concludedId) : new ClusterData();
+			String bucket = findBucket(seqDesc);
+			String key = (mode == Mode.Ngs) ? seqName.substring(0, seqName.lastIndexOf('_')) + bucket : concludedId;
+			
+			ClusterData toolData = clusterDataMap.containsKey(key) ? clusterDataMap.get(key) : new ClusterData();
 
 			if (concludedId != null && !concludedId.equals("Unassigned"))
 				toolData.taxonomyId = taxonomyId;
@@ -505,7 +529,17 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			toolData.sequenceNames.add(sequenceData);
 			toolData.concludedId = concludedId;
 			toolData.src = clusterSrc;
-			clusterDataMap.put(concludedId, toolData);
+
+			clusterDataMap.put(key, toolData);
+		}
+
+		private String findBucket(String description) {
+			String[] parts = description.split("__");
+			for (int i = 0; i < parts.length - 1; ++i) {
+				if(parts[i].equals("bucket"))
+					return parts[i + 1];
+			}
+			return null;
 		}
 	}
 }

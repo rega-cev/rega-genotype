@@ -3,6 +3,7 @@ package rega.genotype.ngs;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -21,11 +22,11 @@ public class NgsProgress {
 
 	public enum State {
 		Init(0, "Init"),
-		QC(1, "runing QC"),
-		Preprocessing(2, "runing preprocessing"),
-		QC2(3, "runing QC of preprocessed."),
-		Diamond(4, "runing diamond blast"),
-		Spades(5, "runing spades"),
+		QC(1, "running QC"),
+		Preprocessing(2, "running preprocessing"),
+		QC2(3, "running QC of preprocessed."),
+		Diamond(4, "running diamond blast"),
+		Spades(5, "running spades"),
 		FinishedAll(6, "finished");
 
 		public final int code;
@@ -33,6 +34,44 @@ public class NgsProgress {
 		State(int code, String text) {
 			this.code = code;
 			this.text = text;
+		}
+	}
+
+	public static class BasketData {
+		public BasketData(String scientificName, String ancestors, Integer readCountTotal) {
+			this.setReadCountTotal(readCountTotal);
+			this.setScientificName(scientificName);
+			this.setAncestors(ancestors);
+		}
+		private String ancestors = null;
+		private String scientificName = null;
+		private Integer readCountTotal = null;
+		private Integer readCountAfterMakeConsensus = null;
+
+		public String getScientificName() {
+			return scientificName;
+		}
+		public void setScientificName(String scientificName) {
+			this.scientificName = scientificName;
+		}
+		public Integer getReadCountTotal() {
+			return readCountTotal;
+		}
+		public void setReadCountTotal(Integer readCountTotal) {
+			this.readCountTotal = readCountTotal;
+		}
+		public Integer getReadCountAfterMakeConsensus() {
+			return readCountAfterMakeConsensus;
+		}
+		public void setReadCountAfterMakeConsensus(
+				Integer readCountAfterMakeConsensus) {
+			this.readCountAfterMakeConsensus = readCountAfterMakeConsensus;
+		}
+		public String getAncestors() {
+			return ancestors;
+		}
+		public void setAncestors(String ancestors) {
+			this.ancestors = ancestors;
 		}
 	}
 
@@ -46,7 +85,12 @@ public class NgsProgress {
 	private Boolean skipPreprocessing = false;
 
 	private Map<State, Long> stateStartTimeInMiliseconds = new TreeMap<NgsProgress.State, Long>();
-	private Map<String, Integer> diamondBlastResults = new TreeMap<String, Integer>();// count sequences per taxon.
+	
+	private Integer readCountInit = null;
+	private Integer readCountAfterPrepocessing = null;
+	private Map<String, BasketData> diamondBlastResults = new HashMap<String, BasketData>();// count sequences per taxon.
+	private Map<String, BasketData> diamondBlastResultsBeforeMerge = new HashMap<String, BasketData>();// count sequences per taxon.
+	private Integer readCountAfterMakeConsensus = null;
 
 	public NgsProgress() {}
 
@@ -132,11 +176,11 @@ public class NgsProgress {
 		this.spadesErrors = spadesErrors;
 	}
 
-	public Map<String, Integer> getDiamondBlastResults() {
+	public Map<String, BasketData> getDiamondBlastResults() {
 		return diamondBlastResults;
 	}
 
-	public void setDiamondBlastResults(Map<String, Integer> diamondBlastResults) {
+	public void setDiamondBlastResults(Map<String, BasketData> diamondBlastResults) {
 		this.diamondBlastResults = diamondBlastResults;
 	}
 
@@ -146,5 +190,39 @@ public class NgsProgress {
 
 	public void setSkipPreprocessing(Boolean skipPreprocessing) {
 		this.skipPreprocessing = skipPreprocessing;
+	}
+
+	public Integer getReadCountInit() {
+		return readCountInit;
+	}
+
+	public void setReadCountInit(Integer readCountInit) {
+		this.readCountInit = readCountInit;
+	}
+
+	public Integer getReadCountAfterPrepocessing() {
+		return readCountAfterPrepocessing;
+	}
+
+	public void setReadCountAfterPrepocessing(Integer readCountAfterPrepocessing) {
+		this.readCountAfterPrepocessing = readCountAfterPrepocessing;
+	}
+
+	public Integer getReadCountAfterMakeConsensus() {
+		return readCountAfterMakeConsensus;
+	}
+
+	public void setReadCountAfterMakeConsensus(
+			Integer readCountAfterMakeConsensus) {
+		this.readCountAfterMakeConsensus = readCountAfterMakeConsensus;
+	}
+
+	public Map<String, BasketData> getDiamondBlastResultsBeforeMerge() {
+		return diamondBlastResultsBeforeMerge;
+	}
+
+	public void setDiamondBlastResultsBeforeMerge(
+			Map<String, BasketData> diamondBlastResultsBeforeMerge) {
+		this.diamondBlastResultsBeforeMerge = diamondBlastResultsBeforeMerge;
 	}
 }

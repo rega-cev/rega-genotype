@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,14 +26,12 @@ import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AlignmentAnalyses.Cluster.Source;
 import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.ApplicationException;
-import rega.genotype.BlastAnalysis;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.SequenceAlignment;
 import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.taxonomy.TaxonomyModel;
-import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.utils.EdirectUtil;
 import rega.genotype.utils.ExcelUtils;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal1;
@@ -90,7 +87,7 @@ public class PanViralToolGenerator {
 	
 	public AlignmentAnalyses createAlignmentAnalyses(File ictvMasterSpeciesListFile) throws ApplicationException, IOException, InterruptedException, ParameterProblemException, FileFormatException {
 
-		File ncbiVirusesDb = RegaSystemFiles.ncbiVirusesFile();
+		File ncbiVirusesDb = RegaSystemFiles.ncbiVirusesFileAnnotated();
 		if (!ncbiVirusesDb.exists())
 			throw new ApplicationException("NCBI viruses file was not found. Ask admin to update global config.");
 
@@ -104,8 +101,8 @@ public class PanViralToolGenerator {
 		File fastaOut = new File(workDir, "fasta-out");
 		File taxonomyOut = new File(workDir, "taxonomy-out");
 
-		queryFasta(query, workDir, fastaOut);
-		querytaxonomyIds(query, workDir, taxonomyOut);
+		EdirectUtil.queryFasta(query, workDir, fastaOut);
+		EdirectUtil.querytaxonomyIds(query, taxonomyOut);
 
 		// Add taxonomy id data		
 		fillData(accessionNumMapICTV, taxonomyOut, true);
@@ -122,7 +119,7 @@ public class PanViralToolGenerator {
 		List<AbstractSequence> badSequences = new ArrayList<AbstractSequence>();
 		AlignmentAnalyses alignmentAnalyses = createAlignmentAnalyses(workDir, fastaOut);
 		for (AbstractSequence s: alignmentAnalyses.getAlignment().getSequences()) {
-			String accessionNumber = findAccessionNumber(getAccessionNumber(s.getName()), accessionNumMapICTV);
+			String accessionNumber = findAccessionNumber(EdirectUtil.getAccessionNumberFromNCBI(s.getName()), accessionNumMapICTV);
 			if (accessionNumber == null)
 				continue;
 
@@ -165,7 +162,7 @@ public class PanViralToolGenerator {
 		
 		File ncbiTaxonomyIdsFile = new File(workDir, "ncbi-taxonomy.fasta");
 		
-		querytaxonomyIds(ncbiAccQuery, workDir, ncbiTaxonomyIdsFile);
+		EdirectUtil.querytaxonomyIds(ncbiAccQuery, ncbiTaxonomyIdsFile);
 
 		File fastaNcbiPreprocessed = new File(workDir, "ncbi-preprocessed.fasta");
 		
@@ -176,7 +173,7 @@ public class PanViralToolGenerator {
 
 		AlignmentAnalyses ncbiAlignmentAnalyses = createAlignmentAnalyses(workDir, ncbiVirusesDb);
 		for (AbstractSequence s: ncbiAlignmentAnalyses.getAlignment().getSequences()) {
-			String accessionNumber = getAccessionNumber(s.getName());
+			String accessionNumber = EdirectUtil.getAccessionNumberFromNCBI(s.getName());
 			if (accessionNumber == null)
 				continue;
 
@@ -220,20 +217,8 @@ public class PanViralToolGenerator {
 		return alignmentAnalyses;
 	}
 
-	private AlignmentAnalyses createAlignmentAnalyses(File workDir, File fastaOutPreprocessed) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException {
-		final File jobDir = GenotypeLib.createJobDir(workDir + File.separator + "tmp");
-		jobDir.mkdirs();
-
-		AlignmentAnalyses alignmentAnalyses = new AlignmentAnalyses();
-		SequenceAlignment sequenceAlignment = new SequenceAlignment(new FileInputStream(fastaOutPreprocessed),
-				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
-		alignmentAnalyses.setAlignment(sequenceAlignment);
-		BlastAnalysis blastAnalysis = new BlastAnalysis(alignmentAnalyses,
-				"", new ArrayList<AlignmentAnalyses.Cluster>(),
-				50.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, "-q -1 -r 1", "", jobDir);
-		alignmentAnalyses.putAnalysis("blast", blastAnalysis);
-
-		return alignmentAnalyses;
+	private AlignmentAnalyses createAlignmentAnalyses(File workDir, File fastaOutPreprocessed) throws ParameterProblemException, IOException, FileFormatException {
+		return AlignmentAnalyses.readFastaToAlignmentAnalyses(workDir, fastaOutPreprocessed);
 	}
 	
 	private void preprocessFasta(File fastaOut, File fastaOutPreprocessed) throws IOException {
@@ -361,26 +346,6 @@ public class PanViralToolGenerator {
 
 		return query;
 	}
-
-	private String getAccessionNumber(String fastaName) {
-		String accessionNumber = null;
-		if (fastaName.contains("|")){
-			String[] split = fastaName.split("\\|");
-			for(int i = 0; i < split.length - 1; ++i){
-				String s = split[i];
-				if (s.equals("gb") || s.equals("emb") || s.equals("dbj")
-						|| s.equals("tpe") || s.equals("ref"))
-					accessionNumber = split[i + 1];
-			}
-			if (accessionNumber == null) {
-				System.err.println("bad accession numebr regex " + fastaName);
-				return null;
-			}
-		} else 
-			accessionNumber = fastaName;
-
-		return accessionNumber;
-	}
 	
 	private String findAccessionNumber(String accessionNumber, Map<String, Data> accessionNumMap) {
 		if (accessionNumber == null)
@@ -430,7 +395,7 @@ public class PanViralToolGenerator {
 		StringBuilder accessionBuild = new StringBuilder();
 		
 		for (AbstractSequence s: ncbiSequences.getAlignment().getSequences()) {
-			String accessionNumber = getAccessionNumber(s.getName());
+			String accessionNumber = EdirectUtil.getAccessionNumberFromNCBI(s.getName());
 			if (accessionNumber == null)
 				continue;
 
@@ -456,8 +421,8 @@ public class PanViralToolGenerator {
 			String[] row = l.split("\t");
 
 			String accessionNumber = ictvData ? 
-					findAccessionNumber(getAccessionNumber(row[0]), accessionNumMap) : 
-						getAccessionNumber(getAccessionNumber(row[0]));
+					findAccessionNumber(EdirectUtil.getAccessionNumberFromNCBI(row[0]), accessionNumMap) : 
+						EdirectUtil.getAccessionNumberFromNCBI(row[0]);
 			if (accessionNumber == null)
 				continue;
 
@@ -467,49 +432,6 @@ public class PanViralToolGenerator {
 			accessionNumMap.put(accessionNumber, new Data(description, taxonomyId, organizedName));
 		}
 		taxonomyBr.close();
-	}
-
-	private void querytaxonomyIds(File accessionNumbersQuery, File workDir, File out) throws ApplicationException, IOException, InterruptedException {
-		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
-
-		String epost = edirectPath + "epost";
-		String efetch = edirectPath + "efetch";
-		String xtract = edirectPath + "xtract";
-
-		String cmd = 
-				// query taxonomy ids from NCBI
-				"cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
-				+ epost + " -db nuccore -format acc|"
-				+ efetch + " -db nuccore -format docsum | " 
-				+ xtract + " -pattern DocumentSummary -element Extra,TaxId,Organism > " + out.getAbsolutePath();
-		execShellCmd(cmd);
-	}
-
-	private void queryFasta(File accessionNumbersQuery, File workDir, File out) throws ApplicationException, IOException, InterruptedException {
-		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
-
-		String epost = edirectPath + "epost";
-		String efetch = edirectPath + "efetch";
-
-		String cmd = 
-				// query fasta ids from NCBI
-				" cat " + accessionNumbersQuery.getAbsolutePath() + "|" 
-				+ epost + " -db nuccore -format acc|" 
-				+ efetch + " -db nuccore -format fasta > " + out.getAbsolutePath();
-
-		execShellCmd(cmd);
-	}
-
-	private void execShellCmd(String cmd) throws IOException, InterruptedException, ApplicationException {
-		String[] shellCmd = {"/bin/sh", "-c", cmd};
-		System.err.println(cmd);
-
-		Process fetchFasta = null;
-		fetchFasta = Runtime.getRuntime().exec(shellCmd);
-		int exitResult = fetchFasta.waitFor();
-		if (exitResult != 0){
-			throw new ApplicationException("fetchFasta exited with error: " + exitResult);
-		}
 	}
 
 	public Signal1<AlignmentAnalyses> finished() {

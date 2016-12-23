@@ -11,8 +11,8 @@ import rega.genotype.ApplicationException;
 import rega.genotype.config.Config;
 import rega.genotype.service.ToolRepoServiceRequests;
 import rega.genotype.singletons.Settings;
-import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.taxonomy.RegaSystemFiles;
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.ui.framework.widgets.AutoForm;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.StandardDialog;
@@ -20,9 +20,9 @@ import rega.genotype.ui.util.FileUpload;
 import rega.genotype.utils.BlastUtil;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
-import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTable;
@@ -159,16 +159,22 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				if (zipedNcbiViruses == null)
 					infoText = "Could not downlod NCBI viruses file" ;
 				else {
-					File ncbiVirusesFile = RegaSystemFiles.ncbiVirusesFile();
+					File ncbiVirusesFile = null;
 					try {
-						final File baseDir = new File(Settings.getInstance().getBaseDir());
-						BlastUtil.formatDB(ncbiVirusesFile,
-								new File(baseDir, RegaSystemFiles.SYSTEM_FILES_DIR));
-					} catch (ApplicationException e) {
+						ncbiVirusesFile = RegaSystemFiles.annotateNcbiDb();
+					} catch (Exception e) {
 						e.printStackTrace();
-						infoText = "Error: format db did not work. " + e.getMessage();
+						infoText = "Error: Annotate ncbi DB did not work. " + e.getMessage();
 					}
-					config.getGeneralConfig().setNcbiVirusesFile(ncbiVirusesFile.getAbsolutePath());
+					if (ncbiVirusesFile != null)
+						try {
+							final File baseDir = new File(Settings.getInstance().getBaseDir());
+							BlastUtil.formatDB(ncbiVirusesFile,
+									new File(baseDir, RegaSystemFiles.SYSTEM_FILES_DIR));
+						} catch (ApplicationException e) {
+							e.printStackTrace();
+							infoText = "Error: format db did not work. " + e.getMessage();
+						}
 				}
 				UpdateLock updateLock = app.getUpdateLock();
 				d.getContents().clear();
@@ -184,7 +190,6 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 	protected Set<String> getIgnoredFields() {
 		Set<String> ignore = new HashSet<String>();
 		ignore.add("publisherPassword");
-		ignore.add("sequencetool");
 		return ignore;
 	}
 
@@ -255,6 +260,9 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldInfo("srrToolKitPath", "<div>This is needed only to allow the users to analyze SRR files from the internet.</div>" +
 				"<div>Provide the pass to the bin folder of srrToolKit (check that fastq-dump is there).</div>" +
 				"<div>I advise to disable the option on most servers. To disable leave the field empty. </div>");
+		setFieldInfo("srrDatabasePath", "<div>Some maywant to save a database of NGS files so one does not need to upload the same files every time.</div>");
+
+		setFieldMandatory("srrDatabasePath", false);
 		setFieldMandatory("bioPythonPath", false);
 		setFieldMandatory("srrToolKitPath", false);
 	}

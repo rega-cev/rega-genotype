@@ -43,9 +43,5 @@ for record in SeqIO.parse(handle, "fasta") :
         if m.group(1) in taxids:
             taxon = taxons[taxids[m.group(1)]]
             rank = taxon[Rank_col]
-            while rank not in ['Genus', 'Subfamily', 'Family', 'Order', 'Superkingdom']:
-                taxon = taxons[int(taxon[Parent_col])]
-                rank = taxon[Rank_col]
-            if rank == 'Genus':
-                record.id = taxon[Taxon_col] + '_' + taxon[Scientific_name_col] + '_' + record.id
-                out.write(record.format('fasta')),
+            record.id = taxon[Taxon_col] + '_' + taxon[Scientific_name_col] + '_' + record.id
+            out.write(record.format('fasta')),

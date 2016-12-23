@@ -50,7 +50,7 @@ public class NgsWidget extends WContainerWidget{
 
 		if (ngsProgress.getState().code >= State.Diamond.code) {
 			if (ngsProgress.getSkipPreprocessing())
-				new WText("<div> input sequence are OK -> skip  preprocessing.</div>", this);
+				new WText("<div> input sequences are OK -> skip  preprocessing.</div>", this);
 			else {
 				new WText("<div> QC after preprocessing</div>", this);
 				File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
@@ -69,6 +69,7 @@ public class NgsWidget extends WContainerWidget{
 				public void trigger() {
 					WDialog d = new StandardDialog("Diamond Balst results");
 					d.getContents().addWidget(new DiamondResultsView(workDir));
+					d.setResizable(true);
 				}
 			});
 		}
