@@ -243,7 +243,7 @@ public class PrimarySearch{
 		// input: diamond results: for every read find lowest common ancestor, add it to taxonomy tree.
 		public void merge(TaxonomyNode parentTaxon) {
 			double level = parentTaxon.level();
-			double MERGE_CONDITION = 0.1 / level; 
+			double MERGE_CONDITION = 0.17 / level; 
 			if (level >= 5) // dont split genus
 				combineAllToParent(parentTaxon);
 			else {
