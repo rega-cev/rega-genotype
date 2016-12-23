@@ -192,6 +192,17 @@ public class QC {
 		return null;
 	}
 
+	public static File qcPreprocessedReportFile(File workDir) {
+		File reportDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
+		for(File reportFile: reportDir.listFiles()) {
+			if (FilenameUtils.getExtension(reportFile.getAbsolutePath()).equals("zip")){
+				return reportFile;
+			}
+		}
+
+		return null;
+	}
+
 	public static List<QcResults> getResults(File reportDir) throws ApplicationException {
 		List<QcResults> ans = new ArrayList<QcResults>();
 

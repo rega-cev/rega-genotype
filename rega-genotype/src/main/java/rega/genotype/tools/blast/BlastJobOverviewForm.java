@@ -240,9 +240,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			blastModel.setHeaderData(IMAGE_COLUMN, tr("detailsForm.summary.image"));
 
 			try {
-				File qcReportFile = QC.qcReportFile(jobDir);
+				File qcReportFile = QC.qcPreprocessedReportFile(jobDir);
+				if (qcReportFile == null || !qcReportFile.exists())
+					qcReportFile = QC.qcReportFile(jobDir); // some times we do not do preprocessing.
 				if (qcReportFile != null) {
-					QcData qcData = new QC.QcData(QC.qcReportFile(jobDir));
+					QcData qcData = new QC.QcData(qcReportFile);
 					readLen = qcData.getReadLength();
 				}
 			} catch (ApplicationException e1) {
@@ -289,6 +291,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 				} else {
 					double contigsLen = 0;
 					double totalCov = 0;
+					double readCount = 0;
 					Integer refLen = null;
 					String refName = null;
 					String lenErrors = null;
@@ -308,10 +311,12 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 							contigsLen += seq.length;
 						String[] seqParts = seq.description.split("__");
 						String[] seqNameParts = seqParts[0].split("_");
+						
+						double readCov = 0.0;
 						for (int j = 1; j < seqNameParts.length - 1; ++j) {
 							if (seqNameParts[j].equals("cov")) {
 								try {
-									totalCov += Double.parseDouble(seqNameParts[j + 1]);
+									readCov = Double.parseDouble(seqNameParts[j + 1]);
 								} catch (NumberFormatException e2) {
 									covErrors = "cov not found";
 								}
@@ -333,17 +338,22 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 								bucket = seqParts[j + 1];
 							}
 						}
+
+						readCount += readCov * seq.length / readLen;
 					}
 
 					// TODO: testing 
 					setDisplayData(blastModel, row, ASSINGMENT_COLUMN, toolData.concludedName 
 							+ " (" + refName + " : " + bucket + ")");
+					
+					if (refName.contains("NC_023639"))
+						System.err.println();
 
 					if (refLen == null && lenErrors == null)
 						lenErrors = "refseq length is emplty";
 
 					if (lenErrors == null) {
-						double readCount = contigsLen * totalCov / readLen;
+						//double readCount = contigsLen * totalCov / readLen;
 
 						setDisplayData(blastModel, row, TOTAL_LENGTH_COLUMN,  contigsLen / refLen  * 100
 								+ "% (" + contigsLen + " of " + refLen + ")");
