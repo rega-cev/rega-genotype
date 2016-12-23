@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -292,7 +293,7 @@ public class NgsAnalysis {
 			File consensusInputContigs = assembledFile;
 
 			for (AbstractSequence ref : refs.getSequences()) {
-				System.out.println("Trying with " + ref.getName() + " " + ref.getDescription());
+				ngsLogger.info("Trying with " + ref.getName() + " " + ref.getDescription());
 				String refseqName = ref.getName().replaceAll("\\|", "_");
 				File refWorkDir = NgsFileSystem.consensusRefSeqDir(virusConsensusDir, refseqName);
 				
@@ -321,7 +322,7 @@ public class NgsAnalysis {
 					i++;
 				}
 
-				System.out.println("Created " + sequenceAlignment.getSequences().size() + " contigs");
+				ngsLogger.info("Created " + sequenceAlignment.getSequences().size() + " contigs");
 	
 				ngsProgress.save(workDir);
 	
@@ -378,8 +379,11 @@ public class NgsAnalysis {
 
 				if (refTxId != null && !bucketTxId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID)) {
 					List<String> refAncestorTaxa = TaxonomyModel.getInstance().getHirarchyTaxonomyIds(refTxId);
-					if (refAncestorTaxa.contains(bucketTxId))
+					if (!refAncestorTaxa.contains(bucketTxId)){
+						ngsLogger.info("Seq: " + as.getName() + " " + as.getDescription() + " not processed because bucket "
+								+ bucketTxId + " is not ancestor - not in : " + Arrays.toString(refAncestorTaxa.toArray()));
 						continue;
+					}
 				}
 				Double prevScore = refNameScoreMap.get(as.getName());
 				if (prevScore != null)
