@@ -7,13 +7,16 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import rega.genotype.ApplicationException;
 import rega.genotype.ngs.NgsProgress;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.ngs.QC;
+import rega.genotype.ngs.QC.QcData;
 import rega.genotype.tools.blast.BlastJobOverviewForm.BlastResultParser;
 import rega.genotype.tools.blast.BlastJobOverviewForm.ClusterData;
 import rega.genotype.tools.blast.BlastJobOverviewForm.SequenceData;
 import rega.genotype.utils.ExcelUtils;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
 
 /**
@@ -23,17 +26,22 @@ import rega.genotype.utils.Utils;
  */
 public class NgsVerification {
 	// File Name	Expected	VIS Result	Reads	Cov	Time	
-	private static final int FILE_NAME_COLUMN = 0;
-	private static final int EXPECTED_COLUMN  = 1;
-	private static final int RESULTS_COLUMN   = 2;
-	private static final int REF_COLUMN       = 3;
-	private static final int CONTIGS_COLUMN   = 4;
-	private static final int LENGTH_COLUMN    = 5;
-	private static final int READ_COLUMN      = 6;
-	private static final int COV_COLUMN       = 7;
-	private static final int TIME_COLUMN      = 8;
+	private static final int FILE_NAME_COLUMN   = 0;
+	private static final int EXPECTED_COLUMN    = 1;
+	private static final int RESULTS_COLUMN     = 2;
+	private static final int REF_COLUMN         = 3;
+	private static final int CONTIGS_COLUMN     = 4;
+	private static final int LENGTH_COLUMN      = 5;
+	private static final int READ_COLUMN        = 6;
+	private static final int COV_COLUMN         = 7;
+	private static final int TIME_COLUMN        = 8;
+	private static final int TOTAL_READS_COLUMN = 9;
+	private static final int READS_LEN_COLUMN = 10;
+	private static final int FILE_SIZE_COLUMN   = 11;
+
 	private static final String[] headers = {
-		"File Name", "Expected", "VIS Result", "Ref", "Contigs Count", "Length %", "Reads count", "Deep cov", "Time"}; 
+		"File Name", "Expected", "VIS Result", "Ref", "Contigs Count", "Length %", 
+		"Reads count", "Deep cov", "Time", "#Total reads", "Read length", "Input file (zipped) size"}; 
 
 	/**
 	 * Summarize all the results in job dir to 1 excel file.
@@ -85,7 +93,16 @@ public class NgsVerification {
 	 */
 	private static int writeResults(final File currentJobDir, final HSSFSheet worksheet,
 			final int row, final Map<String, ClusterData> clusterDataMap) {
-		Integer readLen = QC.readLen(currentJobDir);
+		Integer readLen = null;
+		Integer totalNumberOfReads = null;
+
+		try {
+			QcData qcData = new QcData(QC.usedQcFile(currentJobDir));
+			readLen = qcData.getReadLength();
+			totalNumberOfReads = qcData.getTotalNumberOfReads();
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+		}
 
 		int r = row;
 		for (ClusterData cluster : clusterDataMap.values()) {	
@@ -161,6 +178,15 @@ public class NgsVerification {
 					endTime = ngsProgress.getStateStartTime(State.FinishedAll);
 				ExcelUtils.add(hssfRow, TIME_COLUMN, Utils.formatTime(endTime - startTime));				
 			}
+			ExcelUtils.add(hssfRow, TOTAL_READS_COLUMN, totalNumberOfReads+"");
+			ExcelUtils.add(hssfRow, READS_LEN_COLUMN, readLen+"");
+
+			// TODO: this will work only on our server.
+			File in = FileUtil.find(currentJobDir.getParentFile(), currentJobDir.getName(), ".fastq.gz");
+			if (in == null)
+				ExcelUtils.add(hssfRow, FILE_SIZE_COLUMN, "Input file was deleted?");
+			else
+				ExcelUtils.add(hssfRow, FILE_SIZE_COLUMN, in.length() + " bytes");
 		}
 
 		return clusterDataMap.size();

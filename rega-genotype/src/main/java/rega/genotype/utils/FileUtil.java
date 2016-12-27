@@ -143,6 +143,17 @@ public class FileUtil {
 				new File(path2).getAbsolutePath());
 	}
 
+	public static File find(File dir, String startWith, String endWith) {
+		if (dir.listFiles() == null)
+			return null;
+		for (File f: dir.listFiles())
+			if (f.getName().startsWith(startWith) 
+					&& f.getName().endsWith(endWith))
+				return f;
+
+		return null;
+	}
+
 	// gzip
     /**
      * extract .gz file

@@ -125,4 +125,27 @@ public class Utils {
 
 		return hours + ":" + minutes + ":" + seconds;
 	}
+
+	public static Double biggest(Double n1, Double n2) {
+		if (n1 == null && n2 == null)
+			return null;
+		else if (n1 == null && n2 != null)
+			return n1;
+		else if (n1 != null && n2 == null)
+			return n2;
+		else
+			return Math.max(n1, n2);
+	}
+
+	public static Double getDouble(String str) {
+		if (str == null)
+			return null;
+
+		try {
+			return Double.parseDouble(str);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

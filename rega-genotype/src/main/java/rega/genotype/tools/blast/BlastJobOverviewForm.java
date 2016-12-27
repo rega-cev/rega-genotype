@@ -20,6 +20,7 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.ItemDataRole;
@@ -447,6 +448,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		public String concludedName = new String();
 		public String refName = new String();
 		public String concludedId = new String();
+		public Double bestAbsScore = null; // the best score of all contigs.
 		public String src = new String();
 		public List<SequenceData> sequenceNames = new ArrayList<SequenceData>();
 	}
@@ -517,6 +519,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			String concludedName = GenotypeLib
 					.getEscapedValue(this,
 							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
+			String absScore = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/result[@id='blast']/cluster/absolute-score");
 
 			if (concludedName == null)
 				concludedName = "Unassigned";
@@ -543,10 +547,15 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			} catch (NumberFormatException e){
 				sequenceData.length = null;
 			}
-			
-			toolData.concludedName = concludedName;
+
+			if (concludedId != null && !concludedId.equals("Unassigned"))
+				toolData.concludedName = concludedName;
 			toolData.sequenceNames.add(sequenceData);
-			toolData.concludedId = concludedId;
+			if (toolData.concludedId == null || toolData.concludedId.equals("Unassigned"))
+				toolData.concludedId = concludedId;
+
+			Double bestScore = Utils.getDouble(absScore);
+			toolData.bestAbsScore = Utils.biggest(toolData.bestAbsScore, bestScore);
 			toolData.src = clusterSrc;
 
 			clusterDataMap.put(key, toolData);

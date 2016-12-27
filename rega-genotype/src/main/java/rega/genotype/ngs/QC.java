@@ -101,6 +101,7 @@ public class QC {
 
 	public static class QcData {
 		private Integer readLength = null;
+		private Integer totalNumberOfReads = null;
 
 		public QcData(File fastqcFile) throws ApplicationException {
 			String fileContent = FileUtil.getFileContent(fastqcFile, "fastqc_data.txt");
@@ -120,13 +121,27 @@ public class QC {
 					} catch (NumberFormatException e) {
 						readLength = null;
 					}
-					break; // for now we do not need more data.
+
+					break; // for now it is the last item we need
+				} else  if (parts.length == 2 && parts[0].equals("Total Sequences")) {
+					String len = parts[1];
+					if (len.contains("-"))
+						len = len.split("-")[1];
+					try {
+						totalNumberOfReads = Integer.parseInt(len);
+					} catch (NumberFormatException e) {
+						totalNumberOfReads = null;
+					}
 				}
 			}
 		}
 
 		public Integer getReadLength() {
 			return readLength;
+		}
+
+		public Integer getTotalNumberOfReads() {
+			return totalNumberOfReads;
 		}
 	}
 
@@ -214,6 +229,14 @@ public class QC {
 		}
 
 		return ans;
+	}
+
+	public static File usedQcFile(File jobDir) {
+		File qcReportFile = QC.qcPreprocessedReportFile(jobDir);
+		if (qcReportFile == null || !qcReportFile.exists())
+			return QC.qcReportFile(jobDir); // some times we do not do preprocessing.
+
+		return qcReportFile;
 	}
 
 	public static Integer readLen(File jobDir) {
