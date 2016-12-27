@@ -504,7 +504,16 @@ public abstract class GenotypeTool {
     									.getConstructor(String.class, File.class)
     									.newInstance(url, currentWorkDir);
 
-    							if (!NgsFileSystem.addFastqFiles(currentWorkDir,
+    							if (parseArgsResult.ngsPairedEndSuffix1.endsWith(".gz")) {
+    								if(!NgsFileSystem.addFastqGzipedFiles(
+    										currentWorkDir, peFiles.pe1, peFiles.pe2)) {
+    									System.err.println();
+    									System.err.println("-paired-end-files-list pe file not found ");
+    									System.err.println();
+    									printUsage();
+    									return;
+    								} 
+    							} else if (!NgsFileSystem.addFastqFiles(currentWorkDir,
     									peFiles.pe1, peFiles.pe2)) {
     								System.err.println();
     								System.err.println("-paired-end-files-list pe file not found ");
@@ -513,6 +522,7 @@ public abstract class GenotypeTool {
     								return;
     							}
 
+    							try {
     							NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir,  
     									ngsModuleE.getValue());
     							ngsAnalysis.analyze();
@@ -520,6 +530,9 @@ public abstract class GenotypeTool {
     							genotypeTool.analyze(currentWorkDir.getAbsolutePath()
     									+ File.separator
     									+ NgsFileSystem.SEQUENCES_FILE, traceFile);
+    							} catch (Exception e1) {
+    								e1.printStackTrace(); // 1 filed we still want to continue testing more fiels.
+    							}
     						}
     					}
 					}
