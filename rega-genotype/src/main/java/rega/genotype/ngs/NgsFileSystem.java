@@ -113,7 +113,15 @@ public class NgsFileSystem {
 		FileUtil.unGzip1File(fastqPE1, fastqPE1Ungziped);
 		FileUtil.unGzip1File(fastqPE2, fastqPE2Ungziped);
 
-		return addFastqFiles(workDir, fastqPE1Ungziped, fastqPE2Ungziped, false);
+		NgsProgress ngsProgress = new NgsProgress();
+
+		ngsProgress.setFastqPE1FileName(fastqPE1Ungziped.getName());
+		ngsProgress.setFastqPE2FileName(fastqPE2Ungziped.getName());
+
+		ngsProgress.setState(State.Init);
+		ngsProgress.save(workDir);
+
+		return true;
 	}
 	
 	public static boolean downloadSrrFile(String srrName, File workDir) throws ApplicationException {

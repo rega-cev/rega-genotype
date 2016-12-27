@@ -201,7 +201,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	@Override
 	protected GenotypeResultParser createParser() {
-		blastResultParser = new BlastResultParser();
+		blastResultParser = new BlastResultParser(this);
 		return blastResultParser;
 	}
 
@@ -443,17 +443,18 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	
 	// Classes
 	public static class ClusterData {
-		String taxonomyId = new String();
-		String concludedName = new String();
-		String concludedId = new String();
-		String src = new String();
-		List<SequenceData> sequenceNames = new ArrayList<SequenceData>();
+		public String taxonomyId = new String();
+		public String concludedName = new String();
+		public String refName = new String();
+		public String concludedId = new String();
+		public String src = new String();
+		public List<SequenceData> sequenceNames = new ArrayList<SequenceData>();
 	}
 
 	public static class SequenceData {
-		String name = new String();
-		String description = new String();
-		Integer length;
+		public String name = new String();
+		public String description = new String();
+		public Integer length;
 	}
 	
 	// unused 
@@ -478,11 +479,13 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	 * Parse result.xml file from job dir and fill the output to
 	 * blastResultModel.
 	 */
-	public class BlastResultParser extends GenotypeResultParser {
-		protected Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
+	public static class BlastResultParser extends GenotypeResultParser {
+		public Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
 		private WApplication app;
+		private BlastJobOverviewForm form;
 
-		public BlastResultParser() {
+		public BlastResultParser(BlastJobOverviewForm form) {
+			this.form = form;
 			this.app = WApplication.getInstance();
 			setReaderBlocksOnEof(true);
 		}
@@ -490,7 +493,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		@Override
 		public void updateUi() {
 			UpdateLock updateLock = app.getUpdateLock();
-			updateView();
+			form.updateView();
 			app.triggerUpdate();
 			updateLock.release();
 		}
@@ -518,8 +521,14 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (concludedName == null)
 				concludedName = "Unassigned";
 
+			// TODO: support old versions
+			if (seqName == null || !seqName.contains("_")) {
+				System.err.println("Error seqName does not contain bucket: " + seqName);
+				seqName += "_error";
+			}
 			String bucket = findBucket(seqDesc);
-			String key = (mode == Mode.Ngs) ? seqName.substring(0, seqName.lastIndexOf('_')) + bucket : concludedId;
+			String key = (form == null || form.mode == Mode.Ngs) ? 
+					seqName.substring(0, seqName.lastIndexOf('_')) + bucket : concludedId;
 			
 			ClusterData toolData = clusterDataMap.containsKey(key) ? clusterDataMap.get(key) : new ClusterData();
 

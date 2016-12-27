@@ -215,4 +215,22 @@ public class QC {
 
 		return ans;
 	}
+
+	public static Integer readLen(File jobDir) {
+		Integer readLen = null;
+
+		try {
+			File qcReportFile = QC.qcPreprocessedReportFile(jobDir);
+			if (qcReportFile == null || !qcReportFile.exists())
+				qcReportFile = QC.qcReportFile(jobDir); // some times we do not do preprocessing.
+			if (qcReportFile != null) {
+				QcData qcData = new QC.QcData(qcReportFile);
+				readLen = qcData.getReadLength();
+			}
+		} catch (ApplicationException e1) {
+			e1.printStackTrace();
+		}
+
+		return readLen;
+	}
 }

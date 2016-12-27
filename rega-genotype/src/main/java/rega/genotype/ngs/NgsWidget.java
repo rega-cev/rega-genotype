@@ -11,6 +11,7 @@ import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.ngs.DiamondResultsView;
+import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
@@ -85,7 +86,7 @@ public class NgsWidget extends WContainerWidget{
 		if(ngsProgress.getState() == State.FinishedAll)
 			endTime = ngsProgress.getStateStartTime(State.FinishedAll);
 		if (startTime != null && endTime != null) {
-			WText timeT = new WText("<div> Time: " + formatTime(endTime - startTime) + " </div>", this);
+			WText timeT = new WText("<div> Time: " + Utils.formatTime(endTime - startTime) + " </div>", this);
 
 			timeT.clicked().addListener(timeT, new Signal.Listener() {
 				public void trigger() {
@@ -132,14 +133,6 @@ public class NgsWidget extends WContainerWidget{
 				}
 			});
 		}
-	}
-
-	private String formatTime(long milliseconds) {
-		int seconds = (int) (milliseconds / 1000) % 60 ;
-		int minutes = (int) ((milliseconds / (1000*60)) % 60);
-		int hours   = (int) ((milliseconds / (1000*60*60)));
-
-		return hours + ":" + minutes + ":" + seconds;
 	}
 	
 	private void printTime(

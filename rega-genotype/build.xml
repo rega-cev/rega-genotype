@@ -65,7 +65,17 @@
 		   value="rega.genotype.GenotypeTool"/>
       </manifest>
     </jar>
-    
+
+    <jar jarfile="${dist}/${proj.name}-ngs-verification-${proj.version}.jar" 
+    	basedir="${build}/main/java">
+    	<zipgroupfileset dir="lib">
+    		<include name="**/*.jar" />
+    	</zipgroupfileset>
+      <manifest>
+		<attribute name="Main-Class" value="rega.genotype.scripts.NgsVerification"/>
+      </manifest>
+    </jar>
+
     <javac 
     	target="1.5" 
     	debug="on" 

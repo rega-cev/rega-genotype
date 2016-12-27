@@ -90,6 +90,23 @@ public class ExcelUtils {
 		}
 	}
 
+	public static void writeDocument(HSSFWorkbook workbook, File file) {
+		FileOutputStream fileOut = null;
+		try {
+			fileOut = new FileOutputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			workbook.write(fileOut);
+			fileOut.flush();
+			fileOut.close();
+			workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static File write(List<WAbstractItemModel> models, File file) {	
 		FileOutputStream fileOut = null;
 		try {
@@ -135,5 +152,20 @@ public class ExcelUtils {
 				hssfcell.setCellValue(new HSSFRichTextString(text));
 			}
 		}
+	}
+
+	public static HSSFRow add(HSSFSheet worksheet, int row, int column, String text) {
+		HSSFRow hssfRow = worksheet.getRow(row);
+		if (hssfRow == null)
+			hssfRow = worksheet.createRow(row);
+		HSSFCell hssfCell = hssfRow.createCell(column);
+		hssfCell.setCellValue(new HSSFRichTextString(text));
+
+		return hssfRow;
+	}
+
+	public static void add(HSSFRow hssfRow, int column, String text) {
+		HSSFCell hssfCell = hssfRow.createCell(column);
+		hssfCell.setCellValue(new HSSFRichTextString(text));
 	}
 }
