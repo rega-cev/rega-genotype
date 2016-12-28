@@ -31,7 +31,7 @@ public class NgsModule {
 	private int consensusToolMixtureMinPct = 20;
 	private int consensusToolAbsoluteCutoff = 70;
 	private int consensusToolMinSingleSeqCov = 4;
-	private int consensusToolRelativeCutoff = 1;
+	private double consensusToolRelativeCutoff = 0.7;
 	private String diamondOptions = "-e 0.001";
 	private String spadesOptions = "";
 	private int minRefContigLength = 400;
@@ -180,11 +180,11 @@ public class NgsModule {
 		this.consensusToolMinSingleSeqCov = consensusToolMinSingleSeqCov;
 	}
 
-	public int getConsensusToolRelativeCutoff() {
+	public double getConsensusToolRelativeCutoff() {
 		return consensusToolRelativeCutoff;
 	}
 
-	public void setConsensusToolRelativeCutoff(int consensusToolRelativeCutoff) {
+	public void setConsensusToolRelativeCutoff(double consensusToolRelativeCutoff) {
 		this.consensusToolRelativeCutoff = consensusToolRelativeCutoff;
 	}
 }
