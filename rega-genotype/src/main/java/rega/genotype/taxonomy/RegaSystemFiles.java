@@ -1,6 +1,7 @@
 package rega.genotype.taxonomy;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,7 @@ import rega.genotype.AlignmentAnalyses;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.SequenceAlignment;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.EdirectUtil;
 import rega.genotype.utils.FileUtil;
@@ -54,7 +56,7 @@ public class RegaSystemFiles {
 
 		return null;
 	}
-	
+
 	public static File downloadNcbiViruses(){
 		final File baseDir = new File(Settings.getInstance().getBaseDir());
 		File ncbiVirusesFile = ncbiVirusesFileAnnotated();
@@ -76,6 +78,23 @@ public class RegaSystemFiles {
 		Pattern r = Pattern.compile(pattern);
 		Matcher m = r.matcher(seqDescription);
 		return (m.find()) ? m.group(1) : null;
+	}
+
+	public static File removePhages() throws ParameterProblemException, IOException, FileFormatException {
+		// TODO: currently we identify a phage if it has the word phage in description that is not accurate!!
+		final File baseDir = new File(Settings.getInstance().getBaseDir());
+		final File ncbiVirusesFile = new File(baseDir, NCBI_VIRUSES_DB_FILE_NAME);
+
+		AlignmentAnalyses alignmentAnalyses = AlignmentAnalyses.readFastaToAlignmentAnalyses(
+				new File(baseDir, SYSTEM_FILES_DIR), ncbiVirusesFile);
+		List<AbstractSequence> sequences = alignmentAnalyses.getAlignment().getSequences();
+		for (int i = sequences.size() - 1; i > -1; --i)
+			if (sequences.get(i).getDescription().contains("phage"))
+				sequences.remove(i);
+		alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(ncbiVirusesFile),
+				SequenceAlignment.FILETYPE_FASTA);
+
+		return ncbiVirusesFile;
 	}
 
 	public static File annotateNcbiDb() throws IOException, ParameterProblemException, 

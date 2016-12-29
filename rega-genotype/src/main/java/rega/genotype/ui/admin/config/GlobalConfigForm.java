@@ -161,6 +161,7 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				else {
 					File ncbiVirusesFile = null;
 					try {
+						RegaSystemFiles.removePhages();
 						ncbiVirusesFile = RegaSystemFiles.annotateNcbiDb();
 					} catch (Exception e) {
 						e.printStackTrace();
