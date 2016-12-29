@@ -24,6 +24,7 @@ import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WProgressBar;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
@@ -128,11 +129,18 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				d.getContents().addWidget(upload);
 				upload.setInline(true);
 				upload.getWFileUpload().setFilters(".gz");
+				upload.getWFileUpload().setProgressBar(new WProgressBar());
 
 				upload.uploadedFile().addListener(upload, new Signal1.Listener<File>() {
 					public void trigger(File arg) {
-						File unzipNcbiViruses = RegaSystemFiles.unzipNcbiViruses(arg);
-						createDB(unzipNcbiViruses, d);
+						d.addText("<div><b>Create ncbi database, that can take some time. .. </b></div>");
+						final File unzipNcbiViruses = RegaSystemFiles.unzipNcbiViruses(arg);
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								createDB(unzipNcbiViruses, d);
+							}
+						});
+						t.start();
 					}
 				});
 
