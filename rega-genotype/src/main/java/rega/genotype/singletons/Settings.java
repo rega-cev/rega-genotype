@@ -43,6 +43,7 @@ public class Settings {
 		if (file.exists()) {
 			String json = FileUtil.readFile(file);
 			config = Config.parseJson(json);
+			baseDir = file.getParentFile().getAbsolutePath();
 		}
 	}
 
@@ -86,7 +87,6 @@ public class Settings {
 	public String getBaseDir() {
 		return baseDir;
 	}
-
 	public String getBlastPathStr() {
 		return getBlastPath().getAbsolutePath() + File.separatorChar;
 	}
@@ -190,7 +190,7 @@ public class Settings {
 			if (osName.startsWith("windows"))
 				baseDir = "C:\\Program files\\rega_genotype\\";
 			else
-				baseDir = "./base-work-dir/";
+				baseDir = "./"; //"./base-work-dir";
 		}
 
 		File baseDirfile = new File(baseDir);
