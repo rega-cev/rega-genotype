@@ -23,6 +23,7 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
+import rega.genotype.ngs.NgsProgress.BasketData;
 import rega.genotype.ngs.NgsProgress.State;
 import rega.genotype.ngs.QC.QcData;
 import rega.genotype.ngs.QC.QcResults;
@@ -250,7 +251,8 @@ public class NgsAnalysis {
 		File sequenceFile1 = new File(virusDiamondDir, fastqPE1FileName);
 		File sequenceFile2 = new File(virusDiamondDir, fastqPE2FileName);
 
-		if (sequenceFile1.length() < 1000*10)
+		BasketData basketData = ngsProgress.getDiamondBlastResults().get(virusDiamondDir.getName());
+		if (ngsModule.getMinReadsToStartAssembly() > basketData.getReadCountTotal())
 			return false; // no need to assemble if there is not enough reads.
 
 		try {
