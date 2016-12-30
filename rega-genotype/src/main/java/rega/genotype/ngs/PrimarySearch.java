@@ -201,6 +201,17 @@ public class PrimarySearch{
 			remove(node);
 		}
 
+		private void collapseUnclassifiedToTopClassifiedLevel(TaxonomyNode node) {
+			if (checkUnclassified(node)){
+				List<String> reads = new ArrayList<String>();
+				collapse(node, reads);
+				node.parentTaxon.readNames.addAll(reads);
+			} else {
+				for (int i = node.children.size() - 1; i >= 0; --i)
+					collapseUnclassifiedToTopClassifiedLevel(node.children.get(i));
+			}
+		}
+
 		/**
 		 * @param items Weighted Items
 		 * @return random item with preference to the items with bigger weght
@@ -242,6 +253,14 @@ public class PrimarySearch{
 		public void merge(TaxonomyNode parentTaxon) {
 			double level = parentTaxon.level();
 			double MERGE_CONDITION = 0.17 / level; 
+
+			if (parentTaxon.taxonId.equals("12814"))
+				System.err.println("Respiratory syncytial virus");
+
+			if (parentTaxon.taxonId.equals("11245"))
+				System.err.println("Pneumoviridae");
+
+
 			if (level >= 5) // dont split genus
 				combineAllToParent(parentTaxon);
 			else {
@@ -529,6 +548,7 @@ public class PrimarySearch{
 
 			prevName = readName;
 		}
+		taxonomyTree.collapseUnclassifiedToTopClassifiedLevel(taxonomyTree.root);
 		bf.close();
 
 		return taxonomyTree;
@@ -553,13 +573,9 @@ public class PrimarySearch{
 		for (String taxonId: readTaxa) 
 			taxonomyTree.add(taxonId, "");
 
-		//taxonomyTree.printTree(taxonomyTree.root);
-		removeUnclassifiedNode(taxonomyTree.root); // remove only top lovel unclassified.
+		if (taxonomyTree.root.taxonId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID))
+			removeUnclassifiedNode(taxonomyTree.root);
 
-		//if (taxonomyTree.root.taxonId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID))
-		//	removeUnclassifiedNode(taxonomyTree.root); // remove only top lovel unclassified.
-
-		//return taxonomyTree.root.taxonId;
 		return removeTopLevel1ChildParent(taxonomyTree.root).taxonId;
 	}
 
@@ -579,8 +595,8 @@ public class PrimarySearch{
 					node.children.remove(u);
 		}
 
-		for (TaxonomyNode c: node.children)
-			removeUnclassifiedNode(c);
+//		for (TaxonomyNode c: node.children)
+//			removeUnclassifiedNode(c);
 	}
 
 	public static TaxonomyNode removeTopLevel1ChildParent(TaxonomyNode root) {
@@ -589,7 +605,6 @@ public class PrimarySearch{
 			newRoot = newRoot.children.get(0);
 
 		return newRoot;
-		//return root.children.size() != 1 ? root : removeTopLevel1ChildParent(root.children.get(0));
 	}
 
 	/**
@@ -610,14 +625,16 @@ public class PrimarySearch{
 		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view, diamondResultsDir.getParentFile());
 		StringBuilder newickTreeBeforeMerge = new StringBuilder(); // TODO ..
 		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResultsBeforeMerge(), newickTreeBeforeMerge);
-		
+
+		logger.info("Basket reads sort low ancestor time = " + (System.currentTimeMillis() - start) + " ms");
+
 		Map<String, String> readIdTaxonomyId = taxonomyTree.createReadNameTaxonIdMap();
 		StringBuilder newickTreeAfterMerge = new StringBuilder();
 		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResults(), newickTreeAfterMerge);
 
 //		Map<String, String> readIdTaxonomyId = basketDiamondResultsBasedOnBestScore(view, ngsProgress);
 
-		logger.info("Basket reads time = " + (System.currentTimeMillis() - start) + " ms");
+		logger.info("Basket reads - merge time = " + (System.currentTimeMillis() - start) + " ms");
 
 		// Order fastq sequences in basket per taxon.
 		for(File f : fastqFiles){
