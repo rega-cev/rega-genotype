@@ -89,7 +89,8 @@ public class RegaSystemFiles {
 				new File(baseDir, SYSTEM_FILES_DIR), ncbiVirusesFile);
 		List<AbstractSequence> sequences = alignmentAnalyses.getAlignment().getSequences();
 		for (int i = sequences.size() - 1; i > -1; --i)
-			if (sequences.get(i).getDescription().contains("phage"))
+			if (sequences.get(i).getDescription().contains("phage") 
+					|| sequences.get(i).getDescription().contains("Phage"))
 				sequences.remove(i);
 		alignmentAnalyses.getAlignment().writeOutput(new FileOutputStream(ncbiVirusesFile),
 				SequenceAlignment.FILETYPE_FASTA);
