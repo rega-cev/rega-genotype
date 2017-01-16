@@ -182,15 +182,18 @@ public class FileUtil {
 	}
 
 	// csv
-
 	public static List<String[]> readCSV(File csvFile) {
+		return readCSV(csvFile, ",");
+	}
+
+	public static List<String[]> readCSV(File csvFile, String delimiter) {
         BufferedReader br = null;
         String line = "";
         List<String[]> ans = new ArrayList<String[]>();
         try {
             br = new BufferedReader(new FileReader(csvFile));
             while ((line = br.readLine()) != null) {
-                ans.add(line.split(","));
+                ans.add(line.split(delimiter));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -154,6 +154,20 @@ public class TaxonomyModel {
 		return ans;
 	}
 
+	public List<String> getDescendantsTaxonomyIds(String taxonomyId){
+		WStandardItem item = items.get(taxonomyId);
+		List<String> results = new ArrayList<String>();
+		getDescendantsTaxonomyIds(item, results);
+		return results;
+	}
+
+	private void getDescendantsTaxonomyIds(WStandardItem item,
+			List<String> results) {
+		results.add((String) item.getData(TAXONOMY_ID_ROLE));
+		for (int r = 0; r < item.getRowCount(); r++)
+			getDescendantsTaxonomyIds(item.getChild(r), results);
+	}
+
 	public String getLowesCommonAncestor(String taxonmyId1, String taxonmyId2) {
 		if (items.get(taxonmyId1) == null || items.get(taxonmyId2) == null)
 			return null;
