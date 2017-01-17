@@ -20,6 +20,7 @@ import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.NgsAnalysis;
 import rega.genotype.ngs.NgsFileSystem;
 import rega.genotype.singletons.Settings;
@@ -340,23 +341,10 @@ public class StartForm extends AbstractForm {
 	private void startNgsAnalysis(final File workDir) {
 		Thread ngsAnalysis = new Thread(new Runnable() {
 			public void run() {
-				try {
-					NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir,
-							Settings.getInstance().getConfig().getNgsModule());
-					if (ngsAnalysis.analyze()) {
-						// analyze assembled fasta files 
-						getMain().getOrganismDefinition().startAnalysis(workDir);
-						File done = new File(workDir.getAbsolutePath()+File.separatorChar+"DONE");
-						FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					assert(false);
-				} catch (ParameterProblemException e) {
-					e.printStackTrace();
-				} catch (FileFormatException e) {
-					e.printStackTrace();
-				}
+				ToolConfig toolConfig = getMain().getOrganismDefinition().getToolConfig();
+				NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir,
+						Settings.getInstance().getConfig().getNgsModule(), toolConfig);
+				ngsAnalysis.analyze();
 			}
 		});
 		ngsAnalysis.start();

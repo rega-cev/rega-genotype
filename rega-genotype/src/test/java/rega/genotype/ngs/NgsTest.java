@@ -52,22 +52,8 @@ public class NgsTest  extends TestCase{
 		}
 
 		NgsAnalysis ngsAnalysis = new NgsAnalysis(jobDir,  
-				Settings.getInstance().getConfig().getNgsModule());
+				Settings.getInstance().getConfig().getNgsModule(), toolConfig);
 		ngsAnalysis.analyze();
-
-		String traceFile = jobDir.getAbsolutePath()
-				+ File.separator
-				+ "results.xml";
-		try {
-			blastTool.analyze(jobDir.getAbsolutePath()
-					+ File.separator
-					+ NgsFileSystem.SEQUENCES_FILE, traceFile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail("IOException occured during analysis runtime");
-			
-		}
 
     	GenotypeResultParser p = new GenotypeResultParser(){
 			@Override

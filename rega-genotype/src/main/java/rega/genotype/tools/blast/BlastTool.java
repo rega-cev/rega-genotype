@@ -89,7 +89,7 @@ public class BlastTool extends GenotypeTool {
 	}
 
 	@Override
-	protected void formatDB() throws ApplicationException {
+	public void formatDB() throws ApplicationException {
 		blastAnalysis.formatDB(blastXml.getAlignment());		
 	}
 }

@@ -524,7 +524,7 @@ public abstract class GenotypeTool {
 
     							try {
     							NgsAnalysis ngsAnalysis = new NgsAnalysis(currentWorkDir,  
-    									ngsModuleE.getValue());
+    									ngsModuleE.getValue(), toolConfig);
     							ngsAnalysis.analyze();
 
     							genotypeTool.analyze(currentWorkDir.getAbsolutePath()
@@ -558,7 +558,7 @@ public abstract class GenotypeTool {
 
     				
     				NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir,
-    						 Settings.getInstance().getConfig().getNgsModule());
+    						 Settings.getInstance().getConfig().getNgsModule(), toolConfig);
     				if (parseArgsResult.assembleOnly) {    				
     					// TODO : test do not commit !
     					 //ngsAnalysis.assembleVirus(new File("/home/michael/tmp/fasta-examples/SRP074090__8_sequences/SRR3458562-results-assemble/diamond_result/10912_Rotavirus"));
@@ -567,10 +567,6 @@ public abstract class GenotypeTool {
     					ngsAnalysis.analyze();
 
 					ngsAnalysis.cleanBigData();
-
-    				genotypeTool.analyze(
-    						parseArgsResult.workingDir + File.separator + NgsFileSystem.SEQUENCES_FILE, 
-    						traceFile);
     			}
 
     		} else {

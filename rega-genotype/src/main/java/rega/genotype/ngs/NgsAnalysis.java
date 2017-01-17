@@ -19,7 +19,9 @@ import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
@@ -30,6 +32,7 @@ import rega.genotype.ngs.QC.QcResults;
 import rega.genotype.ngs.QC.QcResults.Result;
 import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.taxonomy.TaxonomyModel;
+import rega.genotype.tools.blast.BlastTool;
 import rega.genotype.utils.BlastUtil;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
@@ -45,10 +48,12 @@ public class NgsAnalysis {
 	private Logger ngsLogger = null;
 	private File workDir;
 	private NgsModule ngsModule;
+	private ToolConfig toolConfig;
 
-	public NgsAnalysis(File workDir, NgsModule ngsModule){
+	public NgsAnalysis(File workDir, NgsModule ngsModule, ToolConfig toolConfig){
 		this.workDir = workDir;
 		this.ngsModule = ngsModule;
+		this.toolConfig = toolConfig;
 		ngsLogger = LogUtils.createLogger(workDir);
 	}
 
@@ -213,20 +218,65 @@ public class NgsAnalysis {
 		}
 	}
 
+	public BlastTool startIdentification(NgsProgress ngsProgress) {
+		BlastTool tool;
+		String traceFile = workDir.getAbsolutePath() + File.separatorChar + "result.xml";
+		try {
+			tool = new BlastTool(toolConfig, workDir);
+			tool.startTracer(traceFile);
+			tool.formatDB();
+		} catch (IOException e) {
+			e.printStackTrace();
+			ngsProgress.setErrors("Identification - failed to init blast tool: " + e. getMessage());
+			ngsProgress.save(workDir);
+			return null;
+		} catch (ParameterProblemException e) {
+			e.printStackTrace();
+			ngsProgress.setErrors("Identification - failed to init blast tool: " + e. getMessage());
+			ngsProgress.save(workDir);
+			return null;
+		} catch (FileFormatException e) {
+			e.printStackTrace();
+			ngsProgress.setErrors("Identification - failed to init blast tool: " + e. getMessage());
+			ngsProgress.save(workDir);
+			return null;
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			ngsProgress.setErrors("Identification - failed to init blast tool: " + e. getMessage());
+			ngsProgress.save(workDir);
+			return null;
+		}
+		return tool;
+	}
+	
 	public boolean assembleAll() {
 		NgsProgress ngsProgress = NgsProgress.read(workDir); // primarySearch may update NgsProgress with diamond results.
+		BlastTool tool = startIdentification(ngsProgress);
+		if (tool == null)
+			return false;
+
 		ngsProgress.setState(State.Spades);
 		ngsProgress.save(workDir);
-
+		
 		// spades
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
 
 		File dimondResultDir = new File(workDir, NgsFileSystem.DIAMOND_RESULT_DIR);
 		for (File d: dimondResultDir.listFiles()){
-			assembleVirus(d);
+			assembleVirus(d, tool);
 		}
 
 		jobLock.release();
+
+		tool.stopTracer();
+		File done = new File(workDir.getAbsolutePath()+File.separatorChar+"DONE");
+		try {
+			FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
+		} catch (IOException e) {
+			e.printStackTrace();
+			ngsProgress.setErrors("Identification - could not write DONE file: " + e. getMessage());
+			ngsProgress.save(workDir);
+		}
 
 		File sequences = new File(workDir, NgsFileSystem.SEQUENCES_FILE);
 		if (!sequences.exists())
@@ -239,7 +289,7 @@ public class NgsAnalysis {
 		return true;
 	}
 
-	public boolean assembleVirus(File virusDiamondDir) {
+	public boolean assembleVirus(File virusDiamondDir, BlastTool tool) {
 		if (!virusDiamondDir.isDirectory())
 			return false;
 
@@ -319,8 +369,12 @@ public class NgsAnalysis {
 					if (refseqName.contains("_ref_"))
 						refAC = refseqName.split("_ref_")[0];
 					String bucket = virusName;
+
 					s.setName(refAC + "__" + i + " " + s.getName() + "__refName__" + ref.getName() + " " + ref.getDescription() + "__reflen__" + ref.getLength() 
 							+ "__bucket__" + bucket + "__" + fastqFileId);
+					
+					tool.analyze(s);
+
 					i++;
 				}
 

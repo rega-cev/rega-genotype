@@ -508,7 +508,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 								ngsProgress = NgsProgress.read(jobDir);
 								if (ngsProgress != null 
-										&& (ngsProgress.getState() == State.FinishedAll
+										&& (ngsProgress.getState() == State.Spades
 											|| !ngsProgress.getErrors().isEmpty()))
 									break;
 								lock.wait(1000);
