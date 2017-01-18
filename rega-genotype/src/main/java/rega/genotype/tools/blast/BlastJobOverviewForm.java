@@ -519,7 +519,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 					int contigLen = Integer.parseInt(c.getChild("length").getValue());
 					double contigCov = Double.parseDouble(c.getChild("cov").getValue());
 
-					Contig contig = new Contig(id, contigLen, contigCov);
+					Contig contig = new Contig(id, contigLen, contigCov, null);
 
 					sequenceData.configs.add(contig);
 				}

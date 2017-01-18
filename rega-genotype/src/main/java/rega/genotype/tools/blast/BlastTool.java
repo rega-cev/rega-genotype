@@ -12,6 +12,8 @@ import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
+import rega.genotype.NgsSequence;
+import rega.genotype.NgsSequence.Contig;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.singletons.Settings;
@@ -51,12 +53,20 @@ public class BlastTool extends GenotypeTool {
 	 */
 	protected void analyseClaster(Cluster c, AbstractSequence s) {
 		try {
-			String fasta = ">" + s.getName() + "\n" + s.getSequence() + "\n";
+			StringBuilder fasta = new StringBuilder();
+			if (s instanceof NgsSequence) { // pass the contigs to virus tool.
+				NgsSequence ngsSequence = (NgsSequence)s;
+				for(Contig contig: ngsSequence.getContigs()){
+					fasta.append(">" + contig.getId() + "_" + ngsSequence.getName() + "\n");
+					fasta.append(contig.getSequence() + "\n");
+				}
+			} else  // pass the only sequence to virus tool
+				fasta.append(">" + s.getName() + "\n" + s.getSequence() + "\n");
 
 			if (c != null) {
 				String toolId = Settings.getInstance().getConfig().getToolId(c.getTaxonomyId());
 				File f = new File(getWorkingDir().getAbsolutePath(), toolId + ".fasta");
-				FileUtil.writeStringToFile(f, fasta, true);
+				FileUtil.writeStringToFile(f, fasta.toString(), true);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();

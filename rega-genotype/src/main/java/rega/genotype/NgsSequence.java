@@ -37,6 +37,7 @@ public class NgsSequence extends Sequence {
 			resultTracer.increaseIndent();
 			resultTracer.add("length", contig.length);
 			resultTracer.add("cov", contig.cov);
+			resultTracer.add("nucleotides", contig.sequence);
 			resultTracer.decreaseIndent();
 			resultTracer.println("</contig>");
 		}
@@ -69,10 +70,11 @@ public class NgsSequence extends Sequence {
 		private String sequence; //nucleotides. 
 
 		//<contig id="1" length="7366" cov="5.35085">
-		public Contig(String id, Integer length, Double cov){
+		public Contig(String id, Integer length, Double cov, String sequence){
 			this.id = id;
 			this.length = length;
-			this.cov = cov;	
+			this.cov = cov;
+			this.sequence = sequence;
 		}
 		public String getId() {
 			return id;
@@ -91,6 +93,12 @@ public class NgsSequence extends Sequence {
 		}
 		public void setLength(Integer length) {
 			this.length = length;
+		}
+		public String getSequence() {
+			return sequence;
+		}
+		public void setSequence(String sequence) {
+			this.sequence = sequence;
 		}
 	}
 

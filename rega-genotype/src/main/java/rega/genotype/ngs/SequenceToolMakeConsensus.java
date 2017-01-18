@@ -98,7 +98,7 @@ public class SequenceToolMakeConsensus {
 				String[] parts = s.getName().split("_");
 				int len = Integer.parseInt(parts[3]);
 				double cov = Double.parseDouble(parts[5]);
-				ans.add(new Contig(parts[1], len, cov));
+				ans.add(new Contig(parts[1], len, cov, s.getSequence()));
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
