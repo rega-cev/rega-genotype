@@ -288,6 +288,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			blastModel.setData(row, SRC_COLUMN, toolData.src);
 
 			if (mode == Mode.Ngs) {
+				int contigCount = 0;
+				for (SequenceData sequenceData: toolData.sequencesData)
+					contigCount += sequenceData.contigs.size();
+				blastModel.setData(row, SEQUENCE_COUNT_COLUMN, contigCount); // percentage
+
 				if (readLen == null) {
 					String readLenError = "Error: read length is missing from QC report.";
 					blastModel.setData(row, PERCENTAGE_COLUMN, readLenError);
@@ -303,7 +308,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 						else
 							contigsLen += seq.length;
 						
-						for (Contig contig: seq.configs) {
+						for (Contig contig: seq.contigs) {
 							readCount += contig.getCov() * contig.getLength() / readLen;
 						}
 					}
@@ -417,7 +422,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		public String name = new String();
 		public String description = new String();
 		public Integer length;
-		public List<Contig> configs = new ArrayList<Contig>();
+		public List<Contig> contigs = new ArrayList<Contig>();
 	}
 
 	// unused 
@@ -521,7 +526,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 					Contig contig = new Contig(id, contigLen, contigCov, null);
 
-					sequenceData.configs.add(contig);
+					sequenceData.contigs.add(contig);
 				}
 
 				String refName = GenotypeLib.getEscapedValue(this,
