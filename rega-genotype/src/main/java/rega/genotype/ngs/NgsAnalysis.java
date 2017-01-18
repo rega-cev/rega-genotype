@@ -18,8 +18,10 @@ import org.apache.commons.io.FileUtils;
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
+import rega.genotype.NgsSequence;
+import rega.genotype.NgsSequence.BucketData;
+import rega.genotype.NgsSequence.Contig;
 import rega.genotype.ParameterProblemException;
-import rega.genotype.Sequence;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.NgsModule;
@@ -328,7 +330,7 @@ public class NgsAnalysis {
 					return false;
 				}
 
-			SequenceAlignment contigs = new SequenceAlignment(new FileInputStream(assembledFile), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+			SequenceAlignment consensusAlignment = new SequenceAlignment(new FileInputStream(assembledFile), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
 			File ncbiVirusesFasta = RegaSystemFiles.ncbiVirusesFileAnnotated();
 			if (!ncbiVirusesFasta.exists())
@@ -337,7 +339,7 @@ public class NgsAnalysis {
 			workDir.mkdirs();
 			String virusName = virusDiamondDir.getName();
 			File virusConsensusDir = NgsFileSystem.consensusDir(workDir, virusName);
-			SequenceAlignment refs = detectRefs(virusConsensusDir, contigs, ncbiVirusesFasta);
+			SequenceAlignment refs = detectRefs(virusConsensusDir, consensusAlignment, ncbiVirusesFasta);
 
 			// FIXME:
 			//  - probably should change the cutoff for the alignment, relative to length?
@@ -360,7 +362,7 @@ public class NgsAnalysis {
 						new FileInputStream(consensus), 
 						SequenceAlignment.FILETYPE_FASTA, 
 						SequenceAlignment.SEQUENCE_DNA);
-	
+
 				int i = 0;
 				for (AbstractSequence s: sequenceAlignment.getSequences()) {
 					String[] split = fastqPE1FileName.split("_");
@@ -370,18 +372,26 @@ public class NgsAnalysis {
 						refAC = refseqName.split("_ref_")[0];
 					String bucket = virusName;
 
-					s.setName(refAC + "__" + i + " " + s.getName() + "__refName__" + ref.getName() + " " + ref.getDescription() + "__reflen__" + ref.getLength() 
-							+ "__bucket__" + bucket + "__" + fastqFileId);
-					
-					tool.analyze(s);
+					String name = refAC + "__" + i + " " + s.getName();
+					String description = fastqFileId;
 
-					i++;
+					BucketData bucketData = new BucketData(bucket, ref.getName(), ref.getDescription(), 
+							ref.getLength());
+
+					List<Contig> contigs = SequenceToolMakeConsensus.readCotigsData(refWorkDir);
+					if (!contigs.isEmpty()){
+						NgsSequence ngsSequence = new NgsSequence(name, false, description, s.getSequence(),
+								null, bucketData, contigs);
+
+						tool.analyze(ngsSequence);
+						i++;
+					}
 				}
 
 				ngsLogger.info("Created " + sequenceAlignment.getSequences().size() + " contigs");
-	
+
 				ngsProgress.save(workDir);
-	
+
 				consensus.delete();
 				sequenceAlignment.writeOutput(new FileOutputStream(consensus),
 						SequenceAlignment.FILETYPE_FASTA);

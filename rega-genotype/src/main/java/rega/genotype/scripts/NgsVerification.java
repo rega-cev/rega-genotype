@@ -116,7 +116,7 @@ public class NgsVerification {
 			String covErrors = null;
 			String bucket = null;
 
-			for (SequenceData seq: cluster.sequenceNames) {
+			for (SequenceData seq: cluster.sequencesData) {
 				//11051__contig_1_len_10306_cov_950.489 vip
 				// currently cov is encoded in description
 				// # reads as Sum of (contig length * coverage / read length)
@@ -161,7 +161,7 @@ public class NgsVerification {
 
 			ExcelUtils.add(hssfRow, RESULTS_COLUMN, cluster.concludedName);
 			ExcelUtils.add(hssfRow, REF_COLUMN, refName);
-			ExcelUtils.add(hssfRow, CONTIGS_COLUMN, cluster.sequenceNames.size()+"");
+			ExcelUtils.add(hssfRow, CONTIGS_COLUMN, cluster.sequencesData.size()+"");
 			ExcelUtils.add(hssfRow, LENGTH_COLUMN,  
 					contigsLen / refLen  * 100
 					+ "% (" + contigsLen + " of " + refLen + ")");

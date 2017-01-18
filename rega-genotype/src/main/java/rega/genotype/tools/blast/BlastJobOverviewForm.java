@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import rega.genotype.ApplicationException;
+import rega.genotype.NgsSequence.BucketData;
+import rega.genotype.NgsSequence.Contig;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
@@ -211,7 +213,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		double total = 0;
 		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
 			ClusterData toolData = e.getValue();
-			total += toolData.sequenceNames.size();
+			total += toolData.sequencesData.size();
 		}
 
 		return total;
@@ -269,9 +271,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 				blastModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
 				blastModel.setData(row, SEQUENCE_COUNT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
 			}
-			blastModel.setData(row, SEQUENCE_COUNT_COLUMN, toolData.sequenceNames.size()); // percentage
+			blastModel.setData(row, SEQUENCE_COUNT_COLUMN, toolData.sequencesData.size()); // percentage
 			blastModel.setData(row, CHART_DISPLAY_COLUMN, 
-					toolData.concludedName + " (" + toolData.sequenceNames.size() + ")");
+					toolData.concludedName + " (" + toolData.sequencesData.size() + ")");
 
 			WColor color = chart.getPalette().getBrush(i).getColor();
 			blastModel.setData(row, COLOR_COLUMN, color, 
@@ -279,7 +281,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 			if (mode != Mode.Ngs)
 				blastModel.setData(row, PERCENTAGE_COLUMN, 
-						(double)toolData.sequenceNames.size() / total * 100.0);
+						(double)toolData.sequencesData.size() / total * 100.0);
 
 			blastModel.setData(row, SRC_COLUMN, toolData.src);
 
@@ -291,67 +293,46 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 					blastModel.setData(row, READ_COUNT_COLUMN, readLenError);
 				} else {
 					double contigsLen = 0;
-					double totalCov = 0;
 					double readCount = 0;
-					Integer refLen = null;
-					String refName = null;
 					String lenErrors = null;
 					String covErrors = null;
-					String bucket = null;
 
-					for (SequenceData seq: toolData.sequenceNames) {
+					for (SequenceData seq: toolData.sequencesData) {
 						//11051__contig_1_len_10306_cov_950.489 vip
 						// currently cov is encoded in description
 						// # reads as Sum of (contig length * coverage / read length)
-						refName = null;
 						if (seq.description == null)
 							continue; // old format.
 						if (seq.length == null)
 							lenErrors = "seq len not found";
 						else
 							contigsLen += seq.length;
-						String[] seqParts = seq.description.split("__");
-						String[] seqNameParts = seqParts[0].split("_");
 						
-						double readCov = 0.0;
-						for (int j = 1; j < seqNameParts.length - 1; ++j) {
-							if (seqNameParts[j].equals("cov")) {
-								try {
-									readCov = Double.parseDouble(seqNameParts[j + 1]);
-								} catch (NumberFormatException e2) {
-									covErrors = "cov not found";
-								}
+						for (Contig contig: seq.configs) {
+							double readCov = 0.0;
+							double contigLen = 0.0;
+							try {
+								readCov = Double.parseDouble(contig.getCov());
+							} catch (NumberFormatException e2) {
+								covErrors = "cov not found";
 							}
-						}
-						for (int j = 1; j < seqParts.length - 1; ++j) {
-							if (seqParts[j].equals("reflen")) {
-								try {
-									refLen = Integer.parseInt(seqParts[j + 1]);
-								} catch (NumberFormatException e2) {
-									lenErrors = "ref len not found";
-								}
-							}  else if (seqParts[j].equals("refName")) {
-								if (refName == null)
-									refName = seqParts[j + 1];
-								else if (!refName.equals(seqParts[j + 1]))
-									System.err.println("ERROR: not same ref!");
-							} else if (seqParts[j].equals("bucket")) {
-								bucket = seqParts[j + 1];
+							try {
+								contigLen = Double.parseDouble(contig.getLength());
+							} catch (NumberFormatException e2) {
+								covErrors = "cov not found";
 							}
-						}
+							
+							readCount += readCov * contigLen / readLen;
 
-						readCount += readCov * seq.length / readLen;
+						}
 					}
 
 					// TODO: testing 
 					setDisplayData(blastModel, row, ASSINGMENT_COLUMN, toolData.concludedName 
-							+ " (" + refName + " : " + bucket + ")");
-					
-					if (refName.contains("NC_023639"))
-						System.err.println();
+							+ " (" + toolData.bucketData.getRefName() 
+							+ " : " + toolData.bucketData.getDiamondBucket() + ")");
 
-					if (refLen == null && lenErrors == null)
-						lenErrors = "refseq length is emplty";
+					int refLen = toolData.bucketData.getRefLen();
 
 					if (lenErrors == null) {
 						//double readCount = contigsLen * totalCov / readLen;
@@ -446,19 +427,22 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	public static class ClusterData {
 		public String taxonomyId = new String();
 		public String concludedName = new String();
-		public String refName = new String();
 		public String concludedId = new String();
 		public Double bestAbsScore = null; // the best score of all contigs.
 		public String src = new String();
-		public List<SequenceData> sequenceNames = new ArrayList<SequenceData>();
+
+		public BucketData bucketData = null;
+
+		public List<SequenceData> sequencesData = new ArrayList<SequenceData>();
 	}
 
 	public static class SequenceData {
 		public String name = new String();
 		public String description = new String();
 		public Integer length;
+		public List<Contig> configs = new ArrayList<Contig>();
 	}
-	
+
 	// unused 
 	@Override
 	public List<Header> getHeaders() {
@@ -522,18 +506,20 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			String absScore = GenotypeLib.getEscapedValue(this,
 					"/genotype_result/sequence/result[@id='blast']/cluster/absolute-score");
 
+			String bucket = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/diamond_bucket");
+
 			if (concludedName == null)
 				concludedName = "Unassigned";
 
-			// TODO: support old versions
-			if (seqName == null || !seqName.contains("_")) {
-				System.err.println("Error seqName does not contain bucket: " + seqName);
-				seqName += "_error";
-			}
-			String bucket = findBucket(seqDesc);
-			String key = (form == null || form.mode == Mode.Ngs) ? 
-					seqName.substring(0, seqName.lastIndexOf('_')) + bucket : concludedId;
-			
+			String key; 
+			boolean ngs = (form == null || form.mode == Mode.Ngs);
+			if (ngs) {
+				String acNum = seqName.substring(0, seqName.lastIndexOf('_'));
+				key= acNum + bucket;
+			} else 
+				key = concludedId;
+
 			ClusterData toolData = clusterDataMap.containsKey(key) ? clusterDataMap.get(key) : new ClusterData();
 
 			if (concludedId != null && !concludedId.equals("Unassigned"))
@@ -548,9 +534,37 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 				sequenceData.length = null;
 			}
 
+			if (ngs) {
+				int i = 1;
+				while (true) {
+					String contigLen = GenotypeLib.getEscapedValue(this,
+							"/genotype_result/sequence/contig[@id='" + i + "']/length");
+					String contigCov = GenotypeLib.getEscapedValue(this,
+							"/genotype_result/sequence/contig[@id='" + i + "']/cov");
+					if (contigLen == null)
+						break;
+					Contig contig = new Contig(i+"", contigLen, contigCov);
+					i++;
+					sequenceData.configs.add(contig);
+				}
+
+				String refName = GenotypeLib.getEscapedValue(this,
+						"/genotype_result/sequence/ref_name");
+				String refDescription = GenotypeLib.getEscapedValue(this,
+						"/genotype_result/sequence/ref_description");
+				int refLen = -1;
+				try {
+					refLen = Integer.parseInt(
+							GenotypeLib.getEscapedValue(this,
+									"/genotype_result/sequence/ref_length"));
+				} catch (NumberFormatException e){}
+
+				toolData.bucketData = new BucketData(bucket, refName, refDescription, refLen);
+			}
+			
 			if (concludedId != null && !concludedId.equals("Unassigned"))
 				toolData.concludedName = concludedName;
-			toolData.sequenceNames.add(sequenceData);
+			toolData.sequencesData.add(sequenceData);
 			if (toolData.concludedId == null || toolData.concludedId.equals("Unassigned"))
 				toolData.concludedId = concludedId;
 
@@ -559,15 +573,6 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			toolData.src = clusterSrc;
 
 			clusterDataMap.put(key, toolData);
-		}
-
-		private String findBucket(String description) {
-			String[] parts = description.split("__");
-			for (int i = 0; i < parts.length - 1; ++i) {
-				if(parts[i].equals("bucket"))
-					return parts[i + 1];
-			}
-			return null;
 		}
 	}
 }

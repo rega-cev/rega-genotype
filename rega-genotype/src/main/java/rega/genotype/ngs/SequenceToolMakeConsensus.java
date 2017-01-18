@@ -1,14 +1,20 @@
 package rega.genotype.ngs;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
+import rega.genotype.NgsSequence.Contig;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.SequenceAlignment;
 import rega.genotype.config.NgsModule;
 import rega.genotype.singletons.Settings;
 
@@ -79,6 +85,28 @@ public class SequenceToolMakeConsensus {
 
 		NgsFileSystem.executeCmd(cmd, consensusWorkDir, logger);
 
-		return outContigs;
+		return out;
+	}
+
+	public static List<Contig> readCotigsData(File consensusWorkDir) {
+		List<Contig> ans = new ArrayList<Contig>();
+		File contigsFile = NgsFileSystem.consensusContigsFile(consensusWorkDir);
+		try {
+			SequenceAlignment contigsAlignment = new SequenceAlignment(new FileInputStream(contigsFile),
+					SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+			for (AbstractSequence s: contigsAlignment.getSequences()) {
+				String[] parts = s.getName().split("_");
+				ans.add(new Contig(parts[1], parts[3], parts[5]));
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (ParameterProblemException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (FileFormatException e) {
+			e.printStackTrace();
+		}
+		return ans;
 	}
 }

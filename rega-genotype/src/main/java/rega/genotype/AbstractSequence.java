@@ -66,6 +66,12 @@ public abstract class AbstractSequence {
     }
 
     /**
+     * Some sequences have meta data that needs to be saved in the 
+     * results.xml file. This can be added as xml fields of the sequence.
+     */
+    public void writeSequenceMetadata(ResultTracer resultTracer) {}
+
+    /**
      * Compute the reverse compliment of the sequence, and return this as
      * a new sequence.
      * 
