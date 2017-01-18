@@ -25,10 +25,13 @@ public class NgsSequence extends Sequence {
 	}
 
 	public void writeSequenceMetadata(ResultTracer resultTracer) {
+		resultTracer.increaseIndent();
 		resultTracer.add("diamond_bucket", bucketData.getDiamondBucket());
 		resultTracer.add("ref_length", bucketData.getRefLen());
 		resultTracer.add("ref_description", bucketData.getRefDescription());
 		resultTracer.add("ref_name", bucketData.getRefName());
+		resultTracer.println("<contigs>");
+		resultTracer.increaseIndent();
 		for (Contig contig: contigs) {
 			resultTracer.println("<contig id=\"" + contig.id + "\">");
 			resultTracer.increaseIndent();
@@ -37,7 +40,9 @@ public class NgsSequence extends Sequence {
 			resultTracer.decreaseIndent();
 			resultTracer.println("</contig>");
 		}
-		
+		resultTracer.decreaseIndent();
+		resultTracer.println("</contigs>");
+		resultTracer.decreaseIndent();
 	}
 
 	public BucketData getBucketData() {
@@ -58,38 +63,33 @@ public class NgsSequence extends Sequence {
 
 	// classes
 	public static class Contig {
-		private String cov;
-		private String length;
+		private Double cov;
+		private Integer length;
 		private String id;
+		private String sequence; //nucleotides. 
 
 		//<contig id="1" length="7366" cov="5.35085">
-		public Contig(String id, String length, String cov){
+		public Contig(String id, Integer length, Double cov){
 			this.id = id;
 			this.length = length;
 			this.cov = cov;	
 		}
-
-		public String getCov() {
-			return cov;
-		}
-
-		public void setCov(String cov) {
-			this.cov = cov;
-		}
-
 		public String getId() {
 			return id;
 		}
-
 		public void setId(String id) {
 			this.id = id;
 		}
-
-		public String getLength() {
+		public Double getCov() {
+			return cov;
+		}
+		public void setCov(Double cov) {
+			this.cov = cov;
+		}
+		public Integer getLength() {
 			return length;
 		}
-
-		public void setLength(String length) {
+		public void setLength(Integer length) {
 			this.length = length;
 		}
 	}

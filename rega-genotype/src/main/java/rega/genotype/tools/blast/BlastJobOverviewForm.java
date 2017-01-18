@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jdom.Element;
+
 import rega.genotype.ApplicationException;
 import rega.genotype.NgsSequence.BucketData;
 import rega.genotype.NgsSequence.Contig;
@@ -294,35 +296,15 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 					double contigsLen = 0;
 					double readCount = 0;
 					String lenErrors = null;
-					String covErrors = null;
 
 					for (SequenceData seq: toolData.sequencesData) {
-						//11051__contig_1_len_10306_cov_950.489 vip
-						// currently cov is encoded in description
-						// # reads as Sum of (contig length * coverage / read length)
-						if (seq.description == null)
-							continue; // old format.
 						if (seq.length == null)
 							lenErrors = "seq len not found";
 						else
 							contigsLen += seq.length;
 						
 						for (Contig contig: seq.configs) {
-							double readCov = 0.0;
-							double contigLen = 0.0;
-							try {
-								readCov = Double.parseDouble(contig.getCov());
-							} catch (NumberFormatException e2) {
-								covErrors = "cov not found";
-							}
-							try {
-								contigLen = Double.parseDouble(contig.getLength());
-							} catch (NumberFormatException e2) {
-								covErrors = "cov not found";
-							}
-							
-							readCount += readCov * contigLen / readLen;
-
+							readCount += contig.getCov() * contig.getLength() / readLen;
 						}
 					}
 
@@ -339,11 +321,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 						setDisplayData(blastModel, row, TOTAL_LENGTH_COLUMN,  contigsLen / refLen  * 100
 								+ "% (" + contigsLen + " of " + refLen + ")");
 
-						if (covErrors == null)
-							setDisplayData(blastModel, row, PERCENTAGE_COLUMN, (int)readCount);
-						else
-							setDisplayData(blastModel, row, PERCENTAGE_COLUMN, "Error: " + covErrors);
-
+						setDisplayData(blastModel, row, PERCENTAGE_COLUMN, (int)readCount);
 
 						double deepCov = readCount * readLen / contigsLen;
 						setDisplayData(blastModel, row, DEEP_COV_COLUMN, deepCov);
@@ -534,16 +512,15 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			}
 
 			if (ngs) {
-				int i = 1;
-				while (true) {
-					String contigLen = GenotypeLib.getEscapedValue(this,
-							"/genotype_result/sequence/contig[@id='" + i + "']/length");
-					String contigCov = GenotypeLib.getEscapedValue(this,
-							"/genotype_result/sequence/contig[@id='" + i + "']/cov");
-					if (contigLen == null)
-						break;
-					Contig contig = new Contig(i+"", contigLen, contigCov);
-					i++;
+				Element contigsE = getElement("/genotype_result/sequence/contigs");
+				List<Element> contigs = contigsE.getChildren("contig");
+				for (Element c: contigs) {
+					String id = c.getAttribute("id").getValue();
+					int contigLen = Integer.parseInt(c.getChild("length").getValue());
+					double contigCov = Double.parseDouble(c.getChild("cov").getValue());
+
+					Contig contig = new Contig(id, contigLen, contigCov);
+
 					sequenceData.configs.add(contig);
 				}
 

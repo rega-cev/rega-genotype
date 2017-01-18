@@ -61,9 +61,7 @@ public class ResultTracer {
     	if (sequence != null) {
             w.println("  <sequence name=\"" + escapeXml(sequence.getName()) + "\" length=\""
                     + sequence.getLength() + "\" description=\"" + escapeXml(sequence.getDescription()) +"\">");
-            increaseIndent();
             sequence.writeSequenceMetadata(this);
-            decreaseIndent();
           w.println("    <nucleotides>");
           w.println("      " + sequence.getSequence());
           w.println("    </nucleotides>");

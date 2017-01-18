@@ -96,7 +96,9 @@ public class SequenceToolMakeConsensus {
 					SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 			for (AbstractSequence s: contigsAlignment.getSequences()) {
 				String[] parts = s.getName().split("_");
-				ans.add(new Contig(parts[1], parts[3], parts[5]));
+				int len = Integer.parseInt(parts[3]);
+				double cov = Double.parseDouble(parts[5]);
+				ans.add(new Contig(parts[1], len, cov));
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
