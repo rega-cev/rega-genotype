@@ -62,7 +62,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	private int CHART_DISPLAY_COLUMN = 2;
 	private int PERCENTAGE_COLUMN =    3; // deep cov for ngs
 	private int TOTAL_LENGTH_COLUMN =  4; // % of Genome
-	private int READ_COUNT_COLUMN =    5;
+	private int DEEP_COV_COLUMN =    5;
 	private int SRC_COLUMN =           6;
 	private int COLOR_COLUMN =         7;
 	private int IMAGE_COLUMN =         8;
@@ -143,7 +143,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		table.setColumnWidth(PERCENTAGE_COLUMN, new WLength(80));
 		table.setColumnWidth(SRC_COLUMN, new WLength(60));
 		table.setColumnWidth(TOTAL_LENGTH_COLUMN, new WLength(90));
-		table.setColumnWidth(READ_COUNT_COLUMN, new WLength(90));
+		table.setColumnWidth(DEEP_COV_COLUMN, new WLength(90));
 		table.setColumnWidth(COLOR_COLUMN, new WLength(60));
 		//table.setRowHeight(new WLength(50));
 
@@ -164,7 +164,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		if (mode != Mode.Ngs) {
 			table.hideColumn(TOTAL_LENGTH_COLUMN);
-			table.hideColumn(READ_COUNT_COLUMN);
+			table.hideColumn(DEEP_COV_COLUMN);
 			table.hideColumn(IMAGE_COLUMN);
 		}
 	}
@@ -236,10 +236,10 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		Integer readLen = null;
 		// NGS
 		if (mode == Mode.Ngs) {
-			blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.deep-cov"));
+			blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.read-cunt"));
 			blastModel.setHeaderData(SEQUENCE_COUNT_COLUMN, tr("detailsForm.summary.contig-count"));
 			blastModel.setHeaderData(TOTAL_LENGTH_COLUMN, tr("detailsForm.summary.total-len"));
-			blastModel.setHeaderData(READ_COUNT_COLUMN, tr("detailsForm.summary.read-cunt"));
+			blastModel.setHeaderData(DEEP_COV_COLUMN, tr("detailsForm.summary.deep-cov"));
 			blastModel.setHeaderData(IMAGE_COLUMN, tr("detailsForm.summary.image"));
 
 			try {
@@ -288,9 +288,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (mode == Mode.Ngs) {
 				if (readLen == null) {
 					String readLenError = "Error: read length is missing from QC report.";
-					blastModel.setData(row, READ_COUNT_COLUMN, readLenError);
+					blastModel.setData(row, PERCENTAGE_COLUMN, readLenError);
 					blastModel.setData(row, TOTAL_LENGTH_COLUMN, readLenError);
-					blastModel.setData(row, READ_COUNT_COLUMN, readLenError);
 				} else {
 					double contigsLen = 0;
 					double readCount = 0;
@@ -341,21 +340,21 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 								+ "% (" + contigsLen + " of " + refLen + ")");
 
 						if (covErrors == null)
-							setDisplayData(blastModel, row, READ_COUNT_COLUMN, (int)readCount);
+							setDisplayData(blastModel, row, PERCENTAGE_COLUMN, (int)readCount);
 						else
-							setDisplayData(blastModel, row, READ_COUNT_COLUMN, "Error: " + covErrors);
+							setDisplayData(blastModel, row, PERCENTAGE_COLUMN, "Error: " + covErrors);
 
 
 						double deepCov = readCount * readLen / contigsLen;
-						setDisplayData(blastModel, row, PERCENTAGE_COLUMN, deepCov);
+						setDisplayData(blastModel, row, DEEP_COV_COLUMN, deepCov);
 
 					} else {
 						setDisplayData(blastModel, row, TOTAL_LENGTH_COLUMN, "Error: " + lenErrors);
-						setDisplayData(blastModel, row, READ_COUNT_COLUMN, "Error: " + lenErrors);
+						setDisplayData(blastModel, row, PERCENTAGE_COLUMN, "Error: " + lenErrors);
 					}
 				}
 				setDisplayData(blastModel, row, IMAGE_COLUMN, "todo");
-				blastModel.sort(0);
+				//blastModel.sort(0);
 			}
 			i++;
 		}
