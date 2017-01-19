@@ -578,3 +578,11 @@ table.reftable caption, .blastResultsTable table caption {
 	width: 44px;
 	margin-left: 50%;
 }
+
+.working {
+    background: gainsboro;
+}
+
+.waiting {
+    color: dimgray;
+}

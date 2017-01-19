@@ -8,21 +8,13 @@ import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.ngs.NgsProgress.State;
-import rega.genotype.ui.framework.widgets.ObjectListComboBox;
-import rega.genotype.ui.framework.widgets.StandardDialog;
-import rega.genotype.ui.ngs.DiamondResultsView;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
-import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
-import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WFileResource;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
-import eu.webtoolkit.jwt.WPushButton;
-import eu.webtoolkit.jwt.WString;
-import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -39,40 +31,53 @@ public class NgsWidget extends WContainerWidget{
 		if (ngsProgress == null)
 			return;
 
-		new WText("<b>NGS state is " + ngsProgress.getState().text + "</b>", this);
+		new WText("<h2> NGS Analysis State </h2>", this);
+		
+		WContainerWidget preprocessingWidget = stateWidget(
+				"Preprocessing", ngsProgress.getStateStartTime(State.Init), 
+				ngsProgress.getStateStartTime(State.Diamond),
+				ngsProgress.getReadCountStartState(State.Init),
+				ngsProgress.getReadCountStartState(State.Diamond));
+
+		WContainerWidget filtringWidget = stateWidget(
+				State.Diamond.text, ngsProgress.getStateStartTime(State.Diamond), 
+				ngsProgress.getStateStartTime(State.Spades),
+				ngsProgress.getReadCountStartState(State.Diamond),
+				ngsProgress.getReadCountStartState(State.Spades));
+
+		WContainerWidget identificationWidget = stateWidget(
+				State.Spades.text, ngsProgress.getStateStartTime(State.Spades), 
+				ngsProgress.getStateStartTime(State.FinishedAll),
+				ngsProgress.getReadCountStartState(State.Spades),
+				ngsProgress.getReadCountStartState(State.FinishedAll));
+
+		addWidget(preprocessingWidget);
+		addWidget(filtringWidget);
+		addWidget(identificationWidget);
+
 		if (!ngsProgress.getErrors().isEmpty() )
-			new WText("<div class=\"error\">Error: " + ngsProgress.getErrors() + "</div>", this);
+			new WText("<div class=\"error\">Error: " + ngsProgress.getErrors() + "</div>", 
+					preprocessingWidget);
 
 		if (ngsProgress.getState().code >= State.Preprocessing.code) {
-			new WText("<div> QC before preprocessing</div>", this);
+			new WText("<div> QC before preprocessing</div>", preprocessingWidget);
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
-			addQC(qcDir);
+			addQC(qcDir, preprocessingWidget);
 		}
 
 		if (ngsProgress.getState().code >= State.Diamond.code) {
 			if (ngsProgress.getSkipPreprocessing())
-				new WText("<div> input sequences are OK -> skip  preprocessing.</div>", this);
+				new WText("<div> input sequences are OK -> skip  preprocessing.</div>", preprocessingWidget);
 			else {
-				new WText("<div> QC after preprocessing</div>", this);
+				new WText("<div> QC after preprocessing</div>", preprocessingWidget);
 				File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
-				addQC(qcDir);
+				addQC(qcDir, preprocessingWidget);
 			}
 		}
 
 		if (ngsProgress.getState().code == State.Diamond.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<div> Diamond blast job state:" + jobState + "</div>", this);
-		}
-
-		if (ngsProgress.getState().code >= State.Spades.code) {
-			WPushButton diamondBlastB = new WPushButton("Diamond Blast results", this);
-			diamondBlastB.clicked().addListener(diamondBlastB, new Signal.Listener() {
-				public void trigger() {
-					WDialog d = new StandardDialog("Diamond Balst results");
-					d.getContents().addWidget(new DiamondResultsView(workDir));
-					d.setResizable(true);
-				}
-			});
+			new WText("<div> Diamond blast job state:" + jobState + "</div>", filtringWidget);
 		}
 
 		if (ngsProgress.getState().code == State.Spades.code) {
@@ -80,76 +85,45 @@ public class NgsWidget extends WContainerWidget{
 			new WText("<div> Sapdes job state:" + jobState + "</div>", this);
 		}
 
+		// style
 
-		Long startTime = ngsProgress.getStateStartTime(State.Init);
-		Long endTime = System.currentTimeMillis();
-		if(ngsProgress.getState() == State.FinishedAll)
-			endTime = ngsProgress.getStateStartTime(State.FinishedAll);
-		if (startTime != null && endTime != null) {
-			WText timeT = new WText("<div> Time: " + Utils.formatTime(endTime - startTime) + " </div>", this);
-
-			timeT.clicked().addListener(timeT, new Signal.Listener() {
-				public void trigger() {
-					StandardDialog d = new StandardDialog("Time");
-					d.getOkB().hide();
-					WTable timeTable = new WTable(d.getContents());
-					timeTable.setMargin(WLength.Auto);
-					final ObjectListComboBox<NgsProgress.State> startStateTimeCB = new ObjectListComboBox<NgsProgress.State>(
-							Arrays.asList(NgsProgress.State.values())) {
-						@Override
-						protected WString render(State t) {
-							return new WString(t.text);
-						}
-					};
-
-					final ObjectListComboBox<NgsProgress.State> endStateTimeCB = new ObjectListComboBox<NgsProgress.State>(
-							Arrays.asList(NgsProgress.State.values())) {
-						@Override
-						protected WString render(State t) {
-							return new WString(t.text);
-						}
-					};
-
-					final WText timeText = new WText();
-					timeTable.getElementAt(0, 0).addWidget(startStateTimeCB);
-					timeTable.getElementAt(0, 1).addWidget(endStateTimeCB);
-					timeTable.getElementAt(0, 2).addWidget(timeText);
-					startStateTimeCB.setCurrentObject(NgsProgress.State.Init);
-					endStateTimeCB.setCurrentObject(NgsProgress.State.FinishedAll);
-
-					printTime(ngsProgress, startStateTimeCB, endStateTimeCB, timeText);
-
-					startStateTimeCB.changed().addListener(startStateTimeCB, new Signal.Listener() {
-						public void trigger() {
-							printTime(ngsProgress, startStateTimeCB, endStateTimeCB, timeText);
-						}
-					});
-
-					endStateTimeCB.changed().addListener(endStateTimeCB, new Signal.Listener() {
-						public void trigger() {
-							printTime(ngsProgress, startStateTimeCB, endStateTimeCB, timeText);
-						}
-					});
-				}
-			});
+		if (ngsProgress.getState().code < State.Diamond.code){
+			preprocessingWidget.addStyleClass("working");
+			filtringWidget.addStyleClass("waiting");
+			identificationWidget.addStyleClass("waiting");
+		} else if (ngsProgress.getState() == State.Diamond){
+			filtringWidget.addStyleClass("working");
+			identificationWidget.addStyleClass("waiting");
+		} else if (ngsProgress.getState() == State.Spades){
+			identificationWidget.addStyleClass("working");
 		}
+		
 	}
-	
-	private void printTime(
-			final NgsProgress ngsProgress,
-			final ObjectListComboBox<NgsProgress.State> startStateTimeCB,
-			final ObjectListComboBox<NgsProgress.State> endStateTimeCB,
-			final WText timeText) {
-		Long startTime = ngsProgress.getStateStartTime(startStateTimeCB.getCurrentObject());
-		Long endTime = ngsProgress.getStateStartTime(endStateTimeCB.getCurrentObject());
+
+	private WContainerWidget stateWidget(String title, 
+			Long startTime, Long endTime,
+			Integer startReads, Integer endReads){
+		WContainerWidget stateWidget = new WContainerWidget();
+		new WText("<div><b>" + title + "</b> ("+ printTime(startTime, endTime) + ") </div>", 
+				stateWidget);
+		if (endReads != null)
+			new WText("<div> Started with " + startReads + " reads. " + (startReads - endReads) + " reads where removed. </div>",
+					stateWidget);
+
+		stateWidget.setMargin(10, Side.Top);
+		
+		return stateWidget;
+	}
+
+	private String printTime(Long startTime, Long endTime) {
 		if (startTime != null && endTime != null) {
-			timeText.setText((endTime - startTime) + " ms");
+			return  Utils.formatTime(endTime - startTime);
 		} else {
-			timeText.setText("unknown");
+			return "--";
 		}
 	}
 
-	private void addQC(File qcDir) {
+	private void addQC(File qcDir, WContainerWidget preprocessingWidget) {
 		if (qcDir.listFiles() == null)
 			return;
 		File[] files = qcDir.listFiles();
@@ -160,7 +134,7 @@ public class NgsWidget extends WContainerWidget{
 		});
 		for (File f: files) {
 			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("html")){
-				WContainerWidget c = new WContainerWidget(this);
+				WContainerWidget c = new WContainerWidget(preprocessingWidget);
 				new WText("QC report for ", c);
 				WFileResource r = new WFileResource("html", f.getAbsolutePath());
 				WLink link = new WLink(r);

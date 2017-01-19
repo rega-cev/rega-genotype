@@ -122,8 +122,8 @@ public class NgsAnalysis {
 			}
 
 			QcData qcData = new QC.QcData(QC.qcReportFile(workDir));
-			ngsProgress.setReadCountInit(qcData.getReadLength());
-
+			ngsProgress.setReadCountInit(qcData.getTotalNumberOfReads());
+			ngsProgress.setReadLength(qcData.getReadLength());
 		} catch (ApplicationException e1) {
 			e1.printStackTrace();
 			ngsProgress.setErrors("QC failed: " + e1.getMessage());
@@ -162,9 +162,9 @@ public class NgsAnalysis {
 						new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR),
 						workDir);
 
-				QcData qcData = new QC.QcData(QC.qcReportFile(workDir));
-				ngsProgress.setReadCountAfterPrepocessing(qcData.getReadLength());
-
+				QcData qcData = new QC.QcData(QC.qcPreprocessedReportFile(workDir));
+				ngsProgress.setReadCountAfterPrepocessing(qcData.getTotalNumberOfReads());
+				ngsProgress.setReadLength(qcData.getReadLength());
 			} catch (ApplicationException e1) {
 				e1.printStackTrace();
 				ngsProgress.setErrors("QC failed: " + e1.getMessage());
@@ -172,8 +172,12 @@ public class NgsAnalysis {
 				cleanBigData();
 				return false;
 			}
+		} else {
+			ngsProgress.setReadCountAfterPrepocessing(ngsProgress.getReadCountInit());
 		}
 
+		ngsProgress.save(workDir);
+		
 		// diamond blast
 
 		try {

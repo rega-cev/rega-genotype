@@ -22,11 +22,11 @@ public class NgsProgress {
 
 	public enum State {
 		Init(0, "Init"),
-		QC(1, "running QC"),
-		Preprocessing(2, "running preprocessing"),
-		QC2(3, "running QC of preprocessed."),
-		Diamond(4, "running diamond blast"),
-		Spades(5, "running spades"),
+		QC(1, "QC"),
+		Preprocessing(2, "Preprocessing"),
+		QC2(3, "QC of preprocessed."),
+		Diamond(4, "Filtring"),
+		Spades(5, "Assembly and Identification"),
 		FinishedAll(6, "finished");
 
 		public final int code;
@@ -85,12 +85,13 @@ public class NgsProgress {
 	private Boolean skipPreprocessing = false;
 
 	private Map<State, Long> stateStartTimeInMiliseconds = new TreeMap<NgsProgress.State, Long>();
-	
+
+	private Integer readLength = null;
 	private Integer readCountInit = null;
 	private Integer readCountAfterPrepocessing = null;
+
 	private Map<String, BasketData> diamondBlastResults = new HashMap<String, BasketData>();// count sequences per taxon.
 	private Map<String, BasketData> diamondBlastResultsBeforeMerge = new HashMap<String, BasketData>();// count sequences per taxon.
-	private Integer readCountAfterMakeConsensus = null;
 
 	public NgsProgress() {}
 
@@ -136,6 +137,41 @@ public class NgsProgress {
 		return stateStartTimeInMiliseconds.get(state);
 	}
 
+	/**
+	 * @return total read count at the beginning of state or null if the state is finished.
+	 */
+	public Integer getReadCountStartState(State state) {
+		switch (state) {
+		case Diamond:
+			return readCountAfterPrepocessing;
+		case FinishedAll:
+			break; // TODO, unused
+		case Init:
+			return readCountInit;
+		case Preprocessing:
+			return readCountInit;
+		case QC:
+			return readCountInit;
+		case QC2:
+			return readCountAfterPrepocessing;
+		case Spades:
+			return totalReadCountAfterFiltring();
+		}
+
+		return null;
+	}
+
+	public Integer totalReadCountAfterFiltring() {
+		if (diamondBlastResults.isEmpty())
+			return null;
+
+		Integer ans = 0;
+		for (BasketData b :diamondBlastResults.values())
+			ans += b.readCountTotal;
+
+		return ans;
+	}
+	
 	public String getErrors() {
 		return errors;
 	}
@@ -208,15 +244,6 @@ public class NgsProgress {
 		this.readCountAfterPrepocessing = readCountAfterPrepocessing;
 	}
 
-	public Integer getReadCountAfterMakeConsensus() {
-		return readCountAfterMakeConsensus;
-	}
-
-	public void setReadCountAfterMakeConsensus(
-			Integer readCountAfterMakeConsensus) {
-		this.readCountAfterMakeConsensus = readCountAfterMakeConsensus;
-	}
-
 	public Map<String, BasketData> getDiamondBlastResultsBeforeMerge() {
 		return diamondBlastResultsBeforeMerge;
 	}
@@ -224,5 +251,13 @@ public class NgsProgress {
 	public void setDiamondBlastResultsBeforeMerge(
 			Map<String, BasketData> diamondBlastResultsBeforeMerge) {
 		this.diamondBlastResultsBeforeMerge = diamondBlastResultsBeforeMerge;
+	}
+
+	public Integer getReadLength() {
+		return readLength;
+	}
+
+	public void setReadLength(Integer readLength) {
+		this.readLength = readLength;
 	}
 }

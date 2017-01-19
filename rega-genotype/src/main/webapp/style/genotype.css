@@ -445,3 +445,9 @@ table.reftable caption, .blastResultsTable table caption {
   margin:5px 0 5px 0;
 }
 
+.working {
+    background: gainsboro;
+}
+.waiting {
+    color: dimgray;
+}
