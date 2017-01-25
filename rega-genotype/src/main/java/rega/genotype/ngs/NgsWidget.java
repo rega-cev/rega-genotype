@@ -12,14 +12,12 @@ import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
-import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WChartPalette;
@@ -121,6 +119,9 @@ public class NgsWidget extends WContainerWidget{
 					NgsConsensusSequenceModel.READ_COUNT_COLUMN,
 					NgsConsensusSequenceModel.COLOR_COLUMN,
 					palette);
+			consensusTable.addTotalsRow(new int[]{
+					NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN,
+					NgsConsensusSequenceModel.READ_COUNT_COLUMN});
 
 			addWidget(consensusTable);
 		}

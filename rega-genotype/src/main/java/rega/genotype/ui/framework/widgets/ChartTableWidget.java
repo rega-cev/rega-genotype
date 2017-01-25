@@ -82,7 +82,7 @@ public class ChartTableWidget extends WContainerWidget{
 	}
 
 	private String formatDouble(Double d) {
-		DecimalFormat df = new DecimalFormat("#.00"); 
+		DecimalFormat df = new DecimalFormat("#.##"); 
 		return df.format(d);
 	}
 
@@ -136,6 +136,22 @@ public class ChartTableWidget extends WContainerWidget{
 				} else
 					addText(r + 1, c, model.getData(r, c));
 			}
+		}
+	}
+
+	public void addTotalsRow(int[] columns) {
+		int row = table.getRowCount();
+		addText(row, 0, "Totals");
+		for (int c: columns) {
+			double total = 0.0;
+			for (int r = 0; r < model.getRowCount(); ++r) {
+				Object data = model.getData(r, c);
+				if (data != null && data instanceof Double)
+					total += (Double)data;
+				else if(data != null && data instanceof Integer)
+					total += (Integer)data;
+			}
+			addText(row, c, total);
 		}
 	}
 }
