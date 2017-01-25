@@ -7,13 +7,9 @@ import rega.genotype.ngs.model.Contig;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
-import eu.webtoolkit.jwt.WBrush;
-import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WModelIndex;
-import eu.webtoolkit.jwt.WPen;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.chart.WChartPalette;
-import eu.webtoolkit.jwt.chart.WStandardPalette;
 
 /**
  * Display data for every assembled consensus sequence from ngs-results.xml  
@@ -23,18 +19,17 @@ import eu.webtoolkit.jwt.chart.WStandardPalette;
 public class NgsConsensusSequenceModel extends WAbstractTableModel {
 	public static final int ASSINGMENT_COLUMN =    0;
 	public static final int SEQUENCE_COUNT_COLUMN =1; // sequence count column. percentages of the chart.
-	public static final int CHART_DISPLAY_COLUMN = 2;
-	public static final int READ_COUNT_COLUMN =    3; 
-	public static final int TOTAL_LENGTH_COLUMN =  4; // % of Genome
-	public static final int DEEP_COV_COLUMN =      5;
-	public static final int SRC_COLUMN =           6;
-	public static final int COLOR_COLUMN =         7;
-	public static final int IMAGE_COLUMN =         8;
+	//public static final int CHART_DISPLAY_COLUMN = 2;
+	public static final int READ_COUNT_COLUMN =    2; 
+	public static final int TOTAL_LENGTH_COLUMN =  3; // % of Genome
+	public static final int DEEP_COV_COLUMN =      4;
+	public static final int SRC_COLUMN =           5;
+	public static final int COLOR_COLUMN =         6;
+	public static final int IMAGE_COLUMN =         7;
 
 	private WString[] headers = {
 			tr("detailsForm.summary.assignment"),
 			tr("detailsForm.summary.contig-count"),
-			tr("----"),
 			tr("detailsForm.summary.read-cunt"),
 			tr("detailsForm.summary.total-len"),
 			tr("detailsForm.summary.deep-cov"),

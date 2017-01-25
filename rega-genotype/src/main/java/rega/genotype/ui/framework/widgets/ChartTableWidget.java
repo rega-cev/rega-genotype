@@ -1,22 +1,21 @@
 package rega.genotype.ui.framework.widgets;
 
+import java.text.DecimalFormat;
 import java.util.EnumSet;
 
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.PositionScheme;
 import eu.webtoolkit.jwt.Side;
-import eu.webtoolkit.jwt.ViewItemRenderFlag;
-import eu.webtoolkit.jwt.WAbstractItemDelegate;
 import eu.webtoolkit.jwt.WAbstractItemModel;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
-import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
-import eu.webtoolkit.jwt.WWidget;
+import eu.webtoolkit.jwt.WTable;
+import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WChartPalette;
 import eu.webtoolkit.jwt.chart.WPieChart;
@@ -29,18 +28,16 @@ import eu.webtoolkit.jwt.chart.WPieChart;
 public class ChartTableWidget extends WContainerWidget{
 	protected WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
 	protected WPieChart chart;
-	private StandardTableView table = new StandardTableView();
+	private WTable table = new WTable();
 	private int chartDataColumn;
-	private int chartDisplayColumn;
 	private int colorColumn;
 	private WAbstractItemModel model;
 	private WChartPalette chartPalette;
 
 	public ChartTableWidget(WAbstractItemModel model, int chartDataColumn, 
-			int chartDisplayColumn, int colorColumn, WChartPalette chartPalette) {
+			int colorColumn, WChartPalette chartPalette) {
 		this.model = model;
 		this.chartDataColumn = chartDataColumn;
-		this.chartDisplayColumn = chartDisplayColumn;
 		this.colorColumn = colorColumn;
 		this.chartPalette = chartPalette;
 
@@ -77,42 +74,53 @@ public class ChartTableWidget extends WContainerWidget{
 		chart.setStartAngle(90);
 
 		chart.setModel(model);
-		//chart.setLabelsColumn(CHART_DISPLAY_COLUMN);
 		chart.setDataColumn(chartDataColumn);
 		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
 		chart.setPlotAreaPadding(30);
 		chart.setPalette(chartPalette);
 	}
 
+	private String formatDouble(Double d) {
+		DecimalFormat df = new DecimalFormat("#.00"); 
+		return df.format(d);
+	}
+
+	private void addText(int row, int column, Object o) {
+		if (o != null) {
+			String text;
+			if (o instanceof Double)
+				text = formatDouble((Double) o);
+			else
+				text = o.toString();
+			table.getElementAt(row, column).addWidget(
+					new WText(text));
+		}
+	}
+
 	public void initTable() {
 		addWidget(table);
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-		table.setSortingEnabled(false);
-		table.setWidth(new WLength(500));
-		table.setStyleClass("blastResultsTable");
-		//table.setHeaderHeight(new WLength(20));
-		table.hideColumn(chartDisplayColumn);
-		table.setModel(model);
-		table.setTableWidth(true);
+		table.setHeaderCount(1);
+		table.setStyleClass("jobTable");
+		for (int c = 0; c < model.getColumnCount(); c++) 
+			addText(0, c, model.getHeaderData(c));
 
-		table.setItemDelegateForColumn(colorColumn, new WAbstractItemDelegate() {
-			@Override
-			public WWidget update(WWidget widget, WModelIndex index, EnumSet<ViewItemRenderFlag> flags) {
-				WContainerWidget w = new WContainerWidget();
-				w.setStyleClass("legend-item");
-				WColor c = (WColor)index.getData(ItemDataRole.UserRole + 1);
-				if (c != null)
-					w.getDecorationStyle().setBackgroundColor(c);
-
-				w.setMargin(WLength.Auto, Side.Left, Side.Right);
-
-				return w;
+		for (int r = 0; r < model.getRowCount(); r++) {
+			for (int c = 0; c < model.getColumnCount(); c++) {
+				if (c == colorColumn) {
+					WContainerWidget w = new WContainerWidget();
+					w.setStyleClass("legend-item");
+					WColor color = (WColor)model.getData(r,c,ItemDataRole.UserRole + 1);
+					if (color != null)
+						w.getDecorationStyle().setBackgroundColor(color);
+	
+					w.setMargin(WLength.Auto, Side.Left, Side.Right);
+					w.setMargin(15, Side.Top);
+					w.resize(30, 30);
+					table.getElementAt(r + 1, c).addWidget(w);
+				} else
+					addText(r + 1, c, model.getData(r, c));
 			}
-		});
-
-	}
-
-	public StandardTableView getTable() {
-		return table;
+		}
 	}
 }

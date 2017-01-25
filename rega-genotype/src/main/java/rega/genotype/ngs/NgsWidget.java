@@ -118,21 +118,10 @@ public class NgsWidget extends WContainerWidget{
 			consensusTable = new ChartTableWidget(
 					consensusModel,
 					NgsConsensusSequenceModel.READ_COUNT_COLUMN,
-					NgsConsensusSequenceModel.CHART_DISPLAY_COLUMN, 
 					NgsConsensusSequenceModel.COLOR_COLUMN,
 					palette);
 
 			addWidget(consensusTable);
-
-			StandardTableView table = consensusTable.getTable();
-			table.setColumnWidth(NgsConsensusSequenceModel.ASSINGMENT_COLUMN, new WLength(340));
-			table.setColumnWidth(NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN, new WLength(80));
-			table.setColumnWidth(NgsConsensusSequenceModel.READ_COUNT_COLUMN, new WLength(80));
-			table.setColumnWidth(NgsConsensusSequenceModel.SRC_COLUMN, new WLength(60));
-			table.setColumnWidth(NgsConsensusSequenceModel.TOTAL_LENGTH_COLUMN, new WLength(90));
-			table.setColumnWidth(NgsConsensusSequenceModel.DEEP_COV_COLUMN, new WLength(90));
-			table.setColumnWidth(NgsConsensusSequenceModel.COLOR_COLUMN, new WLength(60));
-			table.setTableWidth(true);
 		}
 
 		if (model.getState() == State.FinishedAll) {
