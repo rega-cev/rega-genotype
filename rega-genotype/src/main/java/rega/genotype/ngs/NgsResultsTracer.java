@@ -55,7 +55,7 @@ public class NgsResultsTracer extends ResultTracer{
 		printlnOpenElement("init");
 		add("pe-1-file", model.getFastqPE1FileName());
 		add("pe-2-file", model.getFastqPE1FileName());
-		add("end-time", time());
+		add("end-time-ms", time());
 		printlnCloseLastElement();
 		w.flush();
 	}
@@ -64,14 +64,14 @@ public class NgsResultsTracer extends ResultTracer{
 		printlnOpenElement("qc1");
 		add("read-length", model.getReadLength());
 		add("read-count", model.getReadCountInit());
-		add("end-time", time());
+		add("end-time-ms", time());
 		printlnCloseLastElement();
 		w.flush();
 	}
 
 	public void printPreprocessing() {
 		printlnOpen("<preprocessing>");
-		add("end-time", time());
+		add("end-time-ms", time());
 		printlnClose("</preprocessing>");
 		w.flush();
 	}
@@ -80,7 +80,7 @@ public class NgsResultsTracer extends ResultTracer{
 		printlnOpen("<qc2>");
 		add("read-length", model.getReadLength());
 		add("read-count", model.getReadCountAfterPrepocessing());
-		add("end-time", time());
+		add("end-time-ms", time());
 		printlnClose("</qc2>");
 		w.flush();
 	}
@@ -94,7 +94,7 @@ public class NgsResultsTracer extends ResultTracer{
 			add("read-count-total", b.getReadCountTotal());
 			printlnClose("</diamond-bucket>");
 		}
-		add("end-time", time());
+		add("end-time-ms", time());
 		printlnClose("</filtring>");
 		w.flush();
 	}
@@ -126,7 +126,7 @@ public class NgsResultsTracer extends ResultTracer{
 
 	public void printAssemblybucketClose() {
 		printlnCloseLastElement("bucket");
-		add("end-time", time());
+		add("end-time-ms", time());
 		w.flush();
 	}
 

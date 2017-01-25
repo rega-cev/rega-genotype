@@ -44,11 +44,11 @@ public class NgsResultsParser extends GenotypeResultParser{
 					"/genotype_result/init/pe-2-file"));
 			model.readStateTime(State.Init, 0L);
 			model.readStateTime(State.QC, Long.parseLong(GenotypeLib.getEscapedValue(this,
-					"/genotype_result/init/end-time")));
+					"/genotype_result/init/end-time-ms")));
 		} else if (tag.equals("qc1")) {
 			model.readStateTime(State.Preprocessing, Long.parseLong(
 					GenotypeLib.getEscapedValue(this,
-							"/genotype_result/qc1/end-time")));
+							"/genotype_result/qc1/end-time-ms")));
 			model.setReadLength(Integer.parseInt(
 					GenotypeLib.getEscapedValue(this,
 							"/genotype_result/qc1/read-length")));
@@ -58,11 +58,11 @@ public class NgsResultsParser extends GenotypeResultParser{
 		} else if (tag.equals("preprocessing")) {
 			model.readStateTime(State.QC2, Long.parseLong(
 					GenotypeLib.getEscapedValue(this,
-							"/genotype_result/preprocessing/end-time")));
+							"/genotype_result/preprocessing/end-time-ms")));
 		} else if (tag.equals("qc2")) {
 			model.readStateTime(State.Diamond, Long.parseLong(
 					GenotypeLib.getEscapedValue(this,
-							"/genotype_result/qc2/end-time")));
+							"/genotype_result/qc2/end-time-ms")));
 			model.setReadLength(Integer.parseInt(
 					GenotypeLib.getEscapedValue(this,
 							"/genotype_result/qc2/read-length")));
@@ -71,7 +71,7 @@ public class NgsResultsParser extends GenotypeResultParser{
 							"/genotype_result/qc2/read-count")));
 		} else if (tag.equals("filtring")) {
 			Element filtringE = getElement("/genotype_result/filtring");
-			model.readStateTime(State.Spades, Long.parseLong(filtringE.getChildText("end-time")));
+			model.readStateTime(State.Spades, Long.parseLong(filtringE.getChildText("end-time-ms")));
 
 			List<Element> children = filtringE.getChildren("diamond-bucket");
 			for (Element bucketE: children){
@@ -86,7 +86,7 @@ public class NgsResultsParser extends GenotypeResultParser{
 		} else if (tag.equals("assembly")) {
 			//assembly/bucket/
 			Element assemblyE = getElement("/genotype_result/assembly");
-			model.readStateTime(State.FinishedAll, Long.parseLong(assemblyE.getChildText("end-time")));
+			model.readStateTime(State.FinishedAll, Long.parseLong(assemblyE.getChildText("end-time-ms")));
 		} else if (tag.equals("bucket")) {
 			List<Element> elements = getElements("/genotype_result/assembly/bucket");
 			Element bucketE = elements.get(elements.size() - 1);
