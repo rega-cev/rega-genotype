@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Stack;
 
 /**
  * A utility class that serializes genotyping results to the results.xml file.
@@ -17,10 +18,11 @@ import java.io.PrintWriter;
  * @author koen
  */
 public class ResultTracer {
-    PrintWriter w;
-    File        file;
-    AbstractSequence currentSequence;
-    int indent;
+    protected PrintWriter w;
+    protected File        file;
+    protected AbstractSequence currentSequence;
+    protected int indent;
+	protected Stack<String> openElements = new Stack<String>();
 
     public ResultTracer(OutputStream output) {
         this.file = null;
@@ -59,23 +61,19 @@ public class ResultTracer {
     
     private void startNewSequence(AbstractSequence sequence) {
     	if (sequence != null) {
-            w.println("  <sequence name=\"" + escapeXml(sequence.getName()) + "\" length=\""
+           printlnOpen("<sequence name=\"" + escapeXml(sequence.getName()) + "\" length=\""
                     + sequence.getLength() + "\" description=\"" + escapeXml(sequence.getDescription()) +"\">");
-            sequence.writeSequenceMetadata(this);
-          w.println("    <nucleotides>");
-          w.println("      " + sequence.getSequence());
-          w.println("    </nucleotides>");
-          
-          indent = 4;
-    	} else
-    	  indent = 2;
+          printlnOpen("<nucleotides>");
+          println(sequence.getSequence());
+          printlnClose("</nucleotides>");
 
+    	} 
     	currentSequence = sequence;
     }
 
-    private void finishCurrentSequence() {
+    public void finishCurrentSequence() {
         if (currentSequence != null)
-            w.println("  </sequence>");
+            printlnClose("</sequence>");
         w.flush();
         currentSequence = null;
     }
@@ -89,7 +87,7 @@ public class ResultTracer {
         w.flush();
     }
 
-    private void writeXMLEnd() {
+    protected void writeXMLEnd() {
         finishCurrentSequence();
             
         printlnClose("</genotype_result>");
@@ -111,7 +109,36 @@ public class ResultTracer {
     public void println(String s) {
         w.println(indent() + s);
     }
-    
+
+    /**
+     * open xml element the element can be closed with printlnCloseLastElement.
+     * @param tag xml tag example: sequence
+     * @param attributes xml attributes example: name="gi_9629352__0 consensus" length="6423" description=" "
+     */
+    public void printlnOpenElement(String tag, String attributes) {
+    	openElements.push(tag);
+        printlnOpen("<" + tag + " " + attributes + ">");
+    }
+
+    public void printlnOpenElement(String tag) {
+    	openElements.push(tag);
+        printlnOpen("<" + tag + ">");
+    }
+
+    /**
+     * Close and removes the last element that was open with 
+     * printlnOpenElement
+     */
+    public void printlnCloseLastElement() {
+        printlnClose("</" + openElements.pop() + ">");
+    }
+
+    public void printlnCloseLastElement(String tag) {
+    	if (!openElements.peek().equals(tag))
+    		throw new RuntimeException("Tracer error: wrong tag");
+        printlnCloseLastElement();
+    }
+
     public void printlnOpen(String s) {
         println(s);
         increaseIndent();
@@ -155,6 +182,10 @@ public class ResultTracer {
         add(tag, Integer.toString(value));
     }
 
+    public void add(String tag, Long value) {
+        add(tag, Long.toString(value));
+    }
+
     public File getResourceFile(String extension) {
         File result = null;
 
@@ -180,14 +211,12 @@ public class ResultTracer {
             startNewSequence(e.getSequence());
         }
 
-        indent = 4;
         printlnOpen("<error>");
         println(e.getMessage());
         printlnClose("</error>");
 	}
 
 	public void printError(Exception e) {
-		indent = 2;
         printlnOpen("<error>");
         println(e.getMessage());
         printlnClose("</error>");		

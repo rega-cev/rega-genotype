@@ -46,12 +46,21 @@ public class NgsTest  extends TestCase{
 		File pe2 = new File("base-unit-test-work-dir" + File.separator + "ngs-test" + File.separator
 				+ "RES166_S76_L001_R2_001.fastq");
 
-		if (!NgsFileSystem.addFastqFiles(jobDir, pe1, pe2)) {
+		NgsResultsTracer ngsResults;
+		try {
+			ngsResults = new NgsResultsTracer(jobDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+			assertTrue(false);
+			return;
+		}
+
+		if (!NgsFileSystem.addFastqFiles(ngsResults, pe1, pe2)) {
 			fail("Could not copy ngs files");
 			return;
 		}
 
-		NgsAnalysis ngsAnalysis = new NgsAnalysis(jobDir,  
+		NgsAnalysis ngsAnalysis = new NgsAnalysis(ngsResults,  
 				Settings.getInstance().getConfig().getNgsModule(), toolConfig);
 		ngsAnalysis.analyze();
 

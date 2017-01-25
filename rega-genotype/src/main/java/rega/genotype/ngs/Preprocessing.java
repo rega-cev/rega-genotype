@@ -36,9 +36,9 @@ public class Preprocessing{
 	 * @throws ApplicationException
 	 * TODO: delete - not used
 	 */
-	public static List<File> trimomatic(File workDir, Logger logger) throws ApplicationException {
-		File sequenceFile1 = NgsFileSystem.fastqPE1(workDir);
-		File sequenceFile2 = NgsFileSystem.fastqPE2(workDir);
+	public static List<File> trimomatic(NgsResultsTracer ngsResults, Logger logger) throws ApplicationException {
+		File sequenceFile1 = NgsFileSystem.fastqPE1(ngsResults);
+		File sequenceFile2 = NgsFileSystem.fastqPE2(ngsResults);
 
 		File ngsModulePath = Settings.getInstance().getConfig().trimomaticPath();
 		if (ngsModulePath == null)
@@ -52,12 +52,13 @@ public class Preprocessing{
 
 		String inputFileNames = sequenceFile1.getAbsolutePath() + " " + sequenceFile2.getAbsolutePath();
 
-		File preprocessedDir = new File(workDir, NgsFileSystem.PREPROCESSED_DIR);
+		File preprocessedDir = new File(ngsResults.getWorkDir(),
+				NgsFileSystem.PREPROCESSED_DIR);
 		preprocessedDir.mkdirs();
-		NgsFileSystem.preprocessedPE1(workDir);
+		NgsFileSystem.preprocessedPE1(ngsResults);
 		
-		File paired1 = NgsFileSystem.createPreprocessedPE1(workDir, sequenceFile1.getName());
-		File paired2 = NgsFileSystem.createPreprocessedPE2(workDir, sequenceFile2.getName());
+		File paired1 = NgsFileSystem.createPreprocessedPE1(ngsResults.getWorkDir(), sequenceFile1.getName());
+		File paired2 = NgsFileSystem.createPreprocessedPE2(ngsResults.getWorkDir(), sequenceFile2.getName());
 
 		File unpaired1 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile1.getName());
 		File unpaired2 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile2.getName());
@@ -69,7 +70,7 @@ public class Preprocessing{
 
 		String cmd = trimmomaticCmd + " " + inputFileNames + " " + outoutFileNames + " " + trimmomaticOptions;
 
-		NgsFileSystem.executeCmd(cmd, workDir, logger);
+		NgsFileSystem.executeCmd(cmd, ngsResults.getWorkDir(), logger);
 
 		List<File> ans = new ArrayList<File>();
 		ans.add(paired1);

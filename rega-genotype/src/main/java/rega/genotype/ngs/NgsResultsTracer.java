@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.GsonUtil;
+import rega.genotype.NgsSequence.BucketData;
+import rega.genotype.NgsSequence.Contig;
+import rega.genotype.ResultTracer;
 
 /**
  * JSON file that monitors NGS analysis state.
@@ -17,7 +18,7 @@ import rega.genotype.utils.GsonUtil;
  * 
  * @author michael
  */
-public class NgsProgress {
+public class NgsResultsTracer extends ResultTracer{
 	public static final String NGS_PROGRESS_FILL = "ngs_progress";
 
 	public enum State {
@@ -84,7 +85,7 @@ public class NgsProgress {
 	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
 	private Boolean skipPreprocessing = false;
 
-	private Map<State, Long> stateStartTimeInMiliseconds = new TreeMap<NgsProgress.State, Long>();
+	private Map<State, Long> stateStartTimeInMiliseconds = new TreeMap<NgsResultsTracer.State, Long>();
 
 	private Integer readLength = null;
 	private Integer readCountInit = null;
@@ -92,9 +93,24 @@ public class NgsProgress {
 
 	private Map<String, BasketData> diamondBlastResults = new HashMap<String, BasketData>();// count sequences per taxon.
 	private Map<String, BasketData> diamondBlastResultsBeforeMerge = new HashMap<String, BasketData>();// count sequences per taxon.
+	private File workDir;
 
-	public NgsProgress() {}
+	public NgsResultsTracer(File workDir) throws IOException {
+		super(createResultsFile(workDir));
+		this.workDir = workDir;
+	}
 
+	public static File ngsRsultsFile(File workDir) {
+		return new File(workDir, "ngs-results.xml");
+	}
+
+	private static File createResultsFile(File workDir) throws IOException {
+		workDir.mkdirs();
+		File ngsRsultsFile = ngsRsultsFile(workDir);
+		ngsRsultsFile.createNewFile();
+		return ngsRsultsFile;
+	}
+/*
 	public static NgsProgress read(File workDir) {
 		File ngsProgressFile = new File(workDir, NGS_PROGRESS_FILL);
 		if (!ngsProgressFile.exists())
@@ -123,6 +139,110 @@ public class NgsProgress {
 			assert(false);
 		}
 	}
+ */
+
+	public static NgsResultsTracer read(File workDir) {
+		return null; // TODO
+	}
+
+	// ngs-results.xml is written incrementally -> every step needs to be written separately.
+	public void printInit() {
+		add("pe-1-file", fastqPE1FileName);
+		add("pe-2-file", fastqPE1FileName);
+		add("init-time", stateStartTimeInMiliseconds.get(State.Init));
+		w.flush();
+	}
+
+	public void printQC1() {
+		printlnOpenElement("qc1");
+		add("read-length", readLength);
+		add("read-count", readCountInit);
+		add("time", stateStartTimeInMiliseconds.get(State.QC));
+		printlnCloseLastElement();
+		w.flush();
+	}
+
+	public void printPreprocessing() {
+		printlnOpen("<preprocessing>");
+		add("time", stateStartTimeInMiliseconds.get(State.Preprocessing));
+		printlnClose("</preprocessing>");
+		w.flush();
+	}
+
+	public void printQC2() {
+		printlnOpen("<qc2>");
+		add("read-length", readLength);
+		add("read-count", readCountAfterPrepocessing);
+		add("time", stateStartTimeInMiliseconds.get(State.QC2));
+		printlnClose("</qc2>");
+		w.flush();
+	}
+
+	public void printFiltring() {
+		printlnOpen("<filtring>");
+		add("TODO", "print diamond results");
+		// TODO write diamondBlastResults
+		add("time", stateStartTimeInMiliseconds.get(State.Diamond));
+		printlnClose("</filtring>");
+		w.flush();
+	}
+
+	public void printAssemblyOpen() {
+		printlnOpenElement("assembly");
+		add("time", stateStartTimeInMiliseconds.get(State.Spades));
+		w.flush();
+	}
+
+	public void printAssemblybucketOpen(
+			BucketData bucketData, List<Contig> contigs) {
+		printlnOpenElement("bucket",
+				"id=\"" + bucketData.getDiamondBucket() + "__" + bucketData.getRefName() + "\"");
+		add("diamond_bucket", bucketData.getDiamondBucket());
+		add("ref_name", bucketData.getRefName());
+		add("ref_description", bucketData.getRefDescription());
+		add("ref_length", bucketData.getRefLen());
+		// TODO: write spades results
+		printlnOpen("<contigs>");
+		for (Contig contig: contigs) {
+			printlnOpen("<contig id=\"" + contig.getId() + "\">");
+			add("length", contig.getLength());
+			add("cov", contig.getCov());
+			add("nucleotides", contig.getSequence());
+			printlnClose("</contig>");
+		}
+		printlnClose("</contigs>");
+	}
+
+	public void printAssemblybucketClose() {
+		printlnCloseLastElement("bucket");
+		
+		w.flush();
+	}
+
+	public void printAssemblyError(String error) {
+		add("error", error);
+		if (openElements.peek().equals("bucket")) {
+			openElements.pop();
+			printlnClose("</bucket>");
+		}
+		w.flush();
+	}
+
+	public void printStop() {
+		System.err.println(indent);
+		System.err.println(openElements.size());
+		while (!openElements.isEmpty()) {
+			printlnCloseLastElement();
+		}
+		add("end-time", System.currentTimeMillis());
+		writeXMLEnd();
+	}
+
+	public void printFatalError(String error) {
+		setErrors(error);
+		add("error", error);
+		printStop();
+	}
 
 	public State getState() {
 		return state;
@@ -131,6 +251,30 @@ public class NgsProgress {
 	public void setState(State state) {
 		this.state = state;
 		stateStartTimeInMiliseconds.put(state, System.currentTimeMillis());
+		
+//		switch (state) {
+//		case Init:
+//			writeXmlInit();
+//			break;
+//		case QC:
+//			writeXmlQC1(); should be write init here ..
+//			break;
+//		case Preprocessing:
+//			writeXmlPreprocessing();
+//			break;
+//		case QC2:
+//			writeXmlQC2();
+//			break;
+//		case Diamond:
+//			writeXmlFiltring();
+//			break;
+//		case Spades:
+//			writeXmlAssemblyStart();
+//			break;
+//		case FinishedAll:
+//			writeXmlAssemblyEnd();
+//			break;
+//		}
 	}
 
 	public Long getStateStartTime(State state) {
@@ -259,5 +403,13 @@ public class NgsProgress {
 
 	public void setReadLength(Integer readLength) {
 		this.readLength = readLength;
+	}
+
+	public File getWorkDir() {
+		return workDir;
+	}
+
+	public void setWorkDir(File workDir) {
+		this.workDir = workDir;
 	}
 }

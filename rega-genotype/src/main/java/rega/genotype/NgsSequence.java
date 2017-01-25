@@ -30,19 +30,15 @@ public class NgsSequence extends Sequence {
 		resultTracer.add("ref_length", bucketData.getRefLen());
 		resultTracer.add("ref_description", bucketData.getRefDescription());
 		resultTracer.add("ref_name", bucketData.getRefName());
-		resultTracer.println("<contigs>");
-		resultTracer.increaseIndent();
+		resultTracer.printlnOpen("<contigs>");
 		for (Contig contig: contigs) {
-			resultTracer.println("<contig id=\"" + contig.id + "\">");
-			resultTracer.increaseIndent();
+			resultTracer.printlnOpen("<contig id=\"" + contig.id + "\">");
 			resultTracer.add("length", contig.length);
 			resultTracer.add("cov", contig.cov);
 			resultTracer.add("nucleotides", contig.sequence);
-			resultTracer.decreaseIndent();
-			resultTracer.println("</contig>");
+			resultTracer.printlnClose("</contig>");
 		}
-		resultTracer.decreaseIndent();
-		resultTracer.println("</contigs>");
+		resultTracer.printlnClose("</contigs>");
 		resultTracer.decreaseIndent();
 	}
 

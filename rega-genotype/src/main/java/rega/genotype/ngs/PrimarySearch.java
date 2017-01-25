@@ -23,8 +23,8 @@ import rega.genotype.config.Config.GeneralConfig;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
-import rega.genotype.ngs.NgsProgress.BasketData;
-import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ngs.NgsResultsTracer.BasketData;
+import rega.genotype.ngs.NgsResultsTracer.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.utils.LogUtils;
@@ -162,6 +162,11 @@ public class PrimarySearch{
 			return readNameTaxonIdMap;
 		}
 
+		/**
+		 * print the tree into diamonResults.
+		 * @param diamonResults
+		 * @param newickTree
+		 */
 		void fillDiamondResults(Map<String, BasketData> diamonResults, StringBuilder newickTree) {
 			diamonResults.clear();
 			fillDiamondResults(root, diamonResults, newickTree );
@@ -293,10 +298,11 @@ public class PrimarySearch{
 	 * @return primary search results that will be used by NgsProgress
 	 * @throws ApplicationException
 	 */
-	public static void diamondSearch(File workDir, NgsModule ngsModule, Logger logger) throws ApplicationException {
-		File preprocessedPE1 = NgsFileSystem.preprocessedPE1(workDir);
-		File preprocessedPE2 = NgsFileSystem.preprocessedPE2(workDir);
+	public static void diamondSearch(NgsResultsTracer ngsProgress, NgsModule ngsModule, Logger logger) throws ApplicationException {
+		File preprocessedPE1 = NgsFileSystem.preprocessedPE1(ngsProgress);
+		File preprocessedPE2 = NgsFileSystem.preprocessedPE2(ngsProgress);
 
+		File workDir = ngsProgress.getWorkDir();
 		File diamondDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
 		if (!(diamondDir.exists())){
 			diamondDir.mkdirs();
@@ -310,9 +316,7 @@ public class PrimarySearch{
 			throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
 		} 
 
-		NgsProgress ngsProgress = NgsProgress.read(workDir);
 		ngsProgress.setState(State.Diamond);
-		ngsProgress.save(workDir);
 
 		File matches = null;
 		File view = null;
@@ -396,7 +400,7 @@ public class PrimarySearch{
 	}
 
 	// TODO: we are still testing what will be the best way to bucket.
-	private static Map<String, String> basketDiamondResultsBasedOnBestScore(File view, NgsProgress ngsProgress) throws NumberFormatException, IOException {
+	private static Map<String, String> basketDiamondResultsBasedOnBestScore(File view, NgsResultsTracer ngsProgress) throws NumberFormatException, IOException {
 		String line = "";
 		BufferedReader bf;
 		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
@@ -538,8 +542,11 @@ public class PrimarySearch{
 					readTaxaDebug.append(t + " " + TaxonomyModel.getInstance().getHirarchy(t, 100) + "\n");
 				}
 				//log.info("Set: " + Arrays.toString(readTaxa.toArray()));
-				log.info(readTaxaDebug.toString());
-				log.info("lowestAncestor = " + lowestAncestor + "\n");
+				boolean debug = false;
+				if (debug){
+					log.info(readTaxaDebug.toString());
+					log.info("lowestAncestor = " + lowestAncestor + "\n");
+				}
 				taxonomyTree.add(lowestAncestor, prevName);
 				readTaxa.clear();
 			}
@@ -620,7 +627,7 @@ public class PrimarySearch{
 	 * @throws IOException
 	 */
 	private static void creatDiamondResults(File diamondResultsDir, File view, File[] fastqFiles,
-			NgsProgress ngsProgress, Logger logger) throws FileFormatException, IOException {
+			NgsResultsTracer ngsProgress, Logger logger) throws FileFormatException, IOException {
 		long start = System.currentTimeMillis();
 		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view, diamondResultsDir.getParentFile());
 		StringBuilder newickTreeBeforeMerge = new StringBuilder(); // TODO ..
@@ -667,7 +674,5 @@ public class PrimarySearch{
 			fileReader.close();
 			lnr.close();
 		}
-
-		ngsProgress.save(diamondResultsDir.getParentFile());
 	}
 }

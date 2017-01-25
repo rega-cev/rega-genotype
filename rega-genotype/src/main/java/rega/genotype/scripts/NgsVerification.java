@@ -8,8 +8,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import rega.genotype.ApplicationException;
-import rega.genotype.ngs.NgsProgress;
-import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ngs.NgsResultsTracer;
+import rega.genotype.ngs.NgsResultsTracer.State;
 import rega.genotype.ngs.QC;
 import rega.genotype.ngs.QC.QcData;
 import rega.genotype.tools.blast.BlastJobOverviewForm.BlastResultParser;
@@ -168,7 +168,7 @@ public class NgsVerification {
 			ExcelUtils.add(hssfRow, READ_COLUMN, readCount+"");
 			ExcelUtils.add(hssfRow, COV_COLUMN, deepCov+"");
 			
-			final NgsProgress ngsProgress = NgsProgress.read(currentJobDir);
+			final NgsResultsTracer ngsProgress = NgsResultsTracer.read(currentJobDir);
 			if (ngsProgress == null){
 				ExcelUtils.add(hssfRow, TIME_COLUMN, "Error no ngs progress file");
 			} else {

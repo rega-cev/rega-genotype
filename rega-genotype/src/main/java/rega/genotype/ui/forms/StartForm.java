@@ -23,6 +23,7 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.NgsAnalysis;
 import rega.genotype.ngs.NgsFileSystem;
+import rega.genotype.ngs.NgsResultsTracer;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
@@ -242,10 +243,17 @@ public class StartForm extends AbstractForm {
 				if (!srr.getText().isEmpty()) {
 					final File workDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getJobDir());
 
+					NgsResultsTracer ngsResults;
+					try {
+						ngsResults = new NgsResultsTracer(workDir);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						return;
+					}
 					boolean downloaded = false;
 					String err = "";
 					try {
-						downloaded = NgsFileSystem.downloadSrrFile(srr.getText(), workDir);
+						downloaded = NgsFileSystem.downloadSrrFile(ngsResults, srr.getText());
 					} catch (ApplicationException e) {
 						e.printStackTrace();
 						err = e.getMessage();
@@ -255,7 +263,7 @@ public class StartForm extends AbstractForm {
 						StandardDialog d = new StandardDialog("Download error");
 						d.addText("Download srr file failed. " + err);
 					} else
-						startNgsAnalysis(workDir);
+						startNgsAnalysis(ngsResults);
 				} else {
 					fastqFileUpload1.upload();
 				}
@@ -314,10 +322,11 @@ public class StartForm extends AbstractForm {
 						FileUtils.copyFile(fastqFile1, extructedFastqPE1);
 						FileUtils.copyFile(fastqFile2, extructedFastqPE2);
 					}
-
-					NgsFileSystem.addFastqFiles(workDir, extructedFastqPE1, extructedFastqPE2);
+					
+					NgsResultsTracer ngsResults = new NgsResultsTracer(workDir);
+					NgsFileSystem.addFastqFiles(ngsResults, extructedFastqPE1, extructedFastqPE2);
 	
-					startNgsAnalysis(workDir);
+					startNgsAnalysis(ngsResults);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -338,18 +347,18 @@ public class StartForm extends AbstractForm {
 		ngsTemplate.setCondition("if-download-srr", true);
 	}
 
-	private void startNgsAnalysis(final File workDir) {
+	private void startNgsAnalysis(final NgsResultsTracer ngsResults) {
 		Thread ngsAnalysis = new Thread(new Runnable() {
 			public void run() {
 				ToolConfig toolConfig = getMain().getOrganismDefinition().getToolConfig();
-				NgsAnalysis ngsAnalysis = new NgsAnalysis(workDir,
+				NgsAnalysis ngsAnalysis = new NgsAnalysis(ngsResults,
 						Settings.getInstance().getConfig().getNgsModule(), toolConfig);
 				ngsAnalysis.analyze();
 			}
 		});
 		ngsAnalysis.start();
 		//initNgs(t);
-		getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(workDir) + "/");
+		getMain().changeInternalPath(JobForm.JOB_URL + "/" + AbstractJobOverview.jobId(ngsResults.getWorkDir()) + "/");
 	}
 
 	private WInteractWidget createButton(String textKey, String iconKey) {

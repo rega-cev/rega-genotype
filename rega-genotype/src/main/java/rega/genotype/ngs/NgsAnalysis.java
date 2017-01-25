@@ -18,7 +18,6 @@ import org.apache.commons.io.FileUtils;
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
-import rega.genotype.NgsSequence;
 import rega.genotype.NgsSequence.BucketData;
 import rega.genotype.NgsSequence.Contig;
 import rega.genotype.ParameterProblemException;
@@ -27,8 +26,8 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
-import rega.genotype.ngs.NgsProgress.BasketData;
-import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ngs.NgsResultsTracer.BasketData;
+import rega.genotype.ngs.NgsResultsTracer.State;
 import rega.genotype.ngs.QC.QcData;
 import rega.genotype.ngs.QC.QcResults;
 import rega.genotype.ngs.QC.QcResults.Result;
@@ -51,11 +50,13 @@ public class NgsAnalysis {
 	private File workDir;
 	private NgsModule ngsModule;
 	private ToolConfig toolConfig;
+	private NgsResultsTracer ngsResults;
 
-	public NgsAnalysis(File workDir, NgsModule ngsModule, ToolConfig toolConfig){
-		this.workDir = workDir;
+	public NgsAnalysis(NgsResultsTracer ngsProgress, NgsModule ngsModule, ToolConfig toolConfig){
+		this.workDir = ngsProgress.getWorkDir();
 		this.ngsModule = ngsModule;
 		this.toolConfig = toolConfig;
+		this.ngsResults = ngsProgress;
 		ngsLogger = LogUtils.createLogger(workDir);
 	}
 
@@ -68,7 +69,7 @@ public class NgsAnalysis {
 	 */
 	protected void preprocess() throws ApplicationException {
 		// Preprocessing.cutadaptPreprocess(workDir);
-		Preprocessing.trimomatic(workDir, ngsLogger);
+		Preprocessing.trimomatic(ngsResults, ngsLogger);
 	}
 
 	/**
@@ -79,7 +80,7 @@ public class NgsAnalysis {
 	 * @throws ApplicationException
 	 */
 	protected void primarySearch() throws ApplicationException {
-		PrimarySearch.diamondSearch(workDir, ngsModule, ngsLogger);
+		PrimarySearch.diamondSearch(ngsResults, ngsModule, ngsLogger);
 	}
 
 	/**
@@ -101,15 +102,12 @@ public class NgsAnalysis {
 	 * @param workDir
 	 */
 	public boolean analyze() {
-		NgsProgress ngsProgress = NgsProgress.read(workDir);
-
 		// QC
 
-		ngsProgress.setState(State.QC);
-		ngsProgress.save(workDir);
+		ngsResults.setState(State.QC);
 
 		boolean needPreprocessing = true;// TODO true -> always preproces // for now we base it only on adapter content.
-		File fastqDir = NgsFileSystem.fastqDir(workDir);
+		File fastqDir = NgsFileSystem.fastqDir(ngsResults);
 		try {
 			QC.qcReport(fastqDir.listFiles(),
 					new File(workDir, NgsFileSystem.QC_REPORT_DIR),
@@ -122,38 +120,35 @@ public class NgsAnalysis {
 			}
 
 			QcData qcData = new QC.QcData(QC.qcReportFile(workDir));
-			ngsProgress.setReadCountInit(qcData.getTotalNumberOfReads());
-			ngsProgress.setReadLength(qcData.getReadLength());
+			ngsResults.setReadCountInit(qcData.getTotalNumberOfReads());
+			ngsResults.setReadLength(qcData.getReadLength());
 		} catch (ApplicationException e1) {
 			e1.printStackTrace();
-			ngsProgress.setErrors("QC failed: " + e1.getMessage());
-			ngsProgress.save(workDir);
+			ngsResults.printFatalError("QC failed: " + e1.getMessage());
 			cleanBigData();
 			return false;
 		}
 
-		ngsProgress.setSkipPreprocessing(!needPreprocessing);
-		ngsProgress.setState(State.Preprocessing);
-		ngsProgress.save(workDir);
+		ngsResults.setSkipPreprocessing(!needPreprocessing);
+		ngsResults.setState(State.Preprocessing);
+		ngsResults.printQC1();
 
 		// pre-process
 		if (needPreprocessing) {
 			try {
 				preprocess();
+				ngsResults.printPreprocessing();
 			} catch (ApplicationException e) {
 				e.printStackTrace();
-				ngsProgress.setErrors("Preprocessing failed: " + e.getMessage());
-				ngsProgress.save(workDir);
+				ngsResults.printFatalError("Preprocessing failed: " + e.getMessage());
 				cleanBigData();
 				return false;
 			}
 
-			File preprocessed1 = NgsFileSystem.preprocessedPE1(workDir);
-			File preprocessed2 = NgsFileSystem.preprocessedPE2(workDir);
+			File preprocessed1 = NgsFileSystem.preprocessedPE1(ngsResults);
+			File preprocessed2 = NgsFileSystem.preprocessedPE2(ngsResults);
 
-			ngsProgress = NgsProgress.read(workDir);
-			ngsProgress.setState(State.QC2);
-			ngsProgress.save(workDir);
+			ngsResults.setState(State.QC2);
 
 			// QC 2
 
@@ -163,29 +158,27 @@ public class NgsAnalysis {
 						workDir);
 
 				QcData qcData = new QC.QcData(QC.qcPreprocessedReportFile(workDir));
-				ngsProgress.setReadCountAfterPrepocessing(qcData.getTotalNumberOfReads());
-				ngsProgress.setReadLength(qcData.getReadLength());
+				ngsResults.setReadCountAfterPrepocessing(qcData.getTotalNumberOfReads());
+				ngsResults.setReadLength(qcData.getReadLength());
+				ngsResults.printQC2();
 			} catch (ApplicationException e1) {
 				e1.printStackTrace();
-				ngsProgress.setErrors("QC failed: " + e1.getMessage());
-				ngsProgress.save(workDir);
+				ngsResults.printFatalError("QC failed: " + e1.getMessage());
 				cleanBigData();
 				return false;
 			}
 		} else {
-			ngsProgress.setReadCountAfterPrepocessing(ngsProgress.getReadCountInit());
+			ngsResults.setReadCountAfterPrepocessing(ngsResults.getReadCountInit());
 		}
-
-		ngsProgress.save(workDir);
 		
 		// diamond blast
 
 		try {
 			primarySearch();
+			ngsResults.printFiltring();
 		} catch (ApplicationException e) {
 			e.printStackTrace();
-			ngsProgress.setErrors("primary search failed: " + e.getMessage());
-			ngsProgress.save(workDir);
+			ngsResults.printFatalError("primary search failed: " + e.getMessage());
 			cleanBigData();
 			return false;
 		}
@@ -203,7 +196,7 @@ public class NgsAnalysis {
 		if (!workDir.exists() || workDir.listFiles() == null)
 			return;
 		File preprocessedDir = NgsFileSystem.preprocessedDir(workDir);
-		File fastqDir = NgsFileSystem.fastqDir(workDir);
+		File fastqDir = NgsFileSystem.fastqDir(ngsResults);
 		// TODO: diamond results are useful only for testing 
 		//File diamondDBDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
 		// delete all html files
@@ -224,46 +217,39 @@ public class NgsAnalysis {
 		}
 	}
 
-	public BlastTool startIdentification(NgsProgress ngsProgress) {
+	public BlastTool startIdentification(NgsResultsTracer ngsProgress) {
 		BlastTool tool;
-		String traceFile = workDir.getAbsolutePath() + File.separatorChar + "result.xml";
 		try {
 			tool = new BlastTool(toolConfig, workDir);
-			tool.startTracer(traceFile);
+			tool.setTracer(ngsProgress);
 			tool.formatDB();
 		} catch (IOException e) {
 			e.printStackTrace();
-			ngsProgress.setErrors("Identification - failed to init blast tool: " + e. getMessage());
-			ngsProgress.save(workDir);
+			ngsProgress.printFatalError("Identification - failed to init blast tool: " + e. getMessage());
 			return null;
 		} catch (ParameterProblemException e) {
 			e.printStackTrace();
-			ngsProgress.setErrors("Identification - failed to init blast tool: " + e. getMessage());
-			ngsProgress.save(workDir);
+			ngsProgress.printFatalError("Identification - failed to init blast tool: " + e. getMessage());
 			return null;
 		} catch (FileFormatException e) {
 			e.printStackTrace();
-			ngsProgress.setErrors("Identification - failed to init blast tool: " + e. getMessage());
-			ngsProgress.save(workDir);
+			ngsProgress.printFatalError("Identification - failed to init blast tool: " + e. getMessage());
 			return null;
 		} catch (ApplicationException e) {
 			e.printStackTrace();
-			ngsProgress.setErrors("Identification - failed to init blast tool: " + e. getMessage());
-			ngsProgress.save(workDir);
+			ngsProgress.printFatalError("Identification - failed to init blast tool: " + e. getMessage());
 			return null;
 		}
 		return tool;
 	}
 	
 	public boolean assembleAll() {
-		NgsProgress ngsProgress = NgsProgress.read(workDir); // primarySearch may update NgsProgress with diamond results.
-		BlastTool tool = startIdentification(ngsProgress);
+		BlastTool tool = startIdentification(ngsResults);
 		if (tool == null)
 			return false;
 
-		ngsProgress.setState(State.Spades);
-		ngsProgress.save(workDir);
-		
+		ngsResults.setState(State.Spades);
+		ngsResults.printAssemblyOpen();
 		// spades
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
 
@@ -274,23 +260,22 @@ public class NgsAnalysis {
 
 		jobLock.release();
 
-		tool.stopTracer();
+		//tool.stopTracer();
 		File done = new File(workDir.getAbsolutePath()+File.separatorChar+"DONE");
 		try {
 			FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
 		} catch (IOException e) {
 			e.printStackTrace();
-			ngsProgress.setErrors("Identification - could not write DONE file: " + e. getMessage());
-			ngsProgress.save(workDir);
+			ngsResults.printFatalError("Identification - could not write DONE file: " + e. getMessage());
 		}
 
 		File sequences = new File(workDir, NgsFileSystem.SEQUENCES_FILE);
 		if (!sequences.exists())
-			ngsProgress.setErrors("No assembly results.");
+			ngsResults.printFatalError("No assembly results.");
 		else
-			ngsProgress.setState(State.FinishedAll);
+			ngsResults.setState(State.FinishedAll);
 
-		ngsProgress.save(workDir);
+		ngsResults.printStop();
 
 		return true;
 	}
@@ -299,15 +284,13 @@ public class NgsAnalysis {
 		if (!virusDiamondDir.isDirectory())
 			return false;
 
-		NgsProgress ngsProgress = NgsProgress.read(workDir);
-
-		String fastqPE1FileName = NgsFileSystem.fastqPE1(workDir).getName();
-		String fastqPE2FileName = NgsFileSystem.fastqPE2(workDir).getName();
+		String fastqPE1FileName = NgsFileSystem.fastqPE1(ngsResults).getName();
+		String fastqPE2FileName = NgsFileSystem.fastqPE2(ngsResults).getName();
 
 		File sequenceFile1 = new File(virusDiamondDir, fastqPE1FileName);
 		File sequenceFile2 = new File(virusDiamondDir, fastqPE2FileName);
 
-		BasketData basketData = ngsProgress.getDiamondBlastResults().get(virusDiamondDir.getName());
+		BasketData basketData = ngsResults.getDiamondBlastResults().get(virusDiamondDir.getName());
 		if (ngsModule.getMinReadsToStartAssembly() > basketData.getReadCountTotal())
 			return false; // no need to assemble if there is not enough reads.
 
@@ -329,8 +312,7 @@ public class NgsAnalysis {
 					sequences.createNewFile();
 				} catch (IOException e1) {
 					e1.printStackTrace();
-					ngsProgress.setErrors("assemble failed, could not create sequences.xml");
-					ngsProgress.save(workDir);
+					ngsResults.printFatalError("assemble failed, could not create sequences.xml");
 					return false;
 				}
 
@@ -383,18 +365,18 @@ public class NgsAnalysis {
 							ref.getLength());
 
 					List<Contig> contigs = SequenceToolMakeConsensus.readCotigsData(refWorkDir);
-					if (!contigs.isEmpty()){
-						NgsSequence ngsSequence = new NgsSequence(name, false, description, s.getSequence(),
-								null, bucketData, contigs);
 
-						tool.analyze(ngsSequence);
+					ngsResults.printAssemblybucketOpen(bucketData, contigs);
+					if (!contigs.isEmpty()){
+						s.setName(name);
+						tool.analyze(s); // add consensus alignment to results file.
+						ngsResults.finishCurrentSequence();
 						i++;
 					}
+					ngsResults.printAssemblybucketClose();
 				}
 
 				ngsLogger.info("Created " + sequenceAlignment.getSequences().size() + " contigs");
-
-				ngsProgress.save(workDir);
 
 				consensus.delete();
 				sequenceAlignment.writeOutput(new FileOutputStream(consensus),
@@ -406,8 +388,7 @@ public class NgsAnalysis {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			ngsProgress.getSpadesErrors().add("assemble failed." + e.getMessage());
-			ngsProgress.save(workDir);
+			ngsResults.printAssemblyError("assemble failed." + e.getMessage());
 			return false;
 		}
 

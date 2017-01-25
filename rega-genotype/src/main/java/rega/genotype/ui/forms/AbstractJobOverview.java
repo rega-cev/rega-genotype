@@ -15,8 +15,8 @@ import org.jdom.Element;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
-import rega.genotype.ngs.NgsProgress;
-import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ngs.NgsResultsTracer;
+import rega.genotype.ngs.NgsResultsTracer.State;
 import rega.genotype.ngs.NgsWidget;
 import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
@@ -460,7 +460,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	protected boolean isNgsJob() {
-		return NgsProgress.read(jobDir) != null;
+		return NgsResultsTracer.ngsRsultsFile(jobDir).exists();
 	}
 
 	public void stop() {
@@ -489,7 +489,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		}
 		public void run() {
 			// prepare NGS data
-			NgsProgress ngsProgress = NgsProgress.read(jobDir);
+			NgsResultsTracer ngsProgress = NgsResultsTracer.read(jobDir);
 			if (ngsProgress != null) {
 				if (ngsProgress.getState() == State.FinishedAll || stop) {
 					UpdateLock updateLock = app.getUpdateLock();
@@ -506,7 +506,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 								app.triggerUpdate();
 								updateLock.release();
 
-								ngsProgress = NgsProgress.read(jobDir);
+								ngsProgress = NgsResultsTracer.read(jobDir);
 								if (ngsProgress != null 
 										&& (ngsProgress.getState() == State.Spades
 											|| !ngsProgress.getErrors().isEmpty()))

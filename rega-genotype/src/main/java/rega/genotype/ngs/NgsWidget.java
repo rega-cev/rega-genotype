@@ -7,7 +7,7 @@ import java.util.Comparator;
 import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.framework.async.LongJobsScheduler;
-import rega.genotype.ngs.NgsProgress.State;
+import rega.genotype.ngs.NgsResultsTracer.State;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Side;
@@ -27,7 +27,7 @@ public class NgsWidget extends WContainerWidget{
 	public NgsWidget(final File workDir) {
 		super();
 
-		final NgsProgress ngsProgress = NgsProgress.read(workDir);
+		final NgsResultsTracer ngsProgress = NgsResultsTracer.read(workDir);
 		if (ngsProgress == null)
 			return;
 
