@@ -270,8 +270,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			String toolId = config.getToolId(toolData.taxonomyId);
 			ToolConfig toolConfig = toolId == null ? null : config.getCurrentVersion(toolId);
 			if (toolConfig != null) {
-				blastModel.setData(row, ASSINGMENT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
-				blastModel.setData(row, SEQUENCE_COUNT_COLUMN, createToolLink(toolData.taxonomyId, jobId), ItemDataRole.LinkRole);
+				ToolConfig blastToolConfig = getMain().getOrganismDefinition().getToolConfig();
+				blastModel.setData(row, ASSINGMENT_COLUMN, createToolLink(
+						toolData.taxonomyId, jobId, blastToolConfig), ItemDataRole.LinkRole);
+				blastModel.setData(row, SEQUENCE_COUNT_COLUMN, createToolLink(
+						toolData.taxonomyId, jobId, blastToolConfig), ItemDataRole.LinkRole);
 			}
 			blastModel.setData(row, SEQUENCE_COUNT_COLUMN, toolData.sequencesData.size()); // percentage
 			blastModel.setData(row, CHART_DISPLAY_COLUMN, 
@@ -388,7 +391,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		return jobIdChanged;
 	}
 
-	private WLink createToolLink(final String taxonomyId, final String jobId) {
+	public static WLink createToolLink(final String taxonomyId, final String jobId, ToolConfig blastToolConfig) {
 		Config config = Settings.getInstance().getConfig();
 		ToolConfig toolConfig = config.getCurrentVersion(config.getToolId(taxonomyId));
 		if (toolConfig == null)
@@ -396,8 +399,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		String url = GenotypeMain.getApp().getServletContext().getContextPath()
 		+ "/typingtool/" + toolConfig.getPath() + "/"
-		+ BLAST_JOB_ID_PATH + "/" + getMain().getOrganismDefinition().getToolConfig().getId()
-		+ "/" + getMain().getOrganismDefinition().getToolConfig().getVersion() + "/" + jobId;
+		+ BLAST_JOB_ID_PATH + "/" + blastToolConfig.getId()
+		+ "/" + blastToolConfig.getVersion() + "/" + jobId;
 
 		WLink link = new WLink(url);
 		link.setTarget(AnchorTarget.TargetNewWindow);

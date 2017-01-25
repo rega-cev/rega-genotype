@@ -12,6 +12,7 @@ import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
 import eu.webtoolkit.jwt.WTable;
@@ -85,16 +86,23 @@ public class ChartTableWidget extends WContainerWidget{
 		return df.format(d);
 	}
 
-	private void addText(int row, int column, Object o) {
+	private String getText(Object o) {
+		String text = null;
 		if (o != null) {
-			String text;
 			if (o instanceof Double)
 				text = formatDouble((Double) o);
 			else
 				text = o.toString();
+		}
+
+		return text;
+	}
+
+	private void addText(int row, int column, Object o) {
+		String text = getText(o);
+		if (text != null)
 			table.getElementAt(row, column).addWidget(
 					new WText(text));
-		}
 	}
 
 	public void initTable() {
@@ -118,6 +126,13 @@ public class ChartTableWidget extends WContainerWidget{
 					w.setMargin(15, Side.Top);
 					w.resize(30, 30);
 					table.getElementAt(r + 1, c).addWidget(w);
+				} else if (model.getData(r, c, ItemDataRole.LinkRole) != null) {
+					// add link
+					WAnchor a = new WAnchor((WLink) model.getData(r, c, ItemDataRole.LinkRole));
+					String text = getText(model.getData(r, c));
+					if (text != null)
+						a.setText(text);
+					table.getElementAt(r + 1, c).addWidget(a);
 				} else
 					addText(r + 1, c, model.getData(r, c));
 			}

@@ -1,9 +1,12 @@
 package rega.genotype.ngs;
 
+import java.io.File;
 import java.util.List;
 
+import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
+import rega.genotype.tools.blast.BlastJobOverviewForm;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
@@ -40,12 +43,16 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 	private List<ConsensusBucket> buckets;
 	private int readLength; // from qc.
 	private WChartPalette palette;
+	private ToolConfig toolConfig;
+	private File jobDir;
 
 	public NgsConsensusSequenceModel(List<ConsensusBucket> buckets, 
-			int readLength, WChartPalette palette) {
+			int readLength, WChartPalette palette, ToolConfig toolConfig, File jobDir) {
 		this.buckets = buckets;
 		this.readLength = readLength;
 		this.palette = palette;
+		this.toolConfig = toolConfig;
+		this.jobDir = jobDir;
 	}
 
 	@Override
@@ -84,14 +91,16 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			} case SRC_COLUMN :
 				return bucket.getSrcDatabase();
 			case COLOR_COLUMN:
-				return "TODO";
+				return "";
 			case IMAGE_COLUMN:
 				return "TODO";
 			}
 		} else if (role == ItemDataRole.LinkRole) {
+			ConsensusBucket bucket = buckets.get(index.getRow());
 			if (index.getColumn() == ASSINGMENT_COLUMN
 					|| index.getColumn() == SEQUENCE_COUNT_COLUMN) {
-				// TODO
+				return BlastJobOverviewForm.createToolLink(bucket.getConcludedTaxonomyId(),
+						jobDir.getName(), toolConfig);
 			}
 		} else if (role == ItemDataRole.UserRole + 1) {
 			if (index.getColumn() == COLOR_COLUMN)
