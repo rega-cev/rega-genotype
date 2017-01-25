@@ -26,11 +26,11 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
-import rega.genotype.ngs.NgsResultsTracer.BasketData;
-import rega.genotype.ngs.NgsResultsTracer.State;
 import rega.genotype.ngs.QC.QcData;
 import rega.genotype.ngs.QC.QcResults;
 import rega.genotype.ngs.QC.QcResults.Result;
+import rega.genotype.ngs.model.DiamondBucket;
+import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.tools.blast.BlastTool;
@@ -104,7 +104,7 @@ public class NgsAnalysis {
 	public boolean analyze() {
 		// QC
 
-		ngsResults.setState(State.QC);
+		ngsResults.setStateStart(State.QC);
 
 		boolean needPreprocessing = true;// TODO true -> always preproces // for now we base it only on adapter content.
 		File fastqDir = NgsFileSystem.fastqDir(ngsResults);
@@ -120,8 +120,8 @@ public class NgsAnalysis {
 			}
 
 			QcData qcData = new QC.QcData(QC.qcReportFile(workDir));
-			ngsResults.setReadCountInit(qcData.getTotalNumberOfReads());
-			ngsResults.setReadLength(qcData.getReadLength());
+			ngsResults.getModel().setReadCountInit(qcData.getTotalNumberOfReads());
+			ngsResults.getModel().setReadLength(qcData.getReadLength());
 		} catch (ApplicationException e1) {
 			e1.printStackTrace();
 			ngsResults.printFatalError("QC failed: " + e1.getMessage());
@@ -129,8 +129,8 @@ public class NgsAnalysis {
 			return false;
 		}
 
-		ngsResults.setSkipPreprocessing(!needPreprocessing);
-		ngsResults.setState(State.Preprocessing);
+		ngsResults.getModel().setSkipPreprocessing(!needPreprocessing);
+		ngsResults.setStateStart(State.Preprocessing);
 		ngsResults.printQC1();
 
 		// pre-process
@@ -148,7 +148,7 @@ public class NgsAnalysis {
 			File preprocessed1 = NgsFileSystem.preprocessedPE1(ngsResults);
 			File preprocessed2 = NgsFileSystem.preprocessedPE2(ngsResults);
 
-			ngsResults.setState(State.QC2);
+			ngsResults.setStateStart(State.QC2);
 
 			// QC 2
 
@@ -158,8 +158,8 @@ public class NgsAnalysis {
 						workDir);
 
 				QcData qcData = new QC.QcData(QC.qcPreprocessedReportFile(workDir));
-				ngsResults.setReadCountAfterPrepocessing(qcData.getTotalNumberOfReads());
-				ngsResults.setReadLength(qcData.getReadLength());
+				ngsResults.getModel().setReadCountAfterPrepocessing(qcData.getTotalNumberOfReads());
+				ngsResults.getModel().setReadLength(qcData.getReadLength());
 				ngsResults.printQC2();
 			} catch (ApplicationException e1) {
 				e1.printStackTrace();
@@ -168,7 +168,7 @@ public class NgsAnalysis {
 				return false;
 			}
 		} else {
-			ngsResults.setReadCountAfterPrepocessing(ngsResults.getReadCountInit());
+			ngsResults.getModel().setReadCountAfterPrepocessing(ngsResults.getModel().getReadCountInit());
 		}
 		
 		// diamond blast
@@ -248,7 +248,7 @@ public class NgsAnalysis {
 		if (tool == null)
 			return false;
 
-		ngsResults.setState(State.Spades);
+		ngsResults.setStateStart(State.Spades);
 		ngsResults.printAssemblyOpen();
 		// spades
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
@@ -273,7 +273,7 @@ public class NgsAnalysis {
 		if (!sequences.exists())
 			ngsResults.printFatalError("No assembly results.");
 		else
-			ngsResults.setState(State.FinishedAll);
+			ngsResults.setStateStart(State.FinishedAll);
 
 		ngsResults.printStop();
 
@@ -290,7 +290,7 @@ public class NgsAnalysis {
 		File sequenceFile1 = new File(virusDiamondDir, fastqPE1FileName);
 		File sequenceFile2 = new File(virusDiamondDir, fastqPE2FileName);
 
-		BasketData basketData = ngsResults.getDiamondBlastResults().get(virusDiamondDir.getName());
+		DiamondBucket basketData = ngsResults.getModel().getDiamondBlastResults().get(virusDiamondDir.getName());
 		if (ngsModule.getMinReadsToStartAssembly() > basketData.getReadCountTotal())
 			return false; // no need to assemble if there is not enough reads.
 

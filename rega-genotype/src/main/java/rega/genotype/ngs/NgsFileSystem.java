@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.ApplicationException;
-import rega.genotype.ngs.NgsResultsTracer.State;
+import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
@@ -65,12 +65,12 @@ public class NgsFileSystem {
 		fastqDir.mkdirs();
 
 		//PE
-		ngsProgress.setFastqPE1FileName(fastqPE1.getName());
-		ngsProgress.setFastqPE2FileName(fastqPE2.getName());
+		ngsProgress.getModel().setFastqPE1FileName(fastqPE1.getName());
+		ngsProgress.getModel().setFastqPE2FileName(fastqPE2.getName());
 
 		// SE TODO
 
-		ngsProgress.setState(State.Init);
+		ngsProgress.setStateStart(State.Init);
 		ngsProgress.printInit();
 
 		try {
@@ -99,8 +99,8 @@ public class NgsFileSystem {
 		return fileName.endsWith(".gz") ? fileName.substring(0, fileName.length() - 3) : fileName;
 	}
 
-	public static boolean addFastqGzipedFiles(NgsResultsTracer ngsProgress, File fastqPE1, File fastqPE2) {
-		File fastqDir = new File(ngsProgress.getWorkDir(), FASTQ_FILES_DIR);
+	public static boolean addFastqGzipedFiles(NgsResultsTracer ngsResults, File fastqPE1, File fastqPE2) {
+		File fastqDir = new File(ngsResults.getWorkDir(), FASTQ_FILES_DIR);
 		fastqDir.mkdirs();
 
 		String pe1Name = makeFastqFileName(fastqPE1.getName());
@@ -112,11 +112,11 @@ public class NgsFileSystem {
 		FileUtil.unGzip1File(fastqPE1, fastqPE1Ungziped);
 		FileUtil.unGzip1File(fastqPE2, fastqPE2Ungziped);
 
-		ngsProgress.setFastqPE1FileName(fastqPE1Ungziped.getName());
-		ngsProgress.setFastqPE2FileName(fastqPE2Ungziped.getName());
+		ngsResults.getModel().setFastqPE1FileName(fastqPE1Ungziped.getName());
+		ngsResults.getModel().setFastqPE2FileName(fastqPE2Ungziped.getName());
 
-		ngsProgress.setState(State.Init);
-		ngsProgress.printInit();
+		ngsResults.setStateStart(State.Init);
+		ngsResults.printInit();
 
 		return true;
 	}
@@ -161,7 +161,7 @@ public class NgsFileSystem {
 	public static File fastqDir(NgsResultsTracer ngsProgress) {
 		File fastqDir = new File(ngsProgress.getWorkDir(), FASTQ_FILES_DIR);
 		if (!fastqDir.exists()) {
-			ngsProgress.setState(State.Init);
+			ngsProgress.setStateStart(State.Init);
 			ngsProgress.printFatalError("no fastq files");
 			return null;
 		}
@@ -174,8 +174,8 @@ public class NgsFileSystem {
 		if (fastqDir == null)
 			return null;
 
-		if (ngsProgress.getFastqSEFileName() != null) {
-			File fastqSE = new File(fastqDir, ngsProgress.getFastqSEFileName());
+		if (ngsProgress.getModel().getFastqSEFileName() != null) {
+			File fastqSE = new File(fastqDir, ngsProgress.getModel().getFastqSEFileName());
 			if (!fastqSE.exists()){
 				ngsProgress.printFatalError("FASTQ files could not be found.");
 				return null;
@@ -185,16 +185,16 @@ public class NgsFileSystem {
 			return null;
 	}
 
-	public static File fastqPE1(NgsResultsTracer ngsProgress) {
-		File fastqDir = fastqDir(ngsProgress);
+	public static File fastqPE1(NgsResultsTracer ngsResults) {
+		File fastqDir = fastqDir(ngsResults);
 		if (fastqDir == null)
 			return null;
 
-		if (ngsProgress.getFastqPE1FileName() != null 
-				&& ngsProgress.getFastqPE2FileName() != null){
-			File fastqPE1 = new File(fastqDir, ngsProgress.getFastqPE1FileName());
+		if (ngsResults.getModel().getFastqPE1FileName() != null 
+				&& ngsResults.getModel().getFastqPE2FileName() != null){
+			File fastqPE1 = new File(fastqDir, ngsResults.getModel().getFastqPE1FileName());
 			if (!fastqPE1.exists()){
-				ngsProgress.printFatalError("FASTQ files could not be found.");
+				ngsResults.printFatalError("FASTQ files could not be found.");
 				return null;
 			}
 			return fastqPE1;
@@ -203,16 +203,16 @@ public class NgsFileSystem {
 		return null;
 	}
 
-	public static File fastqPE2(NgsResultsTracer ngsProgress) {
-		File fastqDir = fastqDir(ngsProgress);
+	public static File fastqPE2(NgsResultsTracer ngsResults) {
+		File fastqDir = fastqDir(ngsResults);
 		if (fastqDir == null)
 			return null;
 
-		if (ngsProgress.getFastqPE1FileName() != null 
-				&& ngsProgress.getFastqPE2FileName() != null){
-			File fastqPE2 = new File(fastqDir, ngsProgress.getFastqPE2FileName());
+		if (ngsResults.getModel().getFastqPE1FileName() != null 
+				&& ngsResults.getModel().getFastqPE2FileName() != null){
+			File fastqPE2 = new File(fastqDir, ngsResults.getModel().getFastqPE2FileName());
 			if (!fastqPE2.exists()){
-				ngsProgress.printFatalError("FASTQ files could not be found.");
+				ngsResults.printFatalError("FASTQ files could not be found.");
 				return null;
 			}
 			return fastqPE2;
@@ -247,22 +247,22 @@ public class NgsFileSystem {
 		return new File(preprocessedPE2Dir(workDir), fileName);
 	}
 
-	public static File preprocessedPE1(NgsResultsTracer ngsProgress) {
-		if (ngsProgress.getSkipPreprocessing())
-			return fastqPE1(ngsProgress);
+	public static File preprocessedPE1(NgsResultsTracer ngsResults) {
+		if (ngsResults.getModel().getSkipPreprocessing())
+			return fastqPE1(ngsResults);
 
-		File preprocessedPE1Dir = preprocessedPE1Dir(ngsProgress.getWorkDir());
+		File preprocessedPE1Dir = preprocessedPE1Dir(ngsResults.getWorkDir());
 		if (preprocessedPE1Dir.listFiles().length != 1)
 			return null;
 
 		return preprocessedPE1Dir.listFiles()[0];
 	}
 
-	public static File preprocessedPE2(NgsResultsTracer ngsProgress) {
-		if (ngsProgress.getSkipPreprocessing())
-			return fastqPE2(ngsProgress);
+	public static File preprocessedPE2(NgsResultsTracer ngsResults) {
+		if (ngsResults.getModel().getSkipPreprocessing())
+			return fastqPE2(ngsResults);
 
-		File preprocessedPE2Dir = preprocessedPE2Dir(ngsProgress.getWorkDir());
+		File preprocessedPE2Dir = preprocessedPE2Dir(ngsResults.getWorkDir());
 		if (preprocessedPE2Dir.listFiles().length != 1)
 			return null;
 		return preprocessedPE2Dir.listFiles()[0];

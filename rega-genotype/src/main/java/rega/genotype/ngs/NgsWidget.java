@@ -7,15 +7,23 @@ import java.util.Comparator;
 import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.framework.async.LongJobsScheduler;
-import rega.genotype.ngs.NgsResultsTracer.State;
+import rega.genotype.ngs.model.NgsResultsModel;
+import rega.genotype.ngs.model.NgsResultsModel.State;
+import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.framework.widgets.ChartTableWidget;
+import rega.genotype.ui.framework.widgets.DownloadsWidget;
+import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.chart.WChartPalette;
+import eu.webtoolkit.jwt.chart.WStandardPalette;
 
 /**
  * Present ngs analysis state in job overview tab. 
@@ -24,49 +32,53 @@ import eu.webtoolkit.jwt.WText;
  */
 public class NgsWidget extends WContainerWidget{
 
+	private ChartTableWidget consensusTable;
+	private File workDir;
+
 	public NgsWidget(final File workDir) {
 		super();
+		this.workDir = workDir;
+	}
 
-		final NgsResultsTracer ngsProgress = NgsResultsTracer.read(workDir);
-		if (ngsProgress == null)
-			return;
+	public void refresh(NgsResultsModel model, OrganismDefinition organismDefinition) {
+		clear();
 
 		new WText("<h2> NGS Analysis State </h2>", this);
 		
 		WContainerWidget preprocessingWidget = stateWidget(
-				"Preprocessing", ngsProgress.getStateStartTime(State.Init), 
-				ngsProgress.getStateStartTime(State.Diamond),
-				ngsProgress.getReadCountStartState(State.Init),
-				ngsProgress.getReadCountStartState(State.Diamond));
+				"Preprocessing", model.getStateStartTime(State.Init), 
+				model.getStateStartTime(State.Diamond),
+				model.getReadCountStartState(State.Init),
+				model.getReadCountStartState(State.Diamond));
 
 		WContainerWidget filtringWidget = stateWidget(
-				State.Diamond.text, ngsProgress.getStateStartTime(State.Diamond), 
-				ngsProgress.getStateStartTime(State.Spades),
-				ngsProgress.getReadCountStartState(State.Diamond),
-				ngsProgress.getReadCountStartState(State.Spades));
+				State.Diamond.text, model.getStateStartTime(State.Diamond), 
+				model.getStateStartTime(State.Spades),
+				model.getReadCountStartState(State.Diamond),
+				model.getReadCountStartState(State.Spades));
 
 		WContainerWidget identificationWidget = stateWidget(
-				State.Spades.text, ngsProgress.getStateStartTime(State.Spades), 
-				ngsProgress.getStateStartTime(State.FinishedAll),
-				ngsProgress.getReadCountStartState(State.Spades),
-				ngsProgress.getReadCountStartState(State.FinishedAll));
+				State.Spades.text, model.getStateStartTime(State.Spades), 
+				model.getStateStartTime(State.FinishedAll),
+				model.getReadCountStartState(State.Spades),
+				model.getReadCountStartState(State.FinishedAll));
 
 		addWidget(preprocessingWidget);
 		addWidget(filtringWidget);
 		addWidget(identificationWidget);
 
-		if (!ngsProgress.getErrors().isEmpty() )
-			new WText("<div class=\"error\">Error: " + ngsProgress.getErrors() + "</div>", 
+		if (!model.getErrors().isEmpty() )
+			new WText("<div class=\"error\">Error: " + model.getErrors() + "</div>", 
 					preprocessingWidget);
 
-		if (ngsProgress.getState().code >= State.Preprocessing.code) {
+		if (model.getState().code >= State.Preprocessing.code) {
 			new WText("<div> QC before preprocessing</div>", preprocessingWidget);
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
 			addQC(qcDir, preprocessingWidget);
 		}
 
-		if (ngsProgress.getState().code >= State.Diamond.code) {
-			if (ngsProgress.getSkipPreprocessing())
+		if (model.getState().code >= State.Diamond.code) {
+			if (model.getSkipPreprocessing())
 				new WText("<div> input sequences are OK -> skip  preprocessing.</div>", preprocessingWidget);
 			else {
 				new WText("<div> QC after preprocessing</div>", preprocessingWidget);
@@ -75,29 +87,57 @@ public class NgsWidget extends WContainerWidget{
 			}
 		}
 
-		if (ngsProgress.getState().code == State.Diamond.code) {
+		if (model.getState().code == State.Diamond.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
 			new WText("<div> Diamond blast job state:" + jobState + "</div>", filtringWidget);
 		}
 
-		if (ngsProgress.getState().code == State.Spades.code) {
+		if (model.getState().code == State.Spades.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
 			new WText("<div> Sapdes job state:" + jobState + "</div>", this);
 		}
 
 		// style
 
-		if (ngsProgress.getState().code < State.Diamond.code){
+		if (model.getState().code < State.Diamond.code){
 			preprocessingWidget.addStyleClass("working");
 			filtringWidget.addStyleClass("waiting");
 			identificationWidget.addStyleClass("waiting");
-		} else if (ngsProgress.getState() == State.Diamond){
+		} else if (model.getState() == State.Diamond){
 			filtringWidget.addStyleClass("working");
 			identificationWidget.addStyleClass("waiting");
-		} else if (ngsProgress.getState() == State.Spades){
+		} else if (model.getState() == State.Spades){
 			identificationWidget.addStyleClass("working");
 		}
-		
+
+		// consensus table.
+		if (!model.getConsensusBuckets().isEmpty()) {
+			WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
+			NgsConsensusSequenceModel consensusModel = new NgsConsensusSequenceModel(
+					model.getConsensusBuckets(), model.getReadLength(), palette);
+			consensusTable = new ChartTableWidget(
+					consensusModel,
+					NgsConsensusSequenceModel.READ_COUNT_COLUMN,
+					NgsConsensusSequenceModel.CHART_DISPLAY_COLUMN, 
+					NgsConsensusSequenceModel.COLOR_COLUMN,
+					palette);
+
+			addWidget(consensusTable);
+
+			StandardTableView table = consensusTable.getTable();
+			table.setColumnWidth(NgsConsensusSequenceModel.ASSINGMENT_COLUMN, new WLength(340));
+			table.setColumnWidth(NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN, new WLength(80));
+			table.setColumnWidth(NgsConsensusSequenceModel.READ_COUNT_COLUMN, new WLength(80));
+			table.setColumnWidth(NgsConsensusSequenceModel.SRC_COLUMN, new WLength(60));
+			table.setColumnWidth(NgsConsensusSequenceModel.TOTAL_LENGTH_COLUMN, new WLength(90));
+			table.setColumnWidth(NgsConsensusSequenceModel.DEEP_COV_COLUMN, new WLength(90));
+			table.setColumnWidth(NgsConsensusSequenceModel.COLOR_COLUMN, new WLength(60));
+			table.setTableWidth(true);
+		}
+
+		if (model.getState() == State.FinishedAll) {
+			addWidget(new DownloadsWidget(null, workDir, organismDefinition, true));
+		}
 	}
 
 	private WContainerWidget stateWidget(String title, 
@@ -111,7 +151,7 @@ public class NgsWidget extends WContainerWidget{
 					stateWidget);
 
 		stateWidget.setMargin(10, Side.Top);
-		
+
 		return stateWidget;
 	}
 

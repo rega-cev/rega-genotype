@@ -13,15 +13,14 @@ import java.util.List;
 import org.jdom.Element;
 
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
+import rega.genotype.ngs.NgsResultsParser;
 import rega.genotype.ngs.NgsResultsTracer;
-import rega.genotype.ngs.NgsResultsTracer.State;
 import rega.genotype.ngs.NgsWidget;
-import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.widgets.DownloadsWidget;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.util.CsvDataTable;
@@ -89,6 +88,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	 */
 	private ParserRunnable parserRunnable;
 	private GenotypeResultParser parser;
+	private NgsResultsParser ngsParser;
 
 	protected File jobDir;
 	private WTable jobTable;
@@ -99,6 +99,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	protected Template template;
 	
 	private boolean hasRecombinationResults;
+	private NgsWidget ngsWidget;
 
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main);
@@ -144,7 +145,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		
 		jobTable.clear();
 
-		template.bindWidget("downloads", createDownloadsWidget(filter));
+		if (!isNgsJob())
+			template.bindWidget("downloads", createDownloadsWidget(filter));
 		template.bindWidget("scroll", createScrollButton());
 
 		if (hasRecombinationResults)
@@ -240,7 +242,13 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	}
 
 	protected void updateNgsView() {
-		template.bindWidget("ngs-results", new NgsWidget(jobDir));
+		if (ngsParser != null) {
+			if (ngsWidget == null) {
+				ngsWidget = new NgsWidget(jobDir);
+				template.bindWidget("ngs-results", ngsWidget);
+			}
+			ngsWidget.refresh(ngsParser.getModel(), getMain().getOrganismDefinition());
+		}
 	}
 
 	protected void fillResultsWidget() {
@@ -300,59 +308,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return scroll;
 	}
 	private WWidget createDownloadsWidget(final String filter) {
-		WTemplate t = new WTemplate(tr("job-overview-downloads"));
-		
-		WAnchor xmlAnchor = null;
-		if (filter == null)
-			xmlAnchor = createXmlDownload();
-		t.bindWidget("xml-file", xmlAnchor);
-		t.bindWidget("csv-file", createTableDownload(tr("monitorForm.csvTable"), true));
-		t.bindWidget("xls-file", createTableDownload(tr("monitorForm.xlsTable"), false));
-		
-		WAnchor fastaAnchor = createFastaDownload();
-
-		t.bindWidget("fasta-file", fastaAnchor);
-
-		t.hide();
-		
-		return t;
-	}
-
-	private WAnchor createXmlDownload() {
-		WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"));
-		xmlFileDownload.setObjectName("xml-download");
-		xmlFileDownload.setStyleClass("link");
-		WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
-		xmlResource.suggestFileName("result.xml");
-		xmlResource.setDispositionType(DispositionType.Attachment);
-		xmlFileDownload.setLink(new WLink(xmlResource));
-		return xmlFileDownload;
-	}
-	
-	private WAnchor createFastaDownload() {
-		WAnchor fastaDownload = new WAnchor("", tr("monitorForm.fasta"));
-		fastaDownload.setObjectName("fasta-download");
-		fastaDownload.setStyleClass("link");
-
-		WResource fastaResource;
-		if (filter != null) {
-			fastaResource = new WResource() {
-				@Override
-				protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
-					response.setContentType("text/plain");
-					FastaGenerator generateFasta = new FastaGenerator(filter, response.getOutputStream());
-					generateFasta.parseResultFile(new File(jobDir.getAbsolutePath()));
-				}
-			};
-		} else {
-			fastaResource = new WFileResource("text/plain", jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta");
-		}
-
-		fastaResource.suggestFileName("sequences.fasta");
-		fastaResource.setDispositionType(DispositionType.Attachment);
-		fastaDownload.setLink(new WLink(fastaResource));
-
-		return fastaDownload;
+		DownloadsWidget downloadsWidget = new DownloadsWidget(this.filter, jobDir, getMain().getOrganismDefinition(), filter == null);
+		downloadsWidget.hide();
+		return downloadsWidget;
 	}
 	
 	private WAnchor createRecombinationFragmentTableDownload(WString label, final boolean csv) {
@@ -435,29 +393,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 		return tableDownload;
 	}
-	
-	private WAnchor createTableDownload(WString label, final boolean csv) {
-		WAnchor csvTableDownload = new WAnchor("", label);
-		csvTableDownload.setObjectName("csv-table-download");
-		csvTableDownload.setStyleClass("link");
-
-		WResource csvResource = new WResource() {
-			@Override
-			protected void handleRequest(WebRequest request, WebResponse response) throws IOException {
-				response.setContentType("application/excel");
-				DataTable t = csv ? new CsvDataTable(response.getOutputStream(), ',', '"') : new XlsDataTable(response.getOutputStream());
-				AbstractDataTableGenerator acsvgen = 
-					AbstractJobOverview.this.getMain().getOrganismDefinition().getDataTableGenerator(AbstractJobOverview.this.getFilter(), t);
-				acsvgen.parseResultFile(new File(jobDir.getAbsolutePath()));
-			}
-			
-		};
-		csvResource.suggestFileName("results." + (csv ? "csv" : "xls"));
-		csvResource.setDispositionType(DispositionType.Attachment);
-		csvTableDownload.setLink(new WLink(csvResource));
-
-		return csvTableDownload;
-	}
 
 	protected boolean isNgsJob() {
 		return NgsResultsTracer.ngsRsultsFile(jobDir).exists();
@@ -478,6 +413,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		parserThread.start();
 	}
 
+	protected void startNgsParser() {
+		
+	}
+
 	private class ParserRunnable implements Runnable {
 		final Object lock = new Object();
 		volatile boolean stop = false;
@@ -489,39 +428,21 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		}
 		public void run() {
 			// prepare NGS data
-			NgsResultsTracer ngsProgress = NgsResultsTracer.read(jobDir);
-			if (ngsProgress != null) {
-				if (ngsProgress.getState() == State.FinishedAll || stop) {
+			ngsParser = new NgsResultsParser();
+			ngsParser.updateUiSignal().addListener(AbstractJobOverview.this,
+					new Signal.Listener() {
+				public void trigger() {
 					UpdateLock updateLock = app.getUpdateLock();
 					updateNgsView();
 					app.triggerUpdate();
 					updateLock.release();
-					parser.updateUi();
-				} else 
-					while (!stop){
-						synchronized (lock) {
-							try {
-								UpdateLock updateLock = app.getUpdateLock();
-								updateNgsView();
-								app.triggerUpdate();
-								updateLock.release();
-
-								ngsProgress = NgsResultsTracer.read(jobDir);
-								if (ngsProgress != null 
-										&& (ngsProgress.getState() == State.Spades
-											|| !ngsProgress.getErrors().isEmpty()))
-									break;
-								lock.wait(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-								assert (false);
-							}
-						}
-					}
-			}
-
-			final File resultFile = new File(getJobdir().getAbsolutePath()
-					+ File.separatorChar + "result.xml");
+				}
+			});
+			final File ngsResultFile = new File(getJobdir(), NgsResultsTracer.NGS_RESULTS_FILL);
+			if (ngsResultFile.exists())
+				ngsParser.parseFile(ngsResultFile);
+			
+			final File resultFile = new File(getJobdir(), "result.xml");
 			// wait till result.xml is ready
 			while (!stop && !resultFile.exists()){
 				synchronized (lock) {

@@ -9,9 +9,9 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.ngs.NgsResultsTracer;
-import rega.genotype.ngs.NgsResultsTracer.State;
 import rega.genotype.ngs.QC;
 import rega.genotype.ngs.QC.QcData;
+import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.tools.blast.BlastJobOverviewForm.BlastResultParser;
 import rega.genotype.tools.blast.BlastJobOverviewForm.ClusterData;
 import rega.genotype.tools.blast.BlastJobOverviewForm.SequenceData;
@@ -168,14 +168,14 @@ public class NgsVerification {
 			ExcelUtils.add(hssfRow, READ_COLUMN, readCount+"");
 			ExcelUtils.add(hssfRow, COV_COLUMN, deepCov+"");
 			
-			final NgsResultsTracer ngsProgress = NgsResultsTracer.read(currentJobDir);
-			if (ngsProgress == null){
+			final NgsResultsTracer ngsResults = NgsResultsTracer.read(currentJobDir);
+			if (ngsResults == null){
 				ExcelUtils.add(hssfRow, TIME_COLUMN, "Error no ngs progress file");
 			} else {
-				Long startTime = ngsProgress.getStateStartTime(State.Init);
+				Long startTime = ngsResults.getModel().getStateStartTime(State.Init);
 				Long endTime = System.currentTimeMillis();
-				if(ngsProgress.getState() == State.FinishedAll)
-					endTime = ngsProgress.getStateStartTime(State.FinishedAll);
+				if(ngsResults.getModel().getState() == State.FinishedAll)
+					endTime = ngsResults.getModel().getStateStartTime(State.FinishedAll);
 				ExcelUtils.add(hssfRow, TIME_COLUMN, Utils.formatTime(endTime - startTime));				
 			}
 			ExcelUtils.add(hssfRow, TOTAL_READS_COLUMN, totalNumberOfReads+"");

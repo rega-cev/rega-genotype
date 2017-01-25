@@ -2,15 +2,14 @@ package rega.genotype.ngs;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import rega.genotype.NgsSequence.BucketData;
 import rega.genotype.NgsSequence.Contig;
 import rega.genotype.ResultTracer;
+import rega.genotype.ngs.model.DiamondBucket;
+import rega.genotype.ngs.model.NgsResultsModel;
+import rega.genotype.ngs.model.NgsResultsModel.State;
 
 /**
  * JSON file that monitors NGS analysis state.
@@ -19,81 +18,13 @@ import rega.genotype.ResultTracer;
  * @author michael
  */
 public class NgsResultsTracer extends ResultTracer{
-	public static final String NGS_PROGRESS_FILL = "ngs_progress";
-
-	public enum State {
-		Init(0, "Init"),
-		QC(1, "QC"),
-		Preprocessing(2, "Preprocessing"),
-		QC2(3, "QC of preprocessed."),
-		Diamond(4, "Filtring"),
-		Spades(5, "Assembly and Identification"),
-		FinishedAll(6, "finished");
-
-		public final int code;
-		public final String text;
-		State(int code, String text) {
-			this.code = code;
-			this.text = text;
-		}
-	}
-
-	public static class BasketData {
-		public BasketData(String scientificName, String ancestors, Integer readCountTotal) {
-			this.setReadCountTotal(readCountTotal);
-			this.setScientificName(scientificName);
-			this.setAncestors(ancestors);
-		}
-		private String ancestors = null;
-		private String scientificName = null;
-		private Integer readCountTotal = null;
-		private Integer readCountAfterMakeConsensus = null;
-
-		public String getScientificName() {
-			return scientificName;
-		}
-		public void setScientificName(String scientificName) {
-			this.scientificName = scientificName;
-		}
-		public Integer getReadCountTotal() {
-			return readCountTotal;
-		}
-		public void setReadCountTotal(Integer readCountTotal) {
-			this.readCountTotal = readCountTotal;
-		}
-		public Integer getReadCountAfterMakeConsensus() {
-			return readCountAfterMakeConsensus;
-		}
-		public void setReadCountAfterMakeConsensus(
-				Integer readCountAfterMakeConsensus) {
-			this.readCountAfterMakeConsensus = readCountAfterMakeConsensus;
-		}
-		public String getAncestors() {
-			return ancestors;
-		}
-		public void setAncestors(String ancestors) {
-			this.ancestors = ancestors;
-		}
-	}
+	public static final String NGS_RESULTS_FILL = "ngs-results.xml";
 
 	// Analysis variables.
-	private State state = State.Init;
-	private String errors = new String();
-	private List<String> spadesErrors = new ArrayList<String>(); // spades can crash on files with small amount of sequences, in that case it is still good to check the other viruses.
-	private String fastqPE1FileName;// File with forward reads.
-	private String fastqPE2FileName;// File with reverse reads.
-	private String fastqSEFileName; // File with interlaced forward and reverse paired-end reads.
-	private Boolean skipPreprocessing = false;
 
-	private Map<State, Long> stateStartTimeInMiliseconds = new TreeMap<NgsResultsTracer.State, Long>();
-
-	private Integer readLength = null;
-	private Integer readCountInit = null;
-	private Integer readCountAfterPrepocessing = null;
-
-	private Map<String, BasketData> diamondBlastResults = new HashMap<String, BasketData>();// count sequences per taxon.
-	private Map<String, BasketData> diamondBlastResultsBeforeMerge = new HashMap<String, BasketData>();// count sequences per taxon.
 	private File workDir;
+	private NgsResultsModel model = new NgsResultsModel(); // Every thing is stored in a model in case we need to print also to json.
+	private long startTime = System.currentTimeMillis();
 
 	public NgsResultsTracer(File workDir) throws IOException {
 		super(createResultsFile(workDir));
@@ -110,86 +41,66 @@ public class NgsResultsTracer extends ResultTracer{
 		ngsRsultsFile.createNewFile();
 		return ngsRsultsFile;
 	}
-/*
-	public static NgsProgress read(File workDir) {
-		File ngsProgressFile = new File(workDir, NGS_PROGRESS_FILL);
-		if (!ngsProgressFile.exists())
-			return null;
-
-		String json = FileUtil.readFile(ngsProgressFile);
-		return parseJson(json);
-	}
-
-	public static NgsProgress parseJson(String json) {
-		if (json == null)
-			return null;
-
-		return GsonUtil.parseJson(json, NgsProgress.class);
-	}
-
-	public String toJson() {
-		return GsonUtil.toJson(this);
-	}
-
-	public void save(File workDir) {
-		try {
-			FileUtil.writeStringToFile(new File(workDir ,NGS_PROGRESS_FILL), toJson());
-		} catch (IOException e) {
-			e.printStackTrace();
-			assert(false);
-		}
-	}
- */
 
 	public static NgsResultsTracer read(File workDir) {
 		return null; // TODO
 	}
 
+	private Long time() {
+		return System.currentTimeMillis() - startTime;
+	}
+
 	// ngs-results.xml is written incrementally -> every step needs to be written separately.
 	public void printInit() {
-		add("pe-1-file", fastqPE1FileName);
-		add("pe-2-file", fastqPE1FileName);
-		add("init-time", stateStartTimeInMiliseconds.get(State.Init));
+		printlnOpenElement("init");
+		add("pe-1-file", model.getFastqPE1FileName());
+		add("pe-2-file", model.getFastqPE1FileName());
+		add("end-time", time());
+		printlnCloseLastElement();
 		w.flush();
 	}
 
 	public void printQC1() {
 		printlnOpenElement("qc1");
-		add("read-length", readLength);
-		add("read-count", readCountInit);
-		add("time", stateStartTimeInMiliseconds.get(State.QC));
+		add("read-length", model.getReadLength());
+		add("read-count", model.getReadCountInit());
+		add("end-time", time());
 		printlnCloseLastElement();
 		w.flush();
 	}
 
 	public void printPreprocessing() {
 		printlnOpen("<preprocessing>");
-		add("time", stateStartTimeInMiliseconds.get(State.Preprocessing));
+		add("end-time", time());
 		printlnClose("</preprocessing>");
 		w.flush();
 	}
 
 	public void printQC2() {
 		printlnOpen("<qc2>");
-		add("read-length", readLength);
-		add("read-count", readCountAfterPrepocessing);
-		add("time", stateStartTimeInMiliseconds.get(State.QC2));
+		add("read-length", model.getReadLength());
+		add("read-count", model.getReadCountAfterPrepocessing());
+		add("end-time", time());
 		printlnClose("</qc2>");
 		w.flush();
 	}
 
 	public void printFiltring() {
 		printlnOpen("<filtring>");
-		add("TODO", "print diamond results");
-		// TODO write diamondBlastResults
-		add("time", stateStartTimeInMiliseconds.get(State.Diamond));
+		for (DiamondBucket b: model.getDiamondBlastResults().values()) {
+			printlnOpen("<diamond-bucket id=\"" + b.getTaxonId() + "\" >");
+			add("ancestors", b.getAncestors());
+			add("scientific-name", b.getScientificName());
+			add("read-count-total", b.getReadCountTotal());
+			printlnClose("</diamond-bucket>");
+		}
+		add("end-time", time());
 		printlnClose("</filtring>");
 		w.flush();
 	}
 
 	public void printAssemblyOpen() {
 		printlnOpenElement("assembly");
-		add("time", stateStartTimeInMiliseconds.get(State.Spades));
 		w.flush();
 	}
 
@@ -215,7 +126,7 @@ public class NgsResultsTracer extends ResultTracer{
 
 	public void printAssemblybucketClose() {
 		printlnCloseLastElement("bucket");
-		
+		add("end-time", time());
 		w.flush();
 	}
 
@@ -229,180 +140,20 @@ public class NgsResultsTracer extends ResultTracer{
 	}
 
 	public void printStop() {
-		System.err.println(indent);
-		System.err.println(openElements.size());
 		while (!openElements.isEmpty()) {
 			printlnCloseLastElement();
 		}
-		add("end-time", System.currentTimeMillis());
 		writeXMLEnd();
 	}
 
 	public void printFatalError(String error) {
-		setErrors(error);
+		model.setErrors(error);
 		add("error", error);
 		printStop();
 	}
 
-	public State getState() {
-		return state;
-	}
-
-	public void setState(State state) {
-		this.state = state;
-		stateStartTimeInMiliseconds.put(state, System.currentTimeMillis());
-		
-//		switch (state) {
-//		case Init:
-//			writeXmlInit();
-//			break;
-//		case QC:
-//			writeXmlQC1(); should be write init here ..
-//			break;
-//		case Preprocessing:
-//			writeXmlPreprocessing();
-//			break;
-//		case QC2:
-//			writeXmlQC2();
-//			break;
-//		case Diamond:
-//			writeXmlFiltring();
-//			break;
-//		case Spades:
-//			writeXmlAssemblyStart();
-//			break;
-//		case FinishedAll:
-//			writeXmlAssemblyEnd();
-//			break;
-//		}
-	}
-
-	public Long getStateStartTime(State state) {
-		return stateStartTimeInMiliseconds.get(state);
-	}
-
-	/**
-	 * @return total read count at the beginning of state or null if the state is finished.
-	 */
-	public Integer getReadCountStartState(State state) {
-		switch (state) {
-		case Diamond:
-			return readCountAfterPrepocessing;
-		case FinishedAll:
-			break; // TODO, unused
-		case Init:
-			return readCountInit;
-		case Preprocessing:
-			return readCountInit;
-		case QC:
-			return readCountInit;
-		case QC2:
-			return readCountAfterPrepocessing;
-		case Spades:
-			return totalReadCountAfterFiltring();
-		}
-
-		return null;
-	}
-
-	public Integer totalReadCountAfterFiltring() {
-		if (diamondBlastResults.isEmpty())
-			return null;
-
-		Integer ans = 0;
-		for (BasketData b :diamondBlastResults.values())
-			ans += b.readCountTotal;
-
-		return ans;
-	}
-	
-	public String getErrors() {
-		return errors;
-	}
-
-	public void setErrors(String errors) {
-		this.errors = errors;
-	}
-
-	public String getFastqPE1FileName() {
-		return fastqPE1FileName;
-	}
-
-	public void setFastqPE1FileName(String fastqPE1FileName) {
-		this.fastqPE1FileName = fastqPE1FileName;
-	}
-
-	public String getFastqPE2FileName() {
-		return fastqPE2FileName;
-	}
-
-	public void setFastqPE2FileName(String fastqPE2FileName) {
-		this.fastqPE2FileName = fastqPE2FileName;
-	}
-
-	public String getFastqSEFileName() {
-		return fastqSEFileName;
-	}
-
-	public void setFastqSEFileName(String fastqSEFileName) {
-		this.fastqSEFileName = fastqSEFileName;
-	}
-
-	public List<String> getSpadesErrors() {
-		return spadesErrors;
-	}
-
-	public void setSpadesErrors(List<String> spadesErrors) {
-		this.spadesErrors = spadesErrors;
-	}
-
-	public Map<String, BasketData> getDiamondBlastResults() {
-		return diamondBlastResults;
-	}
-
-	public void setDiamondBlastResults(Map<String, BasketData> diamondBlastResults) {
-		this.diamondBlastResults = diamondBlastResults;
-	}
-
-	public Boolean getSkipPreprocessing() {
-		return skipPreprocessing;
-	}
-
-	public void setSkipPreprocessing(Boolean skipPreprocessing) {
-		this.skipPreprocessing = skipPreprocessing;
-	}
-
-	public Integer getReadCountInit() {
-		return readCountInit;
-	}
-
-	public void setReadCountInit(Integer readCountInit) {
-		this.readCountInit = readCountInit;
-	}
-
-	public Integer getReadCountAfterPrepocessing() {
-		return readCountAfterPrepocessing;
-	}
-
-	public void setReadCountAfterPrepocessing(Integer readCountAfterPrepocessing) {
-		this.readCountAfterPrepocessing = readCountAfterPrepocessing;
-	}
-
-	public Map<String, BasketData> getDiamondBlastResultsBeforeMerge() {
-		return diamondBlastResultsBeforeMerge;
-	}
-
-	public void setDiamondBlastResultsBeforeMerge(
-			Map<String, BasketData> diamondBlastResultsBeforeMerge) {
-		this.diamondBlastResultsBeforeMerge = diamondBlastResultsBeforeMerge;
-	}
-
-	public Integer getReadLength() {
-		return readLength;
-	}
-
-	public void setReadLength(Integer readLength) {
-		this.readLength = readLength;
+	public void setStateStart(State state) {
+		model.setStateTime(state, System.currentTimeMillis());
 	}
 
 	public File getWorkDir() {
@@ -411,5 +162,9 @@ public class NgsResultsTracer extends ResultTracer{
 
 	public void setWorkDir(File workDir) {
 		this.workDir = workDir;
+	}
+
+	public NgsResultsModel getModel() {
+		return model;
 	}
 }

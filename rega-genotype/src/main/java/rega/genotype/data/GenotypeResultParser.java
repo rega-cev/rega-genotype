@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -46,6 +47,9 @@ public class GenotypeResultParser extends DefaultHandler
 
 	private volatile boolean stop = false;
 
+	// When one of the passes is reached the parser will update ui.
+	protected List<String> reportPaths = Arrays.asList(new String[]{"/genotype_result"});
+	
 	public GenotypeResultParser() {
 		this(-1);
 	}
@@ -112,10 +116,15 @@ public class GenotypeResultParser extends DefaultHandler
 		if (getSequenceIndex() == getSelectedSequenceIndex())
 			stopParsing();
 	}
+
+	public void endReportElement(String tag) {
+		
+	}
 	
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (!stopped()) {
-			if (qName.equals("sequence") && getCurrentPath().equals("/genotype_result")) {
+			if (qName.equals("sequence") 
+					&& reportPaths.contains(getCurrentPath())) {
 				if (root != null)
 					root.removeContent();
 				++sequenceIndex;
@@ -156,8 +165,10 @@ public class GenotypeResultParser extends DefaultHandler
 	    		stack.pop();
 	    	}
 
-	    	if (qName.equals("sequence") && getCurrentPath().equals("/genotype_result"))
+	    	if (qName.equals("sequence") && reportPaths.contains(getCurrentPath()))
 	    		endSequence();
+	    	if (reportPaths.contains(getCurrentPath()))
+	    		endReportElement(qName);
     	}
     }
 
@@ -336,8 +347,6 @@ public class GenotypeResultParser extends DefaultHandler
 		
 		GenotypeResultParser p = GenotypeResultParser.parseFile(jobDir, Integer.parseInt(sequence));
 		p.dumpDebug();
-		System.err.println(p.getValue("/genotype_result/sequence/result/start"));
-		System.err.println(p.getSequenceIndex());
 	}
 
 	public boolean isReaderBlocksOnEof() {

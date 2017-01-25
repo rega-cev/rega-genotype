@@ -240,7 +240,7 @@ public class StartForm extends AbstractForm {
 
 		fastqStart.clicked().addListener(fastqStart, new Signal.Listener() {
 			public void trigger() {
-				if (!srr.getText().isEmpty()) {
+				if (!srr.getText().isEmpty()) { // download srr file. (if not cashed)
 					final File workDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getJobDir());
 
 					NgsResultsTracer ngsResults;
@@ -262,7 +262,7 @@ public class StartForm extends AbstractForm {
 					if (!downloaded) {
 						StandardDialog d = new StandardDialog("Download error");
 						d.addText("Download srr file failed. " + err);
-					} else
+					} else // use uploaded files.
 						startNgsAnalysis(ngsResults);
 				} else {
 					fastqFileUpload1.upload();

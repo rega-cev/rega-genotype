@@ -23,8 +23,8 @@ import rega.genotype.config.Config.GeneralConfig;
 import rega.genotype.config.NgsModule;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.framework.async.LongJobsScheduler.Lock;
-import rega.genotype.ngs.NgsResultsTracer.BasketData;
-import rega.genotype.ngs.NgsResultsTracer.State;
+import rega.genotype.ngs.model.DiamondBucket;
+import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.utils.LogUtils;
@@ -167,16 +167,16 @@ public class PrimarySearch{
 		 * @param diamonResults
 		 * @param newickTree
 		 */
-		void fillDiamondResults(Map<String, BasketData> diamonResults, StringBuilder newickTree) {
+		void fillDiamondResults(Map<String, DiamondBucket> diamonResults, StringBuilder newickTree) {
 			diamonResults.clear();
 			fillDiamondResults(root, diamonResults, newickTree );
 		}
 
-		void fillDiamondResults(TaxonomyNode node, Map<String, BasketData> diamonResults, StringBuilder newickTree) {
+		void fillDiamondResults(TaxonomyNode node, Map<String, DiamondBucket> diamonResults, StringBuilder newickTree) {
 			String scientificName = TaxonomyModel.getInstance().getScientificName(node.taxonId);
 			String ancestors = TaxonomyModel.getInstance().getHirarchy(node.taxonId, 100);
 
-			diamonResults.put(node.taxonId, new BasketData(
+			diamonResults.put(node.taxonId, new DiamondBucket(node.taxonId,
 					scientificName, ancestors, node.readNames.size()));
 
 			for (TaxonomyNode c: node.children)
@@ -298,11 +298,11 @@ public class PrimarySearch{
 	 * @return primary search results that will be used by NgsProgress
 	 * @throws ApplicationException
 	 */
-	public static void diamondSearch(NgsResultsTracer ngsProgress, NgsModule ngsModule, Logger logger) throws ApplicationException {
-		File preprocessedPE1 = NgsFileSystem.preprocessedPE1(ngsProgress);
-		File preprocessedPE2 = NgsFileSystem.preprocessedPE2(ngsProgress);
+	public static void diamondSearch(NgsResultsTracer ngsResults, NgsModule ngsModule, Logger logger) throws ApplicationException {
+		File preprocessedPE1 = NgsFileSystem.preprocessedPE1(ngsResults);
+		File preprocessedPE2 = NgsFileSystem.preprocessedPE2(ngsResults);
 
-		File workDir = ngsProgress.getWorkDir();
+		File workDir = ngsResults.getWorkDir();
 		File diamondDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
 		if (!(diamondDir.exists())){
 			diamondDir.mkdirs();
@@ -316,7 +316,7 @@ public class PrimarySearch{
 			throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
 		} 
 
-		ngsProgress.setState(State.Diamond);
+		ngsResults.setStateStart(State.Diamond);
 
 		File matches = null;
 		File view = null;
@@ -332,7 +332,7 @@ public class PrimarySearch{
 		}
 		try {
 			File[] preprocessedFiles = {preprocessedPE1, preprocessedPE2};
-			creatDiamondResults(resultDiamondDir, view,  preprocessedFiles, ngsProgress, logger);
+			creatDiamondResults(resultDiamondDir, view,  preprocessedFiles, ngsResults, logger);
 		} catch (FileFormatException e) {
 			throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
 		} catch (IOException e) {
@@ -400,12 +400,12 @@ public class PrimarySearch{
 	}
 
 	// TODO: we are still testing what will be the best way to bucket.
-	private static Map<String, String> basketDiamondResultsBasedOnBestScore(File view, NgsResultsTracer ngsProgress) throws NumberFormatException, IOException {
+	private static Map<String, String> basketDiamondResultsBasedOnBestScore(File view, NgsResultsTracer ngsResults) throws NumberFormatException, IOException {
 		String line = "";
 		BufferedReader bf;
 		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
 		// sequences with best score per taxon counters.
-		Map<String, BasketData> taxonCounters = new HashMap<String, BasketData>();
+		Map<String, DiamondBucket> taxonCounters = new HashMap<String, DiamondBucket>();
 		// All the data per sequence
 		Map<String, List<SequenceData>> sequenceNameData = new HashMap<String, List<SequenceData>>();
 
@@ -436,7 +436,7 @@ public class PrimarySearch{
 					if (counter == null)
 						counter = 0;
 					counter++;
-					taxonCounters.put(prevBestTaxon, new BasketData("", "", counter));
+					taxonCounters.put(prevBestTaxon, new DiamondBucket(prevBestTaxon,"", "", counter));
 				}
 
 				prevName = name[0];
@@ -451,7 +451,7 @@ public class PrimarySearch{
 		}
 		bf.close();
 
-		ngsProgress.setDiamondBlastResults(taxonCounters);
+		ngsResults.getModel().setDiamondBlastResults(taxonCounters);
 
 		// Step2: find genus taxonomy for every sequence. 
 		Map<String, String> taxoNameId = new HashMap<String, String>();
@@ -622,22 +622,22 @@ public class PrimarySearch{
 	 * @param diamondResultsDir
 	 * @param view
 	 * @param fastqFiles
-	 * @param ngsProgress 
+	 * @param ngsResults 
 	 * @throws FileFormatException
 	 * @throws IOException
 	 */
 	private static void creatDiamondResults(File diamondResultsDir, File view, File[] fastqFiles,
-			NgsResultsTracer ngsProgress, Logger logger) throws FileFormatException, IOException {
+			NgsResultsTracer ngsResults, Logger logger) throws FileFormatException, IOException {
 		long start = System.currentTimeMillis();
 		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view, diamondResultsDir.getParentFile());
 		StringBuilder newickTreeBeforeMerge = new StringBuilder(); // TODO ..
-		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResultsBeforeMerge(), newickTreeBeforeMerge);
+		taxonomyTree.fillDiamondResults(ngsResults.getModel().getDiamondBlastResultsBeforeMerge(), newickTreeBeforeMerge);
 
 		logger.info("Basket reads sort low ancestor time = " + (System.currentTimeMillis() - start) + " ms");
 
 		Map<String, String> readIdTaxonomyId = taxonomyTree.createReadNameTaxonIdMap();
 		StringBuilder newickTreeAfterMerge = new StringBuilder();
-		taxonomyTree.fillDiamondResults(ngsProgress.getDiamondBlastResults(), newickTreeAfterMerge);
+		taxonomyTree.fillDiamondResults(ngsResults.getModel().getDiamondBlastResults(), newickTreeAfterMerge);
 
 //		Map<String, String> readIdTaxonomyId = basketDiamondResultsBasedOnBestScore(view, ngsProgress);
 
