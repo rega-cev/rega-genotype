@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rega.genotype.NgsSequence.BucketData;
-import rega.genotype.NgsSequence.Contig;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ngs.model.ConsensusBucket;
+import rega.genotype.ngs.model.Contig;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
@@ -310,7 +310,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		public String concludedId = new String();
 		public String src = new String();
 
-		public BucketData bucketData = null;
+		public ConsensusBucket bucketData = null;
 
 		public List<SequenceData> sequencesData = new ArrayList<SequenceData>();
 	}

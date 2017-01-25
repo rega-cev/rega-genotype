@@ -12,10 +12,10 @@ import java.util.logging.Logger;
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
-import rega.genotype.NgsSequence.Contig;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.NgsModule;
+import rega.genotype.ngs.model.Contig;
 import rega.genotype.singletons.Settings;
 
 public class SequenceToolMakeConsensus {

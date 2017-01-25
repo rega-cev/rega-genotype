@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import rega.genotype.NgsSequence.BucketData;
-import rega.genotype.NgsSequence.Contig;
 import rega.genotype.ResultTracer;
+import rega.genotype.ngs.model.ConsensusBucket;
+import rega.genotype.ngs.model.Contig;
 import rega.genotype.ngs.model.DiamondBucket;
 import rega.genotype.ngs.model.NgsResultsModel;
 import rega.genotype.ngs.model.NgsResultsModel.State;
@@ -105,7 +105,7 @@ public class NgsResultsTracer extends ResultTracer{
 	}
 
 	public void printAssemblybucketOpen(
-			BucketData bucketData, List<Contig> contigs) {
+			ConsensusBucket bucketData, List<Contig> contigs) {
 		printlnOpenElement("bucket",
 				"id=\"" + bucketData.getDiamondBucket() + "__" + bucketData.getRefName() + "\"");
 		add("diamond_bucket", bucketData.getDiamondBucket());

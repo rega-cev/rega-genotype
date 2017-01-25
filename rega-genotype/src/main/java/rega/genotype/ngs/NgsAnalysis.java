@@ -18,8 +18,6 @@ import org.apache.commons.io.FileUtils;
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.FileFormatException;
-import rega.genotype.NgsSequence.BucketData;
-import rega.genotype.NgsSequence.Contig;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
@@ -29,6 +27,8 @@ import rega.genotype.framework.async.LongJobsScheduler.Lock;
 import rega.genotype.ngs.QC.QcData;
 import rega.genotype.ngs.QC.QcResults;
 import rega.genotype.ngs.QC.QcResults.Result;
+import rega.genotype.ngs.model.ConsensusBucket;
+import rega.genotype.ngs.model.Contig;
 import rega.genotype.ngs.model.DiamondBucket;
 import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.taxonomy.RegaSystemFiles;
@@ -361,7 +361,7 @@ public class NgsAnalysis {
 					String name = refAC + "__" + i + " " + s.getName();
 					String description = fastqFileId;
 
-					BucketData bucketData = new BucketData(bucket, ref.getName(), ref.getDescription(), 
+					ConsensusBucket bucketData = new ConsensusBucket(bucket, ref.getName(), ref.getDescription(), 
 							ref.getLength());
 
 					List<Contig> contigs = SequenceToolMakeConsensus.readCotigsData(refWorkDir);
