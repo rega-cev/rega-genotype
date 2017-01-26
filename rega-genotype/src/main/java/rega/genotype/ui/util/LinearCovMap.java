@@ -8,6 +8,7 @@ import rega.genotype.ngs.model.Contig;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPaintDevice;
 import eu.webtoolkit.jwt.WPaintedWidget;
 import eu.webtoolkit.jwt.WPainter;
@@ -70,7 +71,7 @@ public class LinearCovMap {
 
 		paintedWidget.update();
 		paintedWidget.resize((int)(MARGIN * 2 + GENOM_WIDTH), 50);
-
+		paintedWidget.setMargin(WLength.Auto);
 		return paintedWidget;
 	}
 }
