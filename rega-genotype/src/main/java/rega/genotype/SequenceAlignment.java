@@ -53,7 +53,12 @@ public class SequenceAlignment
     }
     
     public SequenceAlignment(InputStream inputFile,
-                             int fileType, int sequenceType)
+            int fileType, int sequenceType) throws ParameterProblemException, IOException, FileFormatException {
+    	this(inputFile, fileType, sequenceType, true);
+    }
+ 
+    public SequenceAlignment(InputStream inputFile,
+                             int fileType, int sequenceType, boolean makeLegalName)
         throws ParameterProblemException, IOException, FileFormatException
     {
     	this.sequenceType = sequenceType;
@@ -61,7 +66,7 @@ public class SequenceAlignment
 
         switch (fileType) {
             case FILETYPE_FASTA:
-                readFastaFile(inputFile, sequenceType);
+                readFastaFile(inputFile, sequenceType, makeLegalName);
                 break;
             case FILETYPE_CLUSTAL:
                 //readClustalFile(inputFile);
@@ -134,7 +139,7 @@ public class SequenceAlignment
         this.sequenceType = sequenceType;
     }
 
-    private void readFastaFile(InputStream inputFile, int sequenceType)
+    private void readFastaFile(InputStream inputFile, int sequenceType, boolean makeLegalName)
         throws IOException, FileFormatException
     {
         /*
@@ -148,7 +153,7 @@ public class SequenceAlignment
             = new LineNumberReader(new InputStreamReader(inputFile));
 
         for (;;) {
-            Sequence s = readFastaFileSequence(reader, sequenceType);
+            Sequence s = readFastaFileSequence(reader, sequenceType, makeLegalName);
 
             if (s != null) {
                 sequences.add(s);
@@ -170,7 +175,8 @@ public class SequenceAlignment
 		}
 	}
 
-    public static Sequence readFastaFileSequence(LineNumberReader reader, int sequenceType)
+    public static Sequence readFastaFileSequence(LineNumberReader reader, int sequenceType, 
+    		boolean makeLegalName)
         throws IOException, FileFormatException
     {
         /*
@@ -201,13 +207,16 @@ public class SequenceAlignment
         boolean nameCapped;
         String description;
         if (spacePos != -1) {   // only a name	
-           name = makeLegalName(header.substring(0, spacePos));
-           nameCapped = name.length() < header.substring(0, spacePos).length();
-           description = header.substring(spacePos);
+        	if (makeLegalName)
+        		name = makeLegalName(header.substring(0, spacePos));
+        	else
+        		name = header.substring(0, spacePos);
+        	nameCapped = name.length() < header.substring(0, spacePos).length();
+        	description = header.substring(spacePos);
         } else {
-           name = makeLegalName(header);
-           nameCapped = name.length() < header.length();
-           description = "";
+       		name = makeLegalName ? makeLegalName(header) : header;
+        	nameCapped = name.length() < header.length();
+        	description = "";
         }
 
         /*

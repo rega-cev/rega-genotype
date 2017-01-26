@@ -7,6 +7,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
 import rega.genotype.tools.blast.BlastJobOverviewForm;
+import rega.genotype.ui.util.LinearCovMap;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
@@ -93,7 +94,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			case COLOR_COLUMN:
 				return "";
 			case IMAGE_COLUMN:
-				return "TODO";
+				return LinearCovMap.paint(bucket, jobDir);
 			}
 		} else if (role == ItemDataRole.LinkRole) {
 			ConsensusBucket bucket = buckets.get(index.getRow());

@@ -73,7 +73,7 @@ public class FastaUploadWidget extends WContainerWidget{
 
 		try {
 			while (true) {
-				if (SequenceAlignment.readFastaFileSequence(r, SequenceAlignment.SEQUENCE_DNA)
+				if (SequenceAlignment.readFastaFileSequence(r, SequenceAlignment.SEQUENCE_DNA, true)
 						== null)
 					break;
 				++sequenceCount;

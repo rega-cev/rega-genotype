@@ -8,13 +8,15 @@ package rega.genotype.ngs.model;
 public class Contig {
 	private Double cov;
 	private Integer length;
+	private Integer endPosition;
 	private String id;
 	private String sequence; //nucleotides. 
 
 	//<contig id="1" length="7366" cov="5.35085">
-	public Contig(String id, Integer length, Double cov, String sequence){
+	public Contig(String id, Integer length, Integer endPosition, Double cov, String sequence){
 		this.id = id;
 		this.length = length;
+		this.endPosition = endPosition;
 		this.cov = cov;
 		this.sequence = sequence;
 	}
@@ -41,5 +43,11 @@ public class Contig {
 	}
 	public void setSequence(String sequence) {
 		this.sequence = sequence;
+	}
+	public Integer getEndPosition() {
+		return endPosition;
+	}
+	public void setEndPosition(Integer endPosition) {
+		this.endPosition = endPosition;
 	}
 }

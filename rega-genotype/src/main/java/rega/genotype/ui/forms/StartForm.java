@@ -437,7 +437,7 @@ public class StartForm extends AbstractForm {
 
 		try {
 			while (true) {
-				Sequence s = SequenceAlignment.readFastaFileSequence(r, SequenceAlignment.SEQUENCE_DNA);
+				Sequence s = SequenceAlignment.readFastaFileSequence(r, SequenceAlignment.SEQUENCE_DNA, true);
 				if (s == null)
 					break;
 				
@@ -461,7 +461,7 @@ public class StartForm extends AbstractForm {
 
 		try {
 			while (true) {
-				if (SequenceAlignment.readFastaFileSequence(r, SequenceAlignment.SEQUENCE_DNA)
+				if (SequenceAlignment.readFastaFileSequence(r, SequenceAlignment.SEQUENCE_DNA, true)
 						== null)
 					break;
 				++sequenceCount;

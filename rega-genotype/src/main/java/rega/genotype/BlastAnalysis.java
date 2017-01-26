@@ -860,9 +860,9 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 	    	BlastAnalysis blastAnalysis = (BlastAnalysis) alignmentAnalyses.getAnalysis("blast");
 	    	blastAnalysis.formatDB(alignmentAnalyses.getAlignment());
-			for (Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA);
+			for (Sequence s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA, true);
 					s != null ;
-					s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA)) {
+					s = SequenceAlignment.readFastaFileSequence(reader, SequenceAlignment.SEQUENCE_DNA, true)) {
 			    	s.removeGaps();
 			    	ans.add(blastAnalysis.run(s));
 			}

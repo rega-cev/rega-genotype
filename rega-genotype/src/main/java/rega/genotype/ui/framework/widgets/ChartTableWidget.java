@@ -17,6 +17,7 @@ import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
+import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WChartPalette;
 import eu.webtoolkit.jwt.chart.WPieChart;
@@ -133,6 +134,9 @@ public class ChartTableWidget extends WContainerWidget{
 					if (text != null)
 						a.setText(text);
 					table.getElementAt(r + 1, c).addWidget(a);
+				} else if (model.getData(r, c) != null 
+						&& model.getData(r, c) instanceof WWidget) {
+					table.getElementAt(r + 1, c).addWidget((WWidget)model.getData(r, c));
 				} else
 					addText(r + 1, c, model.getData(r, c));
 			}

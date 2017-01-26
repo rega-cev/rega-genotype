@@ -93,12 +93,13 @@ public class SequenceToolMakeConsensus {
 		File contigsFile = NgsFileSystem.consensusContigsFile(consensusWorkDir);
 		try {
 			SequenceAlignment contigsAlignment = new SequenceAlignment(new FileInputStream(contigsFile),
-					SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+					SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA, false);
 			for (AbstractSequence s: contigsAlignment.getSequences()) {
 				String[] parts = s.getName().split("_");
 				int len = Integer.parseInt(parts[3]);
 				double cov = Double.parseDouble(parts[5]);
-				ans.add(new Contig(parts[1], len, cov, s.getSequence()));
+				int endPosition = Integer.parseInt(parts[7]);
+				ans.add(new Contig(parts[1], len, endPosition, cov, s.getSequence()));
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
