@@ -49,7 +49,7 @@ public class NgsWidget extends WContainerWidget{
 				model.getReadCountStartState(State.Init),
 				model.getReadCountStartState(State.Diamond));
 
-		WContainerWidget filtringWidget = stateWidget(
+		WContainerWidget filteringWidget = stateWidget(
 				State.Diamond.text, model.getStateStartTime(State.Diamond), 
 				model.getStateStartTime(State.Spades),
 				model.getReadCountStartState(State.Diamond),
@@ -62,7 +62,7 @@ public class NgsWidget extends WContainerWidget{
 				model.getReadCountStartState(State.FinishedAll));
 
 		addWidget(preprocessingWidget);
-		addWidget(filtringWidget);
+		addWidget(filteringWidget);
 		addWidget(identificationWidget);
 
 		if (!model.getErrors().isEmpty() )
@@ -87,7 +87,7 @@ public class NgsWidget extends WContainerWidget{
 
 		if (model.getState().code == State.Diamond.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<div> Diamond blast job state:" + jobState + "</div>", filtringWidget);
+			new WText("<div> Diamond blast job state:" + jobState + "</div>", filteringWidget);
 		}
 
 		if (model.getState().code == State.Spades.code) {
@@ -99,10 +99,10 @@ public class NgsWidget extends WContainerWidget{
 
 		if (model.getState().code < State.Diamond.code){
 			preprocessingWidget.addStyleClass("working");
-			filtringWidget.addStyleClass("waiting");
+			filteringWidget.addStyleClass("waiting");
 			identificationWidget.addStyleClass("waiting");
 		} else if (model.getState() == State.Diamond){
-			filtringWidget.addStyleClass("working");
+			filteringWidget.addStyleClass("working");
 			identificationWidget.addStyleClass("waiting");
 		} else if (model.getState() == State.Spades){
 			identificationWidget.addStyleClass("working");

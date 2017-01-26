@@ -17,7 +17,7 @@ public class NgsResultsModel {
 		QC(1, "QC"),
 		Preprocessing(2, "Preprocessing"),
 		QC2(3, "QC of preprocessed."),
-		Diamond(4, "Filtring"),
+		Diamond(4, "filtering"),
 		Spades(5, "Assembly and Identification"),
 		FinishedAll(6, "finished");
 
@@ -78,12 +78,12 @@ public class NgsResultsModel {
 		case QC2:
 			return readCountAfterPrepocessing;
 		case Spades:
-			return totalReadCountAfterFiltring();
+			return totalReadCountAfterfiltering();
 		}
 
 		return null;
 	}
-	public Integer totalReadCountAfterFiltring() {
+	public Integer totalReadCountAfterfiltering() {
 		if (diamondBlastResults.isEmpty())
 			return null;
 

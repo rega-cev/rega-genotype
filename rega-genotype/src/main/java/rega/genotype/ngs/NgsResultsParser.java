@@ -69,11 +69,11 @@ public class NgsResultsParser extends GenotypeResultParser{
 			model.setReadCountAfterPrepocessing(Integer.parseInt(
 					GenotypeLib.getEscapedValue(this,
 							"/genotype_result/qc2/read-count")));
-		} else if (tag.equals("filtring")) {
-			Element filtringE = getElement("/genotype_result/filtring");
-			model.readStateTime(State.Spades, Long.parseLong(filtringE.getChildText("end-time-ms")));
+		} else if (tag.equals("filtering")) {
+			Element filteringE = getElement("/genotype_result/filtering");
+			model.readStateTime(State.Spades, Long.parseLong(filteringE.getChildText("end-time-ms")));
 
-			List<Element> children = filtringE.getChildren("diamond-bucket");
+			List<Element> children = filteringE.getChildren("diamond-bucket");
 			for (Element bucketE: children){
 				String id = bucketE.getAttributeValue("id");
 				String scientificName = bucketE.getChildText("scientific-name");

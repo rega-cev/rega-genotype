@@ -175,7 +175,7 @@ public class NgsAnalysis {
 
 		try {
 			primarySearch();
-			ngsResults.printFiltring();
+			ngsResults.printfiltering();
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 			ngsResults.printFatalError("primary search failed: " + e.getMessage());

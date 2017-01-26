@@ -85,8 +85,8 @@ public class NgsResultsTracer extends ResultTracer{
 		w.flush();
 	}
 
-	public void printFiltring() {
-		printlnOpen("<filtring>");
+	public void printfiltering() {
+		printlnOpen("<filtering>");
 		for (DiamondBucket b: model.getDiamondBlastResults().values()) {
 			printlnOpen("<diamond-bucket id=\"" + b.getTaxonId() + "\" >");
 			add("ancestors", b.getAncestors());
@@ -95,7 +95,7 @@ public class NgsResultsTracer extends ResultTracer{
 			printlnClose("</diamond-bucket>");
 		}
 		add("end-time-ms", time());
-		printlnClose("</filtring>");
+		printlnClose("</filtering>");
 		w.flush();
 	}
 
