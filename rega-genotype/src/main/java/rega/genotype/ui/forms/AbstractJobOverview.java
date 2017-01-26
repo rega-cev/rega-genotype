@@ -433,7 +433,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 					new Signal.Listener() {
 				public void trigger() {
 					UpdateLock updateLock = app.getUpdateLock();
-					updateNgsView();
+					updateView();
 					app.triggerUpdate();
 					updateLock.release();
 				}
