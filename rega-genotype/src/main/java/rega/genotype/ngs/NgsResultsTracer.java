@@ -118,6 +118,7 @@ public class NgsResultsTracer extends ResultTracer{
 			printlnOpen("<contig id=\"" + contig.getId() + "\">");
 			add("length", contig.getLength());
 			add("end-position", contig.getEndPosition());
+			add("start-position", contig.getStartPosition());
 			add("cov", contig.getCov());
 			add("nucleotides", contig.getSequence());
 			printlnClose("</contig>");

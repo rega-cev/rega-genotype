@@ -19,10 +19,6 @@ public class LinearCovMap {
 	public static final double GENOM_WIDTH = 400;
 	public static final int MARGIN = 15;
 
-	public static File generalGenomeImage() {
-		return new File("todo"); // TODO
-	}
-
 	public static File genomeImage(final ConsensusBucket bucket, final File workDir) {
 		File imagesDir = new File(workDir, "genome-images");
 		imagesDir.mkdirs();
@@ -49,18 +45,21 @@ public class LinearCovMap {
 
 				WPainter painter = new WPainter(paintDevice);
 				painter.drawPath(genomePath);
-				painter.drawText(1, 1, MARGIN, MARGIN, EnumSet.of(AlignmentFlag.AlignLeft), "5'");
+				painter.drawText(5, 1, MARGIN, MARGIN, EnumSet.of(AlignmentFlag.AlignLeft), "5'");
 				painter.drawText(GENOM_WIDTH + MARGIN, 1, MARGIN, MARGIN, 
-						EnumSet.of(AlignmentFlag.AlignLeft), "3'");
-				painter.drawText(1, 1, MARGIN, MARGIN, EnumSet.of(AlignmentFlag.AlignLeft), "5'");
+						EnumSet.of(AlignmentFlag.AlignRight), "3'");
 				painter.drawText(GENOM_WIDTH / 2 + MARGIN, 1, MARGIN, MARGIN, 
 						EnumSet.of(AlignmentFlag.AlignCenter), bucket.getRefName());
+				painter.drawText(MARGIN, GENOM_HIGHT + MARGIN + 1,
+						MARGIN, MARGIN, EnumSet.of(AlignmentFlag.AlignLeft), "0");
+				painter.drawText(GENOM_WIDTH, GENOM_HIGHT + MARGIN + 1,
+						MARGIN, MARGIN,  EnumSet.of(AlignmentFlag.AlignRight), bucket.getRefLen()+"");
 
 				for (Contig contig: bucket.getContigs()) {
 					WPainterPath gcontigPath = new WPainterPath();
-					double start = scale(bucket.getConsensusLength(), 
+					double start = scale(bucket.getRefLen(), 
 							contig.getEndPosition() - contig.getLength());
-					double width = scale(bucket.getConsensusLength(), contig.getLength());
+					double width = scale(bucket.getRefLen(), contig.getLength());
 					gcontigPath.addRect(MARGIN + start, MARGIN, width, GENOM_HIGHT);
 					int alpha = Math.min(contig.getCov().intValue() * 10, 255);
 					painter.setBrush(new WBrush(new WColor(50, 150, 50, alpha)));

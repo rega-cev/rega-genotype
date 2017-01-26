@@ -103,7 +103,9 @@ public class NgsResultsParser extends GenotypeResultParser{
 				int contigLen = Integer.parseInt(c.getChild("length").getValue());
 				double contigCov = Double.parseDouble(c.getChild("cov").getValue());
 				int endPosition = Integer.parseInt(c.getChild("end-position").getValue());
-				Contig contig = new Contig(id, contigLen, endPosition, contigCov, null);
+				int startPosition = Integer.parseInt(c.getChild("start-position").getValue());
+				Contig contig = new Contig(id, contigLen, startPosition,
+						endPosition, contigCov, null);
 				bucket.getContigs().add(contig);
 			}
 			Element sequenceE = bucketE.getChild("sequence");

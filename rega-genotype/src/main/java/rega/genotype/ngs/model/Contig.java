@@ -9,13 +9,16 @@ public class Contig {
 	private Double cov;
 	private Integer length;
 	private Integer endPosition;
+	private Integer startPosition;
 	private String id;
 	private String sequence; //nucleotides. 
 
 	//<contig id="1" length="7366" cov="5.35085">
-	public Contig(String id, Integer length, Integer endPosition, Double cov, String sequence){
+	public Contig(String id, Integer length, Integer startPosition, 
+			Integer endPosition, Double cov, String sequence){
 		this.id = id;
 		this.length = length;
+		this.startPosition = startPosition;
 		this.endPosition = endPosition;
 		this.cov = cov;
 		this.sequence = sequence;
@@ -49,5 +52,11 @@ public class Contig {
 	}
 	public void setEndPosition(Integer endPosition) {
 		this.endPosition = endPosition;
+	}
+	public Integer getStartPosition() {
+		return startPosition;
+	}
+	public void setStartPosition(Integer startPosition) {
+		this.startPosition = startPosition;
 	}
 }
