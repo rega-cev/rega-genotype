@@ -127,7 +127,6 @@ public class NgsResultsTracer extends ResultTracer{
 
 	public void printAssemblybucketClose() {
 		printlnCloseLastElement("bucket");
-		add("end-time-ms", time());
 		w.flush();
 	}
 
@@ -141,6 +140,7 @@ public class NgsResultsTracer extends ResultTracer{
 	}
 
 	public void printStop() {
+		add("end-time-ms", time());
 		while (!openElements.isEmpty()) {
 			printlnCloseLastElement();
 		}
