@@ -2,6 +2,7 @@ package rega.genotype.ui.util;
 
 import java.io.File;
 import java.util.EnumSet;
+import java.util.List;
 
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
@@ -55,13 +56,15 @@ public class LinearCovMap {
 				painter.drawText(GENOM_WIDTH, GENOM_HIGHT + MARGIN + 1,
 						MARGIN, MARGIN,  EnumSet.of(AlignmentFlag.AlignRight), bucket.getRefLen()+"");
 
+				double maxCov = maxCov(bucket.getContigs());
 				for (Contig contig: bucket.getContigs()) {
 					WPainterPath gcontigPath = new WPainterPath();
 					double start = scale(bucket.getRefLen(), 
 							contig.getEndPosition() - contig.getLength());
 					double width = scale(bucket.getRefLen(), contig.getLength());
 					gcontigPath.addRect(MARGIN + start, MARGIN, width, GENOM_HIGHT);
-					int alpha = Math.min(contig.getCov().intValue() * 10, 255);
+					double scale = contig.getCov() / maxCov; // scale colors by contig cov in ref.
+					int alpha = (int) (scale * 255);
 					painter.setBrush(new WBrush(new WColor(50, 150, 50, alpha)));
 					painter.drawPath(gcontigPath);
 				}
@@ -72,5 +75,13 @@ public class LinearCovMap {
 		paintedWidget.resize((int)(MARGIN * 2 + GENOM_WIDTH), 50);
 		paintedWidget.setMargin(WLength.Auto);
 		return paintedWidget;
+	}
+
+	private static double maxCov(List<Contig> contigs) {
+		double ans = 0;
+		for (Contig contig: contigs) 
+			ans = Math.max(ans, contig.getCov());
+
+		return ans;
 	}
 }
