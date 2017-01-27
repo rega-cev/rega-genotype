@@ -20,6 +20,8 @@ import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.AbstractDataTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.framework.Constants;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.util.CsvDataTable;
 import rega.genotype.util.DataTable;
 import eu.webtoolkit.jwt.utils.StreamUtils;
@@ -92,8 +94,9 @@ public class GenotypeService extends HttpServlet {
 					throw new RuntimeException("Illegal output format: " + outputS);
 				}
 			}
-			
-			File traceFile = new File(workingDir, "result.xml");
+
+			// TODO: NGS is not supported yet.
+			File traceFile = new File(workingDir, Constants.RESULT_FILE_NAME);
 
 			GenotypeTool genotypeTool = (GenotypeTool) tool.getConstructor(String.class, File.class).newInstance(path, workingDir);;
 
@@ -116,7 +119,7 @@ public class GenotypeService extends HttpServlet {
 					};
 					
 					AbstractDataTableGenerator tg = tableGenerator.getConstructor(SequenceFilter.class, DataTable.class).newInstance(passAll, dt);
-					tg.parseResultFile(traceFile.getParentFile());
+					tg.parseResultFile(traceFile.getParentFile(), Mode.Classical);
 				}
 			}
 		} catch (IllegalArgumentException e) {

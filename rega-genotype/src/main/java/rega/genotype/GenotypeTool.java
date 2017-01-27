@@ -534,9 +534,9 @@ public abstract class GenotypeTool {
     									ngsModuleE.getValue(), toolConfig);
     							ngsAnalysis.analyze();
 
-    							genotypeTool.analyze(currentWorkDir.getAbsolutePath()
-    									+ File.separator
-    									+ NgsFileSystem.SEQUENCES_FILE, traceFile);
+//    							genotypeTool.analyze(currentWorkDir.getAbsolutePath()
+//    									+ File.separator
+//    									+ NgsFileSystem.SEQUENCES_FILE, traceFile);
     							} catch (Exception e1) {
     								e1.printStackTrace(); // 1 filed we still want to continue testing more fiels.
     							}

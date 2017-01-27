@@ -10,6 +10,7 @@ import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.ngs.model.NgsResultsModel;
 import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
 import rega.genotype.utils.Utils;
@@ -127,7 +128,7 @@ public class NgsWidget extends WContainerWidget{
 		}
 
 		if (model.getState() == State.FinishedAll) {
-			addWidget(new DownloadsWidget(null, workDir, organismDefinition, true));
+			addWidget(new DownloadsWidget(null, workDir, organismDefinition, true, Mode.Ngs));
 		}
 	}
 

@@ -59,4 +59,16 @@ public class Contig {
 	public void setStartPosition(Integer startPosition) {
 		this.startPosition = startPosition;
 	}
+
+	public double getReadCount(int readLength) {
+		return getCov() * getLength() / readLength;
+	}
+
+	public double getCovPercentage(int refLength) {
+		return (double)length / (double)refLength  * (double)100;
+	}
+
+	public double getDeepCov(int readLength) {
+		return getReadCount(readLength) * (double)readLength / length;
+	}
 }

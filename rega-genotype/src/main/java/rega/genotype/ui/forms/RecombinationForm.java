@@ -9,6 +9,7 @@ import org.jdom.Element;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.viruses.recombination.RegionUtils;
@@ -46,7 +47,7 @@ public class RecombinationForm extends AbstractForm{
 		t.bindString("app.context", GenotypeMain.getApp().getServletContext().getContextPath());
 		
 		p = new GenotypeResultParser(selectedSequenceIndex);
-		p.parseResultFile(jobDir);
+		p.parseResultFile(jobDir, Mode.Classical);
 		
 		final String id;
 		if (!p.elementExists("/genotype_result/sequence/conclusion")) {

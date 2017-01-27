@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.data.GenotypeResultParser;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.utils.TestUtils;
 import rega.genotype.viruses.hiv.HIVTool;
 
@@ -70,6 +71,6 @@ public class HIVGenotypeAnalysisTest extends TestCase {
 				return false;
 			}    		
     	};
-    	p.parseResultFile(jobDir);
+    	p.parseResultFile(jobDir, Mode.Classical);
     }
 }

@@ -13,6 +13,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.singletons.Settings;
 import rega.genotype.tools.blast.BlastTool;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.utils.TestUtils;
 
 public class NgsTest  extends TestCase{
@@ -84,7 +85,7 @@ public class NgsTest  extends TestCase{
 				return false;
 			}    		
     	};
-    	p.parseResultFile(jobDir);
+    	p.parseResultFile(jobDir, Mode.Ngs);
    
 		assertTrue(true);
 	}

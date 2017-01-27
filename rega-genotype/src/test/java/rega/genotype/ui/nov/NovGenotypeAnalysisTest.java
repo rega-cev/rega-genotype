@@ -11,6 +11,7 @@ import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.utils.TestUtils;
 import rega.genotype.viruses.generic.GenericTool;
 
@@ -77,7 +78,7 @@ public class NovGenotypeAnalysisTest extends TestCase {
 				return false;
 			}    		
 		};
-		p.parseResultFile(jobDir);
+		p.parseResultFile(jobDir, Mode.Classical);
 	}
 
 	public void testAnalysisRuntime() {
@@ -110,7 +111,7 @@ public class NovGenotypeAnalysisTest extends TestCase {
 				return false;
 			}    		
 		};
-		p.parseResultFile(jobDir);
+		p.parseResultFile(jobDir, Mode.Classical);
 	}
 
 	public void testAsciiFastaIds() {
@@ -152,7 +153,7 @@ public class NovGenotypeAnalysisTest extends TestCase {
 			}    		
 		};
 		try {
-			p.parseResultFile(jobDir);
+			p.parseResultFile(jobDir, Mode.Classical);
 		} catch (Exception e) {
 			/* That's alright, we expected an exception */
 			return;

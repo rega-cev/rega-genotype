@@ -20,10 +20,10 @@ public abstract class AbstractDataTableGenerator extends GenotypeResultParser {
 		Number
 	}
 	
-	private DataTable table;
+	protected DataTable table;
 
 	//TODO no ui components in this class!
-	private SequenceFilter filter;
+	protected SequenceFilter filter;
 
 	public AbstractDataTableGenerator(SequenceFilter filter, DataTable table) {
 		super(-1);

@@ -5,7 +5,6 @@ import java.util.List;
 
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.model.ConsensusBucket;
-import rega.genotype.ngs.model.Contig;
 import rega.genotype.tools.blast.BlastJobOverviewForm;
 import rega.genotype.ui.util.LinearCovMap;
 import eu.webtoolkit.jwt.ItemDataRole;
@@ -84,11 +83,11 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			case SEQUENCE_COUNT_COLUMN:
 				return bucket.getContigs().size();
 			case READ_COUNT_COLUMN: {
-				return readCount(bucket);
+				return bucket.getTotalReadCount(readLength);
 			} case TOTAL_LENGTH_COLUMN:{
-				return contigsLen(bucket) / bucket.getRefLen()  * 100;
+				return bucket.getCovPercentage();
 			} case DEEP_COV_COLUMN: {
-				return readCount(bucket) * (double)readLength / contigsLen(bucket);
+				return bucket.getDeepCov(readLength);
 			} case SRC_COLUMN :
 				return bucket.getSrcDatabase();
 			case COLOR_COLUMN:
@@ -108,19 +107,5 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 				return palette.getBrush(index.getRow()).getColor();
 		}
 		return null;
-	}
-
-	private double contigsLen(ConsensusBucket bucket){
-		double contigsLen = 0;
-		for (Contig contig: bucket.getContigs()) 
-			contigsLen += contig.getLength();
-		return contigsLen;
-	}
-
-	private double readCount(ConsensusBucket bucket){
-		double readCount = 0;
-		for (Contig contig: bucket.getContigs()) 
-			readCount += contig.getCov() * contig.getLength() / readLength;
-		return readCount;
 	}
 }

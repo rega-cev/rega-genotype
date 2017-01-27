@@ -76,6 +76,8 @@
 	<message id="monitorForm.csvTable">Table (CSV format)</message>
 	<message id="monitorForm.xlsTable">Table (Excel format)</message>
 	<message id="monitorForm.fasta">Sequences (Fasta format)</message>
+	<message id="monitorForm.contigs">Contigs (Fasta format)</message>
+	<message id="monitorForm.consensuses">Consensus (Fasta format)</message>
 	<message id="monitorForm.xmlFile">XML File</message>
 	<message id="monitorForm.downloadJob">Download all job files:</message>
 	<message id="monitorForm.jobFile">ZIP</message>

@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
+import jnr.ffi.Struct.mode_t;
+
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -28,6 +30,9 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import rega.genotype.ui.framework.Constants;
+import rega.genotype.ui.framework.Constants.Mode;
 
 /**
  * A sax parser which parses the rega-genotype analysis result file and offers
@@ -287,8 +292,9 @@ public class GenotypeResultParser extends DefaultHandler
 		}
 	}
 
-	public void parseResultFile(File jobDir) {
-		File resultFile = new File(jobDir.getAbsolutePath()+File.separatorChar+"result.xml");
+	public void parseResultFile(File jobDir, Mode mode) {
+		String fileName = mode == Mode.Classical ? Constants.RESULT_FILE_NAME : Constants.NGS_RESULT_FILE_NAME;
+		File resultFile = new File(jobDir.getAbsolutePath(), fileName);
 		parseFile(resultFile);
 	}
 
@@ -331,9 +337,9 @@ public class GenotypeResultParser extends DefaultHandler
 		return stop;
 	}
 
-	public static GenotypeResultParser parseFile(File jobDir, int selectedSequenceIndex) {
+	public static GenotypeResultParser parseFile(File jobDir, int selectedSequenceIndex, Mode mode) {
 		GenotypeResultParser p = new GenotypeResultParser(selectedSequenceIndex);
-		p.parseResultFile(jobDir);
+		p.parseResultFile(jobDir, mode);
 
 		if (!p.indexOutOfBounds())
 			return p;
@@ -344,8 +350,9 @@ public class GenotypeResultParser extends DefaultHandler
 	public static void main(String args[]){
 		File jobDir = new File(args[0]);
 		String sequence = args.length > 1 ? args[1]:null;
+		Mode mode = args[2] != null && args[2].equals("NGS") ? Mode.Ngs : Mode.Classical;
 		
-		GenotypeResultParser p = GenotypeResultParser.parseFile(jobDir, Integer.parseInt(sequence));
+		GenotypeResultParser p = GenotypeResultParser.parseFile(jobDir, Integer.parseInt(sequence), mode);
 		p.dumpDebug();
 	}
 

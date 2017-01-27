@@ -10,6 +10,7 @@ import java.io.File;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;
@@ -46,7 +47,7 @@ public class DetailsForm extends AbstractForm {
 	
 	WString init(File jobDir, Integer selectedSequenceIndex) {
 		try {
-			p = GenotypeResultParser.parseFile(jobDir, selectedSequenceIndex);
+			p = GenotypeResultParser.parseFile(jobDir, selectedSequenceIndex, Mode.Classical);
 		
 			if (p == null) {
 				return tr("detailsForm.nonExistingSequenceId").arg(selectedSequenceIndex);

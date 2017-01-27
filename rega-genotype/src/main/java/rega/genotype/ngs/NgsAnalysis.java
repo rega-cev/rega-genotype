@@ -269,7 +269,7 @@ public class NgsAnalysis {
 			ngsResults.printFatalError("Identification - could not write DONE file: " + e. getMessage());
 		}
 
-		File sequences = new File(workDir, NgsFileSystem.SEQUENCES_FILE);
+		File sequences = new File(workDir, NgsFileSystem.CONTIGS_FILE);
 		if (!sequences.exists())
 			ngsResults.printFatalError("No assembly results.");
 		else
@@ -305,18 +305,27 @@ public class NgsAnalysis {
 			long endAssembly = System.currentTimeMillis();
 			ngsLogger.info("assembled " + virusDiamondDir.getName() + " = " + (endAssembly - startAssembly) + " ms");
 
-			// fill sequences.xml'
-			File sequences = new File(workDir, NgsFileSystem.SEQUENCES_FILE);
-			if (!sequences.exists())
+			// fill sequences.fasta'
+			File allContigsFile = new File(workDir, NgsFileSystem.CONTIGS_FILE);
+			if (!allContigsFile.exists())
 				try {
-					sequences.createNewFile();
+					allContigsFile.createNewFile();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					ngsResults.printFatalError("assemble failed, could not create sequences.xml");
+					return false;
+				}
+			File allConsensusesFile = new File(workDir, NgsFileSystem.CONSENSUSES_FILE);
+			if (!allConsensusesFile.exists())
+				try {
+					allConsensusesFile.createNewFile();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 					ngsResults.printFatalError("assemble failed, could not create sequences.xml");
 					return false;
 				}
 
-			SequenceAlignment consensusAlignment = new SequenceAlignment(new FileInputStream(assembledFile), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+			SequenceAlignment spadesContigsAlignment = new SequenceAlignment(new FileInputStream(assembledFile), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
 			File ncbiVirusesFasta = RegaSystemFiles.ncbiVirusesFileAnnotated();
 			if (!ncbiVirusesFasta.exists())
@@ -325,7 +334,7 @@ public class NgsAnalysis {
 			workDir.mkdirs();
 			String virusName = virusDiamondDir.getName();
 			File virusConsensusDir = NgsFileSystem.consensusDir(workDir, virusName);
-			SequenceAlignment refs = detectRefs(virusConsensusDir, consensusAlignment, ncbiVirusesFasta);
+			SequenceAlignment refs = detectRefs(virusConsensusDir, spadesContigsAlignment, ncbiVirusesFasta);
 
 			// FIXME:
 			//  - probably should change the cutoff for the alignment, relative to length?
@@ -338,19 +347,20 @@ public class NgsAnalysis {
 				File refWorkDir = NgsFileSystem.consensusRefSeqDir(virusConsensusDir, refseqName);
 				
 				File alingment = SequenceToolMakeConsensus.consensusAlign(consensusInputContigs, ref, refWorkDir, ngsModule, ngsLogger);
-				File consensus = SequenceToolMakeConsensus.makeConsensus(alingment, refWorkDir, ngsModule, ngsLogger);
+				File consensusFile = SequenceToolMakeConsensus.makeConsensus(alingment, refWorkDir, ngsModule, ngsLogger);
+				File contigsFile = NgsFileSystem.consensusContigsFile(refWorkDir);
 
 				consensusInputContigs = NgsFileSystem.consensusUnusedContigsFile(refWorkDir); // next time use only what was not used buy the first ref.
 
 				// add virus taxonomy id to every consensus contig name, save sequence metadata.
 
-				SequenceAlignment sequenceAlignment = new SequenceAlignment(
-						new FileInputStream(consensus), 
+				SequenceAlignment consensusAlignment = new SequenceAlignment(
+						new FileInputStream(consensusFile), 
 						SequenceAlignment.FILETYPE_FASTA, 
 						SequenceAlignment.SEQUENCE_DNA);
 
 				int i = 0;
-				for (AbstractSequence s: sequenceAlignment.getSequences()) {
+				for (AbstractSequence s: consensusAlignment.getSequences()) {
 					String[] split = fastqPE1FileName.split("_");
 					String fastqFileId = (split.length > 0) ? split[0] : fastqPE1FileName;
 					String refAC = "AC";
@@ -376,15 +386,12 @@ public class NgsAnalysis {
 					ngsResults.printAssemblybucketClose();
 				}
 
-				ngsLogger.info("Created " + sequenceAlignment.getSequences().size() + " contigs");
-
-				consensus.delete();
-				sequenceAlignment.writeOutput(new FileOutputStream(consensus),
-						SequenceAlignment.FILETYPE_FASTA);
-	
 				ngsLogger.info("consensus " + virusDiamondDir.getName() + " = " + (System.currentTimeMillis() - endAssembly) + " ms");
-	
-				FileUtil.appendToFile(consensus, sequences);
+
+				if(contigsFile.exists() && contigsFile.length() != 0) {
+					FileUtil.appendToFile(contigsFile, allContigsFile);
+					FileUtil.appendToFile(consensusFile, allConsensusesFile);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -22,6 +22,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.singletons.Settings;
 import rega.genotype.tools.blast.BlastTool;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.utils.TestUtils;
 import rega.genotype.utils.FileUtil;
 
@@ -192,7 +193,7 @@ public class PenViralGenotypeAnalysisTest extends TestCase{
 				return false;
 			}    		
     	};
-    	p.parseResultFile(jobDir);
+    	p.parseResultFile(jobDir, Mode.Classical);
 	}
 
 	/**

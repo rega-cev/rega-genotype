@@ -6,6 +6,7 @@ import java.io.OutputStreamWriter;
 
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.SequenceFilter;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.util.GenotypeLib;
 
 /**
@@ -14,11 +15,13 @@ import rega.genotype.ui.util.GenotypeLib;
 public class FastaGenerator extends GenotypeResultParser {
 	private SequenceFilter filter;
 	private OutputStreamWriter writer;
-	
-	public FastaGenerator(SequenceFilter filter, OutputStream outputStream) {
+	private Mode mode;
+
+	public FastaGenerator(SequenceFilter filter, OutputStream outputStream, Mode mode) {
 		super(-1);
 
 		this.filter = filter;
+		this.mode = mode;
 		this.writer = new OutputStreamWriter(outputStream);
 	}
 
@@ -28,13 +31,20 @@ public class FastaGenerator extends GenotypeResultParser {
 
 		try {
 			writer.write(">");
-			writer.write(GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/@name"));
-			String description = GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/result[@id='blast']/cluster/concluded-description");
+			String seqPath =  mode == Mode.Classical ? "/genotype_result/sequence" 
+					: "/genotype_result/assembly/bucket/sequence";
+			
+			String namePath = seqPath + "/@name";
+			String descPath = seqPath + "/sequence/result[@id='blast']/cluster/concluded-description";
+			String nuclPath = seqPath +  "/sequence/nucleotides";
+
+			writer.write(GenotypeLib.getEscapedValue(this, namePath));
+			String description = GenotypeLib.getEscapedValue(this, descPath);
 			if (description != null) // support old result.xml files
 				writer.write(description.isEmpty() ? "__unassigned" : description);
 
 			writer.write("\n");
-			writer.write(GenotypeLib.getEscapedValue(this, "/genotype_result/sequence/nucleotides"));
+			writer.write(GenotypeLib.getEscapedValue(this, nuclPath));
 			writer.write("\n");
 			writer.flush();
 		} catch (IOException e) {

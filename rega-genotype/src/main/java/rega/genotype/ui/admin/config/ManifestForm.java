@@ -10,7 +10,7 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyButton;
-import rega.genotype.ui.framework.Global;
+import rega.genotype.ui.framework.Constants;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListModel;
 import eu.webtoolkit.jwt.Signal;
@@ -150,7 +150,7 @@ public class ManifestForm extends FormTemplate{
 		manifest.setVersion(versionLE.getText());
 		manifest.setCommitMessage(commitLE.getText());
 		manifest.setTaxonomyId(taxonomyT.getValue());
-		manifest.setSoftwareVersion(Global.SOFTWARE_VERSION);
+		manifest.setSoftwareVersion(Constants.SOFTWARE_VERSION);
 		if (publishing) {
 			manifest.setPublicationDate(WDate.getCurrentDate().getDate());
 			manifest.setPublisherName(config.getGeneralConfig().getPublisherName());

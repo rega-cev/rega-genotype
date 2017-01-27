@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import rega.genotype.ApplicationException;
 import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.framework.Constants;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.Utils;
@@ -44,7 +45,8 @@ public class NgsFileSystem {
 	public static final String PREPROCESSED_PE2_DIR = PREPROCESSED_DIR + File.separator + "PE2";
 	
 	public static final String PREPROCESSED_FILE_NAMR_UNPAIRD = "unpaird_";
-	public static final String SEQUENCES_FILE = "sequences.fasta";
+	public static final String CONTIGS_FILE = Constants.SEQUENCES_FILE_NAME; // contigs will be passed to sub typing tool
+	public static final String CONSENSUSES_FILE = "consensuses.fasta";
 
 	public static final String CONSENSUS_CONTIGS_FILE = "consensus-contigs.fasta";
 	public static final String CONSENSUS_FILE = "consensus.fasta";

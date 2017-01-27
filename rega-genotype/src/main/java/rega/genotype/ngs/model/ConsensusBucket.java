@@ -117,4 +117,34 @@ public class ConsensusBucket {
 	public void setConsensusLength(Integer consensusLength) {
 		this.consensusLength = consensusLength;
 	}
+
+	public double getTotalContigsLen(){
+		double contigsLen = 0;
+		for (Contig contig: getContigs()) 
+			contigsLen += contig.getLength();
+		return contigsLen;
+	}
+
+	/**
+	 * We can only estimate read count based on counting how much reads where 
+	 * used for every contig.
+	 * @param readLength - ngs reads have constant size depending on the machine.
+	 * @return
+	 */
+	public double getTotalReadCount(int readLength){
+		double readCount = 0;
+		for (Contig contig: getContigs()) 
+			readCount += contig.getReadCount(readLength);
+		return readCount;
+	}
+
+	public double getDeepCov(int readLength){
+		return getTotalReadCount(readLength) * 
+				(double)readLength / getTotalContigsLen();
+	}
+
+	public double getCovPercentage() {
+		return getTotalContigsLen() / getRefLen()  * 100;
+
+	}
 }

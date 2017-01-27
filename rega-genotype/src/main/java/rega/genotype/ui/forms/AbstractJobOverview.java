@@ -20,6 +20,7 @@ import rega.genotype.ngs.NgsWidget;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
@@ -308,7 +309,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return scroll;
 	}
 	private WWidget createDownloadsWidget(final String filter) {
-		DownloadsWidget downloadsWidget = new DownloadsWidget(this.filter, jobDir, getMain().getOrganismDefinition(), filter == null);
+		DownloadsWidget downloadsWidget = new DownloadsWidget(this.filter, jobDir, 
+				getMain().getOrganismDefinition(), filter == null, Mode.Classical);
 		downloadsWidget.hide();
 		return downloadsWidget;
 	}
@@ -347,7 +349,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 								if (this.elementExists(recombinationPath)) {
 									if (p == null) {
 										p = new GenotypeResultParser(this.getSequenceIndex());
-										p.parseResultFile(jobDir);
+										p.parseResultFile(jobDir, Mode.Classical);
 									}
 									
 									Element recombination = p.getElement(recombinationPath);
@@ -378,7 +380,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 				    	return filter.excludeSequence(this);
 				    }
 				};
-				grp.parseResultFile(jobDir);
+				grp.parseResultFile(jobDir, Mode.Classical);
 
 				try {
 					t.flush();
@@ -456,7 +458,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			}
 
 			if (!stop)
-				parser.parseResultFile(getJobdir());
+				parser.parseResultFile(getJobdir(), Mode.Classical);
 		}
 
 		void stop(){
