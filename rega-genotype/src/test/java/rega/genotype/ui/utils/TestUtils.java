@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.framework.Constants;
 import rega.genotype.utils.FileUtil;
 
 public class TestUtils {
@@ -47,11 +48,11 @@ public class TestUtils {
 	}
 
 	public static File getFastaFile(File jobDir) {
-		return new File(jobDir.getAbsolutePath() + File.separatorChar + "sequences.fasta");
+		return new File(jobDir.getAbsolutePath() + File.separatorChar + Constants.SEQUENCES_FILE_NAME);
 	}
 
 	public static File getResultFile(File jobDir) {
-		return new File(jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+		return new File(jobDir.getAbsolutePath() + File.separatorChar + Constants.RESULT_FILE_NAME);
 	}
 	
 	public static void deleteJobDirs(List<File> jobDirs) {

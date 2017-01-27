@@ -67,7 +67,7 @@ public class DownloadsWidget extends WTemplate{
 		xmlFileDownload.setObjectName("xml-download");
 		xmlFileDownload.setStyleClass("link");
 		WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
-		xmlResource.suggestFileName("result.xml");
+		xmlResource.suggestFileName(Constants.RESULT_FILE_NAME);
 		xmlResource.setDispositionType(DispositionType.Attachment);
 		xmlFileDownload.setLink(new WLink(xmlResource));
 		return xmlFileDownload;

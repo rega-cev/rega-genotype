@@ -28,6 +28,7 @@ import java.util.TreeSet;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.framework.Constants;
 import rega.genotype.utils.StreamReaderRuntime;
 
 /**
@@ -496,7 +497,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 
 			String cmd = "";
 			if (owner.getAlignment().getSequenceType() == SequenceAlignment.SEQUENCE_AA){
-				File query = getTempFile("sequences.fasta");
+				File query = getTempFile(Constants.SEQUENCES_FILE_NAME);
 				cmd = diamondPath + " " + formatDbOptions() + " --in " + query.getAbsolutePath() + " -d "+ getTempFile("") + File.separator + "nr.dmnd";
 				formatdb1 = StreamReaderRuntime.exec(cmd, null, workingDir);
 				int exitResult = formatdb1.waitFor();

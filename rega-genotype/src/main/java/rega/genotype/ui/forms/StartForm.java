@@ -28,6 +28,7 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.framework.Constants;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.StandardDialog;
@@ -413,7 +414,7 @@ public class StartForm extends AbstractForm {
 		Thread analysis = new Thread(new Runnable(){
 			public void run() {
 				try {
-					File seqFile = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"sequences.fasta");
+					File seqFile = new File(thisJobDir.getAbsolutePath(), Constants.SEQUENCES_FILE_NAME);
 					FileUtil.writeStringToFile(seqFile, fastaContent);
 					organismDefinition.startAnalysis(thisJobDir);
 					File done = new File(thisJobDir.getAbsolutePath()+File.separatorChar+"DONE");

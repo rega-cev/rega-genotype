@@ -35,6 +35,7 @@ import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
+import rega.genotype.ui.framework.Constants;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenomeAttributes;
@@ -146,8 +147,8 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		else
 			tool = new GenericTool(toolConfig, workingDir);
 
-		tool.analyze(workingDir.getAbsolutePath() + File.separatorChar + "sequences.fasta",
-					 workingDir.getAbsolutePath() + File.separatorChar + "result.xml");
+		tool.analyze(workingDir.getAbsolutePath() + File.separatorChar + Constants.SEQUENCES_FILE_NAME,
+					 workingDir.getAbsolutePath() + File.separatorChar + Constants.RESULT_FILE_NAME);
 	}
 
 	public AbstractJobOverview getJobOverview(GenotypeWindow main) {

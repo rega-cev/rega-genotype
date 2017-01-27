@@ -18,9 +18,10 @@ import rega.genotype.ngs.NgsResultsParser;
 import rega.genotype.ngs.NgsResultsTracer;
 import rega.genotype.ngs.NgsWidget;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.framework.Constants;
+import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
@@ -444,7 +445,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			if (ngsResultFile.exists())
 				ngsParser.parseFile(ngsResultFile);
 			
-			final File resultFile = new File(getJobdir(), "result.xml");
+			final File resultFile = new File(getJobdir(), Constants.RESULT_FILE_NAME);
 			// wait till result.xml is ready
 			while (!stop && !resultFile.exists()){
 				synchronized (lock) {

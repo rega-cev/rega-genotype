@@ -20,6 +20,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.VerificationTableItem;
+import rega.genotype.ui.framework.Constants;
 import rega.genotype.ui.framework.widgets.FastaUploadWidget;
 import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.framework.widgets.Template;
@@ -92,7 +93,7 @@ public class GoldenSequencesTestWidget extends Template {
 		bindWidget("report", reportC);
 		bindWidget("download", downloadB);
 
-		final File traceFile = new File(workDir.getAbsolutePath(), "result.xml");
+		final File traceFile = new File(workDir.getAbsolutePath(), Constants.RESULT_FILE_NAME);
 
 		
 		if (traceFile.exists()){
