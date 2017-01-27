@@ -92,9 +92,9 @@
 	<message id="detailsForm.summary.percentage">Percentage</message>
 	<message id="detailsForm.summary.src">Source</message>
 	<message id="detailsForm.summary.legend">Legend</message>
-	<message id="detailsForm.summary.total-len">Total length %</message>
+	<message id="detailsForm.summary.total-len">Coverage (%)</message>
 	<message id="detailsForm.summary.read-cunt"># Reads</message>
-	<message id="detailsForm.summary.deep-cov">Deep coverage</message>
+	<message id="detailsForm.summary.deep-cov">Depth of coverage</message>
 	<message id="detailsForm.summary.image">Coverage image</message>
 	<message id="detailsForm.summary.contig-count"># Contigs</message>
 	
