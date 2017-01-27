@@ -12,14 +12,14 @@ import java.util.List;
 
 import org.jdom.Element;
 
+import rega.genotype.Constants;
+import rega.genotype.Constants.Mode;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ngs.NgsResultsParser;
 import rega.genotype.ngs.NgsResultsTracer;
 import rega.genotype.ngs.NgsWidget;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.framework.Constants;
-import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;

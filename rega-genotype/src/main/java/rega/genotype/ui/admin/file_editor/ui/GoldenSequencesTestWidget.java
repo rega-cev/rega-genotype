@@ -15,12 +15,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import rega.genotype.Constants;
 import rega.genotype.GenotypeTool;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.VerificationTableItem;
-import rega.genotype.ui.framework.Constants;
 import rega.genotype.ui.framework.widgets.FastaUploadWidget;
 import rega.genotype.ui.framework.widgets.StandardTableView;
 import rega.genotype.ui.framework.widgets.Template;

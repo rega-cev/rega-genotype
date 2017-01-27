@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.ApplicationException;
+import rega.genotype.Constants;
 import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.singletons.Settings;
-import rega.genotype.ui.framework.Constants;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.Utils;

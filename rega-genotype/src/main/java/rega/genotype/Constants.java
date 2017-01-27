@@ -1,4 +1,4 @@
-package rega.genotype.ui.framework;
+package rega.genotype;
 
 /**
  * Global constants and enums

@@ -28,7 +28,6 @@ import java.util.TreeSet;
 
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.singletons.Settings;
-import rega.genotype.ui.framework.Constants;
 import rega.genotype.utils.StreamReaderRuntime;
 
 /**

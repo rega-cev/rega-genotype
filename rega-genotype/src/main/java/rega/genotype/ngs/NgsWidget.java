@@ -6,11 +6,11 @@ import java.util.Comparator;
 
 import org.apache.commons.io.FilenameUtils;
 
+import rega.genotype.Constants.Mode;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.ngs.model.NgsResultsModel;
 import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
 import rega.genotype.utils.Utils;

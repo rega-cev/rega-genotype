@@ -16,13 +16,13 @@ import org.junit.Test;
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Result;
+import rega.genotype.Constants.Mode;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.singletons.Settings;
 import rega.genotype.tools.blast.BlastTool;
-import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.utils.TestUtils;
 import rega.genotype.utils.FileUtil;
 

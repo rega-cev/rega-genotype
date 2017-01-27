@@ -7,10 +7,10 @@ package rega.genotype.ui.forms;
 
 import java.io.File;
 
+import rega.genotype.Constants.Mode;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.framework.widgets.WListContainerWidget;
 import rega.genotype.ui.util.GenotypeLib;

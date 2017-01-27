@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
 
+import rega.genotype.Constants;
 import rega.genotype.singletons.Settings;
-import rega.genotype.ui.framework.Constants;
 import rega.genotype.utils.FileUtil;
 
 public class TestUtils {

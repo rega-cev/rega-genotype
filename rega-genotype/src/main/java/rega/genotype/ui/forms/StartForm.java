@@ -16,6 +16,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.ApplicationException;
+import rega.genotype.Constants;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
@@ -28,7 +29,6 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.framework.Constants;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.StandardDialog;

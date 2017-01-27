@@ -31,8 +31,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import rega.genotype.ui.framework.Constants;
-import rega.genotype.ui.framework.Constants.Mode;
+import rega.genotype.Constants;
+import rega.genotype.Constants.Mode;
 
 /**
  * A sax parser which parses the rega-genotype analysis result file and offers

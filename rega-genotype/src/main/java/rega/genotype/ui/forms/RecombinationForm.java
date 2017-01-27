@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.jdom.Element;
 
+import rega.genotype.Constants.Mode;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
-import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.viruses.recombination.RegionUtils;

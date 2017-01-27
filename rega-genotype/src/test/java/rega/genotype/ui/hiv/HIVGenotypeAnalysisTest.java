@@ -8,8 +8,8 @@ import java.util.List;
 import junit.framework.TestCase;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.Constants.Mode;
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.ui.utils.TestUtils;
 import rega.genotype.viruses.hiv.HIVTool;
 

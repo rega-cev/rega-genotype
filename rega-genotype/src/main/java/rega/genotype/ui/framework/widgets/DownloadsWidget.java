@@ -3,14 +3,14 @@ package rega.genotype.ui.framework.widgets;
 import java.io.File;
 import java.io.IOException;
 
+import rega.genotype.Constants;
+import rega.genotype.Constants.Mode;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.data.table.NgsTableGenerator;
 import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ngs.NgsFileSystem;
 import rega.genotype.ui.data.FastaGenerator;
 import rega.genotype.ui.data.OrganismDefinition;
-import rega.genotype.ui.framework.Constants;
-import rega.genotype.ui.framework.Constants.Mode;
 import rega.genotype.util.CsvDataTable;
 import rega.genotype.util.DataTable;
 import rega.genotype.util.XlsDataTable;

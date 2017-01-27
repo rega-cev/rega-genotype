@@ -20,6 +20,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import rega.genotype.Constants;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
@@ -35,7 +36,6 @@ import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
 import rega.genotype.ui.forms.details.DefaultPhylogeneticDetailsForm;
 import rega.genotype.ui.forms.details.DefaultRecombinationDetailsForm;
-import rega.genotype.ui.framework.Constants;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.util.Genome;
 import rega.genotype.ui.util.GenomeAttributes;

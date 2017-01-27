@@ -2,6 +2,7 @@ package rega.genotype.ui.admin.config;
 
 import java.io.File;
 
+import rega.genotype.Constants;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.NgsModule;
@@ -10,7 +11,6 @@ import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyButton;
-import rega.genotype.ui.framework.Constants;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListModel;
 import eu.webtoolkit.jwt.Signal;
