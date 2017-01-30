@@ -1,26 +1,22 @@
 package rega.genotype.data.table;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.xml.sax.SAXException;
 
-import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ngs.NgsResultsParser;
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
 import rega.genotype.ngs.model.NgsResultsModel;
 import rega.genotype.util.DataTable;
 
-public class NgsTableGenerator extends GenotypeResultParser {
+public class NgsTableGenerator extends NgsResultsParser {
 	private NgsResultsModel model;
 	private DataTable table;
 
 	public NgsTableGenerator(DataTable table) throws IOException {
-
+		super();
 		this.table = table;
-		this.reportPaths = Arrays.asList(new String[]
-				{"/genotype_result", "/genotype_result/assembly"});
 
 		table.addLabel("Rega Assignment");
 		table.addLabel("Contigs number");
@@ -34,16 +30,6 @@ public class NgsTableGenerator extends GenotypeResultParser {
 		table.newRow();
 
 		model = new NgsResultsModel();
-	}
-
-	@Override
-	public void endSequence() {}
-
-	@Override
-	public void endReportElement(String tag) {
-		//super.endReportElement(tag);
-
-		NgsResultsParser.endReportElement(tag, this, model);
 	}
 
 	@Override
