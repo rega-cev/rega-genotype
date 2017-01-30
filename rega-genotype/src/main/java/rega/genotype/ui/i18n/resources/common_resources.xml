@@ -99,6 +99,8 @@
 	<message id="detailsForm.summary.deep-cov">Depth of coverage</message>
 	<message id="detailsForm.summary.image">Coverage image</message>
 	<message id="detailsForm.summary.contig-count"># Contigs</message>
+	<message id="detailsForm.summary.downloads">Downloads</message>
+	
 	
 	<message id="detailsForm.summary.total"><i>Total</i></message>
 	

@@ -53,6 +53,7 @@ public class NgsFileSystem {
 	public static final String CONSENSUS_ALINGMENT_FILE = "consensus-alingemnt.fasta";
 	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
 	public static final String CONSENSUS_UNUSED_CONTIGS_FILE = "consensus-unused-contigs.fasta";
+	public static final String ALINGMENT_SAM_FILE = "alingment.sam";
 
 	public static boolean addFastqFiles(NgsResultsTracer ngsProgress, File fastqPE1, File fastqPE2) {
 		return addFastqFiles(ngsProgress, fastqPE1, fastqPE2, false);
@@ -275,6 +276,18 @@ public class NgsFileSystem {
 		Utils.executeCmd(cmd, workDir);
 	}
 
+	public static File diamondResutlsDir(File jobDir) {
+		return new File(jobDir, DIAMOND_RESULT_DIR);
+	}
+
+	public static File diamodBucketDir(File jobDir, String diamondBucketName) {
+		return new File(diamondResutlsDir(jobDir), diamondBucketName);
+	}
+
+	public static File diamodPeFile(File jobDir, String diamondBucketName, String peFileName) {			
+		return new File(diamodBucketDir(jobDir, diamondBucketName), peFileName);
+	}
+
 	public static String contigsDir(String virusName) {
 		return ASSEMBALED_CONTIGS_DIR + File.separator + virusName;
 	}
@@ -288,7 +301,7 @@ public class NgsFileSystem {
 	}
 
 	public static File consensusRefSeqDir(File virusDir, String refseq) {
-		return new File(virusDir, refseq);
+		return new File(virusDir, refseq.replaceAll("\\|", "_"));
 	}
 
 	public static File consensusUnusedContigsFile(File workDir) {
@@ -309,5 +322,21 @@ public class NgsFileSystem {
 
 	public static File consensusRefFile(File workDir) {
 		return new File(workDir, CONSENSUS_REF_FILE);
+	}
+	public static File consensusRefFile(File jobDir, String diamondBucket, String refName) {
+		File consensusDir = consensusDir(jobDir, diamondBucket);
+		File consensusRefSeqDir = consensusRefSeqDir(consensusDir, refName);
+		return new File(consensusRefSeqDir, CONSENSUS_REF_FILE);
+	}
+	public static File consensusFile(File jobDir, String diamondBucket, String refName) {
+		File consensusDir = consensusDir(jobDir, diamondBucket);
+		File consensusRefSeqDir = consensusRefSeqDir(consensusDir, refName);
+		return new File(consensusRefSeqDir, CONSENSUS_FILE);
+	}
+
+	public static File samFile(File jobDir, String diamondBucket, String refName) {
+		File consensusDir = consensusDir(jobDir, diamondBucket);
+		File consensusRefSeqDir = consensusRefSeqDir(consensusDir, refName);
+		return new File(consensusRefSeqDir, ALINGMENT_SAM_FILE);
 	}
 }

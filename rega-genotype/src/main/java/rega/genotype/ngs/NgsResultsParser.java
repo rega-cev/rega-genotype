@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jdom.Element;
 
+import rega.genotype.Sequence;
 import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
@@ -33,6 +34,11 @@ public class NgsResultsParser extends GenotypeResultParser{
 
 	public Signal updateUiSignal() {
 		return updateUiSignal;
+	}
+
+	@Override
+	public void endSequence() {
+		// Do nothing: endReportElement is used.
 	}
 
 	@Override
@@ -115,10 +121,13 @@ public class NgsResultsParser extends GenotypeResultParser{
 			}
 			Element sequenceE = bucketE.getChild("sequence");
 			if (sequenceE != null) {
-				bucket.setConsensusName(sequenceE.getAttributeValue("name"));
-				bucket.setConsensusDescription(sequenceE.getAttributeValue("description"));
-				bucket.setConsensusLength(
-						Integer.parseInt(sequenceE.getAttributeValue("length")));
+				Sequence consensusSequence = new Sequence(
+						sequenceE.getAttributeValue("name"),
+						false,
+						sequenceE.getAttributeValue("description"),
+						sequenceE.getChildText("nucleotides"), 
+						null);
+				bucket.setConsensusSequence(consensusSequence);
 
 				Element clusterE = sequenceE.getChild("result").getChild("cluster");
 

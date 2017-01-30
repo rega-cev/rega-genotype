@@ -65,6 +65,17 @@ public class Utils {
 			throw new ApplicationException(errorPrefix + e.getMessage(), e);
 		}
 	}
+	public static void execShellCmd(String cmd, File workDir) throws ApplicationException {
+		cmd = "cd " + workDir.getAbsolutePath() + "\n" + cmd;
+
+		try {
+			Utils.execShellCmd(cmd);
+		} catch (IOException e) {
+			throw new ApplicationException(e.getMessage(), e);
+		} catch (InterruptedException e) {
+			throw new ApplicationException(e.getMessage(), e);
+		}
+	}
 
 	public static void execShellCmd(String cmd) throws IOException, InterruptedException, ApplicationException {
 		String[] shellCmd = {"/bin/sh", "-c", cmd};

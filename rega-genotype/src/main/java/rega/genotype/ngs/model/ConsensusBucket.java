@@ -3,6 +3,8 @@ package rega.genotype.ngs.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import rega.genotype.Sequence;
+
 /**
  * make consensus is called on all contigs that came from spades and where best aligned 
  * with a given reference sequence.
@@ -14,9 +16,7 @@ import java.util.List;
 public class ConsensusBucket {
 	private String diamondBucket;
 
-	private String consensusName;
-	private String consensusDescription;
-	private Integer consensusLength;
+	private Sequence consensusSequence;
 	private String concludedTaxonomyId;
 	private String concludedId;
 	private String concludedName;
@@ -75,18 +75,6 @@ public class ConsensusBucket {
 	public void setContigs(List<Contig> contigs) {
 		this.contigs = contigs;
 	}
-	public String getConsensusName() {
-		return consensusName;
-	}
-	public void setConsensusName(String consensusName) {
-		this.consensusName = consensusName;
-	}
-	public String getConsensusDescription() {
-		return consensusDescription;
-	}
-	public void setConsensusDescription(String consensusDescription) {
-		this.consensusDescription = consensusDescription;
-	}
 	public String getConcludedTaxonomyId() {
 		return concludedTaxonomyId;
 	}
@@ -110,12 +98,6 @@ public class ConsensusBucket {
 	}
 	public void setSrcDatabase(String srcDatabase) {
 		this.srcDatabase = srcDatabase;
-	}
-	public Integer getConsensusLength() {
-		return consensusLength;
-	}
-	public void setConsensusLength(Integer consensusLength) {
-		this.consensusLength = consensusLength;
 	}
 
 	public double getTotalContigsLen(){
@@ -146,5 +128,11 @@ public class ConsensusBucket {
 	public double getCovPercentage() {
 		return getTotalContigsLen() / getRefLen()  * 100;
 
+	}
+	public Sequence getConsensusSequence() {
+		return consensusSequence;
+	}
+	public void setConsensusSequence(Sequence consensusSequence) {
+		this.consensusSequence = consensusSequence;
 	}
 }

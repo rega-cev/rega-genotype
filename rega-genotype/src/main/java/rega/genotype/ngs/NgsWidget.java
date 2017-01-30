@@ -114,7 +114,8 @@ public class NgsWidget extends WContainerWidget{
 			WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
 			NgsConsensusSequenceModel consensusModel = new NgsConsensusSequenceModel(
 					model.getConsensusBuckets(), model.getReadLength(), palette,
-					organismDefinition.getToolConfig(), workDir);
+					organismDefinition.getToolConfig(), workDir, 
+					model.getFastqPE1FileName(), model.getFastqPE2FileName());
 			consensusTable = new ChartTableWidget(
 					consensusModel,
 					NgsConsensusSequenceModel.READ_COUNT_COLUMN,
