@@ -300,6 +300,8 @@ public class Config {
 		private String sequencetool = "";
 		private String srrToolKitPath = "";
 		private String srrDatabasePath = "";
+		private String samtoolsCmd = "samtools";
+		private String bwaCmd = "bwa";
 
 		private String publisherName; // Unique publisher name for the server copied to ToolManifest.
 		private String publisherPassword; // Unique publisher name for the server created with GeneralConfig. used by Repo server and also sored there.
@@ -434,6 +436,18 @@ public class Config {
 		}
 		public void setSrrDatabasePath(String srrDatabasePath) {
 			this.srrDatabasePath = srrDatabasePath;
+		}
+		public String getSamtoolsCmd() {
+			return samtoolsCmd;
+		}
+		public void setSamtoolsCmd(String samtoolsCmd) {
+			this.samtoolsCmd = samtoolsCmd;
+		}
+		public String getBwaCmd() {
+			return bwaCmd;
+		}
+		public void setBwaCmd(String bwaCmd) {
+			this.bwaCmd = bwaCmd;
 		}
 	}
 

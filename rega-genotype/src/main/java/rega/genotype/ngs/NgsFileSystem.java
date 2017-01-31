@@ -54,6 +54,8 @@ public class NgsFileSystem {
 	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
 	public static final String CONSENSUS_UNUSED_CONTIGS_FILE = "consensus-unused-contigs.fasta";
 	public static final String ALINGMENT_SAM_FILE = "alingment.sam";
+	public static final String ALINGMENT_BAM_FILE = "alingment.bam";
+	public static final String ALINGMENT_BAM_SORTED_FILE = "alingment-sorted.bam";
 
 	public static boolean addFastqFiles(NgsResultsTracer ngsProgress, File fastqPE1, File fastqPE2) {
 		return addFastqFiles(ngsProgress, fastqPE1, fastqPE2, false);
@@ -328,15 +330,25 @@ public class NgsFileSystem {
 		File consensusRefSeqDir = consensusRefSeqDir(consensusDir, refName);
 		return new File(consensusRefSeqDir, CONSENSUS_REF_FILE);
 	}
-	public static File consensusFile(File jobDir, String diamondBucket, String refName) {
+	public static File consensusRefDir(File jobDir, String diamondBucket, String refName) {
 		File consensusDir = consensusDir(jobDir, diamondBucket);
-		File consensusRefSeqDir = consensusRefSeqDir(consensusDir, refName);
+		return new File(consensusDir, refName.replaceAll("\\|", "_"));
+	}
+	public static File consensusFile(File jobDir, String diamondBucket, String refName) {
+		File consensusRefSeqDir = consensusRefDir(jobDir, diamondBucket, refName);
 		return new File(consensusRefSeqDir, CONSENSUS_FILE);
 	}
 
 	public static File samFile(File jobDir, String diamondBucket, String refName) {
-		File consensusDir = consensusDir(jobDir, diamondBucket);
-		File consensusRefSeqDir = consensusRefSeqDir(consensusDir, refName);
+		File consensusRefSeqDir = consensusRefDir(jobDir, diamondBucket, refName);
 		return new File(consensusRefSeqDir, ALINGMENT_SAM_FILE);
+	}
+	public static File bamFile(File jobDir, String diamondBucket, String refName) {
+		File consensusRefSeqDir = consensusRefDir(jobDir, diamondBucket, refName);
+		return new File(consensusRefSeqDir, ALINGMENT_BAM_FILE);
+	}
+	public static File bamSortedFile(File jobDir, String diamondBucket, String refName) {
+		File consensusRefSeqDir = consensusRefDir(jobDir, diamondBucket, refName);
+		return new File(consensusRefSeqDir, ALINGMENT_BAM_SORTED_FILE);
 	}
 }

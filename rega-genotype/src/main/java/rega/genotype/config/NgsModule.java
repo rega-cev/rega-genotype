@@ -37,7 +37,7 @@ public class NgsModule {
 	private int minRefContigLength = 400;
 	private double refMaxBlastEValue = 1E-5;
 	private double refMinBlastBitScore = 50;
-	private int minReadsToStartAssembly = 50; // do not start assembly of very small buckets
+	private int minReadsToStartAssembly = 10; // do not start assembly of very small buckets
 
 	public NgsModule() {}
 

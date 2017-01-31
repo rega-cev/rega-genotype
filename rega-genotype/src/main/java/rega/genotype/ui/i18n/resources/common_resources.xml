@@ -464,6 +464,14 @@
 
 	</message>
 
+	<message id="cov-map">
+		<p><b>Coverage map: alignment of all sequences in the bucket against the consensus sequence.</b></p>
+		${map}
+		${slider}
+		<p><b>Downloads</b></p>
+		<p>${sam} ${bam}</p>
+	</message>
+
 	<message id="empty">(Empty)</message>
 
 	<!-- blocks -->

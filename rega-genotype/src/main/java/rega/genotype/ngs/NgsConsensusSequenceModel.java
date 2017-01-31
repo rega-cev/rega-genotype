@@ -1,19 +1,16 @@
 package rega.genotype.ngs;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 import rega.genotype.ApplicationException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.tools.blast.BlastJobOverviewForm;
-import rega.genotype.ui.util.LinearCovMap;
-import rega.genotype.utils.Utils;
+import rega.genotype.utils.SamtoolsUtil;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Orientation;
@@ -53,7 +50,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			tr("detailsForm.summary.src"),
 			tr("detailsForm.summary.legend"),
 			tr("detailsForm.summary.image"),
-			tr("detailsForm.summary.downloads")
+			//tr("detailsForm.summary.downloads")
 			};
 	private List<ConsensusBucket> buckets;
 	private int readLength; // from qc.
@@ -96,7 +93,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 	@Override
 	public Object getData(WModelIndex index, int role) {
 		if (role == ItemDataRole.DisplayRole) {
-			ConsensusBucket bucket = buckets.get(index.getRow());
+			final ConsensusBucket bucket = buckets.get(index.getRow());
 			switch (index.getColumn()) {
 			case ASSINGMENT_COLUMN:
 				return bucket.getConcludedName();
@@ -113,7 +110,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			case COLOR_COLUMN:
 				return "";
 			case IMAGE_COLUMN:
-				return LinearCovMap.paint(bucket, jobDir);
+				return "";
 			case DOWNLOADS_COLUMN:
 				return "sam";
 			}
@@ -133,37 +130,16 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 		return null;
 	}
 
+	public File samFile(ConsensusBucket bucket) throws ApplicationException {
+		File samFile = SamtoolsUtil.samFile(bucket, jobDir);
+		if (!samFile.exists())
+			samFile = createSamFile(bucket);
+			
+		return samFile;
+	}
+
 	public File createSamFile(final ConsensusBucket bucket) throws ApplicationException {
-		String bwaPath = "/home/michael/install/bwa-0.7.15/bwa"; // TODO
-		File consensusFile = NgsFileSystem.consensusFile(jobDir, bucket.getDiamondBucket(),
-				bucket.getRefName());
-
-//		bucket.getConsensusSequence().writeFastaOutput(f);
-		File pe1 = NgsFileSystem.diamodPeFile(
-				jobDir, bucket.getDiamondBucket(), pe1Name);
-		File pe2 = NgsFileSystem.diamodPeFile(
-				jobDir, bucket.getDiamondBucket(), pe2Name);
-
-		File out = NgsFileSystem.samFile(jobDir, 
-				bucket.getDiamondBucket(), bucket.getRefName());
-
-		File consensusDir = NgsFileSystem.consensusRefSeqDir(
-				NgsFileSystem.consensusDir(jobDir, bucket.getDiamondBucket()),
-				bucket.getRefName());
-
-		// ./bwa index ref.fa
-		String cmd = bwaPath + " index " + consensusFile.getAbsolutePath();
-		System.err.println(cmd);
-		Utils.executeCmd(cmd, consensusDir);
-
-		// ./bwa mem ref.fa read1.fq read2.fq > aln-pe.sam.gz
-		cmd = bwaPath + " mem " + consensusFile.getAbsolutePath()
-				+ " " + pe1.getAbsolutePath() + " " + pe2.getAbsolutePath() 
-				+ " > " + out.getAbsolutePath(); 
-		System.err.println(cmd);
-		Utils.execShellCmd(cmd, consensusFile);
-
-		return out;
+		return SamtoolsUtil.createSamFile(bucket, jobDir, pe1Name, pe2Name);
 	}
 	
 	public WLink samLink(final ConsensusBucket bucket) {
@@ -198,7 +174,41 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			}
 		};
 		WLink link = new WLink(r);
-		link.setTarget(AnchorTarget.TargetNewWindow);
+		link.setTarget(AnchorTarget.TargetDownload);
+		return link;
+	}
+
+	public ConsensusBucket getBucket(int row) {
+		return buckets.get(row);
+	}
+
+	public WLink bamLink(final ConsensusBucket bucket) {
+		WResource r = new WResource() {
+			@Override
+			protected void handleRequest(WebRequest request, WebResponse response)
+					throws IOException {
+				File bam = NgsFileSystem.bamSortedFile(jobDir,
+						bucket.getDiamondBucket(), bucket.getRefName());
+
+				response.setContentType("text");
+				try {
+					FileInputStream fis = new FileInputStream(bam);
+					try {
+						StreamUtils.copy(fis, response.getOutputStream());
+						response.getOutputStream().flush();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						StreamUtils.closeQuietly(fis);
+					}
+				} catch (FileNotFoundException e) {
+					System.err.println("Could not find file: " + bam.getAbsolutePath());
+					response.setStatus(404);
+				}
+			}
+		};
+		WLink link = new WLink(r);
+		link.setTarget(AnchorTarget.TargetDownload);
 		return link;
 	}
 }

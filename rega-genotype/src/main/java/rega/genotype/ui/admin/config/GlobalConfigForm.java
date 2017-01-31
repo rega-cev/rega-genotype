@@ -270,6 +270,9 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				"<div>Provide the pass to the bin folder of srrToolKit (check that fastq-dump is there).</div>" +
 				"<div>I advise to disable the option on most servers. To disable leave the field empty. </div>");
 		setFieldInfo("srrDatabasePath", "<div>Some maywant to save a database of NGS files so one does not need to upload the same files every time.</div>");
+		setFieldInfo("samtoolsCmd", "<div>Can be obtained from http://samtools.sourceforge.net/</div>");
+		setFieldInfo("bwaCmd", "<div>Can be obtained from http://bio-bwa.sourceforge.net/</div>");
+
 
 		setFieldMandatory("srrDatabasePath", false);
 		setFieldMandatory("bioPythonPath", false);

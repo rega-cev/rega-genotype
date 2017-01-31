@@ -85,7 +85,7 @@ public class Utils {
 		fetchFasta = Runtime.getRuntime().exec(shellCmd);
 		int exitResult = fetchFasta.waitFor();
 		if (exitResult != 0){
-			throw new ApplicationException("fetchFasta exited with error: " + exitResult);
+			throw new ApplicationException("shell cmd exited with error: " + exitResult);
 		}
 	}
 

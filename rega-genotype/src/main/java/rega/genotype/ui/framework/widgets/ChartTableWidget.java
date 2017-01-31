@@ -17,7 +17,6 @@ import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WRectF;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WText;
-import eu.webtoolkit.jwt.WWidget;
 import eu.webtoolkit.jwt.chart.LabelOption;
 import eu.webtoolkit.jwt.chart.WChartPalette;
 import eu.webtoolkit.jwt.chart.WPieChart;
@@ -30,7 +29,7 @@ import eu.webtoolkit.jwt.chart.WPieChart;
 public class ChartTableWidget extends WContainerWidget{
 	protected WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
 	protected WPieChart chart;
-	private WTable table = new WTable();
+	protected WTable table = new WTable();
 	private int chartDataColumn;
 	private int colorColumn;
 	private WAbstractItemModel model;
@@ -116,31 +115,32 @@ public class ChartTableWidget extends WContainerWidget{
 
 		for (int r = 0; r < model.getRowCount(); r++) {
 			for (int c = 0; c < model.getColumnCount(); c++) {
-				if (c == colorColumn) {
-					WContainerWidget w = new WContainerWidget();
-					w.setStyleClass("legend-item");
-					WColor color = (WColor)model.getData(r,c,ItemDataRole.UserRole + 1);
-					if (color != null)
-						w.getDecorationStyle().setBackgroundColor(color);
-	
-					w.setMargin(WLength.Auto, Side.Left, Side.Right);
-					w.setMargin(15, Side.Top);
-					w.resize(30, 30);
-					table.getElementAt(r + 1, c).addWidget(w);
-				} else if (model.getData(r, c, ItemDataRole.LinkRole) != null) {
-					// add link
-					WAnchor a = new WAnchor((WLink) model.getData(r, c, ItemDataRole.LinkRole));
-					String text = getText(model.getData(r, c));
-					if (text != null)
-						a.setText(text);
-					table.getElementAt(r + 1, c).addWidget(a);
-				} else if (model.getData(r, c) != null 
-						&& model.getData(r, c) instanceof WWidget) {
-					table.getElementAt(r + 1, c).addWidget((WWidget)model.getData(r, c));
-				} else
-					addText(r + 1, c, model.getData(r, c));
+				addWidget(r,c);
 			}
 		}
+	}
+
+	protected void addWidget(int row, int column) {
+		if (column == colorColumn) {
+			WContainerWidget w = new WContainerWidget();
+			w.setStyleClass("legend-item");
+			WColor color = (WColor)model.getData(row,column,ItemDataRole.UserRole + 1);
+			if (color != null)
+				w.getDecorationStyle().setBackgroundColor(color);
+
+			w.setMargin(WLength.Auto, Side.Left, Side.Right);
+			w.setMargin(15, Side.Top);
+			w.resize(30, 30);
+			table.getElementAt(row + 1, column).addWidget(w);
+		} else if (model.getData(row, column, ItemDataRole.LinkRole) != null) {
+			// add link
+			WAnchor a = new WAnchor((WLink) model.getData(row, column, ItemDataRole.LinkRole));
+			String text = getText(model.getData(row, column));
+			if (text != null)
+				a.setText(text);
+			table.getElementAt(row + 1, column).addWidget(a);
+		} else
+			addText(row + 1, column, model.getData(row, column));
 	}
 
 	public void addTotalsRow(int[] columns) {

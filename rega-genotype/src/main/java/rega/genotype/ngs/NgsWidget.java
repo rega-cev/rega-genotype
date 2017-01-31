@@ -13,6 +13,7 @@ import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
+import rega.genotype.ui.util.CovMap;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Side;
@@ -112,7 +113,7 @@ public class NgsWidget extends WContainerWidget{
 		// consensus table.
 		if (!model.getConsensusBuckets().isEmpty()) {
 			WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
-			NgsConsensusSequenceModel consensusModel = new NgsConsensusSequenceModel(
+			final NgsConsensusSequenceModel consensusModel = new NgsConsensusSequenceModel(
 					model.getConsensusBuckets(), model.getReadLength(), palette,
 					organismDefinition.getToolConfig(), workDir, 
 					model.getFastqPE1FileName(), model.getFastqPE2FileName());
@@ -120,7 +121,18 @@ public class NgsWidget extends WContainerWidget{
 					consensusModel,
 					NgsConsensusSequenceModel.READ_COUNT_COLUMN,
 					NgsConsensusSequenceModel.COLOR_COLUMN,
-					palette);
+					palette){
+				@Override
+				protected void addWidget(int row, int column) {
+					if (column == NgsConsensusSequenceModel.IMAGE_COLUMN) {
+						CovMap covMap = new CovMap(
+								consensusModel.getBucket(row), consensusModel);
+
+						table.getElementAt(row + 1, column).addWidget(covMap);
+					} else
+						super.addWidget(row, column);
+				}
+			};
 			consensusTable.addTotalsRow(new int[]{
 					NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN,
 					NgsConsensusSequenceModel.READ_COUNT_COLUMN});
