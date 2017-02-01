@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import rega.genotype.ApplicationException;
+import rega.genotype.Sequence;
 import rega.genotype.ngs.NgsConsensusSequenceModel;
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
@@ -15,6 +16,7 @@ import rega.genotype.utils.SamtoolsUtil;
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
@@ -23,12 +25,15 @@ import eu.webtoolkit.jwt.WPaintDevice;
 import eu.webtoolkit.jwt.WPaintedWidget;
 import eu.webtoolkit.jwt.WPainter;
 import eu.webtoolkit.jwt.WPainterPath;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.Axis;
+import eu.webtoolkit.jwt.chart.AxisConfig;
 import eu.webtoolkit.jwt.chart.AxisScale;
 import eu.webtoolkit.jwt.chart.ChartType;
 import eu.webtoolkit.jwt.chart.FillRangeType;
 import eu.webtoolkit.jwt.chart.SeriesType;
+import eu.webtoolkit.jwt.chart.WAxis;
 import eu.webtoolkit.jwt.chart.WAxisSliderWidget;
 import eu.webtoolkit.jwt.chart.WCartesianChart;
 import eu.webtoolkit.jwt.chart.WDataSeries;
@@ -45,6 +50,7 @@ public class CovMap extends WPaintedWidget{
 		update();
 		resize((int)(MARGIN * 2 + GENOM_WIDTH), 50);
 		setMargin(WLength.Auto);
+		addStyleClass("hoverable");
 
 		clicked().addListener(this, new Signal.Listener() {
 			public void trigger() {
@@ -63,27 +69,32 @@ public class CovMap extends WPaintedWidget{
 					d.getOkB().hide();
 					d.getCancelB().setText("Close");
 					Template template = new Template(tr("cov-map"), d.getContents()); 
-					
-					WCartesianChart chart = new WCartesianChart();
-				    chart.setBackground(new WBrush(new WColor(220, 220, 220)));
-				    chart.setModel(covMapModel);
-				    chart.setType(ChartType.ScatterPlot);
-				    chart.getAxis(Axis.XAxis).setScale(AxisScale.LinearScale);
-				    chart.getAxis(Axis.XAxis).setMaximum(covMapModel.getRowCount());
-				    chart.getAxis(Axis.XAxis).setMinimumZoomRange(10);
 
-				    WDataSeries s = new WDataSeries(0, SeriesType.LineSeries);
-				    s.setFillRange(FillRangeType.MinimumValueFill);
-			        chart.addSeries(s);
-				    chart.resize(new WLength(800), new WLength(400));
-				    chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+					final WCartesianChart chart = new WCartesianChart();
+					chart.setBackground(new WBrush(new WColor(220, 220, 220)));
+					chart.setModel(covMapModel);
+					chart.setType(ChartType.ScatterPlot);
 
-				    WAxisSliderWidget sliderWidget = new WAxisSliderWidget(s);
-				    
-				    sliderWidget.resize(new WLength(800), new WLength(80));
-				    sliderWidget.setSelectionAreaPadding(40, EnumSet.of(Side.Left,
-				            Side.Right));
-				    sliderWidget.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+					final SequenceAxis sequenceAxis = new SequenceAxis(
+							bucket.getConsensusSequence());
+					chart.setAxis(sequenceAxis, Axis.XAxis);
+
+					chart.getAxis(Axis.XAxis).setScale(AxisScale.LinearScale);
+					chart.getAxis(Axis.XAxis).setMaximum(covMapModel.getRowCount());
+					chart.getAxis(Axis.XAxis).setMinimumZoomRange(10);
+
+					WDataSeries s = new WDataSeries(0, SeriesType.LineSeries);
+					s.setFillRange(FillRangeType.MinimumValueFill);
+					chart.addSeries(s);
+					chart.resize(new WLength(800), new WLength(400));
+					chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+
+					WAxisSliderWidget sliderWidget = new WAxisSliderWidget(s);
+
+					sliderWidget.resize(new WLength(800), new WLength(80));
+					sliderWidget.setSelectionAreaPadding(40, EnumSet.of(Side.Left,
+							Side.Right));
+					sliderWidget.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 
 				    //wcon
 				    WAnchor samAnchor = new WAnchor(model.samLink(bucket));
@@ -95,6 +106,13 @@ public class CovMap extends WPaintedWidget{
 					template.bindWidget("slider", sliderWidget);
 					template.bindWidget("sam", samAnchor);
 					template.bindWidget("bam", bamAnchor);
+
+					sequenceAxis.zoomRangeChanged().addListener(chart, new Signal2.Listener<Double, Double>() {
+						public void trigger(Double min, Double max) {
+							chart.update();
+						}
+					});
+
 				} catch (ApplicationException e) {
 					e.printStackTrace();
 					StandardDialog d = new StandardDialog("Coverage map: " + bucket.getConcludedName());
@@ -160,5 +178,28 @@ public class CovMap extends WPaintedWidget{
 			ans = Math.max(ans, contig.getCov());
 
 		return ans;
+	}
+
+	public static class SequenceAxis extends WAxis {
+		Sequence sequence;
+		public SequenceAxis(Sequence sequence) {
+			this.sequence = sequence;
+		}
+
+		@Override
+		protected void getLabelTicks(List<TickLabel> ticks, int segment,
+				AxisConfig config) {
+			int showSeqZoom = 55;
+			double zoomLevel = Math.pow(2, config.zoomLevel);
+			if (getZoom() > showSeqZoom && zoomLevel > showSeqZoom){
+				int min = (int) getZoomMinimum();
+				boolean roundTop = getZoomMinimum() > 1000;
+				for (int i = min; i < getZoomMaximum(); ++i)
+					ticks.add(new TickLabel((double)i,
+							WAxis.TickLabel.TickLength.Short, 
+							new WString(sequence.getSequence().charAt(roundTop ? i - 1 : i))));
+			} else
+				super.getLabelTicks(ticks, segment, config);
+		}
 	}
 }

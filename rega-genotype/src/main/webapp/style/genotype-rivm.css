@@ -586,3 +586,9 @@ table.reftable caption, .blastResultsTable table caption {
 .waiting {
     color: dimgray;
 }
+
+.hoverable:hover {
+  color: blueviolet;
+  cursor: pointer;
+  cursor: hand;
+}
