@@ -18,8 +18,11 @@ import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
+import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WPaintDevice;
 import eu.webtoolkit.jwt.WPaintedWidget;
@@ -43,9 +46,11 @@ public class CovMap extends WPaintedWidget{
 	public static final double GENOM_WIDTH = 400;
 	public static final int MARGIN = 15;
 	private ConsensusBucket bucket;
+	private NgsConsensusSequenceModel model;
 	
 	public CovMap(final ConsensusBucket bucket, final NgsConsensusSequenceModel model) {
 		this.bucket = bucket;
+		this.model = model;
 
 		update();
 		resize((int)(MARGIN * 2 + GENOM_WIDTH), 50);
@@ -54,78 +59,93 @@ public class CovMap extends WPaintedWidget{
 
 		clicked().addListener(this, new Signal.Listener() {
 			public void trigger() {
-				try {
-					File samFile = model.samFile(bucket);
-					File consensusWorkDir = samFile.getParentFile();
-					File covFile = new File(consensusWorkDir, "aln.cov");
 
-					if (!covFile.exists())
-						SamtoolsUtil.samToCovMap(samFile, covFile, consensusWorkDir);
+				final WApplication app = WApplication.getInstance();
+				final StandardDialog d = new StandardDialog("Coverage map: " + bucket.getConcludedName());
+				d.getOkB().hide();
+				d.getCancelB().setText("Close");
+				d.getContents().addWidget(new WText("Creating cverage map please wait. .. ... la .. la la ..."));
 
-					ObjectListModel<Integer> covMapModel = SamtoolsUtil.covMapModel(
-							covFile, bucket.getConsensusSequence().getLength());
+				Thread t = new Thread(new Runnable() {
+					public void run() {
+						try {
+							File samFile = model.samFile(bucket);
+							File consensusWorkDir = samFile.getParentFile();
+							File covFile = new File(consensusWorkDir, "aln.cov");
 
-					StandardDialog d = new StandardDialog("Coverage map: " + bucket.getConcludedName());
-					d.getOkB().hide();
-					d.getCancelB().setText("Close");
-					Template template = new Template(tr("cov-map"), d.getContents()); 
+							if (!covFile.exists())
+								SamtoolsUtil.samToCovMap(samFile, covFile, consensusWorkDir);
+							UpdateLock updateLock = app.getUpdateLock();
+							d.getContents().clear();
+							paintChart(covFile, d);
+							app.triggerUpdate();
+							updateLock.release();
+						} catch (ApplicationException e) {
+							e.printStackTrace();
+							StandardDialog d = new StandardDialog("Coverage map: " + bucket.getConcludedName());
+							d.getOkB().hide();
+							d.getCancelB().setText("Close");
+							d.getContents().addWidget(new WText("Error: " + e.getMessage()));
 
-					final WCartesianChart chart = new WCartesianChart();
-					chart.setBackground(new WBrush(new WColor(220, 220, 220)));
-					chart.setModel(covMapModel);
-					chart.setType(ChartType.ScatterPlot);
-
-					final SequenceAxis sequenceAxis = new SequenceAxis(
-							bucket.getConsensusSequence());
-					chart.setAxis(sequenceAxis, Axis.XAxis);
-
-					chart.getAxis(Axis.XAxis).setScale(AxisScale.LinearScale);
-					chart.getAxis(Axis.XAxis).setMaximum(covMapModel.getRowCount());
-					chart.getAxis(Axis.XAxis).setMinimumZoomRange(10);
-
-					WDataSeries s = new WDataSeries(0, SeriesType.LineSeries);
-					s.setFillRange(FillRangeType.MinimumValueFill);
-					chart.addSeries(s);
-					chart.resize(new WLength(800), new WLength(400));
-					chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-
-					WAxisSliderWidget sliderWidget = new WAxisSliderWidget(s);
-
-					sliderWidget.resize(new WLength(800), new WLength(80));
-					sliderWidget.setSelectionAreaPadding(40, EnumSet.of(Side.Left,
-							Side.Right));
-					sliderWidget.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
-
-				    //wcon
-				    WAnchor samAnchor = new WAnchor(model.samLink(bucket));
-				    samAnchor.setText("sam");
-				    WAnchor bamAnchor = new WAnchor(model.bamLink(bucket));
-				    bamAnchor.setText("bam");
-
-					template.bindWidget("map", chart);
-					template.bindWidget("slider", sliderWidget);
-					template.bindWidget("sam", samAnchor);
-					template.bindWidget("bam", bamAnchor);
-
-					sequenceAxis.zoomRangeChanged().addListener(chart, new Signal2.Listener<Double, Double>() {
-						public void trigger(Double min, Double max) {
-							chart.update();
+							return;
 						}
-					});
-
-				} catch (ApplicationException e) {
-					e.printStackTrace();
-					StandardDialog d = new StandardDialog("Coverage map: " + bucket.getConcludedName());
-					d.getOkB().hide();
-					d.getCancelB().setText("Close");
-					d.getContents().addWidget(new WText("Error: " + e.getMessage()));
-					
-					return;
-				}
+					}
+				});
+				t.start();
 			}
 		});
 	}
 
+	private void paintChart(File covFile, WDialog d) {
+		ObjectListModel<Integer> covMapModel = SamtoolsUtil.covMapModel(
+				covFile, bucket.getConsensusSequence().getLength() + 1);
+
+		Template template = new Template(tr("cov-map"), d.getContents()); 
+
+		final WCartesianChart chart = new WCartesianChart();
+		chart.setBackground(new WBrush(new WColor(220, 220, 220)));
+		chart.setModel(covMapModel);
+		chart.setType(ChartType.ScatterPlot);
+
+		final SequenceAxis sequenceAxis = new SequenceAxis(
+				bucket.getConsensusSequence());
+		chart.setAxis(sequenceAxis, Axis.XAxis);
+
+		chart.getAxis(Axis.XAxis).setScale(AxisScale.LinearScale);
+		chart.getAxis(Axis.XAxis).setMaximum(covMapModel.getRowCount());
+		chart.getAxis(Axis.XAxis).setMinimumZoomRange(10);
+
+		WDataSeries s = new WDataSeries(0, SeriesType.LineSeries);
+		s.setFillRange(FillRangeType.MinimumValueFill);
+		chart.addSeries(s);
+		chart.resize(new WLength(800), new WLength(400));
+		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+
+		WAxisSliderWidget sliderWidget = new WAxisSliderWidget(s);
+
+		sliderWidget.resize(new WLength(800), new WLength(80));
+		sliderWidget.setSelectionAreaPadding(40, EnumSet.of(Side.Left,
+				Side.Right));
+		sliderWidget.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+
+	    //wcon
+	    WAnchor samAnchor = new WAnchor(model.samLink(bucket));
+	    samAnchor.setText("sam");
+	    WAnchor bamAnchor = new WAnchor(model.bamLink(bucket));
+	    bamAnchor.setText("bam");
+
+		template.bindWidget("map", chart);
+		template.bindWidget("slider", sliderWidget);
+		template.bindWidget("sam", samAnchor);
+		template.bindWidget("bam", bamAnchor);
+
+		sequenceAxis.zoomRangeChanged().addListener(chart, new Signal2.Listener<Double, Double>() {
+			public void trigger(Double min, Double max) {
+				chart.update();
+			}
+		});
+	}
+	
 	@Override
 	protected void paintEvent(WPaintDevice paintDevice) {
 		WPainterPath genomePath = new WPainterPath();
