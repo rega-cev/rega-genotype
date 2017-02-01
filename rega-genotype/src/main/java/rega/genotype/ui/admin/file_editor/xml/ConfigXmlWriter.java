@@ -3,6 +3,11 @@ package rega.genotype.ui.admin.file_editor.xml;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -10,6 +15,9 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.python.google.common.reflect.TypeToken;
+
+import rega.genotype.utils.GsonUtil;
 
 public class ConfigXmlWriter {
 
@@ -53,6 +61,7 @@ public class ConfigXmlWriter {
 			add(metaDataE, "cluster-count", metaData.clusterCount);
 			if (metaData.canAccess != null)
 				add(metaDataE, "access", metaData.canAccess);
+			add(metaDataE, "taxonomy-ids", metaData.taxonomyIdsJson());
 
 			root.addContent(metaDataE);
 
@@ -89,6 +98,16 @@ public class ConfigXmlWriter {
 	public static class ToolMetadata {
 		public Integer clusterCount = null;
 		public Integer canAccess = null; // pan-viral tool can redirect to other tools.
+		public Set<String> taxonomyIds = null;
+
+		public String taxonomyIdsJson() {
+			return GsonUtil.toJson(taxonomyIds, false);
+		}
+
+		public static Set<String> parseJsonAsList(String json) {
+			return new HashSet(
+					GsonUtil.parseJson(json, new TypeToken<List<String> >() {}.getType()));
+		}
 	}
 
 }

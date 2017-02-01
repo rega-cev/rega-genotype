@@ -7,6 +7,8 @@ import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.taxonomy.TaxonomyModel;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 import rega.genotype.ui.framework.widgets.StandardItemModelSearchProxy;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
@@ -89,13 +91,16 @@ public class TaxonomyWidget extends WContainerWidget {
 		if (toolConfig == null)
 			return null;
 
-		AlignmentAnalyses alignmentAnalyses = BlastFileEditor.readBlastXml(
-				toolConfig.getConfigurationFile());
-		Set<String> taxonomyIds = new HashSet<String>();
-		for (Cluster c:alignmentAnalyses.getAllClusters()) 
-				taxonomyIds.add(c.getTaxonomyId());
-
-		return taxonomyIds;
+		ToolMetadata metadata = ConfigXmlReader.readMetadata(toolConfig.getConfigurationFile());
+		if (metadata.taxonomyIds == null) { // support old tools
+			AlignmentAnalyses alignmentAnalyses = BlastFileEditor.readBlastXml(
+					toolConfig.getConfigurationFile());
+			Set<String> taxonomyIds = new HashSet<String>();
+			for (Cluster c:alignmentAnalyses.getAllClusters()) 
+				taxonomyIds.add(c.getTaxonomyId());					 
+			return taxonomyIds;
+		} else
+			return metadata.taxonomyIds;
 	}
 
 	private void printWrongTaxons(Set<String> taxonomyIds) {

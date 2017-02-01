@@ -369,8 +369,9 @@ public class BlastFileEditor extends WContainerWidget{
 		// TODO Auto-generated method stub
 		ToolMetadata metaData = new ToolMetadata();
 		metaData.clusterCount = alignmentAnalyses.getAllClusters().size();
+		for (Cluster c: alignmentAnalyses.getAllClusters())
+			metaData.taxonomyIds.add(c.getTaxonomyId());
 
-		
 		ConfigXmlWriter.writeMetaData(workDir, metaData);
 	}
 

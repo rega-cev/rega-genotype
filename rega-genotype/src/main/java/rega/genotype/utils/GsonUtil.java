@@ -29,7 +29,11 @@ public class GsonUtil {
 	}
 
 	public static <C> String toJson(C c) {
-		GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
+		return toJson(c, true);
+	}
+
+	public static <C> String toJson(C c, boolean pretty) {
+		GsonBuilder builder = pretty ? new GsonBuilder().setPrettyPrinting() : new GsonBuilder();
 		Gson gson = builder.create();
 		return gson.toJson(c);
 	}

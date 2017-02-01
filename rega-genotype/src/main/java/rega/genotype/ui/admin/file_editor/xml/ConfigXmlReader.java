@@ -116,11 +116,14 @@ public class ConfigXmlReader {
 		if (tableE != null){
 			Element clusterCountE = tableE.getChild("cluster-count");
 			Element accessE = tableE.getChild("access");
+			Element taxonomyE = tableE.getChild("taxonomy-ids");
 
 			if (clusterCountE != null)
 				ans.clusterCount = Integer.parseInt(clusterCountE.getText());
 			if (accessE != null)
 				ans.canAccess = Integer.parseInt(accessE.getText());
+			if (taxonomyE != null)
+				ans.taxonomyIds = ToolMetadata.parseJsonAsList(taxonomyE.getText());
 		}
 		return ans;
 	}
