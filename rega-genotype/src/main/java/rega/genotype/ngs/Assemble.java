@@ -55,7 +55,7 @@ public class Assemble {
 			throw new ApplicationException("Spades failed error: " + e.getMessage(), e);
 		}
 
-		File ans = new File(contigsDir, "contigs.fasta");
+		File ans = new File(contigsDir, "scaffolds.fasta");
 		if (!ans.exists())
 			throw new ApplicationException("Spades did not create contigs file.");
 
