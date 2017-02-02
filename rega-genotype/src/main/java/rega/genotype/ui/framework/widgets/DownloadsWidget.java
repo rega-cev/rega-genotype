@@ -66,7 +66,8 @@ public class DownloadsWidget extends WTemplate{
 		WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"));
 		xmlFileDownload.setObjectName("xml-download");
 		xmlFileDownload.setStyleClass("link");
-		WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + "result.xml");
+		String resultsFileName = mode == Mode.Ngs ? Constants.NGS_RESULT_FILE_NAME : Constants.RESULT_FILE_NAME;
+		WResource xmlResource = new WFileResource("application/xml", jobDir.getAbsolutePath() + File.separatorChar + resultsFileName);
 		xmlResource.suggestFileName(Constants.RESULT_FILE_NAME);
 		xmlResource.setDispositionType(DispositionType.Attachment);
 		xmlFileDownload.setLink(new WLink(xmlResource));
