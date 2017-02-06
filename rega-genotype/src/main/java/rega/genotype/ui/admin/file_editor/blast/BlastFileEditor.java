@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -369,6 +370,7 @@ public class BlastFileEditor extends WContainerWidget{
 		// TODO Auto-generated method stub
 		ToolMetadata metaData = new ToolMetadata();
 		metaData.clusterCount = alignmentAnalyses.getAllClusters().size();
+		metaData.taxonomyIds = new HashSet<String>();
 		for (Cluster c: alignmentAnalyses.getAllClusters())
 			metaData.taxonomyIds.add(c.getTaxonomyId());
 

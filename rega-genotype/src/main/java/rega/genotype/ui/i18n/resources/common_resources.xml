@@ -100,8 +100,8 @@
 	<message id="detailsForm.summary.image">Coverage image</message>
 	<message id="detailsForm.summary.contig-count"># Contigs</message>
 	<message id="detailsForm.summary.downloads">Downloads</message>
-	
-	
+	<message id="detailsForm.summary.details">Details</message>
+
 	<message id="detailsForm.summary.total"><i>Total</i></message>
 	
 	<message id="detailsForm.summary.filter.title"><h2>Phylogenetic statistics</h2></message>

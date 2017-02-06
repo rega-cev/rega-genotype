@@ -39,7 +39,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 	public static final int SRC_COLUMN =           5;
 	public static final int COLOR_COLUMN =         6;
 	public static final int IMAGE_COLUMN =         7;
-	public static final int DOWNLOADS_COLUMN =     8;
+	public static final int DETAILS_COLUMN =       8;
 
 	private WString[] headers = {
 			tr("detailsForm.summary.assignment"),
@@ -50,7 +50,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			tr("detailsForm.summary.src"),
 			tr("detailsForm.summary.legend"),
 			tr("detailsForm.summary.image"),
-			//tr("detailsForm.summary.downloads")
+			tr("detailsForm.summary.details")
 			};
 	private List<ConsensusBucket> buckets;
 	private int readLength; // from qc.
@@ -111,7 +111,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 				return "";
 			case IMAGE_COLUMN:
 				return "";
-			case DOWNLOADS_COLUMN:
+			case DETAILS_COLUMN:
 				return "sam";
 			}
 		} else if (role == ItemDataRole.LinkRole) {
@@ -120,8 +120,6 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 					|| index.getColumn() == SEQUENCE_COUNT_COLUMN) {
 				return BlastJobOverviewForm.createToolLink(bucket.getConcludedTaxonomyId(),
 						jobDir.getName(), toolConfig);
-			} else if (index.getColumn() == DOWNLOADS_COLUMN) {
-				return samLink(bucket);
 			}
 		} else if (role == ItemDataRole.UserRole + 1) {
 			if (index.getColumn() == COLOR_COLUMN)

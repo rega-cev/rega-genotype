@@ -13,14 +13,17 @@ import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
-import rega.genotype.ui.util.CovMap;
+import rega.genotype.ui.ngs.CovMap;
+import rega.genotype.ui.ngs.CovMapDialog;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Side;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WChartPalette;
 import eu.webtoolkit.jwt.chart.WStandardPalette;
@@ -123,12 +126,20 @@ public class NgsWidget extends WContainerWidget{
 					NgsConsensusSequenceModel.COLOR_COLUMN,
 					palette){
 				@Override
-				protected void addWidget(int row, int column) {
+				protected void addWidget(final int row, final int column) {
 					if (column == NgsConsensusSequenceModel.IMAGE_COLUMN) {
 						CovMap covMap = new CovMap(
 								consensusModel.getBucket(row), consensusModel);
 
 						table.getElementAt(row + 1, column).addWidget(covMap);
+					} else if (column == NgsConsensusSequenceModel.DETAILS_COLUMN) {
+						WPushButton detailsB= new WPushButton("Details",
+								table.getElementAt(row + 1, column));
+						detailsB.clicked().addListener(detailsB, new Signal.Listener() {
+							public void trigger() {
+								new CovMapDialog(consensusModel.getBucket(row), consensusModel);
+							}
+						});
 					} else
 						super.addWidget(row, column);
 				}

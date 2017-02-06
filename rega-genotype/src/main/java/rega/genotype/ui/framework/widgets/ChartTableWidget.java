@@ -120,7 +120,7 @@ public class ChartTableWidget extends WContainerWidget{
 		}
 	}
 
-	protected void addWidget(int row, int column) {
+	protected void addWidget(final int row, final int column) {
 		if (column == colorColumn) {
 			WContainerWidget w = new WContainerWidget();
 			w.setStyleClass("legend-item");
