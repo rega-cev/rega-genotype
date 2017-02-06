@@ -18,14 +18,15 @@ public class ToolUpdateService {
 	public static void update(List<ToolManifest> remoteManifests, String toolId) {
 		ToolManifest lastPublishedRemoteManifest = ToolManifest.lastPublishedVesrsion(remoteManifests,toolId);
 		File f = null;
-		try {
-			f = ToolRepoServiceRequests.getTool(
-					lastPublishedRemoteManifest.getId(), lastPublishedRemoteManifest.getVersion());
-		} catch (ToolRepoServiceExeption e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		if (lastPublishedRemoteManifest != null)
+			try {
+				f = ToolRepoServiceRequests.getTool(
+						lastPublishedRemoteManifest.getId(), lastPublishedRemoteManifest.getVersion());
+			} catch (ToolRepoServiceExeption e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 		if (f != null) {
 			// copy tool content
