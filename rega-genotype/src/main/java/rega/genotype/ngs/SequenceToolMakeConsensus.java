@@ -37,7 +37,8 @@ public class SequenceToolMakeConsensus {
 		// make Consensus
 
 		String sequencetoolPath = Settings.getInstance().getConfig().getGeneralConfig().getSequencetool();
-
+		String clustalPath = Settings.getInstance().getConfig().getGeneralConfig().getClustalWCmd();
+		
 		File alingment = NgsFileSystem.consensusAlingmentFile(consensusWorkDir);
 		alingment.getParentFile().mkdirs();
 
@@ -47,7 +48,9 @@ public class SequenceToolMakeConsensus {
 		fos.close();
 
 		File consensusUnusedContigsFile = NgsFileSystem.consensusUnusedContigsFile(consensusWorkDir);
-		
+		File clastalWorkDir = new File(consensusWorkDir, "clustal-work-dir");
+		clastalWorkDir.mkdirs();
+
 		String cmd = sequencetoolPath + " consensus-align"
 		+ " --reference " + referenceFile.getAbsolutePath()
 		+ " --target " + assembledContigs.getAbsolutePath()
@@ -55,7 +58,9 @@ public class SequenceToolMakeConsensus {
 		+ " --absolute-cutoff " + ngsModule.getConsensusToolAbsoluteCutoff()
 		+ " --relative-cutoff " + ngsModule.getConsensusToolRelativeCutoff()
 		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov()
-		+ " --export-unused " + consensusUnusedContigsFile.getAbsolutePath();
+		+ " --export-unused " + consensusUnusedContigsFile.getAbsolutePath()
+		+ " --clustalw-path " + clustalPath
+		+ " --work-dir " + consensusWorkDir;
 
 		NgsFileSystem.executeCmd(cmd, consensusWorkDir, logger);
 
