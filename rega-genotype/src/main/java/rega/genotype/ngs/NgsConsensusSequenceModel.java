@@ -171,6 +171,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 				}
 			}
 		};
+		r.suggestFileName("sequence-alignment.sam");
 		WLink link = new WLink(r);
 		link.setTarget(AnchorTarget.TargetDownload);
 		return link;
@@ -205,6 +206,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 				}
 			}
 		};
+		r.suggestFileName("sequence-alignment.bam");
 		WLink link = new WLink(r);
 		link.setTarget(AnchorTarget.TargetDownload);
 		return link;

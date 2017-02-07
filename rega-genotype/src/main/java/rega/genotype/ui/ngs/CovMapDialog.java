@@ -108,9 +108,9 @@ public class CovMapDialog extends StandardDialog{
 
 	    //wcon
 	    WAnchor samAnchor = new WAnchor(model.samLink(bucket));
-	    samAnchor.setText("sam");
+	    samAnchor.setText("sequence-alignment.sam");
 	    WAnchor bamAnchor = new WAnchor(model.bamLink(bucket));
-	    bamAnchor.setText("bam");
+	    bamAnchor.setText("sequence-alignment.bam");
 
 		template.bindWidget("map", chart);
 		template.bindWidget("slider", sliderWidget);

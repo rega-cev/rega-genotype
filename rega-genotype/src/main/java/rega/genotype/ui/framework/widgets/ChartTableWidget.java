@@ -110,8 +110,10 @@ public class ChartTableWidget extends WContainerWidget{
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 		table.setHeaderCount(1);
 		table.setStyleClass("jobTable");
-		for (int c = 0; c < model.getColumnCount(); c++) 
+		for (int c = 0; c < model.getColumnCount(); c++) {
 			addText(0, c, model.getHeaderData(c));
+			table.getElementAt(0, c).setStyleClass("jobTableHeader");				
+		}
 
 		for (int r = 0; r < model.getRowCount(); r++) {
 			for (int c = 0; c < model.getColumnCount(); c++) {

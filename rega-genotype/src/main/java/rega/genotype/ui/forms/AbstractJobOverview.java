@@ -106,6 +106,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 	public AbstractJobOverview(GenotypeWindow main) {
 		super(main);
 		
+		setOverflow(Overflow.OverflowAuto);
+		
 		template = new Template(tr("job-overview-form"), this);
 
 		template.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());

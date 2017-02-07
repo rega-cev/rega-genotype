@@ -60,7 +60,7 @@ public class SequenceToolMakeConsensus {
 		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov()
 		+ " --export-unused " + consensusUnusedContigsFile.getAbsolutePath()
 		+ " --clustalw-path " + clustalPath
-		+ " --work-dir " + consensusWorkDir;
+		+ " --work-dir " + consensusWorkDir.getAbsolutePath();
 
 		NgsFileSystem.executeCmd(cmd, consensusWorkDir, logger);
 
