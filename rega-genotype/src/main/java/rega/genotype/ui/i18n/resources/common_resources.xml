@@ -36,7 +36,7 @@
   		<h2>C) Or, revisit results from a previous run:</h2>
     </message>
     <message id="startForm.ngs">
-  		<h2>D) NGS upload FASTQ, assemble a contig from FASTQ files and analyze it. Supported formats: fastq, zip, gz </h2>
+  		<h2>NGS: Upload pair-end reads. Supported formats: fastq or compressed fastq (zip, gz) </h2>
     </message> 	
     <message id="startForm.upload-fastq-1">Upload fastq pair end 1:</message>
     <message id="startForm.upload-fastq-2">Upload fastq pair end 2:</message>
