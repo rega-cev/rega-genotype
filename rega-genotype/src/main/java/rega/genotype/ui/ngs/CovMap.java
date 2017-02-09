@@ -9,7 +9,6 @@ import rega.genotype.ngs.NgsConsensusSequenceModel;
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
 import eu.webtoolkit.jwt.AlignmentFlag;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WBrush;
 import eu.webtoolkit.jwt.WColor;
 import eu.webtoolkit.jwt.WLength;
@@ -34,12 +33,6 @@ public class CovMap extends WPaintedWidget{
 		resize((int)(MARGIN * 2 + GENOM_WIDTH), 50);
 		setMargin(WLength.Auto);
 		addStyleClass("hoverable");
-
-		clicked().addListener(this, new Signal.Listener() {
-			public void trigger() {
-				new CovMapDialog(bucket, model);
-			}
-		});
 	}
 	
 	@Override

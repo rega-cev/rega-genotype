@@ -38,6 +38,19 @@ public class ConsensusBucket {
 		this.refLen = refLen;
 	}
 
+	public String getAccessionNumber() {
+		String[] parts = getRefName().split("\\|");
+		for (String p: parts)
+			if(p.startsWith("NC_"))
+				return p;
+
+		return null;
+	}
+
+	public String getBucketId() {
+		return getDiamondBucket() + "__" + getAccessionNumber();
+	}
+
 	public String getDiamondBucket() {
 		return diamondBucket;
 	}

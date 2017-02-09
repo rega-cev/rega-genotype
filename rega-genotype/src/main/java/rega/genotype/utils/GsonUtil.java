@@ -11,6 +11,9 @@ import com.google.gson.GsonBuilder;
  */
 public class GsonUtil {
 	public static <C> C parseJson(String json, Class<C> c) {
+		if (json == null)
+			return null;
+
 		GsonBuilder builder = new GsonBuilder().setPrettyPrinting().serializeNulls();
 		Gson gson = builder.create();
 		return gson.fromJson(json, c);

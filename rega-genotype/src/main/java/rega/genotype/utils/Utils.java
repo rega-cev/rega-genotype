@@ -65,28 +65,36 @@ public class Utils {
 			throw new ApplicationException(errorPrefix + e.getMessage(), e);
 		}
 	}
-	public static void execShellCmd(String cmd, File workDir) throws ApplicationException {
+	public static String execShellCmd(String cmd, File workDir) throws ApplicationException {
 		cmd = "cd " + workDir.getAbsolutePath() + "\n" + cmd;
+		return Utils.execShellCmd(cmd);
+	}
 
+	public static String execShellCmd(String cmd) throws ApplicationException {
+		String[] shellCmd = {"/bin/sh", "-c", cmd};
+		System.err.println(cmd);
+		StringBuilder ans = new StringBuilder();
+
+		Process p = null;
 		try {
-			Utils.execShellCmd(cmd);
+			p = Runtime.getRuntime().exec(shellCmd);
+
+			BufferedReader inReader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+			int exitResult = p.waitFor();
+
+			String inLine;
+			while ((inLine = inReader.readLine()) != null)
+				ans.append(inLine);
+			if (exitResult != 0){
+				throw new ApplicationException("shell cmd exited with error: " + exitResult);
+			}
 		} catch (IOException e) {
 			throw new ApplicationException(e.getMessage(), e);
 		} catch (InterruptedException e) {
 			throw new ApplicationException(e.getMessage(), e);
 		}
-	}
-
-	public static void execShellCmd(String cmd) throws IOException, InterruptedException, ApplicationException {
-		String[] shellCmd = {"/bin/sh", "-c", cmd};
-		System.err.println(cmd);
-
-		Process fetchFasta = null;
-		fetchFasta = Runtime.getRuntime().exec(shellCmd);
-		int exitResult = fetchFasta.waitFor();
-		if (exitResult != 0){
-			throw new ApplicationException("shell cmd exited with error: " + exitResult);
-		}
+		return ans.toString();
 	}
 
 	/**

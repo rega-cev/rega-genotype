@@ -18,7 +18,6 @@ import eu.webtoolkit.jwt.TextFormat;
 import eu.webtoolkit.jwt.WBreak;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WString;
-import eu.webtoolkit.jwt.WTemplate;
 import eu.webtoolkit.jwt.WText;
 
 /**

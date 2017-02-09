@@ -22,24 +22,30 @@ import rega.genotype.ui.framework.widgets.ObjectListModel;
  * @author michael
  */
 public class SamtoolsUtil {
+	public enum RefType {Consensus, Refrence}
 
-	public static File samFile(final ConsensusBucket bucket, File jobDir) {
-		return NgsFileSystem.samFile(jobDir, 
-				bucket.getDiamondBucket(), bucket.getRefName());
+	public static File samFile(final ConsensusBucket bucket, File jobDir, RefType refType) {
+		if (refType == RefType.Refrence)
+			return NgsFileSystem.samRefFile(jobDir, 
+					bucket.getDiamondBucket(), bucket.getRefName());
+		else
+			return NgsFileSystem.samConsensusFile(jobDir, 
+					bucket.getDiamondBucket(), bucket.getRefName());
 	}
 
 	public static File createSamFile(final ConsensusBucket bucket, File jobDir, 
-			String pe1Name, String pe2Name) throws ApplicationException {
+			String pe1Name, String pe2Name, RefType refType) throws ApplicationException {
 		String bwaPath = Settings.getInstance().getConfig().getGeneralConfig().getBwaCmd();
-		File consensusFile = NgsFileSystem.consensusFile(jobDir, bucket.getDiamondBucket(),
-				bucket.getRefName());
+		File consensusFile = refType == RefType.Refrence ?
+				NgsFileSystem.consensusRefFile(jobDir, bucket.getDiamondBucket(), bucket.getRefName())
+				: NgsFileSystem.consensusFile(jobDir, bucket.getDiamondBucket(), bucket.getRefName());
 
 		File pe1 = NgsFileSystem.diamodPeFile(
 				jobDir, bucket.getDiamondBucket(), pe1Name);
 		File pe2 = NgsFileSystem.diamodPeFile(
 				jobDir, bucket.getDiamondBucket(), pe2Name);
 
-		File out = samFile(bucket, jobDir);
+		File out = samFile(bucket, jobDir, refType);
 
 		File consensusDir = NgsFileSystem.consensusRefSeqDir(
 				NgsFileSystem.consensusDir(jobDir, bucket.getDiamondBucket()),
@@ -58,6 +64,21 @@ public class SamtoolsUtil {
 		Utils.execShellCmd(cmd, consensusFile);
 
 		return out;
+	}
+
+	public static Integer countReads(File sortedBamFile) throws ApplicationException {
+		// samtools view -F 0x4 foo.sorted.bam | cut -f 1 | sort | uniq | wc -l
+		String samtoolsCmd = Settings.getInstance().getConfig().getGeneralConfig().getSamtoolsCmd();
+		String cmd = samtoolsCmd + " view -F 0x4 " + sortedBamFile.getAbsolutePath()
+		+ " | cut -f 1 | sort | uniq | wc -l";
+		System.err.println(cmd);
+
+		try {
+			return Integer.parseInt(Utils.execShellCmd(cmd));
+		} catch (NumberFormatException e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static void samToBam(File samFile, File out, File workDir) throws ApplicationException {
@@ -84,9 +105,16 @@ public class SamtoolsUtil {
 		Utils.execShellCmd(cmd, workDir);
 	}
 
-	public static void samToCovMap(File samFile, File out, File consensusWorkDir) throws ApplicationException {
-		File bamFile = new File(consensusWorkDir, NgsFileSystem.ALINGMENT_BAM_FILE);
-		File sortedBamFile = new File(consensusWorkDir, NgsFileSystem.ALINGMENT_BAM_SORTED_FILE);
+	public static void samToCovMap(File samFile, File out, File consensusWorkDir, RefType refType) throws ApplicationException {
+		File bamFile;
+		File sortedBamFile;
+		if (refType == RefType.Refrence) {
+			bamFile = new File(consensusWorkDir, NgsFileSystem.ALINGMENT_REF_BAM_FILE);
+			sortedBamFile = new File(consensusWorkDir, NgsFileSystem.ALINGMENT_REF_BAM_SORTED_FILE);
+		} else {
+			bamFile = new File(consensusWorkDir, NgsFileSystem.ALINGMENT_CONSENSUS_BAM_FILE);
+			sortedBamFile = new File(consensusWorkDir, NgsFileSystem.ALINGMENT_CONSENSUS_BAM_SORTED_FILE);
+		}
 		samToBam(samFile, bamFile, consensusWorkDir);
 		sortBamFile(bamFile, sortedBamFile, consensusWorkDir);
 		createCovMap(sortedBamFile, out, consensusWorkDir);

@@ -46,7 +46,10 @@ public class NgsResultsParser extends GenotypeResultParser{
 		endReportElement(tag, this, model);
 	}
 
-	public static void endReportElement(String tag, GenotypeResultParser parser,
+	protected void endParsingBucket(ConsensusBucket bucket){
+	}
+	
+	public void endReportElement(String tag, GenotypeResultParser parser,
 			NgsResultsModel model) {
 		if (tag.equals("init")) {
 			model.setFastqPE1FileName(GenotypeLib.getEscapedValue(parser,
@@ -137,6 +140,7 @@ public class NgsResultsParser extends GenotypeResultParser{
 				bucket.setSrcDatabase(clusterE.getChildText("src"));
 
 				model.getConsensusBuckets().add(bucket);
+				endParsingBucket(bucket);
 			}
 		}
 	}

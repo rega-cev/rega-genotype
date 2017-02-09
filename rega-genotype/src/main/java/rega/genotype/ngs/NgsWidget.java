@@ -11,19 +11,18 @@ import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.ngs.model.NgsResultsModel;
 import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.ui.data.OrganismDefinition;
+import rega.genotype.ui.forms.AbstractJobOverview;
+import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
 import rega.genotype.ui.ngs.CovMap;
-import rega.genotype.ui.ngs.CovMapDialog;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Side;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLink;
-import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WChartPalette;
 import eu.webtoolkit.jwt.chart.WStandardPalette;
@@ -43,7 +42,7 @@ public class NgsWidget extends WContainerWidget{
 		this.workDir = workDir;
 	}
 
-	public void refresh(NgsResultsModel model, OrganismDefinition organismDefinition) {
+	public void refresh(NgsResultsModel model, final OrganismDefinition organismDefinition) {
 		clear();
 
 		new WText("<h2> NGS Analysis State </h2>", this);
@@ -118,8 +117,7 @@ public class NgsWidget extends WContainerWidget{
 			WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
 			final NgsConsensusSequenceModel consensusModel = new NgsConsensusSequenceModel(
 					model.getConsensusBuckets(), model.getReadLength(), palette,
-					organismDefinition.getToolConfig(), workDir, 
-					model.getFastqPE1FileName(), model.getFastqPE2FileName());
+					organismDefinition.getToolConfig(), workDir);
 			consensusTable = new ChartTableWidget(
 					consensusModel,
 					NgsConsensusSequenceModel.READ_COUNT_COLUMN,
@@ -133,13 +131,14 @@ public class NgsWidget extends WContainerWidget{
 
 						table.getElementAt(row + 1, column).addWidget(covMap);
 					} else if (column == NgsConsensusSequenceModel.DETAILS_COLUMN) {
-						WPushButton detailsB= new WPushButton("Details",
-								table.getElementAt(row + 1, column));
-						detailsB.clicked().addListener(detailsB, new Signal.Listener() {
-							public void trigger() {
-								new CovMapDialog(consensusModel.getBucket(row), consensusModel);
-							}
-						});
+						WAnchor details = new WAnchor();
+						details.setText("Details");
+						table.getElementAt(row + 1, column).addWidget(details);
+						String jobId = AbstractJobOverview.jobId(workDir);
+						details.setLink(new WLink(WLink.Type.InternalPath, 
+								"/job/" + jobId + "/" + JobForm.BUCKET_PATH + "/"
+								+ consensusModel.getBucket(row).getBucketId()));
+						details.setTarget(AnchorTarget.TargetNewWindow);
 					} else
 						super.addWidget(row, column);
 				}

@@ -19,6 +19,7 @@ import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.framework.widgets.Template;
+import rega.genotype.ui.ngs.NgsDetailsForm;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal1.Listener;
@@ -84,8 +85,9 @@ public class GenotypeWindow extends WContainerWidget
 		
 		ToolConfig toolConfig = GenotypeApplication.getGenotypeApplication().getToolConfig();
 		if (toolConfig.getToolMenifest().isBlastTool()) {
-			BlastJobOverviewForm blastJobOverview = new BlastJobOverviewForm(this);
-			
+			JobForm blastJobOverview = new JobForm(this, 
+					new BlastJobOverviewForm(this));
+
 			final WMenuItem item = addForm(tr("main.navigation.monitor").arg(""),
 					JobForm.JOB_URL, blastJobOverview);
 			blastJobOverview.jobIdChanged().addListener(this, new Listener<String>() {
@@ -152,7 +154,12 @@ public class GenotypeWindow extends WContainerWidget
 				} else
 					System.err.println("ERROR: in handleInternalPath " + internalPath + " blastJobId = " + blastJobId + "blastTool = " + blastTool);
 
-			} 
+			} else if (path.length >= 3 
+					&& path[0].equals("job")
+					&& path[1].equals(NgsDetailsForm.BUCKET_PATH)) {
+				OrganismDefinition od = getOrganismDefinition();
+
+			}
 		}
 
 		WApplication app = WApplication.getInstance();

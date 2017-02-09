@@ -107,7 +107,7 @@ public class NgsResultsTracer extends ResultTracer{
 	public void printAssemblybucketOpen(
 			ConsensusBucket bucketData, List<Contig> contigs) {
 		printlnOpenElement("bucket",
-				"id=\"" + bucketData.getDiamondBucket() + "__" + bucketData.getRefName() + "\"");
+				"id=\"" + bucketData.getBucketId() + "\"");
 		add("diamond_bucket", bucketData.getDiamondBucket());
 		add("ref_name", bucketData.getRefName());
 		add("ref_description", bucketData.getRefDescription());

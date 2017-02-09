@@ -1,10 +1,11 @@
 package rega.genotype.ui.forms;
 
+import java.io.File;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
+import rega.genotype.ui.ngs.NgsDetailsForm;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
@@ -20,6 +21,7 @@ public class JobForm extends AbstractForm {
 	
 	public static final String SEQUENCE_PREFIX = "sequence-";
 	public static final String FILTER_PREFIX = "filter-";
+	public static final String BUCKET_PATH = "bucket";
 	
 	private DetailsForm details;
 	private AbstractJobOverview jobOverview;
@@ -58,6 +60,23 @@ public class JobForm extends AbstractForm {
 					sequenceId = Integer.parseInt(token.substring(SEQUENCE_PREFIX.length()));
 				else if (token.startsWith(FILTER_PREFIX))
 					filter = token.substring(FILTER_PREFIX.length());
+				else if (token.equals(BUCKET_PATH))
+					if (internalPathTokenizer.hasMoreElements()) {
+						String bucketId = internalPathTokenizer.nextToken();
+						if (!jobOverview.existsJob(jobId)) {
+							error.setText(tr("monitorForm.nonExistingJobId").arg(jobId));
+							showWidget(error);
+							return;
+						}
+						File jobDir = jobOverview.getJobDir(jobId);
+
+						NgsDetailsForm ngsDetails = new NgsDetailsForm(
+								getMain(), jobDir, bucketId);
+						addWidget(ngsDetails);
+						jobIdChanged.trigger(jobId);
+						showWidget(ngsDetails);
+						return;
+					}
 			}
 
 			String detailed = null;
