@@ -139,9 +139,9 @@ public class ConsensusBucket {
 	}
 
 	public double getCovPercentage() {
-		return getTotalContigsLen() / getRefLen()  * 100;
-
+		return getTotalContigsLen() / getConsensusSequence().getLength()  * 100;
 	}
+
 	public Sequence getConsensusSequence() {
 		return consensusSequence;
 	}

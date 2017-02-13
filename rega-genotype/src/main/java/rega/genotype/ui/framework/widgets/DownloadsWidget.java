@@ -44,25 +44,25 @@ public class DownloadsWidget extends WTemplate{
 
 		WAnchor xmlAnchor = null;
 		if (hasXmlAnchor)
-			xmlAnchor = createXmlDownload();
+			xmlAnchor = createXmlDownload(mode, jobDir);
 		bindWidget("xml-file", xmlAnchor);
 		bindWidget("csv-file", createTableDownload(tr("monitorForm.csvTable"), true));
 		bindWidget("xls-file", createTableDownload(tr("monitorForm.xlsTable"), false));
 
 		WContainerWidget fasta;
 		if (mode == Mode.Classical)
-			fasta = createFastaDownload(Constants.SEQUENCES_FILE_NAME, tr("monitorForm.fasta"));
+			fasta = createFastaDownload(Constants.SEQUENCES_FILE_NAME, tr("monitorForm.fasta"), mode, jobDir, filter);
 		else {
 			fasta = new WContainerWidget();
 			fasta.setInline(true);
-			fasta.addWidget(createFastaDownload(NgsFileSystem.CONTIGS_FILE, tr("monitorForm.contigs")));
+			fasta.addWidget(createFastaDownload(NgsFileSystem.CONTIGS_FILE, tr("monitorForm.contigs"), mode, jobDir, filter));
 			fasta.addWidget(new WText(" "));
-			fasta.addWidget(createFastaDownload(NgsFileSystem.CONSENSUSES_FILE, tr("monitorForm.consensuses")));
+			fasta.addWidget(createFastaDownload(NgsFileSystem.CONSENSUSES_FILE, tr("monitorForm.consensuses"), mode, jobDir, filter));
 		}
 		bindWidget("fasta-file", fasta);
 	}
 
-	private WAnchor createXmlDownload() {
+	public static WAnchor createXmlDownload(final Mode mode, final File jobDir) {
 		WAnchor xmlFileDownload = new WAnchor("", tr("monitorForm.xmlFile"));
 		xmlFileDownload.setObjectName("xml-download");
 		xmlFileDownload.setStyleClass("link");
@@ -74,7 +74,8 @@ public class DownloadsWidget extends WTemplate{
 		return xmlFileDownload;
 	}
 	
-	private WAnchor createFastaDownload(String fileName, WString anchorName) {
+	public static WAnchor createFastaDownload(final String fileName,
+			final WString anchorName, final Mode mode, final File jobDir, final SequenceFilter filter) {
 		WAnchor fastaDownload = new WAnchor("", anchorName);
 		fastaDownload.setObjectName("fasta-download");
 		fastaDownload.setStyleClass("link");

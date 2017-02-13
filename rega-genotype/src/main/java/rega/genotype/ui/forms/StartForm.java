@@ -355,6 +355,24 @@ public class StartForm extends AbstractForm {
 				NgsAnalysis ngsAnalysis = new NgsAnalysis(ngsResults,
 						Settings.getInstance().getConfig().getNgsModule(), toolConfig);
 				ngsAnalysis.analyze();
+
+				if (!toolConfig.getToolMenifest().isBlastTool())
+					try {
+						getMain().getOrganismDefinition().startAnalysis(ngsResults.getWorkDir());
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (ParameterProblemException e) {
+						e.printStackTrace();
+					} catch (FileFormatException e) {
+						e.printStackTrace();
+					}
+				File done = new File(ngsResults.getWorkDir().getAbsolutePath(), "DONE");
+				try {
+					FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		ngsAnalysis.start();

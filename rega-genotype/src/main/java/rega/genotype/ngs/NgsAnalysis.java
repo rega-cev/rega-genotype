@@ -259,15 +259,6 @@ public class NgsAnalysis {
 
 		jobLock.release();
 
-		//tool.stopTracer();
-		File done = new File(workDir.getAbsolutePath()+File.separatorChar+"DONE");
-		try {
-			FileUtil.writeStringToFile(done, System.currentTimeMillis()+"");
-		} catch (IOException e) {
-			e.printStackTrace();
-			ngsResults.printFatalError("Identification - could not write DONE file: " + e. getMessage());
-		}
-
 		File sequences = new File(workDir, NgsFileSystem.CONTIGS_FILE);
 		if (!sequences.exists())
 			ngsResults.printFatalError("No assembly results.");

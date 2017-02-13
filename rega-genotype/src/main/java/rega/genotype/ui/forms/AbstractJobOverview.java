@@ -149,8 +149,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		
 		jobTable.clear();
 
-		if (!isNgsJob())
-			template.bindWidget("downloads", createDownloadsWidget(filter));
+		template.bindWidget("downloads", createDownloadsWidget(filter));
 		template.bindWidget("scroll", createScrollButton());
 
 		if (hasRecombinationResults)
@@ -239,7 +238,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			updateNgsView();
 		fillResultsWidget();
 		updateInfo();
-		if (jobDone()) {
+		if (jobDone() && jobTable.getRowCount() > 0) {
 			showDownloads();
 			template.bindEmpty("scroll");
 		}
@@ -494,6 +493,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			int numRows = AbstractJobOverview.this.jobTable.getRowCount()-1;
 			if (getSequenceIndex() - getFilteredSequences() >= numRows) {
 				jobTable.setHidden(false);
+				if (ngsWidget != null)
+					ngsWidget.showSubTypingHeader();
 
 				if (numRows < 1000) {
 					List<WWidget> data = getData(this);

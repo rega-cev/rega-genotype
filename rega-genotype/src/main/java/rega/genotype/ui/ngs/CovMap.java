@@ -22,8 +22,8 @@ import eu.webtoolkit.jwt.chart.WAxis;
 
 public class CovMap extends WPaintedWidget{
 	public static final double GENOM_HIGHT = 20;
-	public static final double GENOM_WIDTH = 400;
-	public static final int MARGIN = 15;
+	public static final double GENOM_WIDTH = 250;
+	public static final int MARGIN = 13;
 	private ConsensusBucket bucket;
 	
 	public CovMap(final ConsensusBucket bucket, final NgsConsensusSequenceModel model) {

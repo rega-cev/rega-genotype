@@ -592,3 +592,12 @@ table.reftable caption, .blastResultsTable table caption {
   cursor: pointer;
   cursor: hand;
 }
+
+.single-ngs-result-table {
+	margin:auto;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+.single-ngs-result-table td {
+	padding:3px;
+}

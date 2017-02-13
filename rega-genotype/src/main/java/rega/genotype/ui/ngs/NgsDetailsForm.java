@@ -11,7 +11,6 @@ import rega.genotype.ngs.NgsFileSystem;
 import rega.genotype.ngs.NgsResultsParser;
 import rega.genotype.ngs.NgsResultsTracer;
 import rega.genotype.ngs.model.ConsensusBucket;
-import rega.genotype.ngs.model.Contig;
 import rega.genotype.ngs.model.NgsResultsModel;
 import rega.genotype.ui.forms.AbstractForm;
 import rega.genotype.ui.framework.GenotypeWindow;
@@ -173,6 +172,11 @@ public class NgsDetailsForm extends AbstractForm{
 	    WAnchor bamAnchor = new WAnchor(bamLink(bucket, refType));
 	    bamAnchor.setText("sequence-alignment.bam");
 
+	    int totalCov = 0;
+	    int totalContigsLength = (int) bucket.getTotalContigsLen();
+	    for (Integer cov: covMapModel.getObjects())
+	    	totalCov += cov;
+
 	    try {
 		    Integer readCount = refType == RefType.Refrence ? countRefReads(bucket) : countConsensusReads(bucket);
 	    	template.bindString("read-count", "" + readCount);
@@ -180,13 +184,6 @@ public class NgsDetailsForm extends AbstractForm{
 			e.printStackTrace();
 			template.bindEmpty("read-count");
 		}
-
-	    int totalCov = 0;
-	    int totalContigsLength = 0;
-	    for (Integer cov: covMapModel.getObjects())
-	    	totalCov += cov;
-	    for (Contig contig: bucket.getContigs())
-	    	totalContigsLength += contig.getLength();
 
     	template.bindString("deep-cov", "" + (totalCov / totalContigsLength));
     	template.bindString("title", refType == RefType.Refrence ? tr("cov-map.ref-title") : tr("cov-map.consensus-title"));

@@ -251,6 +251,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	@Override
 	public void fillResultsWidget() {
+		if (isNgsJob())
+			return;
+
 		createChart();
 
 		if (blastResultParser == null || blastResultParser.clusterDataMap.isEmpty())

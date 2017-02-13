@@ -61,7 +61,7 @@ public class Contig {
 	}
 
 	public double getReadCount(int readLength) {
-		return getCov() * getLength() / readLength;
+		return (cov * length) / readLength;
 	}
 
 	public double getCovPercentage(int refLength) {

@@ -1,7 +1,9 @@
 package rega.genotype.ui.framework.widgets;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.ItemDataRole;
@@ -32,8 +34,9 @@ public class ChartTableWidget extends WContainerWidget{
 	protected WTable table = new WTable();
 	private int chartDataColumn;
 	private int colorColumn;
-	private WAbstractItemModel model;
+	protected WAbstractItemModel model;
 	private WChartPalette chartPalette;
+	private List<Integer> skipColumn = new ArrayList<Integer>(); // no good way to hide a column in html table
 
 	public ChartTableWidget(WAbstractItemModel model, int chartDataColumn, 
 			int colorColumn, WChartPalette chartPalette) {
@@ -41,8 +44,13 @@ public class ChartTableWidget extends WContainerWidget{
 		this.chartDataColumn = chartDataColumn;
 		this.colorColumn = colorColumn;
 		this.chartPalette = chartPalette;
+	}
 
-		createChart();
+	public void init() {
+		if (model.getRowCount() > 1)
+			createChart();
+		else
+			skipColumn.add(colorColumn);
 		initTable();
 	}
 
@@ -82,7 +90,7 @@ public class ChartTableWidget extends WContainerWidget{
 	}
 
 	private String formatDouble(Double d) {
-		DecimalFormat df = new DecimalFormat("#.##"); 
+		DecimalFormat df = new DecimalFormat("#.#"); 
 		return df.format(d);
 	}
 
@@ -98,11 +106,20 @@ public class ChartTableWidget extends WContainerWidget{
 		return text;
 	}
 
-	private void addText(int row, int column, Object o) {
+	protected void addText(int row, int column, Object o) {
 		String text = getText(o);
 		if (text != null)
 			table.getElementAt(row, column).addWidget(
 					new WText(text));
+	}
+
+	protected int tableCol(int column) {
+		int ans = column;
+		for (Integer c: skipColumn)
+			if (c < column)
+				ans--;
+
+		return ans;
 	}
 
 	public void initTable() {
@@ -111,13 +128,16 @@ public class ChartTableWidget extends WContainerWidget{
 		table.setHeaderCount(1);
 		table.setStyleClass("jobTable");
 		for (int c = 0; c < model.getColumnCount(); c++) {
-			addText(0, c, model.getHeaderData(c));
-			table.getElementAt(0, c).setStyleClass("jobTableHeader");				
+			if (!skipColumn.contains(c)) {
+				addText(0, tableCol(c), model.getHeaderData(c));
+				table.getElementAt(0, tableCol(c)).setStyleClass("jobTableHeader");			
+			}
 		}
 
 		for (int r = 0; r < model.getRowCount(); r++) {
 			for (int c = 0; c < model.getColumnCount(); c++) {
-				addWidget(r,c);
+				if (!skipColumn.contains(c))
+					addWidget(r,c);
 			}
 		}
 	}
@@ -133,16 +153,16 @@ public class ChartTableWidget extends WContainerWidget{
 			w.setMargin(WLength.Auto, Side.Left, Side.Right);
 			w.setMargin(15, Side.Top);
 			w.resize(30, 30);
-			table.getElementAt(row + 1, column).addWidget(w);
+			table.getElementAt(row + 1, tableCol(column)).addWidget(w);
 		} else if (model.getData(row, column, ItemDataRole.LinkRole) != null) {
 			// add link
 			WAnchor a = new WAnchor((WLink) model.getData(row, column, ItemDataRole.LinkRole));
 			String text = getText(model.getData(row, column));
 			if (text != null)
 				a.setText(text);
-			table.getElementAt(row + 1, column).addWidget(a);
+			table.getElementAt(row + 1, tableCol(column)).addWidget(a);
 		} else
-			addText(row + 1, column, model.getData(row, column));
+			addText(row + 1, tableCol(column), model.getData(row, column));
 	}
 
 	public void addTotalsRow(int[] columns) {

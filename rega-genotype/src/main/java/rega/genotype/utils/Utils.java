@@ -167,4 +167,17 @@ public class Utils {
 			return null;
 		}
 	}
+
+	public static String toApproximateString(Number num) {
+		if (num == null)
+			return null;
+
+		String s = "" + num.intValue();
+		if (s.length() > 3) {
+			int z = (int)Math.pow(10.0, (double)(s.length() - 3));
+			int i = num.intValue() / z;
+			s = "" + (i * z);
+		}
+		return "~" + s;
+	}
 }

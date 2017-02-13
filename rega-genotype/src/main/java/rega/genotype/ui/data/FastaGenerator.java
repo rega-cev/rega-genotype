@@ -35,8 +35,8 @@ public class FastaGenerator extends GenotypeResultParser {
 					: "/genotype_result/assembly/bucket/sequence";
 			
 			String namePath = seqPath + "/@name";
-			String descPath = seqPath + "/sequence/result[@id='blast']/cluster/concluded-description";
-			String nuclPath = seqPath +  "/sequence/nucleotides";
+			String descPath = seqPath + "/result[@id='blast']/cluster/concluded-description";
+			String nuclPath = seqPath +  "/nucleotides";
 
 			writer.write(GenotypeLib.getEscapedValue(this, namePath));
 			String description = GenotypeLib.getEscapedValue(this, descPath);
