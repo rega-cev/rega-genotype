@@ -20,11 +20,13 @@ import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.ngs.CovMap;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
-import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
+import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WTable;
+import eu.webtoolkit.jwt.WTableRow;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WChartPalette;
 import eu.webtoolkit.jwt.chart.WStandardPalette;
@@ -38,7 +40,7 @@ public class NgsWidget extends WContainerWidget{
 
 	private ChartTableWidget consensusTable;
 	private File workDir;
-	private WText subTypingHeaderT = new WText("<h2>Sub-typing tool results</h2>");
+	private WText subTypingHeaderT = new WText("<h2>Sub-Typing Tool Results</h2>");
 
 	public NgsWidget(final File workDir) {
 		super();
@@ -49,53 +51,53 @@ public class NgsWidget extends WContainerWidget{
 	public void refresh(NgsResultsModel model, final OrganismDefinition organismDefinition) {
 		clear();
 
-		new WText("<h2> NGS Analysis State </h2>", this);
+		new WText("<h2> NGS Analysis Results </h2>", this);
 		
-		WContainerWidget preprocessingWidget = stateWidget(
+		WTable table = new WTable(this);
+		table.addStyleClass("ngs-detils-table");
+		table.setMargin(WLength.Auto);
+		
+		WTableRow preprocessingWidget = stateWidget(table,
 				"Preprocessing", model.getStateStartTime(State.Init), 
 				model.getStateStartTime(State.Diamond),
 				model.getReadCountStartState(State.Init),
 				model.getReadCountStartState(State.Diamond));
 
-		WContainerWidget filteringWidget = stateWidget(
+		WTableRow filteringWidget = stateWidget(table,
 				State.Diamond.text, model.getStateStartTime(State.Diamond), 
 				model.getStateStartTime(State.Spades),
 				model.getReadCountStartState(State.Diamond),
 				model.getReadCountStartState(State.Spades));
 
-		WContainerWidget identificationWidget = stateWidget(
+		WTableRow identificationWidget = stateWidget(table,
 				State.Spades.text, model.getStateStartTime(State.Spades), 
 				model.getStateStartTime(State.FinishedAll),
 				model.getReadCountStartState(State.Spades),
 				model.getReadCountStartState(State.FinishedAll));
 
-		addWidget(preprocessingWidget);
-		addWidget(filteringWidget);
-		addWidget(identificationWidget);
-
 		if (!model.getErrors().isEmpty() )
 			new WText("<div class=\"error\">Error: " + model.getErrors() + "</div>", 
-					preprocessingWidget);
+					preprocessingWidget.elementAt(0));
 
 		if (model.getState().code >= State.Preprocessing.code) {
-			new WText("<div> QC before preprocessing</div>", preprocessingWidget);
+			new WText("<div> QC before preprocessing</div>", preprocessingWidget.elementAt(0));
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
-			addQC(qcDir, preprocessingWidget);
+			addQC(qcDir, preprocessingWidget.elementAt(0));
 		}
 
 		if (model.getState().code >= State.Diamond.code) {
 			if (model.getSkipPreprocessing())
-				new WText("<div> input sequences are OK -> skip  preprocessing.</div>", preprocessingWidget);
+				new WText("<div> input sequences are OK -> skip  preprocessing.</div>", preprocessingWidget.elementAt(0));
 			else {
-				new WText("<div> QC after preprocessing</div>", preprocessingWidget);
+				new WText("<div> QC after preprocessing</div>", preprocessingWidget.elementAt(0));
 				File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
-				addQC(qcDir, preprocessingWidget);
+				addQC(qcDir, preprocessingWidget.elementAt(0));
 			}
 		}
 
 		if (model.getState().code == State.Diamond.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<div> Diamond blast job state:" + jobState + "</div>", filteringWidget);
+			new WText("<div> Diamond blast job state:" + jobState + "</div>", filteringWidget.elementAt(0));
 		}
 
 		if (model.getState().code == State.Spades.code) {
@@ -126,7 +128,7 @@ public class NgsWidget extends WContainerWidget{
 					organismDefinition.getToolConfig(), workDir);
 			if (showSingleResult) { 
 				SingleResultView view = new SingleResultView(consensusModel, workDir);
-				addWidget(view);
+				table.getElementAt(table.getRowCount(), 0).addWidget(view);
 			} else {
 				consensusTable = new ResultsView(consensusModel, 
 						NgsConsensusSequenceModel.READ_COUNT_COLUMN,
@@ -154,19 +156,20 @@ public class NgsWidget extends WContainerWidget{
 		subTypingHeaderT.show();
 	}
 
-	private WContainerWidget stateWidget(String title, 
+	private WTableRow stateWidget(WTable table, String title, 
 			Long startTime, Long endTime,
 			Integer startReads, Integer endReads){
-		WContainerWidget stateWidget = new WContainerWidget();
-		new WText("<div><b>" + title + "</b> ("+ printTime(startTime, endTime) + ") </div>", 
-				stateWidget);
+		WTableRow stateRow = table.insertRow(table.getRowCount());
+		new WText("<p><b><i>" + title + "</i></b></p>", 
+				stateRow.elementAt(0));
+		new WText("<p>" + printTime(startTime, endTime) + "</p>", stateRow.elementAt(1));
 		if (endReads != null)
-			new WText("<div> Started with " + startReads + " reads. " + (startReads - endReads) + " reads were removed. </div>",
-					stateWidget);
+			new WText("<p>Started with " + startReads + " reads. " + (startReads - endReads) + " reads were removed.</p>",
+					stateRow.elementAt(0));
 
-		stateWidget.setMargin(10, Side.Bottom);
+		//stateWidget.setMargin(10, Side.Bottom);
 
-		return stateWidget;
+		return stateRow;
 	}
 
 	private String printTime(Long startTime, Long endTime) {

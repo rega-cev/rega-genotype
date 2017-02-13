@@ -587,6 +587,10 @@ table.reftable caption, .blastResultsTable table caption {
     color: dimgray;
 }
 
+.ngs-detils-table {
+	text-align: center;
+}
+
 .hoverable:hover {
   color: blueviolet;
   cursor: pointer;

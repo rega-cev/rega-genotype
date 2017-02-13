@@ -63,16 +63,15 @@
   	</message>
 
 	<message id="single-ngs-result-view">
-	
+		${img}
 		<table class="single-ngs-result-table">
-		    <tr><td><b>${tr:detailsForm.summary.read-cunt}</b></td><td>${read-count}</td></tr>
-		    <tr><td><b>${tr:detailsForm.summary.total-len}</b></td><td>${cov-len}</td></tr>
-		    <tr><td><b>${tr:detailsForm.summary.deep-cov}</b></td><td>${depth}</td></tr>
+			<!--<tr><td>${tr:detailsForm.summary.image}</td><td>${img}</td></tr>-->
+		    <tr><td>${tr:detailsForm.summary.read-cunt}</td><td>${read-count}</td></tr>
+		    <tr><td>${tr:detailsForm.summary.total-len}</td><td>${cov-len}</td></tr>
+		    <tr><td>${tr:detailsForm.summary.deep-cov}</td><td>${depth}</td></tr>
+		    <tr><td>${tr:detailsForm.summary.downloads}</td><td>${xml} ${consensus}</td></tr>
+		    <tr><td>Alignment analysis</td><td>${details}</td></tr>
 		</table>
-	    ${img}
-	    <div style="margin-bottom: 10px;"> ${details}</div>
-	    
-	    <div>${tr:detailsForm.summary.downloads}  ${xml} ${consensus}</div>
 	</message>
 
 	<message id="monitorForm.cancelButton">Cancel job</message>
