@@ -161,7 +161,7 @@ public class NgsWidget extends WContainerWidget{
 		new WText("<div><b>" + title + "</b> ("+ printTime(startTime, endTime) + ") </div>", 
 				stateWidget);
 		if (endReads != null)
-			new WText("<div> Started with " + startReads + " reads. " + (startReads - endReads) + " reads where removed. </div>",
+			new WText("<div> Started with " + startReads + " reads. " + (startReads - endReads) + " reads were removed. </div>",
 					stateWidget);
 
 		stateWidget.setMargin(10, Side.Bottom);

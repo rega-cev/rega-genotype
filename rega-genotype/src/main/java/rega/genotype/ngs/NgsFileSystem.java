@@ -50,17 +50,17 @@ public class NgsFileSystem {
 
 	public static final String CONSENSUS_CONTIGS_FILE = "consensus-contigs.fasta";
 	public static final String CONSENSUS_FILE = "consensus.fasta";
-	public static final String CONSENSUS_ALINGMENT_FILE = "consensus-alingemnt.fasta";
+	public static final String CONSENSUS_ALINGMENT_FILE = "consensus-alignment.fasta";
 	public static final String CONSENSUS_REF_FILE = "consensus-ref.fasta";
 	public static final String CONSENSUS_UNUSED_CONTIGS_FILE = "consensus-unused-contigs.fasta";
-	public static final String ALINGMENT_CONSENSUS_SAM_FILE = "consensus-alingment.sam";
-	public static final String ALINGMENT_CONSENSUS_BAM_FILE = "consensus-alingment.bam";
-	public static final String ALINGMENT_CONSENSUS_BAM_SORTED_FILE = "consensus-alingment-sorted.bam";
-	public static final String ALINGMENT_CONSENSUS_COV_FILE = "consensus-alingment.cov";
-	public static final String ALINGMENT_REF_SAM_FILE = "ref-alingment.sam";
-	public static final String ALINGMENT_REF_BAM_FILE = "ref-alingment.bam";
-	public static final String ALINGMENT_REF_BAM_SORTED_FILE = "ref-alingment-sorted.bam";
-	public static final String ALINGMENT_REF_COV_FILE = "ref-alingment.cov";
+	public static final String ALINGMENT_CONSENSUS_SAM_FILE = "consensus-alignment.sam";
+	public static final String ALINGMENT_CONSENSUS_BAM_FILE = "consensus-alignment.bam";
+	public static final String ALINGMENT_CONSENSUS_BAM_SORTED_FILE = "consensus-alignment-sorted.bam";
+	public static final String ALINGMENT_CONSENSUS_COV_FILE = "consensus-alignment.cov";
+	public static final String ALINGMENT_REF_SAM_FILE = "ref-alignment.sam";
+	public static final String ALINGMENT_REF_BAM_FILE = "ref-alignment.bam";
+	public static final String ALINGMENT_REF_BAM_SORTED_FILE = "ref-alignment-sorted.bam";
+	public static final String ALINGMENT_REF_COV_FILE = "ref-alignment.cov";
 
 	public static boolean addFastqFiles(NgsResultsTracer ngsProgress, File fastqPE1, File fastqPE2) {
 		return addFastqFiles(ngsProgress, fastqPE1, fastqPE2, false);

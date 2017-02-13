@@ -17,9 +17,9 @@ public class NgsResultsModel {
 		QC(1, "QC"),
 		Preprocessing(2, "Preprocessing"),
 		QC2(3, "QC of preprocessed."),
-		Diamond(4, "filtering"),
+		Diamond(4, "Filtering"),
 		Spades(5, "Assembly and Identification"),
-		FinishedAll(6, "finished");
+		FinishedAll(6, "Finished");
 
 		public final int code;
 		public final String text;
