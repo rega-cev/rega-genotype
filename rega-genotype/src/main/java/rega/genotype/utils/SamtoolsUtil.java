@@ -135,7 +135,9 @@ public class SamtoolsUtil {
 							// fill 0 cov area
 							ans.addAll(Collections.nCopies(pos - ans.size(), 0));
 						}
-						ans.add(Integer.parseInt(split[2]));
+						int peCov = Integer.parseInt(split[2]);
+						assert(peCov % 2 == 0); // Samtools does not know about pair ends.
+						ans.add(peCov / 2);
 					} catch (NumberFormatException e) {
 						e.printStackTrace(); // should not get here!!
 					}
