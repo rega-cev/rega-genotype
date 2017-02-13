@@ -451,6 +451,13 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			while (!stop && !resultFile.exists()){
 				synchronized (lock) {
 					try {
+						if (jobDone()) {
+							UpdateLock updateLock = app.getUpdateLock();
+							updateView();
+							app.triggerUpdate();
+							updateLock.release();
+							break;
+						}
 						lock.wait(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
