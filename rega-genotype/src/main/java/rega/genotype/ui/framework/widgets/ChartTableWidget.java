@@ -164,20 +164,4 @@ public class ChartTableWidget extends WContainerWidget{
 		} else
 			addText(row + 1, tableCol(column), model.getData(row, column));
 	}
-
-	public void addTotalsRow(int[] columns) {
-		int row = table.getRowCount();
-		addText(row, 0, "Totals");
-		for (int c: columns) {
-			double total = 0.0;
-			for (int r = 0; r < model.getRowCount(); ++r) {
-				Object data = model.getData(r, c);
-				if (data != null && data instanceof Double)
-					total += (Double)data;
-				else if(data != null && data instanceof Integer)
-					total += (Integer)data;
-			}
-			addText(row, c, total);
-		}
-	}
 }

@@ -38,7 +38,7 @@ import eu.webtoolkit.jwt.chart.WStandardPalette;
  */
 public class NgsWidget extends WContainerWidget{
 
-	private ChartTableWidget consensusTable;
+	private ResultsView consensusTable;
 	private File workDir;
 	private WText subTypingHeaderT = new WText("<h2>Sub-Typing Tool Results</h2>");
 
@@ -176,7 +176,7 @@ public class NgsWidget extends WContainerWidget{
 		if (startTime != null && endTime != null) {
 			return  Utils.formatTime(endTime - startTime);
 		} else {
-			return "--";
+			return "";
 		}
 	}
 
@@ -245,6 +245,22 @@ public class NgsWidget extends WContainerWidget{
 			default:
 				super.addWidget(row, column);
 				break;
+			}
+		}
+
+		public void addTotalsRow(int[] columns) {
+			int row = table.getRowCount();
+			addText(row, 0, "Totals");
+			for (int c: columns) {
+				double total = 0.0;
+				for (int r = 0; r < model.getRowCount(); ++r) {
+					Object data = model.getData(r, c);
+					if (data != null && data instanceof Double)
+						total += (Double)data;
+					else if(data != null && data instanceof Integer)
+						total += (Integer)data;
+				}
+				addText(row, c, Utils.toApproximateString(total));
 			}
 		}
 	}
