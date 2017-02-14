@@ -10,6 +10,7 @@ import rega.genotype.AnalysisException;
 import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Result;
+import rega.genotype.Constants;
 import rega.genotype.FileFormatException;
 import rega.genotype.GenotypeTool;
 import rega.genotype.ParameterProblemException;
@@ -29,9 +30,13 @@ public class BlastTool extends GenotypeTool {
 	private BlastAnalysis blastAnalysis;
 
     public BlastTool(ToolConfig toolConfig, File workDir) throws IOException, ParameterProblemException, FileFormatException {
+    	this(toolConfig, workDir, Constants.BLAST_XML_FILE_NAME);
+    }
+
+    public BlastTool(ToolConfig toolConfig, File workDir, String blastXmlFileName) throws IOException, ParameterProblemException, FileFormatException {
     	super(toolConfig, workDir);
 
-    	blastXml = readAnalyses(getXmlPathAsString() + "blast.xml", getWorkingDir());
+    	blastXml = readAnalyses(getXmlPathAsString() + blastXmlFileName, getWorkingDir());
     	blastAnalysis = (BlastAnalysis) blastXml.getAnalysis("blast");
     }
 

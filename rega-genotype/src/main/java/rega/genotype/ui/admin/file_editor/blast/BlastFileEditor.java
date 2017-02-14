@@ -23,6 +23,7 @@ import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.AlignmentAnalyses.Taxus;
 import rega.genotype.ApplicationException;
 import rega.genotype.BlastAnalysis;
+import rega.genotype.Constants;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.Sequence;
@@ -407,7 +408,7 @@ public class BlastFileEditor extends WContainerWidget{
 	}
 
 	public static File blastFile(File dir) {
-		return new File(dir.getAbsolutePath(), "blast.xml");
+		return new File(dir.getAbsolutePath(), Constants.BLAST_XML_FILE_NAME);
 	}
 
 	public static File fastaFile(File dir) {

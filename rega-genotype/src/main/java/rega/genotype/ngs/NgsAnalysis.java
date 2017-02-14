@@ -16,6 +16,7 @@ import org.apache.commons.io.FileUtils;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
+import rega.genotype.Constants;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
@@ -30,6 +31,7 @@ import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
 import rega.genotype.ngs.model.DiamondBucket;
 import rega.genotype.ngs.model.NgsResultsModel.State;
+import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.tools.blast.BlastTool;
@@ -219,7 +221,9 @@ public class NgsAnalysis {
 	public BlastTool startIdentification(NgsResultsTracer ngsProgress) {
 		BlastTool tool;
 		try {
-			tool = new BlastTool(toolConfig, workDir);
+			boolean isHiv = toolConfig.getPath().equals("hiv");
+			String blastXmlFileName = isHiv ? "hiv.xml" : Constants.BLAST_XML_FILE_NAME;
+			tool = new BlastTool(toolConfig, workDir, blastXmlFileName);
 			tool.setTracer(ngsProgress);
 			tool.formatDB();
 		} catch (IOException e) {

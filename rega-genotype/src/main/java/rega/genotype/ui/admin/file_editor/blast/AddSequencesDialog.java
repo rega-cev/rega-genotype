@@ -15,6 +15,7 @@ import rega.genotype.AlignmentAnalyses;
 import rega.genotype.AlignmentAnalyses.Cluster;
 import rega.genotype.BlastAnalysis;
 import rega.genotype.BlastAnalysis.Result;
+import rega.genotype.Constants;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
 import rega.genotype.SequenceAlignment;
@@ -170,7 +171,7 @@ public class AddSequencesDialog extends WDialog{
 			alignmentAnalyses.analyses();
 
 			mode = Mode.AllClusters;
-			File blastXmlFile = new File(toolConfig.getConfiguration(), "blast.xml");
+			File blastXmlFile = new File(toolConfig.getConfiguration(), Constants.BLAST_XML_FILE_NAME);
 			if (!blastXmlFile.exists()) {
 				initSimpleTable(fasta, alignmentAnalyses);
 			} else {

@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import rega.genotype.AlignmentAnalyses;
 import rega.genotype.BlastAnalysis;
+import rega.genotype.Constants;
 import rega.genotype.BlastAnalysis.Result;
 import rega.genotype.Constants.Mode;
 import rega.genotype.FileFormatException;
@@ -61,7 +62,7 @@ public class PenViralGenotypeAnalysisTest extends TestCase{
     	ToolConfig toolConfig = Settings.getInstance().getConfig().getToolConfigById("pen-viral", "1");
 
 		try {
-			File blastFile = new File(toolConfig.getConfiguration(), "blast.xml");
+			File blastFile = new File(toolConfig.getConfiguration(), Constants.BLAST_XML_FILE_NAME);
 			jobDir.mkdirs();
 			alignmentAnalyses = new AlignmentAnalyses(blastFile, null, jobDir);
 		} catch (IOException e) {
