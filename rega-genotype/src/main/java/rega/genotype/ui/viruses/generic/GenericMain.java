@@ -50,8 +50,8 @@ public class GenericMain extends GenotypeMain {
 	
 	@Override
 	public WApplication createApplication(WEnvironment env) {	
-		System.err.println("createApplication");
-		
+		System.err.println("createApplication: " + env.getDeploymentPath());
+
 		String[] deploymentPath = env.getDeploymentPath().split("/");
 		String url = deploymentPath[deploymentPath.length - 1];
 		getConfiguration().setFavicon("/"+deploymentPath[1]+"/pics/favicon1.ico");
@@ -122,6 +122,7 @@ public class GenericMain extends GenotypeMain {
 					app.useStyleSheet(link);
 			}
 		} else { // support old tools
+			app.setCssTheme("default");
 			app.useStyleSheet(new WLink("style/genotype-rivm.css"));
 			app.useStyleSheet(new WLink("style/genotype-rivm-ie.css"),"IE lte 7");
 			app.useStyleSheet(new WLink("style/wt.css")); // do not use Wt's inline stylesheet...
