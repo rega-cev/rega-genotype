@@ -104,7 +104,7 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 
 	@Override
 	public Object getData(WModelIndex index, int role) {
-		ToolInfo info = getToolInfo(index.getRow());
+		final ToolInfo info = getToolInfo(index.getRow());
 		if (role == ItemDataRole.DisplayRole) {
 			switch (index.getColumn()) {
 			case URL_COLUMN:					
@@ -143,8 +143,9 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 				return getData(index, ItemDataRole.DisplayRole);
 			}
 		} else if (role == ItemDataRole.LinkRole) {
-			if (index.getColumn() == 0 && info.getConfig() != null)
-				return new WLink("typingtool/" + info.getConfig().getPath());
+			if (index.getColumn() == 0 && info.getConfig() != null){
+				return new WLink("typingtool/" + info.getConfig().getPath() + "/");
+			}
 		} else if (role == ItemDataRole.StyleClassRole) {
 			if (info.getState() == ToolState.RemoteSync 
 					|| info.getState() == ToolState.Local
