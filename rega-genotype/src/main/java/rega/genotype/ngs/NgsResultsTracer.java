@@ -54,7 +54,7 @@ public class NgsResultsTracer extends ResultTracer{
 	public void printInit() {
 		printlnOpenElement("init");
 		add("pe-1-file", model.getFastqPE1FileName());
-		add("pe-2-file", model.getFastqPE1FileName());
+		add("pe-2-file", model.getFastqPE2FileName());
 		add("end-time-ms", time());
 		printlnCloseLastElement();
 		w.flush();
