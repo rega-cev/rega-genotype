@@ -154,6 +154,13 @@ public class FileUtil {
 		return null;
 	}
 
+	public static String removeExtention(String fileName) {
+		while (fileName.indexOf(".") > 0)
+		    fileName = fileName.substring(0, fileName.lastIndexOf("."));
+
+		return fileName;
+	}
+
 	// gzip
     /**
      * extract .gz file

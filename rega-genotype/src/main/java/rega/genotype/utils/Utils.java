@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import rega.genotype.ApplicationException;
+import eu.webtoolkit.jwt.WTime;
 import eu.webtoolkit.jwt.WWidget;
 
 public class Utils {
@@ -138,11 +139,8 @@ public class Utils {
 	}
 
 	public static String formatTime(long milliseconds) {
-		int seconds = (int) (milliseconds / 1000) % 60 ;
-		int minutes = (int) ((milliseconds / (1000*60)) % 60);
-		int hours   = (int) ((milliseconds / (1000*60*60)));
-
-		return hours + ":" + minutes + ":" + seconds;
+		WTime t = new WTime(milliseconds);
+		return t.toString();
 	}
 
 	public static Double biggest(Double n1, Double n2) {
