@@ -38,8 +38,9 @@
     <message id="startForm.ngs">
   		<h2>NGS: Upload pair-end reads. Supported formats: fastq or compressed fastq (zip, gz) </h2>
     </message> 	
-    <message id="startForm.upload-fastq-1">Upload fastq pair end 1:</message>
-    <message id="startForm.upload-fastq-2">Upload fastq pair end 2:</message>
+    <message id="startForm.upload-fastq-1">Pair end 1:</message>
+    <message id="startForm.upload-fastq-2">Pair end 2:</message>
+    <message id="startForm.upload-fastq">Upload FASTQ files</message>
 
   	<message id="startForm.labelJobId">Job-id:</message>
   	<message id="startForm.monitor">Retrieve results</message>
@@ -48,16 +49,17 @@
   	<message id="startForm.noSequence">No sequences were provided.</message>
   	<message id="startForm.tooManySequences">Too many sequences were provided.</message>
   	<message id="startForm.ioError">I/O error reading the sequence.</message>
- 
- 
+
   	<message id="startForm.ngs-widget">
-		<div>
+		<div class="ngs-start">
 			${tr:startForm.ngs}
 
-			<div>${tr:startForm.upload-fastq-1}${fastq-upload1}${fastq-upload1-info}</div>
-			<div>${tr:startForm.upload-fastq-2}${fastq-upload2}${fastq-upload2-info}</div>
-			<div>Enter the Run Number and Download SRA file. Example: ERR233413</div>
-			<div>Download srr file: ${srr}</div>
+			<p><b>${tr:startForm.upload-fastq}</b></p>
+			<p class="tab">${tr:startForm.upload-fastq-1}${fastq-upload1}${fastq-upload1-info}</p>
+			<p class="tab">${tr:startForm.upload-fastq-2}${fastq-upload2}${fastq-upload2-info}</p>
+			<p><b>Or let the server download the files for you.</b></p>
+			<p class="tab">Enter the Run Number and Download SRA file. Example: ERR233413</p>
+			<p class="tab">Download srr file: ${srr}</p>
 			${fastq-start}
 		</div>
   	</message>
@@ -72,6 +74,22 @@
 		    <tr><td>${tr:detailsForm.summary.downloads}</td><td>${xml} ${consensus}</td></tr>
 		    <tr><td>Alignment analysis</td><td>${details}</td></tr>
 		</table>
+	</message>
+
+	<message id="ngs.qc-view">
+	<p>QC results</p>
+	<table class="single-ngs-result-table">
+		<tr>
+			<td>Input sequences</td>
+			<td>${qc-1}</td>
+			<td>${qc-2}</td>
+		</tr>
+		<tr>
+			<td>After preprocessing</td>
+			<td>${qcp-1}</td>
+			<td>${qcp-2}</td>
+		</tr>
+	</table>
 	</message>
 
 	<message id="monitorForm.cancelButton">Cancel job</message>

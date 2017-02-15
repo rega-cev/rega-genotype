@@ -123,8 +123,8 @@ public class GenericMain extends GenotypeMain {
 			}
 		} else { // support old tools
 			app.setCssTheme("default");
-			app.useStyleSheet(new WLink("style/genotype-rivm.css"));
-			app.useStyleSheet(new WLink("style/genotype-rivm-ie.css"),"IE lte 7");
+			app.useStyleSheet(new WLink("style/genotype.css"));
+			//app.useStyleSheet(new WLink("style/genotype-rivm-ie.css"),"IE lte 7");
 			app.useStyleSheet(new WLink("style/wt.css")); // do not use Wt's inline stylesheet...
 			app.useStyleSheet(new WLink("style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 		}

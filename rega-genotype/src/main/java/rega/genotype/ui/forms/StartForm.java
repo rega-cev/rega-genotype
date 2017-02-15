@@ -38,6 +38,7 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.Icon;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
@@ -218,10 +219,12 @@ public class StartForm extends AbstractForm {
 		fastqFileUpload1 = new WFileUpload();
 		fastqFileUpload1.setProgressBar(new WProgressBar());
 		fastqFileUpload1.setFilters(".fastq,.zip,.gz");
+		fastqFileUpload1.setMargin(10, Side.Left);
 
 		fastqFileUpload2 = new WFileUpload();
 		fastqFileUpload2.setProgressBar(new WProgressBar());
 		fastqFileUpload2.setFilters(".fastq,.zip,.gz");
+		fastqFileUpload2.setMargin(10, Side.Left);
 
 		fastqStart = new WPushButton("Start NGS analysis");
 

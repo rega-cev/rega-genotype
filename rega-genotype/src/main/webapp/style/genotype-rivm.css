@@ -605,3 +605,16 @@ table.reftable caption, .blastResultsTable table caption {
 .single-ngs-result-table td {
 	padding:3px;
 }
+
+.tab {
+	margin-left:15px;
+}
+
+.ngs-start {
+	    background: gainsboro;
+}
+
+.ngs-start button{
+	color: darkblue;
+    font-weight: bold;
+}

@@ -53,7 +53,7 @@ div.imgDiv, div.downloadContainer{
 }
 
 .form {
-	width: 85%;
+	/*width: 85%;*/
 	margin: 0px auto;
 }
 
@@ -240,13 +240,14 @@ h1 {
 
 .note, .footer {
 	padding: 0.5em 3em 0.5em 0.5em;
-	background-color: rgb(204, 204, 255);
+	background-color: rgb(221, 221, 255);
 	display: block;
-	width: 80%;
+	/*width: 80%;*/
 	margin: 0px auto;
 }
 
 .footer{
+	margin-top:15px;
 	text-align: center;
 	font-style: italic;
 }
@@ -256,7 +257,7 @@ h1 {
 	border-color: black;
 	border-style: solid;
 	border-width: 1px 0px 1px 0px;
-	width: 80%;
+	/*width: 80%;*/
 	height: 30px;
 	padding: 1em;
 
@@ -264,9 +265,9 @@ h1 {
 
 .nav_main { 
 	list-style: none;
-	margin-left: auto;
+	/*margin-left: auto;
 	margin-right: auto;
-	text-align: center;
+	text-align: center;*/
 }
 
 .nav_main li { 
@@ -276,7 +277,9 @@ h1 {
 	padding: 0; 
 }
 
+
 .nav_main a {
+/*
 	display: inline-block;
 	width: 12%;
 	text-align: center;
@@ -285,6 +288,25 @@ h1 {
 	text-decoration: underline;
 	color: blue;
 	cursor: pointer;
+*/
+	vertical-align: middle;
+	display: inline-block;
+
+	margin-left:22px;
+	color: slateblue;
+    font-size: 12pt;
+    font-weight:normal;
+    text-decoration:none;
+}
+
+.itemselected a{
+  color: blueviolet;
+  font-weight: bold;
+}
+
+.nav_main a:hover , .itemselected a{
+  color: blueviolet;
+  text-decoration: none;
 }
 
 .edit-invalid {
@@ -329,7 +351,7 @@ div.sequence {
 
 span.refseq{
 	display: block;
-	text-align: center;
+	/*text-align: center;*/
 }
 
 .monitor-form{
@@ -445,9 +467,97 @@ table.reftable caption, .blastResultsTable table caption {
   margin:5px 0 5px 0;
 }
 
+/* Inherited from rivm because many tools used rivm css in the past. */
+
+.rivm-header div#logo {
+	/*background-color: #ffffff;*/
+	text-align: center;
+}
+
+.rivm-header div#logo a {
+	text-decoration: none;
+}
+/**
+.rivm-header div#text div {
+	position: absolute;
+}
+*/
+.rivm-header div#application {
+	background-color: #eaf7ff;
+ 	height: 30px;
+ 	padding-left: 25px;
+ 	/*width: 100%;*/
+}
+
+.rivm-header span#name {
+	font-weight: bold; 
+	/*position: relative;*/
+	top: 25%;
+}
+
+.rivm-header span#info {
+	font-style: italic;
+	/*position: relative;*/
+	top: 25%;
+}
+
+
+/* new style */
+.azure {
+	margin-left: auto;
+	margin-right: auto;
+	width: 1200px;
+}
+
+.error-text {
+	color: rgb(255,0,0);
+}
+
+.caption { 
+	display: block;
+	font-size: 80%;
+    font-family: Verdana, Arial, sans-serif;
+    text-align: center; 
+}
+
 .working {
     background: gainsboro;
 }
+
 .waiting {
     color: dimgray;
 }
+
+.ngs-detils-table {
+	/*text-align: center;*/
+}
+
+.hoverable:hover {
+  color: blueviolet;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.single-ngs-result-table {
+	margin:auto;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+.single-ngs-result-table td {
+	padding:8px;
+}
+
+.tab {
+	margin-left:15px;
+}
+
+.ngs-start {
+	    background: gainsboro;
+}
+
+.ngs-start button{
+	color: darkblue;
+    font-weight: bold;
+}
+
+

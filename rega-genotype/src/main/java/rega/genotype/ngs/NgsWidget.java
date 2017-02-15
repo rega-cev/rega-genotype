@@ -18,8 +18,10 @@ import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.ngs.CovMap;
+import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
@@ -56,7 +58,7 @@ public class NgsWidget extends WContainerWidget{
 		WTable table = new WTable(this);
 		table.addStyleClass("ngs-detils-table");
 		table.setMargin(WLength.Auto);
-		
+
 		WTableRow preprocessingWidget = stateWidget(table,
 				"Preprocessing", model.getStateStartTime(State.Init), 
 				model.getStateStartTime(State.Diamond),
@@ -77,27 +79,29 @@ public class NgsWidget extends WContainerWidget{
 
 		if (!model.getErrors().isEmpty() )
 			new WText("<div class=\"error\">Error: " + model.getErrors() + "</div>", 
-					preprocessingWidget.elementAt(0));
+					preprocessingWidget.elementAt(1));
 
+		Template preprocessing = new Template(tr("ngs.qc-view"), preprocessingWidget.elementAt(1));
 		if (model.getState().code >= State.Preprocessing.code) {
-			new WText("<div> QC before preprocessing</div>", preprocessingWidget.elementAt(0));
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
-			addQC(qcDir, preprocessingWidget.elementAt(0));
+			preprocessing.bindWidget("qc-1", qcAnchor(qcDir, model.getFastqPE1FileName()));
+			preprocessing.bindWidget("qc-2", qcAnchor(qcDir, model.getFastqPE2FileName()));
 		}
 
 		if (model.getState().code >= State.Diamond.code) {
 			if (model.getSkipPreprocessing())
-				new WText("<div> input sequences are OK -> skip  preprocessing.</div>", preprocessingWidget.elementAt(0));
+				new WText("<div> input sequences are OK -> skip  preprocessing.</div>",
+						preprocessingWidget.elementAt(1));
 			else {
-				new WText("<div> QC after preprocessing</div>", preprocessingWidget.elementAt(0));
 				File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
-				addQC(qcDir, preprocessingWidget.elementAt(0));
+				preprocessing.bindWidget("qcp-1", qcAnchor(qcDir, model.getFastqPE1FileName()));
+				preprocessing.bindWidget("qcp-2", qcAnchor(qcDir, model.getFastqPE2FileName()));
 			}
 		}
 
 		if (model.getState().code == State.Diamond.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<div> Diamond blast job state:" + jobState + "</div>", filteringWidget.elementAt(0));
+			new WText("<div> Diamond blast job state:" + jobState + "</div>", filteringWidget.elementAt(1));
 		}
 
 		if (model.getState().code == State.Spades.code) {
@@ -128,7 +132,7 @@ public class NgsWidget extends WContainerWidget{
 					organismDefinition.getToolConfig(), workDir);
 			if (showSingleResult) { 
 				SingleResultView view = new SingleResultView(consensusModel, workDir);
-				table.getElementAt(table.getRowCount(), 0).addWidget(view);
+				table.getElementAt(table.getRowCount(), 1).addWidget(view);
 			} else {
 				consensusTable = new ResultsView(consensusModel, 
 						NgsConsensusSequenceModel.READ_COUNT_COLUMN,
@@ -161,11 +165,17 @@ public class NgsWidget extends WContainerWidget{
 			Integer startReads, Integer endReads){
 		WTableRow stateRow = table.insertRow(table.getRowCount());
 		new WText("<p><b><i>" + title + "</i></b></p>", 
-				stateRow.elementAt(0));
-		new WText("<p>" + printTime(startTime, endTime) + "</p>", stateRow.elementAt(1));
-		if (endReads != null)
-			new WText("<p>Started with " + startReads + " reads. " + (startReads - endReads) + " reads were removed.</p>",
-					stateRow.elementAt(0));
+				stateRow.elementAt(1));
+		stateRow.elementAt(0).setWidth(new WLength(70));
+		new WText("<p>" + printTime(startTime, endTime) + "</p>", stateRow.elementAt(0));
+		if (endReads != null) {
+			new WText("Started with " + startReads + " reads, ",
+					stateRow.elementAt(1));
+			WAnchor removedReads = new WAnchor(new WLink("TODO"),
+					(startReads - endReads) + " reads were removed.");
+			removedReads.setInline(true);
+			stateRow.elementAt(1).addWidget(removedReads);
+		}
 
 		//stateWidget.setMargin(10, Side.Bottom);
 
@@ -180,25 +190,31 @@ public class NgsWidget extends WContainerWidget{
 		}
 	}
 
-	private void addQC(File qcDir, WContainerWidget preprocessingWidget) {
+	private WAnchor qcAnchor(File qcDir, String inFileName) {
 		if (qcDir.listFiles() == null)
-			return;
+			return null;
 		File[] files = qcDir.listFiles();
 		Arrays.sort(files, new Comparator<File>() {
 			public int compare(File o1, File o2) {
 				return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
 			}
 		});
+
 		for (File f: files) {
 			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("html")){
-				WContainerWidget c = new WContainerWidget(preprocessingWidget);
-				new WText("QC report for ", c);
 				WFileResource r = new WFileResource("html", f.getAbsolutePath());
 				WLink link = new WLink(r);
 				link.setTarget(AnchorTarget.TargetNewWindow);
-				c.addWidget(new WAnchor(link, f.getName()));
+				String readsName = FileUtil.removeExtention(inFileName);
+				if (f.getName().contains(readsName)) {
+					WAnchor anchor = new WAnchor(link, readsName);
+					anchor.setInline(true);
+					anchor.setMargin(8);
+					return anchor;
+				}
 			}
 		}
+		return null;
 	}
 
 	public static WAnchor details(ConsensusBucket bucket, File workDir) {
