@@ -17,5 +17,9 @@
         <from>^/([^/]+)/typingtool/(.*)$</from>
         <to last="true" type="permanent-redirect">%{context-path}/typingtool/$1</to>
     </rule>
- 
+
+ 	<rule>
+        <from>/typingtool/(?!hiv)([^/]+)$</from>
+        <to last="true" type="permanent-redirect">%{context-path}/typingtool/$1/</to>
+    </rule>
 </urlrewrite>
