@@ -29,7 +29,7 @@ import eu.webtoolkit.jwt.chart.WPieChart;
  * @author michael
  */
 public class ChartTableWidget extends WContainerWidget{
-	protected WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
+	private WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
 	protected WPieChart chart;
 	protected WTable table = new WTable();
 	private int chartDataColumn;
@@ -47,15 +47,14 @@ public class ChartTableWidget extends WContainerWidget{
 	}
 
 	public void init() {
-		if (model.getRowCount() > 1)
-			createChart();
-		else
-			skipColumn.add(colorColumn);
+		createChart();
 		initTable();
 	}
 
-	private void createChart() {
-		addWidget(chartContainer);
+	protected WContainerWidget createChart() {
+		//addWidget(chartContainer);
+		chartContainer.addWidget(new WText(
+				"<b class=\"ngs-chart-title\">Approximate Reads Count</b>"));
 		chart = new WPieChart() {
 			@Override
 			protected void drawLabel(WPainter painter, WRectF rect,
@@ -73,13 +72,10 @@ public class ChartTableWidget extends WContainerWidget{
 		chartContainer.addWidget(chart);
 		chartContainer.setPositionScheme(PositionScheme.Relative);
 
-		chartContainer.resize(800, 300);
-		chartContainer.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
-		chartContainer.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+		chartContainer.resize(270, 270);
+		chartContainer.setMargin(30, Side.Left);
 
-		chart.resize(800, 300);
-		chart.setMargin(new WLength(30), EnumSet.of(Side.Top, Side.Bottom));
-		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
+		chart.resize(270, 270);
 		chart.setStartAngle(90);
 
 		chart.setModel(model);
@@ -87,6 +83,8 @@ public class ChartTableWidget extends WContainerWidget{
 		chart.setDisplayLabels(LabelOption.Outside, LabelOption.TextLabel);
 		chart.setPlotAreaPadding(30);
 		chart.setPalette(chartPalette);
+
+		return chartContainer;
 	}
 
 	private String formatDouble(Double d) {
@@ -163,5 +161,9 @@ public class ChartTableWidget extends WContainerWidget{
 			table.getElementAt(row + 1, tableCol(column)).addWidget(a);
 		} else
 			addText(row + 1, tableCol(column), model.getData(row, column));
+	}
+
+	public WContainerWidget getChartContainer() {
+		return chartContainer;
 	}
 }

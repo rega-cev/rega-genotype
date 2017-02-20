@@ -157,14 +157,12 @@ public class NgsDetailsForm extends AbstractForm{
 		s.setFillRange(FillRangeType.MinimumValueFill);
 		chart.addSeries(s);
 		chart.resize(new WLength(800), new WLength(400));
-		chart.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 
 		WAxisSliderWidget sliderWidget = new WAxisSliderWidget(s);
 
 		sliderWidget.resize(new WLength(800), new WLength(80));
 		sliderWidget.setSelectionAreaPadding(40, EnumSet.of(Side.Left,
 				Side.Right));
-		sliderWidget.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 
 	    //wcon
 	    WAnchor samAnchor = new WAnchor(samLink(bucket, refType));

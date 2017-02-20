@@ -38,6 +38,7 @@
     <message id="startForm.ngs">
   		<h2>NGS: Upload pair-end reads. Supported formats: fastq or compressed fastq (zip, gz) </h2>
     </message> 	
+    <message id="startForm.upload-fastq-se">Single end:</message>
     <message id="startForm.upload-fastq-1">Pair end 1:</message>
     <message id="startForm.upload-fastq-2">Pair end 2:</message>
     <message id="startForm.upload-fastq">Upload FASTQ files</message>
@@ -51,16 +52,25 @@
   	<message id="startForm.ioError">I/O error reading the sequence.</message>
 
   	<message id="startForm.ngs-widget">
-		<div class="ngs-start">
+		<div class="ngs-start">		
 			${tr:startForm.ngs}
-
-			<p><b>${tr:startForm.upload-fastq}</b></p>
-			<p class="tab">${tr:startForm.upload-fastq-1}${fastq-upload1}${fastq-upload1-info}</p>
-			<p class="tab">${tr:startForm.upload-fastq-2}${fastq-upload2}${fastq-upload2-info}</p>
+			<p><b>${tr:startForm.upload-fastq}</b> ${fastq-type}</p>
+			${<if-pe>} 
+				<table class="ngs-start-table">
+					<tr><td>${tr:startForm.upload-fastq-1}</td><td>${fastq-upload1}</td><td>${fastq-upload1-info}</td></tr>
+					<tr><td>${tr:startForm.upload-fastq-2}</td><td>${fastq-upload2}</td><td>${fastq-upload2-info}</td></tr>
+				</table>
+			${</if-pe>} 
+			${<if-se>}
+				<table class="ngs-start-table">
+					<tr><td>${tr:startForm.upload-fastq-se}</td><td>${fastq-upload-se}</td><td>${fastq-upload-se-info}</td></tr>
+				</table>
+			${</if-se>}
 			<p><b>Or let the server download the files for you.</b></p>
 			<p class="tab">Enter the Run Number and Download SRA file. Example: ERR233413</p>
 			<p class="tab">Download srr file: ${srr}</p>
 			${fastq-start}
+			<div class="ngs-start-advanced">${advanced}</div>
 		</div>
   	</message>
 
@@ -84,13 +94,17 @@
 			<td>${qc-1}</td>
 			<td>${qc-2}</td>
 		</tr>
+		${<if-preprocessing>}
 		<tr>
 			<td>After preprocessing</td>
 			<td>${qcp-1}</td>
 			<td>${qcp-2}</td>
 		</tr>
+		${</if-preprocessing>}
 	</table>
 	</message>
+
+	
 
 	<message id="monitorForm.cancelButton">Cancel job</message>
   	<message id="monitorForm.analysisInProgress">
@@ -120,15 +134,15 @@
 	
 	<message id="detailsForm.summary.title"><h2><i>Summary</i></h2></message>
 	<message id="detailsForm.summary.assignment">Rega Assignment</message>
-	<message id="detailsForm.summary.numberSeqs">sequences #</message>
+	<message id="detailsForm.summary.numberSeqs">Sequences Count</message>
 	<message id="detailsForm.summary.percentage">Percentage</message>
 	<message id="detailsForm.summary.src">Source</message>
 	<message id="detailsForm.summary.legend">Legend</message>
 	<message id="detailsForm.summary.total-len">Coverage (%)</message>
-	<message id="detailsForm.summary.read-cunt">Approximate Reads count</message>
-	<message id="detailsForm.summary.deep-cov">Approximate depth of coverage</message>
-	<message id="detailsForm.summary.image">Coverage image</message>
-	<message id="detailsForm.summary.contig-count"># Contigs</message>
+	<message id="detailsForm.summary.read-cunt">Approximate Reads Count</message>
+	<message id="detailsForm.summary.deep-cov">Approximate Depth Of Coverage</message>
+	<message id="detailsForm.summary.image">Coverage Image</message>
+	<message id="detailsForm.summary.contig-count">Contigs Count</message>
 	<message id="detailsForm.summary.downloads">Downloads</message>
 	<message id="detailsForm.summary.details">Details</message>
 

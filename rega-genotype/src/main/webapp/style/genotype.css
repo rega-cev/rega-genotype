@@ -76,7 +76,7 @@ table.jobTable td, table.jobTable th, div.jobTable td, div.jobTable th {
 	border-bottom: 1px inset gray;
 	padding: 0.5em;
 	text-align: left;
-	line-height: 60px;
+	line-height: 40px;
 }
 
 table.reftable td, table.reftable th,
@@ -240,10 +240,11 @@ h1 {
 
 .note, .footer {
 	padding: 0.5em 3em 0.5em 0.5em;
-	background-color: rgb(221, 221, 255);
+	background-color: #B2D7EE;
 	display: block;
 	/*width: 80%;*/
 	margin: 0px auto;
+    border-radius: 10px;
 }
 
 .footer{
@@ -257,10 +258,9 @@ h1 {
 	border-color: black;
 	border-style: solid;
 	border-width: 1px 0px 1px 0px;
-	/*width: 80%;*/
+	/*width: 80%;
 	height: 30px;
-	padding: 1em;
-
+	padding: 1em;*/
 }
 
 .nav_main { 
@@ -355,7 +355,7 @@ span.refseq{
 }
 
 .monitor-form{
-	text-align: center;
+	/*text-align: center;*/
 }
 
 .analysisProgress{
@@ -483,10 +483,11 @@ table.reftable caption, .blastResultsTable table caption {
 }
 */
 .rivm-header div#application {
+ 	padding-left: 25px;
+	/*
 	background-color: #eaf7ff;
  	height: 30px;
- 	padding-left: 25px;
- 	/*width: 100%;*/
+ 	width: 100%;*/
 }
 
 .rivm-header span#name {
@@ -507,6 +508,7 @@ table.reftable caption, .blastResultsTable table caption {
 	margin-left: auto;
 	margin-right: auto;
 	width: 1200px;
+	padding-left: 25px;
 }
 
 .error-text {
@@ -529,7 +531,9 @@ table.reftable caption, .blastResultsTable table caption {
 }
 
 .ngs-detils-table {
-	/*text-align: center;*/
+	/*text-align: center;
+	width: 100%;*/
+	min-width: 450px;
 }
 
 .hoverable:hover {
@@ -543,7 +547,17 @@ table.reftable caption, .blastResultsTable table caption {
 	margin-bottom: 10px;
 	margin-top: 10px;
 }
+
 .single-ngs-result-table td {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.single-ngs-result-table td {
+	padding:8px;
+}
+
+.ngs-start-table td {
 	padding:8px;
 }
 
@@ -552,12 +566,52 @@ table.reftable caption, .blastResultsTable table caption {
 }
 
 .ngs-start {
-	    background: gainsboro;
+	background: rgb(197, 197, 253);
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
 }
 
 .ngs-start button{
 	color: darkblue;
     font-weight: bold;
+}
+
+.ngs-chart-title {
+    margin-left: 43px;
+}
+
+/* change wt wpanel */
+
+.ngs-start-advanced .Wt-panel {
+	margin-top: 10px;
+    border: 1px solid #888888;
+    background: rgb(197, 197, 253) none repeat scroll 0%;
+}
+
+.ngs-start-advanced .Wt-panel .titlebar {
+    padding: 0px 6px 3px;
+    background: rgb(197, 197, 253);
+    color: darkblue;
+    font-size: 10pt;
+}
+
+.ngs-start-advanced .Wt-panel .body {
+    background: rgb(197, 197, 253);
+    padding: 4px 6px 4px;
+    -webkit-backface-visibility: hidden;
+    clear: left;
+}
+
+/* flex */
+.flex-container {
+  display: flex; /* or inline-flex */
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.flex-elem {
+  flex: 1 0px; 
 }
 
 

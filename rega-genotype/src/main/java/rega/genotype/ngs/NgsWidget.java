@@ -21,7 +21,6 @@ import rega.genotype.ui.ngs.CovMap;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
-import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
@@ -54,10 +53,15 @@ public class NgsWidget extends WContainerWidget{
 		clear();
 
 		new WText("<h2> NGS Analysis Results </h2>", this);
+
+		WContainerWidget horizontalLayout = new WContainerWidget(this);
+		horizontalLayout.addStyleClass("flex-container");
+
+		WTable table = new WTable(horizontalLayout);
+		table.addStyleClass("ngs-detils-table flex-elem");
 		
-		WTable table = new WTable(this);
-		table.addStyleClass("ngs-detils-table");
-		table.setMargin(WLength.Auto);
+		table.getElementAt(0, 1).addWidget(new WText(
+				"NGS Analysis of " + model.getInputName()));
 
 		WTableRow preprocessingWidget = stateWidget(table,
 				"Preprocessing", model.getStateStartTime(State.Init), 
@@ -154,6 +158,8 @@ public class NgsWidget extends WContainerWidget{
 							NgsConsensusSequenceModel.READ_COUNT_COLUMN});
 
 				addWidget(consensusTable);
+				horizontalLayout.addWidget(consensusTable.getChartContainer());
+				consensusTable.getChartContainer().addStyleClass("flex-elem");
 			}
 		}
 

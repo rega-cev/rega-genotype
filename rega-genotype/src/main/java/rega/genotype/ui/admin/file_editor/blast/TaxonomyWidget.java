@@ -12,6 +12,7 @@ import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 import rega.genotype.ui.framework.widgets.StandardItemModelSearchProxy;
 import eu.webtoolkit.jwt.SelectionBehavior;
 import eu.webtoolkit.jwt.SelectionMode;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
@@ -57,6 +58,7 @@ public class TaxonomyWidget extends WContainerWidget {
 		tree.setSelectionMode(SelectionMode.SingleSelection);
 		tree.setHeight(new WLength(400));
 		tree.setSortingEnabled(true);
+		tree.setMargin(10, Side.Top);
 
 		searchLE.textInput().addListener(searchLE, new Signal.Listener() {
 			public void trigger() {
