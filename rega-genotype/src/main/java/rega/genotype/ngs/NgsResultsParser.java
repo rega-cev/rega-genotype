@@ -52,17 +52,25 @@ public class NgsResultsParser extends GenotypeResultParser{
 	public void endReportElement(String tag, GenotypeResultParser parser,
 			NgsResultsModel model) {
 		if (tag.equals("init")) {
+			model.setSkipPreprocessing(GenotypeLib.getEscapedValue(parser,
+					"/genotype_result/init/skip-preprocessing").equals("true"));
 			model.setFastqPE1FileName(GenotypeLib.getEscapedValue(parser,
 					"/genotype_result/init/pe-1-file"));
 			model.setFastqPE2FileName(GenotypeLib.getEscapedValue(parser,
 					"/genotype_result/init/pe-2-file"));
+			model.setFastqSEFileName(GenotypeLib.getEscapedValue(parser,
+					"/genotype_result/init/se-file"));
 			model.readStateTime(State.Init, 0L);
 			model.readStateTime(State.QC, Long.parseLong(GenotypeLib.getEscapedValue(parser,
 					"/genotype_result/init/end-time-ms")));
 		} else if (tag.equals("qc1")) {
-			model.readStateTime(State.Preprocessing, Long.parseLong(
-					GenotypeLib.getEscapedValue(parser,
-							"/genotype_result/qc1/end-time-ms")));
+			if (model.getSkipPreprocessing())
+				model.readStateTime(State.Diamond, Long.parseLong(GenotypeLib.getEscapedValue(parser,
+						"/genotype_result/init/end-time-ms")));
+			else
+				model.readStateTime(State.Preprocessing, Long.parseLong(
+						GenotypeLib.getEscapedValue(parser,
+								"/genotype_result/qc1/end-time-ms")));
 			model.setReadLength(Integer.parseInt(
 					GenotypeLib.getEscapedValue(parser,
 							"/genotype_result/qc1/read-length")));

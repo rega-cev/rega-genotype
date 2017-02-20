@@ -31,7 +31,6 @@ import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.Contig;
 import rega.genotype.ngs.model.DiamondBucket;
 import rega.genotype.ngs.model.NgsResultsModel.State;
-import rega.genotype.singletons.Settings;
 import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.tools.blast.BlastTool;
@@ -96,6 +95,10 @@ public class NgsAnalysis {
 		return Assemble.spadesAssemble(sequenceFile1, sequenceFile2, workDir, virusName, ngsModule, ngsLogger);
 	}
 
+	protected File assemble(File sequenceFile, String virusName) throws ApplicationException {
+		return Assemble.spadesAssemble(sequenceFile, workDir, virusName, ngsModule, ngsLogger);
+	}
+
 	/**
 	 * Contract long virus contigs from ngs output. 
 	 * Steps:QC (FastQC), pre-processing (Trimmomatic),
@@ -107,7 +110,7 @@ public class NgsAnalysis {
 
 		ngsResults.setStateStart(State.QC);
 
-		boolean needPreprocessing = true;// TODO true -> always preproces // for now we base it only on adapter content.
+		boolean needPreprocessing = !ngsResults.getModel().getSkipPreprocessing();
 		File fastqDir = NgsFileSystem.fastqDir(ngsResults);
 		try {
 			QC.qcReport(fastqDir.listFiles(),
@@ -116,8 +119,9 @@ public class NgsAnalysis {
 
 			List<QcResults> qcresults = QC.getResults(new File(workDir, NgsFileSystem.QC_REPORT_DIR));
 			for (QcResults qcr: qcresults) {
-				if (qcr.adapterContent == Result.Fail)
-					needPreprocessing = true;
+				if (qcr.adapterContent == Result.Fail){
+					//needPreprocessing = true; TODO
+				}
 			}
 
 			QcData qcData = new QC.QcData(QC.qcReportFile(workDir));
@@ -146,15 +150,21 @@ public class NgsAnalysis {
 				return false;
 			}
 
-			File preprocessed1 = NgsFileSystem.preprocessedPE1(ngsResults);
-			File preprocessed2 = NgsFileSystem.preprocessedPE2(ngsResults);
-
 			ngsResults.setStateStart(State.QC2);
 
 			// QC 2
 
+			File[] qc2In;
+			if (ngsResults.getModel().isPairEnd()) {
+				File preprocessed1 = NgsFileSystem.preprocessedPE1(ngsResults);
+				File preprocessed2 = NgsFileSystem.preprocessedPE2(ngsResults);
+				qc2In = new File[] {preprocessed1, preprocessed2};
+			} else {
+				File preprocessed = NgsFileSystem.preprocessedSE(ngsResults);
+				qc2In = new File[] {preprocessed};
+			}
 			try {
-				QC.qcReport(new File[] {preprocessed1, preprocessed2}, 
+				QC.qcReport(qc2In, 
 						new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR),
 						workDir);
 
@@ -278,21 +288,32 @@ public class NgsAnalysis {
 		if (!virusDiamondDir.isDirectory())
 			return false;
 
-		String fastqPE1FileName = NgsFileSystem.fastqPE1(ngsResults).getName();
-		String fastqPE2FileName = NgsFileSystem.fastqPE2(ngsResults).getName();
-
-		File sequenceFile1 = new File(virusDiamondDir, fastqPE1FileName);
-		File sequenceFile2 = new File(virusDiamondDir, fastqPE2FileName);
-
 		DiamondBucket basketData = ngsResults.getModel().getDiamondBlastResults().get(virusDiamondDir.getName());
 		if (ngsModule.getMinReadsToStartAssembly() > basketData.getReadCountTotal())
 			return false; // no need to assemble if there is not enough reads.
 
 		try {
 			long startAssembly = System.currentTimeMillis();
+			File assembledFile;
 
-			File assembledFile = assemble(
-					sequenceFile1, sequenceFile2, virusDiamondDir.getName());
+			String fastqFileName;
+
+			if (ngsResults.getModel().isPairEnd()) {
+				String fastqPE1FileName = NgsFileSystem.fastqPE1(ngsResults).getName();
+				String fastqPE2FileName = NgsFileSystem.fastqPE2(ngsResults).getName();
+				fastqFileName = fastqPE1FileName;
+
+				File sequenceFile1 = new File(virusDiamondDir, fastqPE1FileName);
+				File sequenceFile2 = new File(virusDiamondDir, fastqPE2FileName);
+				assembledFile = assemble(
+						sequenceFile1, sequenceFile2, virusDiamondDir.getName());
+			} else {
+				fastqFileName = NgsFileSystem.fastqSE(ngsResults).getName();
+
+				File sequenceFile = new File(virusDiamondDir, fastqFileName);
+				assembledFile = assemble(
+						sequenceFile, virusDiamondDir.getName());
+			}
 			if (assembledFile == null)
 				return false;
 
@@ -355,8 +376,8 @@ public class NgsAnalysis {
 
 				int i = 0;
 				for (AbstractSequence s: consensusAlignment.getSequences()) {
-					String[] split = fastqPE1FileName.split("_");
-					String fastqFileId = (split.length > 0) ? split[0] : fastqPE1FileName;
+					String[] split = fastqFileName.split("_");
+					String fastqFileId = (split.length > 0) ? split[0] : fastqFileName;
 					String refAC = "AC";
 					if (refseqName.contains("_ref_"))
 						refAC = refseqName.split("_ref_")[0];

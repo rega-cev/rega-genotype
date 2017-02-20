@@ -53,8 +53,13 @@ public class NgsResultsTracer extends ResultTracer{
 	// ngs-results.xml is written incrementally -> every step needs to be written separately.
 	public void printInit() {
 		printlnOpenElement("init");
-		add("pe-1-file", model.getFastqPE1FileName());
-		add("pe-2-file", model.getFastqPE2FileName());
+		if (model.isPairEnd()) {
+			add("pe-1-file", model.getFastqPE1FileName());
+			add("pe-2-file", model.getFastqPE2FileName());
+		} else {
+			add("se-file", model.getFastqSEFileName());
+		}
+		add("skip-preprocessing", model.getSkipPreprocessing().toString());
 		add("end-time-ms", time());
 		printlnCloseLastElement();
 		w.flush();
@@ -151,7 +156,6 @@ public class NgsResultsTracer extends ResultTracer{
 	public void printFatalError(String error) {
 		model.setErrors(error);
 		add("error", error);
-		printStop();
 	}
 
 	public void setStateStart(State state) {

@@ -1,8 +1,6 @@
 package rega.genotype.ngs;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import rega.genotype.ApplicationException;
@@ -36,47 +34,49 @@ public class Preprocessing{
 	 * @throws ApplicationException
 	 * TODO: delete - not used
 	 */
-	public static List<File> trimomatic(NgsResultsTracer ngsResults, Logger logger) throws ApplicationException {
-		File sequenceFile1 = NgsFileSystem.fastqPE1(ngsResults);
-		File sequenceFile2 = NgsFileSystem.fastqPE2(ngsResults);
-
+	public static void trimomatic(NgsResultsTracer ngsResults, Logger logger) throws ApplicationException {
 		File ngsModulePath = Settings.getInstance().getConfig().trimomaticPath();
 		if (ngsModulePath == null)
 			throw new ApplicationException("NGS module is missing contact server admin.");
 
-		String trimmomaticPath = Settings.getInstance().getConfig().trimomaticPath().getAbsolutePath();
-		String adaptersFilePath = Settings.getInstance().getConfig().adaptersFilePath().getAbsolutePath();
-
-		String trimmomaticCmd = "java -Xmx1000m -jar " + trimmomaticPath + " PE -threads 1 ";
-		String trimmomaticOptions = " ILLUMINACLIP:" + adaptersFilePath + ":2:30:10 HEADCROP:15 LEADING:10 TRAILING:10 SLIDINGWINDOW:4:20 MINLEN:50";
-
-		String inputFileNames = sequenceFile1.getAbsolutePath() + " " + sequenceFile2.getAbsolutePath();
-
 		File preprocessedDir = new File(ngsResults.getWorkDir(),
 				NgsFileSystem.PREPROCESSED_DIR);
 		preprocessedDir.mkdirs();
-		NgsFileSystem.preprocessedPE1(ngsResults);
-		
-		File paired1 = NgsFileSystem.createPreprocessedPE1(ngsResults.getWorkDir(), sequenceFile1.getName());
-		File paired2 = NgsFileSystem.createPreprocessedPE2(ngsResults.getWorkDir(), sequenceFile2.getName());
 
-		File unpaired1 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile1.getName());
-		File unpaired2 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile2.getName());
+		String inputFileNames;
+		String outoutFileNames;
+		String inType = ngsResults.getModel().isPairEnd() ? " PE " : " SE ";
+		if (ngsResults.getModel().isPairEnd()) {
+			File sequenceFile1 = NgsFileSystem.fastqPE1(ngsResults);
+			File sequenceFile2 = NgsFileSystem.fastqPE2(ngsResults);
 
-		String outoutFileNames = paired1.getAbsolutePath()
-				+ " " + unpaired1 .getAbsolutePath()
-				+ " " + paired2.getAbsolutePath()
-				+ " " + unpaired2.getAbsolutePath();
+			File paired1 = NgsFileSystem.createPreprocessedPE1(ngsResults.getWorkDir(), sequenceFile1.getName());
+			File paired2 = NgsFileSystem.createPreprocessedPE2(ngsResults.getWorkDir(), sequenceFile2.getName());
+
+			File unpaired1 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile1.getName());
+			File unpaired2 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile2.getName());
+
+			inputFileNames = sequenceFile1.getAbsolutePath() + " " + sequenceFile2.getAbsolutePath();
+
+			outoutFileNames = paired1.getAbsolutePath()
+					+ " " + unpaired1 .getAbsolutePath()
+					+ " " + paired2.getAbsolutePath()
+					+ " " + unpaired2.getAbsolutePath();
+		} else {
+			File sequenceFile = NgsFileSystem.fastqSE(ngsResults);
+			File out = NgsFileSystem.createPreprocessedSE(ngsResults.getWorkDir(), sequenceFile.getName());
+			inputFileNames = sequenceFile.getAbsolutePath();
+			outoutFileNames = out.getAbsolutePath();
+		}
+
+		String trimmomaticPath = Settings.getInstance().getConfig().trimomaticPath().getAbsolutePath();
+		String adaptersFilePath = Settings.getInstance().getConfig().adaptersFilePath().getAbsolutePath();
+
+		String trimmomaticCmd = "java -Xmx1000m -jar " + trimmomaticPath + inType + " -threads 4 ";
+		String trimmomaticOptions = " ILLUMINACLIP:" + adaptersFilePath + ":2:30:10 HEADCROP:15 LEADING:10 TRAILING:10 SLIDINGWINDOW:4:20 MINLEN:50";
 
 		String cmd = trimmomaticCmd + " " + inputFileNames + " " + outoutFileNames + " " + trimmomaticOptions;
 
 		NgsFileSystem.executeCmd(cmd, ngsResults.getWorkDir(), logger);
-
-		List<File> ans = new ArrayList<File>();
-		ans.add(paired1);
-		ans.add(paired2);
-		ans.add(unpaired1);
-		ans.add(unpaired2);
-		return ans;
 	}
 }

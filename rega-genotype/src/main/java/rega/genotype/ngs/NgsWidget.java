@@ -82,20 +82,28 @@ public class NgsWidget extends WContainerWidget{
 					preprocessingWidget.elementAt(1));
 
 		Template preprocessing = new Template(tr("ngs.qc-view"), preprocessingWidget.elementAt(1));
+		preprocessing.bindEmpty("qc-1");
+		preprocessing.bindEmpty("qc-2");
+		preprocessing.bindEmpty("qcp-1");
+		preprocessing.bindEmpty("qcp-2");
+		preprocessing.setCondition("if-preprocessing", !model.getSkipPreprocessing());
 		if (model.getState().code >= State.Preprocessing.code) {
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
-			preprocessing.bindWidget("qc-1", qcAnchor(qcDir, model.getFastqPE1FileName()));
-			preprocessing.bindWidget("qc-2", qcAnchor(qcDir, model.getFastqPE2FileName()));
+			if (model.isPairEnd()) {
+				preprocessing.bindWidget("qc-1", qcAnchor(qcDir, model.getFastqPE1FileName()));
+				preprocessing.bindWidget("qc-2", qcAnchor(qcDir, model.getFastqPE2FileName()));
+			} else {
+				preprocessing.bindWidget("qc-1", qcAnchor(qcDir, model.getFastqSEFileName()));
+			}
 		}
 
 		if (model.getState().code >= State.Diamond.code) {
-			if (model.getSkipPreprocessing())
-				new WText("<div> input sequences are OK -> skip  preprocessing.</div>",
-						preprocessingWidget.elementAt(1));
-			else {
-				File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
+			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
+			if (model.isPairEnd()) {
 				preprocessing.bindWidget("qcp-1", qcAnchor(qcDir, model.getFastqPE1FileName()));
 				preprocessing.bindWidget("qcp-2", qcAnchor(qcDir, model.getFastqPE2FileName()));
+			} else {
+				preprocessing.bindWidget("qcp-1", qcAnchor(qcDir, model.getFastqSEFileName()));
 			}
 		}
 

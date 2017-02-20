@@ -43,6 +43,9 @@ import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
 import eu.webtoolkit.jwt.WApplication;
+import eu.webtoolkit.jwt.WButtonGroup;
+import eu.webtoolkit.jwt.WCheckBox;
+import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WImage;
 import eu.webtoolkit.jwt.WInteractWidget;
@@ -51,8 +54,10 @@ import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WMouseEvent;
+import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WProgressBar;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WRadioButton;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
@@ -65,6 +70,10 @@ public class StartForm extends AbstractForm {
 	private WTextArea sequenceTA;
 	private FileUpload fileUpload;
 	private String fileUploadFasta;
+	private WButtonGroup fastqTypeGroup;
+	private WRadioButton fastqPe;
+	private WRadioButton fastqSe;
+	private WFileUpload fastqFileUploadSe;
 	private WFileUpload fastqFileUpload1;
 	private WFileUpload fastqFileUpload2;
 	private WPushButton fastqStart;
@@ -212,21 +221,57 @@ public class StartForm extends AbstractForm {
 		return FilenameUtils.getBaseName(fileName) + ".fastq";
 	}
 
-	private void initNgs(final Template t) {
+	private static WFileUpload createFileUpload() {
+		WFileUpload u = new WFileUpload();
+		u.setProgressBar(new WProgressBar());
+		u.setFilters(".fastq,.zip,.gz");
+		u.setMargin(10, Side.Left);
+		u.setInline(true);
+		return u;
+	}
+
+	private void initNgs(final Template topTemplate) {
 		final Template ngsTemplate = new Template(tr("startForm.ngs-widget"));
-		t.bindWidget("start-form.ngs-widget", ngsTemplate);
+		topTemplate.bindWidget("start-form.ngs-widget", ngsTemplate);
 
-		fastqFileUpload1 = new WFileUpload();
-		fastqFileUpload1.setProgressBar(new WProgressBar());
-		fastqFileUpload1.setFilters(".fastq,.zip,.gz");
-		fastqFileUpload1.setMargin(10, Side.Left);
-
-		fastqFileUpload2 = new WFileUpload();
-		fastqFileUpload2.setProgressBar(new WProgressBar());
-		fastqFileUpload2.setFilters(".fastq,.zip,.gz");
-		fastqFileUpload2.setMargin(10, Side.Left);
+		fastqFileUpload1 = createFileUpload();
+		fastqFileUpload2 = createFileUpload();
+		fastqFileUploadSe = createFileUpload();
 
 		fastqStart = new WPushButton("Start NGS analysis");
+
+		WContainerWidget fastqTypeGroupContainer = new WContainerWidget();
+		fastqTypeGroupContainer.setInline(true);
+
+		fastqSe = new WRadioButton("Single end read", fastqTypeGroupContainer);
+		fastqPe = new WRadioButton("Pair end read", fastqTypeGroupContainer);
+		fastqSe.setInline(true);
+		fastqPe.setInline(true);
+
+		fastqTypeGroup = new WButtonGroup();
+		fastqTypeGroup.addButton(fastqPe);
+		fastqTypeGroup.addButton(fastqSe);
+		fastqTypeGroup.setCheckedButton(fastqPe);
+
+		final WPanel advancedPanel = new WPanel();
+		final WContainerWidget advancedC = new WContainerWidget();
+
+		final WCheckBox skipPreprocessing = new WCheckBox(
+				"Skip preprocessing", advancedC);
+
+		advancedPanel.setCollapsible(true);
+		advancedPanel.setCollapsed(true);
+		advancedPanel.setCentralWidget(advancedC);
+		advancedPanel.setTitle("Advanced options");
+
+		ngsTemplate.setCondition("if-pe", true);
+
+		fastqTypeGroup.checkedChanged().addListener(fastqTypeGroup, new Signal1.Listener<WRadioButton>() {
+			public void trigger(WRadioButton arg) {
+				ngsTemplate.setCondition("if-pe", arg.equals(fastqPe));
+				ngsTemplate.setCondition("if-se", arg.equals(fastqSe));
+			}
+		});
 
 		fastqFileUpload1.fileTooLarge().addListener(fastqFileUpload1, new Signal1.Listener<Long>() {
 			public void trigger(Long arg) {
@@ -239,6 +284,13 @@ public class StartForm extends AbstractForm {
 			public void trigger(Long arg) {
 				long maxRequestSize = WApplication.getInstance().getEnvironment().getServer().getConfiguration().getMaxRequestSize() / (1000*1000*1000);
 				ngsTemplate.bindString("fastq-upload2-info", "File too large. Max file size = " + maxRequestSize + " GB");
+			}
+		});
+
+		fastqFileUploadSe.fileTooLarge().addListener(fastqFileUpload2, new Signal1.Listener<Long>() {
+			public void trigger(Long arg) {
+				long maxRequestSize = WApplication.getInstance().getEnvironment().getServer().getConfiguration().getMaxRequestSize() / (1000*1000*1000);
+				ngsTemplate.bindString("fastq-upload-se-info", "File too large. Max file size = " + maxRequestSize + " GB");
 			}
 		});
 
@@ -269,7 +321,10 @@ public class StartForm extends AbstractForm {
 					} else // use uploaded files.
 						startNgsAnalysis(ngsResults);
 				} else {
-					fastqFileUpload1.upload();
+					if (fastqTypeGroup.getCheckedButton().equals(fastqPe))
+						fastqFileUpload1.upload();
+					else
+						fastqFileUploadSe.upload();
 				}
 			}
 		});
@@ -326,10 +381,11 @@ public class StartForm extends AbstractForm {
 						FileUtils.copyFile(fastqFile1, extructedFastqPE1);
 						FileUtils.copyFile(fastqFile2, extructedFastqPE2);
 					}
-					
+
 					NgsResultsTracer ngsResults = new NgsResultsTracer(workDir);
+					ngsResults.getModel().setSkipPreprocessing(skipPreprocessing.isChecked());
 					NgsFileSystem.addFastqFiles(ngsResults, extructedFastqPE1, extructedFastqPE2);
-	
+
 					startNgsAnalysis(ngsResults);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -337,11 +393,50 @@ public class StartForm extends AbstractForm {
 			}
 		});
 
+		fastqFileUploadSe.uploaded().addListener(fastqFileUploadSe, new Signal.Listener() {
+			public void trigger() {
+				File fastqFile = new File(fastqFileUploadSe.getSpoolFileName());
+
+				final File workDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getJobDir());
+
+				try {
+					File fastqDir = new File(workDir, NgsFileSystem.FASTQ_FILES_DIR);
+					fastqDir.mkdirs();
+
+					new File(fastqDir, fastqFileUploadSe.getClientFileName());
+
+					File extructedFastqSE = new File(fastqDir, fastqFileUploadSe.getClientFileName());
+
+					if (FilenameUtils.getExtension(fastqFileUploadSe.getClientFileName()).equals("gz")) {
+						extructedFastqSE = new File(fastqDir, setFastqExtention(fastqFileUploadSe.getClientFileName()));
+						FileUtil.unGzip1File(fastqFile, extructedFastqSE);
+					} else if (FilenameUtils.getExtension(fastqFileUploadSe.getClientFileName()).equals("zip")){ // compressed .zip
+						extructedFastqSE = new File(fastqDir, setFastqExtention(fastqFileUploadSe.getClientFileName()));
+						FileUtil.unzip1File(fastqFile, extructedFastqSE);
+					} else { // not compressed
+						FileUtils.copyFile(fastqFile, extructedFastqSE);
+					}
+
+					NgsResultsTracer ngsResults = new NgsResultsTracer(workDir);
+					ngsResults.getModel().setSkipPreprocessing(skipPreprocessing.isChecked());
+					NgsFileSystem.addFastqSE(ngsResults, extructedFastqSE);
+
+					startNgsAnalysis(ngsResults);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		ngsTemplate.bindWidget("advanced", advancedPanel);
 		ngsTemplate.bindWidget("fastq-start", fastqStart);
 		ngsTemplate.bindWidget("fastq-upload1", fastqFileUpload1);
 		ngsTemplate.bindWidget("fastq-upload2", fastqFileUpload2);
+		ngsTemplate.bindWidget("fastq-upload-se", fastqFileUploadSe);
+		ngsTemplate.bindWidget("fastq-type", fastqTypeGroupContainer);
 		ngsTemplate.bindEmpty("fastq-upload1-info");
 		ngsTemplate.bindEmpty("fastq-upload2-info");
+		ngsTemplate.bindEmpty("fastq-upload-se-info");
 
 		if (Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath().isEmpty())
 			ngsTemplate.bindEmpty("srr");

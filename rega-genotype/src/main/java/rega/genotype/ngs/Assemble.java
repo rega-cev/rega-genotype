@@ -24,16 +24,31 @@ public class Assemble {
 	public static File spadesAssemble(File sequenceFile1, File sequenceFile2,
 			File workDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException {
 
+		String in = " -1 " + sequenceFile1.getAbsolutePath();
+		in       += " -2 " + sequenceFile2.getAbsolutePath();
+
+		return spadesAssemble(in, workDir, virusName, ngsModule, logger);
+	}
+
+	public static File spadesAssemble(File sequenceFile,
+			File workDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException {
+
+		String in = " -s " + sequenceFile.getAbsolutePath();
+
+		return spadesAssemble(in, workDir, virusName, ngsModule, logger);
+	}
+
+	public static File spadesAssemble(String inputCmd,
+			File workDir, String virusName, NgsModule ngsModule, Logger logger) throws ApplicationException {
+
 		long startTime = System.currentTimeMillis();
 
 		File contigsDir = new File(workDir, NgsFileSystem.contigsDir(virusName));
 		contigsDir.mkdirs();
 
 		String cmd = Settings.getInstance().getConfig().getGeneralConfig().getSpadesCmd();
-		// TODO: now only pair-ends
-		cmd += " -1 " + sequenceFile1.getAbsolutePath();
-		cmd += " -2 " + sequenceFile2.getAbsolutePath();
 
+		cmd += inputCmd;
 		cmd += " -o " + contigsDir.getAbsolutePath();
 		cmd += " --threads 6 " + ngsModule.getSpadesOptions();
 
@@ -59,8 +74,8 @@ public class Assemble {
 		if (!ans.exists())
 			throw new ApplicationException("Spades did not create contigs file.");
 
-		System.err.println("Assembly time for: " + sequenceFile1.getName() + " is: " + (startTime - System.currentTimeMillis()));
-		
+		System.err.println("Assembly time : " + (startTime - System.currentTimeMillis()));
+
 		return ans;
 	}
 }

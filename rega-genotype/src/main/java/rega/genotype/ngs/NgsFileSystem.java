@@ -43,7 +43,8 @@ public class NgsFileSystem {
 	public static final String PREPROCESSED_DIR = "preprocessed-fastq";
 	public static final String PREPROCESSED_PE1_DIR = PREPROCESSED_DIR + File.separator + "PE1";
 	public static final String PREPROCESSED_PE2_DIR = PREPROCESSED_DIR + File.separator + "PE2";
-	
+	public static final String PREPROCESSED_SE_DIR = PREPROCESSED_DIR + File.separator + "SE";
+
 	public static final String PREPROCESSED_FILE_NAMR_UNPAIRD = "unpaird_";
 	public static final String CONTIGS_FILE = Constants.SEQUENCES_FILE_NAME; // contigs will be passed to sub typing tool
 	public static final String CONSENSUSES_FILE = "consensuses.fasta";
@@ -97,6 +98,38 @@ public class NgsFileSystem {
 					FileUtils.moveFile(fastqPE2, fastqPE2Copy);
 				else
 					FileUtils.copyFile(fastqPE2, fastqPE2Copy);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return false;
+		}
+
+		return true;
+	}
+	public static boolean addFastqSE(NgsResultsTracer ngsProgress, File fastqSE) {
+		return addFastqSE(ngsProgress, fastqSE, false);
+	}
+
+	public static boolean addFastqSE(NgsResultsTracer ngsProgress, File fastqSE, boolean deleteOldFile) {
+		if (!fastqSE.exists()) 
+    		return false;
+
+		File fastqDir = new File(ngsProgress.getWorkDir(), FASTQ_FILES_DIR);
+		fastqDir.mkdirs();
+
+		ngsProgress.getModel().setFastqSEFileName(fastqSE.getName());
+
+		ngsProgress.setStateStart(State.Init);
+		ngsProgress.printInit();
+
+		try {
+			File fastqSECopy = new File(fastqDir, fastqSE.getName());
+
+			if (!fastqSE.getAbsolutePath().equals(fastqSECopy.getAbsolutePath()))
+				if (deleteOldFile)
+					FileUtils.moveFile(fastqSE, fastqSECopy);
+				else
+					FileUtils.copyFile(fastqSE, fastqSECopy);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -249,12 +282,23 @@ public class NgsFileSystem {
 		return ans;
 	}
 
+	public static File preprocessedSEDir(File workDir) {
+		File ans = new File(workDir, PREPROCESSED_SE_DIR);
+		if (!ans.exists())
+			ans.mkdirs();
+		return ans;
+	}
+
 	public static File createPreprocessedPE1(File workDir, String fileName) {
 		return new File(preprocessedPE1Dir(workDir), fileName);
 	}
 
 	public static File createPreprocessedPE2(File workDir, String fileName) {
 		return new File(preprocessedPE2Dir(workDir), fileName);
+	}
+
+	public static File createPreprocessedSE(File workDir, String fileName) {
+		return new File(preprocessedSEDir(workDir), fileName);
 	}
 
 	public static File preprocessedPE1(NgsResultsTracer ngsResults) {
@@ -276,6 +320,16 @@ public class NgsFileSystem {
 		if (preprocessedPE2Dir.listFiles().length != 1)
 			return null;
 		return preprocessedPE2Dir.listFiles()[0];
+	}
+
+	public static File preprocessedSE(NgsResultsTracer ngsResults) {
+		if (ngsResults.getModel().getSkipPreprocessing())
+			return fastqSE(ngsResults);
+
+		File preprocessedSEDir = preprocessedSEDir(ngsResults.getWorkDir());
+		if (preprocessedSEDir.listFiles().length != 1)
+			return null;
+		return preprocessedSEDir.listFiles()[0];
 	}
 
 	public static void executeCmd(String cmd, File workDir, Logger logger) throws ApplicationException{

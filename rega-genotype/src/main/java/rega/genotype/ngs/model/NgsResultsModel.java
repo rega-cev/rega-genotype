@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import rega.genotype.utils.FileUtil;
+
 /**
  * Represents all the data from ngs-results.xml
  * 
@@ -66,7 +68,7 @@ public class NgsResultsModel {
 	public Integer getReadCountStartState(State state) {
 		switch (state) {
 		case Diamond:
-			return readCountAfterPrepocessing;
+			return skipPreprocessing ? readCountInit : readCountAfterPrepocessing;
 		case FinishedAll:
 			break; // TODO, unused
 		case Init:
@@ -76,7 +78,7 @@ public class NgsResultsModel {
 		case QC:
 			return readCountInit;
 		case QC2:
-			return readCountAfterPrepocessing;
+			return skipPreprocessing ? readCountInit : readCountAfterPrepocessing ;
 		case Spades:
 			return totalReadCountAfterfiltering();
 		}
@@ -105,6 +107,18 @@ public class NgsResultsModel {
 	public void setSpadesErrors(List<String> spadesErrors) {
 		this.spadesErrors = spadesErrors;
 	}
+
+	public String getInputName() {
+		if (isPairEnd()) {
+			if (fastqPE1FileName != null)
+				return FileUtil.removeExtention(fastqPE1FileName);
+		} else if (fastqSEFileName != null){
+			return FileUtil.removeExtention(fastqSEFileName);
+		}
+
+		return null;
+	}
+
 	public String getFastqPE1FileName() {
 		return fastqPE1FileName;
 	}
@@ -162,5 +176,9 @@ public class NgsResultsModel {
 	}
 	public List<ConsensusBucket> getConsensusBuckets() {
 		return consensusBuckets;
+	}
+
+	public boolean isPairEnd() {
+		return fastqSEFileName == null;
 	}
 }

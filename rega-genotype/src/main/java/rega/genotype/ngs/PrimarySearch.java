@@ -299,8 +299,6 @@ public class PrimarySearch{
 	 * @throws ApplicationException
 	 */
 	public static void diamondSearch(NgsResultsTracer ngsResults, NgsModule ngsModule, Logger logger) throws ApplicationException {
-		File preprocessedPE1 = NgsFileSystem.preprocessedPE1(ngsResults);
-		File preprocessedPE2 = NgsFileSystem.preprocessedPE2(ngsResults);
 
 		File workDir = ngsResults.getWorkDir();
 		File diamondDir = new File(workDir, NgsFileSystem.DIAMOND_BLAST_DIR);
@@ -308,14 +306,19 @@ public class PrimarySearch{
 			diamondDir.mkdirs();
 		}
 		File fastqMerge = null;
-		try {
-			fastqMerge = megerFiles(diamondDir, preprocessedPE1, preprocessedPE2);
-		} catch (IOException e) {
-			throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
-		} catch (FileFormatException e) {
-			throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
-		} 
-
+		if (ngsResults.getModel().isPairEnd()) {
+			File preprocessedPE1 = NgsFileSystem.preprocessedPE1(ngsResults);
+			File preprocessedPE2 = NgsFileSystem.preprocessedPE2(ngsResults);
+			try {
+				fastqMerge = megerFiles(diamondDir, preprocessedPE1, preprocessedPE2);
+			} catch (IOException e) {
+				throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
+			} catch (FileFormatException e) {
+				throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
+			} 
+		} else {
+			fastqMerge = NgsFileSystem.preprocessedSE(ngsResults);
+		}
 		ngsResults.setStateStart(State.Diamond);
 
 		File matches = null;
@@ -331,7 +334,14 @@ public class PrimarySearch{
 			resultDiamondDir.mkdirs();
 		}
 		try {
-			File[] preprocessedFiles = {preprocessedPE1, preprocessedPE2};
+			File[] preprocessedFiles;
+			if (ngsResults.getModel().isPairEnd()){
+				File preprocessedPE1 = NgsFileSystem.preprocessedPE1(ngsResults);
+				File preprocessedPE2 = NgsFileSystem.preprocessedPE2(ngsResults);
+				preprocessedFiles = new  File[] {preprocessedPE1, preprocessedPE2};
+			} else
+				preprocessedFiles = new  File[] {NgsFileSystem.preprocessedSE(ngsResults)};
+
 			creatDiamondResults(resultDiamondDir, view,  preprocessedFiles, ngsResults, logger);
 		} catch (FileFormatException e) {
 			throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
