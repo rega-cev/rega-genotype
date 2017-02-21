@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import rega.genotype.ApplicationException;
+import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WTime;
 import eu.webtoolkit.jwt.WWidget;
 
@@ -177,5 +178,13 @@ public class Utils {
 			s = "" + (i * z);
 		}
 		return "~" + s;
+	}
+
+	public static String getInternalPathLastComponenet(WApplication app) {
+		String[] internalPath = app.getInternalPath().split("/");
+		if (internalPath.length == 0)
+			return "";
+		else
+			return internalPath[internalPath.length - 1];
 	}
 }

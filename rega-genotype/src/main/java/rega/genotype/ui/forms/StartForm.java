@@ -42,6 +42,8 @@ import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.StandardButton;
+import eu.webtoolkit.jwt.TextFormat;
+import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WButtonGroup;
 import eu.webtoolkit.jwt.WCheckBox;
@@ -54,7 +56,6 @@ import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WMouseEvent;
-import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WProgressBar;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WRadioButton;
@@ -253,16 +254,22 @@ public class StartForm extends AbstractForm {
 		fastqTypeGroup.addButton(fastqSe);
 		fastqTypeGroup.setCheckedButton(fastqPe);
 
-		final WPanel advancedPanel = new WPanel();
+		boolean isAdvanced = Utils.getInternalPathLastComponenet(
+				WApplication.getInstance()).equals("advanced");
+
 		final WContainerWidget advancedC = new WContainerWidget();
+		final WContainerWidget advancedContent = new WContainerWidget(advancedC);
+		advancedContent.setHidden(!isAdvanced);
 
+		new WText("<p><b>Advanced options</b></p>", TextFormat.XHTMLText, advancedContent);
 		final WCheckBox skipPreprocessing = new WCheckBox(
-				"Skip preprocessing", advancedC);
+				"Skip preprocessing", advancedContent);
 
-		advancedPanel.setCollapsible(true);
-		advancedPanel.setCollapsed(true);
-		advancedPanel.setCentralWidget(advancedC);
-		advancedPanel.setTitle("Advanced options");
+		final WAnchor showAdvanced = new WAnchor(advancedC);
+		showAdvanced.setText("Show advanced options");
+		showAdvanced.setMargin(10, Side.Top);
+		showAdvanced.setLink(new WLink("advanced"));
+		showAdvanced.setHidden(isAdvanced);
 
 		ngsTemplate.setCondition("if-pe", true);
 
@@ -428,7 +435,7 @@ public class StartForm extends AbstractForm {
 			}
 		});
 		
-		ngsTemplate.bindWidget("advanced", advancedPanel);
+		ngsTemplate.bindWidget("advanced", advancedC);
 		ngsTemplate.bindWidget("fastq-start", fastqStart);
 		ngsTemplate.bindWidget("fastq-upload1", fastqFileUpload1);
 		ngsTemplate.bindWidget("fastq-upload2", fastqFileUpload2);

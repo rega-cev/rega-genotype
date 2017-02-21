@@ -569,6 +569,7 @@ table.reftable caption, .blastResultsTable table caption {
     border-radius: 10px;
     padding: 10px;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .ngs-start button{
@@ -581,6 +582,9 @@ table.reftable caption, .blastResultsTable table caption {
 }
 
 /* change wt wpanel */
+.ngs-start-advanced {
+	margin-top: 10px;
+}
 
 .ngs-start-advanced .Wt-panel {
 	margin-top: 10px;
