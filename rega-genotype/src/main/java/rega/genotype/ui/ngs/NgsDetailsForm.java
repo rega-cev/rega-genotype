@@ -140,40 +140,56 @@ public class NgsDetailsForm extends AbstractForm{
 
 		Template template = new Template(tr("cov-map"), covMapContainer); 
 
-		final WCartesianChart chart = new WCartesianChart();
-		chart.setBackground(new WBrush(new WColor(220, 220, 220)));
-		chart.setModel(covMapModel);
-		chart.setType(ChartType.ScatterPlot);
-
-		final SequenceAxis sequenceAxis = new SequenceAxis(
-				bucket.getConsensusSequence());
-		chart.setAxis(sequenceAxis, Axis.XAxis);
-
-		chart.getAxis(Axis.XAxis).setScale(AxisScale.LinearScale);
-		chart.getAxis(Axis.XAxis).setMaximum(covMapModel.getRowCount());
-		chart.getAxis(Axis.XAxis).setMinimumZoomRange(10);
-
-		WDataSeries s = new WDataSeries(0, SeriesType.LineSeries);
-		s.setFillRange(FillRangeType.MinimumValueFill);
-		chart.addSeries(s);
-		chart.resize(new WLength(800), new WLength(400));
-
-		WAxisSliderWidget sliderWidget = new WAxisSliderWidget(s);
-
-		sliderWidget.resize(new WLength(800), new WLength(80));
-		sliderWidget.setSelectionAreaPadding(40, EnumSet.of(Side.Left,
-				Side.Right));
-
-	    //wcon
-	    WAnchor samAnchor = new WAnchor(samLink(bucket, refType));
-	    samAnchor.setText("SAM file");
-	    WAnchor bamAnchor = new WAnchor(bamLink(bucket, refType));
-	    bamAnchor.setText("BAM file");
-
 	    int totalCov = 0;
 	    int totalContigsLength = (int) bucket.getTotalContigsLen();
 	    for (Integer cov: covMapModel.getObjects())
 	    	totalCov += cov;
+
+	    if (totalCov != 0) {
+	    	final WCartesianChart chart = new WCartesianChart();
+	    	chart.setBackground(new WBrush(new WColor(220, 220, 220)));
+	    	chart.setModel(covMapModel);
+	    	chart.setType(ChartType.ScatterPlot);
+
+	    	final SequenceAxis sequenceAxis = new SequenceAxis(
+	    			bucket.getConsensusSequence());
+	    	chart.setAxis(sequenceAxis, Axis.XAxis);
+
+	    	chart.getAxis(Axis.XAxis).setScale(AxisScale.LinearScale);
+	    	chart.getAxis(Axis.XAxis).setMaximum(covMapModel.getRowCount());
+	    	chart.getAxis(Axis.XAxis).setMinimumZoomRange(10);
+
+	    	WDataSeries s = new WDataSeries(0, SeriesType.LineSeries);
+	    	s.setFillRange(FillRangeType.MinimumValueFill);
+	    	chart.addSeries(s);
+	    	chart.resize(new WLength(800), new WLength(400));
+
+	    	WAxisSliderWidget sliderWidget = new WAxisSliderWidget(s);
+
+	    	sliderWidget.resize(new WLength(800), new WLength(80));
+	    	sliderWidget.setSelectionAreaPadding(40, EnumSet.of(Side.Left,
+	    			Side.Right));
+	    	
+			template.bindWidget("map", chart);
+			template.bindWidget("slider", sliderWidget);
+
+	    	if (chart.getAxis(Axis.YAxis).getLabelInterval() < 1.0)
+	    		chart.getAxis(Axis.YAxis).setLabelInterval(1.0);
+
+			sequenceAxis.zoomRangeChanged().addListener(chart, new Signal2.Listener<Double, Double>() {
+				public void trigger(Double min, Double max) {
+					chart.update();
+				}
+			});
+	    } else {
+	    	template.bindWidget("map", new WText("Coverage map could not be created."));
+			template.bindEmpty("slider");
+	    }
+
+	    WAnchor samAnchor = new WAnchor(samLink(bucket, refType));
+	    samAnchor.setText("SAM file");
+	    WAnchor bamAnchor = new WAnchor(bamLink(bucket, refType));
+	    bamAnchor.setText("BAM file");
 
 	    try {
 		    Integer readCount = refType == RefType.Refrence ? countRefReads(bucket) : countConsensusReads(bucket);
@@ -185,17 +201,8 @@ public class NgsDetailsForm extends AbstractForm{
 
     	template.bindString("deep-cov", "" + (totalCov / totalContigsLength));
     	template.bindString("title", tr("cov-map.consensus-title"));
-    	
-		template.bindWidget("map", chart);
-		template.bindWidget("slider", sliderWidget);
 		template.bindWidget("sam", samAnchor);
 		template.bindWidget("bam", bamAnchor);
-
-		sequenceAxis.zoomRangeChanged().addListener(chart, new Signal2.Listener<Double, Double>() {
-			public void trigger(Double min, Double max) {
-				chart.update();
-			}
-		});
 	}
 
 	public File samFile(final ConsensusBucket bucket, final RefType refType) throws ApplicationException {
