@@ -508,8 +508,7 @@
 
 	</message>
 
-	<message id="cov-map.consensus-title">Coverage map: alignment of all sequences in the bucket against the consensus sequence.</message>
-	<message id="cov-map.ref-title">Coverage map: alignment of all sequences in the bucket against the reference sequence.</message>
+	<message id="cov-map.consensus-title">Coverage map: alignment of the reads against the chosen reference sequence.</message>
 
 	<message id="cov-map">
 		<p><b>${title}</b></p>
@@ -521,7 +520,8 @@
 			<div>Exact depth of coverage = ${deep-cov}</div>
 		</p>
 		<p><b>Downloads</b></p>
-		<p>${sam} ${bam}</p>
+		<p>${sam}</p> 
+		<p>${bam}</p>
 	</message>
 
 	<message id="choose-cov-map-type-text">

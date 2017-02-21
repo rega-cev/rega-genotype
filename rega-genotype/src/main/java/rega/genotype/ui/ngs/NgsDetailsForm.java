@@ -166,9 +166,9 @@ public class NgsDetailsForm extends AbstractForm{
 
 	    //wcon
 	    WAnchor samAnchor = new WAnchor(samLink(bucket, refType));
-	    samAnchor.setText("sequence-alignment.sam");
+	    samAnchor.setText("SAM file");
 	    WAnchor bamAnchor = new WAnchor(bamLink(bucket, refType));
-	    bamAnchor.setText("sequence-alignment.bam");
+	    bamAnchor.setText("BAM file");
 
 	    int totalCov = 0;
 	    int totalContigsLength = (int) bucket.getTotalContigsLen();
@@ -184,7 +184,7 @@ public class NgsDetailsForm extends AbstractForm{
 		}
 
     	template.bindString("deep-cov", "" + (totalCov / totalContigsLength));
-    	template.bindString("title", refType == RefType.Refrence ? tr("cov-map.ref-title") : tr("cov-map.consensus-title"));
+    	template.bindString("title", tr("cov-map.consensus-title"));
     	
 		template.bindWidget("map", chart);
 		template.bindWidget("slider", sliderWidget);
