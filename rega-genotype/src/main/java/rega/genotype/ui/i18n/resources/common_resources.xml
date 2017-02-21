@@ -36,11 +36,12 @@
   		<h2>C) Or, revisit results from a previous run:</h2>
     </message>
     <message id="startForm.ngs">
-  		<h2>NGS: Upload pair-end reads. Supported formats: fastq or compressed fastq (zip, gz) </h2>
+  		<h2>NGS: Upload paired-end reads.</h2>
     </message> 	
+    <message id="startForm.upload-format">Supported formats: fastq or compressed fastq (zip, gz)</message>
     <message id="startForm.upload-fastq-se">Single end:</message>
-    <message id="startForm.upload-fastq-1">Pair end 1:</message>
-    <message id="startForm.upload-fastq-2">Pair end 2:</message>
+    <message id="startForm.upload-fastq-1">Paired end 1:</message>
+    <message id="startForm.upload-fastq-2">Paired end 2:</message>
     <message id="startForm.upload-fastq">Upload FASTQ files</message>
 
   	<message id="startForm.labelJobId">Job-id:</message>
@@ -55,6 +56,7 @@
 		<div class="ngs-start">		
 			${tr:startForm.ngs}
 			<p><b>${tr:startForm.upload-fastq}</b> ${fastq-type}</p>
+			<p>${tr:startForm.upload-format}</p>
 			${<if-pe>} 
 				<table class="ngs-start-table">
 					<tr><td>${tr:startForm.upload-fastq-1}</td><td>${fastq-upload1}</td><td>${fastq-upload1-info}</td></tr>
@@ -133,16 +135,16 @@
 	<message id="detailsForm.nonExistingSequenceId">Sequence id {1} doesn't exist</message>
 	
 	<message id="detailsForm.summary.title"><h2><i>Summary</i></h2></message>
-	<message id="detailsForm.summary.assignment">Rega Assignment</message>
-	<message id="detailsForm.summary.numberSeqs">Sequences Count</message>
+	<message id="detailsForm.summary.assignment">Rega assignment</message>
+	<message id="detailsForm.summary.numberSeqs">Sequences count</message>
 	<message id="detailsForm.summary.percentage">Percentage</message>
 	<message id="detailsForm.summary.src">Source</message>
 	<message id="detailsForm.summary.legend">Legend</message>
 	<message id="detailsForm.summary.total-len">Coverage (%)</message>
-	<message id="detailsForm.summary.read-cunt">Approximate Reads Count</message>
-	<message id="detailsForm.summary.deep-cov">Approximate Depth Of Coverage</message>
-	<message id="detailsForm.summary.image">Coverage Image</message>
-	<message id="detailsForm.summary.contig-count">Contigs Count</message>
+	<message id="detailsForm.summary.read-cunt">Approx. reads count</message>
+	<message id="detailsForm.summary.deep-cov">Approx. depth of coverage</message>
+	<message id="detailsForm.summary.image">Coverage image</message>
+	<message id="detailsForm.summary.contig-count">Contigs count</message>
 	<message id="detailsForm.summary.downloads">Downloads</message>
 	<message id="detailsForm.summary.details">Details</message>
 

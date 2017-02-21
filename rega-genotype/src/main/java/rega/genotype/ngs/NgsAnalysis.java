@@ -330,7 +330,7 @@ public class NgsAnalysis {
 					return false;
 				}
 			// fill sequences.fasta'
-			File sequencesFile = new File(workDir, NgsFileSystem.CONTIGS_FILE);
+			File sequencesFile = new File(workDir, Constants.SEQUENCES_FILE_NAME);
 			if (!sequencesFile.exists())
 				try {
 					sequencesFile.createNewFile();

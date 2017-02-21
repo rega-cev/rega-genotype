@@ -104,7 +104,7 @@ public class ChartTableWidget extends WContainerWidget{
 		return text;
 	}
 
-	protected void addText(int row, int column, Object o) {
+	public void addText(int row, int column, Object o) {
 		String text = getText(o);
 		if (text != null)
 			table.getElementAt(row, column).addWidget(

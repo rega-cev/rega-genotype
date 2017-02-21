@@ -26,7 +26,6 @@ import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
-import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableRow;
@@ -151,14 +150,16 @@ public class NgsWidget extends WContainerWidget{
 						palette, workDir);
 				consensusTable.init();
 
-				if (consensusModel.getRowCount() > 1)
-					consensusTable.addTotalsRow(new int[]{
-							NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN,
-							NgsConsensusSequenceModel.READ_COUNT_COLUMN});
+				if (consensusModel.getRowCount() > 1){
+					int row = table.getRowCount();
+					consensusTable.addText(row, 0, "Totals");
+					consensusTable.addTotals(NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN, false);
+					consensusTable.addTotals(NgsConsensusSequenceModel.READ_COUNT_COLUMN, true);
+				}
 
 				addWidget(consensusTable);
 				horizontalLayout.addWidget(consensusTable.getChartContainer());
-				consensusTable.getChartContainer().addStyleClass("flex-elem");
+				consensusTable.getChartContainer().addStyleClass("flex-elem-auto");
 			}
 		}
 
@@ -208,23 +209,20 @@ public class NgsWidget extends WContainerWidget{
 			break;
 		}
 
-		new WText("<p><b><i>" + title + "</i></b></p>", 
+		new WText("<p><b><i>" + title + "</i></b> (" + printTime(startTime, endTime) + ")</p>", 
 				stateRow.elementAt(1));
-		stateRow.elementAt(0).setWidth(new WLength(70));
-		new WText("<p>" + printTime(startTime, endTime) + "</p>", stateRow.elementAt(0));
 		if (endReads != null) {
 			new WText("Started with " + startReads + " reads, ",
 					stateRow.elementAt(1));
-			WAnchor removedReads;
-			if (state == State.Preprocessing)
-				removedReads = new WAnchor(new WLink("TODO"),
-					(startReads - endReads) + " reads that did not pass qc, were removed.");
-			else 
-				removedReads = new WAnchor(new WLink("TODO"),
-						(startReads - endReads) + " reads that did not appear to be viral, were removed.");
-
+			WAnchor removedReads = new WAnchor(new WLink("TODO"),(startReads - endReads) + " reads");
 			removedReads.setInline(true);
 			stateRow.elementAt(1).addWidget(removedReads);
+			if (state == State.Preprocessing)
+				new WText(" that did not pass qc, were removed.",
+						stateRow.elementAt(1));
+			else
+				new WText(" that did not appear to be viral, were removed.",
+						stateRow.elementAt(1));
 		}
 
 		//stateWidget.setMargin(10, Side.Bottom);
@@ -314,20 +312,22 @@ public class NgsWidget extends WContainerWidget{
 			}
 		}
 
-		public void addTotalsRow(int[] columns) {
-			int row = table.getRowCount();
+		public void addTotals(int c, boolean approx) {
+			int row = table.getRowCount() - 1;
 			addText(row, 0, "Totals");
-			for (int c: columns) {
-				double total = 0.0;
-				for (int r = 0; r < model.getRowCount(); ++r) {
-					Object data = model.getData(r, c);
-					if (data != null && data instanceof Double)
-						total += (Double)data;
-					else if(data != null && data instanceof Integer)
-						total += (Integer)data;
-				}
-				addText(row, c, Utils.toApproximateString(total));
+
+			double total = 0.0;
+			for (int r = 0; r < model.getRowCount(); ++r) {
+				Object data = model.getData(r, c);
+				if (data != null && data instanceof Double)
+					total += (Double)data;
+				else if(data != null && data instanceof Integer)
+					total += (Integer)data;
 			}
+			if (approx)
+				addText(row, c, Utils.toApproximateString(total));
+			else
+				addText(row, c, total);
 		}
 	}
 
