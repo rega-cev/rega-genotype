@@ -320,11 +320,20 @@ public class NgsAnalysis {
 			long endAssembly = System.currentTimeMillis();
 			ngsLogger.info("assembled " + virusDiamondDir.getName() + " = " + (endAssembly - startAssembly) + " ms");
 
-			// fill sequences.fasta'
 			File allContigsFile = new File(workDir, NgsFileSystem.CONTIGS_FILE);
 			if (!allContigsFile.exists())
 				try {
 					allContigsFile.createNewFile();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					ngsResults.printFatalError("assemble failed, could not create sequences.xml");
+					return false;
+				}
+			// fill sequences.fasta'
+			File sequencesFile = new File(workDir, NgsFileSystem.CONTIGS_FILE);
+			if (!sequencesFile.exists())
+				try {
+					sequencesFile.createNewFile();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 					ngsResults.printFatalError("assemble failed, could not create sequences.xml");
@@ -356,6 +365,7 @@ public class NgsAnalysis {
 
 			File consensusInputContigs = assembledFile;
 
+			boolean identified = false; // only identified consensus contigs are passed on to the sub typing tool.
 			for (AbstractSequence ref : refs.getSequences()) {
 				ngsLogger.info("Trying with " + ref.getName() + " " + ref.getDescription());
 				String refseqName = ref.getName().replaceAll("\\|", "_");
@@ -394,7 +404,7 @@ public class NgsAnalysis {
 					ngsResults.printAssemblybucketOpen(bucketData, contigs);
 					if (!contigs.isEmpty()){
 						s.setName(name);
-						tool.analyze(s); // add consensus alignment to results file.
+						identified = tool.analyzeBlast(s); // add consensus alignment to results file.
 						ngsResults.finishCurrentSequence();
 						i++;
 					}
@@ -406,6 +416,8 @@ public class NgsAnalysis {
 				if(contigsFile.exists() && contigsFile.length() != 0) {
 					FileUtil.appendToFile(contigsFile, allContigsFile);
 					FileUtil.appendToFile(consensusFile, allConsensusesFile);
+					if (identified)
+						FileUtil.appendToFile(contigsFile, sequencesFile);
 				}
 			}
 		} catch (Exception e) {

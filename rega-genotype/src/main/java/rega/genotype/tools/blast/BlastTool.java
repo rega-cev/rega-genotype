@@ -42,12 +42,16 @@ public class BlastTool extends GenotypeTool {
 
     @Override
     public void analyze(AbstractSequence s) throws AnalysisException {
+    	analyzeBlast(s);
+    }
+
+    public boolean analyzeBlast(AbstractSequence s) throws AnalysisException {
     	Result blastResult = blastAnalysis.run(s);
     	if (blastResult.haveSupport() && blastResult.getConcludedCluster() != null) {
     		Cluster c = blastResult.getConcludedCluster();
     		analyseClaster(c, s);
     	} 
-    	conclude(blastAnalysis, blastResult);
+    	return conclude(blastAnalysis, blastResult);
     }
 
     /**

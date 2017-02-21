@@ -1,8 +1,10 @@
 package rega.genotype.ngs;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -63,23 +65,9 @@ public class NgsWidget extends WContainerWidget{
 		table.getElementAt(0, 1).addWidget(new WText(
 				"NGS Analysis of " + model.getInputName()));
 
-		WTableRow preprocessingWidget = stateWidget(table,
-				"Preprocessing", model.getStateStartTime(State.Init), 
-				model.getStateStartTime(State.Diamond),
-				model.getReadCountStartState(State.Init),
-				model.getReadCountStartState(State.Diamond));
-
-		WTableRow filteringWidget = stateWidget(table,
-				State.Diamond.text, model.getStateStartTime(State.Diamond), 
-				model.getStateStartTime(State.Spades),
-				model.getReadCountStartState(State.Diamond),
-				model.getReadCountStartState(State.Spades));
-
-		WTableRow identificationWidget = stateWidget(table,
-				State.Spades.text, model.getStateStartTime(State.Spades), 
-				model.getStateStartTime(State.FinishedAll),
-				model.getReadCountStartState(State.Spades),
-				model.getReadCountStartState(State.FinishedAll));
+		WTableRow preprocessingWidget = addStateRow(table, State.Preprocessing, model);
+		WTableRow filteringWidget = addStateRow(table, State.Diamond, model);
+		WTableRow identificationWidget = addStateRow(table, State.Spades, model);
 
 		if (!model.getErrors().isEmpty() )
 			new WText("<div class=\"error\">Error: " + model.getErrors() + "</div>", 
@@ -134,13 +122,24 @@ public class NgsWidget extends WContainerWidget{
 			identificationWidget.addStyleClass("working");
 		}
 
-		boolean showSingleResult = !organismDefinition.getToolConfig().getToolMenifest().isBlastTool()
-				&& model.getConsensusBuckets().size() == 1;
+		boolean isBlastTool = organismDefinition.getToolConfig().getToolMenifest().isBlastTool();
+		boolean showSingleResult = !isBlastTool && model.getConsensusBuckets().size() == 1;
+
+		List<ConsensusBucket> consensusBuckets = new ArrayList<ConsensusBucket>();
+		if (isBlastTool) {
+			consensusBuckets.addAll(model.getConsensusBuckets());
+		} else {
+			for (ConsensusBucket b: model.getConsensusBuckets())
+				if (!b.getConcludedId().equals("Unassigned"))
+					consensusBuckets.add(b);
+		}
+
 		// consensus table.
-		if (!model.getConsensusBuckets().isEmpty()) {
+		if (!consensusBuckets.isEmpty()) {
 			WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
+
 			final NgsConsensusSequenceModel consensusModel = new NgsConsensusSequenceModel(
-					model.getConsensusBuckets(), model.getReadLength(), palette,
+					consensusBuckets, model.getReadLength(), palette,
 					organismDefinition.getToolConfig(), workDir);
 			if (showSingleResult) { 
 				SingleResultView view = new SingleResultView(consensusModel, workDir);
@@ -174,10 +173,41 @@ public class NgsWidget extends WContainerWidget{
 		subTypingHeaderT.show();
 	}
 
-	private WTableRow stateWidget(WTable table, String title, 
-			Long startTime, Long endTime,
-			Integer startReads, Integer endReads){
+	private WTableRow addStateRow(WTable table, State state, NgsResultsModel model){
 		WTableRow stateRow = table.insertRow(table.getRowCount());
+
+		String title = null;
+		Long startTime = null, endTime = null;
+		Integer startReads = null, endReads = null;
+
+		switch (state) {
+		case Init:
+		case QC:
+		case Preprocessing:
+		case QC2:
+			title = "Preprocessing";
+			startTime = model.getStateStartTime(State.Init);
+			endTime = model.getStateStartTime(State.Diamond);
+			startReads = model.getReadCountStartState(State.Init);
+			endReads = model.getReadCountStartState(State.Diamond);
+			break;
+		case Diamond:
+			title = State.Diamond.text;
+			startTime = model.getStateStartTime(State.Diamond); 
+			endTime = model.getStateStartTime(State.Spades);
+			startReads = model.getReadCountStartState(State.Diamond);
+			endReads = model.getReadCountStartState(State.Spades);
+			break;
+		case Spades:
+		case FinishedAll:
+			title = State.Spades.text;
+			startTime = model.getStateStartTime(State.Spades);
+			endTime = model.getStateStartTime(State.FinishedAll);
+			startReads = model.getReadCountStartState(State.Spades);
+			endReads = model.getReadCountStartState(State.FinishedAll);
+			break;
+		}
+
 		new WText("<p><b><i>" + title + "</i></b></p>", 
 				stateRow.elementAt(1));
 		stateRow.elementAt(0).setWidth(new WLength(70));
@@ -185,8 +215,14 @@ public class NgsWidget extends WContainerWidget{
 		if (endReads != null) {
 			new WText("Started with " + startReads + " reads, ",
 					stateRow.elementAt(1));
-			WAnchor removedReads = new WAnchor(new WLink("TODO"),
-					(startReads - endReads) + " reads were removed.");
+			WAnchor removedReads;
+			if (state == State.Preprocessing)
+				removedReads = new WAnchor(new WLink("TODO"),
+					(startReads - endReads) + " reads that did not pass qc, were removed.");
+			else 
+				removedReads = new WAnchor(new WLink("TODO"),
+						(startReads - endReads) + " reads that did not appear to be viral, were removed.");
+
 			removedReads.setInline(true);
 			stateRow.elementAt(1).addWidget(removedReads);
 		}

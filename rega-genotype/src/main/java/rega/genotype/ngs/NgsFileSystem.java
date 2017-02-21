@@ -46,7 +46,7 @@ public class NgsFileSystem {
 	public static final String PREPROCESSED_SE_DIR = PREPROCESSED_DIR + File.separator + "SE";
 
 	public static final String PREPROCESSED_FILE_NAMR_UNPAIRD = "unpaird_";
-	public static final String CONTIGS_FILE = Constants.SEQUENCES_FILE_NAME; // contigs will be passed to sub typing tool
+	public static final String CONTIGS_FILE = "contigs.fasta"; // contigs will be passed to sub typing tool
 	public static final String CONSENSUSES_FILE = "consensuses.fasta";
 
 	public static final String CONSENSUS_CONTIGS_FILE = "consensus-contigs.fasta";

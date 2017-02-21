@@ -341,7 +341,7 @@ public abstract class GenotypeTool {
         getTracer().printlnClose("</conclusion>");    	
     }
 
-    protected void conclude(BlastAnalysis blastAnalysis, Result blastResult) {
+    protected boolean conclude(BlastAnalysis blastAnalysis, Result blastResult) {
         if (blastResult.haveSupport() && blastResult.getConcludedCluster() != null) {
  			if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
    				conclude(blastResult, "Assigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
@@ -351,6 +351,7 @@ public abstract class GenotypeTool {
    			else if (blastAnalysis.getRelativeCutoff() != null)
    				conclude(blastResult, "Assigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
 
+ 			return true;
         } else {
            	if (blastAnalysis.getAbsCutoff() != null && blastAnalysis.getRelativeCutoff() != null)
    				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff() 
@@ -359,6 +360,8 @@ public abstract class GenotypeTool {
    				conclude("Unassigned", "Unassigned based on BLAST absolute score &gt;= " + blastAnalysis.getAbsCutoff(), null); 
    			else if (blastAnalysis.getRelativeCutoff() != null)
    				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
+
+           	return true;
         }
     }
     
