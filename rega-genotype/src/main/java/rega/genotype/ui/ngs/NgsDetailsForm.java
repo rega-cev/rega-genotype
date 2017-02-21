@@ -202,13 +202,17 @@ public class NgsDetailsForm extends AbstractForm{
 		File samFile = SamtoolsUtil.samFile(bucket, workDir, refType);
 		if (!samFile.exists())
 			samFile = createSamFile(bucket, refType);
-			
+
 		return samFile;
 	}
 
 	public File createSamFile(final ConsensusBucket bucket, final RefType refType) throws ApplicationException {
-		return SamtoolsUtil.createSamFile(bucket, workDir, 
-				model.getFastqPE1FileName(), model.getFastqPE2FileName(), refType);
+		if (model.isPairEnd())
+			return SamtoolsUtil.createSamFile(bucket, workDir, 
+					model.getFastqPE1FileName(), model.getFastqPE2FileName(), refType);
+		else 
+			return SamtoolsUtil.createSamFile(bucket, workDir, 
+					model.getFastqSEFileName(), refType);
 	}
 
 	public WLink samLink(final ConsensusBucket bucket, final RefType refType) {

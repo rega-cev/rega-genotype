@@ -33,20 +33,16 @@ public class SamtoolsUtil {
 					bucket.getDiamondBucket(), bucket.getRefName());
 	}
 
-	public static File createSamFile(final ConsensusBucket bucket, File jobDir, 
-			String pe1Name, String pe2Name, RefType refType) throws ApplicationException {
-		String bwaPath = Settings.getInstance().getConfig().getGeneralConfig().getBwaCmd();
-		File consensusFile = refType == RefType.Refrence ?
+	private static File consensusFile(final ConsensusBucket bucket, File jobDir,  RefType refType) {
+		return refType == RefType.Refrence ?
 				NgsFileSystem.consensusRefFile(jobDir, bucket.getDiamondBucket(), bucket.getRefName())
 				: NgsFileSystem.consensusFile(jobDir, bucket.getDiamondBucket(), bucket.getRefName());
+	}
 
-		File pe1 = NgsFileSystem.diamodPeFile(
-				jobDir, bucket.getDiamondBucket(), pe1Name);
-		File pe2 = NgsFileSystem.diamodPeFile(
-				jobDir, bucket.getDiamondBucket(), pe2Name);
+	public static void bwaAlign(final ConsensusBucket bucket, File jobDir, RefType refType) throws ApplicationException {
+		String bwaPath = Settings.getInstance().getConfig().getGeneralConfig().getBwaCmd();
 
-		File out = samFile(bucket, jobDir, refType);
-
+		File consensusFile = consensusFile(bucket, jobDir, refType);
 		File consensusDir = NgsFileSystem.consensusRefSeqDir(
 				NgsFileSystem.consensusDir(jobDir, bucket.getDiamondBucket()),
 				bucket.getRefName());
@@ -55,10 +51,45 @@ public class SamtoolsUtil {
 		String cmd = bwaPath + " index " + consensusFile.getAbsolutePath();
 		System.err.println(cmd);
 		Utils.executeCmd(cmd, consensusDir);
+	}
+
+	public static File createSamFile(final ConsensusBucket bucket, File jobDir, 
+			String pe1Name, String pe2Name, RefType refType) throws ApplicationException {
+		
+		String bwaPath = Settings.getInstance().getConfig().getGeneralConfig().getBwaCmd();
+		File out = samFile(bucket, jobDir, refType);
+
+		File consensusFile = consensusFile(bucket, jobDir, refType);
+
+		File pe1 = NgsFileSystem.diamodPeFile(
+				jobDir, bucket.getDiamondBucket(), pe1Name);
+		File pe2 = NgsFileSystem.diamodPeFile(
+				jobDir, bucket.getDiamondBucket(), pe2Name);
 
 		// ./bwa mem ref.fa read1.fq read2.fq > aln-pe.sam.gz
-		cmd = bwaPath + " mem " + consensusFile.getAbsolutePath()
+		String cmd = bwaPath + " mem " + consensusFile.getAbsolutePath()
 				+ " " + pe1.getAbsolutePath() + " " + pe2.getAbsolutePath() 
+				+ " > " + out.getAbsolutePath(); 
+		System.err.println(cmd);
+		Utils.execShellCmd(cmd, consensusFile);
+
+		return out;
+	}
+
+	public static File createSamFile(final ConsensusBucket bucket, File jobDir, 
+			String seName, RefType refType) throws ApplicationException {
+		
+		String bwaPath = Settings.getInstance().getConfig().getGeneralConfig().getBwaCmd();
+		File out = samFile(bucket, jobDir, refType);
+
+		File consensusFile = consensusFile(bucket, jobDir, refType);
+
+		File se = NgsFileSystem.diamodPeFile(
+				jobDir, bucket.getDiamondBucket(), seName);
+
+		// ./bwa mem ref.fa read1.fq read2.fq > aln-pe.sam.gz
+		String cmd = bwaPath + " mem " + consensusFile.getAbsolutePath()
+				+ " " + se.getAbsolutePath()
 				+ " > " + out.getAbsolutePath(); 
 		System.err.println(cmd);
 		Utils.execShellCmd(cmd, consensusFile);
