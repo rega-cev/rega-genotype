@@ -56,6 +56,8 @@ public class SamtoolsUtil {
 	public static File createSamFile(final ConsensusBucket bucket, File jobDir, 
 			String pe1Name, String pe2Name, RefType refType) throws ApplicationException {
 		
+		bwaAlign(bucket, jobDir, refType);
+
 		String bwaPath = Settings.getInstance().getConfig().getGeneralConfig().getBwaCmd();
 		File out = samFile(bucket, jobDir, refType);
 
@@ -78,7 +80,9 @@ public class SamtoolsUtil {
 
 	public static File createSamFile(final ConsensusBucket bucket, File jobDir, 
 			String seName, RefType refType) throws ApplicationException {
-		
+
+		bwaAlign(bucket, jobDir, refType);
+
 		String bwaPath = Settings.getInstance().getConfig().getGeneralConfig().getBwaCmd();
 		File out = samFile(bucket, jobDir, refType);
 
