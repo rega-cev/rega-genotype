@@ -243,7 +243,7 @@ h1 {
 	background-color: #B2D7EE;
 	display: block;
 	/*width: 80%;*/
-	margin: 0px auto;
+	margin: 10px auto;
     border-radius: 10px;
 }
 
@@ -532,7 +532,7 @@ table.reftable caption, .blastResultsTable table caption {
 .ngs-detils-table {
 	/*text-align: center;
 	width: 100%;*/
-	min-width: 450px;
+	min-width: 500px;
 }
 
 .hoverable:hover {
@@ -621,3 +621,8 @@ table.reftable caption, .blastResultsTable table caption {
     flex: 1 auto;
 }
 
+.link {
+    color: -webkit-link;
+    text-decoration: underline;
+    cursor: pointer;
+}
