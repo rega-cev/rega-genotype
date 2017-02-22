@@ -23,9 +23,10 @@
   	<message id="sequenceInput.inputSequenceInFastaFormat">
   		<p>You may either:</p>
   		  <ol style="list-style-type: upper-alpha">
-  		    <li>paste one or more sequences in FASTA format in the input field.</li>
-  		    <li>upload a FASTA file.</li>
-  		    <li>revisit results of a previous run</li>
+  		    <li>Paste one or more sequences in FASTA format in the input field.</li>
+  		    <li>Upload a FASTA file.</li>
+  		    <li>Revisit results of a previous run</li>
+  		    <li>Upload FASTQ files.</li>
   		  </ol>
   		<h2>A) Paste nucleotide sequence(s) in FASTA format:</h2>
     </message>
