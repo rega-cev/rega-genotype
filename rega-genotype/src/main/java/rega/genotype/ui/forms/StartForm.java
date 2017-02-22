@@ -37,6 +37,7 @@ import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
+import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
@@ -259,7 +260,6 @@ public class StartForm extends AbstractForm {
 
 		final WContainerWidget advancedC = new WContainerWidget();
 		final WContainerWidget advancedContent = new WContainerWidget(advancedC);
-		advancedContent.setHidden(!isAdvanced);
 
 		new WText("<p><b>Advanced options</b></p>", TextFormat.XHTMLText, advancedContent);
 		final WCheckBox skipPreprocessing = new WCheckBox(
@@ -268,9 +268,18 @@ public class StartForm extends AbstractForm {
 		final WAnchor showAdvanced = new WAnchor(advancedC);
 		showAdvanced.setText("Show advanced options");
 		showAdvanced.setMargin(10, Side.Top);
-		showAdvanced.setLink(new WLink("advanced"));
+		showAdvanced.addStyleClass("link");
+		
+		advancedContent.setHidden(!isAdvanced);
 		showAdvanced.setHidden(isAdvanced);
-
+		
+		showAdvanced.clicked().addListener(showAdvanced, new Signal.Listener() {
+			public void trigger() {
+				advancedContent.setHidden(false);
+				showAdvanced.setHidden(true);
+			}
+		});
+		
 		ngsTemplate.setCondition("if-pe", true);
 
 		fastqTypeGroup.checkedChanged().addListener(fastqTypeGroup, new Signal1.Listener<WRadioButton>() {
@@ -403,6 +412,14 @@ public class StartForm extends AbstractForm {
 		fastqFileUploadSe.uploaded().addListener(fastqFileUploadSe, new Signal.Listener() {
 			public void trigger() {
 				File fastqFile = new File(fastqFileUploadSe.getSpoolFileName());
+
+				if (fastqFileUploadSe.getSpoolFileName().isEmpty()) {
+					StandardDialog d = new StandardDialog("Upload first");
+					d.setWidth(new WLength(200));
+					d.addText("Can not run NGS analysis on empty files.");
+					d.getOkB().hide();
+					return;
+				}
 
 				final File workDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getJobDir());
 
