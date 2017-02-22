@@ -100,8 +100,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			}
 		} else if (role == ItemDataRole.LinkRole) {
 			ConsensusBucket bucket = buckets.get(index.getRow());
-			if (index.getColumn() == ASSINGMENT_COLUMN
-					|| index.getColumn() == SEQUENCE_COUNT_COLUMN) {
+			if (index.getColumn() == ASSINGMENT_COLUMN) {
 				return BlastJobOverviewForm.createToolLink(bucket.getConcludedTaxonomyId(),
 						jobDir.getName(), toolConfig);
 			}

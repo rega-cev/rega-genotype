@@ -53,8 +53,6 @@ public class NgsWidget extends WContainerWidget{
 	public void refresh(NgsResultsModel model, final OrganismDefinition organismDefinition) {
 		clear();
 
-		new WText("<h2> NGS Analysis Results </h2>", this);
-
 		WContainerWidget horizontalLayout = new WContainerWidget(this);
 		horizontalLayout.addStyleClass("flex-container");
 
@@ -150,12 +148,8 @@ public class NgsWidget extends WContainerWidget{
 						palette, workDir);
 				consensusTable.init();
 
-				if (consensusModel.getRowCount() > 1){
-					int row = table.getRowCount();
-					consensusTable.addText(row, 0, "Totals");
-					consensusTable.addTotals(NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN, false);
-					consensusTable.addTotals(NgsConsensusSequenceModel.READ_COUNT_COLUMN, true);
-				}
+				if (consensusModel.getRowCount() > 1)
+					consensusTable.addTotals();
 
 				addWidget(consensusTable);
 				horizontalLayout.addWidget(consensusTable.getChartContainer());
@@ -234,7 +228,7 @@ public class NgsWidget extends WContainerWidget{
 		if (startTime != null && endTime != null) {
 			return  Utils.formatTime(endTime - startTime);
 		} else {
-			return "";
+			return "--";
 		}
 	}
 
@@ -311,10 +305,14 @@ public class NgsWidget extends WContainerWidget{
 				break;
 			}
 		}
+		public void addTotals() {
+			addText(table.getRowCount(), 0, "Totals");
+			addTotals(NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN, false);
+			addTotals(NgsConsensusSequenceModel.READ_COUNT_COLUMN, true);
+		}
 
 		public void addTotals(int c, boolean approx) {
 			int row = table.getRowCount() - 1;
-			addText(row, 0, "Totals");
 
 			double total = 0.0;
 			for (int r = 0; r < model.getRowCount(); ++r) {
