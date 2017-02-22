@@ -345,7 +345,8 @@ public class NgsDetailsForm extends AbstractForm{
 
 		Integer ans = SamtoolsUtil.countReads(bam);
 
-		samtoolsResults = new SamtoolsResults();
+		if (samtoolsResults == null)
+			samtoolsResults = new SamtoolsResults();
 		try {
 			samtoolsResults.refReadCount = ans;
 		} catch (NumberFormatException e){
@@ -368,7 +369,8 @@ public class NgsDetailsForm extends AbstractForm{
 
 		Integer ans = SamtoolsUtil.countReads(bam);
 
-		samtoolsResults = new SamtoolsResults();
+		if (samtoolsResults == null)
+			samtoolsResults = new SamtoolsResults();
 		try {
 			samtoolsResults.consensusReadCount = ans;
 		} catch (NumberFormatException e){

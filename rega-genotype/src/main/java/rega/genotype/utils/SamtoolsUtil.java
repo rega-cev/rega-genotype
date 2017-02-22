@@ -104,7 +104,6 @@ public class SamtoolsUtil {
 		String samtoolsCmd = Settings.getInstance().getConfig().getGeneralConfig().getSamtoolsCmd();
 		String cmd = samtoolsCmd + " view -F 0x4 " + sortedBamFile.getAbsolutePath()
 		+ " | cut -f 1 | sort | uniq | wc -l";
-		System.err.println(cmd);
 
 		try {
 			return Integer.parseInt(Utils.execShellCmd(cmd));
