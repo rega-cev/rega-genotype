@@ -117,8 +117,14 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	@Override
 	public void init(String jobId, String filter) {
+		blastResultParser = null;
+
 		super.init(jobId, filter);
 
+		chartContainer.hide();
+		table.hide();
+		createChart();
+		
 		// table
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 		table.setSortingEnabled(false);
@@ -152,7 +158,6 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	@Override
 	public void handleInternalPath(String internalPath) {
 		createChart();
-		blastResultParser = null;
 
 		table.hide();
 		chartContainer.hide();
