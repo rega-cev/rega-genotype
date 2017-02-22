@@ -72,7 +72,6 @@ public class SamtoolsUtil {
 		String cmd = bwaPath + " mem " + consensusFile.getAbsolutePath()
 				+ " " + pe1.getAbsolutePath() + " " + pe2.getAbsolutePath() 
 				+ " > " + out.getAbsolutePath(); 
-		System.err.println(cmd);
 		Utils.execShellCmd(cmd, consensusFile);
 
 		return out;
@@ -95,7 +94,6 @@ public class SamtoolsUtil {
 		String cmd = bwaPath + " mem " + consensusFile.getAbsolutePath()
 				+ " " + se.getAbsolutePath()
 				+ " > " + out.getAbsolutePath(); 
-		System.err.println(cmd);
 		Utils.execShellCmd(cmd, consensusFile);
 
 		return out;

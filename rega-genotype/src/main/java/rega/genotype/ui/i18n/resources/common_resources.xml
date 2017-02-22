@@ -82,7 +82,7 @@
 			<!--<tr><td>${tr:detailsForm.summary.image}</td><td>${img}</td></tr>-->
 		    <tr><td>${tr:detailsForm.summary.read-cunt}</td><td>${read-count}</td></tr>
 		    <tr><td>${tr:detailsForm.summary.total-len}</td><td>${cov-len}</td></tr>
-		    <tr><td>${tr:detailsForm.summary.deep-cov}</td><td>${depth}</td></tr>
+		    <tr><td>${tr:detailsForm.summary.deep-cov}</td><td>${depth} (of the area covered by contigs)</td></tr>
 		    <tr><td>${tr:detailsForm.summary.downloads}</td><td>${xml} ${consensus}</td></tr>
 		    <tr><td>Alignment analysis</td><td>${details}</td></tr>
 		</table>
@@ -526,16 +526,14 @@
 		<p>${bam}</p>
 	</message>
 
-	<message id="choose-cov-map-type-text">
-		<div>What sequence would you like to use as a reference for mapping the reads: </div>
-		<div>The assembly consensus sequences of {1} or the reference sequence ({2}) </div>
-		<div>Note: mapping to the reference sequence may fail when the sample sequence is too divergent from the reference sequence. </div>
-	</message>
-
 	<message id="choose-cov-map-type">
 		<h2>Coverage maps of ${concluded-name}</h2>
-		<p>${text}</p>
-		${cb}
+		<p>
+			<div>What sequence would you like to use as a reference for mapping the reads: </div>
+			${consensus-rb}
+			${ref-rb}
+			<div>Note: mapping to the reference sequence may fail when the sample sequence is too divergent from the reference sequence. </div>
+		</p>
 		${start}
 		${cov-map}
 	</message>

@@ -25,17 +25,19 @@ import rega.genotype.utils.SamtoolsUtil.RefType;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
+import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal2;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WBrush;
+import eu.webtoolkit.jwt.WButtonGroup;
 import eu.webtoolkit.jwt.WColor;
-import eu.webtoolkit.jwt.WComboBox;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WRadioButton;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.Axis;
@@ -50,6 +52,12 @@ import eu.webtoolkit.jwt.servlet.WebRequest;
 import eu.webtoolkit.jwt.servlet.WebResponse;
 import eu.webtoolkit.jwt.utils.StreamUtils;
 
+/**
+ * Detailed view of 1 consensus results.
+ * Contains cov map that is created by BWA alignment of all reads in the bucket.
+ * 
+ * @author michael
+ */
 public class NgsDetailsForm extends AbstractForm{
 	public static final String BUCKET_PATH = "bucket";
 	private NgsResultsModel model;
@@ -57,6 +65,10 @@ public class NgsDetailsForm extends AbstractForm{
 
 	private WContainerWidget covMapContainer = new WContainerWidget();
 	private File workDir;
+	private WButtonGroup typeGroup;
+	private WRadioButton consensusRB;
+	private WRadioButton refRB;
+	private WPushButton startB;
 	
 	public NgsDetailsForm(GenotypeWindow main, final File workDir, final String bucketId) {
 		super(main);
@@ -76,32 +88,60 @@ public class NgsDetailsForm extends AbstractForm{
 		ngsParser.parseFile(ngsResultFile);
 	}
 
+	private RefType selectedRefType() {
+		return typeGroup.getCheckedButton().equals(refRB) ? RefType.Refrence : RefType.Consensus;
+	}
+
 	private void endParsing() {
 
-		final WPushButton startB = new WPushButton("Create map");
-		final WComboBox chooseCovMapTypeCB = new WComboBox();
-		chooseCovMapTypeCB.addItem("Consensus alignment");
-		chooseCovMapTypeCB.addItem("Refrence");
+		startB = new WPushButton("Create map");
+
+		typeGroup = new WButtonGroup();
+		consensusRB = new WRadioButton("The assembly consensus sequences of " + bucket.getConcludedName());
+		refRB = new WRadioButton("The reference sequence " + bucket.getRefName());
+		consensusRB.setInline(false);
+		refRB.setInline(false);
+		typeGroup.addButton(consensusRB);
+		typeGroup.addButton(refRB);
 
 		Template chooseTypeTemplate = new Template(tr("choose-cov-map-type"), this);
-		String text = tr("choose-cov-map-type-text").arg(bucket.getConcludedName()).arg(bucket.getRefName()).toString();
-		chooseTypeTemplate.bindString("text", text);
 		chooseTypeTemplate.bindString("concluded-name", bucket.getConcludedName());
 		chooseTypeTemplate.bindWidget("start", startB);
-		chooseTypeTemplate.bindWidget("cb", chooseCovMapTypeCB);
 		chooseTypeTemplate.bindWidget("cov-map", covMapContainer);
+		chooseTypeTemplate.bindWidget("consensus-rb", consensusRB);
+		chooseTypeTemplate.bindWidget("ref-rb", refRB);
 
 		startB.clicked().addListener(startB, new Signal.Listener() {
 			public void trigger() {
-				covMapContainer.clear();
-				covMapContainer.addWidget(new WText("Creating coverage map please wait.."));
-				RefType refType = chooseCovMapTypeCB.getCurrentIndex() == 1 ? RefType.Refrence : RefType.Consensus;
-				creatCovMap(refType);
+				creatCovMap(selectedRefType());
 			}
 		});
+
+		typeGroup.checkedChanged().addListener(refRB, new Signal1.Listener<WRadioButton>() {
+			public void trigger(WRadioButton arg) {
+				refTypeChanged();
+			}
+		});
+		typeGroup.setCheckedButton(consensusRB);
+		refTypeChanged();
 	}
 
+	private void refTypeChanged() {
+		File samFile = SamtoolsUtil.samFile(bucket, workDir, selectedRefType());
+		startB.setHidden(samFile.exists());
+		covMapContainer.clear();
+		if (samFile.exists())
+			creatCovMap(selectedRefType());
+	}
+	
 	private void creatCovMap(final RefType refType) {
+		covMapContainer.clear();
+		File samFile = SamtoolsUtil.samFile(bucket, workDir, selectedRefType());
+		if (samFile.exists())
+			covMapContainer.addWidget(new WText("Loading coverage map please wait.."));
+		else
+			covMapContainer.addWidget(new WText("Creating coverage map please wait.."));
+
 		final WApplication app = WApplication.getInstance();
 
 		Thread t = new Thread(new Runnable() {
@@ -142,8 +182,10 @@ public class NgsDetailsForm extends AbstractForm{
 
 	    int totalCov = 0;
 	    int totalContigsLength = (int) bucket.getTotalContigsLen();
-	    for (Integer cov: covMapModel.getObjects())
+	    for (Integer cov: covMapModel.getObjects()) {
 	    	totalCov += cov;
+	    	
+	    }
 
 	    if (totalCov != 0) {
 	    	final WCartesianChart chart = new WCartesianChart();

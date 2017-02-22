@@ -20,6 +20,11 @@ import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.chart.AxisConfig;
 import eu.webtoolkit.jwt.chart.WAxis;
 
+/**
+ * cov map of all reads in the bucket. Created from BWA alignment.
+ * 
+ * @author michael
+ */
 public class CovMap extends WPaintedWidget{
 	public static final double GENOM_HIGHT = 20;
 	public static final double GENOM_WIDTH = 250;
