@@ -106,7 +106,8 @@
 	</table>
 	</message>
 
-	
+	<message id="job-form.typing-time"><p>A whole genome typing will take approximately 60 seconds, please be patient.</p></message>
+	<message id="job-form.typing-time-ngs"><p>A whole genome typing will take up to 2 hours, please be patient.</p></message>
 
 	<message id="monitorForm.cancelButton">Cancel job</message>
   	<message id="monitorForm.analysisInProgress">

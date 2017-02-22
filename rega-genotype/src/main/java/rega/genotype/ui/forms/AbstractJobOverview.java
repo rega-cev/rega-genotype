@@ -129,6 +129,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		template.bindEmpty("recombination-fragment-downloads");
 		template.bindEmpty("analysis-in-progress");
 		template.bindEmpty("scroll");
+		template.bindEmpty("typing-time");
 	}
 
 	public void init(final String jobId, final String filter) {
@@ -164,6 +165,11 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		parser = createParser();
 		startParserThread();
 
+		if (isNgsJob())
+			template.bindString("typing-time", tr("job-form.typing-time-ngs"));
+		else
+			template.bindString("typing-time", tr("job-form.typing-time"));
+
 		updateView();
 	}
 
@@ -195,6 +201,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		
 		if (jobDone() && jobCancelled())
 			template.bindString("analysis-cancelled", tr("monitorForm.analysisCancelled"));
+
+		if (jobDone())
+			template.bindEmpty("typing-time");
 	}
 
 	private WTemplate createInProgressWidget() {
