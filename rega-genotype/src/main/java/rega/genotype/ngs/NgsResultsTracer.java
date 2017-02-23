@@ -156,6 +156,7 @@ public class NgsResultsTracer extends ResultTracer{
 	public void printFatalError(String error) {
 		model.setErrors(error);
 		add("error", error);
+		w.flush();
 	}
 
 	public void setStateStart(State state) {
