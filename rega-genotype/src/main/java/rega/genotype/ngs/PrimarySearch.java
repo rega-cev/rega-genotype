@@ -325,9 +325,12 @@ public class PrimarySearch{
 		File view = null;
 
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
-		matches = diamondBlastX(diamondDir, fastqMerge, ngsModule, logger);
-		view = diamondView(diamondDir, matches, logger);
-		jobLock.release();
+		try {
+			matches = diamondBlastX(diamondDir, fastqMerge, ngsModule, logger);
+			view = diamondView(diamondDir, matches, logger);
+		} finally {
+			jobLock.release();
+		}
 
 		File resultDiamondDir = new File(workDir, NgsFileSystem.DIAMOND_RESULT_DIR);
 		if (!(resultDiamondDir.exists())){

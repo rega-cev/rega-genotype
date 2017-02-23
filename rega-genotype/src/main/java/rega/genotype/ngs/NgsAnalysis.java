@@ -266,12 +266,14 @@ public class NgsAnalysis {
 		// spades
 		Lock jobLock = LongJobsScheduler.getInstance().getJobLock(workDir);
 
-		File dimondResultDir = new File(workDir, NgsFileSystem.DIAMOND_RESULT_DIR);
-		for (File d: dimondResultDir.listFiles()){
-			assembleVirus(d, tool);
+		try {
+			File dimondResultDir = new File(workDir, NgsFileSystem.DIAMOND_RESULT_DIR);
+			for (File d: dimondResultDir.listFiles()){
+				assembleVirus(d, tool);
+			}
+		} finally {
+			jobLock.release();
 		}
-
-		jobLock.release();
 
 		File sequences = new File(workDir, NgsFileSystem.CONTIGS_FILE);
 		if (!sequences.exists())
