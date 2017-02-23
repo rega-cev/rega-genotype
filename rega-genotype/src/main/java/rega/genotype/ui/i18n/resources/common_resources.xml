@@ -37,7 +37,7 @@
   		<h2>C) Or, revisit results from a previous run:</h2>
     </message>
     <message id="startForm.ngs">
-  		<h2>NGS: Upload paired-end reads.</h2>
+  		<h2>NGS: upload FASTQ reads</h2>
     </message> 	
     <message id="startForm.upload-format">Supported formats: fastq or compressed fastq (zip, gz)</message>
     <message id="startForm.upload-fastq-se">Single end:</message>
@@ -149,6 +149,7 @@
 	<message id="detailsForm.summary.contig-count">Contigs count</message>
 	<message id="detailsForm.summary.downloads">Downloads</message>
 	<message id="detailsForm.summary.details">Details</message>
+	<message id="detailsForm.summary.empty"></message>
 
 	<message id="detailsForm.summary.total"><i>Total</i></message>
 	

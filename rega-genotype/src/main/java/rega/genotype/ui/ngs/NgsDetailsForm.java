@@ -136,6 +136,8 @@ public class NgsDetailsForm extends AbstractForm{
 	
 	private void creatCovMap(final RefType refType) {
 		covMapContainer.clear();
+		covMapContainer.setHeight(new WLength(650));
+		
 		File samFile = SamtoolsUtil.samFile(bucket, workDir, selectedRefType());
 		if (samFile.exists())
 			covMapContainer.addWidget(new WText("Loading coverage map please wait.."));
