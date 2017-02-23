@@ -450,7 +450,11 @@ public class SequenceAlignment
         }
     }
     
-    void writeFastaOutput(OutputStream outputFile) throws IOException
+    void writeFastaOutput(OutputStream outputFile) throws IOException {
+    	writeFastaOutput(outputFile, sequences);
+    }
+
+    public static void writeFastaOutput(OutputStream outputFile, List<AbstractSequence> sequences) throws IOException
     {
         /*
          * The fasta format (for multiple sequences) as described in

@@ -1,20 +1,22 @@
 package rega.genotype.ngs.model;
 
+import rega.genotype.AbstractSequence;
+
 /**
  * represent consensus-contigs (output of make consensus)
  * 
  * @author michael
  */
-public class Contig {
+public class Contig extends AbstractSequence{
 	private Double cov;
-	private Integer length;
+	private int length;
 	private Integer endPosition;
 	private Integer startPosition;
 	private String id;
 	private String sequence; //nucleotides. 
 
 	//<contig id="1" length="7366" cov="5.35085">
-	public Contig(String id, Integer length, Integer startPosition, 
+	public Contig(String id, int length, Integer startPosition, 
 			Integer endPosition, Double cov, String sequence){
 		this.id = id;
 		this.length = length;
@@ -35,7 +37,7 @@ public class Contig {
 	public void setCov(Double cov) {
 		this.cov = cov;
 	}
-	public Integer getLength() {
+	public int getLength() {
 		return length;
 	}
 	public void setLength(Integer length) {
@@ -70,5 +72,32 @@ public class Contig {
 
 	public double getDeepCov(int readLength) {
 		return getReadCount(readLength) * (double)readLength / length;
+	}
+	@Override
+	public String getName() {
+		return "Contig" + id;
+	}
+	@Override
+	public void setName(String name) {
+		throw new RuntimeException("The contig name is computed.");
+	}
+	@Override
+	public boolean isNameCapped() {
+		return false;
+	}
+	@Override
+	public String getDescription() {
+		return "length_" + length + "__cov_" + cov ;
+	}
+	@Override
+	public String getQuality() {
+		return null;
+	}
+	@Override
+	public void removeChar(int i) {
+	}
+	@Override
+	public AbstractSequence sourceSequence() {
+		return null;
 	}
 }

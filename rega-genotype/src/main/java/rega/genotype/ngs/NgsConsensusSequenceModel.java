@@ -1,17 +1,23 @@
 package rega.genotype.ngs;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.model.ConsensusBucket;
+import rega.genotype.ngs.model.Contig;
 import rega.genotype.tools.blast.BlastJobOverviewForm;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
+import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
+import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.chart.WChartPalette;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * Display data for every assembled consensus sequence from ngs-results.xml  
@@ -103,6 +109,8 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			if (index.getColumn() == ASSINGMENT_COLUMN) {
 				return BlastJobOverviewForm.createToolLink(bucket.getConcludedTaxonomyId(),
 						jobDir.getName(), toolConfig);
+			} else if (index.getColumn() == SEQUENCE_COUNT_COLUMN) {
+				return createContigsLink(bucket);
 			}
 		} else if (role == ItemDataRole.UserRole + 1) {
 			if (index.getColumn() == COLOR_COLUMN)
@@ -113,5 +121,17 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 
 	public ConsensusBucket getBucket(int row) {
 		return buckets.get(row);
+	}
+
+	public static WLink createContigsLink(final ConsensusBucket bucket) {
+		WResource r = new WResource() {
+			@Override
+			protected void handleRequest(WebRequest request, WebResponse response)
+					throws IOException {
+				for (Contig c: bucket.getContigs())
+					c.writeFastaOutput(response.getOutputStream());
+			}
+		};
+		return new WLink(r);
 	}
 }
