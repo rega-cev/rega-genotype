@@ -63,15 +63,13 @@ public class CovMap extends WPaintedWidget{
 
 		double maxCov = maxCov(bucket.getContigs());
 		for (Contig contig: bucket.getContigs()) {
-			WPainterPath gcontigPath = new WPainterPath();
 			double start = scale(bucket.getRefLen(), 
 					contig.getEndPosition() - contig.getLength());
 			double width = scale(bucket.getRefLen(), contig.getLength());
-			gcontigPath.addRect(MARGIN + start, MARGIN, width, GENOM_HIGHT);
 			double scale = contig.getCov() / maxCov; // scale colors by contig cov in ref.
 			int alpha = (int) (scale * 255);
-			painter.setBrush(new WBrush(new WColor(50, 150, 50, alpha)));
-			painter.drawPath(gcontigPath);
+			painter.fillRect(MARGIN + start, MARGIN, width, GENOM_HIGHT, 
+					new WBrush(new WColor(50, 150, 50, alpha)));
 		}
 	}
 	
