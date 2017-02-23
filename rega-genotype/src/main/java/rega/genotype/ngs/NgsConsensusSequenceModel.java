@@ -44,7 +44,7 @@ public class NgsConsensusSequenceModel extends WAbstractTableModel {
 			tr("detailsForm.summary.deep-cov"),
 			tr("detailsForm.summary.src"),
 			tr("detailsForm.summary.legend"),
-			tr("detailsForm.summary.details"),
+			tr("detailsForm.summary.empty"),
 			tr("detailsForm.summary.image")
 			};
 	private List<ConsensusBucket> buckets;
