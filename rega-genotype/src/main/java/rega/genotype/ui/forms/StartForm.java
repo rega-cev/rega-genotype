@@ -37,7 +37,6 @@ import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
-import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.Icon;
 import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.Signal;
@@ -462,10 +461,7 @@ public class StartForm extends AbstractForm {
 		ngsTemplate.bindEmpty("fastq-upload2-info");
 		ngsTemplate.bindEmpty("fastq-upload-se-info");
 
-		if (Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath().isEmpty())
-			ngsTemplate.bindEmpty("srr");
-		else
-			ngsTemplate.bindWidget("srr", srr);
+		ngsTemplate.bindWidget("srr", srr);
 
 		ngsTemplate.setCondition("if-download-srr", true);
 	}

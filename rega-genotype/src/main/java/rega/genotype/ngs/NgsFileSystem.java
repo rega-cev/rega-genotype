@@ -189,18 +189,49 @@ public class NgsFileSystem {
 		File workDir = ngsProgress.getWorkDir();
 		// if not found download them
 		if (fastqPE1 == null || fastqPE2 == null) {
-			String srrToolKitPath = Settings.getInstance().getConfig().getGeneralConfig().getSrrToolKitPath();
-			Logger logger = LogUtils.createLogger(workDir);
-			String cmd = srrToolKitPath + "fastq-dump --split-files " + srrName;
-			executeCmd(cmd, workDir, logger);
-
 			fastqPE1 = new File(workDir, srrName + "_1.fastq");
 			fastqPE2 = new File(workDir, srrName + "_2.fastq");
+			downloadSrr(srrName, workDir, fastqPE1, fastqPE2);
 		}
 
 		return addFastqFiles(ngsProgress, fastqPE1, fastqPE2, true);
 	}
 
+	public static void downloadSrr(String srrAccessionNumber, File workDir,
+			File fastqPE1, File fastqPE2) throws ApplicationException {
+		// wget --output-document=$i.ftp.txt "http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=$i&result=read_run&fields=fastq_ftp"
+		String url = "http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=" 
+		+ srrAccessionNumber
+		+ "&result=read_run&fields=fastq_ftp";
+
+		String ftpTxt = Utils.wget(url);
+
+		if (ftpTxt == null)
+			throw new ApplicationException("Failed to download srr file " + srrAccessionNumber);
+
+		System.err.println(ftpTxt);
+		
+		ftpTxt = ftpTxt.replace("fastq_ftp", "");
+		String[] ftpTxtSplit = ftpTxt.split(";");
+		if (ftpTxtSplit.length != 2)
+			throw new ApplicationException("Failed to download srr file " + srrAccessionNumber);
+
+		String pe1Url = "http://" +ftpTxtSplit[0];
+		String pe2Url = "http://" + ftpTxtSplit[1];
+
+		File pe1Compressed = new File(workDir, srrAccessionNumber + "_1.gz");
+		File pe2Compressed = new File(workDir, srrAccessionNumber + "_2.gz");
+
+		if (!Utils.wget(pe1Url, pe1Compressed))
+			throw new ApplicationException("Failed to download srr file " + srrAccessionNumber);
+
+		if (!Utils.wget(pe2Url, pe2Compressed))
+			throw new ApplicationException("Failed to download srr file " + srrAccessionNumber);
+	
+		FileUtil.unGzip1File(pe1Compressed, fastqPE1);
+		FileUtil.unGzip1File(pe2Compressed, fastqPE2);
+	}
+	
 	public static File fastqDir(NgsResultsTracer ngsProgress) {
 		File fastqDir = new File(ngsProgress.getWorkDir(), FASTQ_FILES_DIR);
 		if (!fastqDir.exists()) {

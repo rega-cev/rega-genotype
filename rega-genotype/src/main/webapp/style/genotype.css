@@ -361,6 +361,7 @@ span.refseq{
 
 .analysisProgress{
 	color: red;
+	margin-bottom: 10px;
 }
 
 .error {

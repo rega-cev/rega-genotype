@@ -4,8 +4,10 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -136,6 +138,29 @@ public class Utils {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+		}
+	}
+
+	public static String wget(String url) {
+
+		StringBuilder out = new StringBuilder();
+		try {
+		//	HttpURLConnection conn = (HttpURLConnection)  new URL(url).openConnection();
+			
+			URLConnection conn = new URL(url).openConnection();
+
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					conn.getInputStream()));
+			String inputLine;
+			while ((inputLine = in.readLine()) != null)
+				out.append(inputLine);
+
+			return out.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			
 		}
 	}
 

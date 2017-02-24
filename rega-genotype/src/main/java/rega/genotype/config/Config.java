@@ -298,7 +298,6 @@ public class Config {
 		private String spadesCmd = "spades";
 		private String bioPythonPath = "";
 		private String sequencetool = "";
-		private String srrToolKitPath = "";
 		private String srrDatabasePath = "";
 		private String samtoolsCmd = "samtools";
 		private String bwaCmd = "bwa";
@@ -424,12 +423,6 @@ public class Config {
 		}
 		public void setSequencetool(String sequencetool) {
 			this.sequencetool = sequencetool;
-		}
-		public String getSrrToolKitPath() {
-			return srrToolKitPath;
-		}
-		public void setSrrToolKitPath(String srrToolKitPath) {
-			this.srrToolKitPath = srrToolKitPath;
 		}
 		public String getSrrDatabasePath() {
 			return srrDatabasePath;
