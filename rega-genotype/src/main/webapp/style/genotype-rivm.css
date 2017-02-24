@@ -79,7 +79,7 @@ table.jobTable td, table.jobTable th {
 	border-bottom: 1px solid gray;
 	padding: 0.5em;
 	text-align: left;
-	line-height: 60px;
+	line-height: 30px;
 }
 
 table.reftable td, table.reftable th,
@@ -126,7 +126,7 @@ table.reftable td, table.reftable th,
 }
 
 table.jobTable .jobTableHeader {
-	line-height: 30px;
+	line-height: 15px;
 	font-weight: bold;
 	text-align: center;
 }
@@ -588,7 +588,9 @@ table.reftable caption, .blastResultsTable table caption {
 }
 
 .ngs-detils-table {
-	text-align: center;
+	/*text-align: center;
+	width: 100%;*/
+	min-width: 500px;
 }
 
 .hoverable:hover {
@@ -598,12 +600,21 @@ table.reftable caption, .blastResultsTable table caption {
 }
 
 .single-ngs-result-table {
-	margin:auto;
 	margin-bottom: 10px;
 	margin-top: 10px;
 }
+
 .single-ngs-result-table td {
-	padding:3px;
+    width: 1%;
+    white-space: nowrap;
+}
+
+.single-ngs-result-table td {
+	padding:8px;
+}
+
+.ngs-start-table td {
+	padding:8px;
 }
 
 .tab {
@@ -611,10 +622,64 @@ table.reftable caption, .blastResultsTable table caption {
 }
 
 .ngs-start {
-	    background: gainsboro;
+	background: rgb(197, 197, 253);
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .ngs-start button{
 	color: darkblue;
     font-weight: bold;
+}
+
+.ngs-chart-title {
+    margin-left: 43px;
+}
+
+/* change wt wpanel */
+.ngs-start-advanced {
+	margin-top: 10px;
+}
+
+.ngs-start-advanced .Wt-panel {
+	margin-top: 10px;
+    border: 1px solid #888888;
+    background: rgb(197, 197, 253) none repeat scroll 0%;
+}
+
+.ngs-start-advanced .Wt-panel .titlebar {
+    padding: 0px 6px 3px;
+    background: rgb(197, 197, 253);
+    color: darkblue;
+    font-size: 10pt;
+}
+
+.ngs-start-advanced .Wt-panel .body {
+    background: rgb(197, 197, 253);
+    padding: 4px 6px 4px;
+    -webkit-backface-visibility: hidden;
+    clear: left;
+}
+
+/* flex */
+.flex-container {
+  display: flex; /* or inline-flex */
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.flex-elem {
+  flex: 5 0px; 
+}
+
+.flex-elem-auto {
+    flex: 1 auto;
+}
+
+.link {
+    color: -webkit-link;
+    text-decoration: underline;
+    cursor: pointer;
 }
