@@ -6,11 +6,9 @@ import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.ApplicationException;
-import rega.genotype.Constants;
 import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
-import rega.genotype.utils.LogUtils;
 import rega.genotype.utils.Utils;
 
 /**
@@ -32,6 +30,14 @@ import rega.genotype.utils.Utils;
  */
 public class NgsFileSystem {
 	public static final String FASTQ_FILES_DIR = "fastq_files";
+
+	public static final String PE1 = "PE1.fastq";
+	public static final String PE2 = "PE2.fastq";
+	public static final String SE = "SE.fastq";
+
+	public static final String QC_PE1 = "PE1_fastqc.html";
+	public static final String QC_PE2 = "PE2_fastqc.html";
+	public static final String QC_SE = "SE_fastqc.html";
 
 	public static final String QC_REPORT_DIR = "qc_report";
 	public static final String QC_REPORT_AFTER_PREPROCESS_DIR = "qc2_report";
@@ -85,8 +91,8 @@ public class NgsFileSystem {
 		ngsProgress.printInit();
 
 		try {
-			File fastqPE1Copy = new File(fastqDir, fastqPE1.getName());
-			File fastqPE2Copy = new File(fastqDir, fastqPE2.getName());
+			File fastqPE1Copy = new File(fastqDir, PE1);
+			File fastqPE2Copy = new File(fastqDir, PE2);
 
 			if (!fastqPE1.getAbsolutePath().equals(fastqPE1Copy.getAbsolutePath()))
 				if (deleteOldFile)
@@ -123,7 +129,7 @@ public class NgsFileSystem {
 		ngsProgress.printInit();
 
 		try {
-			File fastqSECopy = new File(fastqDir, fastqSE.getName());
+			File fastqSECopy = new File(fastqDir, SE);
 
 			if (!fastqSE.getAbsolutePath().equals(fastqSECopy.getAbsolutePath()))
 				if (deleteOldFile)
@@ -243,13 +249,25 @@ public class NgsFileSystem {
 		return fastqDir;
 	}
 
+	public static File fastqSE(File jobDir) {
+		return new File(jobDir, FASTQ_FILES_DIR + File.separator + SE);
+	}
+
+	public static File fastqPE1(File jobDir) {
+		return new File(jobDir, FASTQ_FILES_DIR + File.separator + PE1);
+	}
+
+	public static File fastqPE2(File jobDir) {
+		return new File(jobDir, FASTQ_FILES_DIR + File.separator + PE2);
+	}
+
 	public static File fastqSE(NgsResultsTracer ngsProgress) {
 		File fastqDir = fastqDir(ngsProgress);
 		if (fastqDir == null)
 			return null;
 
 		if (ngsProgress.getModel().getFastqSEFileName() != null) {
-			File fastqSE = new File(fastqDir, ngsProgress.getModel().getFastqSEFileName());
+			File fastqSE = new File(fastqDir, SE);
 			if (!fastqSE.exists()){
 				ngsProgress.printFatalError("FASTQ files could not be found.");
 				return null;
@@ -266,7 +284,7 @@ public class NgsFileSystem {
 
 		if (ngsResults.getModel().getFastqPE1FileName() != null 
 				&& ngsResults.getModel().getFastqPE2FileName() != null){
-			File fastqPE1 = new File(fastqDir, ngsResults.getModel().getFastqPE1FileName());
+			File fastqPE1 = new File(fastqDir, PE1);
 			if (!fastqPE1.exists()){
 				ngsResults.printFatalError("FASTQ files could not be found.");
 				return null;
@@ -284,7 +302,7 @@ public class NgsFileSystem {
 
 		if (ngsResults.getModel().getFastqPE1FileName() != null 
 				&& ngsResults.getModel().getFastqPE2FileName() != null){
-			File fastqPE2 = new File(fastqDir, ngsResults.getModel().getFastqPE2FileName());
+			File fastqPE2 = new File(fastqDir, PE2);
 			if (!fastqPE2.exists()){
 				ngsResults.printFatalError("FASTQ files could not be found.");
 				return null;
@@ -320,16 +338,16 @@ public class NgsFileSystem {
 		return ans;
 	}
 
-	public static File createPreprocessedPE1(File workDir, String fileName) {
-		return new File(preprocessedPE1Dir(workDir), fileName);
+	public static File createPreprocessedPE1(File workDir) {
+		return new File(preprocessedPE1Dir(workDir), PE1);
 	}
 
-	public static File createPreprocessedPE2(File workDir, String fileName) {
-		return new File(preprocessedPE2Dir(workDir), fileName);
+	public static File createPreprocessedPE2(File workDir) {
+		return new File(preprocessedPE2Dir(workDir), PE2);
 	}
 
-	public static File createPreprocessedSE(File workDir, String fileName) {
-		return new File(preprocessedSEDir(workDir), fileName);
+	public static File createPreprocessedSE(File workDir) {
+		return new File(preprocessedSEDir(workDir), SE);
 	}
 
 	public static File preprocessedPE1(NgsResultsTracer ngsResults) {
@@ -368,6 +386,18 @@ public class NgsFileSystem {
 		Utils.executeCmd(cmd, workDir);
 	}
 
+	public static File qcPE1File(File qcDir) {
+		return new File(qcDir, QC_PE1);
+	}
+
+	public static File qcPE2File(File qcDir) {
+		return new File(qcDir, QC_PE2);
+	}
+
+	public static File qcSEFile(File qcDir) {
+		return new File(qcDir, QC_SE);
+	}
+	
 	public static File diamondResutlsDir(File jobDir) {
 		return new File(jobDir, DIAMOND_RESULT_DIR);
 	}
@@ -378,6 +408,18 @@ public class NgsFileSystem {
 
 	public static File diamodPeFile(File jobDir, String diamondBucketName, String peFileName) {			
 		return new File(diamodBucketDir(jobDir, diamondBucketName), peFileName);
+	}
+
+	public static File diamodPe1File(File jobDir, String diamondBucketName) {			
+		return new File(diamodBucketDir(jobDir, diamondBucketName), PE1);
+	}
+
+	public static File diamodPe2File(File jobDir, String diamondBucketName) {			
+		return new File(diamodBucketDir(jobDir, diamondBucketName), PE2);
+	}
+
+	public static File diamodSeFile(File jobDir, String diamondBucketName) {			
+		return new File(diamodBucketDir(jobDir, diamondBucketName), SE);
 	}
 
 	public static String contigsDir(String virusName) {
