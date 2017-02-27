@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FileUtils;
-
 import rega.genotype.AbstractSequence;
 import rega.genotype.ApplicationException;
 import rega.genotype.Constants;
@@ -204,6 +202,7 @@ public class NgsAnalysis {
 	 * Delete large ngs files from work dir.
 	 */
 	public void cleanBigData() {
+		/*
 		if (!workDir.exists() || workDir.listFiles() == null)
 			return;
 		File preprocessedDir = NgsFileSystem.preprocessedDir(workDir);
@@ -225,7 +224,7 @@ public class NgsAnalysis {
 		} catch (IOException e) {
 			e.printStackTrace();
 			// leave it
-		}
+		}*/
 	}
 
 	public BlastTool startIdentification(NgsResultsTracer ngsProgress) {

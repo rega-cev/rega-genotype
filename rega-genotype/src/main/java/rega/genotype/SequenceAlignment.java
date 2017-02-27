@@ -4,6 +4,8 @@
  * See the LICENSE file for terms of use.
  */
 package rega.genotype;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -240,7 +242,20 @@ public class SequenceAlignment
 
         return new Sequence(name, nameCapped, description, sequence.toString(), null);
     }
-    
+
+	public static Set<String> getReadNames(File fastq) throws IOException, FileFormatException {
+		Set<String> ans = new HashSet<String>();
+		FileReader fr = new FileReader(fastq.getAbsolutePath());
+		LineNumberReader lnr = new LineNumberReader(fr);
+		while (true){
+			Sequence s = SequenceAlignment.readFastqFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
+			if (s == null )
+				break;
+			ans.add(s.getName());
+		}
+		return ans;
+	}
+
 	public static Sequence readFastqFileSequence(LineNumberReader reader,
 			int sequenceType) throws IOException, FileFormatException {
 

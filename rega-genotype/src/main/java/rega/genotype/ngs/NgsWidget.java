@@ -1,10 +1,17 @@
 package rega.genotype.ngs;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import rega.genotype.Constants.Mode;
+import rega.genotype.FileFormatException;
+import rega.genotype.Sequence;
+import rega.genotype.SequenceAlignment;
 import rega.genotype.framework.async.LongJobsScheduler;
 import rega.genotype.ngs.model.ConsensusBucket;
 import rega.genotype.ngs.model.NgsResultsModel;
@@ -23,11 +30,14 @@ import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WTable;
 import eu.webtoolkit.jwt.WTableRow;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WChartPalette;
 import eu.webtoolkit.jwt.chart.WStandardPalette;
+import eu.webtoolkit.jwt.servlet.WebRequest;
+import eu.webtoolkit.jwt.servlet.WebResponse;
 
 /**
  * Present ngs analysis state in job overview tab. 
@@ -204,15 +214,35 @@ public class NgsWidget extends WContainerWidget{
 		if (endReads != null) {
 			new WText("Started with " + startReads + " reads, ",
 					stateRow.elementAt(1));
-			WAnchor removedReads = new WAnchor(new WLink("TODO"),(startReads - endReads) + " reads");
-			removedReads.setInline(true);
-			stateRow.elementAt(1).addWidget(removedReads);
-			if (state == State.Preprocessing)
-				new WText(" that did not pass qc, were removed.",
+			if (state == State.Preprocessing) {
+				new WText((startReads - endReads) + " reads that did not pass qc, were removed.",
 						stateRow.elementAt(1));
-			else
-				new WText(" that did not appear to be viral, were removed.",
+				if (model.isPairEnd()) {
+					WAnchor removedReads1 = new WAnchor(
+							removedByPreprocessingLink(NgsFileSystem.fastqPE1(workDir), 
+									NgsFileSystem.preprocessedPE1(workDir)),
+							"Removed read PE 1");
+					removedReads1.setInline(false);
+					stateRow.elementAt(1).addWidget(removedReads1);
+
+					WAnchor removedReads2 = new WAnchor(
+							removedByPreprocessingLink(NgsFileSystem.fastqPE2(workDir), 
+									NgsFileSystem.preprocessedPE2(workDir)),
+							"Removed read PE 2");
+					removedReads2.setInline(false);
+					stateRow.elementAt(1).addWidget(removedReads2);
+				} else {
+					WAnchor removedReads1 = new WAnchor(
+							removedByPreprocessingLink(NgsFileSystem.fastqSE(workDir), 
+									NgsFileSystem.preprocessedSE(workDir)),
+							"Removed read SE");
+					removedReads1.setInline(false);
+					stateRow.elementAt(1).addWidget(removedReads1);
+				}
+			} else {
+				new WText((startReads - endReads) + " reads that did not appear to be viral, were removed.",
 						stateRow.elementAt(1));
+			}
 		}
 
 		//stateWidget.setMargin(10, Side.Bottom);
@@ -226,6 +256,41 @@ public class NgsWidget extends WContainerWidget{
 		} else {
 			return "--";
 		}
+	}
+
+	private WLink removedByPreprocessingLink(final File fastq, final File preprocessed) {
+		WResource r = new WResource() {
+			@Override
+			protected void handleRequest(WebRequest request, WebResponse response)
+					throws IOException {
+
+				try {
+					Set<String> readNames = SequenceAlignment.getReadNames(preprocessed);
+
+					FileReader fr = new FileReader(fastq.getAbsolutePath());
+					LineNumberReader lnr = new LineNumberReader(fr);
+					while (true){
+						Sequence s = SequenceAlignment.readFastqFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
+						if (s == null )
+							break;
+						if (!readNames.contains(s.getName())) {
+							response.getOutputStream().println("@" + s.getName());
+							response.getOutputStream().println(s.getSequence());
+							response.getOutputStream().println("+");
+							response.getOutputStream().println(s.getQuality());
+						}
+					}
+				} catch (FileFormatException e) {
+					e.printStackTrace();
+					response.setStatus(404);
+					return;
+				}
+				response.getOutputStream();
+			}
+		};
+		WLink link = new WLink(r);
+		link.setTarget(AnchorTarget.TargetNewWindow);
+		return link;
 	}
 
 	private WAnchor qcAnchor(File inFile) {
