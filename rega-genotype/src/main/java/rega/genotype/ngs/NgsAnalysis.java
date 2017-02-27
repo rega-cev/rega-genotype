@@ -156,11 +156,11 @@ public class NgsAnalysis {
 
 			File[] qc2In;
 			if (ngsResults.getModel().isPairEnd()) {
-				File preprocessed1 = NgsFileSystem.preprocessedPE1(ngsResults);
-				File preprocessed2 = NgsFileSystem.preprocessedPE2(ngsResults);
+				File preprocessed1 = NgsFileSystem.preprocessedPE1(workDir);
+				File preprocessed2 = NgsFileSystem.preprocessedPE2(workDir);
 				qc2In = new File[] {preprocessed1, preprocessed2};
 			} else {
-				File preprocessed = NgsFileSystem.preprocessedSE(ngsResults);
+				File preprocessed = NgsFileSystem.preprocessedSE(workDir);
 				qc2In = new File[] {preprocessed};
 			}
 			try {
@@ -268,9 +268,9 @@ public class NgsAnalysis {
 
 		try {
 			File dimondResultDir = new File(workDir, NgsFileSystem.DIAMOND_RESULT_DIR);
-			for (File d: dimondResultDir.listFiles()){
-				assembleVirus(d, tool);
-			}
+			if (dimondResultDir.listFiles() != null) // Could be that diamond filtered all.
+				for (File d: dimondResultDir.listFiles())
+					assembleVirus(d, tool);
 		} finally {
 			jobLock.release();
 		}

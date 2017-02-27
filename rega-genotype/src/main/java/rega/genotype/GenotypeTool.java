@@ -512,7 +512,8 @@ public abstract class GenotypeTool {
     									.getConstructor(String.class, File.class)
     									.newInstance(url, currentWorkDir);
 
-    		    				NgsResultsTracer ngsResults = new NgsResultsTracer(workDir);
+    		    				NgsResultsTracer ngsResults = new NgsResultsTracer(
+    		    						workDir, peFiles.pe1.getName(), peFiles.pe2.getName());
 
     							if (parseArgsResult.ngsPairedEndSuffix1.endsWith(".gz")) {
     								if(!NgsFileSystem.addFastqGzipedFiles(
@@ -523,7 +524,7 @@ public abstract class GenotypeTool {
     									printUsage();
     									return;
     								} 
-    							} else if (!NgsFileSystem.addFastqFiles(ngsResults,
+    							} else if (!NgsFileSystem.addFastqFiles(ngsResults.getWorkDir(),
     									peFiles.pe1, peFiles.pe2)) {
     								System.err.println();
     								System.err.println("-paired-end-files-list pe file not found ");
@@ -555,10 +556,13 @@ public abstract class GenotypeTool {
     					return;
     				}
 
-    				NgsResultsTracer ngsResults = new NgsResultsTracer(workDir);
+    				String pe1 = parseArgsResult.ngsPairedEndFile1 == null ? "pe1.fastq" : parseArgsResult.ngsPairedEndFile1;
+    				String pe2 = parseArgsResult.ngsPairedEndFile2 == null ? "pe2.fastq" : parseArgsResult.ngsPairedEndFile2;
+
+    				NgsResultsTracer ngsResults = new NgsResultsTracer(workDir, pe1, pe2);
 
     				if (!parseArgsResult.assembleOnly &&
-    						!NgsFileSystem.addFastqFiles(ngsResults, 
+    						!NgsFileSystem.addFastqFiles(workDir, 
     								new File(parseArgsResult.ngsPairedEndFile1), 
     								new File(parseArgsResult.ngsPairedEndFile2))){
     					System.err.println();

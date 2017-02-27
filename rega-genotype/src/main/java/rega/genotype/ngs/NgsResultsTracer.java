@@ -26,9 +26,20 @@ public class NgsResultsTracer extends ResultTracer{
 	private NgsResultsModel model = new NgsResultsModel(); // Every thing is stored in a model in case we need to print also to json.
 	private long startTime = System.currentTimeMillis();
 
-	public NgsResultsTracer(File workDir) throws IOException {
+	public NgsResultsTracer(File workDir, String pe1UserName,
+			String pe2UserName
+			) throws IOException {
 		super(createResultsFile(workDir));
 		this.workDir = workDir;
+		model.setFastqPE1FileName(pe1UserName);
+		model.setFastqPE2FileName(pe2UserName);
+	}
+
+	public NgsResultsTracer(File workDir, String seUserName
+			) throws IOException {
+		super(createResultsFile(workDir));
+		this.workDir = workDir;
+		model.setFastqSEFileName(seUserName);
 	}
 
 	public static File ngsRsultsFile(File workDir) {

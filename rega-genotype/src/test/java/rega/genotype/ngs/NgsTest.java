@@ -49,14 +49,14 @@ public class NgsTest  extends TestCase{
 
 		NgsResultsTracer ngsResults;
 		try {
-			ngsResults = new NgsResultsTracer(jobDir);
+			ngsResults = new NgsResultsTracer(jobDir, pe1.getName(), pe2.getName());
 		} catch (IOException e) {
 			e.printStackTrace();
 			assertTrue(false);
 			return;
 		}
 
-		if (!NgsFileSystem.addFastqFiles(ngsResults, pe1, pe2)) {
+		if (!NgsFileSystem.addFastqFiles(ngsResults.getWorkDir(), pe1, pe2)) {
 			fail("Could not copy ngs files");
 			return;
 		}

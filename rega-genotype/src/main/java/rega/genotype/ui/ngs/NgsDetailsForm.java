@@ -259,11 +259,9 @@ public class NgsDetailsForm extends AbstractForm{
 
 	public File createSamFile(final ConsensusBucket bucket, final RefType refType) throws ApplicationException {
 		if (model.isPairEnd())
-			return SamtoolsUtil.createSamFile(bucket, workDir, 
-					model.getFastqPE1FileName(), model.getFastqPE2FileName(), refType);
+			return SamtoolsUtil.createSamFilePE(bucket, workDir, refType);
 		else 
-			return SamtoolsUtil.createSamFile(bucket, workDir, 
-					model.getFastqSEFileName(), refType);
+			return SamtoolsUtil.createSamFileSE(bucket, workDir, refType);
 	}
 
 	public WLink samLink(final ConsensusBucket bucket, final RefType refType) {

@@ -25,6 +25,7 @@ import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.NgsAnalysis;
 import rega.genotype.ngs.NgsFileSystem;
 import rega.genotype.ngs.NgsResultsTracer;
+import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
@@ -316,7 +317,9 @@ public class StartForm extends AbstractForm {
 
 					NgsResultsTracer ngsResults;
 					try {
-						ngsResults = new NgsResultsTracer(workDir);
+						
+						ngsResults = new NgsResultsTracer(workDir,
+								srr.getText() + "_1.fastq", srr.getText() + "_2.fastq");
 					} catch (IOException e1) {
 						e1.printStackTrace();
 						return;
@@ -324,7 +327,8 @@ public class StartForm extends AbstractForm {
 					boolean downloaded = false;
 					String err = "";
 					try {
-						downloaded = NgsFileSystem.downloadSrrFile(ngsResults, srr.getText());
+						downloaded = NgsFileSystem.downloadSrrFile(
+								workDir, srr.getText());
 					} catch (ApplicationException e) {
 						e.printStackTrace();
 						err = e.getMessage();
@@ -374,8 +378,8 @@ public class StartForm extends AbstractForm {
 
 					new File(fastqDir, fastqFileUpload1.getClientFileName());
 
-					File extructedFastqPE1 = new File(fastqDir, fastqFileUpload1.getClientFileName());
-					File extructedFastqPE2 = new File(fastqDir, fastqFileUpload2.getClientFileName());
+					File extructedFastqPE1 = new File(fastqDir, NgsFileSystem.PE1);
+					File extructedFastqPE2 = new File(fastqDir, NgsFileSystem.PE2);
 
 					if (!FilenameUtils.getExtension(fastqFile1.getName()).equals(
 							FilenameUtils.getExtension(fastqFile2.getName()))) {
@@ -383,13 +387,9 @@ public class StartForm extends AbstractForm {
 						d.getContents().addWidget(new WText("Error: the files are not of the same typr?"));
 						return;
 					} else if (FilenameUtils.getExtension(fastqFileUpload1.getClientFileName()).equals("gz")) {
-						extructedFastqPE1 = new File(fastqDir, setFastqExtention(fastqFileUpload1.getClientFileName()));
-						extructedFastqPE2 = new File(fastqDir, setFastqExtention(fastqFileUpload2.getClientFileName()));
 						FileUtil.unGzip1File(fastqFile1, extructedFastqPE1);
 						FileUtil.unGzip1File(fastqFile2, extructedFastqPE2);
 					} else if (FilenameUtils.getExtension(fastqFileUpload1.getClientFileName()).equals("zip")){ // compressed .zip
-						extructedFastqPE1 = new File(fastqDir, setFastqExtention(fastqFileUpload1.getClientFileName()));
-						extructedFastqPE2 = new File(fastqDir, setFastqExtention(fastqFileUpload2.getClientFileName()));
 						FileUtil.unzip1File(fastqFile1, extructedFastqPE1);
 						FileUtil.unzip1File(fastqFile2, extructedFastqPE2);
 					} else { // not compressed
@@ -397,9 +397,10 @@ public class StartForm extends AbstractForm {
 						FileUtils.copyFile(fastqFile2, extructedFastqPE2);
 					}
 
-					NgsResultsTracer ngsResults = new NgsResultsTracer(workDir);
+					NgsResultsTracer ngsResults = new NgsResultsTracer(workDir, 
+							fastqFileUpload1.getClientFileName(), fastqFileUpload2.getClientFileName());
 					ngsResults.getModel().setSkipPreprocessing(skipPreprocessing.isChecked());
-					NgsFileSystem.addFastqFiles(ngsResults, extructedFastqPE1, extructedFastqPE2);
+					NgsFileSystem.addFastqFiles(workDir, extructedFastqPE1, extructedFastqPE2);
 
 					startNgsAnalysis(ngsResults);
 				} catch (IOException e) {
@@ -426,23 +427,19 @@ public class StartForm extends AbstractForm {
 					File fastqDir = new File(workDir, NgsFileSystem.FASTQ_FILES_DIR);
 					fastqDir.mkdirs();
 
-					new File(fastqDir, fastqFileUploadSe.getClientFileName());
-
-					File extructedFastqSE = new File(fastqDir, fastqFileUploadSe.getClientFileName());
+					File extructedFastqSE = new File(fastqDir, NgsFileSystem.SE);
 
 					if (FilenameUtils.getExtension(fastqFileUploadSe.getClientFileName()).equals("gz")) {
-						extructedFastqSE = new File(fastqDir, setFastqExtention(fastqFileUploadSe.getClientFileName()));
 						FileUtil.unGzip1File(fastqFile, extructedFastqSE);
 					} else if (FilenameUtils.getExtension(fastqFileUploadSe.getClientFileName()).equals("zip")){ // compressed .zip
-						extructedFastqSE = new File(fastqDir, setFastqExtention(fastqFileUploadSe.getClientFileName()));
 						FileUtil.unzip1File(fastqFile, extructedFastqSE);
 					} else { // not compressed
 						FileUtils.copyFile(fastqFile, extructedFastqSE);
 					}
 
-					NgsResultsTracer ngsResults = new NgsResultsTracer(workDir);
+					NgsResultsTracer ngsResults = new NgsResultsTracer(workDir, fastqFileUploadSe.getClientFileName());
 					ngsResults.getModel().setSkipPreprocessing(skipPreprocessing.isChecked());
-					NgsFileSystem.addFastqSE(ngsResults, extructedFastqSE);
+					NgsFileSystem.addFastqSE(workDir, extructedFastqSE);
 
 					startNgsAnalysis(ngsResults);
 				} catch (IOException e) {
@@ -469,6 +466,9 @@ public class StartForm extends AbstractForm {
 	private void startNgsAnalysis(final NgsResultsTracer ngsResults) {
 		Thread ngsAnalysis = new Thread(new Runnable() {
 			public void run() {
+				ngsResults.setStateStart(State.Init);
+				ngsResults.printInit();
+
 				ToolConfig toolConfig = getMain().getOrganismDefinition().getToolConfig();
 				NgsAnalysis ngsAnalysis = new NgsAnalysis(ngsResults,
 						Settings.getInstance().getConfig().getNgsModule(), toolConfig);

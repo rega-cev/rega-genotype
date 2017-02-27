@@ -2,11 +2,7 @@ package rega.genotype.ngs;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-
-import org.apache.commons.io.FilenameUtils;
 
 import rega.genotype.Constants.Mode;
 import rega.genotype.framework.async.LongJobsScheduler;
@@ -79,20 +75,20 @@ public class NgsWidget extends WContainerWidget{
 		if (model.getState().code >= State.Preprocessing.code) {
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
 			if (model.isPairEnd()) {
-				preprocessing.bindWidget("qc-1", qcAnchor(qcDir, model.getFastqPE1FileName()));
-				preprocessing.bindWidget("qc-2", qcAnchor(qcDir, model.getFastqPE2FileName()));
+				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir)));
+				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir)));
 			} else {
-				preprocessing.bindWidget("qc-1", qcAnchor(qcDir, model.getFastqSEFileName()));
+				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir)));
 			}
 		}
 
 		if (model.getState().code >= State.Diamond.code) {
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
 			if (model.isPairEnd()) {
-				preprocessing.bindWidget("qcp-1", qcAnchor(qcDir, model.getFastqPE1FileName()));
-				preprocessing.bindWidget("qcp-2", qcAnchor(qcDir, model.getFastqPE2FileName()));
+				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir)));
+				preprocessing.bindWidget("qcp-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir)));
 			} else {
-				preprocessing.bindWidget("qcp-1", qcAnchor(qcDir, model.getFastqSEFileName()));
+				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir)));
 			}
 		}
 
@@ -232,31 +228,18 @@ public class NgsWidget extends WContainerWidget{
 		}
 	}
 
-	private WAnchor qcAnchor(File qcDir, String inFileName) {
-		if (qcDir.listFiles() == null)
+	private WAnchor qcAnchor(File inFile) {
+		if (inFile == null || !inFile.exists())
 			return null;
-		File[] files = qcDir.listFiles();
-		Arrays.sort(files, new Comparator<File>() {
-			public int compare(File o1, File o2) {
-				return o1.getAbsolutePath().compareTo(o2.getAbsolutePath());
-			}
-		});
 
-		for (File f: files) {
-			if (FilenameUtils.getExtension(f.getAbsolutePath()).equals("html")){
-				WFileResource r = new WFileResource("html", f.getAbsolutePath());
-				WLink link = new WLink(r);
-				link.setTarget(AnchorTarget.TargetNewWindow);
-				String readsName = FileUtil.removeExtention(inFileName);
-				if (f.getName().contains(readsName)) {
-					WAnchor anchor = new WAnchor(link, readsName);
-					anchor.setInline(true);
-					anchor.setMargin(8);
-					return anchor;
-				}
-			}
-		}
-		return null;
+		WFileResource r = new WFileResource("html", inFile.getAbsolutePath());
+		WLink link = new WLink(r);
+		link.setTarget(AnchorTarget.TargetNewWindow);
+		String readsName = FileUtil.removeExtention(inFile.getName());
+		WAnchor anchor = new WAnchor(link, readsName);
+		anchor.setInline(true);
+		anchor.setMargin(8);
+		return anchor;
 	}
 
 	public static WAnchor details(ConsensusBucket bucket, File workDir) {

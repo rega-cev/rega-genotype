@@ -50,8 +50,8 @@ public class Preprocessing{
 			File sequenceFile1 = NgsFileSystem.fastqPE1(ngsResults);
 			File sequenceFile2 = NgsFileSystem.fastqPE2(ngsResults);
 
-			File paired1 = NgsFileSystem.createPreprocessedPE1(ngsResults.getWorkDir(), sequenceFile1.getName());
-			File paired2 = NgsFileSystem.createPreprocessedPE2(ngsResults.getWorkDir(), sequenceFile2.getName());
+			File paired1 = NgsFileSystem.createPreprocessedPE1(ngsResults.getWorkDir());
+			File paired2 = NgsFileSystem.createPreprocessedPE2(ngsResults.getWorkDir());
 
 			File unpaired1 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile1.getName());
 			File unpaired2 = new File(preprocessedDir, NgsFileSystem.PREPROCESSED_FILE_NAMR_UNPAIRD + sequenceFile2.getName());
@@ -64,7 +64,7 @@ public class Preprocessing{
 					+ " " + unpaired2.getAbsolutePath();
 		} else {
 			File sequenceFile = NgsFileSystem.fastqSE(ngsResults);
-			File out = NgsFileSystem.createPreprocessedSE(ngsResults.getWorkDir(), sequenceFile.getName());
+			File out = NgsFileSystem.createPreprocessedSE(ngsResults.getWorkDir());
 			inputFileNames = sequenceFile.getAbsolutePath();
 			outoutFileNames = out.getAbsolutePath();
 		}

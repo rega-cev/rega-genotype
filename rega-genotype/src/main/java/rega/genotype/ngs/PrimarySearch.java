@@ -306,9 +306,10 @@ public class PrimarySearch{
 			diamondDir.mkdirs();
 		}
 		File fastqMerge = null;
+		boolean skipped = ngsResults.getModel().getSkipPreprocessing();
 		if (ngsResults.getModel().isPairEnd()) {
-			File preprocessedPE1 = NgsFileSystem.preprocessedPE1(ngsResults);
-			File preprocessedPE2 = NgsFileSystem.preprocessedPE2(ngsResults);
+			File preprocessedPE1 = skipped ? NgsFileSystem.fastqPE1(workDir) : NgsFileSystem.preprocessedPE1(workDir);
+			File preprocessedPE2 = skipped ? NgsFileSystem.fastqPE2(workDir) : NgsFileSystem.preprocessedPE2(workDir);
 			try {
 				fastqMerge = megerFiles(diamondDir, preprocessedPE1, preprocessedPE2);
 			} catch (IOException e) {
@@ -317,7 +318,7 @@ public class PrimarySearch{
 				throw new ApplicationException("diamond files could not be merged. " + e.getMessage(), e);
 			} 
 		} else {
-			fastqMerge = NgsFileSystem.preprocessedSE(ngsResults);
+			fastqMerge = skipped ? NgsFileSystem.fastqSE(workDir) : NgsFileSystem.preprocessedSE(workDir);
 		}
 		ngsResults.setStateStart(State.Diamond);
 
@@ -339,11 +340,13 @@ public class PrimarySearch{
 		try {
 			File[] preprocessedFiles;
 			if (ngsResults.getModel().isPairEnd()){
-				File preprocessedPE1 = NgsFileSystem.preprocessedPE1(ngsResults);
-				File preprocessedPE2 = NgsFileSystem.preprocessedPE2(ngsResults);
+				File preprocessedPE1 = skipped ? NgsFileSystem.fastqPE1(workDir) : NgsFileSystem.preprocessedPE1(workDir);
+				File preprocessedPE2 = skipped ? NgsFileSystem.fastqPE2(workDir) : NgsFileSystem.preprocessedPE2(workDir);
 				preprocessedFiles = new  File[] {preprocessedPE1, preprocessedPE2};
-			} else
-				preprocessedFiles = new  File[] {NgsFileSystem.preprocessedSE(ngsResults)};
+			} else {
+				File preprocessedSE = skipped ? NgsFileSystem.fastqSE(workDir) : NgsFileSystem.preprocessedSE(workDir);
+				preprocessedFiles = new  File[] {preprocessedSE};
+			}
 
 			creatDiamondResults(resultDiamondDir, view,  preprocessedFiles, ngsResults, logger);
 		} catch (FileFormatException e) {
