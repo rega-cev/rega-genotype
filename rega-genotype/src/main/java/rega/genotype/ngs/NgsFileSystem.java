@@ -322,6 +322,7 @@ public class NgsFileSystem {
 
 	public static File preprocessedSE(File workDir) {
 		return new File(workDir, PREPROCESSED_DIR + File.separator + SE);
+
 	}
 
 	public static void executeCmd(String cmd, File workDir, Logger logger) throws ApplicationException{
@@ -340,7 +341,7 @@ public class NgsFileSystem {
 	public static File qcSEFile(File qcDir) {
 		return new File(qcDir, QC_SE);
 	}
-	
+
 	public static File diamondResutlsDir(File jobDir) {
 		return new File(jobDir, DIAMOND_RESULT_DIR);
 	}
