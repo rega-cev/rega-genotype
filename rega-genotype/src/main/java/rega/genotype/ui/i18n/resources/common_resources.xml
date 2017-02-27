@@ -89,7 +89,29 @@
 		</table>
 	</message>
 
-	<message id="ngs.qc-view">
+	<message id="ngs.view">
+		<p><i>NGS Analysis of ${input-name}</i></p>
+		${<if-errors>}
+			<div class="error">Error: ${errors}</div>
+		${</if-errors>}
+		${preprocessing}
+		${filtering}
+		${assembly}
+	</message>
+
+	<message id="ngs.preprocessing-view">
+	<p><b><i>Preprocessing (00:00:16)</i></b></p>
+	${<if-finished>}
+		<p>Started with 88533 reads, 26642 reads that did not pass qc, were removed.</p>
+	${</if-finished>}
+
+	<table class="single-ngs-result-table">
+		<tr>
+			<td>Removed reads</td>
+			<td>${removed-pe1}</td>
+			<td>${removed-pe2}</td>
+		</tr>
+	</table>
 	<p>QC results</p>
 	<table class="single-ngs-result-table">
 		<tr>
@@ -105,6 +127,17 @@
 		</tr>
 		${</if-preprocessing>}
 	</table>
+	</message>
+
+	<message id="ngs.filtering-view">
+		<p><b><i>Filtering (${time})</i></b></p>
+		${<if-finished>}
+			<p>Started with ${start-reads} reads, ${end-reads} reads that did not appear to be viral, were removed.</p>
+		${</if-finished>}
+	</message>
+
+	<message id="ngs.assembly-view">
+		<p><b><i>Assembly and Identification (${time})</i></b></p>
 	</message>
 
 	<message id="job-form.typing-time"><p>A whole genome typing will take approximately 60 seconds, please be patient.</p></message>

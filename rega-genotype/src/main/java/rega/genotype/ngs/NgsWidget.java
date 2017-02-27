@@ -31,8 +31,6 @@ import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WResource;
-import eu.webtoolkit.jwt.WTable;
-import eu.webtoolkit.jwt.WTableRow;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WChartPalette;
 import eu.webtoolkit.jwt.chart.WStandardPalette;
@@ -61,26 +59,22 @@ public class NgsWidget extends WContainerWidget{
 
 		WContainerWidget horizontalLayout = new WContainerWidget(this);
 		horizontalLayout.addStyleClass("flex-container");
-
-		WTable table = new WTable(horizontalLayout);
-		table.addStyleClass("ngs-detils-table flex-elem");
 		
-		table.getElementAt(0, 1).addWidget(new WText(
-				"NGS Analysis of " + model.getInputName()));
+		Template preprocessing = new Template(tr("ngs.preprocessing-view"));
+		Template filtering = new Template(tr("ngs.filtering-view"));
+		Template identification = new Template(tr("ngs.assembly-view"));
 
-		WTableRow preprocessingWidget = addStateRow(table, State.Preprocessing, model);
-		WTableRow filteringWidget = addStateRow(table, State.Diamond, model);
-		WTableRow identificationWidget = addStateRow(table, State.Spades, model);
+		fillStateTemplate(preprocessing, State.Preprocessing, model);
+		fillStateTemplate(filtering, State.Diamond, model);
+		fillStateTemplate(identification, State.Spades, model);
 
-		if (!model.getErrors().isEmpty() )
-			new WText("<div class=\"error\">Error: " + model.getErrors() + "</div>", 
-					preprocessingWidget.elementAt(1));
-
-		Template preprocessing = new Template(tr("ngs.qc-view"), preprocessingWidget.elementAt(1));
 		preprocessing.bindEmpty("qc-1");
 		preprocessing.bindEmpty("qc-2");
 		preprocessing.bindEmpty("qcp-1");
 		preprocessing.bindEmpty("qcp-2");
+		preprocessing.bindEmpty("removed-pe1");
+		preprocessing.bindEmpty("removed-pe2");
+
 		preprocessing.setCondition("if-preprocessing", !model.getSkipPreprocessing());
 		if (model.getState().code >= State.Preprocessing.code) {
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
@@ -89,6 +83,30 @@ public class NgsWidget extends WContainerWidget{
 				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir)));
 			} else {
 				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir)));
+			}
+			preprocessing.setCondition("if-finished", true);
+
+			// preprocessing removed reads 
+			
+			if (model.isPairEnd()) {
+				WAnchor removedReads1 = new WAnchor(
+						removedByPreprocessingLink(NgsFileSystem.fastqPE1(workDir), 
+								NgsFileSystem.preprocessedPE1(workDir)), "PE 1");
+				removedReads1.setInline(false);
+				preprocessing.bindWidget("removed-pe1", removedReads1);
+
+				WAnchor removedReads2 = new WAnchor(
+						removedByPreprocessingLink(NgsFileSystem.fastqPE2(workDir), 
+								NgsFileSystem.preprocessedPE2(workDir)), "PE 2");
+				removedReads2.setInline(false);
+				preprocessing.bindWidget("removed-pe2", removedReads2);
+			} else {
+				WAnchor removedReads = new WAnchor(
+						removedByPreprocessingLink(NgsFileSystem.fastqSE(workDir), 
+								NgsFileSystem.preprocessedSE(workDir)), "SE");
+				removedReads.setInline(false);
+				preprocessing.bindWidget("removed-pe1", removedReads);
+				preprocessing.bindEmpty("removed-pe2");
 			}
 		}
 
@@ -104,25 +122,43 @@ public class NgsWidget extends WContainerWidget{
 
 		if (model.getState().code == State.Diamond.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<div> Diamond blast job state:" + jobState + "</div>", filteringWidget.elementAt(1));
+			new WText("<p> Diamond blast job state:" + jobState + "</p>", this);
 		}
 
 		if (model.getState().code == State.Spades.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<div> Sapdes job state:" + jobState + "</div>", this);
+			new WText("<p> Sapdes job state:" + jobState + "</p>", this);
+		}
+
+		if (model.getState().code >= State.Spades.code) {
+			filtering.setCondition("if-finished", true);
+		}
+
+		// top view
+
+		Template view = new Template(tr("ngs.view"), horizontalLayout);
+		view.addStyleClass("ngs-view flex-elem ");
+		view.bindString("input-name", model.getInputName());
+		view.bindWidget("preprocessing", preprocessing);
+		view.bindWidget("filtering", filtering);
+		view.bindWidget("assembly", identification);
+
+		if (!model.getErrors().isEmpty() ){
+			view.setCondition("if-errors", true);
+			view.bindString("errors", model.getErrors());
 		}
 
 		// style
 
 		if (model.getState().code < State.Diamond.code){
-			preprocessingWidget.addStyleClass("working");
-			filteringWidget.addStyleClass("waiting");
-			identificationWidget.addStyleClass("waiting");
+			preprocessing.addStyleClass("working");
+			filtering.addStyleClass("waiting");
+			identification.addStyleClass("waiting");
 		} else if (model.getState() == State.Diamond){
-			filteringWidget.addStyleClass("working");
-			identificationWidget.addStyleClass("waiting");
+			filtering.addStyleClass("working");
+			identification.addStyleClass("waiting");
 		} else if (model.getState() == State.Spades){
-			identificationWidget.addStyleClass("working");
+			identification.addStyleClass("working");
 		}
 
 		boolean isBlastTool = organismDefinition.getToolConfig().getToolMenifest().isBlastTool();
@@ -145,8 +181,8 @@ public class NgsWidget extends WContainerWidget{
 					consensusBuckets, model.getReadLength(), palette,
 					organismDefinition.getToolConfig(), workDir);
 			if (showSingleResult) { 
-				SingleResultView view = new SingleResultView(consensusModel, workDir);
-				table.getElementAt(table.getRowCount(), 1).addWidget(view);
+				SingleResultView singleView = new SingleResultView(consensusModel, workDir);
+				addWidget(singleView);
 			} else {
 				consensusTable = new ResultsView(consensusModel, 
 						NgsConsensusSequenceModel.READ_COUNT_COLUMN,
@@ -174,10 +210,9 @@ public class NgsWidget extends WContainerWidget{
 		subTypingHeaderT.show();
 	}
 
-	private WTableRow addStateRow(WTable table, State state, NgsResultsModel model){
-		WTableRow stateRow = table.insertRow(table.getRowCount());
+	private void fillStateTemplate(Template template, 
+			State state, NgsResultsModel model){
 
-		String title = null;
 		Long startTime = null, endTime = null;
 		Integer startReads = null, endReads = null;
 
@@ -186,14 +221,12 @@ public class NgsWidget extends WContainerWidget{
 		case QC:
 		case Preprocessing:
 		case QC2:
-			title = "Preprocessing";
 			startTime = model.getStateStartTime(State.Init);
 			endTime = model.getStateStartTime(State.Diamond);
 			startReads = model.getReadCountStartState(State.Init);
 			endReads = model.getReadCountStartState(State.Diamond);
 			break;
 		case Diamond:
-			title = State.Diamond.text;
 			startTime = model.getStateStartTime(State.Diamond); 
 			endTime = model.getStateStartTime(State.Spades);
 			startReads = model.getReadCountStartState(State.Diamond);
@@ -201,7 +234,6 @@ public class NgsWidget extends WContainerWidget{
 			break;
 		case Spades:
 		case FinishedAll:
-			title = State.Spades.text;
 			startTime = model.getStateStartTime(State.Spades);
 			endTime = model.getStateStartTime(State.FinishedAll);
 			startReads = model.getReadCountStartState(State.Spades);
@@ -209,45 +241,12 @@ public class NgsWidget extends WContainerWidget{
 			break;
 		}
 
-		new WText("<p><b><i>" + title + "</i></b> (" + printTime(startTime, endTime) + ")</p>", 
-				stateRow.elementAt(1));
+		template.bindString("time", printTime(startTime, endTime));
+
 		if (endReads != null) {
-			new WText("Started with " + startReads + " reads, ",
-					stateRow.elementAt(1));
-			if (state == State.Preprocessing) {
-				new WText((startReads - endReads) + " reads that did not pass qc, were removed.",
-						stateRow.elementAt(1));
-				if (model.isPairEnd()) {
-					WAnchor removedReads1 = new WAnchor(
-							removedByPreprocessingLink(NgsFileSystem.fastqPE1(workDir), 
-									NgsFileSystem.preprocessedPE1(workDir)),
-							"Removed read PE 1");
-					removedReads1.setInline(false);
-					stateRow.elementAt(1).addWidget(removedReads1);
-
-					WAnchor removedReads2 = new WAnchor(
-							removedByPreprocessingLink(NgsFileSystem.fastqPE2(workDir), 
-									NgsFileSystem.preprocessedPE2(workDir)),
-							"Removed read PE 2");
-					removedReads2.setInline(false);
-					stateRow.elementAt(1).addWidget(removedReads2);
-				} else {
-					WAnchor removedReads1 = new WAnchor(
-							removedByPreprocessingLink(NgsFileSystem.fastqSE(workDir), 
-									NgsFileSystem.preprocessedSE(workDir)),
-							"Removed read SE");
-					removedReads1.setInline(false);
-					stateRow.elementAt(1).addWidget(removedReads1);
-				}
-			} else {
-				new WText((startReads - endReads) + " reads that did not appear to be viral, were removed.",
-						stateRow.elementAt(1));
-			}
+			template.bindString("start-reads", startReads + "");
+			template.bindString("end-reads", (startReads - endReads) + "");
 		}
-
-		//stateWidget.setMargin(10, Side.Bottom);
-
-		return stateRow;
 	}
 
 	private String printTime(Long startTime, Long endTime) {

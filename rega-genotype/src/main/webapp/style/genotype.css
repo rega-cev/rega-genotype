@@ -582,6 +582,10 @@ table.reftable caption, .blastResultsTable table caption {
     margin-left: 43px;
 }
 
+.ngs-view {
+	max-width: 500px;
+}
+
 /* change wt wpanel */
 .ngs-start-advanced {
 	margin-top: 10px;
