@@ -132,8 +132,8 @@ public class NgsFileSystem {
 		return fileName.endsWith(".gz") ? fileName.substring(0, fileName.length() - 3) : fileName;
 	}
 
-	public static boolean addFastqGzipedFiles(NgsResultsTracer ngsResults, File fastqPE1, File fastqPE2) {
-		File fastqDir = new File(ngsResults.getWorkDir(), FASTQ_FILES_DIR);
+	public static boolean addFastqGzipedFiles(File workDir, File fastqPE1, File fastqPE2) {
+		File fastqDir = new File(workDir, FASTQ_FILES_DIR);
 		fastqDir.mkdirs();
 
 		String pe1Name = makeFastqFileName(fastqPE1.getName());
@@ -144,12 +144,6 @@ public class NgsFileSystem {
 
 		FileUtil.unGzip1File(fastqPE1, fastqPE1Ungziped);
 		FileUtil.unGzip1File(fastqPE2, fastqPE2Ungziped);
-
-		ngsResults.getModel().setFastqPE1FileName(fastqPE1Ungziped.getName());
-		ngsResults.getModel().setFastqPE2FileName(fastqPE2Ungziped.getName());
-
-		ngsResults.setStateStart(State.Init);
-		ngsResults.printInit();
 
 		return true;
 	}

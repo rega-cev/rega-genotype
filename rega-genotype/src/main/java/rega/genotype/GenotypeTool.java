@@ -33,6 +33,7 @@ import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.ngs.NgsAnalysis;
 import rega.genotype.ngs.NgsFileSystem;
 import rega.genotype.ngs.NgsResultsTracer;
+import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.viruses.generic.GenericDefinition;
 import rega.genotype.util.CsvDataTable;
@@ -517,7 +518,7 @@ public abstract class GenotypeTool {
 
     							if (parseArgsResult.ngsPairedEndSuffix1.endsWith(".gz")) {
     								if(!NgsFileSystem.addFastqGzipedFiles(
-    										ngsResults, peFiles.pe1, peFiles.pe2)) {
+    										workDir, peFiles.pe1, peFiles.pe2)) {
     									System.err.println();
     									System.err.println("-paired-end-files-list pe file not found ");
     									System.err.println();
@@ -533,14 +534,13 @@ public abstract class GenotypeTool {
     								return;
     							}
 
-    							try {
-    							NgsAnalysis ngsAnalysis = new NgsAnalysis(ngsResults,  
-    									ngsModuleE.getValue(), toolConfig);
-    							ngsAnalysis.analyze();
+    							ngsResults.setStateStart(State.Init);
+    							ngsResults.printInit();
 
-//    							genotypeTool.analyze(currentWorkDir.getAbsolutePath()
-//    									+ File.separator
-//    									+ NgsFileSystem.SEQUENCES_FILE, traceFile);
+    							try {
+    								NgsAnalysis ngsAnalysis = new NgsAnalysis(ngsResults,  
+    										ngsModuleE.getValue(), toolConfig);
+    								ngsAnalysis.analyze();
     							} catch (Exception e1) {
     								e1.printStackTrace(); // 1 filed we still want to continue testing more fiels.
     							}
@@ -572,7 +572,8 @@ public abstract class GenotypeTool {
     					return;
     				}
 
-    				
+    				ngsResults.setStateStart(State.Init);
+    				ngsResults.printInit();
     				NgsAnalysis ngsAnalysis = new NgsAnalysis(ngsResults,
     						 Settings.getInstance().getConfig().getNgsModule(), toolConfig);
     				if (parseArgsResult.assembleOnly) {    				
