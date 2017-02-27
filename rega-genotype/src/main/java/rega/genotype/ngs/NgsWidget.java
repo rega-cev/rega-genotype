@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +24,6 @@ import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.framework.widgets.DownloadsWidget;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.ngs.CovMap;
-import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.WAnchor;
@@ -75,48 +75,43 @@ public class NgsWidget extends WContainerWidget{
 		preprocessing.bindEmpty("removed-pe1");
 		preprocessing.bindEmpty("removed-pe2");
 
+		filtering.bindEmpty("removed-pe1");
+		filtering.bindEmpty("removed-pe2");
+
 		preprocessing.setCondition("if-preprocessing", !model.getSkipPreprocessing());
 		if (model.getState().code >= State.Preprocessing.code) {
+			preprocessing.setCondition("if-finished", true);
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
 			if (model.isPairEnd()) {
-				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir)));
-				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir)));
-			} else {
-				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir)));
-			}
-			preprocessing.setCondition("if-finished", true);
+				// qc
+				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), "PE 1"));
+				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), "PE 2"));
+				// removed reads 
+				preprocessing.bindWidget("removed-pe1", 
+						removedByPreprocessingAnchor(
+								NgsFileSystem.fastqPE1(workDir), 
+								NgsFileSystem.preprocessedPE1(workDir), "PE 1"));
 
-			// preprocessing removed reads 
-			
-			if (model.isPairEnd()) {
-				WAnchor removedReads1 = new WAnchor(
-						removedByPreprocessingLink(NgsFileSystem.fastqPE1(workDir), 
-								NgsFileSystem.preprocessedPE1(workDir)), "PE 1");
-				removedReads1.setInline(false);
-				preprocessing.bindWidget("removed-pe1", removedReads1);
-
-				WAnchor removedReads2 = new WAnchor(
-						removedByPreprocessingLink(NgsFileSystem.fastqPE2(workDir), 
-								NgsFileSystem.preprocessedPE2(workDir)), "PE 2");
-				removedReads2.setInline(false);
-				preprocessing.bindWidget("removed-pe2", removedReads2);
+				preprocessing.bindWidget("removed-pe2", removedByPreprocessingAnchor(
+						NgsFileSystem.fastqPE2(workDir), 
+						NgsFileSystem.preprocessedPE2(workDir), "PE 2"));
 			} else {
-				WAnchor removedReads = new WAnchor(
-						removedByPreprocessingLink(NgsFileSystem.fastqSE(workDir), 
-								NgsFileSystem.preprocessedSE(workDir)), "SE");
-				removedReads.setInline(false);
-				preprocessing.bindWidget("removed-pe1", removedReads);
-				preprocessing.bindEmpty("removed-pe2");
+				// qc
+				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), "SE"));
+				// removed reads 
+				preprocessing.bindWidget("removed-pe1", removedByPreprocessingAnchor(
+						NgsFileSystem.fastqSE(workDir), 
+						NgsFileSystem.preprocessedSE(workDir), "SE"));
 			}
 		}
 
 		if (model.getState().code >= State.Diamond.code) {
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
 			if (model.isPairEnd()) {
-				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir)));
-				preprocessing.bindWidget("qcp-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir)));
+				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), "PE 1"));
+				preprocessing.bindWidget("qcp-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), "PE 2"));
 			} else {
-				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir)));
+				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), "SE"));
 			}
 		}
 
@@ -132,6 +127,19 @@ public class NgsWidget extends WContainerWidget{
 
 		if (model.getState().code >= State.Spades.code) {
 			filtering.setCondition("if-finished", true);
+			if (model.isPairEnd()) {
+				// removed reads 
+				filtering.bindWidget("removed-pe1", 
+						removedByFiltringAnchor(
+								NgsFileSystem.fastqPE1(workDir), "PE 1"));
+
+				filtering.bindWidget("removed-pe2", removedByFiltringAnchor(
+						NgsFileSystem.fastqPE2(workDir), "PE 2"));
+			} else {
+				// removed reads 
+				filtering.bindWidget("removed-pe1", removedByFiltringAnchor(
+						NgsFileSystem.fastqSE(workDir), "SE"));
+			}
 		}
 
 		// top view
@@ -257,6 +265,22 @@ public class NgsWidget extends WContainerWidget{
 		}
 	}
 
+	private WAnchor removedByPreprocessingAnchor(final File fastq, final File preprocessed,
+			final String anchorName) {
+		WAnchor removedReads = new WAnchor(
+				removedByPreprocessingLink(fastq, preprocessed), anchorName);
+		removedReads.setInline(false);
+		return removedReads;
+	}
+
+	private WAnchor removedByFiltringAnchor(final File fastq,
+			final String anchorName) {
+		WAnchor removedReads = new WAnchor(
+				removedByFilteringLink(fastq), anchorName);
+		removedReads.setInline(false);
+		return removedReads;
+	}
+
 	private WLink removedByPreprocessingLink(final File fastq, final File preprocessed) {
 		WResource r = new WResource() {
 			@Override
@@ -292,17 +316,58 @@ public class NgsWidget extends WContainerWidget{
 		return link;
 	}
 
-	private WAnchor qcAnchor(File inFile) {
+	private WLink removedByFilteringLink(final File fastq) {
+		WResource r = new WResource() {
+			@Override
+			protected void handleRequest(WebRequest request, WebResponse response)
+					throws IOException {
+
+				try {
+					Set<String> readNames = new HashSet<String>();
+
+					File diamondResutlsDir = NgsFileSystem.diamondResutlsDir(workDir);
+					for (File d: diamondResutlsDir.listFiles()) {
+						if (d.isDirectory())
+							for (File f: d.listFiles())
+								if (f.getName().equals(fastq.getName()))
+									readNames.addAll(SequenceAlignment.getReadNames(f));
+					}
+
+					FileReader fr = new FileReader(fastq.getAbsolutePath());
+					LineNumberReader lnr = new LineNumberReader(fr);
+					while (true){
+						Sequence s = SequenceAlignment.readFastqFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
+						if (s == null )
+							break;
+						if (!readNames.contains(s.getName())) {
+							response.getOutputStream().println("@" + s.getName());
+							response.getOutputStream().println(s.getSequence());
+							response.getOutputStream().println("+");
+							response.getOutputStream().println(s.getQuality());
+						}
+					}
+				} catch (FileFormatException e) {
+					e.printStackTrace();
+					response.setStatus(404);
+					return;
+				}
+				response.getOutputStream();
+			}
+		};
+		WLink link = new WLink(r);
+		link.setTarget(AnchorTarget.TargetNewWindow);
+		return link;
+	}
+
+	private WAnchor qcAnchor(File inFile, String anchorName) {
 		if (inFile == null || !inFile.exists())
 			return null;
 
 		WFileResource r = new WFileResource("html", inFile.getAbsolutePath());
 		WLink link = new WLink(r);
 		link.setTarget(AnchorTarget.TargetNewWindow);
-		String readsName = FileUtil.removeExtention(inFile.getName());
-		WAnchor anchor = new WAnchor(link, readsName);
+		WAnchor anchor = new WAnchor(link, anchorName);
 		anchor.setInline(true);
-		anchor.setMargin(8);
 		return anchor;
 	}
 

@@ -549,14 +549,14 @@ table.reftable caption, .blastResultsTable table caption {
 }
 
 .single-ngs-result-table td {
-    width: 1%;
+   /* width: 1%;*/
     white-space: nowrap;
+    padding:8px;
 }
 
-.single-ngs-result-table td {
-	padding:8px;
+.ngs-view-rowheader {
+	width: 1%;
 }
-
 .ngs-start-table td {
 	padding:8px;
 }

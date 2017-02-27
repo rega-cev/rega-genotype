@@ -106,14 +106,20 @@
 		${</if-finished>}
 	
 		<table class="single-ngs-result-table">
+			<col width="150px" />
+    		<col width="60px" />
+   			<col width="60px" />
 			<tr>
 				<td>Removed reads</td>
 				<td>${removed-pe1}</td>
 				<td>${removed-pe2}</td>
 			</tr>
 		</table>
-		<p>QC results</p>
+		<p><b>QC results</b></p>
 		<table class="single-ngs-result-table">
+			<col width="150px" />
+    		<col width="60px" />
+   			<col width="60px" />
 			<tr>
 				<td>Input sequences</td>
 				<td>${qc-1}</td>
@@ -134,6 +140,16 @@
 		${<if-finished>}
 			<p>Started with ${start-reads} reads, ${end-reads} reads that did not appear to be viral, were removed.</p>
 		${</if-finished>}
+		<table class="single-ngs-result-table">
+			<col width="150px" />
+    		<col width="60px" />
+   			<col width="60px" />
+			<tr>
+				<td>Removed reads</td>
+				<td>${removed-pe1}</td>
+				<td>${removed-pe2}</td>
+			</tr>
+		</table>
 	</message>
 
 	<message id="ngs.assembly-view">
