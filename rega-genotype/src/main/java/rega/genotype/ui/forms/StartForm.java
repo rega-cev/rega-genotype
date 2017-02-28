@@ -209,14 +209,25 @@ public class StartForm extends AbstractForm {
 		if (metadata != null) {
 			if (metadata.clusterCount != null)
 				template.bindString("count_virus_from_blast.xml",  metadata.clusterCount + "");
-			if (metadata.canAccess != null)
-				template.bindString("count_typing_tools",  metadata.canAccess + "");
+			if (metadata.taxonomyIds != null)
+				template.bindString("count_typing_tools",  access(metadata) + "");
 		} 
 
 
 		// NGS
 
 		initNgs(template);
+	}
+
+	private int access(ToolMetadata pvMetadata) {
+		int ans = 0;
+		for (ToolConfig c: Settings.getInstance().getConfig().getTools())
+			if(c.getToolMenifest() != null
+				&& pvMetadata.taxonomyIds.contains(
+						c.getToolMenifest().getTaxonomyId()))
+				ans++;
+
+		return ans;
 	}
 
 	private String setFastqExtention(String fileName) {

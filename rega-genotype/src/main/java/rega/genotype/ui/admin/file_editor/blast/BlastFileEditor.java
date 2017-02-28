@@ -368,9 +368,9 @@ public class BlastFileEditor extends WContainerWidget{
 
 	private void saveToolMetadata(File workDir,
 			AlignmentAnalyses alignmentAnalyses) throws JDOMException, IOException {
-		// TODO Auto-generated method stub
 		ToolMetadata metaData = new ToolMetadata();
 		metaData.clusterCount = alignmentAnalyses.getAllClusters().size();
+		
 		metaData.taxonomyIds = new HashSet<String>();
 		for (Cluster c: alignmentAnalyses.getAllClusters())
 			metaData.taxonomyIds.add(c.getTaxonomyId());
