@@ -427,8 +427,10 @@ public class NgsWidget extends WContainerWidget{
 			case NgsConsensusSequenceModel.IMAGE_COLUMN:
 				CovMap covMap = new CovMap(
 						model().getBucket(row), model());
-
-				table.getElementAt(row + 1, tableCol(column)).addWidget(covMap);
+				WAnchor a = new WAnchor(detailsLink(
+						model().getBucket(row), workDir));
+				a.addWidget(covMap);
+				table.getElementAt(row + 1, tableCol(column)).addWidget(a);
 				break;
 			case NgsConsensusSequenceModel.DETAILS_COLUMN:
 				table.getElementAt(row + 1, tableCol(column)).addWidget(
