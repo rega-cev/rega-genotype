@@ -11,7 +11,6 @@ import rega.genotype.ngs.model.NgsResultsModel;
 import rega.genotype.util.DataTable;
 
 public class NgsTableGenerator extends NgsResultsParser {
-	private NgsResultsModel model;
 	private DataTable table;
 
 	public NgsTableGenerator(DataTable table) throws IOException {
@@ -28,8 +27,6 @@ public class NgsTableGenerator extends NgsResultsParser {
 		table.addLabel("Source");
 
 		table.newRow();
-
-		model = new NgsResultsModel();
 	}
 
 	@Override

@@ -17,7 +17,7 @@ import eu.webtoolkit.jwt.Signal;
 
 public class NgsResultsParser extends GenotypeResultParser{
 
-	private NgsResultsModel model;
+	protected NgsResultsModel model;
 	private Signal updateUiSignal = new Signal();
 
 	public NgsResultsParser() {
