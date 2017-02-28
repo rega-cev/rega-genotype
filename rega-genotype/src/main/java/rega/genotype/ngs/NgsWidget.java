@@ -119,7 +119,6 @@ public class NgsWidget extends WContainerWidget{
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
 			new WText("<p> Diamond blast job state:" + jobState + "</p>", this);
 		}
-
 		if (model.getState().code == State.Spades.code) {
 			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
 			new WText("<p> Sapdes job state:" + jobState + "</p>", this);
@@ -254,6 +253,9 @@ public class NgsWidget extends WContainerWidget{
 		if (endReads != null) {
 			template.bindString("start-reads", startReads + "");
 			template.bindString("end-reads", (startReads - endReads) + "");
+		} else {
+			template.bindEmpty("start-reads");
+			template.bindEmpty("end-reads");
 		}
 	}
 

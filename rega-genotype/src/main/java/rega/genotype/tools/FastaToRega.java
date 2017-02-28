@@ -62,7 +62,7 @@ public class FastaToRega {
 	public enum AnalysisType {
 		Major, Minor, MajorSelfScan, Empty;
 
-		private int analysisNumber = 0;
+		private String analysisNumber = "";
 
 		public String analysisName() {
 			switch (this) {
@@ -74,11 +74,11 @@ public class FastaToRega {
 			return "";
 		}
 
-		public int getAnalysisNumber() {
+		public String getAnalysisNumber() {
 			return analysisNumber;
 		}
 
-		public void setAnalysisNumber(int analysisNumber) {
+		public void setAnalysisNumber(String analysisNumber) {
 			this.analysisNumber = analysisNumber;
 		}
 
@@ -154,7 +154,10 @@ public class FastaToRega {
 	 */
 	public static void createTool(String taxonomyId, String fastaAlingmentFile, String toolDir) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ParserConfigurationException, TransformerException {
 		// may need to update pattern to extract genotype string from FASTA seq id
-		Pattern pattern = Pattern.compile("(\\d[^_]*)\\??_.*");;
+		//Pattern pattern = Pattern.compile("(\\d[^_]*)\\??_.*");
+		
+		//Pattern pattern = Pattern.compile("(\\d++)([^_]++)_.*"); // Tulio
+		Pattern pattern = Pattern.compile("([^\\.]++).([^_]++)_.*"); // Sam
 
 		List<Sequence> sequences = new ArrayList<Sequence>();
 
@@ -166,9 +169,8 @@ public class FastaToRega {
 			if(matcher.find()) {
 				Sequence sequence = new Sequence();
 				sequence.id = seq.getName();
-				String genotypeSubtype = matcher.group(1);
-				sequence.genotype = genotypeSubtype.substring(0, 1);
-				sequence.subtype = genotypeSubtype.substring(1);
+				sequence.genotype = matcher.group(1);
+				sequence.subtype = matcher.group(2);
 				sequence.data = seq.getSequence();
 				sequences.add(sequence);
 			} else if (seq.getName().startsWith(OUT_GROUP_NAME)) {
@@ -388,7 +390,7 @@ public class FastaToRega {
 				}
 			if (!clusterIds.isEmpty()) {
 				AnalysisType minor = AnalysisType.Minor;
-				minor.setAnalysisNumber(n);
+				minor.setAnalysisNumber(i.getKey());
 				n++;
 				createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, minor, outgroupName);
 			}

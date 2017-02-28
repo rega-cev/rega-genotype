@@ -100,9 +100,9 @@
 	</message>
 
 	<message id="ngs.preprocessing-view">
-		<p><b><i>Preprocessing (00:00:16)</i></b></p>
+		<p><b><i>Preprocessing (${time})</i></b></p>
 		${<if-finished>}
-			<p>Started with 88533 reads, 26642 reads that did not pass qc, were removed.</p>
+			<p>Started with ${start-reads} reads, ${end-reads} reads that did not pass qc, were removed.</p>
 		${</if-finished>}
 	
 		<table class="single-ngs-result-table">
