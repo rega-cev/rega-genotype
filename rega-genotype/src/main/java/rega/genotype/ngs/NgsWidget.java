@@ -26,13 +26,10 @@ import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.ngs.CovMap;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
-import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
-import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLink;
-import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WChartPalette;
@@ -86,13 +83,24 @@ public class NgsWidget extends WContainerWidget{
 		filtering.bindEmpty("removed-pe2");
 
 		preprocessing.setCondition("if-preprocessing", !model.getSkipPreprocessing());
-		if (model.getState().code >= State.Preprocessing.code) {
+
+		if (model.getState().code >= State.QC.code) {
+			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
+			if (model.isPairEnd()) {
+				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
+				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), PE2));
+			} else {
+				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), SE));
+			}
+		}
+
+		if (model.getState().code >= State.Diamond.code) {
 			preprocessing.setCondition("if-finished", true);
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
 			if (model.isPairEnd()) {
 				// qc
-				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
-				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), PE2));
+				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
+				preprocessing.bindWidget("qcp-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), PE2));
 				// removed reads 
 				preprocessing.bindWidget("removed-pe1", 
 						removedByPreprocessingAnchor(
@@ -104,31 +112,12 @@ public class NgsWidget extends WContainerWidget{
 						NgsFileSystem.preprocessedPE2(workDir), PE2));
 			} else {
 				// qc
-				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), SE));
+				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), SE));
 				// removed reads 
 				preprocessing.bindWidget("removed-pe1", removedByPreprocessingAnchor(
 						NgsFileSystem.fastqSE(workDir), 
 						NgsFileSystem.preprocessedSE(workDir), SE));
 			}
-		}
-
-		if (model.getState().code >= State.Diamond.code) {
-			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
-			if (model.isPairEnd()) {
-				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
-				preprocessing.bindWidget("qcp-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), PE2));
-			} else {
-				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), SE));
-			}
-		}
-
-		if (model.getState().code == State.Diamond.code) {
-			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<p> Diamond blast job state:" + jobState + "</p>", this);
-		}
-		if (model.getState().code == State.Spades.code) {
-			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<p> Sapdes job state:" + jobState + "</p>", this);
 		}
 
 		if (model.getState().code >= State.Spades.code) {
@@ -146,6 +135,22 @@ public class NgsWidget extends WContainerWidget{
 				filtering.bindWidget("removed-pe1", removedByFiltringAnchor(
 						NgsFileSystem.fastqSE(workDir), SE));
 			}
+		}
+
+		// job state msg.
+
+		if (model.getState().code == State.QC.code)
+			new WText("<p> QC job state: Running</p>", this);
+		else if (model.getState().code == State.Preprocessing.code)
+			new WText("<p> Preprocessing job state: Running</p>", this);
+		else if (model.getState().code == State.QC2.code) 
+			new WText("<p> QC job state: Running</p>", this);
+		else if (model.getState().code == State.Diamond.code) {
+			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
+			new WText("<p> Diamond blast job state:" + jobState + "</p>", this);
+		} else if (model.getState().code == State.Spades.code) {
+			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
+			new WText("<p> Sapdes job state:" + jobState + "</p>", this);
 		}
 
 		// top view

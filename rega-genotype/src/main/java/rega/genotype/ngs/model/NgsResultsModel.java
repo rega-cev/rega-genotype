@@ -49,6 +49,9 @@ public class NgsResultsModel {
 	private Map<String, DiamondBucket> diamondBlastResultsBeforeMerge = new HashMap<String, DiamondBucket>();// count sequences per taxon.
 	private List<ConsensusBucket> consensusBuckets = new ArrayList<ConsensusBucket>();
 
+	/**
+	 * @return The current running state. So the previous state was written.
+	 */
 	public State getState() {
 		return state;
 	}
