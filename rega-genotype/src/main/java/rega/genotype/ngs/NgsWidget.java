@@ -26,10 +26,13 @@ import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.ngs.CovMap;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.WAnchor;
+import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
 import eu.webtoolkit.jwt.WLink;
+import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WResource;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.chart.WChartPalette;
@@ -43,6 +46,10 @@ import eu.webtoolkit.jwt.servlet.WebResponse;
  * @author michael
  */
 public class NgsWidget extends WContainerWidget{
+
+	private static final String PE1 = "Paired end 1";
+	private static final String PE2 = "Paired end 2";
+	private static final String SE = "Single end";
 
 	private ResultsView consensusTable;
 	private File workDir;
@@ -84,34 +91,34 @@ public class NgsWidget extends WContainerWidget{
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
 			if (model.isPairEnd()) {
 				// qc
-				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), "PE 1"));
-				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), "PE 2"));
+				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
+				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), PE2));
 				// removed reads 
 				preprocessing.bindWidget("removed-pe1", 
 						removedByPreprocessingAnchor(
 								NgsFileSystem.fastqPE1(workDir), 
-								NgsFileSystem.preprocessedPE1(workDir), "PE 1"));
+								NgsFileSystem.preprocessedPE1(workDir), PE1));
 
 				preprocessing.bindWidget("removed-pe2", removedByPreprocessingAnchor(
 						NgsFileSystem.fastqPE2(workDir), 
-						NgsFileSystem.preprocessedPE2(workDir), "PE 2"));
+						NgsFileSystem.preprocessedPE2(workDir), PE2));
 			} else {
 				// qc
-				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), "SE"));
+				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), SE));
 				// removed reads 
 				preprocessing.bindWidget("removed-pe1", removedByPreprocessingAnchor(
 						NgsFileSystem.fastqSE(workDir), 
-						NgsFileSystem.preprocessedSE(workDir), "SE"));
+						NgsFileSystem.preprocessedSE(workDir), SE));
 			}
 		}
 
 		if (model.getState().code >= State.Diamond.code) {
 			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
 			if (model.isPairEnd()) {
-				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), "PE 1"));
-				preprocessing.bindWidget("qcp-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), "PE 2"));
+				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
+				preprocessing.bindWidget("qcp-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), PE2));
 			} else {
-				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), "SE"));
+				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), SE));
 			}
 		}
 
@@ -130,14 +137,14 @@ public class NgsWidget extends WContainerWidget{
 				// removed reads 
 				filtering.bindWidget("removed-pe1", 
 						removedByFiltringAnchor(
-								NgsFileSystem.fastqPE1(workDir), "PE 1"));
+								NgsFileSystem.fastqPE1(workDir), PE1));
 
 				filtering.bindWidget("removed-pe2", removedByFiltringAnchor(
-						NgsFileSystem.fastqPE2(workDir), "PE 2"));
+						NgsFileSystem.fastqPE2(workDir), PE2));
 			} else {
 				// removed reads 
 				filtering.bindWidget("removed-pe1", removedByFiltringAnchor(
-						NgsFileSystem.fastqSE(workDir), "SE"));
+						NgsFileSystem.fastqSE(workDir), SE));
 			}
 		}
 
@@ -376,12 +383,21 @@ public class NgsWidget extends WContainerWidget{
 	public static WAnchor details(ConsensusBucket bucket, File workDir) {
 		WAnchor details = new WAnchor();
 		details.setText("Details");
-		String jobId = AbstractJobOverview.jobId(workDir);
-		details.setLink(new WLink(WLink.Type.InternalPath, 
-				"/job/" + jobId + "/" + JobForm.BUCKET_PATH + "/"
-				+ bucket.getBucketId()));
-		details.setTarget(AnchorTarget.TargetNewWindow);
+		details.setLink(detailsLink(bucket, workDir));
 		return details;
+	}
+
+	public static WLink detailsLink(ConsensusBucket bucket, File workDir) {
+		 WLink details = new WLink(WLink.Type.InternalPath, 
+				 detailsUrl(bucket, workDir));
+		 details.setTarget(AnchorTarget.TargetNewWindow);
+		 return details;
+	}
+
+	public static String detailsUrl(ConsensusBucket bucket, File workDir) {
+		String jobId = AbstractJobOverview.jobId(workDir);
+		return "/job/" + jobId + "/" + JobForm.BUCKET_PATH + "/"
+				+ bucket.getBucketId();
 	}
 
 	public static class ResultsView extends ChartTableWidget {

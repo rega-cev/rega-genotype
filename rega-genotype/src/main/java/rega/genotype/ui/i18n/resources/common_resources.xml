@@ -106,18 +106,18 @@
 		${</if-finished>}
 	
 		<table class="single-ngs-result-table">
-			<col width="150px" />
+			<col width="200px" />
     		<col width="60px" />
    			<col width="60px" />
 			<tr>
-				<td>Removed reads</td>
+				<td>Download removed reads</td>
 				<td>${removed-pe1}</td>
 				<td>${removed-pe2}</td>
 			</tr>
 		</table>
 		<p><b>QC results</b></p>
 		<table class="single-ngs-result-table">
-			<col width="150px" />
+			<col width="200px" />
     		<col width="60px" />
    			<col width="60px" />
 			<tr>
@@ -141,11 +141,11 @@
 			<p>Started with ${start-reads} reads, ${end-reads} reads that did not appear to be viral, were removed.</p>
 		${</if-finished>}
 		<table class="single-ngs-result-table">
-			<col width="150px" />
+			<col width="200px" />
     		<col width="60px" />
    			<col width="60px" />
 			<tr>
-				<td>Removed reads</td>
+				<td>Download removed reads</td>
 				<td>${removed-pe1}</td>
 				<td>${removed-pe2}</td>
 			</tr>
