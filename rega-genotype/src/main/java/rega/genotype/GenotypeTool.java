@@ -362,7 +362,7 @@ public abstract class GenotypeTool {
    			else if (blastAnalysis.getRelativeCutoff() != null)
    				conclude("Unassigned", "Unassigned based on BLAST relative score &gt;= " + blastAnalysis.getAbsCutoff(), null);
 
-           	return true;
+           	return false;
         }
     }
     
