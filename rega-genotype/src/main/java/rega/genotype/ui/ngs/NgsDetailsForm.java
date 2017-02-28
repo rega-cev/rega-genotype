@@ -217,9 +217,6 @@ public class NgsDetailsForm extends AbstractForm{
 			template.bindWidget("map", chart);
 			template.bindWidget("slider", sliderWidget);
 
-	    	if (chart.getAxis(Axis.YAxis).getLabelInterval() < 1.0)
-	    		chart.getAxis(Axis.YAxis).setLabelInterval(1.0);
-
 			sequenceAxis.zoomRangeChanged().addListener(chart, new Signal2.Listener<Double, Double>() {
 				public void trigger(Double min, Double max) {
 					chart.update();
