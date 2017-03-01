@@ -616,6 +616,7 @@ table.reftable caption, .blastResultsTable table caption {
   display: flex; /* or inline-flex */
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .flex-elem {
@@ -624,6 +625,7 @@ table.reftable caption, .blastResultsTable table caption {
 
 .flex-elem-auto {
     flex: 1 auto;
+    align-self: flex-end;
 }
 
 .link {

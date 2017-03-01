@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import rega.genotype.Constants.Mode;
 import rega.genotype.FileFormatException;
@@ -26,6 +29,7 @@ import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.ngs.CovMap;
 import rega.genotype.utils.Utils;
 import eu.webtoolkit.jwt.AnchorTarget;
+import eu.webtoolkit.jwt.Side;
 import eu.webtoolkit.jwt.WAnchor;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WFileResource;
@@ -44,13 +48,22 @@ import eu.webtoolkit.jwt.servlet.WebResponse;
  */
 public class NgsWidget extends WContainerWidget{
 
-	private static final String PE1 = "Paired end 1";
-	private static final String PE2 = "Paired end 2";
-	private static final String SE = "Single end";
+	private static final String PE1 = "QC report of reads 1";
+	private static final String PE2 = "QC report of reads 2";
+	private static final String SE = "Report";
 
 	private ResultsView consensusTable;
 	private File workDir;
 	private WText subTypingHeaderT = new WText("<h2>Sub-Typing Tool Results</h2>");
+
+	private static class FastqFilePair {
+		public FastqFilePair(File original, File preprocessed) {
+			this.original = original;
+			this.preprocessed = preprocessed;
+		}
+		File original;
+		File preprocessed;
+	}
 
 	public NgsWidget(final File workDir) {
 		super();
@@ -101,56 +114,14 @@ public class NgsWidget extends WContainerWidget{
 				// qc
 				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
 				preprocessing.bindWidget("qcp-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), PE2));
-				// removed reads 
-				preprocessing.bindWidget("removed-pe1", 
-						removedByPreprocessingAnchor(
-								NgsFileSystem.fastqPE1(workDir), 
-								NgsFileSystem.preprocessedPE1(workDir), PE1));
-
-				preprocessing.bindWidget("removed-pe2", removedByPreprocessingAnchor(
-						NgsFileSystem.fastqPE2(workDir), 
-						NgsFileSystem.preprocessedPE2(workDir), PE2));
 			} else {
 				// qc
 				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcSEFile(qcDir), SE));
-				// removed reads 
-				preprocessing.bindWidget("removed-pe1", removedByPreprocessingAnchor(
-						NgsFileSystem.fastqSE(workDir), 
-						NgsFileSystem.preprocessedSE(workDir), SE));
 			}
 		}
 
 		if (model.getState().code >= State.Spades.code) {
 			filtering.setCondition("if-finished", true);
-			if (model.isPairEnd()) {
-				// removed reads 
-				filtering.bindWidget("removed-pe1", 
-						removedByFiltringAnchor(
-								NgsFileSystem.fastqPE1(workDir), PE1));
-
-				filtering.bindWidget("removed-pe2", removedByFiltringAnchor(
-						NgsFileSystem.fastqPE2(workDir), PE2));
-			} else {
-				// removed reads 
-				filtering.bindWidget("removed-pe1", removedByFiltringAnchor(
-						NgsFileSystem.fastqSE(workDir), SE));
-			}
-		}
-
-		// job state msg.
-
-		if (model.getState().code == State.QC.code)
-			new WText("<p> QC job state: Running</p>", this);
-		else if (model.getState().code == State.Preprocessing.code)
-			new WText("<p> Preprocessing job state: Running</p>", this);
-		else if (model.getState().code == State.QC2.code) 
-			new WText("<p> QC job state: Running</p>", this);
-		else if (model.getState().code == State.Diamond.code) {
-			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<p> Diamond blast job state:" + jobState + "</p>", this);
-		} else if (model.getState().code == State.Spades.code) {
-			String jobState = LongJobsScheduler.getInstance().getJobState(workDir);
-			new WText("<p> Sapdes job state:" + jobState + "</p>", this);
 		}
 
 		// top view
@@ -167,6 +138,25 @@ public class NgsWidget extends WContainerWidget{
 			view.bindString("errors", model.getErrors());
 		}
 
+		// job state msg.
+
+		String jobState = "";
+		if (model.getState().code == State.QC.code)
+			jobState = "<p> QC job state: Running</p>";
+		else if (model.getState().code == State.Preprocessing.code)
+			jobState = "<p> Preprocessing job state: Running</p>";
+		else if (model.getState().code == State.QC2.code) 
+			jobState = "<p> QC job state: Running</p>";
+		else if (model.getState().code == State.Diamond.code) {
+			String schedState = LongJobsScheduler.getInstance().getJobState(workDir);
+			jobState = "<p> Diamond blast job state:" + schedState + "</p>";
+		} else if (model.getState().code == State.Spades.code) {
+			String schedState = LongJobsScheduler.getInstance().getJobState(workDir);
+			jobState = "<p> Sapdes job state:" + schedState + "</p>";
+		} 
+
+		view.bindString("job-state", jobState);
+			
 		// style
 
 		if (model.getState().code < State.Diamond.code){
@@ -183,6 +173,7 @@ public class NgsWidget extends WContainerWidget{
 		boolean isBlastTool = organismDefinition.getToolConfig().getToolMenifest().isBlastTool();
 		boolean showSingleResult = !isBlastTool && model.getConsensusBuckets().size() == 1;
 
+		boolean hasUnassigned = false;
 		List<ConsensusBucket> consensusBuckets = new ArrayList<ConsensusBucket>();
 		if (isBlastTool) {
 			consensusBuckets.addAll(model.getConsensusBuckets());
@@ -190,8 +181,15 @@ public class NgsWidget extends WContainerWidget{
 			for (ConsensusBucket b: model.getConsensusBuckets())
 				if (!b.getConcludedId().equals("Unassigned"))
 					consensusBuckets.add(b);
+				else
+					hasUnassigned = true;
 		}
 
+		if (hasUnassigned)
+			view.bindWidget("redirect-to-pan-viral", createPanViralToolAnchor());
+		else
+			view.bindEmpty("redirect-to-pan-viral");
+		
 		// consensus table.
 		if (!consensusBuckets.isEmpty()) {
 			WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
@@ -219,10 +217,18 @@ public class NgsWidget extends WContainerWidget{
 		}
 
 		if (model.getState() == State.FinishedAll) {
-			if (!showSingleResult)
+			if (!showSingleResult && 
+					(!isBlastTool && model.getConsensusBuckets().size() == 0))
 				addWidget(new DownloadsWidget(null, workDir, organismDefinition, true, Mode.Ngs));
 			addWidget(subTypingHeaderT);
 		}
+	}
+
+	private WAnchor createPanViralToolAnchor() {
+		WAnchor a = new WAnchor(new WLink("TODO")); // TODO
+		a.setText("Some contigs could not be identified by the current tool, try the Pan-viral tool.");
+		a.setMargin(20, Side.Bottom);
+		return a;
 	}
 
 	public void showSubTypingHeader() {
@@ -235,23 +241,42 @@ public class NgsWidget extends WContainerWidget{
 		Long startTime = null, endTime = null;
 		Integer startReads = null, endReads = null;
 
+		WLink removedReads = null;
+		
 		switch (state) {
 		case Init:
 		case QC:
 		case Preprocessing:
-		case QC2:
+		case QC2: {
 			startTime = model.getStateStartTime(State.Init);
 			endTime = model.getStateStartTime(State.Diamond);
 			startReads = model.getReadCountStartState(State.Init);
 			endReads = model.getReadCountStartState(State.Diamond);
+			FastqFilePair[] fastqFiles;
+			if (model.isPairEnd())
+				fastqFiles = new FastqFilePair[]{
+					new FastqFilePair(NgsFileSystem.fastqPE1(workDir), NgsFileSystem.preprocessedPE1(workDir)),
+					new FastqFilePair(NgsFileSystem.fastqPE2(workDir), NgsFileSystem.preprocessedPE2(workDir))};
+			else
+				fastqFiles = new FastqFilePair[]{
+					new FastqFilePair(NgsFileSystem.fastqSE(workDir), NgsFileSystem.preprocessedSE(workDir))};
+
+			removedReads = removedByPreprocessingLink(fastqFiles);
 			break;
-		case Diamond:
+		} case Diamond: {
 			startTime = model.getStateStartTime(State.Diamond); 
 			endTime = model.getStateStartTime(State.Spades);
 			startReads = model.getReadCountStartState(State.Diamond);
 			endReads = model.getReadCountStartState(State.Spades);
+			File[] fastqFiles;
+			if (model.isPairEnd())
+				fastqFiles = new File[]{
+					NgsFileSystem.fastqPE1(workDir), NgsFileSystem.fastqPE2(workDir)};
+			else
+				fastqFiles = new File[]{NgsFileSystem.fastqSE(workDir)};
+			removedReads = removedByFilteringLink(fastqFiles);
 			break;
-		case Spades:
+		} case Spades:
 		case FinishedAll:
 			startTime = model.getStateStartTime(State.Spades);
 			endTime = model.getStateStartTime(State.FinishedAll);
@@ -264,7 +289,8 @@ public class NgsWidget extends WContainerWidget{
 
 		if (endReads != null) {
 			template.bindString("start-reads", startReads + "");
-			template.bindString("end-reads", (startReads - endReads) + "");
+			template.bindWidget("end-reads", new WAnchor(
+					removedReads, (startReads - endReads) + ""));
 		} else {
 			template.bindEmpty("start-reads");
 			template.bindEmpty("end-reads");
@@ -279,86 +305,104 @@ public class NgsWidget extends WContainerWidget{
 		}
 	}
 
-	private WAnchor removedByPreprocessingAnchor(final File fastq, final File preprocessed,
-			final String anchorName) {
-		WAnchor removedReads = new WAnchor(
-				removedByPreprocessingLink(fastq, preprocessed), anchorName);
-		removedReads.setInline(false);
-		return removedReads;
+	/**
+	 * Write all reads that are in originalFastq and are not in preprocessed to zos.
+	 * @param originalFastq
+	 * @param preprocessed
+	 * @param out
+	 * @throws IOException
+	 * @throws FileFormatException
+	 */
+	private static void writeRemovedFastq(File originalFastq, File preprocessed,
+			OutputStream out) throws IOException, FileFormatException {
+		writeRemovedFastq(originalFastq, SequenceAlignment.getReadNames(preprocessed), out);
 	}
 
-	private WAnchor removedByFiltringAnchor(final File fastq,
-			final String anchorName) {
-		WAnchor removedReads = new WAnchor(
-				removedByFilteringLink(fastq), anchorName);
-		removedReads.setInline(false);
-		return removedReads;
+	private static void writeRemovedFastq(File originalFastq, Set<String> usedReadNames,
+			OutputStream out) throws IOException, FileFormatException {
+		FileReader fr = new FileReader(originalFastq.getAbsolutePath());
+		LineNumberReader lnr = new LineNumberReader(fr);
+
+		while (true){
+			Sequence s = SequenceAlignment.readFastqFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
+			if (s == null )
+				break;
+			if (!usedReadNames.contains(s.getName())) {
+				out.write(("@" + s.getName() + "\n").getBytes());
+				out.write((s.getSequence() + "\n").getBytes());
+				out.write(("+" + "\n").getBytes());
+				out.write((s.getQuality() + "\n").getBytes());
+			}
+		}
 	}
 
-	private WLink removedByPreprocessingLink(final File fastq, final File preprocessed) {
+	private WLink removedByPreprocessingLink(final FastqFilePair[] filePairs) {
 		WResource r = new WResource() {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response)
 					throws IOException {
+				ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
 
 				try {
-					Set<String> readNames = SequenceAlignment.getReadNames(preprocessed);
-
-					FileReader fr = new FileReader(fastq.getAbsolutePath());
-					LineNumberReader lnr = new LineNumberReader(fr);
-					while (true){
-						Sequence s = SequenceAlignment.readFastqFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
-						if (s == null )
-							break;
-						if (!readNames.contains(s.getName())) {
-							response.getOutputStream().println("@" + s.getName());
-							response.getOutputStream().println(s.getSequence());
-							response.getOutputStream().println("+");
-							response.getOutputStream().println(s.getQuality());
-						}
+					for (FastqFilePair fp: filePairs) {
+						zos.putNextEntry(new ZipEntry(fp.original.getName()));
+						writeRemovedFastq(fp.original, fp.preprocessed, zos);
 					}
 				} catch (FileFormatException e) {
 					e.printStackTrace();
 					response.setStatus(404);
 					return;
+				} finally {
+					zos.close();
 				}
-				response.getOutputStream();
 			}
 		};
+		r.suggestFileName("removed-reads-preprocessing.zip");
 		WLink link = new WLink(r);
-		link.setTarget(AnchorTarget.TargetNewWindow);
+		link.setTarget(AnchorTarget.TargetDownload);
 		return link;
 	}
 
-	private WLink removedByFilteringLink(final File fastq) {
+	/**
+	 * @return the names of all read that passed filtering.
+	 * @throws FileFormatException 
+	 * @throws IOException 
+	 */
+	private Set<String> readThatPassedFiltring() throws IOException, FileFormatException {
+		Set<String> readNames = new HashSet<String>();
+
+		File diamondResutlsDir = NgsFileSystem.diamondResutlsDir(workDir);
+		for (File d: diamondResutlsDir.listFiles()) {
+			if (d.isDirectory())
+				for (File f: d.listFiles())
+					if (f.getName().endsWith(".fastq"))
+						readNames.addAll(SequenceAlignment.getReadNames(f));
+		}
+		return readNames;
+	}
+
+	private WLink removedByFilteringLink(final File[] fastqFiles) {
 		WResource r = new WResource() {
 			@Override
 			protected void handleRequest(WebRequest request, WebResponse response)
 					throws IOException {
 
 				try {
-					Set<String> readNames = new HashSet<String>();
+					Set<String> readNames = readThatPassedFiltring();
 
-					File diamondResutlsDir = NgsFileSystem.diamondResutlsDir(workDir);
-					for (File d: diamondResutlsDir.listFiles()) {
-						if (d.isDirectory())
-							for (File f: d.listFiles())
-								if (f.getName().equals(fastq.getName()))
-									readNames.addAll(SequenceAlignment.getReadNames(f));
-					}
+					ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
 
-					FileReader fr = new FileReader(fastq.getAbsolutePath());
-					LineNumberReader lnr = new LineNumberReader(fr);
-					while (true){
-						Sequence s = SequenceAlignment.readFastqFileSequence(lnr, SequenceAlignment.SEQUENCE_DNA);
-						if (s == null )
-							break;
-						if (!readNames.contains(s.getName())) {
-							response.getOutputStream().println("@" + s.getName());
-							response.getOutputStream().println(s.getSequence());
-							response.getOutputStream().println("+");
-							response.getOutputStream().println(s.getQuality());
+					try {
+						for (File fastq: fastqFiles) {
+							zos.putNextEntry(new ZipEntry(fastq.getName()));
+							writeRemovedFastq(fastq, readNames, zos);
 						}
+					} catch (FileFormatException e) {
+						e.printStackTrace();
+						response.setStatus(404);
+						return;
+					} finally {
+						zos.close();
 					}
 				} catch (FileFormatException e) {
 					e.printStackTrace();
@@ -368,8 +412,9 @@ public class NgsWidget extends WContainerWidget{
 				response.getOutputStream();
 			}
 		};
+		r.suggestFileName("removed-reads-filtering.zip");
 		WLink link = new WLink(r);
-		link.setTarget(AnchorTarget.TargetNewWindow);
+		link.setTarget(AnchorTarget.TargetDownload);
 		return link;
 	}
 

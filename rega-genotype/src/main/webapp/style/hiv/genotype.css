@@ -592,6 +592,7 @@ table.reftable caption{
   display: flex; /* or inline-flex */
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .flex-elem {

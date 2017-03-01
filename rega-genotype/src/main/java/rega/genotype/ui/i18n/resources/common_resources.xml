@@ -97,6 +97,8 @@
 		${preprocessing}
 		${filtering}
 		${assembly}
+		${job-state}
+		${redirect-to-pan-viral}
 	</message>
 
 	<message id="ngs.preprocessing-view">
@@ -104,24 +106,14 @@
 		${<if-finished>}
 			<p>Started with ${start-reads} reads, ${end-reads} reads that did not pass qc, were removed.</p>
 		${</if-finished>}
-	
+		<p><b><i>Quality control (QC) reports</i></b></p>
+		<p>
+			The preprocessing step will filter low quality reads and and remove potential adapters.
+			Below are QC reports of the original submitted reads and the reads after preprocessing.
+		</p>
 		<table class="single-ngs-result-table">
-			<col width="200px" />
-    		<col width="60px" />
-   			<col width="60px" />
 			<tr>
-				<td>Download removed reads</td>
-				<td>${removed-pe1}</td>
-				<td>${removed-pe2}</td>
-			</tr>
-		</table>
-		<p><b>QC results</b></p>
-		<table class="single-ngs-result-table">
-			<col width="200px" />
-    		<col width="60px" />
-   			<col width="60px" />
-			<tr>
-				<td>Input sequences</td>
+				<td>Before preprocessing</td>
 				<td>${qc-1}</td>
 				<td>${qc-2}</td>
 			</tr>
@@ -140,16 +132,6 @@
 		${<if-finished>}
 			<p>Started with ${start-reads} reads, ${end-reads} reads that did not appear to be viral, were removed.</p>
 		${</if-finished>}
-		<table class="single-ngs-result-table">
-			<col width="200px" />
-    		<col width="60px" />
-   			<col width="60px" />
-			<tr>
-				<td>Download removed reads</td>
-				<td>${removed-pe1}</td>
-				<td>${removed-pe2}</td>
-			</tr>
-		</table>
 	</message>
 
 	<message id="ngs.assembly-view">

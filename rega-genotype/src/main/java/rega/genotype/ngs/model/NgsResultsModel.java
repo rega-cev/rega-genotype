@@ -119,7 +119,7 @@ public class NgsResultsModel {
 			return FileUtil.removeExtention(fastqSEFileName);
 		}
 
-		return null;
+		return "";
 	}
 
 	public String getFastqPE1FileName() {
