@@ -98,7 +98,7 @@ public class NgsWidget extends WContainerWidget{
 		preprocessing.setCondition("if-preprocessing", !model.getSkipPreprocessing());
 
 		if (model.getState().code >= State.QC.code) {
-			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
+			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
 			if (model.isPairEnd()) {
 				preprocessing.bindWidget("qc-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
 				preprocessing.bindWidget("qc-2", qcAnchor(NgsFileSystem.qcPE2File(qcDir), PE2));
@@ -109,7 +109,7 @@ public class NgsWidget extends WContainerWidget{
 
 		if (model.getState().code >= State.Diamond.code) {
 			preprocessing.setCondition("if-finished", true);
-			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_DIR);
+			File qcDir = new File(workDir, NgsFileSystem.QC_REPORT_AFTER_PREPROCESS_DIR);
 			if (model.isPairEnd()) {
 				// qc
 				preprocessing.bindWidget("qcp-1", qcAnchor(NgsFileSystem.qcPE1File(qcDir), PE1));
