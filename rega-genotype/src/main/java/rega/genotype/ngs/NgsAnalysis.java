@@ -50,6 +50,8 @@ public class NgsAnalysis {
 	private ToolConfig toolConfig;
 	private NgsResultsTracer ngsResults;
 
+	private enum AssemblyState {AssembledAndIdentified, Assembled, Failed, }
+	
 	public NgsAnalysis(NgsResultsTracer ngsProgress, NgsModule ngsModule, ToolConfig toolConfig){
 		this.workDir = ngsProgress.getWorkDir();
 		this.ngsModule = ngsModule;
@@ -285,13 +287,15 @@ public class NgsAnalysis {
 		return true;
 	}
 
-	public boolean assembleVirus(File virusDiamondDir, BlastTool tool) {
+	public AssemblyState assembleVirus(File virusDiamondDir, BlastTool tool) {
 		if (!virusDiamondDir.isDirectory())
-			return false;
+			return AssemblyState.Failed;
 
 		DiamondBucket basketData = ngsResults.getModel().getDiamondBlastResults().get(virusDiamondDir.getName());
 		if (ngsModule.getMinReadsToStartAssembly() > basketData.getReadCountTotal())
-			return false; // no need to assemble if there is not enough reads.
+			return AssemblyState.Failed; // no need to assemble if there is not enough reads.
+
+		boolean identified = false; // only identified consensus contigs are passed on to the sub typing tool.
 
 		try {
 			long startAssembly = System.currentTimeMillis();
@@ -316,7 +320,7 @@ public class NgsAnalysis {
 						sequenceFile, virusDiamondDir.getName());
 			}
 			if (assembledFile == null)
-				return false;
+				return AssemblyState.Failed;
 
 			long endAssembly = System.currentTimeMillis();
 			ngsLogger.info("assembled " + virusDiamondDir.getName() + " = " + (endAssembly - startAssembly) + " ms");
@@ -328,7 +332,7 @@ public class NgsAnalysis {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 					ngsResults.printFatalError("assemble failed, could not create sequences.xml");
-					return false;
+					return AssemblyState.Failed;
 				}
 			// fill sequences.fasta'
 			File sequencesFile = new File(workDir, Constants.SEQUENCES_FILE_NAME);
@@ -338,7 +342,7 @@ public class NgsAnalysis {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 					ngsResults.printFatalError("assemble failed, could not create sequences.xml");
-					return false;
+					return AssemblyState.Failed;
 				}
 			File allConsensusesFile = new File(workDir, NgsFileSystem.CONSENSUSES_FILE);
 			if (!allConsensusesFile.exists())
@@ -347,7 +351,7 @@ public class NgsAnalysis {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 					ngsResults.printFatalError("assemble failed, could not create sequences.xml");
-					return false;
+					return AssemblyState.Failed;
 				}
 
 			SequenceAlignment spadesContigsAlignment = new SequenceAlignment(new FileInputStream(assembledFile), SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
@@ -366,7 +370,6 @@ public class NgsAnalysis {
 
 			File consensusInputContigs = assembledFile;
 
-			boolean identified = false; // only identified consensus contigs are passed on to the sub typing tool.
 			for (AbstractSequence ref : refs.getSequences()) {
 				ngsLogger.info("Trying with " + ref.getName() + " " + ref.getDescription());
 				String refseqName = ref.getName().replaceAll("\\|", "_");
@@ -424,10 +427,10 @@ public class NgsAnalysis {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ngsResults.printAssemblyError("assemble failed." + e.getMessage());
-			return false;
+			return AssemblyState.Failed;
 		}
 
-		return true;
+		return identified ? AssemblyState.AssembledAndIdentified : AssemblyState.Assembled;
 	}
 
 	/**
