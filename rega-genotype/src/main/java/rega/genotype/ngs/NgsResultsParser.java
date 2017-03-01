@@ -66,7 +66,7 @@ public class NgsResultsParser extends GenotypeResultParser{
 		} else if (tag.equals("qc1")) {
 			if (model.getSkipPreprocessing())
 				model.readStateTime(State.Diamond, Long.parseLong(GenotypeLib.getEscapedValue(parser,
-						"/genotype_result/init/end-time-ms")));
+						"/genotype_result/qc1/end-time-ms")));
 			else
 				model.readStateTime(State.Preprocessing, Long.parseLong(
 						GenotypeLib.getEscapedValue(parser,
