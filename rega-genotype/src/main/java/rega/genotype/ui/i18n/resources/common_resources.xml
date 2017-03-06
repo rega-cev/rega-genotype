@@ -413,7 +413,54 @@
 		
 		${placeholders}
 	</message>
-	
+
+	<message id="admin.auto-subtyping-widget">
+		<div><b>Create subtyping tool from annotated alingment file.</b></div>
+		<p>
+			${one-alignment}
+			${many-alignments}
+		</p>
+		${text}
+		<p>
+		<div><b>Sequene name format (Tulio): 'genotype''subtype'_'accession number'</b></div>
+		<div>Example: 1a_AF009606</div>
+		<div>genotype = 1, subtype = a, name = AF009606</div>
+		<div>Out group is marked by 'X' so out group sequence name can be >X or >X_AF009606</div>
+		</p>
+		<p>${advance-format}</p>
+		<p>Scientific name ${scientific-name}</p>
+		
+		${upload}
+		${create}
+		${info}
+	</message>
+
+	<message id="admin.auto-subtyping-widget.one-alignemnt">
+		<p><b>blast.xml</b> will be contain one cluster with the first sequence of every genotype.</p>
+		<p><b>phylo-.xml</b> if the alignemnt contains only 1 genotype phylo-.xml will contain a cluster for every subtype and 1 phylo major analysis of all this clusters.</p> 
+	</message>
+
+	<message id="admin.auto-subtyping-widget.many-alignment">
+		<p><b>blast.xml</b> will contain a cluster per phylo alignemnt.</p>
+		<p><b>phylo-.xml</b> if the alignemnt contains only 1 genotype phylo-.xml will contain a cluster for every subtype and 1 phylo major analysis of all this clusters.</p>
+		<p><b>Input files</b></p>
+		<p>
+			<b>blast.fasta</b> used to create blast.xml. blast.fasta sequences names must be the accession number,
+			 the same ac number must be part of a sequence in 1 of the alignment files. This will be used to build the clusters and identify regions.
+		</p>
+		<p>
+			<b>phylo-'cluster-name'.fasta</b> used to create phylo-'cluster-name'.xml the 'cluster name' is used in blast.xml to identify the alignment.
+		</p> 
+	</message>
+
+	<message id="admin.auto-subtyping-widget.advanced">
+		<div>Alternatively you can provide sequence format regex that contains 3 groups ('genotype', 'subtype', 'accession number') </div>
+		<div>Examples: </div>
+		<div>Format "Tulio" = (\\d++)([^_]++)_(.*)</div>
+		<div>Format "Sam" = ([^\\.]++).([^_]++)_(.*)</div>
+		<div>Alternative format ${format}</div>
+	</message>
+
 	<message id="admin.config.ui-file-editor.placeholders">
 		<table class="form-table">
 	    <col width="200"><col width="200"></col></col>

@@ -6,10 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,9 +31,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import rega.genotype.AbstractSequence;
+import rega.genotype.AlignmentException;
+import rega.genotype.ApplicationException;
+import rega.genotype.BlastAnalysis.Region;
 import rega.genotype.FileFormatException;
 import rega.genotype.ParameterProblemException;
+import rega.genotype.Sequence;
+import rega.genotype.SequenceAlign;
 import rega.genotype.SequenceAlignment;
+import rega.genotype.utils.EdirectUtil;
+import rega.genotype.utils.FileUtil;
 
 /**
  * Auto create phylo- and blast xmls from fasta alignment file.
@@ -58,6 +63,72 @@ import rega.genotype.SequenceAlignment;
  */
 public class FastaToRega {
 	private static final String OUT_GROUP_NAME = "X";
+
+	/**
+	 * phylo-'cluster'.fasta
+	 */
+	public static class PhyloAlignment {
+		String alignmentName;
+		Map<String, Map<String, List<RegaSequence>>> genotypeToSubtypeToSequences;
+
+		public PhyloAlignment(File fastaAlingmentFile, String fastaHeaderRegix) 
+				throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ApplicationException {
+			this(alignmentNameFromFileName(fastaAlingmentFile), fastaAlingmentFile, fastaHeaderRegix);
+		}
+
+		public PhyloAlignment(String alignmentName,
+				File fastaAlingmentFile, String fastaHeaderRegix) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ApplicationException {
+			this.alignmentName = alignmentName;
+			genotypeToSubtypeToSequences = new HashMap<String, Map<String,List<RegaSequence>>>();
+
+			List<RegaSequence> sequences = readSequences(fastaAlingmentFile, fastaHeaderRegix);
+
+			// Map<genotype, all the sequences that belong to the genotype>
+			Map<String, List<RegaSequence>> genotypeToSequences = new HashMap<String, List<RegaSequence>>();		
+			for (RegaSequence seq : sequences) {
+				if (genotypeToSequences.get(seq.genotype) == null)
+					genotypeToSequences.put(seq.genotype, new ArrayList<RegaSequence>());
+				genotypeToSequences.get(seq.genotype).add(seq);
+			}
+
+			// Map<genotype, Map<subType, all the sequences that belong to the subType> >
+			for (Entry<String, List<RegaSequence>> a : genotypeToSequences.entrySet()) {
+				Map<String, List<RegaSequence>> subtypeMap = new HashMap<String, List<RegaSequence>>();
+
+				for (RegaSequence seq : a.getValue()) {
+					if (subtypeMap.get(seq.subtype) == null)
+						subtypeMap.put(seq.subtype, new ArrayList<RegaSequence>());
+					subtypeMap.get(seq.subtype).add(seq);
+				}
+				genotypeToSubtypeToSequences.put(a.getKey(), subtypeMap);
+			}
+		}
+
+		public RegaSequence find(String accessionNumber) {
+			for (Map<String, List<RegaSequence>> subtypeToSequences :
+				genotypeToSubtypeToSequences.values())
+				for (List<RegaSequence> seqs: subtypeToSequences.values())
+					for (RegaSequence seq: seqs)
+						if (seq.accesssionNumber.equals(accessionNumber))
+							return seq;
+
+			return null;
+		}
+
+		public String aligmentFastaFileName() {
+			return "phylo-" + alignmentName + ".fasta";
+		}
+
+		public String aligmentXmlFileName() {
+			return "phylo-" + alignmentName + ".xml";
+		}
+
+		public static String alignmentNameFromFileName(File fastaFile) {
+			return fastaFile.getName().replace("phylo-", "").replace(".fasta", "");
+		}
+	}
+
+	public enum Mode {OneAlilgnment, ManyAlignemnts}
 
 	public enum AnalysisType {
 		Major, Minor, MajorSelfScan, Empty;
@@ -84,12 +155,13 @@ public class FastaToRega {
 
 	}
 
-	private static class Sequence {
+	private static class RegaSequence extends Sequence {
+		public RegaSequence(AbstractSequence other) {
+			super(other.getName(), false, other.getDescription(), other.getSequence(), null);
+		}
 		String genotype = null;
 		String subtype = null;
-		String id;
-		String data;
-		public String toString() { return genotype+"-"+subtype+":"+id; }
+		String accesssionNumber = null;
 	}
 
 	/**
@@ -99,7 +171,7 @@ public class FastaToRega {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		if (args.length < 2) {
+		if (args.length < 3) {
 			System.err.println("Usage: fastaToRega input.fasta output-dir");
 			return;
 		}
@@ -107,168 +179,209 @@ public class FastaToRega {
 		String fastaAlingmentFile = args[0];
 		String toolDir = args[1];
 		String taxonomyId = args[2];
+		String clustalwPath = (args.length > 3) ? args[3] : null;
 
-		createTool(taxonomyId, fastaAlingmentFile, toolDir);
+		createTool(taxonomyId, new File(fastaAlingmentFile), 
+				new File(toolDir), clustalwPath);
 	}
 
-	/**
-	 * Create phylo-{taxonomyId}.xml xml File
-	 * @param taxonomyId - will be used in the name of the file and also in the cluster name of blast.xml
-	 * @param fastaAlingmentFile - all the fasta sequences for the analysis (must be formated as documeted on top)
-	 * @param toolDir - xml dir of the tool the new file will be stored there (same as in createTool)
-	 */
-	public static void addPhyloFile(String taxonomyId, String fastaAlingmentFile, String toolDir) {
-		// TODO: Hey Yum, this function will be very similar to createTool.
-		// There is 2 cases
-		// 1. blast.xml does not exist -> exactly the same as createTool
-		// 2. blast.xml exist -> you do not need to create it but only to add the correct clusters for this phylo analysis. 
-		//    use: addClustersToBlastDoc
-	}
-
-	/**
-	 * Add the clusters of a phylo- analysis to blast.xml
-	 * @param alingmentFile
-	 * @param taxonomyId - used for the cluster name.
-	 * @param genotypeToSubtypeToSequences - Map<genotype, Map<subType, all the sequences that belong to the subType> >
-	 * @return the new blast.xml Document
-	 */
-	private static void addClustersToBlastDoc(
-			String alingmentFile, String taxonomyId, 
-			Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences) {
-		// TODO: Hey Yum, this function will be very similar to blastDocument.
-		// you need to read blast Document, add the clusters and write it back to the file.
-	}
-
-	/**
-	 * Create blast.xml xml File
-	 * @param taxonomyId - will be used in the name of the file and also in the cluster name of blast.xml
-	 * @param fastaAlingmentFile - all the fasta sequences for the analysis (must be formated as documeted on top)
-	 * @param toolDir - xml dir of the tool the new file will be stored there (same as in createTool)
-	 */
-	public static void addBlastFile(String taxonomyId, String fastaAlingmentFile, String toolDir) {
-		// TODO: Hey Yum, this function will be very similar to createTool but does not need to create the phylo.xml file
+	public static void createTool(String taxonomyId,
+			File fastaAlingmentFile, File toolDir) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ParserConfigurationException, TransformerException, ApplicationException, AlignmentException {
+		createTool(taxonomyId, fastaAlingmentFile, toolDir, "(\\d++)([^_]++)_(.*)"); // Tulio regix
 	}
 
 	/**
 	 * Main function: Create blast.xml and phylo xml files 
 	 */
-	public static void createTool(String taxonomyId, String fastaAlingmentFile, String toolDir) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ParserConfigurationException, TransformerException {
-		// may need to update pattern to extract genotype string from FASTA seq id
-		//Pattern pattern = Pattern.compile("(\\d[^_]*)\\??_.*");
-		
-		//Pattern pattern = Pattern.compile("(\\d++)([^_]++)_.*"); // Tulio
-		Pattern pattern = Pattern.compile("([^\\.]++).([^_]++)_.*"); // Sam
+	public static void createTool(String taxonomyId, File fastaAlingmentFile,
+			File toolDir, String fastaHeaderRegix)
+					throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ParserConfigurationException, TransformerException, ApplicationException, AlignmentException {
 
-		List<Sequence> sequences = new ArrayList<Sequence>();
+		PhyloAlignment phyloAlignment = new PhyloAlignment(taxonomyId, fastaAlingmentFile, fastaHeaderRegix);
 
-		SequenceAlignment seqAlign = new SequenceAlignment(new FileInputStream(new File(fastaAlingmentFile)), 
+		// create phylo-taxonomyId.xml file.
+		Document clustalDoc = clustersDoc(phyloAlignment);
+		writeXml(new File(toolDir, phyloAlignment.aligmentXmlFileName()), clustalDoc);
+
+		// create blast.xml
+		List<PhyloAlignment> alignments = new ArrayList<FastaToRega.PhyloAlignment>();
+		Document blastDoc = blastDocument(Mode.OneAlilgnment, fastaAlingmentFile, alignments);
+		writeXml(new File(toolDir, "blast.xml"), blastDoc);
+	}
+
+	public static void createTool(List<PhyloAlignment> phyloAlignments,
+			File toolDir)
+					throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ParserConfigurationException, TransformerException, ApplicationException, InterruptedException, AlignmentException {
+		File blastFasta = new File(toolDir, "blast.fasta");
+		autoCreateBlastFasta(phyloAlignments, new File(toolDir, "blast.fasta"));
+		createTool(blastFasta, phyloAlignments, toolDir);
+	}
+
+	/**
+	 * Main function: Create blast.xml and phylo xml files 
+	 */
+	public static void createTool(File blastFasta, List<PhyloAlignment> phyloAlignments,
+			File toolDir) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ParserConfigurationException, TransformerException, AlignmentException {
+
+		// create phylo-taxonomyId.xml files.
+		for (PhyloAlignment phyloAlignment: phyloAlignments) {
+			Document clustalDoc = clustersDoc(phyloAlignment);
+			writeXml(new File(toolDir, phyloAlignment.aligmentXmlFileName()), clustalDoc);
+		}
+
+		// create blast.xml
+		Document blastDoc = blastDocument(Mode.ManyAlignemnts, blastFasta, phyloAlignments);
+		writeXml(new File(toolDir, "blast.xml"), blastDoc);
+	}
+
+	/**
+	 * Download from gen bank all the full sequence for every first sequence in a sub type. 
+	 * @throws InterruptedException 
+	 * @throws IOException 
+	 * @throws ApplicationException 
+	 * @throws FileFormatException 
+	 * @throws ParameterProblemException 
+	 */
+	public static void autoCreateBlastFasta(List<PhyloAlignment> phyloAlignments, File blastFasta) throws ApplicationException, IOException, InterruptedException, ParameterProblemException, FileFormatException {
+		List<String> accessionNumbers = new ArrayList<String>();
+		for (PhyloAlignment phyloAlignment: phyloAlignments) {
+			for (Entry<String, Map<String, List<RegaSequence>>> i : phyloAlignment.genotypeToSubtypeToSequences.entrySet()) {
+				Map<String, List<RegaSequence>> subtypeToSequences = i.getValue();
+				for (Entry<String, List<RegaSequence>> j : subtypeToSequences.entrySet()) {
+					if (j.getValue().size() > 0)
+						accessionNumbers.add(j.getValue().get(0).accesssionNumber);
+				}
+			}
+		}
+
+		File query = File.createTempFile("accession-numbers", "");
+		File ncbiFasta = File.createTempFile("ncbi-seq", "");
+
+		EdirectUtil.createNcbiAccQuery(accessionNumbers, query);
+		EdirectUtil.queryFasta(query, ncbiFasta);
+
+		SequenceAlignment alignment = new SequenceAlignment(new FileInputStream(ncbiFasta), 
+				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA, false);
+
+		for (AbstractSequence seq: alignment.getSequences()) {
+			String accessionNumber = EdirectUtil.getAccessionNumberFromNCBI(seq.getName());
+			// NCBI addes version numbers to accession number.
+			if (accessionNumber.contains(".")
+					&& !accessionNumbers.contains(accessionNumber))
+				accessionNumber = accessionNumber.substring(0, accessionNumber.indexOf("."));
+			seq.setName(accessionNumber);
+		}
+
+		alignment.writeOutput(new FileOutputStream(blastFasta),
+				SequenceAlignment.FILETYPE_FASTA);
+	}
+
+	private static List<RegaSequence> readSequences(File fastaAlingmentFile, String regix) throws FileNotFoundException, ParameterProblemException, IOException, FileFormatException, ApplicationException {
+		Pattern pattern = Pattern.compile(regix);
+		List<RegaSequence> sequences = new ArrayList<RegaSequence>();
+
+		SequenceAlignment seqAlign = new SequenceAlignment(new FileInputStream(fastaAlingmentFile), 
 				SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 
 		for (AbstractSequence seq : seqAlign.getSequences()) {
 			Matcher matcher = pattern.matcher(seq.getName());
 			if(matcher.find()) {
-				Sequence sequence = new Sequence();
-				sequence.id = seq.getName();
+				RegaSequence sequence = new RegaSequence(seq);
 				sequence.genotype = matcher.group(1);
 				sequence.subtype = matcher.group(2);
-				sequence.data = seq.getSequence();
+				sequence.accesssionNumber = matcher.group(3);
 				sequences.add(sequence);
 			} else if (seq.getName().startsWith(OUT_GROUP_NAME)) {
-				Sequence sequence = new Sequence();
-				sequence.id = seq.getName();
+				RegaSequence sequence = new RegaSequence(seq);
 				sequence.genotype = OUT_GROUP_NAME;
 				sequence.subtype = "";
-				sequence.data = seq.getSequence();
 				sequences.add(sequence);
+			} else {
+				throw new ApplicationException("Sequence: '" + seq.getName() + "' name is not properlly formated.");
 			}
-
 		}
 
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(new File(fastaAlingmentFile));
-			for (Sequence seq : sequences) {
-				writer.println(">"+seq.id);
-				writer.println(seq.data);
-				writer.flush();
-			}
-		} finally {
-			if (writer != null)
-				writer.close();
-		}
+		return sequences;
+	}
 
-		// Map<genotype, all the sequences that belong to the genotype>
-		Map<String, List<Sequence>> genotypeToSequences = new HashMap<String, List<Sequence>>();		
-		for (Sequence seq : sequences) {
-			if (genotypeToSequences.get(seq.genotype) == null)
-				genotypeToSequences.put(seq.genotype, new ArrayList<Sequence>());
-			genotypeToSequences.get(seq.genotype).add(seq);
-		}
+	/**
+	 * If region is a region of refSeq return the region info, else return null.
+	 */
+	public static Region region(AbstractSequence refSeq,
+			AbstractSequence region, File workDir) throws AlignmentException {
 
-		// Map<genotype, Map<subType, all the sequences that belong to the subType> >
-		Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences = new LinkedHashMap<String, Map<String, List<Sequence>>>();
-		for (Entry<String, List<Sequence>> a : genotypeToSequences.entrySet()) {
-			Map<String, List<Sequence>> subtypeMap = new HashMap<String, List<Sequence>>();
+		SequenceAlignment example = SequenceAlign.pairAlign(refSeq, region, workDir);
 
-			for (Sequence seq : a.getValue()) {
-				if (subtypeMap.get(seq.subtype) == null)
-					subtypeMap.put(seq.subtype, new ArrayList<Sequence>());
-				subtypeMap.get(seq.subtype).add(seq);
-			}
-			genotypeToSubtypeToSequences.put(a.getKey(), subtypeMap);
-		}
+		System.err.println("refSeq = " + refSeq.getLength()
+				+ " example = " + example.getLength() + " region = " + region.getLength());
+		
+		int diff = example.getLength() - region.getLength();
 
-		// create phylo-taxonomyId.xml file.
-		Document clustalDoc = clustersDoc(fastaAlingmentFile, genotypeToSubtypeToSequences);
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream(new File(toolDir, "phylo-" + taxonomyId + ".xml"));
-			prettyPrint(clustalDoc, fos, 4);
-		} finally {
-			if (fos != null)
-				fos.close();
-		}
+		if (diff == 0)
+			return null;
 
-		// create blast.xml
-		Document blastDoc = blastDocument(
-				fastaAlingmentFile, taxonomyId, genotypeToSubtypeToSequences);
-		fos = null;
-		try {
-			fos = new FileOutputStream(new File(toolDir, "blast.xml"));
-			prettyPrint(blastDoc, fos, 4);
-		} finally {
-			if (fos != null)
-				fos.close();
-		}
+		rega.genotype.Sequence query = (rega.genotype.Sequence) 
+				example.getSequences().get(1);
+
+		int start = Math.max(0, query.firstNonGapPosition() - diff);
+		int end = Math.min(region.getLength(), query.lastNonGapPosition() + diff);
+
+		return new Region(refSeq.getName(), start, end);
 	}
 
 	/**
 	 * Create blast.xml file
-	 * @param alingmentFile
+	 * @param blastFasta - blast.fasta
 	 * @param taxonomyId - used for the cluster name.
 	 * @param genotypeToSubtypeToSequences - Map<genotype, Map<subType, all the sequences that belong to the subType> >
 	 * @return the new blast.xml Document
 	 * @throws ParserConfigurationException
+	 * @throws FileFormatException 
+	 * @throws IOException 
+	 * @throws ParameterProblemException 
+	 * @throws FileNotFoundException 
+	 * @throws AlignmentException 
 	 */
-	private static Document blastDocument(
-			String alingmentFile, String taxonomyId, 
-			Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences)
-					throws ParserConfigurationException {
+	private static Document blastDocument(Mode mode,
+			File blastFasta, List<PhyloAlignment> phyloAlignments)
+					throws ParserConfigurationException, FileNotFoundException, ParameterProblemException, IOException, FileFormatException, AlignmentException {
+
 		Document doc = newDocument();
-		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, alingmentFile);
+		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, blastFasta.getName());
 		Node clustersElem = genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
-		Element toolClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
-		toolClusterElem.setAttribute("id", taxonomyId);
-		toolClusterElem.setAttribute("name", taxonomyId);
-		Element descriptionElem = (Element) toolClusterElem.appendChild(doc.createElement("description"));
-		descriptionElem.appendChild(doc.createTextNode(taxonomyId));
 
-		for (Map<String, List<Sequence>> subtypeToSequences : genotypeToSubtypeToSequences.values()) {
-			Sequence firstSeq = subtypeToSequences.values().iterator().next().get(0);
-			Element taxusElem = (Element) toolClusterElem.appendChild(doc.createElement("taxus"));
-			taxusElem.setAttribute("name", firstSeq.id);
+		File tempDirectory = FileUtil.createTempDirectory();
+
+		for (PhyloAlignment phyloAlignment: phyloAlignments) {
+			String taxonomyId = phyloAlignment.alignmentName;
+			Element toolClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
+			toolClusterElem.setAttribute("id", taxonomyId);
+			toolClusterElem.setAttribute("name", taxonomyId);
+			Element descriptionElem = (Element) toolClusterElem.appendChild(doc.createElement("description"));
+			descriptionElem.appendChild(doc.createTextNode(taxonomyId));
+
+			if (mode == Mode.OneAlilgnment) {
+				// Choose the first sequence in every genotype cluster to be the representative in blast.xml
+				for (Map<String, List<RegaSequence>> subtypeToSequences :
+					phyloAlignment.genotypeToSubtypeToSequences.values()) {
+					RegaSequence firstSeq = subtypeToSequences.values().iterator().next().get(0);
+					Element taxusElem = (Element) toolClusterElem.appendChild(doc.createElement("taxus"));
+					taxusElem.setAttribute("name", firstSeq.getName());
+				}
+			}else {
+				SequenceAlignment seqAlign = new SequenceAlignment(new FileInputStream(blastFasta), 
+						SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+				// Find all sequences in blast.fasta that belong to the alignment (there ac number can be found)
+				for (AbstractSequence seq: seqAlign.getSequences()) {
+					RegaSequence region = phyloAlignment.find(seq.getName());
+					if (region != null){
+						Element taxusElem = (Element) toolClusterElem.appendChild(doc.createElement("taxus"));
+						taxusElem.setAttribute("name", seq.getName());
+						region(seq, region, tempDirectory);
+					}
+				}
+			}
 		}
-
 		Element analysisElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("analysis"));
 		analysisElem.setAttribute("id", "blast");
 		analysisElem.setAttribute("type", "blast");
@@ -282,23 +395,7 @@ public class FastaToRega {
 		Element optionsElem = (Element) analysisElem.appendChild(doc.createElement("options"));
 		optionsElem.appendChild(doc.createTextNode("\n          -q -1 -r 1\n        "));
 
-
 		return doc;
-	}
-
-	/**
-	 * Add the genotype-analyses Element to the top of the file.
-	 * @param doc
-	 * @param filename
-	 * @return
-	 */
-	private static Element regaGenotypeAnalysesDoc(Document doc, String filename) {
-		Element genotypeAnalysesElem = (Element) doc.appendChild(doc.createElement("genotype-analyses"));
-		Element alignmentElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("alignment"));
-		alignmentElem.setAttribute("file", new File(filename).getName());
-		alignmentElem.setAttribute("trim", "true");
-		return genotypeAnalysesElem;
-
 	}
 
 	/**
@@ -308,34 +405,32 @@ public class FastaToRega {
 	 * @return the new phylo-{taxonomyId}.xml Document
 	 * @throws ParserConfigurationException
 	 */
-	private static Document clustersDoc(
-			String fastaAlingmentFile, Map<String, Map<String, List<Sequence>>> genotypeToSubtypeToSequences)
-					throws ParserConfigurationException {
+	private static Document clustersDoc(PhyloAlignment phyloAlignment) throws ParserConfigurationException {
 		Document doc = newDocument();
-		List<String> clusterIds = new ArrayList<String>();
-		Map<String, List<Sequence>> majorList = new HashMap<String, List<Sequence>>();
+		List<String> genotypeClusterIds = new ArrayList<String>();
+		Map<String, List<RegaSequence>> majorList = new HashMap<String, List<RegaSequence>>();
 
 		// Add sub type clusters, needed for phylo minor. (<identify> 1a,1b,1c,... )
 
 		String outgroupName = null;
-		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, fastaAlingmentFile);
+		Element genotypeAnalysesElem = regaGenotypeAnalysesDoc(doc, phyloAlignment.aligmentFastaFileName());
 		Element clustersElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("clusters"));
-		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
+		for (Entry<String, Map<String, List<RegaSequence>>> i : phyloAlignment.genotypeToSubtypeToSequences.entrySet()) {
 			String genotype = i.getKey();
-			Map<String, List<Sequence>> subtypeToSequences = i.getValue();
+			Map<String, List<RegaSequence>> subtypeToSequences = i.getValue();
 			Element parentElem = clustersElem;
-			clusterIds.add(genotype);
+			genotypeClusterIds.add(genotype);
 			final Element subtypeParentElem = parentElem;
 
-			for (Entry<String, List<Sequence>> j : subtypeToSequences.entrySet()) {
+			for (Entry<String, List<RegaSequence>> j : subtypeToSequences.entrySet()) {
 				String subtype = j.getKey();
-				List<Sequence> subtypeSeqs = j.getValue();
+				List<RegaSequence> subtypeSeqs = j.getValue();
 				if (genotype.equals(OUT_GROUP_NAME) && subtypeSeqs.size() > 0)
-					outgroupName = subtypeSeqs.get(0).id; // save out group name
+					outgroupName = subtypeSeqs.get(0).getName(); // save out group name
 
 				if (!subtype.isEmpty()) {
 					if (!majorList.containsKey(genotype)) 
-						majorList.put(genotype, new ArrayList<Sequence>());
+						majorList.put(genotype, new ArrayList<RegaSequence>());
 					majorList.get(genotype).add(subtypeSeqs.get(0));
 				}
 
@@ -352,48 +447,65 @@ public class FastaToRega {
 				subtypeClusterElem.setAttribute("id", subtypeClusterId);
 				subtypeClusterElem.setAttribute("name", subtypeDesc);
 
-				for (Sequence seq : subtypeSeqs) {
+				for (RegaSequence seq : subtypeSeqs) {
 					Element taxusElem = (Element) subtypeClusterElem.appendChild(doc.createElement("taxus"));
-					taxusElem.setAttribute("name", seq.id);
+					taxusElem.setAttribute("name", seq.getName());
 				};
 			};
 		};
 
 		// Add genotype clusters, needed for phylo major. (<identify> 1,2,3,... )
 
-		for (Map.Entry<String, List<Sequence>> e: majorList.entrySet()) {
-			String genotype  = e.getKey();
-			List<Sequence> sequences = e.getValue();
-			Element majorClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
-			majorClusterElem.setAttribute("id", genotype);
-			majorClusterElem.setAttribute("name", "Genotype " + genotype);
-			for (Sequence seq : sequences) {
-				Element taxusElem = (Element) majorClusterElem.appendChild(doc.createElement("taxus"));
-				taxusElem.setAttribute("name", seq.id);
-			};
-		}
-		
-
-		createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, AnalysisType.Major, outgroupName);
-		clusterIds.remove(OUT_GROUP_NAME);
-		createSelfScanElement(doc, clusterIds, genotypeAnalysesElem);
-
-		int n = 1;
-		for (Entry<String, Map<String, List<Sequence>>> i : genotypeToSubtypeToSequences.entrySet()) {
-			clusterIds.clear();
-			Map<String, List<Sequence>> subtypeToSequences = i.getValue();
-			if (!i.getKey().equals(OUT_GROUP_NAME))
-				for (Entry<String, List<Sequence>> j : subtypeToSequences.entrySet()) {
-					if (!j.getKey().isEmpty()) { 
-						clusterIds.add(i.getKey() + j.getKey());
-					}
-				}
-			if (!clusterIds.isEmpty()) {
-				AnalysisType minor = AnalysisType.Minor;
-				minor.setAnalysisNumber(i.getKey());
-				n++;
-				createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, minor, outgroupName);
+		if (phyloAlignment.genotypeToSubtypeToSequences.size() > 1) {// 1 genotype -> only major
+			for (Map.Entry<String, List<RegaSequence>> e: majorList.entrySet()) {
+				String genotype  = e.getKey();
+				List<RegaSequence> sequences = e.getValue();
+				Element majorClusterElem = (Element) clustersElem.appendChild(doc.createElement("cluster"));
+				majorClusterElem.setAttribute("id", genotype);
+				majorClusterElem.setAttribute("name", "Genotype " + genotype);
+				for (RegaSequence seq : sequences) {
+					Element taxusElem = (Element) majorClusterElem.appendChild(doc.createElement("taxus"));
+					taxusElem.setAttribute("name", seq.getName());
+				};
 			}
+
+			createAnalysisElement(doc, genotypeClusterIds, genotypeAnalysesElem, AnalysisType.Major, outgroupName);
+			genotypeClusterIds.remove(OUT_GROUP_NAME);
+			createSelfScanElement(doc, genotypeClusterIds, genotypeAnalysesElem);
+
+			for (Entry<String, Map<String, List<RegaSequence>>> i : 
+				phyloAlignment.genotypeToSubtypeToSequences.entrySet()) {
+				List<String> clusterIds = new ArrayList<String>();
+				Map<String, List<RegaSequence>> subtypeToSequences = i.getValue();
+				if (!i.getKey().equals(OUT_GROUP_NAME))
+					for (Entry<String, List<RegaSequence>> j : subtypeToSequences.entrySet()) {
+						if (!j.getKey().isEmpty()) { 
+							clusterIds.add(i.getKey() + j.getKey());
+						}
+					}
+				if (!clusterIds.isEmpty()) {
+					AnalysisType minor = AnalysisType.Minor;
+					minor.setAnalysisNumber(i.getKey());
+					createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, minor, outgroupName);
+				}
+			}
+		} else {
+			String genotype = null;
+			List<String> clusterIds = new ArrayList<String>();
+			for (Entry<String, Map<String, List<RegaSequence>>> i : 
+				phyloAlignment.genotypeToSubtypeToSequences.entrySet()) {
+				genotype = i.getKey();
+				Map<String, List<RegaSequence>> subtypeToSequences = i.getValue();
+				if (!i.getKey().equals(OUT_GROUP_NAME))
+					for (Entry<String, List<RegaSequence>> j : subtypeToSequences.entrySet()) {
+						clusterIds.add(genotype + j.getKey());
+					}
+				else
+					clusterIds.add(OUT_GROUP_NAME);
+			}
+			createAnalysisElement(doc, clusterIds, genotypeAnalysesElem, AnalysisType.Major, outgroupName);
+			clusterIds.remove(OUT_GROUP_NAME);// TODO check out group
+			createSelfScanElement(doc, clusterIds, genotypeAnalysesElem);
 		}
 
 		return doc;
@@ -421,6 +533,21 @@ public class FastaToRega {
 		createAnalysisElement(doc, clusterIds, analysisElem, AnalysisType.Empty, null);
 
 		return analysisElem;
+	}
+
+	/**
+	 * Add the genotype-analyses Element to the top of the file.
+	 * @param doc
+	 * @param filename
+	 * @return
+	 */
+	private static Element regaGenotypeAnalysesDoc(Document doc, String fastaFileName) {
+		Element genotypeAnalysesElem = (Element) doc.appendChild(doc.createElement("genotype-analyses"));
+		Element alignmentElem = (Element) genotypeAnalysesElem.appendChild(doc.createElement("alignment"));
+		alignmentElem.setAttribute("file", fastaFileName);
+		alignmentElem.setAttribute("trim", "true");
+		return genotypeAnalysesElem;
+
 	}
 
 	/**
@@ -495,6 +622,18 @@ public class FastaToRega {
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		Document doc = docBuilder.newDocument();
 		return doc;
+	}
+
+	private static void writeXml(File xmlFile, Document clustalDoc) throws FileNotFoundException,
+			TransformerException, IOException {
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(xmlFile);
+			prettyPrint(clustalDoc, fos, 4);
+		} finally {
+			if (fos != null)
+				fos.close();
+		}
 	}
 
 	/**

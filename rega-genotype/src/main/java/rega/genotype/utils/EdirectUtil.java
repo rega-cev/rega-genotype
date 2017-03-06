@@ -2,6 +2,7 @@ package rega.genotype.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import rega.genotype.AbstractSequence;
 import rega.genotype.AlignmentAnalyses;
@@ -28,7 +29,7 @@ public class EdirectUtil {
 		Utils.execShellCmd(cmd);
 	}
 
-	public static void queryFasta(File accessionNumbersQuery, File workDir, File out) throws ApplicationException, IOException, InterruptedException {
+	public static void queryFasta(File accessionNumbersQuery, File out) throws ApplicationException, IOException, InterruptedException {
 		String edirectPath = Settings.getInstance().getConfig().getGeneralConfig().getEdirectPath();
 
 		String epost = edirectPath + "epost";
@@ -75,6 +76,18 @@ public class EdirectUtil {
 				continue;
 			}
 
+			accessionBuild.append(accessionNumber);
+			accessionBuild.append(System.getProperty("line.separator"));
+		}
+
+		FileUtil.writeStringToFile(outFile, accessionBuild.toString());
+	}
+
+	public static void createNcbiAccQuery(List<String> accessionNumbers, File outFile) 
+			throws IOException, ParameterProblemException, FileFormatException {
+		StringBuilder accessionBuild = new StringBuilder();
+
+		for (String accessionNumber: accessionNumbers) {
 			accessionBuild.append(accessionNumber);
 			accessionBuild.append(System.getProperty("line.separator"));
 		}

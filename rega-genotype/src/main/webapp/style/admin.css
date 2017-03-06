@@ -243,3 +243,9 @@ body {
 .popup li{
     color: darkblue;
 }
+
+.link {
+    color: -webkit-link;
+    text-decoration: underline;
+    cursor: pointer;
+}

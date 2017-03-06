@@ -101,14 +101,11 @@ public class PanViralToolGenerator {
 		File fastaOut = new File(workDir, "fasta-out");
 		File taxonomyOut = new File(workDir, "taxonomy-out");
 
-		EdirectUtil.queryFasta(query, workDir, fastaOut);
+		EdirectUtil.queryFasta(query, fastaOut);
 		EdirectUtil.querytaxonomyIds(query, taxonomyOut);
 
 		// Add taxonomy id data		
 		fillData(accessionNumMapICTV, taxonomyOut, true);
-
-		// preprocess fasta: remove the description.
-		//File fastaOutPreprocessed = preprocessFasta(workDir, fastaOut); removed because the format of the files from NCBI was changed.
 
 		// make sure that taxonomy is ready
 		if (TaxonomyModel.getInstance().getTaxons().isEmpty())
@@ -388,8 +385,6 @@ public class PanViralToolGenerator {
 	}
 
 	private File createNcbiAccQuery(File workDir, File ncbiVirusesDb) throws IOException, ParameterProblemException, FileFormatException {
-//		File preprocessNcbiDbFasta = new File(workDir, "ncbi-preprocesses-sequences");
-//				preprocessFasta(ncbiVirusesDb);
 		AlignmentAnalyses ncbiSequences = createAlignmentAnalyses(workDir, ncbiVirusesDb);
 
 		StringBuilder accessionBuild = new StringBuilder();

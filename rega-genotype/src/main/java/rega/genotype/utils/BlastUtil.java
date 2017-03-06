@@ -6,7 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import rega.genotype.AbstractSequence;
@@ -91,6 +93,10 @@ public class BlastUtil {
 			double maxEValue, double minBitScore, Logger logger)
 			throws ApplicationException, IOException, InterruptedException {
 
+		out.getParentFile().mkdirs();
+		if (out.exists())
+			out.delete();
+
 		List<String[]> blastResults = blastResults(sequence, workDir, blastdb, logger);
 		if (blastResults.size() > 0) {
 			String[] values = blastResults.get(0);
@@ -110,14 +116,43 @@ public class BlastUtil {
 		return null;
 	}
 
-	public static void findSequence(String sequenceId, File blastdb, File out, Logger logger) throws IOException, ApplicationException, InterruptedException {
+	/**
+	 * Run blastn on input sequence. 
+	 * Write the result refseq with best score in out.
+	 * Note: formatDB must be called inthe same workDir before.
+	 * @return the bit score of best mutch.
+	 */
+	public static Map<String, Double> computeAllBestRefSeq(AbstractSequence sequence, File workDir, File out, File blastdb, 
+			double maxEValue, double minBitScore, Logger logger)
+			throws ApplicationException, IOException, InterruptedException {
+
 		out.getParentFile().mkdirs();
 		if (out.exists())
 			out.delete();
 
+		Map<String, Double> ans = new HashMap<String, Double>();
+		List<String[]> blastResults = blastResults(sequence, workDir, blastdb, logger);
+		for (String[] values: blastResults) {
+			if (values.length != 12)
+				throw new ApplicationException("blast result format error");
+
+			double eVal = Double.valueOf(values[BlastAnalysis.BLAST_RESULT_E_VALUE_IDX]);
+			double bitScore = Double.valueOf(values[BlastAnalysis.BLAST_RESULT_BIT_SCORE_IDX]);
+			String id = values[BlastAnalysis.BLAST_RESULT_SUBJECT_ID_IDX];
+			if (!ans.containsKey(id) && eVal < maxEValue && bitScore > minBitScore) {
+				findSequence(id, blastdb, out, logger);
+				ans.put(id, bitScore);
+			}
+		}
+
+		return ans;
+	}
+
+	public static void findSequence(String sequenceId, File blastdb, File out, Logger logger) throws IOException, ApplicationException, InterruptedException {
+
 		String blastPath = Settings.getInstance().getBlastPathStr();
 		String cmd = blastPath + "fastacmd -s '" + sequenceId + "' -d " + blastdb.getAbsolutePath() 
-				+ " -o " + out.getAbsolutePath();
+				+ " >> " + out.getAbsolutePath();
 
 		logger.info(cmd);
 

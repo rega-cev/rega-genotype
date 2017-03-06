@@ -57,6 +57,7 @@ import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
+import eu.webtoolkit.jwt.WButtonGroup;
 import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
@@ -65,7 +66,9 @@ import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
+import eu.webtoolkit.jwt.WRadioButton;
 import eu.webtoolkit.jwt.WStackedWidget;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
 /**
@@ -144,74 +147,11 @@ public class BlastFileEditor extends WContainerWidget{
 
 		autoCreateVirusToolB.clicked().addListener(autoCreateVirusToolB, new Signal.Listener() {
 			public void trigger() {
-				final WDialog d = new WDialog("Auto create virus tool");
-				d.show();
-				final WPushButton close = new WPushButton("Close", d.getFooter());
-				close.clicked().addListener(close, new Signal.Listener() {
+				AutoCreateSubtypingToolDialog d = new AutoCreateSubtypingToolDialog(workDir, manifestForm.getScientificName());
+				d.created().addListener(d, new Signal.Listener() {
 					public void trigger() {
-						d.reject();
-					}
-				});
-
-				d.getContents().addWidget(new WText("Scientific name "));
-				final WLineEdit taxonomyLE = new WLineEdit(d.getContents());
-				taxonomyLE.setText(manifestForm.getScientificName() == null ? tr("empty").toString() : manifestForm.getScientificName());
-
-				d.getContents().addWidget(new WText("<div>Upload alingment FASTA</div>" +
-						"<div>Sequene name format: 'genotype''subtype'_name</div>" +
-						"<div>Example: 1a_AF009606</div>" +
-						"<div>genotype = 1, subtype = a, name = AF009606</div>" +
-						"<div>Out group is marked by 'X' so out group sequence name can be >X or >X_AF009606</div>"));
-				final WFileUpload upload = new WFileUpload(d.getContents());
-				upload.setFilters(".fasta");
-
-				final WPushButton createB = new WPushButton("Create", d.getContents());
-				final WText info = new WText(d.getContents());
-				info.addStyleClass("auto-form-info");
-				info.setInline(false);
-				createB.clicked().addListener(createB, new Signal.Listener() {
-					public void trigger() {
-						upload.upload();
-					}
-				});
-				createB.setMargin(10);
-
-				upload.uploaded().addListener(upload, new Signal.Listener() {
-					public void trigger() {
-						if (upload.getUploadedFiles().size() == 0) 
-							info.setText("Upload file first.");
-
-						try {
-							File fastaAlingmentFile = new File(BlastFileEditor.this.workDir, upload.getClientFileName());
-							fastaAlingmentFile.delete();
-							FileUtils.copyFile(new File(upload.getSpoolFileName()),
-									fastaAlingmentFile);
-
-							FastaToRega.createTool(taxonomyLE.getText(),
-									fastaAlingmentFile.getAbsolutePath(),
-									BlastFileEditor.this.workDir.getAbsolutePath());
-							info.setText("Tool created.");
-							rereadFiles();
-							dirtyHandler.increaseDirty();
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-							info.setText("Error: " + e.getMessage());
-						} catch (ParameterProblemException e) {
-							e.printStackTrace();
-							info.setText("Error: " + e.getMessage());
-						} catch (IOException e) {
-							e.printStackTrace();
-							info.setText("Error: " + e.getMessage());
-						} catch (FileFormatException e) {
-							e.printStackTrace();
-							info.setText("Error: " + e.getMessage());
-						} catch (ParserConfigurationException e) {
-							e.printStackTrace();
-							info.setText("Error: " + e.getMessage());
-						} catch (TransformerException e) {
-							e.printStackTrace();
-							info.setText("Error: " + e.getMessage());
-						}
+						rereadFiles();
+						dirtyHandler.increaseDirty();
 					}
 				});
 			}
