@@ -454,32 +454,33 @@ public class NgsAnalysis {
 			File reference = NgsFileSystem.consensusRefFile(virusDir);
 			virusDir.mkdirs();
 
-			Double matchScore = BlastUtil.computeBestRefSeq(contig, virusDir,
+			Map<String, Double> matchScores = BlastUtil.computeAllBestRefSeq(contig, virusDir,
 					reference, ncbiVirusesFasta, ngsModule.getRefMaxBlastEValue(),
 					ngsModule.getRefMinBlastBitScore(), ngsLogger);
 
-			if (matchScore != null) {
+			if (!matchScores.isEmpty()) {
 				SequenceAlignment ref = new SequenceAlignment(new FileInputStream(reference),
 						SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
-				AbstractSequence as = ref.getSequences().get(0);
+				for(AbstractSequence as :ref.getSequences()){
+					String bucketTxId = virusDir.getName().split("_")[0];
+					String refTxId = RegaSystemFiles.taxonomyIdFromAnnotatedNcbiSeq(as.getDescription());
 
-				String bucketTxId = virusDir.getName().split("_")[0];
-				String refTxId = RegaSystemFiles.taxonomyIdFromAnnotatedNcbiSeq(as.getDescription());
-
-				if (refTxId != null && !bucketTxId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID)) {
-					List<String> refAncestorTaxa = TaxonomyModel.getInstance().getHirarchyTaxonomyIds(refTxId);
-					if (!refAncestorTaxa.contains(bucketTxId)){
-						ngsLogger.info("Seq: " + as.getName() + " " + as.getDescription() + " not processed because bucket "
-								+ bucketTxId + " is not ancestor - not in : " + Arrays.toString(refAncestorTaxa.toArray()));
-						continue;
+					if (refTxId != null && !bucketTxId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID)) {
+						List<String> refAncestorTaxa = TaxonomyModel.getInstance().getHirarchyTaxonomyIds(refTxId);
+						if (!refAncestorTaxa.contains(bucketTxId)){
+							ngsLogger.info("Seq: " + as.getName() + " " + as.getDescription() + " not processed because bucket "
+									+ bucketTxId + " is not ancestor - not in : " + Arrays.toString(refAncestorTaxa.toArray()));
+							continue;
+						}
 					}
-				}
-				Double prevScore = refNameScoreMap.get(as.getName());
-				if (prevScore != null)
-					refNameScoreMap.put(as.getName(), Math.max(prevScore, matchScore));
-				else {
-					refs.addSequence(as);
-					refNameScoreMap.put(as.getName(), matchScore);
+					Double prevScore = refNameScoreMap.get(as.getName());
+					Double currentScore = matchScores.get(as.getName());
+					if (prevScore != null)
+						refNameScoreMap.put(as.getName(), prevScore + currentScore);
+					else {
+						refs.addSequence(as);
+						refNameScoreMap.put(as.getName(), currentScore);
+					}
 				}
 			}
 		}
