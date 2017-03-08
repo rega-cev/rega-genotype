@@ -36,12 +36,6 @@ import rega.genotype.utils.LogUtils;
  * @author michael and vagner
  */
 public class PrimarySearch{
-	private static class SequenceData {
-		SequenceData(){}
-		String taxon = null;
-		Double score = null;
-	}
-
 	private static class TaxonomyNode {
 		String taxonId = null;
 		List<String> readNames = new ArrayList<String>();
@@ -165,14 +159,13 @@ public class PrimarySearch{
 		/**
 		 * print the tree into diamonResults.
 		 * @param diamonResults
-		 * @param newickTree
 		 */
-		void fillDiamondResults(Map<String, DiamondBucket> diamonResults, StringBuilder newickTree) {
+		void fillDiamondResults(Map<String, DiamondBucket> diamonResults) {
 			diamonResults.clear();
-			fillDiamondResults(root, diamonResults, newickTree );
+			fillDiamondResults(root, diamonResults);
 		}
 
-		void fillDiamondResults(TaxonomyNode node, Map<String, DiamondBucket> diamonResults, StringBuilder newickTree) {
+		void fillDiamondResults(TaxonomyNode node, Map<String, DiamondBucket> diamonResults) {
 			String scientificName = TaxonomyModel.getInstance().getScientificName(node.taxonId);
 			String ancestors = TaxonomyModel.getInstance().getHirarchy(node.taxonId, 100);
 
@@ -180,7 +173,7 @@ public class PrimarySearch{
 					scientificName, ancestors, node.readNames.size()));
 
 			for (TaxonomyNode c: node.children)
-				fillDiamondResults(c, diamonResults, newickTree);
+				fillDiamondResults(c, diamonResults);
 		}
 
 		void fillReadNameTaxonIdMap(TaxonomyNode parentTaxon, Map<String, String> readNameTaxonIdMap){
@@ -415,124 +408,6 @@ public class PrimarySearch{
 		return result;
 	}
 
-	// TODO: we are still testing what will be the best way to bucket.
-	private static Map<String, String> basketDiamondResultsBasedOnBestScore(File view, NgsResultsTracer ngsResults) throws NumberFormatException, IOException {
-		String line = "";
-		BufferedReader bf;
-		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
-		// sequences with best score per taxon counters.
-		Map<String, DiamondBucket> taxonCounters = new HashMap<String, DiamondBucket>();
-		// All the data per sequence
-		Map<String, List<SequenceData>> sequenceNameData = new HashMap<String, List<SequenceData>>();
-
-		String prevName = null;
-		String prevBestTaxon = null;
-		Double prevBestScore = null;
-		while ((line = bf.readLine()) != null)  {
-			String[] name = line.split("\\t");
-			String[] taxon = name[1].split("_");
-
-			String score = name[2];
-
-			SequenceData data = new SequenceData();
-			data.score = Double.parseDouble(score);
-			data.taxon = taxon[0] + "_" + taxon[1];
-
-			List<SequenceData> sequenceDataList = sequenceNameData.get(name[0]);
-			if (sequenceDataList == null) {
-				sequenceDataList = new ArrayList<SequenceData>();
-				sequenceNameData.put(name[0], sequenceDataList);
-			}
-			sequenceDataList.add(data);
-
-			if (prevName == null || !prevName.equals(name[0])) {
-				if (prevName != null) { // not first time.
-					Integer counter = taxonCounters.get(prevBestTaxon) == null ? null :
-							taxonCounters.get(prevBestTaxon).getReadCountTotal();
-					if (counter == null)
-						counter = 0;
-					counter++;
-					taxonCounters.put(prevBestTaxon, new DiamondBucket(prevBestTaxon,"", "", counter));
-				}
-
-				prevName = name[0];
-				prevBestTaxon = data.taxon;
-				prevBestScore = data.score;
-			} else {
-				if (data.score > prevBestScore) {
-					prevBestTaxon = data.taxon;
-					prevBestScore = data.score;
-				}
-			}
-		}
-		bf.close();
-
-		ngsResults.getModel().setDiamondBlastResults(taxonCounters);
-
-		// Step2: find genus taxonomy for every sequence. 
-		Map<String, String> taxoNameId = new HashMap<String, String>();
-		for (Map.Entry<String, List<SequenceData>> s: sequenceNameData.entrySet()) {
-			SequenceData bestScore = s.getValue().get(0);
- 			for (SequenceData d: s.getValue()) {
-				if (d.score > bestScore.score)
-					bestScore = d;
- 			}
-
-			SequenceData best = s.getValue().get(0);
-			Integer bestScoreTaxonCounter = taxonCounters.get(bestScore.taxon).getReadCountTotal();
-			for (SequenceData d: s.getValue()) {
-				if (taxonCounters.get(d.taxon) != null){
-					Integer currentTaxonCounter = taxonCounters.get(d.taxon).getReadCountTotal();
-					if (currentTaxonCounter != null 
-							&& bestScore.score - d.score < 5 
-							&& currentTaxonCounter > bestScoreTaxonCounter + 10000)
-						best = d;// big basket gets priority.
-				}
-			}
-			taxoNameId.put(s.getKey(), best.taxon);
-		}
-		return taxoNameId;
-	}
-
-	/**
-	 * First step basket by the result of every read by lowest common ancestor.
-	 */
-	private static TaxonomyTree basketDiamondResultsLowCommonAncestorold(File view) throws NumberFormatException, IOException {
-		String line = "";
-		BufferedReader bf;
-		bf = new BufferedReader(new FileReader(view.getAbsolutePath()));
-		// All the data per sequence
-		TaxonomyTree taxonomyTree = new TaxonomyTree();
-
-		String prevName = null;
-		String prevTaxon = null;
-		String lowestCommonAncestor = null;
-		while ((line = bf.readLine()) != null)  {
-			String[] name = line.split("\\t");
-			String[] taxon = name[1].split("_");
-
-			String taxonId = taxon[0];
-
-			if (prevName == null || !prevName.equals(name[0])) { // new read
-				if (prevName != null) { // not first time.
-					taxonomyTree.add(lowestCommonAncestor, prevName);
-				}
-
-				prevName = name[0];
-				lowestCommonAncestor = taxonId;
-			} else { // continue analyzing more output for same read.
-				if (lowestCommonAncestor == null)
-					lowestCommonAncestor = taxonId;
-				lowestCommonAncestor = TaxonomyModel.getInstance().getLowesCommonAncestor(
-						taxonId, lowestCommonAncestor);
-			}
-			prevTaxon = taxonId;
-		}
-		bf.close();
-
-		return taxonomyTree;
-	}
-
 	public static TaxonomyTree basketDiamondResultsLowCommonAncestor(File view, File workDir) throws NumberFormatException, IOException {
 		String line = "";
 		BufferedReader bf;
@@ -552,7 +427,7 @@ public class PrimarySearch{
 
 			if (prevName != null && !prevName.equals(readName)) {
 				// restart for next read.
-				String lowestAncestor = lowestAnsestorOnLinage(readTaxa);
+				String lowestAncestor = lowestAnsestor(readTaxa);
 				StringBuilder readTaxaDebug = new StringBuilder();
 				for (String t:readTaxa){
 					readTaxaDebug.append(t + " " + TaxonomyModel.getInstance().getHirarchy(t, 100) + "\n");
@@ -577,21 +452,11 @@ public class PrimarySearch{
 		return taxonomyTree;
 	}
 
-	private static String lowestAnsestor(Set<String> readTaxa) {
-		String lowestCommonAncestor = null;
-		for (String taxonId: readTaxa) {
-			if (lowestCommonAncestor == null)
-				lowestCommonAncestor = taxonId;
-			else
-				lowestCommonAncestor = TaxonomyModel.getInstance().getLowesCommonAncestor(
-						taxonId, lowestCommonAncestor);
-		}
-
-		return lowestCommonAncestor;
-	}
-
-	// TODO: document or rename
-	public static String lowestAnsestorOnLinage(Set<String> readTaxa) {
+	/**
+	 * Find lowest common ancestor af reads.
+	 * Note: if root is viruses, has unclassified child and more then 2 children the unclassified is removed.
+	 */
+	public static String lowestAnsestor(Set<String> readTaxa) {
 		TaxonomyTree taxonomyTree = new TaxonomyTree();
 		for (String taxonId: readTaxa) 
 			taxonomyTree.add(taxonId, "");
@@ -617,11 +482,11 @@ public class PrimarySearch{
 				for (TaxonomyNode u: unclassified)
 					node.children.remove(u);
 		}
-
-//		for (TaxonomyNode c: node.children)
-//			removeUnclassifiedNode(c);
 	}
 
+	/**
+	 * Make sure that root has at least 2 children
+	 */
 	public static TaxonomyNode removeTopLevel1ChildParent(TaxonomyNode root) {
 		TaxonomyNode newRoot = root;
 		while(newRoot.children.size() == 1)
@@ -646,16 +511,12 @@ public class PrimarySearch{
 			NgsResultsTracer ngsResults, Logger logger) throws FileFormatException, IOException {
 		long start = System.currentTimeMillis();
 		TaxonomyTree taxonomyTree = basketDiamondResultsLowCommonAncestor(view, diamondResultsDir.getParentFile());
-		StringBuilder newickTreeBeforeMerge = new StringBuilder(); // TODO ..
-		taxonomyTree.fillDiamondResults(ngsResults.getModel().getDiamondBlastResultsBeforeMerge(), newickTreeBeforeMerge);
+		taxonomyTree.fillDiamondResults(ngsResults.getModel().getDiamondBlastResultsBeforeMerge());
 
 		logger.info("Basket reads sort low ancestor time = " + (System.currentTimeMillis() - start) + " ms");
 
 		Map<String, String> readIdTaxonomyId = taxonomyTree.createReadNameTaxonIdMap();
-		StringBuilder newickTreeAfterMerge = new StringBuilder();
-		taxonomyTree.fillDiamondResults(ngsResults.getModel().getDiamondBlastResults(), newickTreeAfterMerge);
-
-//		Map<String, String> readIdTaxonomyId = basketDiamondResultsBasedOnBestScore(view, ngsProgress);
+		taxonomyTree.fillDiamondResults(ngsResults.getModel().getDiamondBlastResults());
 
 		logger.info("Basket reads - merge time = " + (System.currentTimeMillis() - start) + " ms");
 
