@@ -92,6 +92,8 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 								TaxonomyModel.getInstance().read(RegaSystemFiles.taxonomyFile());
 								info.setText(infoText);
 								d.getCancelB().enable();
+								d.getCancelB().setText("Close");
+								d.getOkB().hide();
 								app.triggerUpdate();
 								updateLock.release();
 							}
@@ -121,11 +123,11 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				d.getContents().addWidget(info);
 				d.getCancelB().setText("Close");
 
-				info.setText("<div>Download NCBI viruses file from NCBI and update all tools to use it. This is used by NGS module and to auto genrate pan viral tool.</div>");
-				new WText("<p><div>You can choose to upload the file or let the system do that for you.</div></p>" +
-						"<div>Can be obtained from: ftp://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.1.1.genomic.fna.gz</div>", d.getContents());
+				info.setText("<div>Download NCBI viruses file from NCBI and update all tools to use it. This is used by NGS module and to auto genrate pan viral tool.</div>" +
+						"<p><div>You can choose to upload the file or let the system do that for you.</div></p>" +
+						"<div>Can be obtained from: ftp://ftp.ncbi.nlm.nih.gov/refseq/release/viral/viral.1.1.genomic.fna.gz</div>");
 
-				FileUpload upload = new FileUpload();
+				final FileUpload upload = new FileUpload();
 				d.getContents().addWidget(upload);
 				upload.setInline(true);
 				upload.getWFileUpload().setFilters(".gz");
@@ -144,13 +146,15 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 					}
 				});
 
-				WPushButton downlodAutomatically = new WPushButton("Download automaticaly.", d.getContents());
+				final WPushButton downlodAutomatically = new WPushButton("Download automaticaly.", d.getContents());
 				downlodAutomatically.setInline(true);
 				downlodAutomatically.clicked().addListener(downlodAutomatically, new Signal.Listener() {
 					public void trigger() {
 						d.getOkB().disable();
 						d.getCancelB().disable();
 						info.setText("Downloading ncbi viruses file, this can take some time..");
+						upload.hide();
+						downlodAutomatically.hide();
 						Thread t = new Thread(new Runnable() {
 							public void run() {
 								createDB(RegaSystemFiles.downloadNcbiViruses(), d);
