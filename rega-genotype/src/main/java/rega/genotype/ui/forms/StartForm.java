@@ -24,6 +24,8 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ngs.NgsAnalysis;
 import rega.genotype.ngs.NgsFileSystem;
+import rega.genotype.ngs.NgsFileSystem.DownloadSrrState;
+import rega.genotype.ngs.NgsFileSystem.DownloadSrrStateTracer;
 import rega.genotype.ngs.NgsResultsTracer;
 import rega.genotype.ngs.model.NgsResultsModel.State;
 import rega.genotype.singletons.Settings;
@@ -63,6 +65,7 @@ import eu.webtoolkit.jwt.WRadioButton;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 import eu.webtoolkit.jwt.WTextArea;
+import eu.webtoolkit.jwt.WTimer;
 
 /**
  * StartForm implementation implements a widget which allows the user to submit
@@ -80,6 +83,7 @@ public class StartForm extends AbstractForm {
 	private WFileUpload fastqFileUpload2;
 	private WPushButton fastqStart;
 	private WLineEdit srr = new WLineEdit();
+	private WTimer srrTimer;
 
 	private WLineEdit jobIdTF;
 	
@@ -230,10 +234,6 @@ public class StartForm extends AbstractForm {
 		return ans;
 	}
 
-	private String setFastqExtention(String fileName) {
-		return FilenameUtils.getBaseName(fileName) + ".fastq";
-	}
-
 	private static WFileUpload createFileUpload() {
 		WFileUpload u = new WFileUpload();
 		u.setProgressBar(new WProgressBar());
@@ -326,7 +326,7 @@ public class StartForm extends AbstractForm {
 				if (!srr.getText().isEmpty()) { // download srr file. (if not cashed)
 					final File workDir = GenotypeLib.createJobDir(getMain().getOrganismDefinition().getJobDir());
 
-					NgsResultsTracer ngsResults;
+					final NgsResultsTracer ngsResults;
 					try {
 						
 						ngsResults = new NgsResultsTracer(workDir,
@@ -335,21 +335,48 @@ public class StartForm extends AbstractForm {
 						e1.printStackTrace();
 						return;
 					}
-					boolean downloaded = false;
-					String err = "";
-					try {
-						downloaded = NgsFileSystem.downloadSrrFile(
-								workDir, srr.getText());
-					} catch (ApplicationException e) {
-						e.printStackTrace();
-						err = e.getMessage();
-					}
+					final DownloadSrrStateTracer downloadSrrStateTracer = new DownloadSrrStateTracer();
+					
+					final StandardDialog downloadStatusDialog = new StandardDialog("Download status");
+					final WText donloadDialogText = new WText(downloadSrrStateTracer.state.msg());
+					downloadStatusDialog.getContents().addWidget(donloadDialogText);
 
-					if (!downloaded) {
-						StandardDialog d = new StandardDialog("Download error");
-						d.addText("Download srr file failed. " + err);
-					} else // use uploaded files.
-						startNgsAnalysis(ngsResults);
+					srrTimer = new WTimer();
+					srrTimer.setInterval(100);
+					srrTimer.timeout().addListener(fastqStart, new Signal.Listener() {
+						public void trigger() {
+							boolean stop = true;
+							if (downloadSrrStateTracer.state == DownloadSrrState.Failed) {
+								donloadDialogText.setText(downloadSrrStateTracer.state.msg() + " " + downloadSrrStateTracer.state.err());
+							} else if (downloadSrrStateTracer.state == DownloadSrrState.Finished) {// use uploaded files.
+								startNgsAnalysis(ngsResults);
+							} else {
+								donloadDialogText.setText(downloadSrrStateTracer.state.msg());
+								stop = false;
+							}
+
+							if (stop)
+								srrTimer.stop();
+						}
+					});
+					srrTimer.start();
+
+					Thread t = new Thread(new Runnable() {
+						public void run() {
+							try {
+								if (NgsFileSystem.downloadSrrFile(
+										workDir, srr.getText(), downloadSrrStateTracer))
+									downloadSrrStateTracer.state = DownloadSrrState.Finished;
+								else
+									downloadSrrStateTracer.state = DownloadSrrState.Failed;
+							} catch (ApplicationException e) {
+								e.printStackTrace();
+								downloadSrrStateTracer.state = DownloadSrrState.Failed;
+								downloadSrrStateTracer.state.setErr(e.getMessage());
+							}
+						}
+					});
+					t.start();
 				} else {
 					if (fastqTypeGroup.getCheckedButton().equals(fastqPe))
 						fastqFileUpload1.upload();
@@ -467,9 +494,9 @@ public class StartForm extends AbstractForm {
 		ngsTemplate.bindWidget("fastq-type", fastqTypeGroupContainer);
 		ngsTemplate.bindEmpty("fastq-upload1-info");
 		ngsTemplate.bindEmpty("fastq-upload2-info");
-		ngsTemplate.bindEmpty("fastq-upload-se-info");
 
 		ngsTemplate.bindWidget("srr", srr);
+		ngsTemplate.bindEmpty("srr-info");
 
 		ngsTemplate.setCondition("if-download-srr", true);
 	}

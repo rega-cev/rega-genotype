@@ -147,8 +147,45 @@ public class NgsFileSystem {
 
 		return true;
 	}
+
+	public static enum DownloadSrrState {
+		Init("Searching for srr files"),
+		Local1("Paired end reads 1 found on local server, extracting."),
+		Local2("Paired end reads 2 found on local server, extracting."),
+		Download1("Download Paired end reads 1, this can take some time."),
+		Download2("Download Paired end reads 2, this can take some time."),
+		Unzip1("Unzip Paired end reads 1."),
+		Unzip2("Unzip Paired end reads 2."),
+		Finished("Finished"),
+		Failed("Failed, Could not download.");
+
+		DownloadSrrState(String msg) {
+			this.msg = msg;
+		}
+		public String msg(){
+			return msg;
+		}
+		public String err() {
+			return err;
+		}
+		public void setErr(String err) {
+			this.err = err;
+		}
+
+		String msg = "";
+		String err = "";
+	}
+
+	/**
+	 * Allows to see the current state.
+	 */
+	public static class DownloadSrrStateTracer {
+		public DownloadSrrStateTracer(){}
+		public DownloadSrrState state = DownloadSrrState.Init;
+	}
 	
-	public static boolean downloadSrrFile(File workDir, String srrName) throws ApplicationException {
+	public static boolean downloadSrrFile(File workDir, String srrName,
+			DownloadSrrStateTracer downloadSrrStateTracer) throws ApplicationException {
 		String srrDatabase = Settings.getInstance().getConfig().getGeneralConfig().getSrrDatabasePath();
 		File fastqPE1 = null;
 		File fastqPE2 = null;
@@ -160,10 +197,12 @@ public class NgsFileSystem {
 			if (srrDatabaseDir.listFiles() != null)
 				for (File f: srrDatabaseDir.listFiles()){
 					if (f.getName().equals(srrName + "_1.fastq.gz")){
+						downloadSrrStateTracer.state = DownloadSrrState.Local1;
 						fastqPE1 = new File(fastqDir, srrName + "_1.fastq");
 						FileUtil.unGzip1File(f, fastqPE1);
 					}
 					if (f.getName().equals(srrName + "_2.fastq.gz")){
+						downloadSrrStateTracer.state = DownloadSrrState.Local2;
 						fastqPE2 = new File(fastqDir, srrName + "_2.fastq");
 						FileUtil.unGzip1File(f, fastqPE2);
 					}
@@ -174,14 +213,14 @@ public class NgsFileSystem {
 		if (fastqPE1 == null || fastqPE2 == null) {
 			fastqPE1 = new File(workDir, srrName + "_1.fastq");
 			fastqPE2 = new File(workDir, srrName + "_2.fastq");
-			downloadSrr(srrName, workDir, fastqPE1, fastqPE2);
+			downloadSrr(srrName, workDir, fastqPE1, fastqPE2, downloadSrrStateTracer);
 		}
 
 		return addFastqFiles(workDir, fastqPE1, fastqPE2, true);
 	}
 
 	public static void downloadSrr(String srrAccessionNumber, File workDir,
-			File fastqPE1, File fastqPE2) throws ApplicationException {
+			File fastqPE1, File fastqPE2, DownloadSrrStateTracer downloadSrrStateTracer) throws ApplicationException {
 		// wget --output-document=$i.ftp.txt "http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=$i&result=read_run&fields=fastq_ftp"
 		String url = "http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=" 
 		+ srrAccessionNumber
@@ -205,13 +244,17 @@ public class NgsFileSystem {
 		File pe1Compressed = new File(workDir, srrAccessionNumber + "_1.gz");
 		File pe2Compressed = new File(workDir, srrAccessionNumber + "_2.gz");
 
+		downloadSrrStateTracer.state = DownloadSrrState.Download1;
 		if (!Utils.wget(pe1Url, pe1Compressed))
 			throw new ApplicationException("Failed to download srr file " + srrAccessionNumber);
 
+		downloadSrrStateTracer.state = DownloadSrrState.Download2;
 		if (!Utils.wget(pe2Url, pe2Compressed))
 			throw new ApplicationException("Failed to download srr file " + srrAccessionNumber);
 	
+		downloadSrrStateTracer.state = DownloadSrrState.Unzip1;
 		FileUtil.unGzip1File(pe1Compressed, fastqPE1);
+		downloadSrrStateTracer.state = DownloadSrrState.Unzip2;
 		FileUtil.unGzip1File(pe2Compressed, fastqPE2);
 	}
 	
