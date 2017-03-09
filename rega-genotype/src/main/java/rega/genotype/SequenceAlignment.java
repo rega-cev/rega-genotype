@@ -201,8 +201,8 @@ public class SequenceAlignment
 
         // eat '>'
         header = header.substring(1);
-        while (header.charAt(0) == ' ')
-			header = header.substring(1);
+        while (!header.isEmpty() && header.charAt(0) == ' ')
+        	header = header.substring(1);
         // separate name from description
         int spacePos = header.indexOf(' ');
         String name;
@@ -216,10 +216,11 @@ public class SequenceAlignment
         	nameCapped = name.length() < header.substring(0, spacePos).length();
         	description = header.substring(spacePos);
         } else {
-       		name = makeLegalName ? makeLegalName(header) : header;
+        	name = makeLegalName ? makeLegalName(header) : header;
         	nameCapped = name.length() < header.length();
         	description = "";
         }
+
 
         /*
          * next read the sequence

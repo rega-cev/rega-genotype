@@ -3,6 +3,7 @@ package rega.genotype.ngs;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -269,11 +270,17 @@ public class NgsAnalysis {
 
 		try {
 			File dimondResultDir = new File(workDir, NgsFileSystem.DIAMOND_RESULT_DIR);
-			if (dimondResultDir.listFiles() != null) // Could be that diamond filtered all.
-				for (File d: dimondResultDir.listFiles())
+			if (dimondResultDir.listFiles() != null) { // Could be that diamond filtered all.
+				int n = 0;
+				for (File d: dimondResultDir.listFiles()) {
 					assembleVirus(d, tool);
+					System.err.println("assemsbled = " + n + " from " + dimondResultDir.listFiles().length);
+					n++;
+				}
+			}
 		} finally {
 			jobLock.release();
+			ngsLogger.info("Assembly lock was released.");
 		}
 
 		File sequences = new File(workDir, NgsFileSystem.CONTIGS_FILE);
@@ -451,35 +458,39 @@ public class NgsAnalysis {
 				continue;
 
 			//File consensusContigDir = NgsFileSystem.consensusContigDir(virusDir, contig.getName());
-			File reference = NgsFileSystem.consensusRefFile(virusDir);
+			File blastResultRefsFile = NgsFileSystem.consensusRefFile(virusDir);
 			virusDir.mkdirs();
 
-			Map<String, Double> matchScores = BlastUtil.computeAllBestRefSeq(contig, virusDir,
-					reference, ncbiVirusesFasta, ngsModule.getRefMaxBlastEValue(),
+			Double matchScores = BlastUtil.computeBestRefSeq(contig, virusDir,
+					blastResultRefsFile, ncbiVirusesFasta, ngsModule.getRefMaxBlastEValue(),
 					ngsModule.getRefMinBlastBitScore(), ngsLogger);
 
-			if (!matchScores.isEmpty()) {
-				SequenceAlignment ref = new SequenceAlignment(new FileInputStream(reference),
+			if (matchScores != null) {
+				SequenceAlignment blastResultRefs = new SequenceAlignment(new FileInputStream(blastResultRefsFile),
 						SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
-				for(AbstractSequence as :ref.getSequences()){
+				if (blastResultRefs.getSequences().size() > 0) {
+					AbstractSequence ref = blastResultRefs.getSequences().get(0);
 					String bucketTxId = virusDir.getName().split("_")[0];
-					String refTxId = RegaSystemFiles.taxonomyIdFromAnnotatedNcbiSeq(as.getDescription());
+					String refTxId = RegaSystemFiles.taxonomyIdFromAnnotatedNcbiSeq(ref.getDescription());
 
 					if (refTxId != null && !bucketTxId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID)) {
 						List<String> refAncestorTaxa = TaxonomyModel.getInstance().getHirarchyTaxonomyIds(refTxId);
 						if (!refAncestorTaxa.contains(bucketTxId)){
-							ngsLogger.info("Seq: " + as.getName() + " " + as.getDescription() + " not processed because bucket "
+							ngsLogger.info("Seq: " + ref.getName() + " " + ref.getDescription() + " not processed because bucket "
 									+ bucketTxId + " is not ancestor - not in : " + Arrays.toString(refAncestorTaxa.toArray()));
 							continue;
 						}
 					}
-					Double prevScore = refNameScoreMap.get(as.getName());
-					Double currentScore = matchScores.get(as.getName());
+					Double prevScore = refNameScoreMap.get(ref.getName());
+					Double currentScore = matchScores;//matchScores.get(as.getName());
 					if (prevScore != null)
-						refNameScoreMap.put(as.getName(), prevScore + currentScore);
+						refNameScoreMap.put(ref.getName(), prevScore + currentScore);
 					else {
-						refs.addSequence(as);
-						refNameScoreMap.put(as.getName(), currentScore);
+						// check that contig will path also sequencetool test
+						if (checkAlignment(ref, contig)) {
+							refs.addSequence(ref);
+							refNameScoreMap.put(ref.getName(), currentScore);
+						}
 					}
 				}
 			}
@@ -495,5 +506,112 @@ public class NgsAnalysis {
 		});
 
 		return refs;
+	}
+
+	// TODO: this seems to be to slow, test more ..
+	/**
+	 * Detect for given genus a list of reference sequences based on long contigs.
+	 * The sequences are stored in the consensus dir.
+	 */
+	private SequenceAlignment detectRefsTryAll(File virusDir,
+			SequenceAlignment contigs, File ncbiVirusesFasta)
+			throws ApplicationException, IOException, InterruptedException,
+			ParameterProblemException, FileFormatException,
+			FileNotFoundException {
+
+		SequenceAlignment refs = new SequenceAlignment();
+		final Map<String, Double> refNameScoreMap = new HashMap<String, Double>(); // make sure not to add same seq 2 times.
+
+		for (AbstractSequence contig : contigs.getSequences()) {
+			if (contig.getLength() < ngsModule.getRefMinContigLength())
+				continue;
+
+			//File consensusContigDir = NgsFileSystem.consensusContigDir(virusDir, contig.getName());
+			File blastResultRefsFile = NgsFileSystem.consensusRefFile(virusDir);
+			virusDir.mkdirs();
+
+			Map<String, Double> matchScores = BlastUtil.computeAllBestRefSeq(contig, virusDir,
+					blastResultRefsFile, ncbiVirusesFasta, ngsModule.getRefMaxBlastEValue(),
+					ngsModule.getRefMinBlastBitScore(), ngsLogger);
+
+
+			if (!matchScores.isEmpty()) {
+				SequenceAlignment blastResultRefs = new SequenceAlignment(new FileInputStream(blastResultRefsFile),
+						SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+				for(AbstractSequence ref :blastResultRefs.getSequences()) {
+					String bucketTxId = virusDir.getName().split("_")[0];
+					String refTxId = RegaSystemFiles.taxonomyIdFromAnnotatedNcbiSeq(ref.getDescription());
+
+					if (refTxId != null && !bucketTxId.equals(TaxonomyModel.VIRUSES_TAXONOMY_ID)) {
+						List<String> refAncestorTaxa = TaxonomyModel.getInstance().getHirarchyTaxonomyIds(refTxId);
+						if (!refAncestorTaxa.contains(bucketTxId)){
+							ngsLogger.info("Seq: " + ref.getName() + " " + ref.getDescription() + " not processed because bucket "
+									+ bucketTxId + " is not ancestor - not in : " + Arrays.toString(refAncestorTaxa.toArray()));
+							continue;
+						}
+					}
+					Double prevScore = refNameScoreMap.get(ref.getName());
+					Double currentScore = matchScores.get(ref.getName());
+					if (prevScore != null)
+						refNameScoreMap.put(ref.getName(), prevScore + currentScore);
+					else {
+						// check that contig will path also sequencetool test
+						if (checkAlignment(ref, contig)) {
+							refs.addSequence(ref);
+							refNameScoreMap.put(ref.getName(), currentScore);
+						}
+					}
+				}
+			}
+		}
+
+		// order by best score.
+		Collections.sort(refs.getSequences(), new Comparator<AbstractSequence>() {
+			public int compare(AbstractSequence as1, AbstractSequence as2) {
+				Double score1 = refNameScoreMap.get(as1.getName());
+				Double score2 = refNameScoreMap.get(as2.getName());
+				return -score1.compareTo(score2);
+			}
+		});
+
+		return refs;
+	}
+	
+	/** check that contig will path also sequencetool test */
+	private boolean checkAlignment(AbstractSequence ref, AbstractSequence contig) {
+		SequenceAlignment assembledContigs = new SequenceAlignment();
+		assembledContigs.addSequence(contig);
+		File tmpDir = new File(workDir, "tmp");
+		tmpDir.mkdirs();
+		File assembledContigsFile = new File(tmpDir, "contig.fasta");
+		try {
+			assembledContigsFile.createNewFile();
+			assembledContigs.writeOutput(new FileOutputStream(assembledContigsFile), 
+					SequenceAlignment.FILETYPE_FASTA);
+			File consensusFile = SequenceToolMakeConsensus.consensusAlign(
+					assembledContigsFile, ref, tmpDir, ngsModule, ngsLogger);
+			
+			SequenceAlignment ans = new SequenceAlignment(new FileInputStream(consensusFile),
+					SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
+			return ans.getLength() > 1;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (ParameterProblemException e) {
+			e.printStackTrace();
+			return false;
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+			return false;
+		} catch (FileFormatException e) {
+			e.printStackTrace();
+			return false;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
