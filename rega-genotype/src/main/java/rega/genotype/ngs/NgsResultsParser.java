@@ -48,7 +48,13 @@ public class NgsResultsParser extends GenotypeResultParser{
 
 	protected void endParsingBucket(ConsensusBucket bucket){
 	}
-	
+
+	private void setError(NgsResultsModel model, GenotypeResultParser parser, String pathPrefix) {
+		String error = GenotypeLib.getEscapedValue(parser, pathPrefix + "error");
+		if (error != null)
+			model.setErrors(error);
+	}
+
 	public void endReportElement(String tag, GenotypeResultParser parser,
 			NgsResultsModel model) {
 		if (tag.equals("init")) {
@@ -63,6 +69,7 @@ public class NgsResultsParser extends GenotypeResultParser{
 			model.readStateTime(State.Init, 0L);
 			model.readStateTime(State.QC, Long.parseLong(GenotypeLib.getEscapedValue(parser,
 					"/genotype_result/init/end-time-ms")));
+			setError(model, parser, "/genotype_result/init/");
 		} else if (tag.equals("qc1")) {
 			if (model.getSkipPreprocessing())
 				model.readStateTime(State.Diamond, Long.parseLong(GenotypeLib.getEscapedValue(parser,
@@ -77,10 +84,12 @@ public class NgsResultsParser extends GenotypeResultParser{
 			model.setReadCountInit(Integer.parseInt(
 					GenotypeLib.getEscapedValue(parser,
 							"/genotype_result/qc1/read-count")));
+			setError(model, parser, "/genotype_result/qc1/");
 		} else if (tag.equals("preprocessing")) {
 			model.readStateTime(State.QC2, Long.parseLong(
 					GenotypeLib.getEscapedValue(parser,
 							"/genotype_result/preprocessing/end-time-ms")));
+			setError(model, parser, "/genotype_result/preprocessing/");
 		} else if (tag.equals("qc2")) {
 			model.readStateTime(State.Diamond, Long.parseLong(
 					GenotypeLib.getEscapedValue(parser,
@@ -91,6 +100,7 @@ public class NgsResultsParser extends GenotypeResultParser{
 			model.setReadCountAfterPrepocessing(Integer.parseInt(
 					GenotypeLib.getEscapedValue(parser,
 							"/genotype_result/qc2/read-count")));
+			setError(model, parser, "/genotype_result/qc2/");
 		} else if (tag.equals("filtering")) {
 			Element filteringE = parser.getElement("/genotype_result/filtering");
 			model.readStateTime(State.Spades, Long.parseLong(filteringE.getChildText("end-time-ms")));
@@ -105,10 +115,12 @@ public class NgsResultsParser extends GenotypeResultParser{
 						id, scientificName, ancestors, Integer.parseInt(readCountTotal));
 				model.getDiamondBlastResults().put(id, diamondBucket);
 			}
+			setError(model, parser, "/genotype_result/filtering/");
 		} else if (tag.equals("assembly")) {
 			//assembly/bucket/
 			Element assemblyE = parser.getElement("/genotype_result/assembly");
 			model.readStateTime(State.FinishedAll, Long.parseLong(assemblyE.getChildText("end-time-ms")));
+			setError(model, parser, "/genotype_result/assembly/");
 		} else if (tag.equals("bucket")) {
 			List<Element> elements = parser.getElements("/genotype_result/assembly/bucket");
 			Element bucketE = elements.get(elements.size() - 1);
@@ -151,6 +163,8 @@ public class NgsResultsParser extends GenotypeResultParser{
 				model.getConsensusBuckets().add(bucket);
 				endParsingBucket(bucket);
 			}
+			if (bucketE.getChildText("error") != null)
+				model.setErrors(bucketE.getChildText("error"));
 		}
 	}
 
