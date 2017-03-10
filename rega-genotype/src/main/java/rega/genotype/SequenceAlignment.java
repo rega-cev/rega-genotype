@@ -328,9 +328,8 @@ public class SequenceAlignment
     		}
     		break;
     	case SEQUENCE_AA:
-    		if (!s.toUpperCase().matches("[ACDEFGHIKLMNPQRSTUVWXY\\-.*]*"))
-    			throw new FileFormatException("Illegal amino acid character in input", line);
-    	}
+    		break;
+     	}
     		
     	return s;
 	}
