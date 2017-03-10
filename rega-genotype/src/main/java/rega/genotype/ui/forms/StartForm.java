@@ -348,9 +348,12 @@ public class StartForm extends AbstractForm {
 							boolean stop = true;
 							if (downloadSrrStateTracer.state == DownloadSrrState.Failed) {
 								donloadDialogText.setText(downloadSrrStateTracer.state.msg() + " " + downloadSrrStateTracer.state.err());
+								downloadStatusDialog.getOkB().show();
 							} else if (downloadSrrStateTracer.state == DownloadSrrState.Finished) {// use uploaded files.
 								startNgsAnalysis(ngsResults);
 							} else {
+								downloadStatusDialog.getOkB().hide();
+								downloadStatusDialog.getCancelB().hide();
 								donloadDialogText.setText(downloadSrrStateTracer.state.msg());
 								stop = false;
 							}

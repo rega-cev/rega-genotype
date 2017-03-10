@@ -166,6 +166,7 @@ public class NgsResultsParser extends GenotypeResultParser{
 			if (bucketE.getChildText("error") != null)
 				model.setErrors(bucketE.getChildText("error"));
 		}
+		setError(model, parser, "/genotype_result/");
 	}
 
 	public NgsResultsModel getModel() {

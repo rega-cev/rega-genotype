@@ -48,8 +48,6 @@ public class SequenceToolMakeConsensus {
 		fos.close();
 
 		File consensusUnusedContigsFile = NgsFileSystem.consensusUnusedContigsFile(consensusWorkDir);
-		File clustalWorkDir = new File(consensusWorkDir, "clustal-work-dir");
-		clustalWorkDir.mkdirs();
 
 		String cmd = sequencetoolPath + " consensus-align"
 		+ " --reference " + referenceFile.getAbsolutePath()
