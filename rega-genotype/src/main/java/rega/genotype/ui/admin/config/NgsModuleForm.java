@@ -5,11 +5,10 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
+import rega.genotype.FileFormatException;
 import rega.genotype.config.Config;
 import rega.genotype.config.NgsModule;
-import rega.genotype.python.PythonEnv;
 import rega.genotype.singletons.Settings;
-import rega.genotype.taxonomy.RegaSystemFiles;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.util.FileUpload;
@@ -17,6 +16,7 @@ import rega.genotype.utils.StreamReaderRuntime;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
+import eu.webtoolkit.jwt.WProgressBar;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WText;
 
@@ -47,6 +47,7 @@ public class NgsModuleForm extends FormTemplate {
 
 
 		aaUpload.getWFileUpload().setFilters(".fasta");
+		aaUpload.getWFileUpload().setProgressBar(new WProgressBar());
 
 		bindWidget("upload-aa-db", aaUpload);
 		bindWidget("create-db", createDb);
@@ -54,6 +55,7 @@ public class NgsModuleForm extends FormTemplate {
 
 		aaUpload.uploadedFile().addListener(aaUpload, new Signal1.Listener<File>() {
 			public void trigger(File arg) {
+				createDb.disable();
 				aaFile = new File(workDir, aaUpload.getWFileUpload().getClientFileName());
 				try {
 					FileUtils.copyFile(arg, aaFile);
@@ -93,18 +95,18 @@ public class NgsModuleForm extends FormTemplate {
 
 		File unirefVirusesAA50 = new File(workDir, NgsModule.NGS_MODULE_AA_VIRUSES_FASTA);
 
-		String[] args = new String[3];
-		args[0] = aaFile.getAbsolutePath();
-		args[1] = RegaSystemFiles.taxonomyFile().getAbsolutePath();
-		args[2] = unirefVirusesAA50.getAbsolutePath(); // out
-
 		try {
-			new PythonEnv().execPython("/rega/genotype/python/number_fasta_r.py", args);
-		} catch (Exception e1) {
+			NgsModule.nunberFastaReverce(aaFile, unirefVirusesAA50);
+		} catch (IOException e1) {
 			e1.printStackTrace();
+			infoT.setText("Error: could not create number uniprot fasta. " + e1.getMessage());
+			return;
+		} catch (FileFormatException e1) {
+			e1.printStackTrace();
+			infoT.setText("Error: could not create number uniprot fasta. " + e1.getMessage());
 			return;
 		}
-
+		
 		// ./diamond makedb --in uniref-viruses-aa50.fa -d uniref-viruses-aa50
 
 		Process p = null;

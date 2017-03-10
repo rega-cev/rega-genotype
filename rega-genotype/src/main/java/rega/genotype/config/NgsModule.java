@@ -1,8 +1,19 @@
 package rega.genotype.config;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.PrintWriter;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import rega.genotype.FileFormatException;
+import rega.genotype.Sequence;
+import rega.genotype.SequenceAlignment;
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.GsonUtil;
 
@@ -195,5 +206,43 @@ public class NgsModule {
 
 	public void setMinReadsToStartAssembly(int minReadsToStartAssembly) {
 		this.minReadsToStartAssembly = minReadsToStartAssembly;
+	}
+
+	public static void nunberFastaReverce(File uniprot50Fasta, File out) throws IOException, FileFormatException {
+		FileReader fr = new FileReader(uniprot50Fasta.getAbsolutePath());
+		LineNumberReader lnr = new LineNumberReader(fr);
+
+		FileWriter fastq = new FileWriter(out, false);
+		PrintWriter annotatedUniprotWriter = new PrintWriter(fastq);
+
+		Map<String, String[]> taxons = TaxonomyModel.getInstance().getTaxons();
+
+		while (true){
+			Sequence s = SequenceAlignment.readFastaFileSequence(lnr,
+					SequenceAlignment.SEQUENCE_AA, false);
+
+			if (s == null )
+				break;
+
+			if (s.getDescription() == null)
+				continue;
+
+			Pattern r = Pattern.compile(".*Tax=.* TaxID=(.*) RepID=.*");
+			Matcher m = r.matcher(s.getDescription());
+			if (m.find()) {
+				String taxon = m.group(1);
+				String[] row = taxons.get(taxon);
+				if (row != null) {
+					s.setName(row[TaxonomyModel.TAXON_COL] + "_" 
+							+ row[TaxonomyModel.SCIENTIFIC_NAME_COL] + "_"
+							+ s.getName());
+					annotatedUniprotWriter.println(">"+s.getName() + " " + s.getDescription());
+					annotatedUniprotWriter.println(s.getSequence());
+				} else {
+					System.err.println("Warning - Taxon: " + taxon + " not found.");
+				}
+			}
+		}
+		annotatedUniprotWriter.close();
 	}
 }

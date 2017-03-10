@@ -41,6 +41,7 @@ public class TaxonomyModel {
 	public static int VIRUS_HOST_COL = 10;
 
 	// cache for improving read speed.
+	// <Taxon_col, all columns>  from uniprot taxonomy.
 	private Map<String, String[]> taxons = new HashMap<String, String[]>();
 	private WStandardItem root = new WStandardItem();
 	private Map<String, WStandardItem> items = new HashMap<String, WStandardItem>();

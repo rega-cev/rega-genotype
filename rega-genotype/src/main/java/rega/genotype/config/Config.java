@@ -296,7 +296,6 @@ public class Config {
 		private String diamondPath = "diamond";
 		private String fastqcCmd = "fastqc";
 		private String spadesCmd = "spades";
-		private String bioPythonPath = "";
 		private String sequencetool = "";
 		private String srrDatabasePath = "";
 		private String samtoolsCmd = "samtools";
@@ -411,12 +410,6 @@ public class Config {
 		}
 		public void setEdirectPath(String edirectPath) {
 			this.edirectPath = edirectPath;
-		}
-		public String getBioPythonPath() {
-			return bioPythonPath;
-		}
-		public void setBioPythonPath(String bioPythonPath) {
-			this.bioPythonPath = bioPythonPath;
 		}
 		public String getSequencetool() {
 			return sequencetool;
