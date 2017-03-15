@@ -514,25 +514,29 @@ public abstract class GenotypeTool {
     									.newInstance(url, currentWorkDir);
 
     		    				NgsResultsTracer ngsResults = new NgsResultsTracer(
-    		    						workDir, peFiles.pe1.getName(), peFiles.pe2.getName());
+    		    						currentWorkDir, peFiles.pe1.getName(), peFiles.pe2.getName());
 
-    							if (parseArgsResult.ngsPairedEndSuffix1.endsWith(".gz")) {
-    								if(!NgsFileSystem.addFastqGzipedFiles(
-    										workDir, peFiles.pe1, peFiles.pe2)) {
-    									System.err.println();
-    									System.err.println("-paired-end-files-list pe file not found ");
-    									System.err.println();
-    									printUsage();
-    									return;
-    								} 
-    							} else if (!NgsFileSystem.addFastqFiles(ngsResults.getWorkDir(),
-    									peFiles.pe1, peFiles.pe2)) {
-    								System.err.println();
-    								System.err.println("-paired-end-files-list pe file not found ");
-    								System.err.println();
-    								printUsage();
-    								return;
-    							}
+    		    				if (parseArgsResult.ngsPairedEndSuffix1.endsWith(".gz")) {
+    		    					NgsFileSystem.fastqDir(currentWorkDir).mkdirs();
+    		    					FileUtil.unGzip1File(peFiles.pe1, NgsFileSystem.fastqPE1(currentWorkDir));
+    		    					FileUtil.unGzip1File(peFiles.pe2, NgsFileSystem.fastqPE2(currentWorkDir));
+    		    					if(!NgsFileSystem.addFastqFiles(ngsResults.getWorkDir(),
+    		    							NgsFileSystem.fastqPE1(currentWorkDir),
+    		    							NgsFileSystem.fastqPE2(currentWorkDir))) {
+    		    						System.err.println();
+    		    						System.err.println("-paired-end-files-list pe file not found ");
+    		    						System.err.println();
+    		    						printUsage();
+    		    						return;
+    		    					} 
+    		    				} else if (!NgsFileSystem.addFastqFiles(ngsResults.getWorkDir(),
+    		    						peFiles.pe1, peFiles.pe2)) {
+    		    					System.err.println();
+    		    					System.err.println("-paired-end-files-list pe file not found ");
+    		    					System.err.println();
+    		    					printUsage();
+    		    					return;
+    		    				}
 
     							ngsResults.setStateStart(State.Init);
     							ngsResults.printInit();

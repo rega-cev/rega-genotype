@@ -128,26 +128,6 @@ public class NgsFileSystem {
 		return true;
 	}
 
-	private static String makeFastqFileName(String fileName) {
-		return fileName.endsWith(".gz") ? fileName.substring(0, fileName.length() - 3) : fileName;
-	}
-
-	public static boolean addFastqGzipedFiles(File workDir, File fastqPE1, File fastqPE2) {
-		File fastqDir = new File(workDir, FASTQ_FILES_DIR);
-		fastqDir.mkdirs();
-
-		String pe1Name = makeFastqFileName(fastqPE1.getName());
-		String pe2Name = makeFastqFileName(fastqPE2.getName());
-
-		File fastqPE1Ungziped = new File(fastqDir, pe1Name);
-		File fastqPE2Ungziped = new File(fastqDir, pe2Name);
-
-		FileUtil.unGzip1File(fastqPE1, fastqPE1Ungziped);
-		FileUtil.unGzip1File(fastqPE2, fastqPE2Ungziped);
-
-		return true;
-	}
-
 	public static enum DownloadSrrState {
 		Init("Searching for srr files"),
 		Local1("Paired end reads 1 found on local server, extracting."),
@@ -267,6 +247,9 @@ public class NgsFileSystem {
 		}
 
 		return fastqDir;
+	}
+	public static File fastqDir(File workDir) {
+		return new File(workDir, FASTQ_FILES_DIR);
 	}
 
 	public static File fastqSE(File jobDir) {
