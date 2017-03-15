@@ -148,7 +148,7 @@ public class NgsResultsTracer extends ResultTracer{
 	}
 
 	public void printAssemblyError(String error) {
-		add("error", error);
+		add("assembly-error", error);
 		if (openElements.peek().equals("bucket")) {
 			openElements.pop();
 			printlnClose("</bucket>");
