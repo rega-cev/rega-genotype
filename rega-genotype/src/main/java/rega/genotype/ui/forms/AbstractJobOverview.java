@@ -165,9 +165,11 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		parser = createParser();
 		startParserThread();
 
-		if (isNgsJob())
+		if (isNgsJob()) {
+			ngsWidget = new NgsWidget(jobDir);
+			template.bindWidget("ngs-results", ngsWidget);
 			template.bindString("typing-time", tr("job-form.typing-time-ngs"));
-		else
+		} else
 			template.bindString("typing-time", tr("job-form.typing-time"));
 
 		updateView();
@@ -255,10 +257,6 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	protected void updateNgsView() {
 		if (ngsParser != null) {
-			if (ngsWidget == null) {
-				ngsWidget = new NgsWidget(jobDir);
-				template.bindWidget("ngs-results", ngsWidget);
-			}
 			ngsWidget.refresh(ngsParser.getModel(), getMain().getOrganismDefinition());
 		}
 	}

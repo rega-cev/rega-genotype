@@ -218,7 +218,7 @@ public class NgsWidget extends WContainerWidget{
 
 		if (model.getState() == State.FinishedAll) {
 			if (!showSingleResult && 
-					(!isBlastTool && model.getConsensusBuckets().size() == 0))
+					!(isBlastTool && model.getConsensusBuckets().size() == 0))
 				addWidget(new DownloadsWidget(null, workDir, organismDefinition, true, Mode.Ngs));
 			addWidget(subTypingHeaderT);
 		}
