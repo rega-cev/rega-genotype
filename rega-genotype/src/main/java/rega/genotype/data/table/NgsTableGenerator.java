@@ -25,6 +25,8 @@ public class NgsTableGenerator extends NgsResultsParser {
 		table.addLabel("Coverage (%)");
 		table.addLabel("Depth of coverage");
 		table.addLabel("Source");
+		table.addLabel("ref");
+		table.addLabel("ref name");
 
 		table.newRow();
 	}
@@ -45,6 +47,8 @@ public class NgsTableGenerator extends NgsResultsParser {
 					table.addNumber(contig.getCovPercentage(bucket.getRefLen()));
 					table.addNumber(contig.getDeepCov(model.getReadLength()));
 					table.addLabel(bucket.getSrcDatabase());
+					table.addLabel(bucket.getRefName());
+					table.addLabel(bucket.getRefDescription());
 					table.newRow();
 				} catch (IOException e) {
 					e.printStackTrace();
