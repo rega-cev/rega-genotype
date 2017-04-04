@@ -45,15 +45,6 @@ public class SequencesTest extends TestCase {
 			fail("FileFormatException");
 		}
 	}
-
-	public void testFastaIllegal() {
-		String s = ">abcd\n1234";
-		try {
-			testSequence(s, "abcd", "");
-			fail("FileFormatException expected");
-		} catch (FileFormatException e) {
-		}
-	}
 	
 	public void testFastaReadMultiple1() {
 		String s1 = ">abcd description\n\nAC\nGT";
