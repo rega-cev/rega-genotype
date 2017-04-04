@@ -3,11 +3,9 @@ package rega.genotype.ui.admin.file_editor.xml;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -20,6 +18,13 @@ import org.python.google.common.reflect.TypeToken;
 import rega.genotype.utils.GsonUtil;
 
 public class ConfigXmlWriter {
+	public enum CssTheme {
+		Detault, RIVM;
+
+		public static CssTheme fromString(String s) {
+			return s != null && s.equals(RIVM.name()) ? RIVM : Detault;
+		}
+	}
 
 	public static void writeGenome(File workdir, Genome genome) throws JDOMException, IOException {
 		File configFile = new File(workdir, "config.xml");
@@ -64,6 +69,28 @@ public class ConfigXmlWriter {
 			add(metaDataE, "taxonomy-ids", metaData.taxonomyIdsJson());
 
 			root.addContent(metaDataE);
+
+			XMLOutputter xmlOutput = new XMLOutputter();
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.output(document, new FileWriter(configFile));
+		} else {
+			// TODO
+		}
+	}
+
+	public static void writeTheme(File workdir, CssTheme theme) throws JDOMException, IOException {
+		File configFile = new File(workdir, "config.xml");
+		if (configFile.exists()) {
+			SAXBuilder builder = new SAXBuilder();
+			Document document = builder.build(configFile);
+			Element root = document.getRootElement();
+
+			root.removeChildren("css-theme");
+
+			Element themeE = new Element("css-theme");
+			themeE.setText(theme.name());
+
+			root.addContent(themeE);
 
 			XMLOutputter xmlOutput = new XMLOutputter();
 			xmlOutput.setFormat(Format.getPrettyFormat());

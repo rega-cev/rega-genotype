@@ -11,6 +11,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest.FileType;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.CssTheme;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.Genome;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 
@@ -43,6 +44,15 @@ public class ConfigXmlReader {
 			}
 
 		return ans;
+	}
+
+	public static CssTheme readtheme(File xmlDir) throws JDOMException, IOException {
+		SAXBuilder builder = new SAXBuilder();
+		Document document = builder.build(xmlDir.getAbsolutePath() + File.separator + "config.xml");
+		Element root = document.getRootElement();
+		Element cssE = root.getChild("css-theme");
+
+		return (cssE != null) ? CssTheme.fromString(cssE.getText()) :  CssTheme.Detault;
 	}
 
 	public static Genome readGenome(File xmlDir) {

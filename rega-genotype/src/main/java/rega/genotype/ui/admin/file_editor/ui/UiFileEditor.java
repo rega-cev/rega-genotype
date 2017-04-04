@@ -13,12 +13,14 @@ import org.jdom.output.XMLOutputter;
 
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.CssTheme;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.Genome;
 import rega.genotype.ui.admin.file_editor.xml.XmlUtils;
 import rega.genotype.ui.admin.file_editor.xml.XmlUtils.ValueType;
 import rega.genotype.ui.admin.file_editor.xml.XmlUtils.XmlMsgNode;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
 import rega.genotype.ui.framework.widgets.FormTemplate;
+import rega.genotype.ui.framework.widgets.ObjectListComboBox;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileServlet;
@@ -38,6 +40,7 @@ import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPaintDevice;
 import eu.webtoolkit.jwt.WPaintedWidget;
 import eu.webtoolkit.jwt.WPainter;
+import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WPainter.Image;
 import eu.webtoolkit.jwt.WPainterPath;
 import eu.webtoolkit.jwt.WPushButton;
@@ -70,10 +73,32 @@ public class UiFileEditor extends FormTemplate{
 	private WTextArea introductionT = new WTextArea();
 	private PlaceholdersWidget placeholdersWidget;
 	private PainterImage painterImage;
+	private ObjectListComboBox<CssTheme> themeCb;
 
 	public UiFileEditor(final File workDir, DirtyHandler dirtyHandler) {
 		super(tr("admin.config.ui-file-editor"));
 		this.workDir = workDir;
+
+		// style
+
+		CssTheme theme = CssTheme.Detault;
+		try {
+			theme = ConfigXmlReader.readtheme(workDir);
+		} catch (JDOMException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		themeCb = new ObjectListComboBox<ConfigXmlWriter.CssTheme>(CssTheme.values()) {
+			@Override
+			protected WString render(CssTheme t) {
+				return new WString(t.name());
+			}
+		};
+		themeCb.setCurrentObject(theme);
+
+		// genome
 
 		painterImage = new PainterImage(workDir);
 
@@ -143,6 +168,7 @@ public class UiFileEditor extends FormTemplate{
 		}
 		placeholdersWidget = new PlaceholdersWidget(messages, dirtyHandler);
 
+		bindWidget("theme", themeCb);
 		bindWidget("image", painterImage);
 		bindWidget("image-start", imageStartLE);
 		bindWidget("image-end", imageEndLE);
@@ -187,6 +213,7 @@ public class UiFileEditor extends FormTemplate{
 
 			try {
 				ConfigXmlWriter.writeGenome(workDir, genome);
+				ConfigXmlWriter.writeTheme(workDir, themeCb.getCurrentObject());
 			} catch (JDOMException e) {
 				e.printStackTrace();
 				return false;

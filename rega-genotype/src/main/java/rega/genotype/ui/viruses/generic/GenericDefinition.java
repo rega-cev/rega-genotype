@@ -31,6 +31,7 @@ import rega.genotype.data.table.SequenceFilter;
 import rega.genotype.tools.blast.BlastTool;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.CssTheme;
 import rega.genotype.ui.data.OrganismDefinition;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.IDetailsForm;
@@ -73,6 +74,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	private List<ResultColumn> downloadColumns = null;
 	private ToolConfig toolConfig;
 	private List<FileManifest> fileManifests; 
+	private CssTheme cssTheme = null;
 	
 	public GenericDefinition(ToolConfig toolConfig) throws JDOMException, IOException {
 		this.toolConfig = toolConfig;
@@ -116,6 +118,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		downloadColumns = readColumnList(root, "result-download");
 
 		fileManifests = ConfigXmlReader.readFileManifests(new File(getXmlPath()));
+		cssTheme = ConfigXmlReader.readtheme(new File(getXmlPath()));
 	}
 
 	private List<ResultColumn> readColumnList(Element root, String tag) {
@@ -307,4 +310,13 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	public void setFileManifests(List<FileManifest> fileManifests) {
 		this.fileManifests = fileManifests;
 	}
+
+	public CssTheme getCssTheme() {
+		return cssTheme;
+	}
+
+	public void setCssTheme(CssTheme cssTheme) {
+		this.cssTheme = cssTheme;
+	}
+
 }

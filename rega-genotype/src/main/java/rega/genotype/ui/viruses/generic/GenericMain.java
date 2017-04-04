@@ -17,6 +17,7 @@ import org.jdom.JDOMException;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlReader.FileManifest.FileType;
+import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.CssTheme;
 import rega.genotype.ui.forms.DocumentationForm;
 import rega.genotype.ui.framework.GenotypeApplication;
 import rega.genotype.ui.framework.GenotypeMain;
@@ -123,8 +124,11 @@ public class GenericMain extends GenotypeMain {
 			}
 		} else { // support old tools
 			app.setCssTheme("default");
-			app.useStyleSheet(new WLink("style/genotype.css"));
-			//app.useStyleSheet(new WLink("style/genotype-rivm-ie.css"),"IE lte 7");
+			if (definition.getCssTheme() == CssTheme.RIVM) {
+				app.useStyleSheet(new WLink("style/genotype-rivm.css"));
+				app.useStyleSheet(new WLink("style/genotype-rivm-ie.css"),"IE lte 7");
+			} else		
+				app.useStyleSheet(new WLink("style/genotype.css"));
 			app.useStyleSheet(new WLink("style/wt.css")); // do not use Wt's inline stylesheet...
 			app.useStyleSheet(new WLink("style/wt_ie.css"), "IE lt 7"); // do not use Wt's inline stylesheet...
 		}

@@ -11,10 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.apache.commons.io.FileUtils;
 import org.jdom.JDOMException;
 
 import rega.genotype.AbstractSequence;
@@ -31,7 +27,6 @@ import rega.genotype.SequenceAlignment;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
-import rega.genotype.tools.FastaToRega;
 import rega.genotype.ui.admin.config.ManifestForm;
 import rega.genotype.ui.admin.file_editor.xml.BlastXmlWriter;
 import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter;
@@ -57,18 +52,14 @@ import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WContainerWidget;
 import eu.webtoolkit.jwt.WDialog;
 import eu.webtoolkit.jwt.WDialog.DialogCode;
-import eu.webtoolkit.jwt.WButtonGroup;
 import eu.webtoolkit.jwt.WFileUpload;
 import eu.webtoolkit.jwt.WLength;
-import eu.webtoolkit.jwt.WLineEdit;
 import eu.webtoolkit.jwt.WMessageBox;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPanel;
 import eu.webtoolkit.jwt.WPushButton;
-import eu.webtoolkit.jwt.WRadioButton;
 import eu.webtoolkit.jwt.WStackedWidget;
-import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WText;
 
 /**

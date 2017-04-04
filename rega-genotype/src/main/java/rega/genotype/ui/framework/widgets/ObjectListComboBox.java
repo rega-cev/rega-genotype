@@ -1,5 +1,6 @@
 package rega.genotype.ui.framework.widgets;
 
+import java.util.Arrays;
 import java.util.List;
 
 import eu.webtoolkit.jwt.WComboBox;
@@ -7,6 +8,10 @@ import eu.webtoolkit.jwt.WString;
 
 public abstract class ObjectListComboBox<T> extends WComboBox {
 	private ObjectListModel<T> model;
+
+	public ObjectListComboBox(T[] objects) {
+		this(Arrays.asList(objects));
+	}
 
 	public ObjectListComboBox(List<T> objects) {
 		this.model = new ObjectListModel<T>(objects) {

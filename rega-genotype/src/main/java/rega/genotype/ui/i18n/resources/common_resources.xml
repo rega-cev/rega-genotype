@@ -387,6 +387,11 @@
 	</message>
 
 	<message id="admin.config.ui-file-editor">
+		<h4>Style</h4>
+		<table class="form-table">
+	    <col width="200"><col width="200"></col></col>
+		  <tr><td>CSS Theme</td><td>${theme}</td></tr>
+ 		</table>
 		<h4>Genome File</h4>
 		<table class="form-table">
 	    <col width="200"><col width="200"></col></col>
