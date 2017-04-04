@@ -111,6 +111,9 @@ public class NgsAnalysis {
 
 		ngsResults.setStateStart(State.QC);
 
+		if (cancelAnalysis())
+			return false;
+
 		boolean needPreprocessing = !ngsResults.getModel().getSkipPreprocessing();
 		File fastqDir = NgsFileSystem.fastqDir(ngsResults);
 		try {
@@ -142,6 +145,10 @@ public class NgsAnalysis {
 		// pre-process
 		if (needPreprocessing) {
 			try {
+
+				if (cancelAnalysis())
+					return false;
+
 				preprocess();
 				ngsResults.printPreprocessing();
 			} catch (ApplicationException e) {
@@ -154,6 +161,10 @@ public class NgsAnalysis {
 			ngsResults.setStateStart(State.QC2);
 
 			// QC 2
+
+
+			if (cancelAnalysis())
+				return false;
 
 			File[] qc2In;
 			if (ngsResults.getModel().isPairEnd()) {
@@ -186,6 +197,10 @@ public class NgsAnalysis {
 		// diamond blast
 
 		try {
+
+			if (cancelAnalysis())
+				return false;
+
 			primarySearch();
 			ngsResults.printfiltering();
 		} catch (ApplicationException e) {
@@ -194,6 +209,9 @@ public class NgsAnalysis {
 			cleanBigData();
 			return false;
 		}
+
+		if (cancelAnalysis())
+			return false;
 
 		boolean ans = assembleAll();
 
@@ -228,6 +246,10 @@ public class NgsAnalysis {
 			e.printStackTrace();
 			// leave it
 		}*/
+	}
+
+	protected boolean cancelAnalysis() {
+		return new File(workDir, ".CANCEL").exists();
 	}
 
 	public BlastTool startIdentification(NgsResultsTracer ngsProgress) {
@@ -276,6 +298,9 @@ public class NgsAnalysis {
 					assembleVirus(d, tool);
 					System.err.println("assemsbled = " + n + " from " + dimondResultDir.listFiles().length);
 					n++;
+
+					if (cancelAnalysis())
+						return false;
 				}
 			}
 		} finally {
