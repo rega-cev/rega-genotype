@@ -197,7 +197,7 @@ public class UiFileEditor extends FormTemplate{
 	}
 
 	private WIntValidator createIntValidator() {
-		WIntValidator validator = new WIntValidator(0, Integer.MAX_VALUE);
+		WIntValidator validator = new WIntValidator(-100, Integer.MAX_VALUE);
 		validator.setMandatory(true);
 		return validator;
 	}
