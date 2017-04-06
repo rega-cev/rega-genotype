@@ -8,8 +8,6 @@ import java.util.Map;
 import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.data.GenotypeResultParser;
-import rega.genotype.ngs.model.ConsensusBucket;
-import rega.genotype.ngs.model.Contig;
 import rega.genotype.singletons.Settings;
 import rega.genotype.ui.forms.AbstractJobOverview;
 import rega.genotype.ui.forms.JobOverviewSummary;
@@ -17,6 +15,7 @@ import rega.genotype.ui.framework.GenotypeMain;
 import rega.genotype.ui.framework.GenotypeWindow;
 import rega.genotype.ui.framework.widgets.ChartTableWidget;
 import rega.genotype.ui.util.GenotypeLib;
+import rega.genotype.ui.viruses.generic.GenericDefinition.ResultColumn;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.WApplication;
@@ -41,12 +40,6 @@ import eu.webtoolkit.jwt.chart.WStandardPalette;
 public class BlastJobOverviewForm extends AbstractJobOverview {
 	public static final String BLAST_JOB_ID_PATH = "blast-job";
 
-	private int ASSINGMENT_COLUMN =    0;
-	private int SEQUENCE_COUNT_COLUMN =1; // sequence count column. percentages of the chart.
-	private int PERCENTAGE_COLUMN =    2; // deep cov for ngs
-	private int SRC_COLUMN =           3;
-	private int COLOR_COLUMN =         4;
-
 	private WStandardItemModel blastResultModel = new WStandardItemModel();
 	private String jobId;
 
@@ -54,9 +47,24 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	private WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
 
+	private List<ResultColumn> resultColumns;
+	private int sequenceCountCol;
+	private int legendCountCol;
 
-	public BlastJobOverviewForm(GenotypeWindow main) {
+	public BlastJobOverviewForm(GenotypeWindow main, List<ResultColumn> resultColumns) {
 		super(main);
+		this.resultColumns = resultColumns;
+
+		sequenceCountCol = 1;
+		legendCountCol = 4;
+		for (int c = 0; c < resultColumns.size(); ++c) {
+			ResultColumn resultColumn = resultColumns.get(c);
+			if (resultColumn.field.equals("sequence-count"))
+				sequenceCountCol = c;
+			else if (resultColumn.field.equals("legend"))
+				legendCountCol = c;
+			
+		}
 	}
 
 	@Override
@@ -91,9 +99,21 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		template.hide();
 	}
 
+	// Classes
+	public static class ClusterData {
+		String taxonomyId = new String();
+		String concludedName = new String();
+		String concludedId = new String();
+
+		int sequenceCount = 0;
+
+		// <column, user data from results file>
+		Map<Integer, String> userData = new HashMap<Integer, String>();
+	}
+
 	@Override
 	protected GenotypeResultParser createParser() {
-		blastResultParser = new BlastResultParser(this);
+		blastResultParser = new BlastResultParser(this, resultColumns);
 		return blastResultParser;
 	}
 
@@ -102,7 +122,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		double total = 0;
 		for (Map.Entry<String, ClusterData> e: clusterDataMap.entrySet()){
 			ClusterData toolData = e.getValue();
-			total += toolData.sequencesData.size();
+			total += toolData.sequenceCount;
 		}
 
 		return total;
@@ -114,14 +134,12 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		// create blastResultModel
 		blastModel = new WStandardItemModel();
-		blastModel.insertColumns(blastModel.getColumnCount(), 5);
+		blastModel.insertColumns(blastModel.getColumnCount(), resultColumns.size());
 
-		blastModel.setHeaderData(ASSINGMENT_COLUMN, tr("detailsForm.summary.assignment"));
-		blastModel.setHeaderData(SEQUENCE_COUNT_COLUMN, tr("detailsForm.summary.numberSeqs"));
-		blastModel.setHeaderData(PERCENTAGE_COLUMN, tr("detailsForm.summary.percentage"));
-		blastModel.setHeaderData(SRC_COLUMN, tr("detailsForm.summary.src"));
-		blastModel.setHeaderData(COLOR_COLUMN, tr("detailsForm.summary.legend"));
+		for (int c = 0; c < resultColumns.size(); ++c)
+			blastModel.setHeaderData(c, resultColumns.get(c).label);
 
+		
 		// find total 
 		double total = totalSequences();
 		Config config = Settings.getInstance().getConfig();
@@ -130,29 +148,32 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			ClusterData toolData = e.getValue();
 			int row = blastModel.getRowCount();
 			blastModel.insertRows(row, 1);
-			blastModel.setData(row, ASSINGMENT_COLUMN, toolData.concludedName);
-			String toolId = config.getToolId(toolData.taxonomyId);
-			ToolConfig toolConfig = toolId == null ? null : config.getCurrentVersion(toolId);
-			if (toolConfig != null) {
-				ToolConfig blastToolConfig = getMain().getOrganismDefinition().getToolConfig();
-				blastModel.setData(row, ASSINGMENT_COLUMN, createToolLink(
-						toolData.taxonomyId, jobId, blastToolConfig), ItemDataRole.LinkRole);
-				blastModel.setData(row, SEQUENCE_COUNT_COLUMN, createToolLink(
-						toolData.taxonomyId, jobId, blastToolConfig), ItemDataRole.LinkRole);
+
+			for (int c = 0; c < resultColumns.size(); ++c) {
+				ResultColumn resultColumn = resultColumns.get(c);
+				if (resultColumn.field.equals("assignment")){
+					blastModel.setData(row, c, toolData.concludedName);
+					String toolId = config.getToolId(toolData.taxonomyId);
+					ToolConfig toolConfig = toolId == null ? null : config.getCurrentVersion(toolId);
+					if (toolConfig != null) {
+						ToolConfig blastToolConfig = getMain().getOrganismDefinition().getToolConfig();
+						blastModel.setData(row, c, createToolLink(
+								toolData.taxonomyId, jobId, blastToolConfig), ItemDataRole.LinkRole);
+					}
+				} else if (resultColumn.field.equals("sequence-count")) {
+					blastModel.setData(row, c, toolData.sequenceCount); // percentage
+				} else if (resultColumn.field.equals("percentage")) {
+					blastModel.setData(row, c, 
+							(double)toolData.sequenceCount / total * 100.0);
+				} else if (resultColumn.field.equals("legend")) {
+					WColor color = palette.getBrush(i).getColor();
+					blastModel.setData(row, c, color, 
+							ItemDataRole.UserRole + 1);
+				} else {
+					blastModel.setData(row, c, toolData.userData.get(c));
+
+				}
 			}
-			blastModel.setData(row, SEQUENCE_COUNT_COLUMN, toolData.sequencesData.size()); // percentage
-//			blastModel.setData(row, CHART_DISPLAY_COLUMN, 
-//					toolData.concludedName + " (" + toolData.sequencesData.size() + ")");
-
-			WColor color = palette.getBrush(i).getColor();
-			blastModel.setData(row, COLOR_COLUMN, color, 
-					ItemDataRole.UserRole + 1);
-
-			blastModel.setData(row, PERCENTAGE_COLUMN, 
-					(double)toolData.sequencesData.size() / total * 100.0);
-
-			blastModel.setData(row, SRC_COLUMN, toolData.src);
-
 			i++;
 		}
 		return blastModel;
@@ -169,9 +190,9 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		}
 
 		blastResultModel = createBlastModel();
-		
+
 		ChartTableWidget view = new ChartTableWidget(
-				blastResultModel, PERCENTAGE_COLUMN, COLOR_COLUMN, palette, "");
+				blastResultModel, sequenceCountCol, legendCountCol, palette, "");
 		
 		WContainerWidget horizontalLayout = new WContainerWidget();
 		horizontalLayout.addStyleClass("flex-container");
@@ -201,25 +222,6 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		return link;
 	}
 	
-	// Classes
-	public static class ClusterData {
-		public String taxonomyId = new String();
-		public String concludedName = new String();
-		public String concludedId = new String();
-		public String src = new String();
-
-		public ConsensusBucket bucketData = null;
-
-		public List<SequenceData> sequencesData = new ArrayList<SequenceData>();
-	}
-
-	public static class SequenceData {
-		public String name = new String();
-		public String description = new String();
-		public Integer length;
-		public List<Contig> contigs = new ArrayList<Contig>();
-	}
-
 	// unused 
 	@Override
 	public List<Header> getHeaders() {
@@ -246,9 +248,11 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		public Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
 		private WApplication app;
 		private BlastJobOverviewForm form;
+		private List<ResultColumn> resultColumns;
 
-		public BlastResultParser(BlastJobOverviewForm form) {
+		public BlastResultParser(BlastJobOverviewForm form, List<ResultColumn> resultColumns) {
 			this.form = form;
+			this.resultColumns = resultColumns;
 			this.app = WApplication.getInstance();
 			setReaderBlocksOnEof(true);
 		}
@@ -266,14 +270,6 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			String taxonomyId = GenotypeLib
 					.getEscapedValue(this,
 							"/genotype_result/sequence/result[@id='blast']/cluster/taxonomy-id");
-			String seqName = GenotypeLib.getEscapedValue(this,
-					"/genotype_result/sequence/@name");
-			String seqDesc = GenotypeLib.getEscapedValue(this,
-					"/genotype_result/sequence/@description");
-			String seqLength = GenotypeLib.getEscapedValue(this,
-					"/genotype_result/sequence/@length");
-			String clusterSrc = GenotypeLib.getEscapedValue(this,
-					"/genotype_result/sequence/result[@id='blast']/cluster/src");
 			String concludedId = GenotypeLib
 					.getEscapedValue(this,
 							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
@@ -291,23 +287,21 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			if (concludedId != null && !concludedId.equals("Unassigned"))
 				toolData.taxonomyId = taxonomyId;
 
-			SequenceData sequenceData = new SequenceData();
-			sequenceData.name = seqName;
-			sequenceData.description = seqDesc;
-			try {
-				sequenceData.length = Integer.parseInt(seqLength);
-			} catch (NumberFormatException e){
-				sequenceData.length = null;
-			}
-			
 			if (concludedId != null && !concludedId.equals("Unassigned"))
 				toolData.concludedName = concludedName;
-			toolData.sequencesData.add(sequenceData);
+
+			toolData.sequenceCount++;
+
 			if (toolData.concludedId == null || toolData.concludedId.equals("Unassigned"))
 				toolData.concludedId = concludedId;
 
-			toolData.src = clusterSrc;
-
+			for (int c = 0; c < resultColumns.size(); ++c) {
+				ResultColumn rc = resultColumns.get(c);
+				if (rc.field.startsWith("/genotype_result/"))
+					toolData.userData.put(c, 
+							GenotypeLib.getEscapedValue(this, resultColumns.get(c).field));
+			}
+			
 			clusterDataMap.put(key, toolData);
 		}
 	}

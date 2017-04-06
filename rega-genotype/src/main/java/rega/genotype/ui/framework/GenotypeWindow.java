@@ -20,6 +20,7 @@ import rega.genotype.ui.forms.JobForm;
 import rega.genotype.ui.forms.StartForm;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.ngs.NgsDetailsForm;
+import rega.genotype.ui.viruses.generic.GenericDefinition;
 import rega.genotype.utils.FileUtil;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.Signal1.Listener;
@@ -85,8 +86,9 @@ public class GenotypeWindow extends WContainerWidget
 		
 		ToolConfig toolConfig = GenotypeApplication.getGenotypeApplication().getToolConfig();
 		if (toolConfig.getToolMenifest().isBlastTool()) {
+			GenericDefinition gd = (GenericDefinition) od;
 			JobForm blastJobOverview = new JobForm(this, 
-					new BlastJobOverviewForm(this));
+					new BlastJobOverviewForm(this, gd.getResultColumns()));
 
 			final WMenuItem item = addForm(tr("main.navigation.monitor").arg(""),
 					JobForm.JOB_URL, blastJobOverview);

@@ -1,6 +1,9 @@
 package rega.genotype.scripts;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -8,13 +11,14 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import rega.genotype.ApplicationException;
+import rega.genotype.data.GenotypeResultParser;
 import rega.genotype.ngs.NgsResultsTracer;
 import rega.genotype.ngs.QC;
 import rega.genotype.ngs.QC.QcData;
+import rega.genotype.ngs.model.ConsensusBucket;
+import rega.genotype.ngs.model.Contig;
 import rega.genotype.ngs.model.NgsResultsModel.State;
-import rega.genotype.tools.blast.BlastJobOverviewForm.BlastResultParser;
-import rega.genotype.tools.blast.BlastJobOverviewForm.ClusterData;
-import rega.genotype.tools.blast.BlastJobOverviewForm.SequenceData;
+import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.ExcelUtils;
 import rega.genotype.utils.FileUtil;
 import rega.genotype.utils.Utils;
@@ -75,7 +79,7 @@ public class NgsVerification {
 				continue;
 			}
 
-			ResultParser parser = new ResultParser();
+			NgsResultParser parser = new NgsResultParser();
 			parser.parseFile(resultsFile);
 
 			row += writeResults(currentJobDir, worksheet, row, parser.clusterDataMap);
@@ -191,13 +195,85 @@ public class NgsVerification {
 
 		return clusterDataMap.size();
 	}
-	
-	public static class ResultParser extends BlastResultParser {
-		public ResultParser() {
-			super(null);
+
+	// Classes
+	public static class ClusterData {
+		public String taxonomyId = new String();
+		public String concludedName = new String();
+		public String concludedId = new String();
+		public String src = new String();
+
+		public ConsensusBucket bucketData = null;
+
+		public List<SequenceData> sequencesData = new ArrayList<SequenceData>();
+	}
+
+	public static class SequenceData {
+		public String name = new String();
+		public String description = new String();
+		public Integer length;
+		public List<Contig> contigs = new ArrayList<Contig>();
+	}
+
+	/**
+	 * Parse result.xml file from job dir and fill the output to
+	 * blastResultModel.
+	 */
+	public static class NgsResultParser extends GenotypeResultParser {
+		public Map<String, ClusterData> clusterDataMap = new HashMap<String, ClusterData>();
+
+		public NgsResultParser() {
+			setReaderBlocksOnEof(true);
 		}
-		
-		public void updateUi() {
+
+		@Override
+		public void endSequence() {
+			String taxonomyId = GenotypeLib
+					.getEscapedValue(this,
+							"/genotype_result/sequence/result[@id='blast']/cluster/taxonomy-id");
+			String seqName = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/@name");
+			String seqDesc = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/@description");
+			String seqLength = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/@length");
+			String clusterSrc = GenotypeLib.getEscapedValue(this,
+					"/genotype_result/sequence/result[@id='blast']/cluster/src");
+			String concludedId = GenotypeLib
+					.getEscapedValue(this,
+							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-id");
+			String concludedName = GenotypeLib
+					.getEscapedValue(this,
+							"/genotype_result/sequence/result[@id='blast']/cluster/concluded-name");
+
+			if (concludedName == null)
+				concludedName = "Unassigned";
+
+			String key= concludedId;
+
+			ClusterData toolData = clusterDataMap.containsKey(key) ? clusterDataMap.get(key) : new ClusterData();
+
+			if (concludedId != null && !concludedId.equals("Unassigned"))
+				toolData.taxonomyId = taxonomyId;
+
+			SequenceData sequenceData = new SequenceData();
+			sequenceData.name = seqName;
+			sequenceData.description = seqDesc;
+			try {
+				sequenceData.length = Integer.parseInt(seqLength);
+			} catch (NumberFormatException e){
+				sequenceData.length = null;
+			}
+			
+			if (concludedId != null && !concludedId.equals("Unassigned"))
+				toolData.concludedName = concludedName;
+			toolData.sequencesData.add(sequenceData);
+			if (toolData.concludedId == null || toolData.concludedId.equals("Unassigned"))
+				toolData.concludedId = concludedId;
+
+			toolData.src = clusterSrc;
+
+			clusterDataMap.put(key, toolData);
 		}
 	}
 }

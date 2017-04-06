@@ -57,8 +57,9 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 	}
 	
 	public static class ResultColumn {
-		String label, field;
-		int colSpan;
+		public String label, field;
+		public int colSpan;
+		public boolean isKey = false;
 	}
 	
 	private List<MenuItem> menuItems = new ArrayList<MenuItem>();
@@ -132,6 +133,13 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 				ResultColumn column = new ResultColumn();
 				column.label = columnE.getChildText("label");
 				column.field = columnE.getChildText("field");
+				String key = columnE.getChildText("field");
+
+				if (key != null)
+					column.isKey = columnE.getChildText("field").equals("true");
+				else
+					column.isKey = false;
+
 				String colSpan = columnE.getChildText("colSpan");
 				if (colSpan != null)
 					column.colSpan = Integer.valueOf(colSpan);
@@ -319,4 +327,7 @@ public class GenericDefinition implements OrganismDefinition, GenomeAttributes {
 		this.cssTheme = cssTheme;
 	}
 
+	public List<ResultColumn> getResultColumns() {
+		return resultColumns;
+	}
 }
