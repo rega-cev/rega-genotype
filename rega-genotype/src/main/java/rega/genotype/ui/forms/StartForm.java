@@ -14,7 +14,6 @@ import java.util.EnumSet;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
-import rega.genotype.AlignmentAnalyses;
 import rega.genotype.ApplicationException;
 import rega.genotype.Constants;
 import rega.genotype.FileFormatException;
@@ -140,7 +139,6 @@ public class StartForm extends AbstractForm {
 				CharSequence error = verifyFasta(fasta);
 				validateInput(error);
 				
-				final Boolean submit = true;
 				if (capSequences(fasta)) {
 					final WMessageBox messageBox = new WMessageBox(
 		                    tr("sequenceInput.capWarning.title").toString(),
@@ -676,21 +674,5 @@ public class StartForm extends AbstractForm {
 
 	private String getFastaTextArea(){
 		return this.fileUploadFasta;
-	}
-
-	private AlignmentAnalyses readBlastXml(){
-		File xmlDir = new File(getMain().getOrganismDefinition().getXmlPath());
-		if (AlignmentAnalyses.blastFile(xmlDir).exists()) {
-			try {
-				return new AlignmentAnalyses(AlignmentAnalyses.blastFile(xmlDir), null, null);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ParameterProblemException e) {
-				e.printStackTrace();
-			} catch (FileFormatException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
 	}
 }

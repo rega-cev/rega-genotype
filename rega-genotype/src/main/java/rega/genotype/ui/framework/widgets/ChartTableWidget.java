@@ -28,22 +28,24 @@ import eu.webtoolkit.jwt.chart.WPieChart;
  * 
  * @author michael
  */
-public class ChartTableWidget extends WContainerWidget{
+public class ChartTableWidget {
 	private WContainerWidget chartContainer = new WContainerWidget(); // used as a layer to draw the anchors on top of the chart.
 	protected WPieChart chart;
-	protected WTable table = new WTable();
+	private WTable table = new WTable();
 	private int chartDataColumn;
 	private int colorColumn;
 	protected WAbstractItemModel model;
 	private WChartPalette chartPalette;
 	private List<Integer> skipColumn = new ArrayList<Integer>(); // no good way to hide a column in html table
-
+	private String chartTitle;
+	
 	public ChartTableWidget(WAbstractItemModel model, int chartDataColumn, 
-			int colorColumn, WChartPalette chartPalette) {
+			int colorColumn, WChartPalette chartPalette, String chartTitle) {
 		this.model = model;
 		this.chartDataColumn = chartDataColumn;
 		this.colorColumn = colorColumn;
 		this.chartPalette = chartPalette;
+		this.chartTitle = chartTitle;
 	}
 
 	public void init() {
@@ -52,9 +54,8 @@ public class ChartTableWidget extends WContainerWidget{
 	}
 
 	protected WContainerWidget createChart() {
-		//addWidget(chartContainer);
 		chartContainer.addWidget(new WText(
-				"<b class=\"ngs-chart-title\">Approximate Reads Count</b>"));
+				"<b class=\"ngs-chart-title\">" + chartTitle + "</b>"));
 		chart = new WPieChart() {
 			@Override
 			protected void drawLabel(WPainter painter, WRectF rect,
@@ -121,7 +122,6 @@ public class ChartTableWidget extends WContainerWidget{
 	}
 
 	public void initTable() {
-		addWidget(table);
 		table.setMargin(WLength.Auto, EnumSet.of(Side.Left, Side.Right));
 		table.setHeaderCount(1);
 		table.setStyleClass("jobTable");
@@ -165,5 +165,9 @@ public class ChartTableWidget extends WContainerWidget{
 
 	public WContainerWidget getChartContainer() {
 		return chartContainer;
+	}
+
+	public WTable getTable() {
+		return table;
 	}
 }

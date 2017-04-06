@@ -210,7 +210,7 @@ public class NgsWidget extends WContainerWidget{
 				if (consensusModel.getRowCount() > 1)
 					consensusTable.addTotals();
 
-				addWidget(consensusTable);
+				addWidget(consensusTable.getTable());
 				horizontalLayout.addWidget(consensusTable.getChartContainer());
 				consensusTable.getChartContainer().addStyleClass("flex-elem-auto");
 			}
@@ -454,7 +454,7 @@ public class NgsWidget extends WContainerWidget{
 		private File workDir;
 		public ResultsView(NgsConsensusSequenceModel model, int chartDataColumn,
 				int colorColumn, WChartPalette chartPalette, File workDir) {
-			super(model, chartDataColumn, colorColumn, chartPalette);
+			super(model, chartDataColumn, colorColumn, chartPalette, "Approximate Reads Count");
 			this.workDir = workDir;
 		}
 
@@ -475,10 +475,10 @@ public class NgsWidget extends WContainerWidget{
 				WAnchor a = new WAnchor(detailsLink(
 						model().getBucket(row), workDir));
 				a.addWidget(covMap);
-				table.getElementAt(row + 1, tableCol(column)).addWidget(a);
+				getTable().getElementAt(row + 1, tableCol(column)).addWidget(a);
 				break;
 			case NgsConsensusSequenceModel.DETAILS_COLUMN:
-				table.getElementAt(row + 1, tableCol(column)).addWidget(
+				getTable().getElementAt(row + 1, tableCol(column)).addWidget(
 						details(model().getBucket(row), workDir));
 				break;
 
@@ -488,13 +488,13 @@ public class NgsWidget extends WContainerWidget{
 			}
 		}
 		public void addTotals() {
-			addText(table.getRowCount(), 0, "Totals");
+			addText(getTable().getRowCount(), 0, "Totals");
 			addTotals(NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN, false);
 			addTotals(NgsConsensusSequenceModel.READ_COUNT_COLUMN, true);
 		}
 
 		public void addTotals(int c, boolean approx) {
-			int row = table.getRowCount() - 1;
+			int row = getTable().getRowCount() - 1;
 
 			double total = 0.0;
 			for (int r = 0; r < model.getRowCount(); ++r) {

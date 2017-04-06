@@ -107,7 +107,7 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		super(main);
 		
 		setOverflow(Overflow.OverflowAuto);
-		
+
 		template = new Template(tr("job-overview-form"), this);
 
 		template.bindString("app.base.url", GenotypeMain.getApp().getEnvironment().getDeploymentPath());
@@ -169,8 +169,10 @@ public abstract class AbstractJobOverview extends AbstractForm {
 			ngsWidget = new NgsWidget(jobDir);
 			template.bindWidget("ngs-results", ngsWidget);
 			template.bindString("typing-time", tr("job-form.typing-time-ngs"));
-		} else
+		} else {
 			template.bindString("typing-time", tr("job-form.typing-time"));
+			template.bindEmpty("ngs-results");
+		}
 
 		updateView();
 	}
@@ -200,6 +202,8 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		if (jobCancelled())
 			template.bindString("analysis-in-progress", 
 					"The job was canceled.");
+		else
+			template.bindEmpty("analysis-cancelled");
 		
 		if (jobDone() && jobCancelled())
 			template.bindString("analysis-cancelled", tr("monitorForm.analysisCancelled"));
@@ -244,12 +248,16 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return analysisInProgress;
 	}
 
+	protected boolean hasResults() {
+		return jobTable.getRowCount() > 0;
+	}
+	
 	public void updateView() {
 		if (isNgsJob())
 			updateNgsView();
 		fillResultsWidget();
 		updateInfo();
-		if (jobDone() && jobTable.getRowCount() > 0) {
+		if (jobDone() && hasResults()) {
 			showDownloads();
 			template.bindEmpty("scroll");
 		}
@@ -652,5 +660,9 @@ public abstract class AbstractJobOverview extends AbstractForm {
 
 	protected void bindResults(WWidget resultsWidget) {
 		template.bindWidget("results", resultsWidget);
+	}
+
+	protected void bindResultsEmpty() {
+		template.bindEmpty("results");
 	}
 }

@@ -119,6 +119,7 @@ public class JobForm extends AbstractForm {
 					showWidget(error);				
 				}
 			}
+			jobOverview.handleInternalPath(internalPath);
 		} catch (NoSuchElementException e) {
 			error.setText(tr("monitorForm.nonExistingJobId").arg(""));
 			showWidget(error);

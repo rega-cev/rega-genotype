@@ -64,7 +64,7 @@ table.jobTable, div.jobTable {
 	border-spacing: 2px;	
 }
 
-table.reftable, .blastResultsTable table {
+table.reftable {
 	width: 70%;
 	margin-left: 0;
 	margin-right: auto;
@@ -80,8 +80,7 @@ table.jobTable td, table.jobTable th, div.jobTable td, div.jobTable th {
 	vertical-align: middle;
 }
 
-table.reftable td, table.reftable th,
-.blastResultsTable table td, .blastResultsTable table th {
+table.reftable td, table.reftable th {
 	border-top: 1px inset gray;
 	border-bottom: 1px inset gray;
 	padding: 0.5em;
@@ -89,20 +88,17 @@ table.reftable td, table.reftable th,
 }
 
 table.jobTable col,
-table.reftable col, .blastResultsTable table col {
+table.reftable col {
 	border-left: 1px outset gray;
 	border-right: 1px outset gray;
 }
 
 table.jobTable td, table.jobTable th,
-table.reftable td, table.reftable th,
-.blastResultsTable table td, .blastResultsTable table th {
+table.reftable td, table.reftable th {
 	border-left: 1px outset gray;
 	border-right: 1px outset gray;
 }
-.blastResultsTable table th .headerrh {
-    height: initial !important;
-}
+
 table.jobTable tr > td {
 	border-left-width: inherit;
 	border-right-width: inherit;	
@@ -463,7 +459,7 @@ table.assignment-overview {
   margin-bottom:20px;
   text-align:center;
 }
-table.reftable caption, .blastResultsTable table caption {
+table.reftable caption {
   font-weight:bold;
   font-size:110%;
   margin:5px 0 5px 0;

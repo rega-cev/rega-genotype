@@ -67,7 +67,7 @@ table.jobTable {
 	border-collapse: collapse;
 }
 
-table.reftable, .blastResultsTable table {
+table.reftable {
 	width: 70%;
 	margin-left: 0;
 	margin-right: auto;
@@ -82,20 +82,15 @@ table.jobTable td, table.jobTable th {
 	line-height: 30px;
 }
 
-table.reftable td, table.reftable th,
-.blastResultsTable table td, .blastResultsTable table th{
+table.reftable td, table.reftable th {
 	border-top: 1px inset gray;
 	border-bottom: 1px inset gray;
 	padding: 0.5em;
 	text-align: left;
 }
 
-.blastResultsTable table th .headerrh {
-    height: initial !important;
-}
 table.jobTable col,
-table.reftable col,
-.blastResultsTable table col {
+table.reftable col {
 	border-left: 1px solid gray;
 	border-right: 1px solid gray;
 }
@@ -119,8 +114,7 @@ table.jobTable tr > td {
 }
 
 table.jobTable td, table.jobTable th, 
-table.reftable td, table.reftable th,
-.blastResultsTable table td, .blastResultsTable table th {
+table.reftable td, table.reftable th {
 	border-left: 1px solid gray;
 	border-right: 1px solid gray;
 }
@@ -137,24 +131,6 @@ table.jobTable td img, .detailsForm img {
 	margin-right: auto;
 }
 
-/*
-.blastResultsTable td, .blastResultsTable th {
-	text-align: left;
-	border: 1px solid gray;
-}
-
-.blastResultsTable td, .blastResultsTable th {
-	border-top: 1px solid gray;
-	border-left: 1px solid gray;
-	padding: 0.5em;
-	text-align: left;
-}
-
-blastResultsTable col {
-	border-left: 1px solid gray;
-	border-right: 1px solid gray;
-}
-*/
 .detailsForm {
 	margin: 3ex auto;
 	width: 800px;
@@ -509,7 +485,7 @@ table.assignment-overview {
   text-align:center;
 }
 
-table.reftable caption, .blastResultsTable table caption {
+table.reftable caption {
   font-weight:bold;
   font-size:110%;
   margin:5px 0 5px 0;
