@@ -48,6 +48,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 	private WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
 
 	private List<ResultColumn> resultColumns;
+
+	private int percentageCountCol;
 	private int sequenceCountCol;
 	private int legendCountCol;
 
@@ -56,6 +58,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		this.resultColumns = resultColumns;
 
 		sequenceCountCol = 1;
+		percentageCountCol = -1;
 		legendCountCol = 4;
 		for (int c = 0; c < resultColumns.size(); ++c) {
 			ResultColumn resultColumn = resultColumns.get(c);
@@ -63,7 +66,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 				sequenceCountCol = c;
 			else if (resultColumn.field.equals("legend"))
 				legendCountCol = c;
-			
+			else if (resultColumn.field.equals("percentage"))
+				percentageCountCol = c;
 		}
 	}
 
@@ -193,11 +197,16 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 		ChartTableWidget view = new ChartTableWidget(
 				blastResultModel, sequenceCountCol, legendCountCol, palette, "");
-		
+
 		WContainerWidget horizontalLayout = new WContainerWidget();
 		horizontalLayout.addStyleClass("flex-container");
 
 		view.init();
+		view.addText(view.getTable().getRowCount(), 0, "Totals");
+		view.addTotals(sequenceCountCol, false);
+		if (percentageCountCol != -1)
+			view.addTotals(percentageCountCol, false);
+
 		view.getTable().setWidth(new WLength(600));
 		view.getChartContainer().addStyleClass("flex-elem");
 		horizontalLayout.addWidget(view.getTable());

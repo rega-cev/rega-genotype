@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import rega.genotype.utils.Utils;
+
 import eu.webtoolkit.jwt.AlignmentFlag;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.PositionScheme;
@@ -54,8 +56,9 @@ public class ChartTableWidget {
 	}
 
 	protected WContainerWidget createChart() {
-		chartContainer.addWidget(new WText(
-				"<b class=\"ngs-chart-title\">" + chartTitle + "</b>"));
+		if (chartTitle != null && !chartTitle.isEmpty())
+			chartContainer.addWidget(new WText(
+					"<b class=\"ngs-chart-title\">" + chartTitle + "</b>"));
 		chart = new WPieChart() {
 			@Override
 			protected void drawLabel(WPainter painter, WRectF rect,
@@ -161,6 +164,23 @@ public class ChartTableWidget {
 			table.getElementAt(row + 1, tableCol(column)).addWidget(a);
 		} else
 			addText(row + 1, tableCol(column), model.getData(row, column));
+	}
+
+	public void addTotals(int c, boolean approx) {
+		int row = getTable().getRowCount() - 1;
+
+		double total = 0.0;
+		for (int r = 0; r < model.getRowCount(); ++r) {
+			Object data = model.getData(r, c);
+			if (data != null && data instanceof Double)
+				total += (Double)data;
+			else if(data != null && data instanceof Integer)
+				total += (Integer)data;
+		}
+		if (approx)
+			addText(row, c, Utils.toApproximateString(total));
+		else
+			addText(row, c, total);
 	}
 
 	public WContainerWidget getChartContainer() {

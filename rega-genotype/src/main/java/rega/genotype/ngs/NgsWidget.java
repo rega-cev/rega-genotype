@@ -492,23 +492,6 @@ public class NgsWidget extends WContainerWidget{
 			addTotals(NgsConsensusSequenceModel.SEQUENCE_COUNT_COLUMN, false);
 			addTotals(NgsConsensusSequenceModel.READ_COUNT_COLUMN, true);
 		}
-
-		public void addTotals(int c, boolean approx) {
-			int row = getTable().getRowCount() - 1;
-
-			double total = 0.0;
-			for (int r = 0; r < model.getRowCount(); ++r) {
-				Object data = model.getData(r, c);
-				if (data != null && data instanceof Double)
-					total += (Double)data;
-				else if(data != null && data instanceof Integer)
-					total += (Integer)data;
-			}
-			if (approx)
-				addText(row, c, Utils.toApproximateString(total));
-			else
-				addText(row, c, total);
-		}
 	}
 
 	public static class SingleResultView extends Template {
