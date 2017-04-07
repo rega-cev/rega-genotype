@@ -46,6 +46,7 @@ import eu.webtoolkit.jwt.WMenuItem;
 import eu.webtoolkit.jwt.WModelIndex;
 import eu.webtoolkit.jwt.WMouseEvent;
 import eu.webtoolkit.jwt.WPopupMenu;
+import eu.webtoolkit.jwt.WProgressBar;
 import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WStackedWidget;
 import eu.webtoolkit.jwt.WText;
@@ -276,6 +277,7 @@ public class ToolConfigTable extends Template{
 				StandardDialog d= new StandardDialog("Import");
 				final FileUpload fileUpload = new FileUpload();
 				fileUpload.getWFileUpload().setFilters(".zip");
+				fileUpload.getWFileUpload().setProgressBar(new WProgressBar());
 				d.getContents().addWidget(new WText("Choose import file"));
 				d.getContents().addWidget(fileUpload);
 				d.finished().addListener(d,  new Signal1.Listener<WDialog.DialogCode>() {
