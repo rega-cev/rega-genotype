@@ -79,7 +79,8 @@ table.jobTable td, table.jobTable th {
 	border-bottom: 1px solid gray;
 	padding: 0.5em;
 	text-align: left;
-	line-height: 30px;
+	/*line-height: 60px;*/
+	vertical-align: middle;
 }
 
 table.reftable td, table.reftable th {
