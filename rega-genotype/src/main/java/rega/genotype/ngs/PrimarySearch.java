@@ -394,14 +394,10 @@ public class PrimarySearch{
 				}
 				break;
 			}
-			String[] name1 = s1.getName().split(" ");
-			String[] name2 = s2.getName().split(" ");
-			if (name1[0].equalsIgnoreCase(name2[0])){
-				saveFile.println("@" + s1.getName());
-				saveFile.println(s1.getSequence() + s2.getSequence());
-				saveFile.println("+");
-				saveFile.println(s1.getQuality() + s2.getQuality());
-			}
+			saveFile.println("@" + s1.getName());
+			saveFile.println(s1.getSequence() + s2.getSequence());
+			saveFile.println("+");
+			saveFile.println(s1.getQuality() + s2.getQuality());
 		}
 		saveFile.close();
 		megerFile.close();

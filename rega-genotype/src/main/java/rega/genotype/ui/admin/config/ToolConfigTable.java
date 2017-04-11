@@ -165,6 +165,7 @@ public class ToolConfigTable extends Template{
 						zip.delete();
 					zip.getParentFile().mkdirs();
 					try {
+						zip.getParentFile().mkdirs();
 						zip.createNewFile();
 					} catch (IOException e) {
 						e.printStackTrace();

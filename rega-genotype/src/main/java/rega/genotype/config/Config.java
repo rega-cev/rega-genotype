@@ -306,6 +306,8 @@ public class Config {
 		private String repoUrl; // url of repository server.
 		private String adminPassword;
 
+		private String jobSchedulerLogFile;
+
 		public String getPaupCmd() {
 			return paupCmd;
 		}
@@ -434,6 +436,12 @@ public class Config {
 		}
 		public void setBwaCmd(String bwaCmd) {
 			this.bwaCmd = bwaCmd;
+		}
+		public String getJobSchedulerLogFile() {
+			return jobSchedulerLogFile;
+		}
+		public void setJobSchedulerLogFile(String jobSchedulerLogFile) {
+			this.jobSchedulerLogFile = jobSchedulerLogFile;
 		}
 	}
 

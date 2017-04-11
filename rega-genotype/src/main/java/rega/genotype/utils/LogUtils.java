@@ -61,4 +61,23 @@ public class LogUtils {
 
 		return logger;
 	}
+
+	public static Logger createRandomLogger(File logFile) {
+		Logger logger = getLogger(logFile);
+		FileHandler fh;  
+		try {  
+			fh = new FileHandler(logFile.getAbsolutePath());  
+			logger.addHandler(fh);
+			SimpleFormatter formatter = new SimpleFormatter();  
+			fh.setFormatter(formatter);  
+		} catch (SecurityException e) {  
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {  
+			e.printStackTrace();
+			return null;
+		}  
+
+		return logger;
+	}
 }

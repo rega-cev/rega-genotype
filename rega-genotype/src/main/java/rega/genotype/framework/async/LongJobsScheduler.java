@@ -1,7 +1,12 @@
 package rega.genotype.framework.async;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Logger;
+
+import rega.genotype.singletons.Settings;
+import rega.genotype.utils.LogUtils;
 
 /**
  * General Job scheduler. 
@@ -39,6 +44,8 @@ public class LongJobsScheduler {
 	private static LongJobsScheduler instance = null;
 	private ConcurrentLinkedQueue<Lock> jobQueue = new ConcurrentLinkedQueue<Lock>();
 	private Object jobQueueLock = new Object();
+	private String loggerName = null;
+	private Logger logger = null;
 
 	public LongJobsScheduler() {
 		//should be instantiated only once in Settings.
@@ -58,6 +65,8 @@ public class LongJobsScheduler {
 			queueSize = jobQueue.size();
 		}
 
+		logQueue("Grab lock " + lock.getJobDir().getName());
+
 		if (queueSize > 1) // some other thread is running.
 			synchronized (lock) {
 				try {
@@ -67,6 +76,8 @@ public class LongJobsScheduler {
 				}
 			}
 
+		
+		
 		return lock;
 	}
 
@@ -77,6 +88,7 @@ public class LongJobsScheduler {
 			synchronized (lock) {
 				lock.notifyAll();
 			}
+			logQueue("Notifiy " + lock.getJobDir().getName());
 		}
 	}
 
@@ -85,6 +97,7 @@ public class LongJobsScheduler {
 			jobQueue.remove(lock);
 			notifyNext();
 		}
+		logQueue("Finished " + lock.getJobDir().getName());
 	}
 
 	public String getJobState(File jobDir) {
@@ -99,5 +112,43 @@ public class LongJobsScheduler {
 			i++;
 		}
 		return "Not in queue: processing results.";
+	}
+
+	private String queuedJobNames() {
+		String ans = "[";
+		for (Lock l: jobQueue) {
+			if (ans.length() > 1)
+				ans += ", ";
+			ans += l.jobDir.getAbsolutePath();
+		}
+
+		ans += "]";
+		return ans;
+	}
+
+	private void logQueue(String msg) {
+		log(msg + " Queue = " + queuedJobNames());
+	}
+
+	private void log(String msg) {
+		String jobSchedulerLogFile = Settings.getInstance().getConfig().getGeneralConfig().getJobSchedulerLogFile();
+		if (jobSchedulerLogFile == null || jobSchedulerLogFile.isEmpty())
+			return;
+
+		File logFile = new File(jobSchedulerLogFile);
+		if (loggerName != jobSchedulerLogFile && !logFile.exists())
+			try {
+				logFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
+
+		if (loggerName == null || loggerName != jobSchedulerLogFile) {
+			loggerName = jobSchedulerLogFile;
+			logger = LogUtils.createRandomLogger(new File(loggerName));
+		}
+
+		logger.info(msg);
 	}
 }
