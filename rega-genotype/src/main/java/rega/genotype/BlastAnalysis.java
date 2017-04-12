@@ -284,6 +284,7 @@ public class BlastAnalysis extends AbstractAnalysis {
 			tracer.add("concluded-description", haveSupport() && cluster.getDescription() != null ? cluster.getDescription() : "");
 			tracer.add("taxonomy-id", cluster != null ? cluster.getTaxonomyId() : "none");
 			tracer.add("src", cluster != null ? cluster.getSource().toString() : "Unknown");
+			tracer.add("report-offset", cluster != null ? cluster.getReportOffset()+"" : "0");
 
 			tracer.printlnClose("</cluster>");
 		}

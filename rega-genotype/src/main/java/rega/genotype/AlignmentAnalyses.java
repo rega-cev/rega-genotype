@@ -97,13 +97,15 @@ public class AlignmentAnalyses {
         private String        tags;
 		private String        taxonomyId;
     	private Source        source;
+		private int           reportOffset = 0; // It is possible to use the same image for 2 close genomes (norovirus 1 and 2). The offset is used only to draw the image properly. 
 
-        public Cluster(String id, String name, String description, String tags, String taxonomyId, Source src) {
+        public Cluster(String id, String name, String description, String tags, String taxonomyId, Source src, int reportOffset) {
             this.id = id;
             this.name = name;
             this.description = description;
             this.tags = tags;
 			this.taxonomyId = taxonomyId;
+			this.reportOffset = reportOffset;
             this.taxa = new ArrayList<Taxus>();
             this.clusters = new ArrayList<Cluster>();
             this.parent = null;
@@ -262,6 +264,14 @@ public class AlignmentAnalyses {
 		public void setSource(Source source) {
 			this.source = source;
 		}
+
+		public int getReportOffset() {
+			return reportOffset;
+		}
+
+		public void setReportOffset(int reportOffset) {
+			this.reportOffset = reportOffset;
+		}
     }
 
     public AlignmentAnalyses() {
@@ -341,7 +351,7 @@ public class AlignmentAnalyses {
             if (sequenceIdsE != null) {
             	for (int i = 0; i < alignment.getSequences().size(); ++i) {
             		AbstractSequence seq = alignment.getSequences().get(i);
-            		Cluster c = new Cluster(seq.getName(), seq.getName(), seq.getDescription(), null, null, null);
+            		Cluster c = new Cluster(seq.getName(), seq.getName(), seq.getDescription(), null, null, null, 0);
             		c.addTaxus(seq.getName()); //TODO SRC?
             		clusters.add(c);
             	}
@@ -562,7 +572,7 @@ public class AlignmentAnalyses {
         
         Cluster c = clusterMap.get(name);
         if (c != null && taxalist != null) {
-            Cluster result = new Cluster(c.getId(), c.getName(), c.getDescription(), c.tags, c.getTaxonomyId(), c.getSource());
+            Cluster result = new Cluster(c.getId(), c.getName(), c.getDescription(), c.tags, c.getTaxonomyId(), c.getSource(), c.getReportOffset());
             
             List<Taxus> taxa = c.getTaxa();
 
@@ -588,6 +598,7 @@ public class AlignmentAnalyses {
         String description = null;
         String tags = null;
         String taxonomyId = null;
+        int reportOffset = 0;
 
         Element descriptionE = element.getChild("description");
         if (descriptionE != null)
@@ -603,7 +614,11 @@ public class AlignmentAnalyses {
 
         Source source = Source.fromString(element.getAttributeValue("src"));
 
-        Cluster result = new Cluster(id, name, description, tags, taxonomyId, source);
+        Element reportOffsetE = element.getChild("report-offset");
+        if (reportOffsetE != null)
+        	reportOffset = Integer.parseInt(reportOffsetE.getText());
+
+        Cluster result = new Cluster(id, name, description, tags, taxonomyId, source, reportOffset);
         clusterMap.put(id, result);
         
         List taxusEs = element.getChildren("taxus");        

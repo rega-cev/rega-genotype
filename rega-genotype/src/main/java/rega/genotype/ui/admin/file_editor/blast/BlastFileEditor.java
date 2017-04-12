@@ -230,7 +230,7 @@ public class BlastFileEditor extends WContainerWidget{
 														// Note cluster parent is not important for pan-viral tool since it is used only in phylogeny
 														newCluster = new Cluster(
 																c.getId(), c.getName(), c.getDescription(), 
-																c.getTags(), c.getTaxonomyId(), c.getSource());
+																c.getTags(), c.getTaxonomyId(), c.getSource(), c.getReportOffset());
 														newClusterMap.put(c.getId(), newCluster);
 														alignmentAnalyses.addCluster(newCluster);
 													} 

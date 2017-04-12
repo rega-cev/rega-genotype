@@ -613,12 +613,15 @@ public abstract class AbstractJobOverview extends AbstractForm {
 		return jobPath(jobDir);
 	}
 	
-	protected WImage createGenomeImage(final GenotypeResultParser p, final String assignedId, final String myTypeGenome, boolean unassigned) {
+	protected WImage createGenomeImage(final GenotypeResultParser p, final String assignedId,
+			final String myTypeGenome, final int reportOffset, boolean unassigned) {		
 		String startV = p.getValue("/genotype_result/sequence/result[@id='blast']/start");
-		final int start = unassigned || startV == null ? -1 : Integer.parseInt(startV);
+		final int start = (unassigned || startV == null ? -1 : Integer.parseInt(startV)) + reportOffset;
 		String endV = p.getValue("/genotype_result/sequence/result[@id='blast']/end");
-		final int end = unassigned || endV == null ? -1 : Integer.parseInt(endV);
+		final int end = (unassigned || endV == null ? -1 : Integer.parseInt(endV)) + reportOffset;
 		final int sequenceIndex = p.getSequenceIndex();
+
+		p.getValue("/genotype_result/sequence/result[@id='blast']/end");
 	
 		if (start < 1 && end < 1)
 			return null; // Do not show genome image if the sequence could not be aligned.

@@ -51,6 +51,9 @@ public class BlastXmlWriter {
 					taxusE.setAttribute(new Attribute("name", taxaId));
 					clusterE.addContent(taxusE);
 				}
+				if (cluster.getReportOffset() != 0)
+					add(clusterE, "taxonomy-id", cluster.getReportOffset());
+
 				clustersE.addContent(clusterE);
 			}
 			doc.getRootElement().addContent(clustersE);
