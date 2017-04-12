@@ -292,6 +292,16 @@
 		<div>All tools that support NGS will use the files from the NGS module with current version checked.</div>
 		</p>
 		<p>
+		<p>
+			<div><b>Uniprot taxonomy database</b></div>
+			<div>Can be updated or downloaded in Global config tab.</div>
+			<div>Note: This file is used no only by the NGS Module </div>
+		</p>
+		<p>
+			<div><b>NCBI Viruses database</b></div>
+			<div>Can be updated or downloaded in Global config tab.</div>
+			<div>Note: This file is used no only by the NGS Module </div>
+		</p>
 		<div><b>Protein database file.</b></div>
 		<div> Currently we use unipro 50%. </div>
 		<div> The file is included in the module and you do not need to download it again unless the included file is old.</div>
