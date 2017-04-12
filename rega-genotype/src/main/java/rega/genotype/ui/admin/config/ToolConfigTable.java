@@ -24,6 +24,7 @@ import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.DownloadResource;
 import rega.genotype.ui.framework.widgets.StandardDialog;
 import rega.genotype.ui.framework.widgets.StandardTableView;
+import rega.genotype.ui.framework.widgets.TableViewWithSearchHeader;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.FileUpload;
 import rega.genotype.ui.util.GenotypeLib;
@@ -80,7 +81,7 @@ public class ToolConfigTable extends Template{
 		// create table
 		ToolConfigTableModel model = new ToolConfigTableModel(
 				localManifests, remoteManifests);
-		final StandardTableView table = new StandardTableView();
+		final StandardTableView table = new TableViewWithSearchHeader();
 		table.setSelectionMode(SelectionMode.ExtendedSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
 		table.setHeight(new WLength(400));
@@ -92,7 +93,7 @@ public class ToolConfigTable extends Template{
 		table.setColumnWidth(ToolConfigTableModel.URL_COLUMN, new WLength(100));
 		table.setColumnWidth(ToolConfigTableModel.NAME_COLUMN, new WLength(120));
 		table.setColumnWidth(ToolConfigTableModel.ID_COLUMN, new WLength(100));
-		table.setColumnWidth(ToolConfigTableModel.VERSION_COLUMN, new WLength(60));
+		table.setColumnWidth(ToolConfigTableModel.VERSION_COLUMN, new WLength(70));
 		table.setColumnWidth(ToolConfigTableModel.DATE_COLUMN, new WLength(100));
 		table.setColumnWidth(ToolConfigTableModel.PUBLISHER_COLUMN, new WLength(100));
 		table.setColumnWidth(ToolConfigTableModel.STATE_COLUMN, new WLength(60));

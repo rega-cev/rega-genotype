@@ -10,13 +10,13 @@ import rega.genotype.config.Config;
 import rega.genotype.config.Config.ToolConfig;
 import rega.genotype.config.ToolManifest;
 import rega.genotype.singletons.Settings;
+import rega.genotype.ui.framework.widgets.SortFilterProxyForSearchHeaders;
 import eu.webtoolkit.jwt.ItemDataRole;
 import eu.webtoolkit.jwt.ItemFlag;
 import eu.webtoolkit.jwt.Orientation;
 import eu.webtoolkit.jwt.WAbstractTableModel;
 import eu.webtoolkit.jwt.WLink;
 import eu.webtoolkit.jwt.WModelIndex;
-import eu.webtoolkit.jwt.WSortFilterProxyModel;
 
 public class ToolConfigTableModel extends WAbstractTableModel {
 	public static final int URL_COLUMN = 0;
@@ -278,7 +278,7 @@ public class ToolConfigTableModel extends WAbstractTableModel {
 	// classes
 
 	// Note: will become framework class.
-	public static class ToolConfigTableModelSortProxy extends WSortFilterProxyModel{
+	public static class ToolConfigTableModelSortProxy extends SortFilterProxyForSearchHeaders {
 		private boolean filterOldVersion = true;
 		private boolean filterRemote;
 		
