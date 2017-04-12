@@ -25,6 +25,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.python.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 
 public class FileUtil {
 	
@@ -173,33 +174,6 @@ public class FileUtil {
 		return temp;
 	}
 
-	// gzip
-	/**
-     * extract .gz file
-     */
-	public static boolean unGzip1File(File gzipFile, File destinationFile){
-		byte[] buffer = new byte[1024];
-		try{
-			GZIPInputStream gzis =
-					new GZIPInputStream(new FileInputStream(gzipFile));
-			FileOutputStream out =
-					new FileOutputStream(destinationFile);
-
-			int len;
-			while ((len = gzis.read(buffer)) > 0) {
-				out.write(buffer, 0, len);
-			}
-
-			gzis.close();
-			out.close();
-		}catch(IOException e){
-			e.printStackTrace();
-			return false;
-		}
-
-		return true;
-	}
-
 	// csv
 	public static List<String[]> readCSV(File csvFile) {
 		return readCSV(csvFile, ",");
@@ -229,6 +203,60 @@ public class FileUtil {
         }
 
         return ans;
+	}
+
+	// gzip
+	/**
+     * extract .gz file
+     */
+	public static boolean unGzip1File(File gzipFile, File destinationFile){
+		byte[] buffer = new byte[1024];
+		try{
+			GZIPInputStream gzis =
+					new GZIPInputStream(new FileInputStream(gzipFile));
+			FileOutputStream out =
+					new FileOutputStream(destinationFile);
+
+			int len;
+			while ((len = gzis.read(buffer)) > 0) {
+				out.write(buffer, 0, len);
+			}
+
+			gzis.close();
+			out.close();
+		}catch(IOException e){
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	//bzip2
+	/**
+     * extract .bzip2 file
+     */
+	public static boolean unBzip2(File gzipFile, File destinationFile){
+		try {
+			FileInputStream in = new FileInputStream(gzipFile);
+			FileOutputStream out = new FileOutputStream(destinationFile);
+			BZip2CompressorInputStream bzIn = new BZip2CompressorInputStream(in);
+			final byte[] buffer = new byte[BUFFER];
+			int n = 0;
+			while (-1 != (n = bzIn.read(buffer))) {
+				out.write(buffer, 0, n);
+			}
+			out.close();
+			bzIn.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return false;
 	}
 
 	// zip 

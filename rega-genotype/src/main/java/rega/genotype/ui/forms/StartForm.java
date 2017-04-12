@@ -431,6 +431,9 @@ public class StartForm extends AbstractForm {
 					} else if (FilenameUtils.getExtension(fastqFileUpload1.getClientFileName()).equals("zip")){ // compressed .zip
 						FileUtil.unzip1File(fastqFile1, extructedFastqPE1);
 						FileUtil.unzip1File(fastqFile2, extructedFastqPE2);
+					} else if (FilenameUtils.getExtension(fastqFileUpload1.getClientFileName()).equals("bz2")){ // compressed .zip
+						FileUtil.unBzip2(fastqFile1, extructedFastqPE1);
+						FileUtil.unBzip2(fastqFile2, extructedFastqPE2);
 					} else { // not compressed
 						FileUtils.copyFile(fastqFile1, extructedFastqPE1);
 						FileUtils.copyFile(fastqFile2, extructedFastqPE2);
@@ -472,6 +475,8 @@ public class StartForm extends AbstractForm {
 						FileUtil.unGzip1File(fastqFile, extructedFastqSE);
 					} else if (FilenameUtils.getExtension(fastqFileUploadSe.getClientFileName()).equals("zip")){ // compressed .zip
 						FileUtil.unzip1File(fastqFile, extructedFastqSE);
+					} else if (FilenameUtils.getExtension(fastqFileUpload1.getClientFileName()).equals("bz2")){ // compressed .zip
+						FileUtil.unBzip2(fastqFile, extructedFastqSE);
 					} else { // not compressed
 						FileUtils.copyFile(fastqFile, extructedFastqSE);
 					}
