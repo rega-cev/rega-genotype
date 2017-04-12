@@ -34,7 +34,9 @@ import rega.genotype.ui.admin.file_editor.xml.ConfigXmlWriter.ToolMetadata;
 import rega.genotype.ui.admin.file_editor.xml.PanViralToolGenerator;
 import rega.genotype.ui.framework.widgets.Dialogs;
 import rega.genotype.ui.framework.widgets.DirtyHandler;
+import rega.genotype.ui.framework.widgets.SortFilterProxyForSearchHeaders;
 import rega.genotype.ui.framework.widgets.StandardTableView;
+import rega.genotype.ui.framework.widgets.TableViewWithSearchHeader;
 import rega.genotype.ui.framework.widgets.Template;
 import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.utils.FileUtil;
@@ -77,6 +79,7 @@ public class BlastFileEditor extends WContainerWidget{
 	private Signal1<Integer> editingInnerXmlElement = new Signal1<Integer>();
 	private DirtyHandler dirtyHandler;
 	private ReferenceTaxaTable referenceTaxaTable;
+	private SortFilterProxyForSearchHeaders proxy;
 
 	public BlastFileEditor(final File workDir, final ManifestForm manifestForm,
 			final DirtyHandler dirtyHandler) {
@@ -405,8 +408,11 @@ public class BlastFileEditor extends WContainerWidget{
 	private void createClustersTable(final AlignmentAnalyses alignmentAnalyses) {
 		List<Cluster> clusters = alignmentAnalyses.getAllClusters();
 		clusterTableModel = new ClusterTableModel(clusters);
-		final StandardTableView table = new StandardTableView();
-		table.setModel(clusterTableModel);
+		proxy = new SortFilterProxyForSearchHeaders();
+		proxy.setSourceModel(clusterTableModel);
+
+		final StandardTableView table = new TableViewWithSearchHeader();
+		table.setModel(proxy);
 		table.setSelectionMode(SelectionMode.SingleSelection);
 		table.setSelectionBehavior(SelectionBehavior.SelectRows);
 		table.setHeight(new WLength(200));
@@ -439,7 +445,7 @@ public class BlastFileEditor extends WContainerWidget{
 			public void trigger() {
 				if (table.getSelectedIndexes().size() == 1){
 					WModelIndex index = table.getSelectedIndexes().first();
-					Cluster cluster = clusterTableModel.getCluster(index.getRow());
+					Cluster cluster = getCluster(index);
 					editClaster(cluster);
 				}
 			}
@@ -448,7 +454,7 @@ public class BlastFileEditor extends WContainerWidget{
 		table.doubleClicked().addListener(table, new Signal2.Listener<WModelIndex, WMouseEvent>() {
 			public void trigger(WModelIndex index, WMouseEvent arg2) {
 				if (index != null && stack.getCount() == 1) {
-					Cluster cluster = clusterTableModel.getCluster(index.getRow());
+					Cluster cluster = getCluster(index);
 					editClaster(cluster);
 				}
 			}
@@ -462,10 +468,9 @@ public class BlastFileEditor extends WContainerWidget{
 				String txt = "Are you sure that you want to remove clusters: ";
 
 				for (int i = 0; i < indexs.length; ++i){
-					int row = indexs[i].getRow();
 					if (i != 0)
 						txt += ", ";
-					txt += clusterTableModel.getCluster(row).getName();
+					txt += getCluster(indexs[i]).getName();
 				}
 
 				final WMessageBox d = new WMessageBox("Warning", txt, Icon.NoIcon,
@@ -477,8 +482,7 @@ public class BlastFileEditor extends WContainerWidget{
 					public void trigger(StandardButton e1) {
 						if(e1 == StandardButton.Ok){
 							for (int i = indexs.length -1; i >= 0; --i){
-								int row = indexs[i].getRow();
-								alignmentAnalyses.removeCluster(clusterTableModel.getCluster(row));
+								alignmentAnalyses.removeCluster(getCluster(indexs[i]));
 							}
 						}
 						clusterTableModel.refresh();
@@ -487,6 +491,10 @@ public class BlastFileEditor extends WContainerWidget{
 				});
 			}
 		});
+	}
+
+	private Cluster getCluster(WModelIndex index) {
+		return clusterTableModel.getCluster(proxy.mapToSource(index).getRow());
 	}
 
 	private void editClaster(final Cluster cluster){
