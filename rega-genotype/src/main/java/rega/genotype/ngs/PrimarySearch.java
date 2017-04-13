@@ -375,6 +375,17 @@ public class PrimarySearch{
 		return matches;
 	}
 
+	/**
+	 * Illumna pair ends results are many times marked with /1 and /2. 
+	 * We need unique sequence names and therefor remove the /1 and /2
+	 */
+	private static String fixSeqName(String name) {
+		if (name.endsWith("/1") || name.endsWith("/2"))
+			return name.substring(0, name.length() - 2);
+		else
+			return name;
+	}
+
 	private static File megerFiles(File workDir, File pe1, File pe2) throws IOException, FileFormatException, ApplicationException {
 		File result = new File(workDir.getAbsolutePath() + File.separator +"query.fna");
 		FileWriter megerFile = new FileWriter(result);
@@ -394,10 +405,13 @@ public class PrimarySearch{
 				}
 				break;
 			}
-			saveFile.println("@" + s1.getName());
+
+			String[] name1 = s1.getName().split(" ");
+			saveFile.println("@" + fixSeqName(name1[0]));
 			saveFile.println(s1.getSequence() + s2.getSequence());
 			saveFile.println("+");
 			saveFile.println(s1.getQuality() + s2.getQuality());
+
 		}
 		saveFile.close();
 		megerFile.close();
@@ -527,10 +541,9 @@ public class PrimarySearch{
 				}
 
 				String[] name = s.getName().split(" ");
-
-				String taxosId = readIdTaxonomyId.get(name[0]);
+				String taxosId = readIdTaxonomyId.get(fixSeqName(name[0]));
 				if (taxosId == null)
-					continue; // TODO ??
+					continue;
 				File taxonDir = new File(diamondResultsDir, taxosId);
 				taxonDir.mkdirs();
 
