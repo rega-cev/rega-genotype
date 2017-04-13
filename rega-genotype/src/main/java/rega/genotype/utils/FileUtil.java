@@ -284,6 +284,9 @@ public class FileUtil {
 	public static String getFileContent(final File zip, String fileName) {
 	    ZipFile zipFile = toZipFile(zip);
 
+	    if (zipFile == null)
+	    	return null;
+
 	    Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
 	    while(entries.hasMoreElements()){
