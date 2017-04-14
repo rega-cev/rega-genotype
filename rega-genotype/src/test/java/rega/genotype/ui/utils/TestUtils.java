@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 
 import rega.genotype.Constants;
+import rega.genotype.config.Config;
 import rega.genotype.singletons.Settings;
 import rega.genotype.utils.FileUtil;
 
@@ -30,6 +31,19 @@ public class TestUtils {
 		}
 		
 		Settings.initSettings(Settings.getInstance(null, true));
+
+		// read global config from base-work-dir:
+		// Global config contains paths to used software and that should be the same 
+		// for unit test and the real program.
+		File configFile = new File("./base-work-dir/config.json");
+		if (configFile.exists()) {
+			String json = FileUtil.readFile(configFile);
+			Config config = Config.parseJson(json);
+			Settings.getInstance().getConfig().setGeneralConfig(config.getGeneralConfig());
+		} else {
+			throw new RuntimeException("./base-work-dir/config.json file could not be found. If you base-work-dir in in an other place" +
+					"you may copy the config file to ./base-work-dir/ . Note: only the global config is needed.");
+		}
 		
 		return jobDir;
 	}

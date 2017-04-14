@@ -1,25 +1,4 @@
 {
-  "generalConfig": {
-    "paupCmd": "/opt/software/rega-genotype/bin/paup4b10-x86-linux",
-    "clustalWCmd": "/opt/software/rega-genotype/bin/clustalw",
-    "blastPath": "/usr/bin/",
-    "treePuzzleCmd": "puzzle",
-    "treeGraphCmd": "/opt/software/rega-genotype/bin/tgf",
-    "epsToPdfCmd": "?",
-    "imageMagickConvertCmd": "convert",
-    "maxAllowedSeqs": 20001,
-    "inkscapeCmd": "inkscape",
-    "edirectPath": "/home/michael/install/edirect/",
-    "diamondPath": "/home/michael/install/diamond",
-    "fastqcCmd": "/local/home/michael/projects/rega-genotype-extenal2/FastQC/fastqc",
-    "spadesCmd": "python /local/home/michael/install/spades/SPAdes-3.8.1-Linux/bin/spades.py",
-    "bioPythonPath": "/home/michael/Downloads/biopython-1.68/",
-    "sequencetool": "/home/michael/projects/sequencetool/build/src/sequencetool",
-		"ncbiVirusesFile":"/home/michael/projects/rega-genotype/rega-genotype/base-work-dir/system-files/ncbi-viruses.fasta",
-    "inkscapeCmd": "?",
-    "publisherName": "EMWEB",
-    "publisherPassword": "60tjpp2ukvfcudojpoek872idr"
-  },
   "tools": [
     {
       "path": "norovirus",
