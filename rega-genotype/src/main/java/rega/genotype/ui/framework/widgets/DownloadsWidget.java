@@ -92,7 +92,7 @@ public class DownloadsWidget extends WTemplate{
 			};
 		} else {
 			fastaResource = new WFileResource("text/plain",
-					jobDir.getAbsolutePath() + File.separatorChar + Constants.SEQUENCES_FILE_NAME);
+					jobDir.getAbsolutePath() + File.separatorChar + fileName);
 		}
 
 		fastaResource.suggestFileName(fileName);
