@@ -282,5 +282,6 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 		setFieldMandatory("srrDatabasePath", false);
 		setFieldMandatory("bioPythonPath", false);
 		setFieldMandatory("srrToolKitPath", false);
+		setFieldMandatory("sequencetool", false);
 	}
 }
