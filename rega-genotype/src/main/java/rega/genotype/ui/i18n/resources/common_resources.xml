@@ -280,7 +280,7 @@
 		  <tr><td class="form-table-name-td">Name</td><td class="form-table-name-td">${name}</td><td>${name-info}</td></tr>
 		  <tr><td class="form-table-name-td">ID</td><td class="form-table-name-td">${id}</td><td>${id-info}</td></tr>
 		  <tr><td class="form-table-name-td">Version</td><td class="form-table-name-td">${version}</td><td>${version-info}</td></tr>
-		  <tr><td class="form-table-name-td">Changes</td><td class="form-table-name-td">${commit}</td><td class="auto-form-info">What is new in this version.</td></tr>
+		  <tr><td class="form-table-name-td">Changes</td><td class="form-table-name-td">${commit}</td><td>${view-commits}</td><td class="auto-form-info">What is new in this version.</td></tr>
 		  <tr><td class="form-table-name-td">Taxonomy ID</td><td class="form-table-name-td">${taxonomy-text}</td></tr>
 		  <tr><td class="form-table-name-td">Tool type</td><td class="form-table-name-td">${tool-type}</td></tr>
 		</table>

@@ -13,12 +13,14 @@ import rega.genotype.ui.admin.config.ToolConfigForm.Mode;
 import rega.genotype.ui.admin.file_editor.blast.TaxonomyButton;
 import rega.genotype.ui.framework.widgets.FormTemplate;
 import rega.genotype.ui.framework.widgets.ObjectListModel;
+import rega.genotype.ui.framework.widgets.StandardDialog;
 import eu.webtoolkit.jwt.Signal;
 import eu.webtoolkit.jwt.Signal1;
 import eu.webtoolkit.jwt.WComboBox;
 import eu.webtoolkit.jwt.WDate;
 import eu.webtoolkit.jwt.WLength;
 import eu.webtoolkit.jwt.WLineEdit;
+import eu.webtoolkit.jwt.WPushButton;
 import eu.webtoolkit.jwt.WString;
 import eu.webtoolkit.jwt.WValidator;
 
@@ -47,6 +49,8 @@ public class ManifestForm extends FormTemplate{
 		this.oldManifest = manifest;
 		this.toolDir = toolDir;
 
+		final WPushButton viewCommitsB = new WPushButton("View changes");
+
 		toolTypeModel = new ObjectListModel<ManifestForm.ToolType>(ToolType.values()) {
 			@Override
 			public WString render(ToolType t) {
@@ -72,6 +76,7 @@ public class ManifestForm extends FormTemplate{
 				toolTypeChanged.trigger(toolTypeModel.getObject(toolTypeCB.getCurrentIndex()));
 			}
 		});
+
 		
 		// read
 
@@ -105,6 +110,14 @@ public class ManifestForm extends FormTemplate{
 			}
 		});
 
+		viewCommitsB.clicked().addListener(viewCommitsB, new Signal.Listener() {
+			public void trigger() {
+				StandardDialog d = new StandardDialog("Changes");
+				d.getContents().addWidget(new ChangesView(idLE.getText()));
+				d.setResizable(true);
+			}
+		});
+
 		// bind
 
 		bindWidget("name", nameLE);
@@ -113,6 +126,7 @@ public class ManifestForm extends FormTemplate{
 		bindWidget("commit", commitLE);
 		bindWidget("tool-type", toolTypeCB);
 		bindWidget("taxonomy-text", taxonomyT);
+		bindWidget("view-commits", viewCommitsB);
 
 		init();
 	}
