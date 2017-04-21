@@ -500,6 +500,7 @@ public class StartForm extends AbstractForm {
 		ngsTemplate.bindWidget("fastq-type", fastqTypeGroupContainer);
 		ngsTemplate.bindEmpty("fastq-upload1-info");
 		ngsTemplate.bindEmpty("fastq-upload2-info");
+		ngsTemplate.bindEmpty("fastq-upload-se-info");
 
 		ngsTemplate.bindWidget("srr", srr);
 		ngsTemplate.bindEmpty("srr-info");
