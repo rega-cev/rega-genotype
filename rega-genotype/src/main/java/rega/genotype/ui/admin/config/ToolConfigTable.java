@@ -93,12 +93,12 @@ public class ToolConfigTable extends Template{
 		table.setColumnWidth(ToolConfigTableModel.URL_COLUMN, new WLength(100));
 		table.setColumnWidth(ToolConfigTableModel.NAME_COLUMN, new WLength(120));
 		table.setColumnWidth(ToolConfigTableModel.ID_COLUMN, new WLength(100));
-		table.setColumnWidth(ToolConfigTableModel.VERSION_COLUMN, new WLength(70));
-		table.setColumnWidth(ToolConfigTableModel.DATE_COLUMN, new WLength(100));
-		table.setColumnWidth(ToolConfigTableModel.PUBLISHER_COLUMN, new WLength(100));
-		table.setColumnWidth(ToolConfigTableModel.STATE_COLUMN, new WLength(60));
+		table.setColumnWidth(ToolConfigTableModel.VERSION_COLUMN, new WLength(100));
+		table.setColumnWidth(ToolConfigTableModel.DATE_COLUMN, new WLength(130));
+		table.setColumnWidth(ToolConfigTableModel.PUBLISHER_COLUMN, new WLength(110));
+		table.setColumnWidth(ToolConfigTableModel.STATE_COLUMN, new WLength(100));
 		table.setColumnWidth(ToolConfigTableModel.UPTODATE_COLUMN, new WLength(100));
-		table.setColumnWidth(ToolConfigTableModel.INSTALLED_COLUMN, new WLength(80));
+		table.setColumnWidth(ToolConfigTableModel.INSTALLED_COLUMN, new WLength(100));
 
 		table.setTableWidth();
 		setMaximumSize(table.getWidth(), WLength.Auto);

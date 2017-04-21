@@ -70,7 +70,7 @@ public class TableViewWithSearchHeader extends StandardTableView {
 	 * @param widget
 	 */
 	public static void setSearchWidgetWidth(WWebWidget widget) {
-		widget.setWidth(new WLength(95, Unit.Percentage));
+		widget.setWidth(new WLength(85, Unit.Percentage));
 		widget.setInline(false);
 	}
 
