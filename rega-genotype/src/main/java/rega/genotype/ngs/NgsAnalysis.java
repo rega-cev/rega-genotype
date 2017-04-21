@@ -458,7 +458,8 @@ public class NgsAnalysis {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			ngsResults.printAssemblyError("assemble failed." + e.getMessage());
+			ngsResults.printAssemblyError("Bucket " + virusDiamondDir.getName() 
+					+ ". assemble failed." + e.getMessage());
 			return AssemblyState.Failed;
 		}
 
