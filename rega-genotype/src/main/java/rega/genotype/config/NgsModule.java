@@ -43,6 +43,12 @@ public class NgsModule {
 	private int consensusToolAbsoluteCutoff = 70;
 	private int consensusToolMinSingleSeqCov = 4;
 	private double consensusToolRelativeCutoff = 0.7;
+	/** K-value = n * e ^ -S
+	 * A version of Karlin-Altschul e-value equation (e-value = Knme^(-λS)) that
+	 * takes in to account only the length of the aligned sequence.
+	 * K and λ don't really change the proportions so they can be emitted.
+	 */
+	private double kvalueCutoff = 1e-162;
 	private String diamondOptions = "-e 0.001";
 	private String spadesOptions = "";
 	private int minRefContigLength = 400;
@@ -244,5 +250,13 @@ public class NgsModule {
 			}
 		}
 		annotatedUniprotWriter.close();
+	}
+
+	public double getKvalueCutoff() {
+		return kvalueCutoff;
+	}
+
+	public void setKvalueCutoff(double kvalueCutoff) {
+		this.kvalueCutoff = kvalueCutoff;
 	}
 }

@@ -53,8 +53,7 @@ public class SequenceToolMakeConsensus {
 		+ " --reference " + referenceFile.getAbsolutePath()
 		+ " --target " + assembledContigs.getAbsolutePath()
 		+ " --output " + alingment.getAbsolutePath()
-		+ " --absolute-cutoff " + ngsModule.getConsensusToolAbsoluteCutoff()
-		+ " --relative-cutoff " + ngsModule.getConsensusToolRelativeCutoff()
+		+ " --k-value-cutoff " + ngsModule.getKvalueCutoff()
 		+ " --min-single-seq-cov " + ngsModule.getConsensusToolMinSingleSeqCov()
 		+ " --export-unused " + consensusUnusedContigsFile.getAbsolutePath()
 		+ " --clustalw-path " + clustalPath
