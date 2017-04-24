@@ -5,6 +5,9 @@
  */
 package rega.genotype;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +56,12 @@ public class SequenceAlignment
     	this.sequenceType = FILETYPE_FASTA;
         this.sequences = new ArrayList<AbstractSequence>();
     }
-    
+
+    public SequenceAlignment(File inputFile) throws ParameterProblemException, IOException, FileFormatException {
+    	this(new FileInputStream(inputFile), FILETYPE_FASTA,
+    			SEQUENCE_DNA, false);
+    }
+
     public SequenceAlignment(InputStream inputFile,
             int fileType, int sequenceType) throws ParameterProblemException, IOException, FileFormatException {
     	this(inputFile, fileType, sequenceType, true);
@@ -465,6 +473,10 @@ public class SequenceAlignment
         }
     }
     
+    public void writeOutput(File outputFile) throws FileNotFoundException, IOException, ParameterProblemException {
+    	writeOutput(new FileOutputStream(outputFile), FILETYPE_FASTA);
+    }
+
     void writeFastaOutput(OutputStream outputFile) throws IOException {
     	writeFastaOutput(outputFile, sequences);
     }

@@ -397,52 +397,81 @@ public class NgsAnalysis {
 			File virusConsensusDir = NgsFileSystem.consensusDir(workDir, virusName);
 			SequenceAlignment refs = detectRefs(virusConsensusDir, spadesContigsAlignment, ncbiVirusesFasta);
 
-			// FIXME:
-			//  - probably should change the cutoff for the alignment, relative to length?
-
 			File consensusInputContigs = assembledFile;
 
+			// <Contig, best alignment score for the contig>
+			Map<String, Double> bestScoresMap = new HashMap<String, Double>();
+
+			// Consensus alignments all.
 			for (AbstractSequence ref : refs.getSequences()) {
-				ngsLogger.info("Trying with " + ref.getName() + " " + ref.getDescription());
-				String refseqName = ref.getName().replaceAll("\\|", "_");
-				File refWorkDir = NgsFileSystem.consensusRefSeqDir(virusConsensusDir, refseqName);
-				
-				File alingment = SequenceToolMakeConsensus.consensusAlign(consensusInputContigs, ref, refWorkDir, ngsModule, ngsLogger);
-				File consensusFile = SequenceToolMakeConsensus.makeConsensus(alingment, refWorkDir, ngsModule, ngsLogger);
+				File refWorkDir = refWorkDir(virusConsensusDir, ref);
+				File alingmentFile = SequenceToolMakeConsensus.consensusAlign(
+						consensusInputContigs, ref, refWorkDir, ngsModule, ngsLogger);
+
+				// Add score to best scores.
+				SequenceAlignment alignment = new SequenceAlignment(alingmentFile);
+				for (AbstractSequence s: alignment.getSequences()) {
+					if (getValue(s.getName(), "score") == null)
+						continue; // reference sequence name is empty
+					Double score = Double.parseDouble(getValue(s.getName(), "score"));
+					Double bestScore = bestScoresMap.get(makeKey(s.getName()));
+					if (bestScore == null || score > bestScore)
+						bestScoresMap.put(makeKey(s.getName()), score);
+				}
+			}
+
+			// leave only sequences that had best score in this alignment. (So the same sequence is not included in 2 alignments)
+			for (AbstractSequence ref : refs.getSequences()) {
+				File refWorkDir = refWorkDir(virusConsensusDir, ref);
+				// read alignment
+				File alingmentFile = NgsFileSystem.consensusAlingmentFile(refWorkDir);
+
+				SequenceAlignment alignment = new SequenceAlignment();
+
+				SequenceAlignment fullAlignment = new SequenceAlignment(alingmentFile);
+				for (AbstractSequence s: fullAlignment.getSequences()) {
+					if (getValue(s.getName(), "score") == null) {
+						if (s.getName().isEmpty())
+							alignment.addSequence(s);
+						continue; // reference sequence name is empty
+					}
+					Double score = Double.parseDouble(getValue(s.getName(), "score"));
+					Double bestScore = bestScoresMap.get(makeKey(s.getName()));
+					if (score.equals(bestScore))
+						alignment.addSequence(s);
+				}
+				alingmentFile.delete();
+				alingmentFile.createNewFile();
+				alignment.writeOutput(alingmentFile);
+			}
+
+			// make consensus for all
+			for (AbstractSequence ref : refs.getSequences()) {
+				File refWorkDir = refWorkDir(virusConsensusDir, ref);
+				File consensusFile = NgsFileSystem.consensusFile(refWorkDir);
 				File contigsFile = NgsFileSystem.consensusContigsFile(refWorkDir);
 
-				consensusInputContigs = NgsFileSystem.consensusUnusedContigsFile(refWorkDir); // next time use only what was not used buy the first ref.
+				File alingmentFile = NgsFileSystem.consensusAlingmentFile(refWorkDir);
+
+				SequenceToolMakeConsensus.makeConsensus(alingmentFile, refWorkDir, ngsModule, ngsLogger);
+
+				//consensusInputContigs = NgsFileSystem.consensusUnusedContigsFile(refWorkDir); // next time use only what was not used buy the first ref.
 
 				// add virus taxonomy id to every consensus contig name, save sequence metadata.
 
-				SequenceAlignment consensusAlignment = new SequenceAlignment(
-						new FileInputStream(consensusFile), 
-						SequenceAlignment.FILETYPE_FASTA, 
-						SequenceAlignment.SEQUENCE_DNA);
+				SequenceAlignment consensusAlignment = new SequenceAlignment(consensusFile);
 
-				int i = 0;
 				for (AbstractSequence s: consensusAlignment.getSequences()) {
-					String[] split = fastqFileName.split("_");
-					String fastqFileId = (split.length > 0) ? split[0] : fastqFileName;
-					String refAC = "AC";
-					if (refseqName.contains("_ref_"))
-						refAC = refseqName.split("_ref_")[0];
 					String bucket = virusName;
-
-					String name = refAC + "__" + i + " " + s.getName();
-					String description = fastqFileId;
-
-					ConsensusBucket bucketData = new ConsensusBucket(bucket, ref.getName(), ref.getDescription(), 
-							ref.getLength());
+					ConsensusBucket bucketData = new ConsensusBucket(
+							bucket, ref.getName(), ref.getDescription(), ref.getLength());
 
 					List<Contig> contigs = SequenceToolMakeConsensus.readCotigsData(refWorkDir);
 
 					ngsResults.printAssemblybucketOpen(bucketData, contigs);
-					if (!contigs.isEmpty()){
-						s.setName(name);
+					if (!contigs.isEmpty()) {
 						identified = tool.analyzeBlast(s); // add consensus alignment to results file.
 						ngsResults.finishCurrentSequence();
-						i++;
 					}
 					ngsResults.printAssemblybucketClose();
 				}
@@ -464,6 +493,26 @@ public class NgsAnalysis {
 		}
 
 		return identified ? AssemblyState.AssembledAndIdentified : AssemblyState.Assembled;
+	}
+
+	private String makeKey(String sequenceName) {
+		return sequenceName.substring(0, 20); // trim the score.
+	}
+
+	private String getValue(String sequenceName, String var) {
+		String[] split = sequenceName.split("_");
+		for (int i = 0; i < split.length; ++i) {
+			if (split[i].equals(var))
+				return split[i+1];
+		}
+
+		return null;
+	}
+
+	private File refWorkDir(File virusConsensusDir, AbstractSequence ref) {
+		String refseqName = ref.getName().replaceAll("\\|", "_");
+		File refWorkDir = NgsFileSystem.consensusRefSeqDir(virusConsensusDir, refseqName);
+		return refWorkDir;
 	}
 
 	/**
