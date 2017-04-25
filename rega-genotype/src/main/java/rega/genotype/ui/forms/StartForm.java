@@ -9,7 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -211,23 +215,29 @@ public class StartForm extends AbstractForm {
 		if (metadata != null) {
 			if (metadata.clusterCount != null)
 				template.bindString("count_virus_from_blast.xml",  metadata.clusterCount + "");
-			if (metadata.taxonomyIds != null)
-				template.bindString("count_typing_tools",  access(metadata) + "");
-		} 
-
+			if (metadata.taxonomyIds != null) {
+				List<String> access = access(metadata);
+				WText accessT = new WText(access.size() + "");
+				accessT.setToolTip(Arrays.toString(access.toArray()));
+				template.bindWidget("count_typing_tools",  accessT);
+			}
+		}
 
 		// NGS
 
 		initNgs(template);
 	}
 
-	private int access(ToolMetadata pvMetadata) {
-		int ans = 0;
+	private List<String> access(ToolMetadata pvMetadata) {
+		List<String> ans = new ArrayList<String>();
+		Set<String> taxonomyIds = pvMetadata.taxonomyIdsAndAnsestors();
 		for (ToolConfig c: Settings.getInstance().getConfig().getTools())
 			if(c.getToolMenifest() != null
-				&& pvMetadata.taxonomyIds.contains(
-						c.getToolMenifest().getTaxonomyId()))
-				ans++;
+					&& c.isCurrentUsedVersion()
+			&& taxonomyIds.contains(c.getToolMenifest().getTaxonomyId())){
+				ans.add(c.getToolMenifest().getId() + " " 
+						+ c.getToolMenifest().getVersion());
+			}
 
 		return ans;
 	}

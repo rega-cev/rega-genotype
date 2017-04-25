@@ -15,6 +15,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.python.google.common.reflect.TypeToken;
 
+import rega.genotype.taxonomy.TaxonomyModel;
 import rega.genotype.utils.GsonUtil;
 
 public class ConfigXmlWriter {
@@ -125,10 +126,23 @@ public class ConfigXmlWriter {
 	public static class ToolMetadata {
 		public Integer clusterCount = null;
 		public Integer canAccess = null; // pan-viral tool can redirect to other tools.
-		public Set<String> taxonomyIds = null;
+		public Set<String> taxonomyIds = null; // The leafs of the taxonomy tree.
 
 		public String taxonomyIdsJson() {
 			return GsonUtil.toJson(taxonomyIds, false);
+		}
+
+		/**
+		 * @return all the taxonomy tree that taxonomyIds are its leafs.
+		 */
+		public Set<String> taxonomyIdsAndAnsestors() {
+			Set<String> ans = new HashSet<String>();
+			for (String ltx: taxonomyIds)
+				for (String tx: TaxonomyModel.
+						getInstance().getHirarchyTaxonomyIds(ltx))
+					ans.add(tx);
+
+			return ans;
 		}
 
 		public static Set<String> parseJsonAsList(String json) {

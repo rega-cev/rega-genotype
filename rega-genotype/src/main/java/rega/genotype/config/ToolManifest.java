@@ -118,6 +118,9 @@ public class ToolManifest {
 	public void setVersion(String version) {
 		this.version = version;
 	}
+	public boolean isSubTypingTool() {
+		return !blastTool && !ngsModule;
+	}
 	public boolean isBlastTool() {
 		return blastTool;
 	}
