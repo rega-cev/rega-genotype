@@ -59,7 +59,7 @@ public class RegaSystemFiles {
 
 	public static File downloadNcbiViruses(){
 		final File baseDir = new File(Settings.getInstance().getBaseDir());
-		File ncbiVirusesFile = ncbiVirusesFileAnnotated();
+		File ncbiVirusesFile = new File(baseDir, NCBI_VIRUSES_DB_FILE_NAME);
 		File ncbiFileGz = new File(baseDir, SYSTEM_FILES_DIR + File.separator + "viral.1.1.genomic.fna.gz");
 		if (Utils.wget(NCBI_VIRUSES_DB_URL, ncbiFileGz)) 
 			if (FileUtil.unGzip1File(ncbiFileGz, ncbiVirusesFile))

@@ -166,14 +166,14 @@ public class GlobalConfigForm extends AutoForm<Config.GeneralConfig>{
 				d.getOkB().hide();
 			}
 
-			private void createDB(File zipedNcbiViruses, StandardDialog d) {
+			private void createDB(File ncbiViruses, StandardDialog d) {
 				String infoText =  "Update finished successfully";
-				if (zipedNcbiViruses == null)
+				if (ncbiViruses == null)
 					infoText = "Could not downlod NCBI viruses file" ;
 				else {
 					File ncbiVirusesFile = null;
 					try {
-						RegaSystemFiles.removePhages();
+						//RegaSystemFiles.removePhages(); 
 						ncbiVirusesFile = RegaSystemFiles.annotateNcbiDb();
 					} catch (Exception e) {
 						e.printStackTrace();
