@@ -233,6 +233,10 @@ public class NgsModule {
 			if (s.getDescription() == null)
 				continue;
 
+			if (s.getDescription().contains("phage") 
+					|| s.getDescription().contains("Phage"))
+				continue; // TODO: No phages for now. 
+
 			Pattern r = Pattern.compile(".*Tax=.* TaxID=(.*) RepID=.*");
 			Matcher m = r.matcher(s.getDescription());
 			if (m.find()) {
