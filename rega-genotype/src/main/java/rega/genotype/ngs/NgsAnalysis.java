@@ -470,7 +470,7 @@ public class NgsAnalysis {
 
 					ngsResults.printAssemblybucketOpen(bucketData, contigs);
 					if (!contigs.isEmpty()) {
-						identified = tool.analyzeBlast(s); // add consensus alignment to results file.
+						identified = tool.analyzeBlast(s, contigsFile); // add consensus alignment to results file.
 						ngsResults.finishCurrentSequence();
 					}
 					ngsResults.printAssemblybucketClose();
@@ -545,6 +545,10 @@ public class NgsAnalysis {
 						SequenceAlignment.FILETYPE_FASTA, SequenceAlignment.SEQUENCE_DNA);
 				if (blastResultRefs.getSequences().size() > 0) {
 					AbstractSequence ref = blastResultRefs.getSequences().get(0);
+
+					if (contig.getLength() > ref.getLength())
+						continue; // contig can not be longer then ref!
+
 					String bucketTxId = virusDir.getName().split("_")[0];
 					String refTxId = RegaSystemFiles.taxonomyIdFromAnnotatedNcbiSeq(ref.getDescription());
 

@@ -42,14 +42,14 @@ public class BlastTool extends GenotypeTool {
 
     @Override
     public void analyze(AbstractSequence s) throws AnalysisException {
-    	analyzeBlast(s);
+    	analyzeBlast(s, null);
     }
 
-    public boolean analyzeBlast(AbstractSequence s) throws AnalysisException {
+    public boolean analyzeBlast(AbstractSequence s, File contigs) throws AnalysisException {
     	Result blastResult = blastAnalysis.run(s);
     	if (blastResult.haveSupport() && blastResult.getConcludedCluster() != null) {
     		Cluster c = blastResult.getConcludedCluster();
-    		analyseClaster(c, s);
+    		analyseClaster(c, s, contigs);
     	} 
     	return conclude(blastAnalysis, blastResult);
     }
@@ -58,7 +58,7 @@ public class BlastTool extends GenotypeTool {
      * Blast tool will order the results buy tool ids, so later the specific tool
      * can make analysis only on the related sequence.
      */
-    protected void analyseClaster(Cluster c, AbstractSequence s) {
+    protected void analyseClaster(Cluster c, AbstractSequence s, File contigs) {
     	try {
     		StringBuilder fasta = new StringBuilder();
     		fasta.append(">" + s.getName() + "\n" + s.getSequence() + "\n");
@@ -66,7 +66,10 @@ public class BlastTool extends GenotypeTool {
     		if (c != null) {
     			String toolId = Settings.getInstance().getConfig().getToolId(c.getTaxonomyId());
     			File f = new File(getWorkingDir().getAbsolutePath(), toolId + ".fasta");
-    			FileUtil.writeStringToFile(f, fasta.toString(), true);
+    			if (contigs != null)
+    				FileUtil.appendToFile(contigs, f);
+    			else
+    				FileUtil.writeStringToFile(f, fasta.toString(), true);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
