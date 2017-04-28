@@ -336,13 +336,14 @@ public class StartForm extends AbstractForm {
 
 					final NgsResultsTracer ngsResults;
 					try {
-						
 						ngsResults = new NgsResultsTracer(workDir,
 								srr.getText() + "_1.fastq", srr.getText() + "_2.fastq");
 					} catch (IOException e1) {
 						e1.printStackTrace();
 						return;
 					}
+					ngsResults.getModel().setSkipPreprocessing(skipPreprocessing.isChecked());
+
 					final DownloadSrrStateTracer downloadSrrStateTracer = new DownloadSrrStateTracer();
 					
 					final StandardDialog downloadStatusDialog = new StandardDialog("Download status");
