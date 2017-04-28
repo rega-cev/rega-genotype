@@ -629,6 +629,7 @@
 			${consensus-rb}
 			${ref-rb}
 			<div>Note: mapping to the reference sequence may fail when the sample sequence is too divergent from the reference sequence. </div>
+			<div>Note: Exact depth of coverage and read count are calculated based on aligning the result consensus sequence against all input reads.</div>
 		</p>
 		${start}
 		${cov-map}

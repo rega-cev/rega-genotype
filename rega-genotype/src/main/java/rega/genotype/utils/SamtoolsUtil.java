@@ -63,14 +63,13 @@ public class SamtoolsUtil {
 
 		File consensusFile = consensusFile(bucket, jobDir, refType);
 
-		File pe1 = NgsFileSystem.diamodPe1File(
-				jobDir, bucket.getDiamondBucket());
-		File pe2 = NgsFileSystem.diamodPe2File(
-				jobDir, bucket.getDiamondBucket());
+		File pe1 = NgsFileSystem.preprocessedPE1(jobDir);
+		File pe2 = NgsFileSystem.preprocessedPE2(jobDir);
 
 		// ./bwa mem ref.fa read1.fq read2.fq > aln-pe.sam.gz
 		String cmd = bwaPath + " mem " + consensusFile.getAbsolutePath()
-				+ " " + pe1.getAbsolutePath() + " " + pe2.getAbsolutePath() 
+				+ " " + pe1.getAbsolutePath() 
+				+ " " + pe2.getAbsolutePath() 
 				+ " > " + out.getAbsolutePath(); 
 		Utils.execShellCmd(cmd, consensusFile);
 
