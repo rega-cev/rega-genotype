@@ -152,7 +152,7 @@ public class NgsWidget extends WContainerWidget{
 			jobState = "<p> Diamond blast job state:" + schedState + "</p>";
 		} else if (model.getState().code == State.Spades.code) {
 			String schedState = LongJobsScheduler.getInstance().getJobState(workDir);
-			jobState = "<p> Sapdes job state:" + schedState + "</p>";
+			jobState = "<p> Spades job state:" + schedState + "</p>";
 		} 
 
 		view.bindString("job-state", jobState);
