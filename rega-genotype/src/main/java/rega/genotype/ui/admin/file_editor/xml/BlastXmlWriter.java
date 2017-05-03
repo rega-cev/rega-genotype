@@ -42,7 +42,8 @@ public class BlastXmlWriter {
 				List<Attribute> attributes = new ArrayList<Attribute>();
 				attributes.add(new Attribute("id", cluster.getId()));
 				attributes.add(new Attribute("name", cluster.getName()));
-				attributes.add(new Attribute("src", cluster.getSource().toString()));
+				if (cluster.getSource() != null)
+					attributes.add(new Attribute("src", cluster.getSource().toString()));
 				clusterE.setAttributes(attributes);
 				add(clusterE, "description", cluster.getDescription());
 				add(clusterE, "taxonomy-id", cluster.getTaxonomyId());
