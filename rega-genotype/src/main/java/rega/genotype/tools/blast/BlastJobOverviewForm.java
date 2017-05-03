@@ -18,6 +18,7 @@ import rega.genotype.ui.util.GenotypeLib;
 import rega.genotype.ui.viruses.generic.GenericDefinition.ResultColumn;
 import eu.webtoolkit.jwt.AnchorTarget;
 import eu.webtoolkit.jwt.ItemDataRole;
+import eu.webtoolkit.jwt.SortOrder;
 import eu.webtoolkit.jwt.WApplication;
 import eu.webtoolkit.jwt.WApplication.UpdateLock;
 import eu.webtoolkit.jwt.WColor;
@@ -45,7 +46,7 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 	protected BlastResultParser blastResultParser;
 
-	private WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Muted);
+	private WChartPalette palette = new WStandardPalette(WStandardPalette.Flavour.Bold);
 
 	private List<ResultColumn> resultColumns;
 
@@ -69,6 +70,19 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 			else if (resultColumn.field.equals("percentage"))
 				percentageCountCol = c;
 		}
+
+		palette = new WStandardPalette(WStandardPalette.Flavour.Muted) {
+			@Override
+			public WColor color(int index) {
+				int rgb = colors[index % 24];
+				return new WColor((rgb & 0xFF0000) >> 16, (rgb & 0x00FF00) >> 8,
+						rgb & 0x0000FF);
+			}
+			private int[] colors = {
+					0xC3D9FF, 0xEEEEEE, 0xFFFF88, 0xCDEB8B, 0x356AA0, 0x36393D, 0xF9F7ED, 0xFF7400, 
+					0xFF1A00, 0x4096EE, 0xFF7400, 0x008C00, 0xFF0084, 0x006E2E, 0xF9F7ED, 0xCC0000,
+					0xB02B2C, 0x3F4C6B, 0xD15600, 0x356AA0, 0xC79810, 0x73880A, 0xD01F3C, 0x6BBA70};
+		};
 	}
 
 	@Override
@@ -143,7 +157,6 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 		for (int c = 0; c < resultColumns.size(); ++c)
 			blastModel.setHeaderData(c, resultColumns.get(c).label);
 
-		
 		// find total 
 		double total = totalSequences();
 		Config config = Settings.getInstance().getConfig();
@@ -169,17 +182,21 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 				} else if (resultColumn.field.equals("percentage")) {
 					blastModel.setData(row, c, 
 							(double)toolData.sequenceCount / total * 100.0);
-				} else if (resultColumn.field.equals("legend")) {
-					WColor color = palette.getBrush(i).getColor();
-					blastModel.setData(row, c, color, 
-							ItemDataRole.UserRole + 1);
 				} else {
 					blastModel.setData(row, c, toolData.userData.get(c));
-
 				}
 			}
 			i++;
 		}
+
+		blastModel.sort(percentageCountCol, SortOrder.DescendingOrder);
+
+		// set colors after sort so chart and table have the same colors
+		for (int r = 0; r < blastModel.getRowCount(); ++r)
+			blastModel.setData(r, legendCountCol,
+					palette.getBrush(r).getColor(),
+					ItemDataRole.UserRole + 1);
+
 		return blastModel;
 	}
 
@@ -298,6 +315,8 @@ public class BlastJobOverviewForm extends AbstractJobOverview {
 
 			if (concludedId != null && !concludedId.equals("Unassigned"))
 				toolData.concludedName = concludedName;
+			else 
+				toolData.concludedName = "Unassigned";
 
 			toolData.sequenceCount++;
 
