@@ -260,7 +260,7 @@ public class BlastAnalysis extends AbstractAnalysis {
                 tracer.printlnClose("</clusters>");
             }
 
-            if (refseq != null)
+            if (refseq != null && end >= 0)
             	tracer.add("refseq", refseq.getTaxus());
             
             writeXMLEnd(tracer);
